@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html >
+  <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="cursor-event-mode" content="native"/>
+		<meta name="touch-event-mode" content="native"/>
+		<meta name="msapplication-tap-highlight" content="no" />
+		<meta content='True' name='HandheldFriendly' />
+		<meta name="misapplication-tap-highlight" content="no"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+	</head>
+    <body style="overflow: hidden;padding:0px;background-color:#000000;margin:0px auto;-ms-touch-action:none;">
+		<div id="ClientDiv" style="postion:absolute;top:0px;left:0px;padding:0px;width:320;height:512;margin:0px auto;">
+		<canvas style="postion:absolute;top:0px;left:0px;" id="Client"></canvas>
+		</div>
+	</body>
+  <script type="application/x-javascript" src="spice.js"> </script>
+  <script >
+	var App = new Client("Empty Project","Client",1024,	720);
+	Main_ = new main_();
+	function main_()
+		{
+		App.defaultText = 12;
+		App.ScaleOnResize = true;
+		Graphics = new Array();
+		GraphicsController = new semblance();
+			this.start = function()
+			{
+				GraphicsController.graphicsInit();
+			}
+			
+			this.update = function()
+			{
+		
+			this.draw();
+			}
+		
+			this.draw = function()
+			{
+				App.visuals._opacity(1);
+				App.visuals._color("#221111");
+				App.visuals.rect(App.width*0.5,App.height*0.5,400,100,1,1,true);
+				App.visuals._color("#FFAAAA");
+				App.visuals.text("Basic HTML5 spice.js app.",App.width*0.5,App.height*0.5,25,1,true);
+				App.visuals._color("#000000");
+			}
+		}
+  </script>
+</html>
