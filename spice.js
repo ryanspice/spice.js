@@ -1,1246 +1,2019 @@
-///////////////////////////////////////////////////////0/2/1////
-////  "Client.js" by Ryan Spice,                  
-////                                                
-////	                                            
-////			How To                              
-////                                                
-////            destination = "Canvas Element Id";  
-////            App = new Client("Title","Canvas Element Id",width,scalex,scaley);
-////             	             
-////            App._state(init, update, draw)
-////            	init, update, draw = functions;
-////            	var menu_state = App._state(menu_refresh,menu_update,menu_draw);
-////				menu_state.enable();
-////
-////               Client.client_start(f,scale)
-////               Client.client_loop()
-////               Client.client_fps() 
-////               Client.client_init()
-////                                   
-////                                   
-////////////////////////////////////////////////////////////////
-
-var App, AppId;
-var blueGesture;
-var Main_, Game_;
-var loader;
-
-
-
 /*
-* @param {string} name Client Name
+ ,-.                         
+(   `     o            o     
+ `-.  ;-. . ,-. ,-.    , ,-. 
+.   ) | | | |   |-'    | `-. 
+ `-'  |-' ' `-' `-' o  | `-' 
+      '               -'     
+	  Created By: Ryan Spice
+	  
 */
-function Client(name,destination,width,height)
-{
-	App = this;
-	document.title = name || "Spice.js";
-	this.name = name;
-	this.canvas = destination;
-	this.visuals = destination;
-	this.width = width;
-	this.height = height;
-		this.setWidth = width;
-		this.setHeight = height;
-	this.defaultText = 12;
-	//var sc = 1*(((window.innerHeight > 0) ? window.innerHeight : this.height)/this.height);
-	////var sc2 = 0.5*(((window.innerWidth > 0) ? window.innerWidth : this.width)/this.width);
-	////if (sc>sc2)
-	////	sc = sc2;
-	////	//sc = 1;
-	//this.scale = sc;
-	this.scale = 1;
-	
-	//this.width = window.innerWidth;
-	//this.height = window.innerHeight;
-	
-	xs = Math.round((window.innerWidth*0.5)-(this.width*0.5));
-	document.getElementById("Client").style.position = "absolute";
-	document.getElementById("Client").style.left = 0+"px";		
-	
-	
-	this.client_run = true;
-	this.client_f;
-	this.client_state;
-	
-	this.time_now = new Date();
-	this.time_diff = 0;
-	this.fps_date = this.time_now;
-	this.fps_count = 0;
-	this.fps_target = 60;
-	this.fps_ = 0;
-	this.delta_speed = 1;
+var Scripts = window.scripts = [],_Main = Object.create(null),Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
 
-	this.INPUT_mousePos;
+var App = {
+	prototype:{
+		user:{
+			name		:"",
+			id			:"",
+			locale		:"",
+			gender		:"",
+			updated_time:"",
+			timezone	:"",
+			quotes		:"",
+			info:Object.create({
+				response:{},
+				facebook:function(response){
+					this.response = response;
+					App.user.name = this.response.name;
+					App.user.id = this.response.id;
+					App.user.locale = this.response.locale;
+					App.user.gender = this.response.gender;
+					App.user.updated_time = this.response.updated_time;
+					App.user.timezone = this.response.timezone;
+					App.user.quotes = this.response.quotes;
+				},
+				connect:function con(appid){
+					window.fbAsyncInit = function() {
+					FB.init({
+					appId      : appid,
+					status     : true, // check login status
+					cookie     : true, // enable cookies to allow the server to access the session
+					xfbml      : true  // parse XFBML
+					});
+					FB.login(function(){
+						FB.api('/me/feed', 'post', {message: 'Hello, world!'});}, {scope: 'publish_actions'});
+					};
 
-	this.Initalized = false;
-	this.STATE_current = this;
-	
-	
-	this.client_init = function()
-	{
-	this.ScaleOnResize = false;
-	this.set_scale();
-		//document.getElementById("Client").width = this.width;
-		//document.getElementById("Client").height = this.height;
-		////this.width /= this.scale;
-		//this.height /= this.scale;
-		document.getElementById("ClientDiv").style.position = "absolute";
-		document.getElementById("ClientDiv").style.left = xs+"px";	
-		function AppLoop(){App.client_loop();}
-		setTimeout(function(){App.client_start(AppLoop,this.scale);},200);
-		
-		this.inputInit();
-	}
+				  // Load the SDK asynchronously
+				  (function(d){
+				   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+				   if (d.getElementById(id)) {return;}
+				   js = d.createElement('script'); js.id = id; js.async = true;
+				   js.src = "//connect.facebook.net/en_US/all.js";
+				   ref.parentNode.insertBefore(js, ref);
+				  }(document));
 
-	this.client_start =function(f,scale)	
-	{
-		this.client_f = f;
-		input_canvas = this.visuals;
-		this.visuals = new Visuals(this.visuals,this.visuals,this.scale);
-		
-		this.STATE_current = Main_;
-		this.STATE_current.start();
-		if (requestNextAnimationFrame(this.client_f))
-			{
-			this.Initalized = true;
-			}
-		this.set_scale();
-	}
-	this.client_loop = function()
-	{
-	
-	this.visuals.canvas.width = App.width;
-	this.visuals.canvas.height = App.height;	
-	this.visuals.canvas.style.cursor = "default";
-	
-	
-	if (this.STATE_current)
-		this.STATE_current.update();
-	input_update();
-	this.visuals._Update(this.scale);
-	requestNextAnimationFrame(this.client_f);
-	this.client_fps();
-	}
-	this.client_fps = function()
-	{
-		window.scrollTo(0, 1);
-		var time_now = new Date();
-		var time_diff = time_now.getTime() - this.fps_date.getTime();
-		this.fps_ = 1000 / time_diff;
-		this.fps_date = time_now;
-		this.delta_speed = this.fps_target / this.fps_;
-		delete time_now, time_diff; 
-	}
-	this.inputInit = function()
-	{
-		window.addEventListener('MSPointerDown',function(evt)	{
-			var mousePos = getMousePos(canvas, evt);
-			INPUT_start = mousePos;
-			INPUT_up = false;
-			INPUT_duration = 0;
-			INPUT_dirX = 0;
-			INPUT_dirY = 0;
-		},true);
-		window.addEventListener('mousedown',function(evt)	{
-			var mousePos = getMousePos(canvas, evt);
-			INPUT_start = mousePos;
-			INPUT_up = false;
-			INPUT_duration = 0;
-			INPUT_dirX = 0;
-			INPUT_dirY = 0;
-		},true);
-		window.addEventListener('MSPointerUp',function(evt)	{
-			var mousePos = getMousePos(canvas, evt);
-			i++;
-			INPUT_end = mousePos;
-			INPUT_delta = 0;
-			INPUT_duration = 0;
-			INPUT_dirX = INPUT_end.x-INPUT_start.x;
-			INPUT_dirY = INPUT_end.y-INPUT_start.y;
-			INPUT_delta = ((INPUT_dirX)*(INPUT_dirX)) + ((INPUT_dirY)*(INPUT_dirY));
-			INPUT_delta = INPUT_delta;
-			INPUT_angle = Math.round(Math.atan2(INPUT_end.y-INPUT_start.y,INPUT_end.x-INPUT_start.x) * 57.2957795);
-			INPUT_up = true;
-			INPUT_released = true;
-		},true);
-		window.addEventListener('mouseup',function(evt)	{
-			var mousePos = getMousePos(canvas, evt);
-			i++;
-			INPUT_end = mousePos;
-			INPUT_delta = 0;
-			INPUT_duration = 0;
-			INPUT_dirX = INPUT_end.x-INPUT_start.x;
-			INPUT_dirY = INPUT_end.y-INPUT_start.y;
-			INPUT_delta = ((INPUT_dirX)*(INPUT_dirX)) + ((INPUT_dirY)*(INPUT_dirY));
-			INPUT_delta = INPUT_delta;
-			INPUT_angle = Math.round(Math.atan2(INPUT_end.y-INPUT_start.y,INPUT_end.x-INPUT_start.x) * 57.2957795);
-			INPUT_up = true;
-			INPUT_released = true;
-		},true);
-		window.addEventListener('mousemove',function(evt)	{
-		var mousePos = getMousePos(canvas, evt);
-			INPUT = mousePos; 
-			INPUT_dirX = INPUT.x-INPUT_start.x;
-			INPUT_dirY = INPUT.y-INPUT_start.y;
-		},true);
-		window.addEventListener('touchstart',function(evt)	{
-			var touch = evt.targetTouches[0];
-			INPUT_start.x = touch.pageX;
-			INPUT_start.y = touch.pageY;
-			INPUT_up = false;
-			INPUT_duration = 0;
-			INPUT_dirX = 0;
-			INPUT_dirY = 0;
-			
-		},true);
-		window.addEventListener('touchmove',function(evt)	{
-			evt.preventDefault();
-			var touch = evt.targetTouches[0];
-			INPUT.x = touch.pageX;
-			INPUT.y = touch.pageY;
-			INPUT_dirX = INPUT.x-INPUT_start.x;
-			INPUT_dirY = INPUT.y-INPUT_start.y;
-		},true);
-		window.addEventListener('touchend',function(evt)	{
-			INPUT_end = INPUT;
-			INPUT_delta = 0;
-			INPUT_duration = 0;
-			INPUT_dirX = INPUT_end.x-INPUT_start.x;
-			INPUT_dirY = INPUT_end.y-INPUT_start.y;
-			INPUT_delta = ((INPUT_dirX)*(INPUT_dirX)) + ((INPUT_dirY)*(INPUT_dirY));
-			INPUT_delta = INPUT_delta;
-			INPUT_angle = Math.round(Math.atan2(INPUT_end.y-INPUT_start.y,INPUT_end.x-INPUT_start.x) * 57.2957795);
-			INPUT_up = true;
-			INPUT_released = true;
-		},true);
-		window.addEventListener('resize',function(evt)	{
-			if (App.ScaleOnResize)
-				App.set_scale();
-		},true);
-	}
-	
-	///FUNCTIONS
-	this.set_scale = function()
-	{
-			var scr = 1;
-			var sc = App.height/App.setHeight;
-			var sc2 = App.width/App.setWidth;
-			if (sc>=sc2)
-				scr = sc2;
-				else
-				scr = sc;
-			this.scale = scr;
-			this.height = window.innerHeight;
-			this.width = window.innerWidth;
-			xs = Math.round((window.innerWidth*0.5)-(this.width*0.5));
-			document.getElementById("Client").style.left = xs+"px";						
-	}
-	this.set_state = function(state,start)
-	{
-	this.STATE_current = state;
-	if (start)
-		this.STATE_current.start();
-	console.log(this.STATE_current);
-	}
-	this.client_init();
-}
-///Additional Operations
-///Custom RequestAnimationFrame
-window.requestNextAnimationFrame =
-   (function () {
-    var originalWebkitRequestAnimationFrame = undefined;
-    var wrapper = undefined;
-    var callback = undefined;
-    var geckoVersion = 0;
-    var userAgent = navigator.userAgent;
-    var index = 0;
-    var self = this;
-    if (window.webkitRequestAnimationFrame) 
-		{
-			wrapper = function (time) {
-			if (time === undefined) 
-				{
-					time = +new Date();
+				  // Here we run a very simple Flappy of the Graph API after login is successful. 
+				  // This testAPI() function is only called in those cases. 
+				  function testAPI() {
+					console.log('Welcome!  Fetching your information.... ');
+					
+					FB.api('/me', function(response) {
+						App.user.info.facebook(response);
+					console.log(App.user);
+					  console.log('Good to see you, ' + response.name + '.');
+					});
+				  }
 				}
-			self.callback(time);
-         };
-         originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame;
-         window.webkitRequestAnimationFrame = function (callback, element) 
-		 {
-            self.callback = callback;
-            originalWebkitRequestAnimationFrame(wrapper, element);
-         }
-		}
-	if (window.mozRequestAnimationFrame) 
-		{
-         index = userAgent.indexOf('rv:');
-         if (userAgent.indexOf('Gecko') != -1) 
-			{
-            geckoVersion = userAgent.substr(index + 3, 3);
-            if (geckoVersion === '2.0') 
-				{
-               window.mozRequestAnimationFrame = undefined;
+			})
+		},
+		ext:{
+			prototype:{
+				fps:0,
+				ping:0,
+				offline:false,
+				delta_speed:0,
+				connectionAttempts:0,
+				connectDate:new Date(),
+				connectDatere:new Date(),
+				
+				top:function(){
+					App.client.update.fullscale = !App.client.update.fullscale;
+				},
+				debug:{
+					prototype:{
+						delay:0,
+						text:String,
+						strength:"Normal",
+						log:function(txt,n)
+							{
+							this.text = txt;
+							this.delay.value--;
+							if ((this.delay.value==0)&&(typeof n!=="undefined"))
+								this.delay.value=n;
+							if ((this.delay.value==0)||(this.delay.value==1)||(typeof n ==="undefined"))
+								if (this.app.debug)
+									if (App.debug==true)
+									//console.log("SJS:"+txt);
+							return true;
+						},
+						toggle:function(txt) {
+							if ((txt=="lite")||(txt=="Lite")||(txt==1))
+								this.strength = "Lite";
+							if ((txt=="off")||(txt=="none")||(txt==0))
+								this.strength = "none";
+							if ((txt=="normal")||(txt=="Normal")||(txt==2))
+								this.strength = "Normal";
+							return this.app.debug = !this.app.debug;
+						}
+					},
+					constructor:function(a){return {
+						app:{value:a},
+						init:{value:function(){
+									this.log('Debug:     '+this.strength);
+									Debug = this;
+								}
+							}
+						}
+					}
+				},
+				useragent:{
+					prototype:{
+						agent:String,
+						mouse:false,
+						touch:false,
+						keyboard:false,
+						windows:false,
+						chrome:false,
+						safari:false,
+						Chrome: function(){
+							return this.chrome = navigator.userAgent.match(/Chrome/i) ? true : false;
+						},
+						Safari: function(){
+							return this.safari = navigator.userAgent.match(/Safari/i) ? true : false;
+						},
+						Android: function(){
+							return navigator.userAgent.match(/Android/i) ? true : false;
+						},
+						BlackBerry:function(){
+							return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+						},
+						iOS:function(){
+							return  navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+						},
+						iemobile:false,
+						IEMobile: function(){
+							return  navigator.userAgent.match(/IEMobile/i) ? true : false;
+						},
+						ie:false,
+						IE: function(){
+							return  navigator.userAgent.match(/Trident/i) ? true : false;
+						},
+						any: function(){
+							return (this.Android() || this.BlackBerry() || this.iOS());
+						}
+					},
+					constructor:function(){return {
+						init:{value:function(){
+								this.agent = navigator.userAgent;
+								this.chrome = this.Chrome();
+								this.safari = this.Safari();
+								this.mouse = this.any();
+								
+								this.iemobile = this.IEMobile();
+								this.windows = this.IEMobile() || this.IE() || !this.any();
+								
+								this.ie = this.trident = this.IE();
+								this.touch = this.any();
+								this.mouse = !this.any() || this.BlackBerry();
+								this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
+								Debug.log('UserAgent: '+this.agent);
+								}
+							}
+						}
+					}
+				},
+				metatag:{
+					prototype:{
+						count:0,
+						metaLink: function(href,rel,type) {
+							var link = document.createElement('link');
+							link.href = href;
+							link.rel = rel;		
+							link.type = type;	
+							return link;
+						},
+						metaTag: function(name,content) {
+							var meta = document.createElement('meta');
+							meta.content = content;
+							meta.name = name;
+							return meta;
+						},
+						metaStyle: function() {
+							var style = document.createElement('style');
+							style.innerHTML = style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;/* Firefox */image-rendering:-o-crisp-edges;/* Opera */image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */-ms-0erpolation-mode: nearest-neighbor;/*IE(non-standard property) */}';
+							return style;
+						},
+						metaAppend: function(meta) {
+							document.getElementsByTagName('head')[0].appendChild(meta);
+							this.count++;
+						},
+						metatags: function(name) {
+							document.title = this.name = name;
+							document.body.style = "overflow: hidden;padding:0px;margin:0px auto;-ms-touch-action:none;";
+							document.body.setAttribute("style","-ms-touch-action: none;background:transparent;");
+							document.body.style.overflow = "hidden";
+							document.body.style.padding = "0px";
+							document.body.style.margin = "0px auto";
+							this.metaAppend(this.metaTag("msapplication-tap-highlight","no"));
+							this.metaAppend(this.metaTag("apple-mobile-web-app-capable","yes"));
+							this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style","black"));
+							this.metaAppend(this.metaTag("format-detection","telephone=no"));
+							this.metaAppend(this.metaTag("cursor-event-mode","native"));
+							this.metaAppend(this.metaTag("touch-event-mode","native"));
+							this.metaAppend(this.metaTag("HandheldFriendly","True"));
+							this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=no"));
+							//this.metaAppend(this.metaTag("viewport","target-densitydpi=device-dpi"));
+							this.metaAppend(this.metaStyle());
+						}
+					},
+					constructor:function(){return {
+						init:{value:function(name){
+								this.metatags(name);
+								Debug.log('Debug:     MetaCount/'+this.count);
+							return true;
+							}
+						}
+					}
 				}
-			}
-      }
-      return window.requestAnimationFrame   ||
-         window.webkitRequestAnimationFrame ||
-         window.mozRequestAnimationFrame    ||
-         window.oRequestAnimationFrame      ||
-         window.msRequestAnimationFrame     ||
-         function (callback, element) 
-		 {
-            var start;
-            var finish;
-            window.setTimeout( function () 
-				{
-					start = +new Date();
-					callback(start);
-					finish = +new Date();
-					self.timeout = 1000 / 60 - (finish - start);
-				}, self.timeout);
-         };
-      }
-   )
-();
-
-////////////////////////////////////////////////////////////////
-////	"Visuals.js" by Ryan Spice,                      	////
-////               
-////               
-////    s: scaled  
-////    a: alpha   
-////    c: centered
-////               
-////    Functions  
-////      	Visuals._draw = function(image, x, y)
-////		Visuals._draw_a = function(image,x,y,a)
-////		Visuals._draw_s = function(image,x,y,s)
-////		Visuals._draw_sa = function(image,x,y,s,a)
-////		Visuals._draw_c = function(image,x,y)
-////		Visuals._draw_sc = function(image,x,y,s)
-////		Visuals._draw_sca = function(image,x,y,s,a)
-////		Visuals._draw_r = function(image,x,y,angle)
-////		Visuals._text_draw = function(string, x, y)
-////		Visuals._text_draw_s = function(string, x, y, s)
-////		Visuals._text_draw_c = function(string, x, y)
-////		Visuals._text_draw_sc = function(string, x, y, s, style, style2)
-////		Visuals._text_draw_button = function(string,x,y,s,style,style2,loc)
-////		Visuals._draw_button = function(image,x,y,s,loc)
-////		Visuals._clear = function(x,y,width,height)
-////		Visuals._rect_draw_c = function(x, y, width, height)
-////		Visuals._rect_draw = function(x, y, width, height)
-////		Visuals._rect_draw_cx = function(x, y, width, height)
-////		Visuals._text_align = function(align)
-////		Visuals._text_baseline = function(align)
-////		Visuals._font = function(font)
-////		Visuals._color = function(colour)
-////		Visuals._colour = function(colour)
-////		Visuals._opacity = function(opacity)
-////		Visuals.text_width = function(string)
-////		Visuals.touch_within_c = function(x, y, w, h)
-////		Visuals.image_load = function(name)                
-////                                                        
-////////////////////////////////////////////////////////////////
-function Visuals(canvas,buffer,scale)
-{
-	this.scale = App.scale;
-	this.context;
-	this.buffer;
-	this.canvas;
-	this.canvas_context;
-	////Base Functions
-	this._init = function(canvas,buffer,scale)
-	{
-	this.scale = scale;
-	this.canvas = document.getElementById(canvas);
-	this.canvas_context = this.canvas.getContext("2d");
-	if (buffer!=null)
-		{
-			this.buffer = document.getElementById(canvas);
-		}
-		else
-		{
-			this.buffer = document.getElementById(buffer);
-		} 
-		this.context = this.buffer.getContext("2d");
-	}
-	this._Update = function(sc)
-	{
-	try {
-	
-		this.canvas_context.drawImage(this.canvas,0,0);
-		this.scale = sc;
-		}
-	catch(e){}
-	}
-	this._init(canvas,buffer,scale);
-	////Drawing Functions
-	this.rect = function(x,y,w,h,s,a,c)
-	{
-		var x = x || 0;
-		var y = y || 0;
-		var w = w || 1;
-		var h = h || 1;
-		var s = s || 1;
-		var a = a || 1;
-		var c = c || false;
-		x = Math.round(x);
-		y = Math.round(y);
-		w = Math.round(w*this.scale*s);
-		h = Math.round(h*this.scale*s);
-		
-		this._opacity(a);
-		this.context.beginPath();
-		if (c)
-			this.context.rect(x-w/2, y-h/2, w, h);
-			else
-			this.context.rect(x, y, w, h);
-		this.context.fill();
-		this._opacity(1);
-	}
-	this.image = function(image,x,y,s,a,c)
-	{
-		var x = x || 0;
-		var y = y || 0;
-		var s = s || 1;
-		var a = a || 1;
-		var c = c || false;
-		var w = image.width*this.scale*s;
-		var h = image.height*this.scale*s;
-		x = Math.round(x);
-		y = Math.round(y);
-		w = Math.round(w);
-		h = Math.round(h);
-		//s = Math.round(s);
-		this._opacity(a);
-		try	{
-			if (c)
-				this.context.drawImage(image,x-w/2,y-h/2,w,h);
-				else                               
-				this.context.drawImage(image,x,y,w,h);
-				
-				
-			}
-			catch(e)	
-			{
-			this.context.rect(x-w/2, y-h/2, w, h);
-			}
-
-		this._opacity(1);
-	}
-	
-	this.image_button = function(image,x,y,s,loc,highlight)
-	{
-		var x = x || 0;
-		var y = y || 0;
-		var s = s || 1;
-		var a = a || 1;
-		var c = c || true;
-		var highlight = highlight || null;
-		var w = image.width*this.scale*s;
-		var h = image.height*this.scale*s;
-		var press = 0;
-		var hi = false;
-		x = Math.round(x);
-		y = Math.round(y);
-		if (this.touch_within_c(x,y,w,h))
-			{
-			if (highlight)
-				hi = true;
-			press = INPUT_duration*1.5;
-			if (press>2)
-				press = 2;
-			x = x + press;
-			y = y + press;
-			if ((mousestate.released)||(INPUT_released))
-				{
-					if ((INPUT_dirX<25*this.scale)&&(INPUT_dirX>-25*this.scale))
-						if ((INPUT.x>0)&&(INPUT.x<App.width))
-							loc();
-				}			
-			if (press>3)
-				{
-				press = 3;
-				ret = true;
-				if ((INPUT_delta>40)&&(INPUT_dirX>0))
-					{
-					ret = true;
+				},
+				colour:{
+					prototype:{
+						Teal		:["#008299",	"#00A0B1"],
+						Blue		:["#2672EC",	"#2E8DEF"],
+						Purple		:["#8C0095",	"#A700AE"],
+						DarkPurple	:["#5133AB",	"#643EBF"],
+						Red			:["#AC193D",	"#BF1E4B"],
+						Orange		:["#D24726",	"#DC572E"],
+						Green		:["#008A00",	"#00A600"],
+						SkyBlue		:["#094AB2",	"#0A5BC4"],
+						White		:["#AFAFAF",	"#F9FAF2"],
+						Black		:["#0F0F0F",	"#A1A1A1"],
+						Current		:["#0F0F0F",	"#AFAFAF"],
+						shade		:0,
+						getCurrent	:function(){return this.Current},
+						get			:function(){var g = (this.shade)?this.Current[0]:this.Current[1];return g;},
+						getAlt		:function(){var g = (this.shade)?this.Current[1]:this.Current[0];return g;},
+						set			:function(set){console.log(set[0]);this.Current = set; var g = (this.shade)?this.Current[0]:this.Current[1];return this.Current;},
+						setAlt		:function(set){this.shade = set;}
+					},
+					constructor:function(){return {
+						init:{value:function(){
+									this.set(this.Black);
+									Debug.log("Colour:    "+this.Current[0]+"/"+this.Current[1]);
+								}
+							}
+						}
+					}
+				},
+				cursor:{
+					prototype:{
+						auto		: "auto",
+						inherit		: "inherit",
+						crosshair	: "crosshair",
+						def			: "default",
+						help		: "help",
+						move		: "move",
+						pointer		: "pointer", 
+						progress	: "progress",
+						text		: "text",
+						wait		: "wait",
+						eresize		: "e-resize",
+						neresize	: "ne-resize",
+						nwresize	: "nw-resize",
+						nresize		: "n-resize",
+						seresize	: "se-resize",
+						swresize	: "sw-resize",
+						sresize		: "s-resize",
+						wresize		: "w-resize",
+						current 	: "auto",
+						last 		: "auto",
+						delay 		: 2,
+						changed		:false,
+						count		:0,
+						lock		:0,
+						set:function(cursor,lock){
+							//if (this.delay>0){
+							//	this.delay--;this.count=0;this.changed=false;return;}
+							//	else
+							//	delay =1;
+							if (this.lock >0)
+								this.lock--;
+							if (lock)
+								this.lock += 1;
+							//if (this.changed==true)
+							//	return;
+							if	((this.last==cursor)||(this.lock))
+								return;
+							//console.log(this.app.client._Visuals);
+							this.last = this.current;
+							this.current=this.app.client.visuals.canvas.style.cursor=this.app.client.visuals.buffer.style.cursor=cursor;
+							document.body.style.cursor=cursor;
+							this.changed = true;
+							this.count++;
+							Debug.log("Cursor:    "+this.current+" - "+this.last);
+						}
+					},
+					constructor:function(a){return{
+						app:{value:a},
+						init:{value:function(){
+									this.set(this.wait);
+									setTimeout(function(){App.ext.cursor.set(App.ext.cursor.def)},2000);
+								}
+							}
+						}
+					}
+				},
+				input:{
+					prototype:{
+						init:false,
+						parent:Private,
+						x: 0,
+						y: 0,
+						keyup:false,keydown:false,
+						start: 		{x:0,y:0},				
+						control:false,
+						window:{
+							play:15,
+							x:false,
+							y:false,
+							inside:false
+						},
+						listener:{
+							down:function(mouse,input) {
+								if (input.delay>0)
+									return;
+								input.start.x = mouse.x || input.x;
+								input.start.y = mouse.y || input.y;
+								input.pressed = true;
+								input.press = true;
+								//if ((input.pressed)||(input.delay))
+								//	return;
+								//input.pressed = true;
+								//input.press = true;
+								//
+								//
+								//
+								//
+								//
+								//
+								input.dist.x = 0;
+								input.dist.y = 0;
+							},
+							move:function(move,touch,input){
+								if (input.delay>0)
+									return;
+								//if ((input.delay))
+								//	return;
+								input.x = move.x || input.x;
+								input.y = move.y || input.y;
+								input.dist.x = (input.x-input.start.x)/App.client.scale;
+								input.dist.y = (input.y-input.start.y)/App.client.scale;
+								//((!touch) ? input.mouse_distance : input.touch_distance)(touch);
+							},
+							up:function(mouse,input) {
+								input.end.x = mouse.x || input.x;
+								input.end.y = mouse.y || input.y;
+								input.pressed = false;
+								input.released = true;
+								
+								input.dist.x = input.end.x-input.start.x;
+								input.dist.y = input.end.y-input.start.y;
+							},
+							touch:function(touch,input){
+								if (input.delay>0)
+									return;
+								input.x = touch.pageX;
+								input.y = touch.pageY;
+								input.pos.x = touch.pageX;
+								input.pos.y = touch.pageY;
+								input.start.x = touch.pageX;
+								input.start.y = touch.pageY;
+								input.released = false;
+								input.duration = 0;
+								//input.dist.x = 0;
+								//input.dist.y = 0;
+							},
+							keydown:function(a,input) {
+								if (input.delay>0)
+									return;
+								input.key = true;
+								input.kpressed = true;
+								input.keyPower = -a;
+								input.keyPower 	= input.keyPower;
+								Debug.log(input.key + " " + input.keyPower);
+							},
+							keyup:function(input) {
+								input.key = false;
+								input.keyPower = 0;
+								input.kreleased = true;
+								input.kpressed = false;
+							}
+							,
+							ups:function(a,input){
+								a==1?input.keyup=true:input.keyup=false;
+								
+							},
+							downs:function(a,input){
+								if (input.delay>0)
+									return;
+								a==1?input.keydown=true:input.keydown=false;
+							}
+						},
+						pressed: 	false,
+						released: false,
+						press: 		false,
+						delta: 0,
+						wheelDelta: 0,
+						duration: 0,
+						dist: {x:0,y:0},
+						pos: {x:0,y:0},
+						last: {x:0,y:0},
+						end: {x:0,y:0},
+						delay:0,
+						key:false,
+						keyPower:0,
+						menu:false,
+						drag:false,
+						confine:false,
+						position:function(canvas,evt) {
+							if ((!canvas)||(!evt))
+									return false;
+							return {x: evt.clientX,y: evt.clientY};
+						},
+						mouse:function() {
+							if (!App.ext.input.pressed)
+								App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input,App.ext.input.start);
+						},
+						mouse_distance:function() {
+							if (!App.ext.input.pressed)
+								App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input.start,App.ext.input.end);
+						},
+						touch_distance:function(touch) {
+							if (!touch)
+								return;
+							App.ext.input.x = touch.pageX;
+							App.ext.input.y = touch.pageY;
+							//if (!App.ext.input.input.pressed)
+								App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input.start,App.ext.input.end);
+						},
+						get_angle: function(){
+							return 57.2957795 * Math.atan2(this.end.y-this.start.y,this.end.x-this.start.x);
+						},
+						get_delta: function(){
+							return this.dist.x*this.dist.x+this.dist.y*this.dist.y;
+						},
+						set: function(x,y){
+							this.x=x;this.y=y;
+						},
+						update:function UPDATE() {
+							this.last.x = this.x;
+							this.last.y = this.y;
+							this.press = false;
+							this.window.inside = 0;
+							this.wheelDelta = 0;
+							this.pressed?this.duration++:this.duration=0;
+							
+							this.confine?(
+								((this.y<this.app.client.visuals.fixY(0))?
+									(this.window.y=0,this.window.inside -= 1):
+										((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+											(this.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.window.inside += 1):
+											(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
+										),
+										((this.x<this.app.client.visuals.fixX(0))?
+											(this.window.x = 0,this.window.inside -=1):
+											((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+												(this.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.window.inside += 1):
+												(this.window.x = -this.app.client.visuals.fixX(0)+this.x)
+											)
+										)
+									)
+								):((this.y<this.app.client.visuals.fixY(0))?
+										(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
+										((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+											(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
+											(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
+									),
+									((this.x<this.app.client.visuals.fixX(0))?
+										(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
+										((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+											(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
+											(this.window.x=-this.app.client.visuals.fixX(0)+this.x)
+										)
+									));
+							this.released?(this.released=false,this.dist.x=0,this.dist.y=0):null;
+							//this.duration>0?(this.released=false);
+							//(this.released==true)?(this.released=false,this.duration=0,this.dist.x=0,this.dist.y=0):null;
+							(this.delay>0)?this.delay-=0.1:null;
+						return true;
+						},
+					},
+					constructor:function(a){return{
+						app:{value:a},
+						init:{value:function Initalize(a){
+							if (!this.menu) {
+									document.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
+									window.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
+								}
+							if (!this.drag) {
+									document.ondragstart   = function(evt) {evt.preventDefault(); return false; };
+									window.ondragstart   = function(evt) {evt.preventDefault(); return false; };
+								}
+								
+							if (App.ext.useragent.keyboard) {
+									window.addEventListener('keydown', 	function(event) {
+									
+									if (event.ctrlKey)
+										App.ext.input.control = true;
+									
+										switch(event.keyCode) 
+										{
+										case 37:App.ext.input.listener.keydown(-1,App.ext.input);break;
+										case 65:App.ext.input.listener.keydown(-1,App.ext.input);break;
+										case 39:App.ext.input.listener.keydown(1,App.ext.input);break;
+										case 68:App.ext.input.listener.keydown(1,App.ext.input);break;
+										case 40:App.ext.input.listener.downs(1,App.ext.input);break;
+										case 83:App.ext.input.listener.downs(1,App.ext.input);break;
+										case 38:App.ext.input.listener.ups(1,App.ext.input);break;
+										case 87:App.ext.input.listener.ups(1,App.ext.input);break;
+										}
+									},true);
+									window.addEventListener('keyup', 	function(event) {
+									if (event.ctrlKey)
+										App.ext.input.control = false;
+										switch(event.keyCode) 
+										{
+										case 37:App.ext.input.listener.keyup(App.ext.input);break;
+										case 65:App.ext.input.listener.keyup(App.ext.input);break;
+										case 39:App.ext.input.listener.keyup(App.ext.input);break;
+										case 68:App.ext.input.listener.keyup(App.ext.input);break;
+										case 40:App.ext.input.listener.downs(2,App.ext.input);break;
+										case 83:App.ext.input.listener.downs(2,App.ext.input);break;
+										case 38:App.ext.input.listener.ups(2,App.ext.input);break;
+										case 87:App.ext.input.listener.ups(2,App.ext.input);break;
+										}
+									},true);
+								}
+								window.addEventListener('mousewheel',function(evt,delta) {
+									evt.preventDefault();
+									if (App.ext.input.control)
+										console.log(delta);
+									App.ext.input.wheelDelta = event.wheelDelta;
+									},true);
+							if (App.ext.useragent.mouse) {
+								window.addEventListener('mousedown',function(evt) {
+										App.ext.input.listener.down(App.ext.input.position(App.client.visuals.canvas, evt),App.ext.input);
+									},true);
+								window.addEventListener('mousemove',function(evt) {
+										App.ext.input.listener.move(App.ext.input.position(App.client.visuals.canvas, evt),null,App.ext.input);
+									},true);
+								window.addEventListener('mouseup',function(evt) {
+										App.ext.input.listener.up(App.ext.input.position(App.client.visuals.canvas, evt),App.ext.input);
+									},true);
+								}
+							if (!App.ext.useragent.touch) {
+								window.addEventListener('touchstart',	function(evt) {
+										evt.preventDefault();
+										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
+									},true);
+								window.addEventListener('touchend',		function(evt) {
+										evt.preventDefault();
+										App.ext.input.listener.up(evt,App.ext.input);
+									},true);
+								window.addEventListener('touchmove',	function(evt) {
+										evt.preventDefault();
+										App.ext.input.listener.move(App.ext.input.position(App.client.visuals.canvas, evt), evt.targetTouches[0],App.ext.input);
+									},true);
+								}
+							if (App.ext.useragent.windows) {
+								window.addEventListener('MSPointerDown',function(evt) {
+										App.ext.input.listener.down(App.ext.input.position(App.client.c, evt),App.ext.input);
+									},true);
+								window.addEventListener('MSPointerMove',function(evt) {
+										App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),null,App.ext.input);
+									},true);
+								window.addEventListener('MSPointerUp',	function(evt) {
+										App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
+									},true);
+								}
+							}
+						}
+					}
+				}
+				},
+				con:false,
+				connection:null,
+				connect:function(app){
+				return;
+					if ((this.offline)||(this.connectionAttempts>0))
+						return this.offline = this.con;
+					this.connectionAttempts++;
+					Debug.log("Network:   Attempt: "+this.connectionAttempts);
+					if (window.XMLHttpRequest)
+						this.connection = new XMLHttpRequest();
+						else
+						this.connection = new ActiveXObject("Microsoft.XMLHTTP");
+					this.connection.onreadystatechange = function()
+						{
+						if (this.connection.readyState==4 && connection.status==200)
+							{
+							this.offline = this.con = false;
+							this.connectDatere = new Date;
+							this.connectDatere = this.connectDatere.getTime();
+							this.ping = this.connectDatere - this.connectDate;
+							}
+							else
+							{
+							this.offline = this.con = true;
+							this.ping = 1;
+							}
+						}
+						try {
+							this.connection.open("GET","http://www.google.com",true);
+							this.connection.send();
+							} 
+					catch(e){Debug.log('No0ernet');}
+					return this.offline = this.con;
+				}
+			},
+			constructor:function(a){return{
+				app:{value:a},
+				init:{value:function(name){
+						(this.debug = Object.create(this.debug.prototype,this.debug.constructor(this.app))).init();
+						(this.cursor = Object.create(this.cursor.prototype,this.cursor.constructor(this.app))).init();
+						(this.useragent = Object.create(this.useragent.prototype,this.useragent.constructor())).init();
+						(this.input = Object.create(this.input.prototype,this.input.constructor(this.app))).init();
+						(this.colour = Object.create(this.colour.prototype,this.colour.constructor())).init();
+						(this.metatag = Object.create(this.metatag.prototype,this.metatag.constructor())).init(name);
+						Debug.log("Network:   Connection: "+!this.connect(this));
+						}
 					}
 				}
 			}
-			else 
-	        {
-	        	press = 0;
-	        }
-		var ret = false;
-		if (!hi)
-			this.context.drawImage(image,x-w/2,y-h/2,w,h);
-			else
-			this.context.drawImage(highlight,x-w/2,y-h/2,w,h);
-		delete x,y,s,a,c,w,h,press,ret;
-		return ret;
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	this.text = function(string, x, y,s,a,c,style)
-	{
-		var x = x || 0;
-		var y = y || 0;
-		var s = s || 1;
-		var a = a || 1;
-		var c = c || false;
-		var w = this.text_width(string);
-		w = Math.round(w*App.scale);
-		x = Math.round(x);
-		y = Math.round(y);
-		s = s * App.scale;
-		var style = style || "";
-		this._font(style+" "+Math.floor(s)+"px "+"sans-serif");
-		if (c)
-			this.context.fillText(string,x-w-s,y-s/2);
-			else                               
-			this.context.fillText(string,x,y);
-		this._font(style+" "+Math.floor(App.defaultText)+"px "+"sans-serif");
-	}
-	
-	
-	
-	
-	this.arch = function(x,y,r,col)
-	{
-		this.context.beginPath();
-		this.context.arc(x, y, r, 0, 2 * Math.PI, false);
-		this.context.fillStyle = col;
-		this.context.fill();
-	}
-
-	this._draw_a = function(image,x,y,a)
-	{
-		var at = 1-a;
-		this._opacity(a);
-		s = 1;
-		x = x ;
-		y = y ;
-	this.context.drawImage(image,x,y,image.width*this.scale,image.height*this.scale);
-		this._opacity(1);
-		delete a;
-	}
-	this._draw_s = function(image,x,y,s)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-	this.context.drawImage(image,x,y,image.width*this.scale*s,image.height*this.scale*s);
-	}
-	this._draw_sa = function(image,x,y,s,a)
-	{
-		var at = 1-a;
-		this._opacity(a);
-		x = x *this.scale;
-		y = y *this.scale;
-	this.context.drawImage(image,x,y,image.width*this.scale*s,image.height*this.scale*s);
-		this._opacity(1);
-		delete a;
-	}
-	this._draw_c = function(image,x,y)
-	{
-		s = 1;
-		x = x *this.scale;
-		y = y *this.scale;
-		var iws = image.width*this.scale*s;
-		var ihs = image.height*this.scale*s;
-	this.context.drawImage(image,x-iws/2,y-ihs/2,iws,ihs);
-		delete iws, ihs;
-	}
-	this._draw_sc = function(image,x,y,s)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-		var iws = image.width*this.scale*s;
-		var ihs = image.height*this.scale*s;
-		this.context.drawImage(image,x-iws/2,y-ihs/2,iws,ihs);
-		delete iws, ihs;
-	}
-	this._draw_sca = function(image,x,y,s,a)
-	{
-		if (a<0)
-			a = 0;
-		var at = 1-a;
-		this._opacity(a);
-		x = x ;
-		y = y ;
-		var iws = image.width *this.scale*s;
-		var ihs = image.height*this.scale*s;
-	this.context.drawImage(image,x-iws/2,y-ihs/2,iws,ihs);
-		this._opacity(1);
-		delete iws, ihs,at;
-	}
-	this._draw_r = function(image,x,y,angle)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-	this.context.translate(x,y);
-		this.context.rotate(angle*0.0174532925);
-			this.context.drawImage(image, -image.width/2, -image.height/2, image.width, image.height);
-		this.context.rotate(-angle*0.0174532925);
-	this.context.translate(-x,-y);
-	}
-	this._draw_rs = function(image,x,y,angle,s)
-	{
-		x = x *this.scale*s;
-		y = y *this.scale*s;
-	this.context.translate(x,y);
-		this.context.rotate(angle*0.0174532925);
-			this.context.drawImage(image, -image.width/2*s, -image.height/2*s, image.width*s, image.height*s);
-		this.context.rotate(-angle*0.0174532925);
-	this.context.translate(-x,-y);
-	}
-	this._draw_rsc = function(image,x,y,angle,s)
-	{
-		x = x *this.scale*s;
-		y = y *this.scale*s;
-	this.context.translate(x,y);
-		this.context.rotate(angle*0.0174532925);
-			this.context.drawImage(image, -image.width*s/2, -image.height*s/2, image.width*s, image.height*s);
-		this.context.rotate(-angle*0.0174532925);
-	this.context.translate(-x,-y);
-	}
-	this._text_draw = function(string, x, y)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-	this.context.fillText(string, x, y);
-	}
-	this._text_draw_s = function(string, x, y, s, style, style2)
-	{
-		if (s<6)
-			s = 6;
-		x = x *this.scale;
-		y = y *this.scale;
-		s = s*this.scale;
-		if (!style)
-			style = "";
-		if (!style2)
-			style2 = "sans-serif";
-
-		//this._font(s+"px sans-serif");
-		this._font(style+" "+Math.floor(s)+"px " + style2);
-	this.context.fillText(string, x, y);
-	}
-	this._text_draw_c = function(string, x, y)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-		
-	this.context.fillText(string, x-(this.text_width(string)/2),y);
-	}
-	this._text_draw_sc = function(string, x, y, s, style, style2)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-		//s = s *App.scale;
-		if (s<8)
-			s = 8;
-		if (!style)
-			style = "";
-		if (!style2)
-			style2 = "sans-serif";
-		this._font(style+" "+Math.floor(s*this.scale)+"px " + style2);
-	this.context.fillText(string, x-(this.text_width(string)/2),y);
-	}
-this._text_draw_button = function(string,x,y,s,style,style2,loc)
-	{
-		if (!style)
-			style = "";
-		if (!style2)
-			style2 = "sans-serif";
-		x = x ;
-		y = y ;
-		s = s *this.scale;
-		this._font(style+" "+Math.floor(s)+"px " + style2);
-		if (this.touch_within_c(x,y,(this.text_width(string)),s))
-			{
-				if ((mousestate.released)||(INPUT_released))
-					{
-						loc();
-					}			
-			}	
-		this.context.fillText(string, x-(this.text_width(string)/2),y);
-	}
-
-	
-	this._clear = function(x,y,width,height)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-		width = width *this.scale;
-		height = height *this.scale;
-		this.context.clearRect ( x , y , width , height );
-	}
-
-	this._tri_draw = function(p1,p2,p3)
-	{
-		this.context.beginPath();
-		this.context.moveTo(p1.x,p1.y);
-		this.context.lineTo(p2.x,p2.y);
-		this.context.lineTo(p3.x,p3.y);
-		this.context.fill();
-	}
-	this._circ_draw = function(x,y,r)
-	{
-		this.context.beginPath();
-		this.context.arc(x, y, r, 0, 2 * Math.PI, false);
-		this.context.fill();
-	}
-	this._rect_draw_c = function(x, y, width, height)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-		this.context.beginPath();
-		this.context.rect(x-(width*this.scale)/2, y-(height*this.scale)/2, width*this.scale, height*this.scale);
-		this.context.fill();
-	}
-	this._rect_draw_cx = function(x, y, width, height)
-	{
-		x = x *this.scale;
-		y = y *this.scale;
-	this.context.beginPath();
-	this.context.rect(x-(width*this.scale/2), y, width*this.scale, height*this.scale);
-	this.context.fill();
-	}
-	
-	this._text_align = function(align)
-	{
-	this.context.textAlign = align;
-	}
-	
-	this._text_baseline = function(align)
-	{
-	this.context.textBaseline = align;
-	}
-	this._font = function(font)
-	{
-	this.context.font = font;
-	}
-	
-	this._color = function(colour)
-	{
-	this.context.fillStyle = colour;
-	this.context.strokeStyle = colour;
-	}
-	
-	this._colour = function(colour)
-	{
-	this.context.fillStyle = colour;
-	this.context.strokeStyle = colour;
-	}
-	
-	this._opacity = function(opacity)
-	{
-	this.context.globalAlpha = opacity;
-	}
-	
-	this.text_width = function(string)
-	{
-	return this.context.measureText(string).width;
-	}
-	this.touch_within_c = function(x, y, w, h)
-	{
-		
-		x = x ;
-		y = y ;
-		w = w ;
-		h = h ;
-		if ((INPUT.x > x-w/2) && (INPUT.x < x + w/2) && (INPUT.y > y-h/2) && (INPUT.y < y + h/2))
-			{
-				this.canvas.style.cursor = "pointer";
-				return true;
-			}
-			else
-			{
+		},
+		client:{
+			canvas:function(){
+				(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
+				(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
+				this._Canvas?(
+						this.visuals.canvas.style.position = "relative",
+						this.visuals.canvas.style.zIndex = "1",
+						this.visuals.canvas.style.left = "0px",
+						this.visuals.canvas.style.top = "0px",
+						this.visuals.buffer.style.position = "relative",
+						this.visuals.buffer.style.zIndex = "0",
+						this.visuals.buffer.style.left = "0px",
+						this.visuals.buffer.style.top = "0px"):(    
+						this.visuals.canvas.style.position = "absolute",
+						this.visuals.canvas.style.zIndex = "1",
+						this.visuals.canvas.style.top = "0px",
+						this.visuals.canvas.style.left = "0px",
+						this.visuals.buffer.style.position = "absolute",
+						this.visuals.buffer.style.zIndex = "0",
+						this.visuals.buffer.style.left = "0px",
+						this.visuals.buffer.style.top = "0px");
+			},
+			init:function(name,w,h){
+				this.name = name;
+				this.discription = "Eh";
+				this.width = this.setWidth = w;
+				this.height = this.setHeight = h;
+				(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.c,this.b))).init();
+				this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
+				(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
+				(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
+				(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
+				(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
+				this._Main = Object.create(_Main.prototype);
+				(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
+			},
+			start:function(loop,scale){
+				this.scale = scale;
+				this.client_f = loop;
+				requestNextAnimationFrame(this.client_f);
+			},
+			loop:function(a){
+				this.mute = this._Audio.update();
+				this.scale = this.update.scale(this);
+				this.fps = this.update.step.tick(this.second,this.mainLoop,a);
+				App.ext.cursor.set("auto");
+				this.resized = this.update.size(this);
+				this._Visuals.draw(this.scale);
+				a.ext.input.update();
+				requestNextAnimationFrame(this.client_f);
+			},
+			update:{
+				last:{w:0,h:0},
+				difference:{x:0,y:0},
+				scaler:{s:1,x:1,y:1},
+				scaling:true,
+				scalediff:0,
+				lastscale:1,
+				fullscale:false,
+				resized:false,
+				pause:0,
+				set:0,
+				frames:0,
+				pause:function(){
 				
-				return false;
-			}
-	}
-	
-	
-	
-	this._draw_bgs = function(image,x,y,x2,y2,s)
-	{
-		x = x ;
-		y = y ;
-		var bx, by, by_first, iw, ih;
-		iw = Math.round(image.width*App.scale);
-		ih = Math.round(image.height*App.scale);
-		//by = Math.round((App.height+(-y2-App.height)*1*1) % ih - ih);
-		//by_first = by;
-		//for (bx = Math.round((App.width+(x2+App.width)*App.scale*s) % iw - iw); bx < App.width+iw; bx += iw)
-		//	for (by = by_first; by < App.height+ih; by += ih)
-		
-		
-		for (bx = -x2; bx < (App.width+(x2+App.width)*App.scale); bx+=iw)
-			for (by = -y2; by < y2+App.height+ih*2; by+=ih)
-				this.context.drawImage(image,bx, by-y2, iw, ih);
-	}
-	
-	
-	
-	
-	
-	this._draw_onmap = function _draw_onmap(image, x, y)
-	{
-	
-	
-	
-	try {
-		this.context.drawImage(image, (App.AppWidth/2)+(x-arcade.viewx-(App.AppWidth/2))*App.scale*1, (App.AppHeight/2)+(y-arcade.viewy-(App.AppHeight/2))*App.scale*1, image.width*App.scale*1, image.height*App.scale*1);
-		}catch(err) {}
-	}
-	
-	
-	
-	
-	
-	
-	
-	this.image_count = 0;
-	this.image_max = 90;
-	
-	this.image_load = function(name)
-	{
-
-		var image = new Image();
-		//image.onload = function(){App.visuals.image_count++;};
-		image.src = name + ".png";
-		return image;
-	}
-	this.image_check = function()
-	{
-		if (this.image_count<=this.image_max)
-			return false;
-			else
-			return true;
-	}
-}
-	///Animation States
-	///  -2 = set to idle.
-	/// -1 = animate backwards and stop.
-	///  0 = set to first frame.
-	///  1 = animate forwards and stop.
-	///  2 = animate forwards and return to 0 and animate again.
-
-function animation(aniArray,aniSpeed,ani,origAni)
-{
-
-	this.aniImage = new Array();
-	this.aniImage = aniArray;
-	this.nextAni = new Array();
-	this.nextAni = origAni;
-	
-	if (this.aniImage[0])
-		this.aniMax = this.aniImage.length-1;
-		else
-		this.aniMax = 0;
-	this.aniCurrent = 0;
-	this.aniSpeed = aniSpeed*App.delta_speed;
-	this.animate = ani;
-	this.aniChanged = 0;
-	this.aniPrev = aniArray;
-	this.aniDir = 1;
-	this.recreate = function create(aniArray,aniSpeed,ani)
-	{
-		this.aniCurrent = 0;
-		this.aniImage = aniArray;
-		this.aniSpeed = aniSpeed;
-		this.animate = ani;
-		this.aniDir = 1;
-	}
-	this.update = function update()
-	{
-		if (!this.aniImage==this.aniPrev)
-			this.aniPrev = this.aniImage,this.changed();
-		if (this.animate==-2)
-		{
-			//this.aniImage = snowboarding_loading.player_idle;
-			if (this.aniCurrent>=this.aniMax)
-				this.aniDir = -1;
-			if (this.aniCurrent<=0)
-				this.aniDir = 1;
-			if (this.aniCurrent<=this.aniMax)
-				this.aniCurrent+=this.aniSpeed * this.aniDir;
+				},
+				size:function(app){
+					this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w,this.last.h),new app.Math.Vec(app.width,app.height));
+					if ((this.difference.x + this.difference.y==0))
+						return false;
+					app._Visuals.canvas.width  = this.last.w = app.width;
+					app._Visuals.canvas.height = this.last.h = app.height;
+					app._Visuals.buffer.width  = this.last.w = app.width;
+					app._Visuals.buffer.height = this.last.h = app.height;
+					Debug.log(this.difference.x + this.difference.y);
+					return true;
+					},
+				scale:function(app) {
+					if (this==window) 
+						return Debug.log('Warning: Scale: [this === window]');
+						else
+					if ((this.pause>0.5))
+						return Debug.log('Warning: Paused',30); 
+						else
+					if (this.set==1)
+						return Debug.log('Warning: Scale: Duplicate Run',30); 
+					if (this.scaling)
+						{
+							if (window.innerHeight!==app.height)
+								app.height = window.innerHeight;
+							if (window.innerWidth!==app.innerWidth)
+								app.width = window.innerWidth;
+						}
+						else
+						{
+							if (window.innerHeight!==app.height)
+								app.height = app.setHeight;
+							if (window.innerWidth!==app.innerWidth)
+								app.width = app.setWidth;
+						}
+					this.set = 1;
+					this.scaler.x = app.height/app.setHeight;
+					this.scaler.y = app.width/app.setWidth;
+					(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
+					if (isNaN(this.scaler.s)){this.set = 0;return;}
+					this.scalediff = this.scaler.s-this.lastscale;
+					(this.scalediff)?function() {
+						window.scrollTo(0, 1);
+						}:null;
+					this.set = 0;
+					this.lastscale = this.scaler.s;
+					return this.scaler.s;
+				},
+				state:{
+					prototype:{
+						init:function(){
+							this.current.init();
+						},
+						draw:function(){
+							this.current.draw();
+						},
+						update:function(){
+							this.current.update();
+						},
+						set:function(state,start){
+							App.ext.input.delay = 1;
+							if ((this.name=state.name)&&(this.initalized=!0)) {
+								if (!state.started)
+									this.current=Object.create(state,App.client._Room);
+							if (start)
+								this.current.init(),this.current.started = true;
+							};
+						},
+						name:"",
+						current:{},
+						initalized:false
+					},
+					constructor:function(){
+						return	{
+							init:{value:function(state){
+									this.set(state,true);
+									this.initalized = true;
+								}
+							}
+						}
+					}
+				},
+				step:{
+					first:function(step,app){ 
+						if (!step.Step(app))
+							return;
+						this.fps = 1 * (this.clean()/step.delta * 1E3);
+						this.delta = step.targetfps / this.fps;
+						this.delta = Math.ceil(this.delta*100000)/100000;
+						if ((this.delta>2.5))
+							this.delta = 2.5;
+							
+						if (this.delta!==this.delta+1)
+							App.delta = App.client.delta = this.delta_speed = this.delta;
+							else
+							App.delta = App.client.delta = this.delta_speed = 1;
+							console.log(this.delta);
+						/* Increment Time to increase performance */
+							if (this.fps==0)
+								return;
+							this.increment = -step.targetfps+ (step.targetfps*(step.targetfps / this.fps));
+							this.adding+=this.increment;
+							if (this.adding>step.targetfps)
+								this.adding-=(this.adding/step.targetfps)*step.targetfps,this.addings+=1;
+						return;
+					},
+					second:function(step,app){
+						if (!step.Step(app))
+							return false;
+						this.frames++;
+						for(var s =this.addings;s>=0;--s)
+							if (app.client.update.state.initalized)
+								(document.hasFocus())?app.client.update.state.current.update():null;
+						this.addings = 0;
+					},
+					tick:function(a,b,app){
+						this.first(a,app); 	
+						this.second(b,app); /* Game Loop, Increment Frames */
+						return this.fps;
+					},
+					clean:function(){
+						var f = this.frames;
+						this.frames = 0;	/* Reset Frames, Return Frames ( Pass F*/
+						return f;
+					},
+					delta_speed:1,
+					increment:0,
+					addings:0,
+					adding:0,
+					delta:1,
+					frames:0,
+					fps:1
+				}
+			},
+			Math:{
+				Vec: function(x,y){
+					this.x = x;
+					this.y = y;
+				},
+				Difference:function(a,b){
+					return a-b;
+				},
+				Pythageon:function(a,b){
+					return Math.sqrt((a*a) + (b*b));
+				},
+				Vector:{
+					x:0,y:0,
+					Difference:function(a,b){
+						return {x:a.x-b.x,y:a.y-b.y};
+					},
+					Sum:function(a,b){
+						return {x:a.x+b.x,y:a.y+b.y};
+					}
+				},
+				Data:{
+					Total:function(){
+					return this.total = this.kilobyteCount($);
+					},
+					Update:function(){
+					if (App.client.update.state.initalized)
+						return this.update = this.byteCount(App.client.update.state.current.update);
+						else
+						return this.update = this.byteCount(Object.create(null,App.client._Room));
+					},
+					isFunction:function(functionToCheck) {
+						 var getType = {};
+						 return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+					},
+					byteCount:function (object) {
+						if (this.isFunction(object))
+							return this.byteCountF(object.toString().length*2);
+						this.objectList = [];
+						this.stack = [ object ];
+						this.bytes = 0;
+						while ( this.stack.length ) {
+							this.value = this.stack.pop();
+							if ( typeof this.value === 'trueean' ) {
+								this.bytes += 4;
+							}
+							else if ( typeof this.value === 'string' ) {
+								this.bytes += this.value.length * 2;
+							}
+							else if ( typeof this.value === 'number' ) {
+								this.bytes += 8;
+							}
+							else if	(typeof this.value === 'object' && this.objectList.indexOf( this.value ) === -1) {
+								this.objectList.push( this.value );
+								for( i in this.value ) {
+									if ((this.value[i]==object)||(this.value[i]==window)){
+										if ((this.selfCount>0)||(this.value[i]==window))
+											{
+												this.selfCount = 0;
+												break;
+											}
+										this.selfCount++;
+									}
+									this.stack.push( this.value[ i ] );
+								}
+							}
+						}
+						return this.bytes;
+					},
+					byteCountF:function(s){
+						return encodeURI(s).split(/%..|./).length - 1;
+					},
+					kilobyteCount:function(object){
+						return  Math.round((this.byteCount(object)*this.KB)*100)/100;
+					},
+					kb:0.0078125,
+					KB:0.0009765625,
+					objectList:[{}],
+					selfCount:0,
+					update:0,
+					stack:[{}],
+					value:{},
+					bytes:0,
+					total:0,
+				}
+			},
+		Particles:{
+			p:0,
+			draw:function(l){
 			
-		}
-		if (this.animate==-1)
-		{
-			if (this.aniCurrent>0)
-				this.aniCurrent-=this.aniSpeed;
-		}
-		if (this.animate==0)
-		{
+				for (this.p=_Rain.size-1; this.p;--this.p)
+					_RainParticles[this.p].draw(App.client.visuals,l);
+			},
+			update:function(){
+				for (var _R=0; _R<_Rain.size;++_R)
+					_RainParticles[_R].update();
+			}
+		},
+		_Room:{
+				prototype:{
+				init:DefaultObject,
+				app:DefaultObject,
+				visuals:DefaultObject,
+				graphics:DefaultObject,
+				started:false,
+				Started:{value:function(){return function() {var a = this.Started;App.set_scale();this.Started = true; return a};}}
+				},
+				constructor:function(){return {
+					init:{value:function(){
+							return {
+							app : {value:App},
+							visuals :   {value:App.client.visuals},
+							graphics :  {value:App.client._Graphics}
+							};
+						}}
+					}
+				}
+			},
+		_Pace:{
+			prototype:{
+			timer:	0,
+			rate:	0,
+			offset:	0,
+			delta:	1,
+			Time:	function(app) 
+				{
+					this.timer = new Date().getTime();
+					return this.timer - this.offset;
+				},
+			Step:	function(app)	
+				{
+					this.delta = this.Time(app);
+					var step = this.rate*this.delta;
+					if (step>1.0)
+						this.offset+=Math.floor(step)/this.rate;
+					return (step - 1.0)>0.0?true:false;
+				},
+			GetStepsPerSecond:	function()	
+				{
+					return 1000.0/this.delta;
+				}
+			},
+			constructor:function(){return {
+				init:{value:function(rate,fps){
+						Debug.log('Pace: Init');
+						this.targetfps = fps;
+						this.timer = new Date().getTime();
+						this.rate = rate/1000.0;
+						this.offset = this.timer-1000.0/rate;
+						this.delta = 0.0;
+						return true;
+					}}
+				}
+			}
+		},
+	_Audio:{
+			prototype:{
+				mute:false,
+				quality:0,
+				current:0,
+				audio: new Audio(),
+				sound: new Array(new Audio()),
+				length: new Array(),
+				MultiChannelSound:function(filename,channelQ,callback){	
+					if (App.ext.useragent.ie)
+						return;
+					this.fname = filename;
+					this.channel = new Array();
+					for (var i = 0; i != channelQ; ++i)
+					{
+						this.channel[i] = new Audio(filename);
+					}
+					this.currentChannel = 0;
+					this.play = function play()
+					{
+						try{
+						this.channel[this.currentChannel].currentTime = 0;
+						this.channel[this.currentChannel].play();
+						++this.currentChannel;
+						if (this.currentChannel == this.channel.length)
+						{
+							this.currentChannel = 0;
+						}
+						}catch(e){}
+					}
+					this.stop = function stop()
+					{
+						this.channel[this.currentChannel].pause();
+						++this.currentChannel;
+						if (this.currentChannel == this.channel.length)
+						{
+							this.currentChannel = 0;
+						}
+					}
+				},
+				toggle:function() {
+					//(this.mute)?this.sound[this.current].play():this.sound.[this.current].pause();
+					return this.mute = !this.mute;
+				},
+				set:function(index){
+					if (App.ext.useragent.ie)
+						return;
+					if (!this.mute)
+						{
+						this.sound[this.current].pause();
+						this.current = index;
+						try{
+						index.currentTime = 0;
+						}catch(e){}
+						index.play();
+						}
+				},
+				update:function() {
+					return;
+					if (this.sound[this.current]==="undefined")
+						return;
+					if (this.sound[this.current].currentTime >= this.length)
+					{
+						if (++this.current == soundtrackQ)
+						{
+							this.current = 0;
+						}
+						
+						this.sound[this.current].currentTime = 0;
+						this.sound[this.current].play();
+					}
+				}
+			},
+			constructor:function(){return {
+				init:{value:function(){
+						Debug.log('Audio: Init');
+						return true;
+					}}
+				}
+			}
+		},
+		_Animation:function(aniArray,aniSpeed,ani,origAni){
+			///Animation States
+			///  -2 = set to idle.
+			/// -1 = animate backwards and stop.
+			///  0 = set to first frame.
+			///  1 = animate forwards and stop.
+			///  2 = animate forwards and return to 0 and animate again.
+	
+			this.aniImage = new Array();
+			this.aniImage = aniArray;
+			this.nextAni = new Array();
+			this.nextAni = origAni;
+			
+			if (this.aniImage[0])
+				this.aniMax = this.aniImage.length-1;
+				else
+				this.aniMax = 0;
 			this.aniCurrent = 0;
-		}
-		if (this.animate==1)
-		{
-			if (this.aniCurrent<this.aniMax)
-				this.aniCurrent+=this.aniSpeed;
-			if (this.aniCurrent>this.aniMax)
-				this.aniCurrent = this.aniMax;
-		}
-		if (this.animate==2)
-		{
-			this.aniCurrent+=this.aniSpeed;
-			if (this.aniCurrent>=this.aniMax)
-				this.aniCurrent=0;
-		}
-	}
-	this.changed = function changed()
+			this.aniSpeed = aniSpeed*App.delta_speed;
+			this.animate = ani;
+			this.aniChanged = 0;
+			this.aniPrev = aniArray;
+			this.aniDir = 1;
+			this.recreate = function recreate(aniArray,aniSpeed,ani)
+			{
+				this.aniCurrent = 0;
+				this.aniImage = aniArray;
+				this.aniSpeed = aniSpeed;
+				this.animate = ani;
+				this.aniDir = 1;
+			}
+			this.update = function update()
+			{
+				if (!this.aniImage==this.aniPrev)
+					this.aniPrev = this.aniImage,this.changed();
+				if (this.animate==-2)
+				{
+					//this.aniImage = snowboarding_loading.player_idle;
+					if (this.aniCurrent>=this.aniMax)
+						this.aniDir = -1;
+					if (this.aniCurrent<=0)
+						this.aniDir = 1;
+					if (this.aniCurrent<=this.aniMax)
+						this.aniCurrent+=this.aniSpeed * this.aniDir;
+					
+				}
+				if (this.animate==-1)
+				{
+					if (this.aniCurrent>0)
+						this.aniCurrent-=this.aniSpeed;
+				}
+				if (this.animate==0)
+				{
+					this.aniCurrent = 0;
+				}
+				if (this.animate==1)
+				{
+					if (this.aniCurrent<this.aniMax)
+						this.aniCurrent+=this.aniSpeed;
+					if (this.aniCurrent>this.aniMax)
+						this.aniCurrent = this.aniMax;
+				}
+				if (this.animate==2)
+				{
+					this.aniCurrent+=this.aniSpeed;
+					if (this.aniCurrent>=this.aniMax)
+						this.aniCurrent=0;
+				}
+			}
+			this.changed = function changed()
+			{
+				this.recreate(this.nextAni,this.aniSpeed,0);
+			}
+			this.reverse = function reverse()
+			{
+				if (this.animate==1)
+					this.animate=-1;
+					else
+					this.animate=1;
+			}
+			this.get_img = function get_img()
+			{
+				if ( this.aniImage[Math.round(this.aniCurrent)])
+					return this.aniImage[Math.round(this.aniCurrent)];
+					else
+					return this.aniImage;
+			}
+		},
+		_Graphics:{
+			prototype:{
+				path:"",
+				SpriteWebItems:new Array(0),
+				SpriteLoadNumber:0,
+				SpriteLoadErrors:0,
+				SpriteLoadTime:0,
+				Sources:{},
+				load:function(name,file){
+					this.Sources.append(this.SpriteAppend(name,file));
+					return this.Sources.getByName(name);
+				},
+				SpriteCreate:function(file,src,name){		
+					this.SpriteLoadNumber++;
+					this.SpriteLoadTime += (10*App.delta_speed)*this.SpriteLoadNumber;
+					return sprite = Object.create(Sprite,{file:{value:file},src:{value:src},name:{value:name}});
+				},
+				SpriteAppend:function(name,file){	
+					return (img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
+				},
+				SpriteUnload:function(name,file){
+					delete this.Sources.getByName(name);
+					//return this.SpriteLoad(name,file);
+				},
+				webLoad:function(name,address){
+					this.SpriteWebItems[name] = new Image();
+					this.SpriteWebItems[name].src = address;
+					return this.SpriteWebItems[name];
+				},
+				graphicsLibrary:function(){
+					Sprite = Object.create(null);
+					this.Sources = Object.create(null);
+					this.Sources.prototype = {	
+						get:function get(){return this.index;},
+						getByName:function getByName(name){return this.index[name];},
+						getName:function getName(name){return this.index[name].name;},
+					}
+					Sprite = Object.create(this.Base,
+					{
+						constructor:function Sprite(path,filename){this.path=path;this.filename=filename;return path;},
+						src:	{value:"S:undefined"},
+						file:	{value:"S:undefined"},
+						name:	{value:"S:undefined"}
+					});
+					this.Sources = Object.create(this.Sources.prototype,
+					{
+						count:{writable: true,  configurable:true,value:0},
+						index:{value:new Array()},
+						append:{value:function append(image)
+						{
+							if (this.index[image.name]==image)
+								return;
+							this.index[image.name]=image; 
+							this.count++;
+							Debug.log("GraphicsController: load: "+image.name + ":"+this.count);
+						}},
+						unload:{value:function unload(name)
+						{
+							this.index[name]=null; 
+							delete this.index[name]; 
+							Debug.log('GraphicsController: unload: '+name);
+							return this.index[name];
+						}},
+					});
+					return true;
+				},
+				Base:{
+					get:function() {
+							var img = new Image();
+							img.src = this.src;
+							img.file = this.file;
+							img.name = this.name;
+							img.number = 1+ App.client._Graphics.SpriteLoadErrors++;
+							img.onload = function() {
+									App.client._Graphics.SpriteLoadErrors--;
+									Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client._Graphics.SpriteLoadErrors));
+								};
+							return img;
+						},
+					unload:function() {
+							this.Sources.unload(this.name);
+							Debug.log("GraphicsController: unload: "+image.name + ":"+this.count);
+						}
+				},
+				getErrors:function(){
+					return this.SpriteLoadErrors; 
+				},
+				getImage:function(name){
+					return this.Sources.getByName(name); 
+				},
+			},
+			constructor:function(){return {
+				init:{value:function(){
+						this.graphicsLibrary();
+						Debug.log('GraphicsController: Init');
+						return true;
+					}}
+				}
+			}
+		},
+		_Visuals:{
+			prototype:{
+				app:DefaultObject,
+				stat:{
+						x:0,
+						y:0,
+						w:0,
+						h:0,
+						s:0,
+						a:0,
+						c:0,
+						colour:"",
+						oldcol:"",
+						init:function(col, colold){
+						this.x = 0;
+						this.y = 0;
+						this.w = 0;
+						this.h = 0;
+						this.s = 0;
+						this.a = 0;
+						this.c = 0;
+						this.colour = col || 0;
+						this.oldcol = colold || 0;
+						}
+					},
+				stat2:DefaultObject,
+				canvas:DefaultObject,
+				canvas_context:DefaultObject,
+				buffer:DefaultObject,
+				buffer_context:DefaultObject,
+				alpha:0,
+				free:false,
+				point:14,
+				scale:0,
+				grd:DefaultObject,
+				font:"",
+				settings:[
+							["Full Clear", true],
+							["Wide Clear", true],
+							["Window Clear",false],
+							["optimized_resize",false],
+							["bufferMax",false],
+							["borders",true]
+						],
+				init:DefaultFunction,
+				set:function(a,b){
+					return this.settings[a][1] = b;
+				},
+				draw:function(){
+					
+					//!0==this.settings[1][1]?this.clear_wide():this.clear_fit());
+					//this.cleans.window();
+					if (this.app.update.state.initalized)
+						this.app.update.state.draw();
+					this.debug();
+					this.clearing.buff(this);//this.settings[2][1]?(this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight),this.canvas_context.drawImage(this.buffer,0,0)):this.canvas_context.drawImage(this.buffer,0,0);
+					//this.settings[4][1]?this.Borders():this.clearBorders();
+					this.scale = this.app.scale;
+				},
+				clearing:{
+					settings:[
+							["WideClear", false],
+							["PreClear", true],
+							["BufferMax",false],
+							["Window Clear",false],
+							["optimized_resize",true],
+							["borders",true]
+						],
+					pre:function(){
+						!0==this.settings[1][1]?this.all():this.none();
+					},
+					buff:function(t){
+					
+						this.pre();
+						this.window();
+						!this.settings[2][1]?(t.canvas_context.drawImage(t.buffer,0,0),t.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight)):t.canvas_context.drawImage(t.buffer,0,0);
+					},
+					window:function(){
+						var a = App.client.width/App.client.scale;
+						var b = (App.client.setWidth*1.777)*0.5;
+						if (!this.settings[0][1]) {
+							this.clear(0-(a),0,a,App.client.setHeight);
+							this.clear(0+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
+						} else {
+							this.clear(-b*0.5-(a),0,a,App.client.setHeight);
+							this.clear(+b*0.5+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
+						}
+						this.clear(-b,0,(App.client.setWidth*1.777)*2/App.client.scale,-App.client.height/App.client.scale);	
+						this.clear(-b,App.client.setHeight,(App.client.setWidth*1.777)*2/App.client.scale,App.client.height/App.client.scale);
+					},
+					none:function(){
+					
+					},
+					borders:function(){
+						this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
+						this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
+						this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
+						this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
+					},
+					all:function(){
+						//this.clear(-App.client.width,0,-App.client.width*2/App.client.scale,App.client.height);
+						//this.clear(+App.client.width*2,0,App.client.width*2/App.client.scale,App.client.height);
+						//this.clear(-App.client.width,-App.client.height,App.client.width*3,App.client.height*3);
+					},
+					clear: function(x,y,width,height) {
+						App.client._Visuals.stat = App.client._Visuals.chk(x,y,width,height,1);
+						App.client._Visuals.buffer_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
+						App.client._Visuals.settings[3][1]||App.client._Visuals.canvas_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
+					}
+				},
+				fixX:function(x){
+					return ((x*this.scale)+(this.app.width/2)-(this.app.setWidth/2)*this.scale);
+				},
+				fixY:function(y){
+					return ((y*this.scale)+(this.app.height/2)-(this.app.setHeight/2)*this.scale);
+				},
+				fixW:function(w){
+					return (w*this.scale);
+				},
+				fixH:function(h){
+					return (h*this.scale);
+				},
+				chkc:{},
+				chk:function(x,y,w,h,s,a,c,colour,font){
+					this.chkc = this.colour();
+					this.opacity(a);
+					this.colour(colour);
+					if (!this.free)	return {
+						x:this.fixX(x),
+						y:this.fixY(y),
+						w:this.fixW(w)*s,
+						h:this.fixH(h)*s,
+						s:s,
+						a:a || 0,
+						c:c || false,
+						colour:colour || this.colour(),
+						oldcol:this.chkc,
+						font:font || this.font,
+						init:this.stat.init
+					}
+					else return {
+						x:x,y:y,
+						w:w || 0,
+						h:h || 0,
+						s:s,
+						a:a || 1,
+						c:c || false,
+						colour:colour || this.colour(),
+						oldcol:this.chkc,
+						font:font,
+						init:this.stat.init
+					}
+				},
+				debug:function(){
+					if (!App.ext.debug.strength=="Normal")
+						return;
+					if ((App.ext.debug.strength=="off")||(App.ext.debug.strength=="none"))
+						return;
+					this.rect_ext(-this.app.setWidth,0,this.app.setWidth+this.app.setWidth+this.app.setWidth,this.point,1,0.1,0);
+					this.rect_ext(0,0,this.app.setWidth,this.point,1,0.1,0);
+					this.text_ext("0",	0,this.point*0.9,this.point*0.9);
+					this.text_ext(this.app.setWidth,	this.app.setWidth-25,this.point*0.9,this.point*0.9);
+					if (window.innerWidth>(this.app.setWidth*1.1)*this.scale)
+						{
+							this.text_free(0-this.fixX(0),	30,4+this.fixY(this.point),this.point*0.99);
+							this.text_free(this.app.width,	window.innerWidth-15,4+this.fixY(this.point),this.point*0.99);
+						}
+					//this.text_ext("Debug",	this.app.setWidth/2.5,this.point*0.9,this.point*0.9);
+					//this.text_ext(this.app.name,5,25,"#FFFFFF",4,1,0);
+					//this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
+					//this.text_ext("x "+Math.round($.ext.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
+					//this.text_ext("x: "+Math.round($.ext.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
+					//this.text_ext("y "+Math.round($.ext.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
+					//this.text_ext("y: "+Math.round($.ext.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
+					if (this.app.fps<20)
+						console.log(this.app.fps);
+					
+					var data = [
+								[this.app.name],
+								[$.code+ " " +$.codefmk],
+								[this.app.name],
+								[
+								"app.ext.input",
+								"x "+Math.round($.ext.input.x*100)/100		,
+								"x "+Math.round($.ext.input.window.x*100)/100,
+								"d "+$.ext.input.pressed+"   p "+$.ext.input.duration,
+								
+								
+								"y "+Math.round($.ext.input.y*100)/100		,
+								"y "+Math.round($.ext.input.window.y*100)/100,
+								($.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
+								],
+								[
+								"app.client",
+								"discription","","",
+								"width" ,this.app.setWidth,this.app.width,
+								"height",this.app.setHeight,this.app.height,
+								"fps",Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(this.app.fps*1000)/1000,"",
+								"scale",this.app.scale,"",
+								"delta",this.app.delta,"",
+								"buffer","double","",
+								],
+								[
+								"app.client.state","",
+								"[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",
+								"",
+								""
+								],
+								[
+								"app.client.data","",
+								"visuals ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Visuals):"?"),"",
+								"graphics ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Graphics):"?"),"",
+								"audio ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Audio):"?"),"",
+								"state ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app.update.state.current):"?"),"",
+								"ext ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount($.ext):"?"),"",
+								"Total ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.Total():"?"),""
+								
+								]
+							];
+							
+							
+for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii)
 	{
-		this.recreate(this.nextAni,this.aniSpeed,0);
-	}
-	this.reverse = function reverse()
-	{
-		if (this.animate==1)
-			this.animate=-1;
-			else
-			this.animate=1;
-	}
-	this.get_img = function get_img()
-	{
-		if ( this.aniImage[Math.round(this.aniCurrent)])
-			return this.aniImage[Math.round(this.aniCurrent)];
-			else
-			return this.aniImage;
-	}
-}
-////////////////////////////////////////////////////////////////
-////	"Audio.js" by Benjamin Bowen,                       ////
-////					Edited by Ryan Spice                ////
-////                                                        ////
-////	                                                    ////
-////			How To                                      ////
-////                                                        ////
-////	-Define an array to store all sound files.          ////
-////		var soundtrack = new Array();                   ////
-////                                                        ////
-////	-Creating a new sound file. [path,channel]          ////
-////		soundtrack[0] = new MultiChannelSound("",2);    ////
-////                                                        ////
-////	-Playing a sound                                    ////
-////		playSound(soundtrack[0]);                       ////
-////                                                        ////
-////////////////////////////////////////////////////////////////
-function MultiChannelSound(filename, channelQ)
-{
-	this.fname = filename;
-	this.channel = new Array();
-	for (var i = 0; i != channelQ; ++i)
-	{
-		this.channel[i] = new Audio(filename);
-	}
-	this.currentChannel = 0;
-	this.play = function play()
-	{
-		this.channel[this.currentChannel].currentTime = 0;
-		this.channel[this.currentChannel].play();
-		++this.currentChannel;
-		if (this.currentChannel == this.channel.length)
-		{
-			this.currentChannel = 0;
-		}
-	}
-}
-function playSound(sound)
-{
-sound.play();
-return sound.fname;
-}
-////////////////////////////////////
-////	"Spice.js" by Ryan Spice,    
-////                                
-////    Default particle system.
-////	
-////                                
-////////////////////////////////////
-var s = 0;
-var PID = 0;
-var Particle = function(img,pos, target, vel, marker, usePhysics) {
- 
-  // properties for animation
-  // and colouring
-  this.image = img;
-  this.gravity  = 0.9;
-  this.alpha    = 0.5+Math.random()*0.5;
-  this.easing   = Math.random() * 0.2;
-  this.fade     = Math.random() * 0.1;
-  this.gridX    = marker % 120;
-  this.gridY    = Math.floor(marker / 120) * 12;
-  this.color    = marker;
-  this.scale = 1;
-  this.start = 30 + Math.random()*180;
- this.del = false;
-  this.pos = {
-    x: pos.x || 0,
-    y: pos.y || 0
-  };
- 
-  this.vel = {
-    x: vel.x || 0,
-    y: vel.y || 0
-  };
- 
-  this.lastPos = {
-    x: this.pos.x,
-    y: this.pos.y
-  };
- 
-  this.target = {
-    y: target.y || 0,
-    x: target.x || 0
-  };
-  
-   if (!usePhysics)
-	{
-		this.dir = Math.random()*1;
-		
-		if (this.dir>0.5)
-			this.dir = 1;
-			else
-			this.dir = -1;
-	}
-	else
-	{
-		if (pos.x - target.x>=0)
-			this.dir = 1;
-			else
-			this.dir = -1;
-		
-	}
+	for(var i=data[ii].length;0<i;--i)
+		0==i%3&&(t=0,tr=15,tt++),
+		this.text_ext(data[ii][data[ii].length-i],tr+15+p*t,25+1.1*this.point*tt,"#AAAAAA",1,1,0),
+		tr=0,
+		t++;
+	t=0;
+	tt++
+	};
 
-
- this.draw = function()
- {
-
- var distance = (this.target.y - this.pos.y);
- 
- 
- if (!usePhysics)
-	if (Math.random()>0.99)
-		this.vel.y +=0.2;
-// ease the position
-//this.pos.y +=  this.vel.y *(distance/100) * (0.3 + this.easing * this.gravity);
-this.pos.y += this.vel.y * (distance/100) * (0.3 + this.easing * this.gravity)+(Math.min(10,(INPUT.y/200))*(1-usePhysics));
-
-if (this.dir==0)
-	this.pos.x +=this.dir* this.vel.x* Math.sin(this.pos.y/this.start)+((INPUT.x/100-INPUT.x/100/2)*(1-usePhysics));
-	else
-	this.pos.x +=this.dir* this.vel.x* this.pos.y/this.start+((INPUT.x/100-INPUT.x/100/2)*(1-usePhysics));
-	//else
-	//this.pos.x -= 0.1;
-if (this.pos.y>440)
-	this.alpha -=0.01;
-	
-if (Math.random()>0.9)
-	this.alpha -=0.01;
-else
-if (Math.random()>0.9)
-	this.alpha +=0.01;
-
-
-if ((distance<4)&&(distance>-4))
-	this.del = true;
-	
-if (this.alpha<0.1)
-	{
-	this.del=true;
-	return;
-	}
-
-
-	
-	if (this.image)
-		App.visuals._draw_sca(this.image,Math.round(this.pos.x+BackPos),Math.round(this.pos.y),this.scale,this.alpha/2);
-		else
-		{
-		App.visuals._color(this.color);
-		App.visuals._opacity(this.alpha-0.4);
-		App.visuals._circ_draw(this.pos.x+BackPos,this.pos.y,this.alpha*2);
-		App.visuals._opacity(1);
-		}
-
-  
- }
-
-  this.usePhysics = usePhysics || false;
- 
-};
-particlesand = new Array();
-////////////////////////////////////////////////////////////////
-////	"Touch.js" by RyanSpice,        	                ////
-////	Original "Input.js" by Benjamin Bowen,        	    ////
-////////////////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////
-	////	GLOBAL VARIABLES        	    		////
-	////////////////////////////////////////////////////
-		var INPUT = {x:100,y:100};			/*	 VECTOR2{x,y}		*//*	Current position of mousemove, touchmove */
-		var INPUT_start = {x:100,y:100};	/*	 VECTOR2{x,y}		*//*	Position of MSPointerDown, mousedown, touchstart */
-		var INPUT_end = {x:100,y:100};  	/*	 VECTOR2{x,y}		*//*	Position of MSPointerUp, mouseup, touchend */
-		var INPUT_mouse = 0;            	/*	 BOOLEAN			*//*	Unused, detects which mouse button */
-		var INPUT_delta = 1;            	/*	 FLOAT 				*//*	Delta between INPUT_start and INPUT_end */
-		var INPUT_angle = 0;            	/*	 FLOAT 	            *//*	Angle between INPUT_start and INPUT_end */
-		var INPUT_dirX = 0;             
-		var INPUT_dirY = 0;             
-		var INPUT_distX = 0;            	/*	 FLOAT 				*//*	Distance between INPUT_start.x and INPUT_end.x */
-		var INPUT_distY = 0;            	/*	 FLOAT 				*//*	Distance between INPUT_start.y and INPUT_end.y */
-		var INPUT_duration = 0;         	/*	 INT 				*//*	Duration between a mouse down and a mouse up event */
-		var INPUT_up = true;            	/*	 BOOLEAN			*//*	Mouse pressed state */
-		var INPUT_released = false;     	/*	 BOOLEAN			*//*	Mouse released last step */
-		var INPUT_wheelDelta = 0;       	/*	 DOUBLE 			*//*	Mouse wheel delta */
-		var i = 0;                      	/*	                    *//*	 */
-		var mx = 0;                     	/*	                    *//*	 */
-		var canvas = document.getElementById("Client");
-		var context = canvas.getContext('2d');
-		
-	////////////////////////////////////////////////////
-	////	FUNCTIONS				        	    ////
-	////////////////////////////////////////////////////
-	
-			////////
-			////	FUNCTIONS
-			////////
-
-	
-	window.addEventListener("load",function() {
-  // Set a timeout...
-  setTimeout(function(){
-    // Hide the address bar!
-    window.scrollTo(0, 1);
-  }, 0);
-});
-    function getMousePos(canvas, evt) 
-	{
-		var rect = canvas.getBoundingClientRect();///Grabs the event location and returns a position relative to the top left corner of the canvas.
+					//this.text_ext("D: "+$.ext.input.duration,210,55);
+					//this.text_ext("P: "+$.ext.input.pressed,160,55);
+					//($.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
+					//this.text_ext("I: "+$.ext.input.window.inside+" X: "+$.ext.input.window.x+" Y: "+$.ext.input.window.y,155,70);
+					//this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
+					//this.text_ext("Discription: "+this.app.discription,25,100,"#FFFFFF",1,1,0);
+					//this.text_ext("Fps: "+Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round($.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
+					//this.text_ext("Width: "+this.app.width,25,130,"#FFFFFF",1,1,0);
+					//this.text_ext("Height: "+$.client.height,25,145,"#FFFFFF",1,1,0);
+					//this.text_ext("setWidth: "+this.app.setWidth,110,130,"#FFFFFF",1,1,0);
+					//this.text_ext("setHeight: "+this.app.setHeight,110,145,"#FFFFFF",1,1,0);
+					//this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
+					//this.text_ext("Delta: "+$.client.delta,25,175,"#FFFFFF",1,1,0);
+					//this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
+					//this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
+					//this.text_ext("[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
+					this.text_ext("Log: "+$.ext.debug.text,35,this.app.setHeight-25,this.point);
+					if (App.ext.debug.strength=="Lite")
+						return;
+						
+						try {
+					//this.text_ext("_Visuals: " 	+ this.app.Math.Data.kilobyteCount($.client._Visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
+					}catch(e){}
+					//this.text_ext("_Graphics: " + this.app.Math.Data.kilobyteCount($.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
+					//this.text_ext("_Audio: " 	+ this.app.Math.Data.kilobyteCount($.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
+					//this.text_ext("_State: " 	+ this.app.Math.Data.kilobyteCount($.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
+					//this.text_ext("ext: " 		+ this.app.Math.Data.kilobyteCount($.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
+					//this.text_ext("Total: "		+ this.app.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
+				},
+				Borders: function() {
+					this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
+					this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
+					this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
+					this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
+				},
+				clearBorders: function() {
+				
+					this.clear(-this.app.width,0,-this.app.width,this.app.height/this.app.scale);
+					this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
+					this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
+					this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
+				
+					return;
+					this.clear(-this.w,0,-this.w*2/this.scale,this.h);
+					this.clear(+this.w*2+2,0,this.w*2/this.scale,this.h);
+					this.clear(0,0,this.w,-this.h);	
+					this.clear(0,this.h,this.w,this.h);
+				},
+				clear_fit: function() {
+					this.clear(0,0,$.client.width,$.client.heighteight);
+				},
+				clear_wide: function() {
+					this.clear(-$.client.width,0,$.client.width*3,$.client.height);
+				},
+				clear: function(x,y,width,height) {
+					this.stat = this.chk(x,y,width,height,1);
+					this.buffer_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					this.settings[3][1]||this.canvas_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+				},
+				background_set:function(value) {
+					this.buffer.style.background = value;
+					this.canvas.style.background = value;
+				},
+				background_get:function() {
+					return this.buffer.style.background;
+				},
+				clean:function(){
+					this.cleanAlpha?this.opacity(1):null;
+					this.colour(this.stat.oldcol);
+					this.stat.init(this.colour(),this.stat.oldcol);
+				},
+				colour:function(colour1,colour2) {
+					if (colour1)
+						{
+							return colour1&&(this.buffer_context.fillStyle=colour1);colour2&&(this.buffer_context.strokeStyle=colour2);
+						}
+						else
+						return this.buffer_context.fillStyle;
+				},
+				opacity:function(opacity) {
+					return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
+				},
+				fontT:"",
+				fontL:"",
+				font:function(font)	{ 
+					return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
+					//if (font)
+					//	this.buffer_context.font = font;
+					//return this.buffer_context.font;
+				},			
+				text_free:function(string, x, y,colour){
+					this.colour(colour);
+					this.font(Math.round(this.point*this.scale)+"px "+"sans-serif");
+					this.buffer_context.fillText(string,x-this.text_width(string)/2-this.point,y-this.point/2);
+					this.clean();
+				},
+				text_ext:function(string,x,y,colour,s,a,c,style){
+					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
+					var f = this.font();
+					this.stat.h = this.stat.s*this.scale;
+					this.font(this.stat.h+"em "+style);
+					this.stat.h = this.point*this.stat.h;
+					(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+					this.font(f);
+					this.clean();
+					delete f;
+				},
+				text_button:function(string,x,y,colour,s,a,c,style){
+					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
+					var f = this.font();
+					this.stat.h = this.stat.s*this.scale;
+					this.font(this.stat.h+"em "+style);
+					this.stat.h = this.point*this.stat.h;
+					if (this.touch_within_stat(this.stat))
+					{
+						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+						App.ext.cursor.set(App.ext.cursor.pointer,true);
+						//if (App.ext.input.released)
+						//	if (App.ext.input.delay<1)
+						//		loc(),App.ext.input.delay = 1;
+						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+					}
+					else
+					{
+						this.opacity(this.stat.a*0.75);
+						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+					}		
+					this.font(f);
+					this.clean();
+					delete f;
+				},
+				within:false,
+				shadow:function(col,blur,x,y){
+					this.buffer_context.shadowColor = col;
+					this.buffer_context.shadowBlur = blur;
+					this.buffer_context.shadowOffsetX = x;
+					this.buffer_context.shadowOffsetY = y;
+				},
+				shadow_clear:function(){
+					this.buffer_context.shadowBlur = 0;
+				},
+				text_button_bg:function(string,x,y,colour,s,a,c,loc,style){
+					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
+					
+					
+					this.shadow("#AAAAAA",1,1,1);
+					
+					var f = this.font();
+					this.stat.h = this.stat.s*this.scale;
+					this.font(this.stat.h+"em "+style);
+					this.stat.h = this.point*this.stat.h;
+					this.within = this.touch_within_stat(this.stat);
+					if (this.within)
+					{
+					this.colour("#00A0F1");
+					this.buffer_context.beginPath();
+					this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x-this.stat.w*0.2, this.stat.y-this.stat.h*0.2, this.stat.w*1.1, this.stat.h*1.1);
+					this.buffer_context.fill();
+					
+					this.colour("#DDDDDD");
+						//this.rect_ext(this.stat.x-this.stat.w/4,this.stat.y-this.stat.h/5,this.stat.w*1.1,this.stat.h*1.1,1,1,0,"#00A0F1");
+						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+						App.ext.cursor.set(App.ext.cursor.pointer,true);
+						if (App.ext.input.released)
+							if (App.ext.input.delay<1)
+								loc(),App.ext.input.delay = 1;
+						
+						
+						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+					}
+					else
+					{
+						this.opacity(this.stat.a*0.75);
+						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+					}		
+					this.font(f);
+					this.clean();
+					delete f;
+				},
+				text:function(string, x, y,colour){
+					this.text_ext(string,x,y,colour,1,1,0,"");
+				},	
+				text_shadow:function(blur,x,y,colour){
+					this.buffer_context.shadowColor = colour;
+					this.buffer_context.shadowBlur = blur;
+					this.buffer_context.shadowOffsetX = x;
+					this.buffer_context.shadowOffsetY = y;
+				},
+				rect_ext:function(x,y,w,h,s,a,c,colour){
+					this.stat = this.chk(x,y,w,h,s,a,c,colour);
+					this.buffer_context.beginPath();
+					this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+					this.buffer_context.fill();
+					
+					this.clean();
+				},	
+				rect_stroke:function(x,y,w,h,s,a,c,colour,l){
+					this.stat = this.chk(x,y,w,h,s,a,c,colour);
+					this.buffer_context.beginPath();
+					this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+					this.buffer_context.fillStyle = 'transparent';
+					this.buffer_context.fill();
+					this.buffer_context.lineWidth = l || 1;
+					this.buffer_context.strokeStyle = colour;
+					this.buffer_context.stroke();
+					
+					this.clean();
+				},	
+				rect:function (x,y,w,h,colour){
+					this.rect_ext(x,y,w,h,1,1,1,colour);
+				},
+				rect_button:function(x,y,w,h,colour,loc,c){
+					this.stat = this.chk(x,y,w,h,1,1,1,colour);
+					if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h))
+					{
+						App.ext.cursor.set(App.ext.cursor.pointer,true);
+						if (App.ext.input.released)
+							if (App.ext.input.delay<1)
+								loc(),App.ext.input.delay = 1;
+					}
+					this.rect_ext(x,y,w,h,1,1,c,colour);
+				},
+				rect_rotate:function(x,y,w,h,colour,s,a,angle){
+					this.stat = this.chk(x,y,w,h,s,a,1,colour);
+					this.buffer_context.translate(this.stat.x,this.stat.y);
+					this.buffer_context.rotate(angle*0.0174532925);
+					this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+					this.buffer_context.rotate(-angle*0.0174532925);
+					this.buffer_context.translate(-this.stat.x,-this.stat.y);
+					this.clean();
+				},
+				rect_gradient:function(x,y,w,h,s,a,c,colour,colour2,angle){
+					this.stat = this.chk(x,y,w,h,s,a,c,colour);
+					this.buffer_context.translate(this.stat.x,this.stat.y);
+					this.buffer_context.rotate(angle*0.0174532925);
+					this.stat.c?this.grd = this.buffer_context.createLinearGradient(this.stat.w/2,0, this.stat.w/2, this.stat.h/2):this.grd = this.buffer_context.createLinearGradient(0,0, this.stat.w, this.stat.h);
+					this.buffer_context.beginPath();
+					this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+					this.grd.addColorStop(0, colour);
+					this.grd.addColorStop(1, colour2);
+					this.buffer_context.fillStyle = this.grd;
+					this.buffer_context.fill();
+					this.buffer_context.rotate(-angle*0.0174532925);
+					this.buffer_context.translate(-this.stat.x,-this.stat.y);
+					this.clean();
+				},	
+				rect_free:function(x,y,w,h,s,a,c,colour){
+					this.stat = this.chk(x,y,w,h,s,a,c,colour);
+					this.buffer_context.beginPath();
+					(c)?this.buffer_context.rect(x-w/2, y-h/2, w, h):this.buffer_context.rect(x, y, w, h);
+					this.buffer_context.fill();
+					this.clean();
+				},	
+				image_ext:function(image,x,y,s,a,c){		
+					this.stat = this.chk(x,y,image.width,image.height,s,a,c);
+					(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+				},
+				image_centered:function(image,x,y){		
+					this.image_ext(image,x,y,1,1,true);
+				},
+				image:function(image,x,y){		
+					this.image_ext(image,x,y,1,1,false);
+				},
+				image_part:function(image,x,y,s,a,c,xx,yy,w,h){
+					this.stat = this.chk(x,y,w,h,s,a,c);
+					this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h,1,1,image.width,image.height);
+				},
+				image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
+					this.stat = this.chk(x,y,image.width,image.height,s,a,true);
+					this.buffer_context.translate(this.stat.x,this.stat.y);
+					this.buffer_context.rotate(angle*0.0174532925);
+					(this.stat.c)?this.buffer_context.drawImage(image,0-this.stat.w/2,0-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,0,0,this.stat.w,this.stat.h);
+					this.buffer_context.rotate(-angle*0.0174532925);
+					this.buffer_context.translate(-this.stat.x,-this.stat.y);
+				},
+				
+				image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
+					this.stat = this.chk(x,y,image.width*xscale,image.height*xscale,s,a,centered);
+					if (this.touch_within_stat(this.stat))
+					{
+						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+						App.ext.cursor.set(App.ext.cursor.pointer,true);
+						if (App.ext.input.released)
+							if (App.ext.input.delay<1)
+								loc(),App.ext.input.delay = 1;
+						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					}
+					else
+					{
+						this.opacity(this.stat.a*0.75);
+						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					}			
+					return;
+				},
+				touch_within:function(x, y, w, h,c) {
+					return c?((App.ext.input.x>x-w/2&&App.ext.input.x<x+w/2&&App.ext.input.y>y-h/2&&App.ext.input.y<y+h/2)?true:false):((App.ext.input.x>x&&App.ext.input.x<x+w&&App.ext.input.y>y&&App.ext.input.y<y+h)?true:false);
+				},
+				touch_within_stat:function(stat) {
+					return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
+				},
+				line:function(x,y,x2,y2,col,a){
+					this.stat = this.chk(x,y,x2,y2,1,a,true);
+					this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
+					this.buffer_context.beginPath();
+					this.buffer_context.moveTo(this.stat.x,this.stat.y);
+					this.buffer_context.lineTo(this.stat2.x,this.stat2.y);
+					this.buffer_context.strokeStyle = col;
+					this.buffer_context.stroke();
+					this.clean();
+				},
+				lines:function(x,y,x2,y2,col,a,s){
+					this.stat = this.chk(x,y,x2,y2,1,a,true);
+					this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
+					this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
+					this.opacity(a);
+					this.buffer_context.strokeStyle = col;
+					this.buffer_context.lineTo(this.stat2.x*s,this.stat2.y*s);			
+				},
+				lineend:function(){
+					this.buffer_context.stroke();
+				},	
+				linestart:function(){
+					this.buffer_context.beginPath();
+				},
+				triangle:function(x0,y0,x1,y1,x2,y2,col,col2,width){
+				//this.buffer_context.fillStyle = col;
+				//this.buffer_context.strokeStyle = col2;
+					this.colour(col,col2);
+					this.buffer_context.lineWidth = width;
+					this.buffer_context.moveTo(x0,y0); // give the (x,y) coordinates
+					this.buffer_context.lineTo(x1,y1);
+					this.buffer_context.lineTo(x2,y2);
+					this.buffer_context.lineTo(x0,y0);
+					this.buffer_context.fill();
+					this.buffer_context.stroke();
+					this.buffer_context.closePath();
+					this.clean();
+				},
+				circle:function(x,y,r,col,a){
+					this.stat = this.chk(x,y,1,1,r,a,true,col);
+					this.buffer_context.beginPath();
+					this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s*this.scale, 0, 2 * Math.PI, false);
+					this.buffer_context.fillStyle = this.stat.colour;
+					this.buffer_context.fill();
+				},
+				circle_free:function(x,y,r,col,a){
+					this.opacity(a);
+					this.buffer_context.beginPath();
+					this.buffer_context.arc(x, y, r*this.scale, 0, 2 * Math.PI, false);
+					this.buffer_context.fillStyle = col;
+					this.buffer_context.fill();
+				},
+				text_width:function(string) {
+					return this.buffer_context.measureText(string).width; // Not WOrking
+				}
+			},
+			constructor:function(){return {
+				init:{value:function(app){
+					this.app = app;
+					this.scale = app.scale;
+					this.canvas = app.c;
+					this.buffer = app.b;
+					this.canvas_context = this.canvas.getContext("2d");
+					this.buffer_context = this.buffer.getContext("2d");
+					this.background_set("transparent");
+				}}}
+			}
+		},
+		_Cookies:{
+			prototype:{
+				list:new Array(),
+				expires:"",
+				nameEQ:"=",
+				ca:"",
+				createCookie:function(name,value,days){
+					if (days) {
+						var date = new Date();
+						date.setTime(date.getTime()+(days*24*60*60*1000));
+						this.expires = "; expires="+date.toGMTString();
+					}
+					else this.expires = "";
+					document.cookie = name+"="+value+";"+this.expires+"; path=/";
+				return this.list.push(value);
+				},
+				readCookie:function(name){
+					this.nameEQ = name + "=";
+					this.ca = document.cookie.split(';');
+					for(var i=0;i < this.ca.length;i++) {
+						var c = this.ca[i];
+						while (c.charAt(0)==' ') c = c.substring(1,c.length);
+						if (c.indexOf(this.nameEQ) == 0) return c.substring(this.nameEQ.length,c.length);
+					}
+					//return null;
+				},
+				eraseCookie:function(name){
+					this.createCookie(name,"",-1);
+				}
+			},
+			constructor:function(){return {
+					init:{value:function(){
+								Debug.log('Cookies: Init');
+							return true;
+							}
+						}
+					}
+				}
+			},
+			name:"",
+			discription:"",
+			scale:1,
+			delta:1,
+			width:0,
+			height:0,
+			setWidth:0,
+			setHeight:0,
+			resized:false,
+			targetfps:60,
+			_Main:{},
+			c:{},
+			b:{}
+		},
+		animationFrame:	function()	{
+			document.requestNextAnimationFrame = window.requestNextAnimationFrame =
+		    (function () {
+			var originalWebkitRequestAnimationFrame = undefined;
+			var wrapper = undefined;
+			var callback = undefined;
+			var geckoVersion = 0;
+			var userAgent = navigator.userAgent;
+			var index = 0;
+			var self = this;
+			if (window.webkitRequestAnimationFrame) 
+				{
+					wrapper = function (time) {
+					if (time === undefined) 
+						{
+							time = +new Date();
+						}
+					self.callback(time);
+				 };
+				 originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame;
+				 window.webkitRequestAnimationFrame = function (callback, element) 
+				 {
+					self.callback = callback;
+					originalWebkitRequestAnimationFrame(wrapper, element);
+				 }
+				}
+			if (window.mozRequestAnimationFrame) 
+				{
+				 index = userAgent.indexOf('rv:');
+				 if (userAgent.indexOf('Gecko') != -1) 
+					{
+					geckoVersion = userAgent.substr(index + 3, 3);
+					if (geckoVersion === '2.0') 
+						{
+					   window.mozRequestAnimationFrame = undefined;
+						}
+					}
+			  }
+			  return window.requestAnimationFrame   ||
+				 window.webkitRequestAnimationFrame ||
+				 window.mozRequestAnimationFrame    ||
+				 window.oRequestAnimationFrame      ||
+				 window.msRequestAnimationFrame     ||
+				 function (callback, element) 
+				 {
+					var start;
+					var finish;
+					window.setTimeout( function () 
+						{
+							start = +new Date();
+							callback(start);
+							finish = +new Date();
+							self.timeout = 1000 / 60 - (finish - start);
+						}, self.timeout);
+				 };
+			  }
+		   )
+		();
+		},
+	},
+	constructor:function(){
 		return {
-				x: evt.clientX,
-				y: evt.clientY
-				};
-    }
-	window.addEventListener('mousewheel',function(evt)	{
-		
-		INPUT_wheelDelta = evt.wheelDelta;
-	},true);
-	
-	
-
-	
-	
-	
-	
-
-
-var k_left = 37, k_right = 39, k_up = 38, k_down = 40, k_enter = 13, k_shift = 16, k_e = 69 , k_r = 82;
-var k_w = 87;
-var k_a = 65;
-var k_s = 83;
-var k_d = 68;
-var input_canvas;
-function Trigger()
-{
-	this.push = false;
-	this.previous = false; // Previous state of 'Push.'
-
-	this.pressed = false;
-	this.released = false;
-}
-
-var mouse_x = 0, mouse_y = 0;
-var mousestate = new Trigger();
-var keystate = new Array();
-
-function input_track_key(code)
-{
-	keystate[code] = new Trigger();
-}
-
-function input_update()
-{
-INPUT_released = false;
-if (INPUT_up==false)
-	INPUT_duration+=1;
-		if (mousestate.push != mousestate.previous)
-		{
-			mousestate.pressed = mousestate.push;
-			mousestate.released = !mousestate.push;
+			loadscripts:{value:function(){
+				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",window.scripts))){};
+				this.scripts = window.scripts;
+				}
+			},
+			init:{value:function(name,w,h){
+				this.loadscripts();		
+				this.client.canvas();
+				(this.ext = Object.create(this.ext.prototype,this.ext.constructor(this))).init(name);
+				this.client.init(name,w,h);
+				this.animationFrame();
+				setTimeout(
+					function(A){
+						function AppLoop(){$=A;A.client.loop(A);}
+						A.client.start(AppLoop,A.scale);
+					}(this),1600);
+				}
+			},
+			scripts:{value:window.scripts},
+			codefmk:{value:'0.6.50.14.22.01.min'},
+			code:{value:"0"}
 		}
-		else
-		{
-			mousestate.pressed = false;
-			mousestate.released = false;
-		}
-		mousestate.previous = mousestate.push;
-		var i, key;
-		for (i in keystate)
-		{
-			key = keystate[i];
-			if (key.push != key.previous)
-			{
-				key.pressed = key.push;
-			}
-			else
-			{
-				key.pressed = false;
-				key.released = false;
-			}
+	},
+	scripts:[],
+	mainLoop:{},
+	second:{},
+	framesT:0.0,
+	frames:0.0,
+	delta:0.0,
+	debug:false,
+	codefmk:"",
+	code:"",
+	fps:0,
+};
+App = Object.create(App.prototype,App.constructor());
 
-			key.previous = key.push;
-		}
-		delete i, key;
-}
 
-////////////////////////////////////////////////////////////////
-////	"semblance.js:" by RyanSpice,        	            ////
-////							        	                ////
-////	GraphicsController = new semblance( array ); //Array list of images
-////	GraphicsController.getImage( image );	//Returns an image from the array; 
-////////////////////////////////////////////////////////////////
-function semblance(array)
-{
-	this.semblanceArray = array||new Array();
-	this.webItems = new Array();
-	this.webLoad = function(name,address)
-	{
-		this.webItems[name] = new Image();
-		this.webItems[name].src = address;
-	}
-	this.packLoad = function(name,file,type)
-	{
-		var type = type || "png";
-		var name = name || "";
-		this.semblanceArray[name] = new Image();
-		this.semblanceArray[name].src = file + "." + type;
-	}
-	this.graphicsInit = function()
-	{
 
-	}
-	this.getImage = function(name)
-	{
-	return this.semblanceArray[name];
-	}
-} 
