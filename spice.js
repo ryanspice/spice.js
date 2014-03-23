@@ -8,6 +8,8 @@
 	  Created By: Ryan Spice-Finnie
 	  
 */
+"use strict";
+/*
 var A = Object.create(null,{name:{value:"eh"}});
 	
 	
@@ -24,11 +26,21 @@ var Properties = Object.create(null,{
 		}
 	});
 	Properties.acessor.set(1);
-console.log(Properties);
+console.log(Properties);*/
+var _Rectangle = {};_Rectangle.prototype = {
+	x:0,
+	y:0,
+	draw:function(x,y,w,h){
+		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,1,0,"111111");
+	}
+}
+var Scripts = window.scripts = [],
+	_Main = Object.create(null,{name:{value:"Main"}}),
+	Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
 	
-var Scripts = window.scripts = [],_Main = Object.create(null),Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
-
-	
+var Debug = Object.create(null);
+var Sprite = Object.create(null);
+var Sprite = Object.create(null);
 var App = {
 	prototype:{
 		user:{
@@ -263,7 +275,7 @@ var App = {
 						getCurrent	:function(){return this.Current},
 						get			:function(){var g = (this.shade)?this.Current[0]:this.Current[1];return g;},
 						getAlt		:function(){var g = (this.shade)?this.Current[1]:this.Current[0];return g;},
-						set			:function(set){console.log(set[0]);this.Current = set; var g = (this.shade)?this.Current[0]:this.Current[1];return this.Current;},
+						set			:function(set){this.Current = set; var g = (this.shade)?this.Current[0]:this.Current[1];return this.Current;},
 						setAlt		:function(set){this.shade = set;}
 					},
 					constructor:function(){return {
@@ -683,6 +695,7 @@ var App = {
 						this.visuals.buffer.style.left = "0px",
 						this.visuals.buffer.style.top = "0px");
 			},
+			
 			init:function(name,w,h){
 				this.name = name;
 				this.discription = "Eh";
@@ -694,7 +707,8 @@ var App = {
 				(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
 				(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
 				(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
-				this._Main = Object.create(_Main.prototype);
+				//console.log(this._Main.constructor());
+				this._Main = Object.create(_Main.prototype,this._Main.constructor());
 				(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
 			},
 			start:function(loop,scale){
@@ -721,7 +735,6 @@ var App = {
 				lastscale:1,
 				fullscale:false,
 				resized:false,
-				pause:0,
 				set:0,
 				frames:0,
 				pause:function(){
@@ -777,12 +790,15 @@ var App = {
 				state:{
 					prototype:{
 						init:function(){
+							if (typeof this.current.init !=='undefined')
 							this.current.init();
 						},
 						draw:function(){
+							if (typeof this.current.draw !=='undefined')
 							this.current.draw();
 						},
 						update:function(){
+							if (typeof this.current.update !=='undefined')
 							this.current.update();
 						},
 						set:function(state,start){
@@ -822,7 +838,7 @@ var App = {
 							App.delta = App.client.delta = this.delta_speed = this.delta;
 							else
 							App.delta = App.client.delta = this.delta_speed = 1;
-							console.log(this.delta);
+							//console.log(this.delta);
 						/* Increment Time to increase performance */
 							if (this.fps==0)
 								return;
@@ -882,7 +898,7 @@ var App = {
 				},
 				Data:{
 					Total:function(){
-					return this.total = this.kilobyteCount($);
+					return this.total = this.kilobyteCount(App);
 					},
 					Update:function(){
 					if (App.client.update.state.initalized)
@@ -1318,14 +1334,14 @@ var App = {
 				point:14,
 				scale:0,
 				grd:DefaultObject,
-				font:"",
 				settings:[
 							["Full Clear", true],
 							["Wide Clear", true],
 							["Window Clear",false],
 							["optimized_resize",false],
 							["bufferMax",false],
-							["borders",true]
+							["borders",true],
+							["disable",false]
 						],
 				init:DefaultFunction,
 				set:function(a,b){
@@ -1335,10 +1351,15 @@ var App = {
 					
 					//!0==this.settings[1][1]?this.clear_wide():this.clear_fit());
 					//this.cleans.window();
+					this.clearing.pre();
 					if (this.app.update.state.initalized)
 						this.app.update.state.draw();
-					this.debug();
-					this.clearing.buff(this);//this.settings[2][1]?(this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight),this.canvas_context.drawImage(this.buffer,0,0)):this.canvas_context.drawImage(this.buffer,0,0);
+					if (this.settings[6][1]==false)
+					{
+						this.debug();
+						this.clearing.buff(this);
+					}
+					//this.settings[2][1]?(this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight),this.canvas_context.drawImage(this.buffer,0,0)):this.canvas_context.drawImage(this.buffer,0,0);
 					//this.settings[4][1]?this.Borders():this.clearBorders();
 					this.scale = this.app.scale;
 				},
@@ -1383,6 +1404,7 @@ var App = {
 						this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
 					},
 					all:function(){
+						//App.client._Visuals.rect(window.innerWidth/2,window.innerHeight/2,window.innerWidth,window.innerHeight,"000000",1,1,1);
 						//this.clear(-App.client.width,0,-App.client.width*2/App.client.scale,App.client.height);
 						//this.clear(+App.client.width*2,0,App.client.width*2/App.client.scale,App.client.height);
 						//this.clear(-App.client.width,-App.client.height,App.client.width*3,App.client.height*3);
@@ -1453,27 +1475,27 @@ var App = {
 					//this.text_ext("Debug",	this.app.setWidth/2.5,this.point*0.9,this.point*0.9);
 					//this.text_ext(this.app.name,5,25,"#FFFFFF",4,1,0);
 					//this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
-					//this.text_ext("x "+Math.round($.ext.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
-					//this.text_ext("x: "+Math.round($.ext.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
-					//this.text_ext("y "+Math.round($.ext.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
-					//this.text_ext("y: "+Math.round($.ext.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
-					if (this.app.fps<20)
-						console.log(this.app.fps);
+					//this.text_ext("x "+Math.round(App.ext.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
+					//this.text_ext("x: "+Math.round(App.ext.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
+					//this.text_ext("y "+Math.round(App.ext.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
+					//this.text_ext("y: "+Math.round(App.ext.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
+					if (App.fps<20)
+						console.log(App.fps);
 					
 					var data = [
 								[this.app.name],
-								[$.code+ " " +$.codefmk],
+								[App.code+ " " +App.codefmk],
 								[this.app.name],
 								[
 								"app.ext.input",
-								"x "+Math.round($.ext.input.x*100)/100		,
-								"x "+Math.round($.ext.input.window.x*100)/100,
-								"d "+$.ext.input.pressed+"   p "+$.ext.input.duration,
+								"x "+Math.round(App.ext.input.x*100)/100		,
+								"x "+Math.round(App.ext.input.window.x*100)/100,
+								"d "+App.ext.input.pressed+"   p "+App.ext.input.duration,
 								
 								
-								"y "+Math.round($.ext.input.y*100)/100		,
-								"y "+Math.round($.ext.input.window.y*100)/100,
-								($.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
+								"y "+Math.round(App.ext.input.y*100)/100		,
+								"y "+Math.round(App.ext.input.window.y*100)/100,
+								(App.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
 								],
 								[
 								"app.client",
@@ -1493,12 +1515,12 @@ var App = {
 								],
 								[
 								"app.client.data","",
-								"visuals ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Visuals):"?"),"",
-								"graphics ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Graphics):"?"),"",
-								"audio ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Audio):"?"),"",
-								"state ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app.update.state.current):"?"),"",
-								"ext ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount($.ext):"?"),"",
-								"Total ",($.ext.debug.strength!=="Lite"?this.app.Math.Data.Total():"?"),""
+								"visuals ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Visuals):"?"),"",
+								"graphics ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Graphics):"?"),"",
+								"audio ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Audio):"?"),"",
+								"state ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app.update.state.current):"?"),"",
+								"ext ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(App.ext):"?"),"",
+								"Total ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.Total():"?"),""
 								
 								]
 							];
@@ -1515,33 +1537,33 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 	tt++
 	};
 
-					//this.text_ext("D: "+$.ext.input.duration,210,55);
-					//this.text_ext("P: "+$.ext.input.pressed,160,55);
-					//($.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
-					//this.text_ext("I: "+$.ext.input.window.inside+" X: "+$.ext.input.window.x+" Y: "+$.ext.input.window.y,155,70);
+					//this.text_ext("D: "+App.ext.input.duration,210,55);
+					//this.text_ext("P: "+App.ext.input.pressed,160,55);
+					//(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
+					//this.text_ext("I: "+App.ext.input.window.inside+" X: "+App.ext.input.window.x+" Y: "+App.ext.input.window.y,155,70);
 					//this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
 					//this.text_ext("Discription: "+this.app.discription,25,100,"#FFFFFF",1,1,0);
-					//this.text_ext("Fps: "+Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round($.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
+					//this.text_ext("Fps: "+Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
 					//this.text_ext("Width: "+this.app.width,25,130,"#FFFFFF",1,1,0);
-					//this.text_ext("Height: "+$.client.height,25,145,"#FFFFFF",1,1,0);
+					//this.text_ext("Height: "+App.client.height,25,145,"#FFFFFF",1,1,0);
 					//this.text_ext("setWidth: "+this.app.setWidth,110,130,"#FFFFFF",1,1,0);
 					//this.text_ext("setHeight: "+this.app.setHeight,110,145,"#FFFFFF",1,1,0);
 					//this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
-					//this.text_ext("Delta: "+$.client.delta,25,175,"#FFFFFF",1,1,0);
+					//this.text_ext("Delta: "+App.client.delta,25,175,"#FFFFFF",1,1,0);
 					//this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
 					//this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
 					//this.text_ext("[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
-					this.text_ext("Log: "+$.ext.debug.text,35,this.app.setHeight-25,this.point);
+					this.text_ext("Log: "+App.ext.debug.text,35,this.app.setHeight-25,this.point);
 					if (App.ext.debug.strength=="Lite")
 						return;
 						
 						try {
-					//this.text_ext("_Visuals: " 	+ this.app.Math.Data.kilobyteCount($.client._Visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
+					//this.text_ext("_Visuals: " 	+ this.app.Math.Data.kilobyteCount(App.client._Visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
 					}catch(e){}
-					//this.text_ext("_Graphics: " + this.app.Math.Data.kilobyteCount($.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
-					//this.text_ext("_Audio: " 	+ this.app.Math.Data.kilobyteCount($.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
-					//this.text_ext("_State: " 	+ this.app.Math.Data.kilobyteCount($.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
-					//this.text_ext("ext: " 		+ this.app.Math.Data.kilobyteCount($.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
+					//this.text_ext("_Graphics: " + this.app.Math.Data.kilobyteCount(App.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
+					//this.text_ext("_Audio: " 	+ this.app.Math.Data.kilobyteCount(App.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
+					//this.text_ext("_State: " 	+ this.app.Math.Data.kilobyteCount(App.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
+					//this.text_ext("ext: " 		+ this.app.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
 					//this.text_ext("Total: "		+ this.app.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
 				},
 				Borders: function() {
@@ -1564,10 +1586,10 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					this.clear(0,this.h,this.w,this.h);
 				},
 				clear_fit: function() {
-					this.clear(0,0,$.client.width,$.client.heighteight);
+					this.clear(0,0,App.client.width,App.client.heighteight);
 				},
 				clear_wide: function() {
-					this.clear(-$.client.width,0,$.client.width*3,$.client.height);
+					this.clear(-App.client.width,0,App.client.width*3,App.client.height);
 				},
 				clear: function(x,y,width,height) {
 					this.stat = this.chk(x,y,width,height,1);
@@ -1620,7 +1642,6 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
 					this.font(f);
 					this.clean();
-					delete f;
 				},
 				text_button:function(string,x,y,colour,s,a,c,style){
 					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
@@ -1644,7 +1665,6 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					}		
 					this.font(f);
 					this.clean();
-					delete f;
 				},
 				within:false,
 				shadow:function(col,blur,x,y){
@@ -1692,7 +1712,6 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					}		
 					this.font(f);
 					this.clean();
-					delete f;
 				},
 				text:function(string, x, y,colour){
 					this.text_ext(string,x,y,colour,1,1,0,"");
@@ -1932,7 +1951,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 			setHeight:0,
 			resized:false,
 			targetfps:60,
-			_Main:{},
+			_Main:{constructor:function(){return {name:{value:"Main"}};}},
 			c:{},
 			b:{}
 		},
@@ -2000,7 +2019,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 		return {
 			loadscripts:{value:function(){
 				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",window.scripts))){};
-				this.scripts = window.scripts;
+				//this.scripts = window.scripts;
 				}
 			},
 			init:{value:function(name,w,h){
@@ -2011,7 +2030,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 				this.animationFrame();
 				setTimeout(
 					function(A){
-						function AppLoop(){$=A;A.client.loop(A);}
+						function AppLoop(){App=A;A.client.loop(A);}
 						A.client.start(AppLoop,A.scale);
 					}(this),1600);
 				}
@@ -2033,8 +2052,8 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 	fps:0
 };
 
-console.log(App);
+//console.log(App);
 App = Object.create(App.prototype,App.constructor());
 
 
-console.log(A);
+//console.log(A);
