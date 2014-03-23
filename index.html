@@ -1,50 +1,98 @@
 <!DOCTYPE html>
 <html >
   <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta name="apple-mobile-web-app-capable" content="yes"/>
-		<meta name="cursor-event-mode" content="native"/>
-		<meta name="touch-event-mode" content="native"/>
-		<meta name="msapplication-tap-highlight" content="no" />
-		<meta content='True' name='HandheldFriendly' />
-		<meta name="misapplication-tap-highlight" content="no"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
 	</head>
     <body style="overflow: hidden;padding:0px;background-color:#000000;margin:0px auto;-ms-touch-action:none;">
 		<div id="ClientDiv" style="postion:absolute;top:0px;left:0px;padding:0px;width:320;height:512;margin:0px auto;">
 		<canvas style="postion:absolute;top:0px;left:0px;" id="Client"></canvas>
 		</div>
 	</body>
-  <script type="application/x-javascript" src="spice.js"> </script>
-  <script >
-	var App = new Client("Empty Project","Client",1024,	720);
-	Main_ = new main_();
-	function main_()
-		{
-		App.defaultText = 12;
-		App.ScaleOnResize = true;
-		Graphics = new Array();
-		GraphicsController = new semblance();
-			this.start = function()
-			{
-				GraphicsController.graphicsInit();
-			}
-			
-			this.update = function()
-			{
+<script rel="prefetch" type="application/x-javascript" src="spice.js"></script>
+<script rel="prefetch" name="main" type="text/javascript" defer>
+Time = 200;
+
+pathR = -1;
+var startFade = function(i) {
+	var r = pathR;
+	if (i==App.client.update.state.current.state)
+		return;
+		else
+	if (i>App.client.update.state.current.state)
+	App.client.update.state.current.scroll_xdir = 1,pathR++;
+	else
+	App.client.update.state.current.scroll_xdir = -1,pathR--;
+	
+	App.client.update.state.current.fadeCur = true;
+	App.client.update.state.current.state = i;
+	
+	
+	switch(i)
+	{
+		case -1:
+			App.client.update.state.current.path = "";
+			pathR = i
+		break;
+		case 0:
+			//App.client.update.state.current.path = App.client.update.state.current.brand;
+		break;
+		case 1:
+			App.client.update.state.current.path = "Queue";
+		break;
+		case 2:
+			App.client.update.state.current.path = "#"+App.client.update.state.current.qnum;
+		break;
+		default:
+			//App.client.update.state.current.path = App.client.update.state.current.state;
+		break;
+	}
+	if (typeof screens[i]!=='undefined')
+	App.client.update.state.current.path = screens[i];
+		App.client.update.state.current.list_update_click(App.client.update.state.current.listPath,App.client.update.state.current.path+"",r);
 		
-			this.draw();
-			}
+		App.client.update.state.current.list_update_text_pos(App.client.update.state.current.listPath,App.client.update.state.current.path+"",pathR);
+		if (r>pathR)
+		App.client.update.state.current.list_update_text_pos(App.client.update.state.current.listPath,"",r);
+}
+
+
+
+
+_Main.prototype = {
+	init:function() {
+		//Game.init(this.app);
+		this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("https://ryanspice.com/flappyfish/images/FlappyFish0.png","shortcut icon","image/png"));
+		this.app.ext.debug.toggle("off");
+		this.visuals.background_set("transparent");
 		
-			this.draw = function()
-			{
-				App.visuals._opacity(1);
-				App.visuals._color("#221111");
-				App.visuals.rect(App.width*0.5,App.height*0.5,400,100,1,1,true);
-				App.visuals._color("#FFAAAA");
-				App.visuals.text("Basic HTML5 spice.js app.",App.width*0.5,App.height*0.5,25,1,true);
-				App.visuals._color("#000000");
-			}
+		//this.bg = this.graphics.load("background","Sky-Clouds-Building-Landscape-City-Toronto-Canada");
+		this.visuals.clearing.settings[0][1]=true;
+		//this.visuals.clearing.settings[2][1]=true;
+		this.app.ext.top();
+		this.w = this.app.client.setWidth;
+		this.h = this.app.client.setHeight;
+		this.app.client.c.style.pointerEvents = "none";
+		
+		return true;
+		},
+	update:function() {
+		
+		return true;
+		},
+	draw:function() {
+	
+		return true;
 		}
-  </script>
+};
+App.init("yw8",320,480);
+</script>
 </html>
+<!---  		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="cursor-event-mode" content="native"/>
+		<meta name="touch-event-mode" content="native"/>
+		<meta name="msapplication-tap-highlight" content="no" />
+		<meta content='True' name='HandheldFriendly' />
+		<meta name="misapplication-tap-highlight" content="no"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" /> --> 
+		

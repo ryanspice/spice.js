@@ -5,11 +5,30 @@
 .   ) | | | |   |-'    | `-. 
  `-'  |-' ' `-' `-' o  | `-' 
       '               -'     
-	  Created By: Ryan Spice
+	  Created By: Ryan Spice-Finnie
 	  
 */
+var A = Object.create(null,{name:{value:"eh"}});
+	
+	
+var Properties = Object.create(null,{
+		value:{
+				writeable:true,
+				configurable:true,
+				value:""
+			},
+		acessor:{
+			configurable:false,
+			get:function(){return this.value;},
+			Set:function(v){this.value = v;}
+		}
+	});
+	Properties.acessor.set(1);
+console.log(Properties);
+	
 var Scripts = window.scripts = [],_Main = Object.create(null),Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
 
+	
 var App = {
 	prototype:{
 		user:{
@@ -2011,9 +2030,11 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 	debug:false,
 	codefmk:"",
 	code:"",
-	fps:0,
+	fps:0
 };
+
+console.log(App);
 App = Object.create(App.prototype,App.constructor());
 
 
-
+console.log(A);
