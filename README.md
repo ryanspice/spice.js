@@ -12,6 +12,7 @@ Setting your index.html
 -----------------------
 
 
+```bash
 <!DOCTYPE html>
 <html >
   <head>
@@ -49,3 +50,4 @@ _Main.prototype = {
 App.init("yw8",320,480);
 </script>
 </html>
+```
