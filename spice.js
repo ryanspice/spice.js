@@ -30,10 +30,12 @@ console.log(Properties);*/
 var _Rectangle = {};_Rectangle.prototype = {
 	x:0,
 	y:0,
-	draw:function(x,y,w,h){
-		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,1,0,"111111");
+	draw:function(x,y,w,h,c){
+		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,1,0,c||"#111111");
 	}
 }
+	var sprite = Object.create(null);
+	var img = Object.create(null);
 var Scripts = window.scripts = [],
 	_Main = Object.create(null,{name:{value:"Main"}}),
 	Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
@@ -41,7 +43,7 @@ var Scripts = window.scripts = [],
 var Debug = Object.create(null);
 var Sprite = Object.create(null);
 var Sprite = Object.create(null);
-var App = {
+var App = Object.create({
 	prototype:{
 		user:{
 			name		:"",
@@ -100,6 +102,7 @@ var App = {
 		},
 		ext:{
 			prototype:{
+				freezeonfocus:false,
 				fps:0,
 				ping:0,
 				offline:false,
@@ -107,9 +110,55 @@ var App = {
 				connectionAttempts:0,
 				connectDate:new Date(),
 				connectDatere:new Date(),
-				
+				scroll:{
+					event:function(evt,delta) {
+						if (App.client._Visuals.seamless)
+							evt.preventDefault();
+						App.ext.input.wheelDelta = event.wheelDelta;
+					},
+					blockforce:false,
+					to:function(force) {
+						if (force)
+							if (this.blockforce)
+							window.scrollTo(this.x,this.y);
+							
+						//if (document.documentElement.offsetLeft!==0)
+						//	window.scrollTo(0,document.documentElement.offsetTop)
+						//if ((this.lock)||(force))
+						//{
+						//window.scrollTo(this.x,this.y);
+						//if (this.y<0)
+						//	this.y = 0;
+						//	else
+						//	if (this.y>document.documentElement.clientHeight)
+						//		this.y=document.documentElement.clientHeight;
+						//}
+						//console.log(this.y);
+					},
+					lock:{x:true,y:false},
+					x:0,
+					y:1
+				},
+				click:function(event, anchorObj) {
+					if (anchorObj.click) {
+						anchorObj.click();
+						} else if(document.createEvent) {
+						if(event.target !== anchorObj) {
+						var evt = document.createEvent("MouseEvents"); 
+						evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
+						var allowDefault = anchorObj.dispatchEvent(evt);
+						// you can check allowDefault for false to see if
+						// any handler called evt.preventDefault().
+						// Firefox will *not* redirect to anchorObj.href
+						// for you. However every other browser will.
+						}
+					}
+				},
 				top:function(){
 					App.client.update.fullscale = !App.client.update.fullscale;
+				},
+				title:function(title){
+					return document.title==title?true:(document.title=title);
 				},
 				debug:{
 					prototype:{
@@ -206,51 +255,46 @@ var App = {
 				},
 				metatag:{
 					prototype:{
-						count:0,
 						metaLink: function(href,rel,type) {
-							var link = document.createElement('link');
-							link.href = href;
-							link.rel = rel;		
-							link.type = type;	
-							return link;
+							this.link = document.createElement('link');
+							this.link.href = href;
+							this.link.rel = rel;		
+							this.link.type = type;	
+							return this.link;
 						},
 						metaTag: function(name,content) {
-							var meta = document.createElement('meta');
-							meta.content = content;
-							meta.name = name;
-							return meta;
-						},
-						metaStyle: function() {
-							var style = document.createElement('style');
-							style.innerHTML = style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;/* Firefox */image-rendering:-o-crisp-edges;/* Opera */image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */-ms-0erpolation-mode: nearest-neighbor;/*IE(non-standard property) */}';
-							return style;
+							this.meta = document.createElement('meta');
+							this.meta.content = content;
+							this.meta.name = name;
+							return this.meta;
 						},
 						metaAppend: function(meta) {
-							document.getElementsByTagName('head')[0].appendChild(meta);
+							this.head.appendChild(meta);
 							this.count++;
 						},
-						metatags: function(name) {
-							document.title = this.name = name;
-							document.body.style = "overflow: hidden;padding:0px;margin:0px auto;-ms-touch-action:none;";
-							document.body.setAttribute("style","-ms-touch-action: none;background:transparent;");
-							document.body.style.overflow = "hidden";
-							document.body.style.padding = "0px";
-							document.body.style.margin = "0px auto";
-							this.metaAppend(this.metaTag("msapplication-tap-highlight","no"));
-							this.metaAppend(this.metaTag("apple-mobile-web-app-capable","yes"));
-							this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style","black"));
-							this.metaAppend(this.metaTag("format-detection","telephone=no"));
-							this.metaAppend(this.metaTag("cursor-event-mode","native"));
-							this.metaAppend(this.metaTag("touch-event-mode","native"));
-							this.metaAppend(this.metaTag("HandheldFriendly","True"));
-							this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=no"));
-							//this.metaAppend(this.metaTag("viewport","target-densitydpi=device-dpi"));
-							this.metaAppend(this.metaStyle());
-						}
+						link:document.createElement('link'),
+						meta:document.createElement('meta'),
+						head:document.getElementsByTagName('head')[0],
+						count:0,
+						ms_taphighlight:"no",
+						apple_webapp:"yes",
+						apple_statusbar:"black",
+						devicedpi:true,
+						devicewidth:true
 					},
 					constructor:function(){return {
-						init:{value:function(name){
-								this.metatags(name);
+						init:{value:function(){
+								this.metaAppend(this.metaTag("msapplication-tap-highlight",this.ms_taphighlight));
+								this.metaAppend(this.metaTag("apple-mobile-web-app-capable",this.apple_webapp));
+								this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style",this.apple_statusbar));
+								this.metaAppend(this.metaTag("cursor-event-mode","native"));
+								this.metaAppend(this.metaTag("touch-event-mode","native"));
+								this.metaAppend(this.metaTag("HandheldFriendly","True"));
+								
+								if (this.devicewidth)
+									this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=no"));
+								if (this.devicedpi)
+									this.metaAppend(this.metaTag("viewport","target-densitydpi=device-dpi"));
 								Debug.log('Debug:     MetaCount/'+this.count);
 							return true;
 							}
@@ -576,12 +620,7 @@ var App = {
 										}
 									},true);
 								}
-								window.addEventListener('mousewheel',function(evt,delta) {
-									evt.preventDefault();
-									if (App.ext.input.control)
-										console.log(delta);
-									App.ext.input.wheelDelta = event.wheelDelta;
-									},true);
+								window.addEventListener('mousewheel',App.ext.scroll.event,true);
 							if (App.ext.useragent.mouse) {
 								window.addEventListener('mousedown',function(evt) {
 										App.ext.input.listener.down(App.ext.input.position(App.client.visuals.canvas, evt),App.ext.input);
@@ -666,7 +705,9 @@ var App = {
 						(this.useragent = Object.create(this.useragent.prototype,this.useragent.constructor())).init();
 						(this.input = Object.create(this.input.prototype,this.input.constructor(this.app))).init();
 						(this.colour = Object.create(this.colour.prototype,this.colour.constructor())).init();
-						(this.metatag = Object.create(this.metatag.prototype,this.metatag.constructor())).init(name);
+						(this.metatag = Object.create(this.metatag.prototype,this.metatag.constructor())).init();
+						this.title(name);
+						Debug.log("Framework:   Initilization: "+name);
 						Debug.log("Network:   Connection: "+!this.connect(this));
 						}
 					}
@@ -674,40 +715,43 @@ var App = {
 			}
 		},
 		client:{
+			enabled:true,
 			canvas:function(){
+				if (!this.enabled)
+					return;
 				(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
 				(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
 				this._Canvas?(
-						this.visuals.canvas.style.position = "relative",
-						this.visuals.canvas.style.zIndex = "1",
-						this.visuals.canvas.style.left = "0px",
-						this.visuals.canvas.style.top = "0px",
-						this.visuals.buffer.style.position = "relative",
-						this.visuals.buffer.style.zIndex = "0",
-						this.visuals.buffer.style.left = "0px",
-						this.visuals.buffer.style.top = "0px"):(    
-						this.visuals.canvas.style.position = "absolute",
-						this.visuals.canvas.style.zIndex = "1",
-						this.visuals.canvas.style.top = "0px",
-						this.visuals.canvas.style.left = "0px",
-						this.visuals.buffer.style.position = "absolute",
-						this.visuals.buffer.style.zIndex = "0",
-						this.visuals.buffer.style.left = "0px",
-						this.visuals.buffer.style.top = "0px");
+					this.visuals.canvas.style.position = "relative",
+					this.visuals.canvas.style.zIndex = "1",
+					this.visuals.canvas.style.left = "0px",
+					this.visuals.canvas.style.top = "0px",
+					this.visuals.buffer.style.position = "relative",
+					this.visuals.buffer.style.zIndex = "0",
+					this.visuals.buffer.style.left = "0px",
+					this.visuals.buffer.style.top = "0px"):(    
+					this.visuals.canvas.style.position = "absolute",
+					this.visuals.canvas.style.zIndex = this.visuals.zindex,
+					this.visuals.canvas.style.top = "0px",
+					this.visuals.canvas.style.left = "0px",
+					this.visuals.buffer.style.position = "absolute",
+					this.visuals.buffer.style.zIndex = "0",
+					this.visuals.buffer.style.left = "0px",
+					this.visuals.buffer.style.top = "0px");
 			},
 			
 			init:function(name,w,h){
+			console.log(document.documentElement.scrollWidth);
 				this.name = name;
 				this.discription = "Eh";
-				this.width = this.setWidth = w;
-				this.height = this.setHeight = h;
+				this.w = this.width = this.setWidth = w;
+				this.h = this.height = this.setHeight = h;
 				(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.c,this.b))).init();
 				this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
 				(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
 				(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
 				(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
 				(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
-				//console.log(this._Main.constructor());
 				this._Main = Object.create(_Main.prototype,this._Main.constructor());
 				(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
 			},
@@ -749,6 +793,7 @@ var App = {
 					app._Visuals.buffer.width  = this.last.w = app.width;
 					app._Visuals.buffer.height = this.last.h = app.height;
 					Debug.log(this.difference.x + this.difference.y);
+					
 					return true;
 					},
 				scale:function(app) {
@@ -764,8 +809,10 @@ var App = {
 						{
 							if (window.innerHeight!==app.height)
 								app.height = window.innerHeight;
-							if (window.innerWidth!==app.innerWidth)
+							if (window.innerWidth!==app.innerWidth){
 								app.width = window.innerWidth;
+								
+								}
 						}
 						else
 						{
@@ -780,9 +827,10 @@ var App = {
 					(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
 					if (isNaN(this.scaler.s)){this.set = 0;return;}
 					this.scalediff = this.scaler.s-this.lastscale;
-					(this.scalediff)?function() {
-						window.scrollTo(0, 1);
-						}:null;
+					
+					
+					
+					(this.scalediff)?App.ext.scroll.to(true):App.ext.scroll.to(false);
 					this.set = 0;
 					this.lastscale = this.scaler.s;
 					return this.scaler.s;
@@ -848,13 +896,18 @@ var App = {
 								this.adding-=(this.adding/step.targetfps)*step.targetfps,this.addings+=1;
 						return;
 					},
+					focus:function(){
+						if (App.ext.freezeonfocus)
+							return document.hasFocus();
+						return true;
+					},
 					second:function(step,app){
 						if (!step.Step(app))
 							return false;
 						this.frames++;
 						for(var s =this.addings;s>=0;--s)
 							if (app.client.update.state.initalized)
-								(document.hasFocus())?app.client.update.state.current.update():null;
+								(this.focus())?app.client.update.state.current.update():null;
 						this.addings = 0;
 					},
 					tick:function(a,b,app){
@@ -1030,7 +1083,7 @@ var App = {
 				}
 			}
 		},
-	_Audio:{
+		_Audio:{
 			prototype:{
 				mute:false,
 				quality:0,
@@ -1302,6 +1355,8 @@ var App = {
 		_Visuals:{
 			prototype:{
 				app:DefaultObject,
+				head:document.getElementsByTagName('head')[0],
+				rendering_style:document.createElement('style'),
 				stat:{
 						x:0,
 						y:0,
@@ -1334,6 +1389,22 @@ var App = {
 				point:14,
 				scale:0,
 				grd:DefaultObject,
+				zindex:1,
+				mstouch:true,
+				seamless:false,
+				tight:true,
+				disable:false,
+				body:function(){
+					if (!this.mstouch)
+						document.body.setAttribute("style","-ms-touch-action: none;");
+					if (this.seamless)
+						document.body.style.overflow = "hidden";
+					if (this.tight)
+					{
+						document.body.style.padding = "0px";
+						document.body.style.margin = "0px auto";
+					}
+				},
 				settings:[
 							["Full Clear", true],
 							["Wide Clear", true],
@@ -1348,9 +1419,10 @@ var App = {
 					return this.settings[a][1] = b;
 				},
 				draw:function(){
-					
 					//!0==this.settings[1][1]?this.clear_wide():this.clear_fit());
 					//this.cleans.window();
+					if (this.disable)
+						return false;
 					this.clearing.pre();
 					if (this.app.update.state.initalized)
 						this.app.update.state.draw();
@@ -1812,8 +1884,11 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 				
 				image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
 					this.stat = this.chk(x,y,image.width*xscale,image.height*xscale,s,a,centered);
-					if (this.touch_within_stat(this.stat))
+					this.stat2 = this.chk(x,y,(image.width*xscale)*0.9,(image.height*xscale)*0.9,s,a,centered);
+					var w = false;
+					if (this.touch_within_stat(this.stat2))
 					{
+						w = true;
 						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
 						App.ext.cursor.set(App.ext.cursor.pointer,true);
 						if (App.ext.input.released)
@@ -1826,7 +1901,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 						this.opacity(this.stat.a*0.75);
 						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					}			
-					return;
+					return w;
 				},
 				touch_within:function(x, y, w, h,c) {
 					return c?((App.ext.input.x>x-w/2&&App.ext.input.x<x+w/2&&App.ext.input.y>y-h/2&&App.ext.input.y<y+h/2)?true:false):((App.ext.input.x>x&&App.ext.input.x<x+w&&App.ext.input.y>y&&App.ext.input.y<y+h)?true:false);
@@ -1899,6 +1974,9 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					this.canvas_context = this.canvas.getContext("2d");
 					this.buffer_context = this.buffer.getContext("2d");
 					this.background_set("transparent");
+					this.rendering_style.innerHTML = this.rendering_style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+					this.head.appendChild(this.rendering_style);
+					this.body();
 				}}}
 			}
 		},
@@ -2036,7 +2114,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 				}
 			},
 			scripts:{value:window.scripts},
-			codefmk:{value:'0.6.50.14.22.01.min'},
+			codefmk:{value:'0.6.50.14.24.04.min'},
 			code:{value:"0"}
 		}
 	},
@@ -2050,7 +2128,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 	codefmk:"",
 	code:"",
 	fps:0
-};
+});
 
 //console.log(App);
 App = Object.create(App.prototype,App.constructor());
