@@ -55,10 +55,9 @@ Setting up your Application
 
 Window Scroll
 
-'''bash
-	App.ext.scroll = true||false;
-	App.ext.scroll.x = 0;
-	App.ext.scroll.y = 0;
-	
-	App.ext.scroll.seamless = true || false;
-'''
+```bash
+App.ext.scroll = true||false;
+App.ext.scroll.x = 0;
+App.ext.scroll.y = 0;
+App.ext.scroll.seamless = true || false;
+```
