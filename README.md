@@ -54,6 +54,7 @@ Setting up your Application
 ---------------------------
 
 Window Scroll
+
 '''bash
 	App.ext.scroll = true||false;
 	App.ext.scroll.x = 0;
@@ -61,7 +62,3 @@ Window Scroll
 	
 	App.ext.scroll.seamless = true || false;
 '''
-
-
-			//this.bg = this.graphics.load("background","Sky-Clouds-Building-Landscape-City-Toronto-Canada");
-			//this.visuals.clearing.settings[2][1]=true;
