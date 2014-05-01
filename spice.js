@@ -45,6 +45,18 @@ var Sprite = Object.create(null);
 var Sprite = Object.create(null);
 var App = Object.create({
 	prototype:{
+		options:{
+			flags:{
+				canvas:true,
+				mstouch:false,
+				seamless:false,
+				tight:false
+			},
+			override:{
+				keyboard:true,
+				mouse:true
+				}
+		},
 		user:{
 			name		:"",
 			id			:"",
@@ -165,8 +177,7 @@ var App = Object.create({
 						delay:0,
 						text:String,
 						strength:"Normal",
-						log:function(txt,n)
-							{
+						log:function(txt,n)	{
 							this.text = txt;
 							this.delay.value--;
 							if ((this.delay.value==0)&&(typeof n!=="undefined"))
@@ -292,9 +303,9 @@ var App = Object.create({
 								this.metaAppend(this.metaTag("HandheldFriendly","True"));
 								
 								if (this.devicewidth)
-									this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=no"));
+									this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"));
 								if (this.devicedpi)
-									this.metaAppend(this.metaTag("viewport","target-densitydpi=device-dpi"));
+									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
 								Debug.log('Debug:     MetaCount/'+this.count);
 							return true;
 							}
@@ -568,6 +579,7 @@ var App = Object.create({
 										)
 									));
 							this.released?(this.released=false,this.dist.x=0,this.dist.y=0):null;
+							this.codereleased = 0;
 							//this.duration>0?(this.released=false);
 							//(this.released==true)?(this.released=false,this.duration=0,this.dist.x=0,this.dist.y=0):null;
 							(this.delay>0)?this.delay-=0.1:null;
@@ -576,7 +588,153 @@ var App = Object.create({
 					},
 					constructor:function(a){return{
 						app:{value:a},
+						codes:{value:new Array()},
 						init:{value:function Initalize(a){
+							this.codes[0]  = '';
+							this.codes[1]  = '';
+							this.codes[2]  = '';
+							this.codes[3]  = '';
+							this.codes[4]  = '';
+							this.codes[5]  = '';
+							this.codes[6]  = '';
+							this.codes[7]  = '';
+							this.codes[8]  ='backspace';
+							this.codes[9]  ='tab'                ;
+							this.codes[13] ='enter'             ;
+							this.codes[16] ='shift'             ;
+							this.codes[17] ='ctrl'              ;
+							this.codes[18] ='alt'               ;
+							this.codes[19] ='pause/break'       ;
+							this.codes[20] ='capslock'          ;
+							this.codes[27] ='escape'            ;
+							this.codes[32] ='space'            ;
+							this.codes[33] ='pageup'            ;
+							this.codes[34] ='pagedown'          ;
+							this.codes[35] ='end'               ;
+							this.codes[36] ='home'              ;
+							this.codes[37] ='leftarrow'         ;
+							this.codes[38] ='uparrow'           ;
+							this.codes[39] ='rightarrow'        ;
+							this.codes[40] ='downarrow'         ;
+							this.codes[45] ='insert'            ;
+							this.codes[46] ='delete'            ;
+							this.codes[48] ='0'                 ;
+							this.codes[49] ='1'                 ;
+							this.codes[50] ='2'                 ;
+							this.codes[51] ='3'                 ;
+							this.codes[52] ='4'                 ;
+							this.codes[53] ='5'                 ;
+							this.codes[54] ='6'                 ;
+							this.codes[55] ='7'                 ;
+							this.codes[56] ='8'                 ;
+							this.codes[57] ='9'                 ;
+							this.codes[65] ='a'                 ;
+							this.codes[66] ='b'                 ;
+							this.codes[67] ='c'                 ;
+							this.codes[68] ='d'                 ;
+							this.codes[69] ='e'                 ;
+							this.codes[70] ='f'                 ;
+							this.codes[71] ='g'                 ;
+							this.codes[72] ='h'                 ;
+							this.codes[73] ='i'                 ;
+							this.codes[74] ='j'                 ;
+							this.codes[75] ='k'                 ;
+							this.codes[76] ='l'                 ;
+							this.codes[77] ='m'                 ;
+							this.codes[78] ='n'                 ;
+							this.codes[79] ='o'                 ;
+							this.codes[80] ='p'                 ;
+							this.codes[81] ='q'                 ;
+							this.codes[82] ='r'                 ;
+							this.codes[83] ='s'                 ;
+							this.codes[84] ='t'                 ;
+							this.codes[85] ='u'                 ;
+							this.codes[86] ='v'                 ;
+							this.codes[87] ='w'                 ;
+							this.codes[88] ='x'                 ;
+							this.codes[89] ='y'                 ;
+							this.codes[90] ='z'                 ;
+							this.codes[91] ='leftwindowkey'     ;
+							this.codes[92] ='rightwindowkey'    ;
+							this.codes[93] ='selectkey'         ;
+							this.codes[96] ='numpad0'           ;
+							this.codes[97] ='numpad1'           ;
+							this.codes[98] ='numpad2'           ;
+							this.codes[99] ='numpad3'           ;
+							this.codes[100]='numpad4'          ;
+							this.codes[101]='numpad5'          ;
+							this.codes[102]='numpad6'          ;
+							this.codes[103]='numpad7'          ;
+							this.codes[104]='numpad8'          ;
+							this.codes[105]='numpad9'          ;
+							this.codes[106]='multiply'         ;
+							this.codes[107]='add'              ;
+							this.codes[109]='subtract'         ;
+							this.codes[110]='decimalpoint'     ;
+							this.codes[111]='divide'           ;
+							this.codes[112]='f1'               ;
+							this.codes[113]='f2'               ;
+							this.codes[114]='f3'               ;
+							this.codes[115]='f4'               ;
+							this.codes[116]='f5'               ;
+							this.codes[117]='f6'               ;
+							this.codes[118]='f7'               ;
+							this.codes[119]='f8'               ;
+							this.codes[120]='f9'               ;
+							this.codes[121]='f10'              ;
+							this.codes[122]='f11'              ;
+							this.codes[123]='f12'              ;
+							this.codes[144]='numlock'          ;
+							this.codes[145]='scrolllock'       ;
+
+							//"Nintendo Wii" 
+							this.codes[175]='Up (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+							this.codes[176]='Down (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+							this.codes[177]='Left (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+							this.codes[178]='Right (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+
+							this.codes[170]='- (Wii?)';		//(CAUTION! ALSO ZOOMS OUT)
+							this.codes[174]='+ (Wii?)';		//(CAUTION! ALSO ZOOMS IN)
+							this.codes[172]='1 (Wii?)';		//
+							this.codes[173]='2 (Wii?)';		//(CAUTION! ALSO SPLITS SCREEN INTO SINGLE COLUMN MODE)
+
+
+							/*
+							PS3:
+							Platform: "PLAYSTATION 3"
+							Up: 38
+							Down: 40
+							Left: 37
+							Right: 39
+							X: 63 (CAUTION! ALSO CLICKS)
+							Nintendo 3ds:
+							Platform: "Nintendo 3ds"
+							Up: 38
+							Down: 40
+							Left: 37
+							Right: 39
+							LG Smart TV:
+							Platform: "Linux 35230"
+							0-9: 48-57
+							Play: 445
+							Pause: 19
+							Rewind: 412
+							FF: 417
+							*/
+
+
+							this.codes[186]='semi-colon'       ;
+							this.codes[187]='equalsign'        ;
+							this.codes[188]='comma'            ;
+							this.codes[189]='dash'             ;
+							this.codes[190]='period'           ;
+							this.codes[191]='forwardslash'     ;
+							this.codes[192]='graveaccent'      ;
+							this.codes[219]='openbracket'      ;
+							this.codes[220]='backslash'        ;
+							this.codes[221]='closebraket'      ;
+							this.codes[222]='singlequote'      ;
+							
 							if (!this.menu) {
 									document.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
 									window.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
@@ -586,41 +744,44 @@ var App = Object.create({
 									window.ondragstart   = function(evt) {evt.preventDefault(); return false; };
 								}
 								
-							if (App.ext.useragent.keyboard) {
+							if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
 									window.addEventListener('keydown', 	function(event) {
-									
-									if (event.ctrlKey)
-										App.ext.input.control = true;
-									
-										switch(event.keyCode) 
-										{
-										case 37:App.ext.input.listener.keydown(-1,App.ext.input);break;
-										case 65:App.ext.input.listener.keydown(-1,App.ext.input);break;
-										case 39:App.ext.input.listener.keydown(1,App.ext.input);break;
-										case 68:App.ext.input.listener.keydown(1,App.ext.input);break;
-										case 40:App.ext.input.listener.downs(1,App.ext.input);break;
-										case 83:App.ext.input.listener.downs(1,App.ext.input);break;
-										case 38:App.ext.input.listener.ups(1,App.ext.input);break;
-										case 87:App.ext.input.listener.ups(1,App.ext.input);break;
-										}
+										App.ext.input.codedown = App.ext.input.codes[event.keyCode];
+										if (event.ctrlKey)
+											App.ext.input.control = true;
+										
+											switch(event.keyCode) 
+											{
+											case 37:App.ext.input.listener.keydown(-1,App.ext.input);break;
+											case 65:App.ext.input.listener.keydown(-1,App.ext.input);break;
+											case 39:App.ext.input.listener.keydown(1,App.ext.input);break;
+											case 68:App.ext.input.listener.keydown(1,App.ext.input);break;
+											case 40:App.ext.input.listener.downs(1,App.ext.input);break;
+											case 83:App.ext.input.listener.downs(1,App.ext.input);break;
+											case 38:App.ext.input.listener.ups(1,App.ext.input);break;
+											case 87:App.ext.input.listener.ups(1,App.ext.input);break;
+											}
 									},true);
+									
 									window.addEventListener('keyup', 	function(event) {
-									if (event.ctrlKey)
-										App.ext.input.control = false;
-										switch(event.keyCode) 
-										{
-										case 37:App.ext.input.listener.keyup(App.ext.input);break;
-										case 65:App.ext.input.listener.keyup(App.ext.input);break;
-										case 39:App.ext.input.listener.keyup(App.ext.input);break;
-										case 68:App.ext.input.listener.keyup(App.ext.input);break;
-										case 40:App.ext.input.listener.downs(2,App.ext.input);break;
-										case 83:App.ext.input.listener.downs(2,App.ext.input);break;
-										case 38:App.ext.input.listener.ups(2,App.ext.input);break;
-										case 87:App.ext.input.listener.ups(2,App.ext.input);break;
-										}
+										App.ext.input.codeup = App.ext.input.codes[event.keyCode];
+										if (event.ctrlKey)
+											App.ext.input.control = false;
+											switch(event.keyCode) 
+											{
+											case 37:App.ext.input.listener.keyup(App.ext.input);break;
+											case 65:App.ext.input.listener.keyup(App.ext.input);break;
+											case 39:App.ext.input.listener.keyup(App.ext.input);break;
+											case 68:App.ext.input.listener.keyup(App.ext.input);break;
+											case 40:App.ext.input.listener.downs(2,App.ext.input);break;
+											case 83:App.ext.input.listener.downs(2,App.ext.input);break;
+											case 38:App.ext.input.listener.ups(2,App.ext.input);break;
+											case 87:App.ext.input.listener.ups(2,App.ext.input);break;
+											}
+										App.ext.input.codereleased = true;
 									},true);
 								}
-								window.addEventListener('mousewheel',App.ext.scroll.event,true);
+							window.addEventListener('mousewheel',App.ext.scroll.event,true);
 							if (App.ext.useragent.mouse) {
 								window.addEventListener('mousedown',function(evt) {
 										App.ext.input.listener.down(App.ext.input.position(App.client.visuals.canvas, evt),App.ext.input);
@@ -715,9 +876,8 @@ var App = Object.create({
 			}
 		},
 		client:{
-			enabled:true,
 			canvas:function(){
-				if (!this.enabled)
+				if ((!App.options.flags.canvas))
 					return;
 				(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
 				(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
@@ -933,6 +1093,12 @@ var App = Object.create({
 				Vec: function(x,y){
 					this.x = x;
 					this.y = y;
+				},
+				Clamp:function(x,min,max){
+					return x < min ? min : (x > max ? max : x);
+				},
+				Wrap:function(x,min,max){
+					return x < min ? max : (x > max ? min : x);
 				},
 				Difference:function(a,b){
 					return a-b;
@@ -1390,16 +1556,15 @@ var App = Object.create({
 				scale:0,
 				grd:DefaultObject,
 				zindex:1,
-				mstouch:true,
 				seamless:false,
 				tight:true,
 				disable:false,
 				body:function(){
-					if (!this.mstouch)
-						document.body.setAttribute("style","-ms-touch-action: none;");
-					if (this.seamless)
+					if (App.options.flags.mstouch)
+						document.body.setAttribute("style","-ms-touch-action: none !important; ms-content-zooming: none !important; touch-action: none; -ms-overflow-style: none;");
+					if (App.options.flags.seamless)
 						document.body.style.overflow = "hidden";
-					if (this.tight)
+					if (App.options.flags.tight)
 					{
 						document.body.style.padding = "0px";
 						document.body.style.margin = "0px auto";
@@ -1786,7 +1951,7 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					this.clean();
 				},
 				text:function(string, x, y,colour){
-					this.text_ext(string,x,y,colour,1,1,0,"");
+					this.text_ext(string,x,y,colour,1,1,0,"Calibri");
 				},	
 				text_shadow:function(blur,x,y,colour){
 					this.buffer_context.shadowColor = colour;
@@ -1970,6 +2135,9 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 					this.app = app;
 					this.scale = app.scale;
 					this.canvas = app.c;
+					this.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
+					this.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+
 					this.buffer = app.b;
 					this.canvas_context = this.canvas.getContext("2d");
 					this.buffer_context = this.buffer.getContext("2d");
