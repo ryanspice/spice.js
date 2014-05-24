@@ -30,32 +30,62 @@ console.log(Properties);*/
 var _Rectangle = {};_Rectangle.prototype = {
 	x:0,
 	y:0,
-	draw:function(x,y,w,h,c){
-		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,1,0,c||"#111111");
+	a:0,
+	draw:function(x,y,w,h,a,c){
+		if (this.a!=a)
+			this.a=a;
+		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
 	}
 }
+var addListener = function(obj, eventName, listener) {
+	if(obj.addEventListener)
+		obj.addEventListener(eventName, listener, false);
+		else 
+		obj.attachEvent("on" + eventName, listener);
+}
+
+
 	var sprite = Object.create(null);
 	var img = Object.create(null);
-var Scripts = window.scripts = [],
-	_Main = Object.create(null,{name:{value:"Main"}}),
+	var Scripts, _Main = Object.create(null,{name:{value:"Main"}}),
 	Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
+	
+	
+
+	
+	
+	
+	
 	
 var Debug = Object.create(null);
 var Sprite = Object.create(null);
 var Sprite = Object.create(null);
+
+
+
+
+
 var App = Object.create({
 	prototype:{
 		options:{
+			canvas:{
+				
+			},
 			flags:{
 				canvas:true,
 				mstouch:false,
 				seamless:false,
-				tight:false
+				tight:true
 			},
 			override:{
 				keyboard:true,
 				mouse:true
-				}
+				},
+			paths:{
+				data:"data/",
+				images:"images/",
+				url:""
+			}
 		},
 		user:{
 			name		:"",
@@ -302,9 +332,9 @@ var App = Object.create({
 								this.metaAppend(this.metaTag("touch-event-mode","native"));
 								this.metaAppend(this.metaTag("HandheldFriendly","True"));
 								
-								if (this.devicewidth)
+								//if (this.devicewidth)
 									this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"));
-								if (this.devicedpi)
+								//if (this.devicedpi)
 									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
 								Debug.log('Debug:     MetaCount/'+this.count);
 							return true;
@@ -393,7 +423,7 @@ var App = Object.create({
 					constructor:function(a){return{
 						app:{value:a},
 						init:{value:function(){
-									this.set(this.wait);
+									//this.set(this.wait);
 									setTimeout(function(){App.ext.cursor.set(App.ext.cursor.def)},2000);
 								}
 							}
@@ -415,6 +445,15 @@ var App = Object.create({
 							y:false,
 							inside:false
 						},
+						getX:function(){return this.x;},
+						getY:function(){return this.y;},
+						getLastX:function(){return this.last.x;},
+						getLastY:function(){return this.last.y;},
+						getStartX:function(){return this.start.x;},
+						getStartY:function(){return this.start.y;},
+						getDuration:function(){return this.duration;},
+						getPressed:function(){return this.pressed;},
+						getReleased:function(){return this.released;},
 						listener:{
 							down:function(mouse,input) {
 								if (input.delay>0)
@@ -504,6 +543,7 @@ var App = Object.create({
 						duration: 0,
 						dist: {x:0,y:0},
 						pos: {x:0,y:0},
+						
 						last: {x:0,y:0},
 						end: {x:0,y:0},
 						delay:0,
@@ -876,1333 +916,1389 @@ var App = Object.create({
 			}
 		},
 		client:{
-			canvas:function(){
-				if ((!App.options.flags.canvas))
-					return;
-				(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
-				(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
-				this._Canvas?(
-					this.visuals.canvas.style.position = "relative",
-					this.visuals.canvas.style.zIndex = "1",
-					this.visuals.canvas.style.left = "0px",
-					this.visuals.canvas.style.top = "0px",
-					this.visuals.buffer.style.position = "relative",
-					this.visuals.buffer.style.zIndex = "0",
-					this.visuals.buffer.style.left = "0px",
-					this.visuals.buffer.style.top = "0px"):(    
-					this.visuals.canvas.style.position = "absolute",
-					this.visuals.canvas.style.zIndex = this.visuals.zindex,
-					this.visuals.canvas.style.top = "0px",
-					this.visuals.canvas.style.left = "0px",
-					this.visuals.buffer.style.position = "absolute",
-					this.visuals.buffer.style.zIndex = "0",
-					this.visuals.buffer.style.left = "0px",
-					this.visuals.buffer.style.top = "0px");
-			},
-			
-			init:function(name,w,h){
-			console.log(document.documentElement.scrollWidth);
-				this.name = name;
-				this.discription = "Eh";
-				this.w = this.width = this.setWidth = w;
-				this.h = this.height = this.setHeight = h;
-				(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.c,this.b))).init();
-				this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
-				(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
-				(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
-				(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
-				(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
-				this._Main = Object.create(_Main.prototype,this._Main.constructor());
-				(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
-			},
-			start:function(loop,scale){
-				this.scale = scale;
-				this.client_f = loop;
-				requestNextAnimationFrame(this.client_f);
-			},
-			loop:function(a){
-				this.mute = this._Audio.update();
-				this.scale = this.update.scale(this);
-				this.fps = this.update.step.tick(this.second,this.mainLoop,a);
-				App.ext.cursor.set("auto");
-				this.resized = this.update.size(this);
-				this._Visuals.draw(this.scale);
-				a.ext.input.update();
-				requestNextAnimationFrame(this.client_f);
-			},
-			update:{
-				last:{w:0,h:0},
-				difference:{x:0,y:0},
-				scaler:{s:1,x:1,y:1},
-				scaling:true,
-				scalediff:0,
-				lastscale:1,
-				fullscale:false,
-				resized:false,
-				set:0,
-				frames:0,
-				pause:function(){
+			prototype:{
+
+				canvas:function(){
 				
-				},
-				size:function(app){
-					this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w,this.last.h),new app.Math.Vec(app.width,app.height));
-					if ((this.difference.x + this.difference.y==0))
-						return false;
-					app._Visuals.canvas.width  = this.last.w = app.width;
-					app._Visuals.canvas.height = this.last.h = app.height;
-					app._Visuals.buffer.width  = this.last.w = app.width;
-					app._Visuals.buffer.height = this.last.h = app.height;
-					Debug.log(this.difference.x + this.difference.y);
-					
-					return true;
-					},
-				scale:function(app) {
-					if (this==window) 
-						return Debug.log('Warning: Scale: [this === window]');
-						else
-					if ((this.pause>0.5))
-						return Debug.log('Warning: Paused',30); 
-						else
-					if (this.set==1)
-						return Debug.log('Warning: Scale: Duplicate Run',30); 
-					if (this.scaling)
-						{
-							if (window.innerHeight!==app.height)
-								app.height = window.innerHeight;
-							if (window.innerWidth!==app.innerWidth){
-								app.width = window.innerWidth;
-								
-								}
-						}
-						else
-						{
-							if (window.innerHeight!==app.height)
-								app.height = app.setHeight;
-							if (window.innerWidth!==app.innerWidth)
-								app.width = app.setWidth;
-						}
-					this.set = 1;
-					this.scaler.x = app.height/app.setHeight;
-					this.scaler.y = app.width/app.setWidth;
-					(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
-					if (isNaN(this.scaler.s)){this.set = 0;return;}
-					this.scalediff = this.scaler.s-this.lastscale;
-					
-					
-					
-					(this.scalediff)?App.ext.scroll.to(true):App.ext.scroll.to(false);
-					this.set = 0;
-					this.lastscale = this.scaler.s;
-					return this.scaler.s;
-				},
-				state:{
-					prototype:{
-						init:function(){
-							if (typeof this.current.init !=='undefined')
-							this.current.init();
-						},
-						draw:function(){
-							if (typeof this.current.draw !=='undefined')
-							this.current.draw();
-						},
-						update:function(){
-							if (typeof this.current.update !=='undefined')
-							this.current.update();
-						},
-						set:function(state,start){
-							App.ext.input.delay = 1;
-							if ((this.name=state.name)&&(this.initalized=!0)) {
-								if (!state.started)
-									this.current=Object.create(state,App.client._Room);
-							if (start)
-								this.current.init(),this.current.started = true;
-							};
-						},
-						name:"",
-						current:{},
-						initalized:false
-					},
-					constructor:function(){
-						return	{
-							init:{value:function(state){
-									this.set(state,true);
-									this.initalized = true;
-								}
-							}
-						}
-					}
-				},
-				step:{
-					first:function(step,app){ 
-						if (!step.Step(app))
-							return;
-						this.fps = 1 * (this.clean()/step.delta * 1E3);
-						this.delta = step.targetfps / this.fps;
-						this.delta = Math.ceil(this.delta*100000)/100000;
-						if ((this.delta>2.5))
-							this.delta = 2.5;
-							
-						if (this.delta!==this.delta+1)
-							App.delta = App.client.delta = this.delta_speed = this.delta;
-							else
-							App.delta = App.client.delta = this.delta_speed = 1;
-							//console.log(this.delta);
-						/* Increment Time to increase performance */
-							if (this.fps==0)
-								return;
-							this.increment = -step.targetfps+ (step.targetfps*(step.targetfps / this.fps));
-							this.adding+=this.increment;
-							if (this.adding>step.targetfps)
-								this.adding-=(this.adding/step.targetfps)*step.targetfps,this.addings+=1;
+				
+					if ((!App.options.flags.canvas))
 						return;
-					},
-					focus:function(){
-						if (App.ext.freezeonfocus)
-							return document.hasFocus();
-						return true;
-					},
-					second:function(step,app){
-						if (!step.Step(app))
-							return false;
-						this.frames++;
-						for(var s =this.addings;s>=0;--s)
-							if (app.client.update.state.initalized)
-								(this.focus())?app.client.update.state.current.update():null;
-						this.addings = 0;
-					},
-					tick:function(a,b,app){
-						this.first(a,app); 	
-						this.second(b,app); /* Game Loop, Increment Frames */
-						return this.fps;
-					},
-					clean:function(){
-						var f = this.frames;
-						this.frames = 0;	/* Reset Frames, Return Frames ( Pass F*/
-						return f;
-					},
-					delta_speed:1,
-					increment:0,
-					addings:0,
-					adding:0,
-					delta:1,
+					(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
+					(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
+					this._Canvas?(
+						this.visuals.canvas.style.position = "relative",
+						this.visuals.canvas.style.zIndex = "1",
+						this.visuals.canvas.style.left = "0px",
+						this.visuals.canvas.style.top = "0px",
+						this.visuals.buffer.style.position = "relative",
+						this.visuals.buffer.style.zIndex = "0",
+						this.visuals.buffer.style.left = "0px",
+						this.visuals.buffer.style.top = "0px"):(    
+						this.visuals.canvas.style.position = "absolute",
+						this.visuals.canvas.style.zIndex = this.visuals.zindex,
+						this.visuals.canvas.style.top = "0px",
+						this.visuals.canvas.style.left = "0px",
+						this.visuals.buffer.style.position = "absolute",
+						this.visuals.buffer.style.zIndex = "0",
+						this.visuals.buffer.style.left = "0px",
+						this.visuals.buffer.style.top = "0px");
+				},
+				
+				init:function(name,w,h){
+				console.log(document.documentElement.scrollWidth);
+					this.name = name;
+					this.discription = "Eh";
+					this.w = this.width = this.setWidth = w;
+					this.h = this.height = this.setHeight = h;
+					(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.c,this.b))).init();
+					this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
+					(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
+					(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
+					(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
+					(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
+					this._Main = Object.create(_Main.prototype,this._Main.constructor());
+					(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
+				},
+				start:function(loop,scale){
+					this.scale = scale;
+					this.client_f = loop;
+					requestNextAnimationFrame(this.client_f);
+				},
+				loop:function(a){
+					this.mute = this._Audio.update();
+					this.scale = this.update.scale(this);
+					this.fps = this.update.step.tick(this.second,this.mainLoop,a);
+					App.ext.cursor.set("auto");
+					this.resized = this.update.size(this);
+					this._Visuals.draw(this.scale);
+					a.ext.input.update();
+					requestNextAnimationFrame(this.client_f);
+				},
+				update:{
+					last:{w:0,h:0},
+					difference:{x:0,y:0},
+					scaler:{s:1,x:1,y:1},
+					scaling:true,
+					scalediff:0,
+					lastscale:1,
+					fullscale:false,
+					resized:false,
+					set:0,
 					frames:0,
-					fps:1
-				}
-			},
-			Math:{
-				Vec: function(x,y){
-					this.x = x;
-					this.y = y;
-				},
-				Clamp:function(x,min,max){
-					return x < min ? min : (x > max ? max : x);
-				},
-				Wrap:function(x,min,max){
-					return x < min ? max : (x > max ? min : x);
-				},
-				Difference:function(a,b){
-					return a-b;
-				},
-				Pythageon:function(a,b){
-					return Math.sqrt((a*a) + (b*b));
-				},
-				Vector:{
-					x:0,y:0,
-					Difference:function(a,b){
-						return {x:a.x-b.x,y:a.y-b.y};
+					pause:function(){
+					
 					},
-					Sum:function(a,b){
-						return {x:a.x+b.x,y:a.y+b.y};
-					}
-				},
-				Data:{
-					Total:function(){
-					return this.total = this.kilobyteCount(App);
-					},
-					Update:function(){
-					if (App.client.update.state.initalized)
-						return this.update = this.byteCount(App.client.update.state.current.update);
-						else
-						return this.update = this.byteCount(Object.create(null,App.client._Room));
-					},
-					isFunction:function(functionToCheck) {
-						 var getType = {};
-						 return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-					},
-					byteCount:function (object) {
-						if (this.isFunction(object))
-							return this.byteCountF(object.toString().length*2);
-						this.objectList = [];
-						this.stack = [ object ];
-						this.bytes = 0;
-						while ( this.stack.length ) {
-							this.value = this.stack.pop();
-							if ( typeof this.value === 'trueean' ) {
-								this.bytes += 4;
-							}
-							else if ( typeof this.value === 'string' ) {
-								this.bytes += this.value.length * 2;
-							}
-							else if ( typeof this.value === 'number' ) {
-								this.bytes += 8;
-							}
-							else if	(typeof this.value === 'object' && this.objectList.indexOf( this.value ) === -1) {
-								this.objectList.push( this.value );
-								for( i in this.value ) {
-									if ((this.value[i]==object)||(this.value[i]==window)){
-										if ((this.selfCount>0)||(this.value[i]==window))
-											{
-												this.selfCount = 0;
-												break;
-											}
-										this.selfCount++;
+					size:function(app){
+						this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w,this.last.h),new app.Math.Vec(app.width,app.height));
+						if ((this.difference.x + this.difference.y==0))
+							return false;
+						app._Visuals.canvas.width  = this.last.w = app.width;
+						app._Visuals.canvas.height = this.last.h = app.height;
+						app._Visuals.buffer.width  = this.last.w = app.width;
+						app._Visuals.buffer.height = this.last.h = app.height;
+						Debug.log(this.difference.x + this.difference.y);
+						
+						return true;
+						},
+					scale:function(app) {
+						if (this==window) 
+							return Debug.log('Warning: Scale: [this === window]');
+							else
+						if ((this.pause>0.5))
+							return Debug.log('Warning: Paused',30); 
+							else
+						if (this.set==1)
+							return Debug.log('Warning: Scale: Duplicate Run',30); 
+						if (this.scaling)
+							{
+								if (window.innerHeight!==app.height)
+									app.height = window.innerHeight;
+								if (window.innerWidth!==app.innerWidth){
+									app.width = window.innerWidth;
+									
 									}
-									this.stack.push( this.value[ i ] );
+							}
+							else
+							{
+								if (window.innerHeight!==app.height)
+									app.height = app.setHeight;
+								if (window.innerWidth!==app.innerWidth)
+									app.width = app.setWidth;
+							}
+						this.set = 1;
+						this.scaler.x = app.height/app.setHeight;
+						this.scaler.y = app.width/app.setWidth;
+						(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
+						if (isNaN(this.scaler.s)){this.set = 0;return;}
+						this.scalediff = this.scaler.s-this.lastscale;
+						
+						
+						
+						(this.scalediff)?App.ext.scroll.to(true):App.ext.scroll.to(false);
+						this.set = 0;
+						this.lastscale = this.scaler.s;
+						return this.scaler.s;
+					},
+					state:{
+						prototype:{
+							init:function(){
+								if (typeof this.current.init !=='undefined')
+								this.current.init();
+							},
+							draw:function(){
+								if (typeof this.current.draw !=='undefined')
+								this.current.draw();
+							},
+							update:function(){
+								if (typeof this.current.update !=='undefined')
+								this.current.update();
+							},
+							set:function(state,start){
+								App.ext.input.delay = 1;
+								if ((this.name=state.name)&&(this.initalized=!0)) {
+									if (!state.started)
+										this.current=Object.create(state,App.client._Room);
+								if (start)
+									this.current.init(),this.current.started = true;
+								};
+							},
+							name:"",
+							current:{},
+							initalized:false
+						},
+						constructor:function(){
+							return	{
+								init:{value:function(state){
+										this.set(state,true);
+										this.initalized = true;
+									}
 								}
 							}
 						}
-						return this.bytes;
 					},
-					byteCountF:function(s){
-						return encodeURI(s).split(/%..|./).length - 1;
+					step:{
+						first:function(step,app){ 
+							if (!step.Step(app))
+								return;
+							this.fps = 1 * (this.clean()/step.delta * 1E3);
+							this.delta = step.targetfps / this.fps;
+							this.delta = Math.ceil(this.delta*100000)/100000;
+							if ((this.delta>2.5))
+								this.delta = 2.5;
+								
+							if (this.delta!==this.delta+1)
+								App.delta = App.client.delta = this.delta_speed = this.delta;
+								else
+								App.delta = App.client.delta = this.delta_speed = 1;
+								//console.log(this.delta);
+							/* Increment Time to increase performance */
+								if (this.fps==0)
+									return;
+								this.increment = -step.targetfps+ (step.targetfps*(step.targetfps / this.fps));
+								this.adding+=this.increment;
+								if (this.adding>step.targetfps)
+									this.adding-=(this.adding/step.targetfps)*step.targetfps,this.addings+=1;
+							return;
+						},
+						focus:function(){
+							if (App.ext.freezeonfocus)
+								return document.hasFocus();
+							return true;
+						},
+						second:function(step,app){
+							if (!step.Step(app))
+								return false;
+							this.frames++;
+							for(var s =this.addings;s>=0;--s)
+								if (app.client.update.state.initalized)
+									(this.focus())?app.client.update.state.current.update():null;
+							this.addings = 0;
+						},
+						tick:function(a,b,app){
+							this.first(a,app); 	
+							this.second(b,app); /* Game Loop, Increment Frames */
+							return this.fps;
+						},
+						clean:function(){
+							var f = this.frames;
+							this.frames = 0;	/* Reset Frames, Return Frames ( Pass F*/
+							return f;
+						},
+						delta_speed:1,
+						increment:0,
+						addings:0,
+						adding:0,
+						delta:1,
+						frames:0,
+						fps:1
+					}
+				},
+				Math:{
+					Vec: function(x,y){
+						this.x = x;
+						this.y = y;
 					},
-					kilobyteCount:function(object){
-						return  Math.round((this.byteCount(object)*this.KB)*100)/100;
+					Clamp:function(x,min,max){
+						return x < min ? min : (x > max ? max : x);
 					},
-					kb:0.0078125,
-					KB:0.0009765625,
-					objectList:[{}],
-					selfCount:0,
-					update:0,
-					stack:[{}],
-					value:{},
-					bytes:0,
-					total:0,
+					Wrap:function(x,min,max){
+						return x < min ? max : (x > max ? min : x);
+					},
+					Difference:function(a,b){
+						return a-b;
+					},
+					Pythageon:function(a,b){
+						return Math.sqrt((a*a) + (b*b));
+					},
+					Vector:{
+						x:0,y:0,
+						Difference:function(a,b){
+							return {x:a.x-b.x,y:a.y-b.y};
+						},
+						Sum:function(a,b){
+							return {x:a.x+b.x,y:a.y+b.y};
+						}
+					},
+					Data:{
+						Total:function(){
+						return this.total = this.kilobyteCount(App);
+						},
+						Update:function(){
+						if (App.client.update.state.initalized)
+							return this.update = this.byteCount(App.client.update.state.current.update);
+							else
+							return this.update = this.byteCount(Object.create(null,App.client._Room));
+						},
+						isFunction:function(functionToCheck) {
+							 var getType = {};
+							 return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+						},
+						byteCount:function (object) {
+							if (this.isFunction(object))
+								return this.byteCountF(object.toString().length*2);
+							this.objectList = [];
+							this.stack = [ object ];
+							this.bytes = 0;
+							while ( this.stack.length ) {
+								this.value = this.stack.pop();
+								if ( typeof this.value === 'trueean' ) {
+									this.bytes += 4;
+								}
+								else if ( typeof this.value === 'string' ) {
+									this.bytes += this.value.length * 2;
+								}
+								else if ( typeof this.value === 'number' ) {
+									this.bytes += 8;
+								}
+								else if	(typeof this.value === 'object' && this.objectList.indexOf( this.value ) === -1) {
+									this.objectList.push( this.value );
+									for( i in this.value ) {
+										if ((this.value[i]==object)||(this.value[i]==window)){
+											if ((this.selfCount>0)||(this.value[i]==window))
+												{
+													this.selfCount = 0;
+													break;
+												}
+											this.selfCount++;
+										}
+										this.stack.push( this.value[ i ] );
+									}
+								}
+							}
+							return this.bytes;
+						},
+						byteCountF:function(s){
+							return encodeURI(s).split(/%..|./).length - 1;
+						},
+						kilobyteCount:function(object){
+							return  Math.round((this.byteCount(object)*this.KB)*100)/100;
+						},
+						kb:0.0078125,
+						KB:0.0009765625,
+						objectList:[{}],
+						selfCount:0,
+						update:0,
+						stack:[{}],
+						value:{},
+						bytes:0,
+						total:0,
+					}
+				},
+			Particles:{
+				p:0,
+				draw:function(l){
+				
+					for (this.p=_Rain.size-1; this.p;--this.p)
+						_RainParticles[this.p].draw(App.client.visuals,l);
+				},
+				update:function(){
+					for (var _R=0; _R<_Rain.size;++_R)
+						_RainParticles[_R].update();
 				}
 			},
-		Particles:{
-			p:0,
-			draw:function(l){
-			
-				for (this.p=_Rain.size-1; this.p;--this.p)
-					_RainParticles[this.p].draw(App.client.visuals,l);
-			},
-			update:function(){
-				for (var _R=0; _R<_Rain.size;++_R)
-					_RainParticles[_R].update();
-			}
-		},
-		_Room:{
+			_Room:{
+					prototype:{
+					init:DefaultObject,
+					app:DefaultObject,
+					visuals:DefaultObject,
+					graphics:DefaultObject,
+					started:false,
+					Started:{value:function(){return function() {var a = this.Started;App.set_scale();this.Started = true; return a};}}
+					},
+					constructor:function(){return {
+						init:{value:function(){
+								return {
+								app : {value:App},
+								visuals :   {value:App.client.visuals},
+								graphics :  {value:App.client._Graphics}
+								};
+							}}
+						}
+					}
+				},
+			_Pace:{
 				prototype:{
-				init:DefaultObject,
-				app:DefaultObject,
-				visuals:DefaultObject,
-				graphics:DefaultObject,
-				started:false,
-				Started:{value:function(){return function() {var a = this.Started;App.set_scale();this.Started = true; return a};}}
+				timer:	0,
+				rate:	0,
+				offset:	0,
+				delta:	1,
+				Time:	function(app) 
+					{
+						this.timer = new Date().getTime();
+						return this.timer - this.offset;
+					},
+				Step:	function(app)	
+					{
+						this.delta = this.Time(app);
+						var step = this.rate*this.delta;
+						if (step>1.0)
+							this.offset+=Math.floor(step)/this.rate;
+						return (step - 1.0)>0.0?true:false;
+					},
+				GetStepsPerSecond:	function()	
+					{
+						return 1000.0/this.delta;
+					}
 				},
 				constructor:function(){return {
-					init:{value:function(){
-							return {
-							app : {value:App},
-							visuals :   {value:App.client.visuals},
-							graphics :  {value:App.client._Graphics}
-							};
+					init:{value:function(rate,fps){
+							Debug.log('Pace: Init');
+							this.targetfps = fps;
+							this.timer = new Date().getTime();
+							this.rate = rate/1000.0;
+							this.offset = this.timer-1000.0/rate;
+							this.delta = 0.0;
+							return true;
 						}}
 					}
 				}
 			},
-		_Pace:{
-			prototype:{
-			timer:	0,
-			rate:	0,
-			offset:	0,
-			delta:	1,
-			Time:	function(app) 
-				{
-					this.timer = new Date().getTime();
-					return this.timer - this.offset;
-				},
-			Step:	function(app)	
-				{
-					this.delta = this.Time(app);
-					var step = this.rate*this.delta;
-					if (step>1.0)
-						this.offset+=Math.floor(step)/this.rate;
-					return (step - 1.0)>0.0?true:false;
-				},
-			GetStepsPerSecond:	function()	
-				{
-					return 1000.0/this.delta;
-				}
-			},
-			constructor:function(){return {
-				init:{value:function(rate,fps){
-						Debug.log('Pace: Init');
-						this.targetfps = fps;
-						this.timer = new Date().getTime();
-						this.rate = rate/1000.0;
-						this.offset = this.timer-1000.0/rate;
-						this.delta = 0.0;
-						return true;
-					}}
-				}
-			}
-		},
-		_Audio:{
-			prototype:{
-				mute:false,
-				quality:0,
-				current:0,
-				audio: new Audio(),
-				sound: new Array(new Audio()),
-				length: new Array(),
-				MultiChannelSound:function(filename,channelQ,callback){	
-					if (App.ext.useragent.ie)
-						return;
-					this.fname = filename;
-					this.channel = new Array();
-					for (var i = 0; i != channelQ; ++i)
-					{
-						this.channel[i] = new Audio(filename);
-					}
-					this.currentChannel = 0;
-					this.play = function play()
-					{
-						try{
-						this.channel[this.currentChannel].currentTime = 0;
-						this.channel[this.currentChannel].play();
-						++this.currentChannel;
-						if (this.currentChannel == this.channel.length)
+			_Audio:{
+				prototype:{
+					mute:false,
+					quality:0,
+					current:0,
+					audio: new Audio(),
+					sound: new Array(new Audio()),
+					length: new Array(),
+					MultiChannelSound:function(filename,channelQ,callback){	
+						if (App.ext.useragent.ie)
+							return;
+						this.fname = filename;
+						this.channel = new Array();
+						for (var i = 0; i != channelQ; ++i)
 						{
-							this.currentChannel = 0;
+							this.channel[i] = new Audio(filename);
 						}
-						}catch(e){}
-					}
-					this.stop = function stop()
-					{
-						this.channel[this.currentChannel].pause();
-						++this.currentChannel;
-						if (this.currentChannel == this.channel.length)
+						this.currentChannel = 0;
+						this.play = function play()
 						{
-							this.currentChannel = 0;
+							try{
+							this.channel[this.currentChannel].currentTime = 0;
+							this.channel[this.currentChannel].play();
+							++this.currentChannel;
+							if (this.currentChannel == this.channel.length)
+							{
+								this.currentChannel = 0;
+							}
+							}catch(e){}
+						}
+						this.stop = function stop()
+						{
+							this.channel[this.currentChannel].pause();
+							++this.currentChannel;
+							if (this.currentChannel == this.channel.length)
+							{
+								this.currentChannel = 0;
+							}
+						}
+					},
+					toggle:function() {
+						//(this.mute)?this.sound[this.current].play():this.sound.[this.current].pause();
+						return this.mute = !this.mute;
+					},
+					set:function(index){
+						if (App.ext.useragent.ie)
+							return;
+						if (!this.mute)
+							{
+							this.sound[this.current].pause();
+							this.current = index;
+							try{
+							index.currentTime = 0;
+							}catch(e){}
+							index.play();
+							}
+					},
+					update:function() {
+						return;
+						if (this.sound[this.current]==="undefined")
+							return;
+						if (this.sound[this.current].currentTime >= this.length)
+						{
+							if (++this.current == soundtrackQ)
+							{
+								this.current = 0;
+							}
+							
+							this.sound[this.current].currentTime = 0;
+							this.sound[this.current].play();
 						}
 					}
 				},
-				toggle:function() {
-					//(this.mute)?this.sound[this.current].play():this.sound.[this.current].pause();
-					return this.mute = !this.mute;
-				},
-				set:function(index){
-					if (App.ext.useragent.ie)
-						return;
-					if (!this.mute)
-						{
-						this.sound[this.current].pause();
-						this.current = index;
-						try{
-						index.currentTime = 0;
-						}catch(e){}
-						index.play();
-						}
-				},
-				update:function() {
-					return;
-					if (this.sound[this.current]==="undefined")
-						return;
-					if (this.sound[this.current].currentTime >= this.length)
-					{
-						if (++this.current == soundtrackQ)
-						{
-							this.current = 0;
-						}
-						
-						this.sound[this.current].currentTime = 0;
-						this.sound[this.current].play();
+				constructor:function(){return {
+					init:{value:function(){
+							Debug.log('Audio: Init');
+							return true;
+						}}
 					}
 				}
 			},
-			constructor:function(){return {
-				init:{value:function(){
-						Debug.log('Audio: Init');
-						return true;
-					}}
-				}
-			}
-		},
-		_Animation:function(aniArray,aniSpeed,ani,origAni){
-			///Animation States
-			///  -2 = set to idle.
-			/// -1 = animate backwards and stop.
-			///  0 = set to first frame.
-			///  1 = animate forwards and stop.
-			///  2 = animate forwards and return to 0 and animate again.
-	
-			this.aniImage = new Array();
-			this.aniImage = aniArray;
-			this.nextAni = new Array();
-			this.nextAni = origAni;
-			
-			if (this.aniImage[0])
-				this.aniMax = this.aniImage.length-1;
-				else
-				this.aniMax = 0;
-			this.aniCurrent = 0;
-			this.aniSpeed = aniSpeed*App.delta_speed;
-			this.animate = ani;
-			this.aniChanged = 0;
-			this.aniPrev = aniArray;
-			this.aniDir = 1;
-			this.recreate = function recreate(aniArray,aniSpeed,ani)
-			{
-				this.aniCurrent = 0;
+			_Animation:function(aniArray,aniSpeed,ani,origAni){
+				///Animation States
+				///  -2 = set to idle.
+				/// -1 = animate backwards and stop.
+				///  0 = set to first frame.
+				///  1 = animate forwards and stop.
+				///  2 = animate forwards and return to 0 and animate again.
+		
+				this.aniImage = new Array();
 				this.aniImage = aniArray;
-				this.aniSpeed = aniSpeed;
+				this.nextAni = new Array();
+				this.nextAni = origAni;
+				
+				if (this.aniImage[0])
+					this.aniMax = this.aniImage.length-1;
+					else
+					this.aniMax = 0;
+				this.aniCurrent = 0;
+				this.aniSpeed = aniSpeed*App.delta_speed;
 				this.animate = ani;
+				this.aniChanged = 0;
+				this.aniPrev = aniArray;
 				this.aniDir = 1;
-			}
-			this.update = function update()
-			{
-				if (!this.aniImage==this.aniPrev)
-					this.aniPrev = this.aniImage,this.changed();
-				if (this.animate==-2)
-				{
-					//this.aniImage = snowboarding_loading.player_idle;
-					if (this.aniCurrent>=this.aniMax)
-						this.aniDir = -1;
-					if (this.aniCurrent<=0)
-						this.aniDir = 1;
-					if (this.aniCurrent<=this.aniMax)
-						this.aniCurrent+=this.aniSpeed * this.aniDir;
-					
-				}
-				if (this.animate==-1)
-				{
-					if (this.aniCurrent>0)
-						this.aniCurrent-=this.aniSpeed;
-				}
-				if (this.animate==0)
+				this.recreate = function recreate(aniArray,aniSpeed,ani)
 				{
 					this.aniCurrent = 0;
+					this.aniImage = aniArray;
+					this.aniSpeed = aniSpeed;
+					this.animate = ani;
+					this.aniDir = 1;
 				}
-				if (this.animate==1)
+				this.update = function update()
 				{
-					if (this.aniCurrent<this.aniMax)
+					if (!this.aniImage==this.aniPrev)
+						this.aniPrev = this.aniImage,this.changed();
+					if (this.animate==-2)
+					{
+						//this.aniImage = snowboarding_loading.player_idle;
+						if (this.aniCurrent>=this.aniMax)
+							this.aniDir = -1;
+						if (this.aniCurrent<=0)
+							this.aniDir = 1;
+						if (this.aniCurrent<=this.aniMax)
+							this.aniCurrent+=this.aniSpeed * this.aniDir;
+						
+					}
+					if (this.animate==-1)
+					{
+						if (this.aniCurrent>0)
+							this.aniCurrent-=this.aniSpeed;
+					}
+					if (this.animate==0)
+					{
+						this.aniCurrent = 0;
+					}
+					if (this.animate==1)
+					{
+						if (this.aniCurrent<this.aniMax)
+							this.aniCurrent+=this.aniSpeed;
+						if (this.aniCurrent>this.aniMax)
+							this.aniCurrent = this.aniMax;
+					}
+					if (this.animate==2)
+					{
 						this.aniCurrent+=this.aniSpeed;
-					if (this.aniCurrent>this.aniMax)
-						this.aniCurrent = this.aniMax;
+						if (this.aniCurrent>=this.aniMax)
+							this.aniCurrent=0;
+					}
 				}
-				if (this.animate==2)
+				this.changed = function changed()
 				{
-					this.aniCurrent+=this.aniSpeed;
-					if (this.aniCurrent>=this.aniMax)
-						this.aniCurrent=0;
+					this.recreate(this.nextAni,this.aniSpeed,0);
 				}
-			}
-			this.changed = function changed()
-			{
-				this.recreate(this.nextAni,this.aniSpeed,0);
-			}
-			this.reverse = function reverse()
-			{
-				if (this.animate==1)
-					this.animate=-1;
-					else
-					this.animate=1;
-			}
-			this.get_img = function get_img()
-			{
-				if ( this.aniImage[Math.round(this.aniCurrent)])
-					return this.aniImage[Math.round(this.aniCurrent)];
-					else
-					return this.aniImage;
-			}
-		},
-		_Graphics:{
-			prototype:{
-				path:"",
-				SpriteWebItems:new Array(0),
-				SpriteLoadNumber:0,
-				SpriteLoadErrors:0,
-				SpriteLoadTime:0,
-				Sources:{},
-				load:function(name,file){
-					this.Sources.append(this.SpriteAppend(name,file));
-					return this.Sources.getByName(name);
-				},
-				SpriteCreate:function(file,src,name){		
-					this.SpriteLoadNumber++;
-					this.SpriteLoadTime += (10*App.delta_speed)*this.SpriteLoadNumber;
-					return sprite = Object.create(Sprite,{file:{value:file},src:{value:src},name:{value:name}});
-				},
-				SpriteAppend:function(name,file){	
-					return (img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
-				},
-				SpriteUnload:function(name,file){
-					delete this.Sources.getByName(name);
-					//return this.SpriteLoad(name,file);
-				},
-				webLoad:function(name,address){
-					this.SpriteWebItems[name] = new Image();
-					this.SpriteWebItems[name].src = address;
-					return this.SpriteWebItems[name];
-				},
-				graphicsLibrary:function(){
-					Sprite = Object.create(null);
-					this.Sources = Object.create(null);
-					this.Sources.prototype = {	
-						get:function get(){return this.index;},
-						getByName:function getByName(name){return this.index[name];},
-						getName:function getName(name){return this.index[name].name;},
-					}
-					Sprite = Object.create(this.Base,
-					{
-						constructor:function Sprite(path,filename){this.path=path;this.filename=filename;return path;},
-						src:	{value:"S:undefined"},
-						file:	{value:"S:undefined"},
-						name:	{value:"S:undefined"}
-					});
-					this.Sources = Object.create(this.Sources.prototype,
-					{
-						count:{writable: true,  configurable:true,value:0},
-						index:{value:new Array()},
-						append:{value:function append(image)
-						{
-							if (this.index[image.name]==image)
-								return;
-							this.index[image.name]=image; 
-							this.count++;
-							Debug.log("GraphicsController: load: "+image.name + ":"+this.count);
-						}},
-						unload:{value:function unload(name)
-						{
-							this.index[name]=null; 
-							delete this.index[name]; 
-							Debug.log('GraphicsController: unload: '+name);
-							return this.index[name];
-						}},
-					});
-					return true;
-				},
-				Base:{
-					get:function() {
-							var img = new Image();
-							img.src = this.src;
-							img.file = this.file;
-							img.name = this.name;
-							img.number = 1+ App.client._Graphics.SpriteLoadErrors++;
-							img.onload = function() {
-									App.client._Graphics.SpriteLoadErrors--;
-									Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client._Graphics.SpriteLoadErrors));
-								};
-							return img;
-						},
-					unload:function() {
-							this.Sources.unload(this.name);
-							Debug.log("GraphicsController: unload: "+image.name + ":"+this.count);
-						}
-				},
-				getErrors:function(){
-					return this.SpriteLoadErrors; 
-				},
-				getImage:function(name){
-					return this.Sources.getByName(name); 
-				},
+				this.reverse = function reverse()
+				{
+					if (this.animate==1)
+						this.animate=-1;
+						else
+						this.animate=1;
+				}
+				this.get_img = function get_img()
+				{
+					if ( this.aniImage[Math.round(this.aniCurrent)])
+						return this.aniImage[Math.round(this.aniCurrent)];
+						else
+						return this.aniImage;
+				}
 			},
-			constructor:function(){return {
-				init:{value:function(){
-						this.graphicsLibrary();
-						Debug.log('GraphicsController: Init');
+			_Graphics:{
+				prototype:{
+					path:"",
+					SpriteWebItems:new Array(0),
+					SpriteLoadNumber:0,
+					SpriteLoadErrors:0,
+					SpriteLoadTime:0,
+					Sources:{},
+					load:function(name,file){
+						if (typeof file==="undefined")
+							file = name;
+						this.Sources.append(this.SpriteAppend(name,file));
+						return this.Sources.getByName(name);
+					},
+					SpriteCreate:function(file,src,name){		
+						this.SpriteLoadNumber++;
+						this.SpriteLoadTime += (10*App.delta_speed)*this.SpriteLoadNumber;
+						return sprite = Object.create(Sprite,{file:{value:file},src:{value:src},name:{value:name}});
+					},
+					SpriteAppend:function(name,file){	
+						return (img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
+					},
+					SpriteUnload:function(name,file){
+						delete this.Sources.getByName(name);
+						//return this.SpriteLoad(name,file);
+					},
+					webLoad:function(name,address){
+						this.SpriteWebItems[name] = new Image();
+						this.SpriteWebItems[name].src = address;
+						return this.SpriteWebItems[name];
+					},
+					graphicsLibrary:function(){
+						Sprite = Object.create(null);
+						this.Sources = Object.create(null);
+						this.Sources.prototype = {	
+							get:function get(){return this.index;},
+							getByName:function getByName(name){return this.index[name];},
+							getName:function getName(name){return this.index[name].name;},
+						}
+						Sprite = Object.create(this.Base,
+						{
+							constructor:function Sprite(path,filename){this.path=path;this.filename=filename;return path;},
+							src:	{value:"S:undefined"},
+							file:	{value:"S:undefined"},
+							name:	{value:"S:undefined"}
+						});
+						this.Sources = Object.create(this.Sources.prototype,
+						{
+							count:{writable: true,  configurable:true,value:0},
+							index:{value:new Array()},
+							append:{value:function append(image)
+							{
+								if (this.index[image.name]==image)
+									return;
+								this.index[image.name]=image; 
+								this.count++;
+								Debug.log("GraphicsController: load: "+image.name + ":"+this.count);
+							}},
+							unload:{value:function unload(name)
+							{
+								this.index[name]=null; 
+								delete this.index[name]; 
+								Debug.log('GraphicsController: unload: '+name);
+								return this.index[name];
+							}},
+						});
 						return true;
-					}}
+					},
+					Base:{
+						get:function() {
+								var img = new Image();
+								img.src = this.src;
+								img.file = this.file;
+								img.name = this.name;
+								img.number = 1+ App.client._Graphics.SpriteLoadErrors++;
+								img.onload = function() {
+										App.client._Graphics.SpriteLoadErrors--;
+										Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client._Graphics.SpriteLoadErrors));
+										
+									};
+								return img;
+							},
+						unload:function() {
+								this.Sources.unload(this.name);
+								Debug.log("GraphicsController: unload: "+image.name + ":"+this.count);
+							}
+					},
+					getErrors:function(){
+						return this.SpriteLoadErrors; 
+					},
+					getImage:function(name){
+						return this.Sources.getByName(name); 
+					},
+				},
+				constructor:function(){return {
+					init:{value:function(){
+							this.graphicsLibrary();
+							Debug.log('GraphicsController: Init');
+							return true;
+						}}
+					}
 				}
-			}
-		},
-		_Visuals:{
-			prototype:{
-				app:DefaultObject,
-				head:document.getElementsByTagName('head')[0],
-				rendering_style:document.createElement('style'),
-				stat:{
-						x:0,
-						y:0,
-						w:0,
-						h:0,
-						s:0,
-						a:0,
-						c:0,
-						colour:"",
-						oldcol:"",
-						init:function(col, colold){
-						this.x = 0;
-						this.y = 0;
-						this.w = 0;
-						this.h = 0;
-						this.s = 0;
-						this.a = 0;
-						this.c = 0;
-						this.colour = col || 0;
-						this.oldcol = colold || 0;
-						}
+			},
+			_Visuals:{
+				prototype:{
+					app:DefaultObject,
+					head:document.getElementsByTagName('head')[0],
+					rendering_style:document.createElement('style'),
+					stat:{
+							x:0,
+							y:0,
+							w:0,
+							h:0,
+							s:0,
+							a:0,
+							c:0,
+							colour:"",
+							oldcol:"",
+							init:function(col, colold){
+							this.x = 0;
+							this.y = 0;
+							this.w = 0;
+							this.h = 0;
+							this.s = 0;
+							this.a = 0;
+							this.c = 0;
+							this.colour = col || 0;
+							this.oldcol = colold || 0;
+							}
+						},
+					stat2:DefaultObject,
+					canvas:DefaultObject,
+					canvas_context:DefaultObject,
+					buffer:DefaultObject,
+					buffer_context:DefaultObject,
+					alpha:0,
+					free:false,
+					point:14,
+					scale:0,
+					grd:DefaultObject,
+					zindex:1,
+					seamless:false,
+					tight:true,
+					disable:false,
+					body:function(){
+						if (!App.options.flags.mstouch)
+							document.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+						if (App.options.flags.seamless)
+							document.body.style.overflow = "hidden";
+						if (App.options.flags.tight)
+							document.body.style.padding = "0px", document.body.style.margin = "0px auto";
 					},
-				stat2:DefaultObject,
-				canvas:DefaultObject,
-				canvas_context:DefaultObject,
-				buffer:DefaultObject,
-				buffer_context:DefaultObject,
-				alpha:0,
-				free:false,
-				point:14,
-				scale:0,
-				grd:DefaultObject,
-				zindex:1,
-				seamless:false,
-				tight:true,
-				disable:false,
-				body:function(){
-					if (App.options.flags.mstouch)
-						document.body.setAttribute("style","-ms-touch-action: none !important; ms-content-zooming: none !important; touch-action: none; -ms-overflow-style: none;");
-					if (App.options.flags.seamless)
-						document.body.style.overflow = "hidden";
-					if (App.options.flags.tight)
-					{
-						document.body.style.padding = "0px";
-						document.body.style.margin = "0px auto";
-					}
-				},
-				settings:[
-							["Full Clear", true],
-							["Wide Clear", true],
-							["Window Clear",false],
-							["optimized_resize",false],
-							["bufferMax",false],
-							["borders",true],
-							["disable",false]
-						],
-				init:DefaultFunction,
-				set:function(a,b){
-					return this.settings[a][1] = b;
-				},
-				draw:function(){
-					//!0==this.settings[1][1]?this.clear_wide():this.clear_fit());
-					//this.cleans.window();
-					if (this.disable)
-						return false;
-					this.clearing.pre();
-					if (this.app.update.state.initalized)
-						this.app.update.state.draw();
-					if (this.settings[6][1]==false)
-					{
-						this.debug();
-						this.clearing.buff(this);
-					}
-					//this.settings[2][1]?(this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight),this.canvas_context.drawImage(this.buffer,0,0)):this.canvas_context.drawImage(this.buffer,0,0);
-					//this.settings[4][1]?this.Borders():this.clearBorders();
-					this.scale = this.app.scale;
-				},
-				clearing:{
 					settings:[
-							["WideClear", false],
-							["PreClear", true],
-							["BufferMax",false],
-							["Window Clear",false],
-							["optimized_resize",true],
-							["borders",true]
-						],
-					pre:function(){
-						!0==this.settings[1][1]?this.all():this.none();
+								["Full Clear", true],
+								["Wide Clear", true],
+								["Window Clear",false],
+								["optimized_resize",false],
+								["bufferMax",false],
+								["borders",true],
+								["disable",false]
+							],
+					init:DefaultFunction,
+					set:function(a,b){
+						return this.settings[a][1] = b;
 					},
-					buff:function(t){
-					
-						this.pre();
-						this.window();
-						!this.settings[2][1]?(t.canvas_context.drawImage(t.buffer,0,0),t.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight)):t.canvas_context.drawImage(t.buffer,0,0);
-					},
-					window:function(){
-						var a = App.client.width/App.client.scale;
-						var b = (App.client.setWidth*1.777)*0.5;
-						if (!this.settings[0][1]) {
-							this.clear(0-(a),0,a,App.client.setHeight);
-							this.clear(0+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
-						} else {
-							this.clear(-b*0.5-(a),0,a,App.client.setHeight);
-							this.clear(+b*0.5+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
+					draw:function(){
+						//!0==this.settings[1][1]?this.clear_wide():this.clear_fit());
+						//this.cleans.window();
+						if (this.disable)
+							return false;
+						this.clearing.pre();
+						if (this.app.update.state.initalized)
+							this.app.update.state.draw();
+						if (this.settings[6][1]==false)
+						{
+							this.debug();
+							this.clearing.buff(this);
 						}
-						this.clear(-b,0,(App.client.setWidth*1.777)*2/App.client.scale,-App.client.height/App.client.scale);	
-						this.clear(-b,App.client.setHeight,(App.client.setWidth*1.777)*2/App.client.scale,App.client.height/App.client.scale);
+						//this.settings[2][1]?(this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight),this.canvas_context.drawImage(this.buffer,0,0)):this.canvas_context.drawImage(this.buffer,0,0);
+						//this.settings[4][1]?this.Borders():this.clearBorders();
+						this.scale = this.app.scale;
 					},
-					none:function(){
-					
+					clearing:{
+						settings:[
+								["WideClear", false],
+								["PreClear", true],
+								["BufferMax",false],
+								["Window Clear",true],
+								["optimized_resize",true],
+								["borders",true]
+							],
+						pre:function(){
+							!0==this.settings[1][1]?this.all():this.none();
+						},
+						buff:function(t){
+						
+							this.pre();
+							this.window();
+							!this.settings[2][1]?(t.canvas_context.drawImage(t.buffer,0,0),t.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight)):t.canvas_context.drawImage(t.buffer,0,0);
+						},
+						window:function(){
+							var a = App.client.width/App.client.scale;
+							var b = (App.client.setWidth*1.777)*0.5;
+							if (!this.settings[0][1]) {
+								this.clear(0-(a),0,a,App.client.setHeight);
+								this.clear(0+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
+							} else {
+								this.clear(-b*0.5-(a),0,a,App.client.setHeight);
+								this.clear(+b*0.5+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
+							}
+							this.clear(-b,0,(App.client.setWidth*1.777)*2/App.client.scale,-App.client.height/App.client.scale);	
+							this.clear(-b,App.client.setHeight,(App.client.setWidth*1.777)*2/App.client.scale,App.client.height/App.client.scale);
+						},
+						none:function(){
+						
+						},
+						borders:function(){
+							this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
+							this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
+							this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
+							this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
+						},
+						all:function(){
+							//App.client._Visuals.rect(window.innerWidth/2,window.innerHeight/2,window.innerWidth,window.innerHeight,"000000",1,1,1);
+							//this.clear(-App.client.width,0,-App.client.width*2/App.client.scale,App.client.height);
+							//this.clear(+App.client.width*2,0,App.client.width*2/App.client.scale,App.client.height);
+							//this.clear(-App.client.width,-App.client.height,App.client.width*3,App.client.height*3);
+						},
+						clear: function(x,y,width,height) {
+							App.client._Visuals.stat = App.client._Visuals.chk(x,y,width,height,1);
+							App.client._Visuals.buffer_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
+							App.client._Visuals.settings[3][1]||App.client._Visuals.canvas_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
+						}
 					},
-					borders:function(){
+					fixX:function(x){
+						return ((x*this.scale)+(this.app.width/2)-(this.app.setWidth/2)*this.scale);
+					},
+					fixY:function(y){
+						return ((y*this.scale)+(this.app.height/2)-(this.app.setHeight/2)*this.scale);
+					},
+					fixW:function(w){
+						return (w*this.scale);
+					},
+					fixH:function(h){
+						return (h*this.scale);
+					},
+					chkc:{},
+					chk:function(x,y,w,h,s,a,c,colour,font){
+						this.chkc = this.colour();
+						this.opacity(a);
+						this.colour(colour);
+						if (!this.free)	return {
+							x:this.fixX(x),
+							y:this.fixY(y),
+							w:this.fixW(w)*s,
+							h:this.fixH(h)*s,
+							s:s,
+							a:a || 0,
+							c:c || false,
+							colour:colour || this.colour(),
+							oldcol:this.chkc,
+							font:font || this.font,
+							init:this.stat.init
+						}
+						else return {
+							x:x,y:y,
+							w:w || 0,
+							h:h || 0,
+							s:s,
+							a:a || 1,
+							c:c || false,
+							colour:colour || this.colour(),
+							oldcol:this.chkc,
+							font:font,
+							init:this.stat.init
+						}
+					},
+					debug:function(){
+						if (!App.ext.debug.strength=="Normal")
+							return;
+						if ((App.ext.debug.strength=="off")||(App.ext.debug.strength=="none"))
+							return;
+						this.rect_ext(-this.app.setWidth,0,this.app.setWidth+this.app.setWidth+this.app.setWidth,this.point,1,0.1,0);
+						this.rect_ext(0,0,this.app.setWidth,this.point,1,0.1,0);
+						this.text_ext("0",	0,this.point*0.9,this.point*0.9);
+						this.text_ext(this.app.setWidth,	this.app.setWidth-25,this.point*0.9,this.point*0.9);
+						if (window.innerWidth>(this.app.setWidth*1.1)*this.scale)
+							{
+								this.text_free(0-this.fixX(0),	30,4+this.fixY(this.point),this.point*0.99);
+								this.text_free(this.app.width,	window.innerWidth-15,4+this.fixY(this.point),this.point*0.99);
+							}
+						//this.text_ext("Debug",	this.app.setWidth/2.5,this.point*0.9,this.point*0.9);
+						//this.text_ext(this.app.name,5,25,"#FFFFFF",4,1,0);
+						//this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
+						//this.text_ext("x "+Math.round(App.ext.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
+						//this.text_ext("x: "+Math.round(App.ext.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
+						//this.text_ext("y "+Math.round(App.ext.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
+						//this.text_ext("y: "+Math.round(App.ext.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
+						if (App.fps<20)
+							console.log(App.fps);
+						
+						var data = [
+									[this.app.name],
+									[App.code+ " " +App.codefmk],
+									[this.app.name],
+									[
+									"app.ext.input",
+									"x "+Math.round(App.ext.input.x*100)/100		,
+									"x "+Math.round(App.ext.input.window.x*100)/100,
+									"d "+App.ext.input.pressed+"   p "+App.ext.input.duration,
+									
+									
+									"y "+Math.round(App.ext.input.y*100)/100		,
+									"y "+Math.round(App.ext.input.window.y*100)/100,
+									(App.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
+									],
+									[
+									"app.client",
+									"discription","","",
+									"width" ,this.app.setWidth,this.app.width,
+									"height",this.app.setHeight,this.app.height,
+									"fps",Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(this.app.fps*1000)/1000,"",
+									"scale",this.app.scale,"",
+									"delta",this.app.delta,"",
+									"buffer","double","",
+									],
+									[
+									"app.client.state","",
+									"[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",
+									"",
+									""
+									],
+									[
+									"app.client.data","",
+									"visuals ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Visuals):"?"),"",
+									"graphics ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Graphics):"?"),"",
+									"audio ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Audio):"?"),"",
+									"state ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app.update.state.current):"?"),"",
+									"ext ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(App.ext):"?"),"",
+									"Total ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.Total():"?"),""
+									
+									]
+								];
+								for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii)
+									{
+									for(var i=data[ii].length;0<i;--i)
+										0==i%3&&(t=0,tr=15,tt++),
+										this.text_ext(data[ii][data[ii].length-i],tr+15+p*t,25+1.1*this.point*tt,"#AAAAAA",1,1,0),
+										tr=0,
+										t++;
+									t=0;
+									tt++
+									};
+
+						//this.text_ext("D: "+App.ext.input.duration,210,55);
+						//this.text_ext("P: "+App.ext.input.pressed,160,55);
+						//(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
+						//this.text_ext("I: "+App.ext.input.window.inside+" X: "+App.ext.input.window.x+" Y: "+App.ext.input.window.y,155,70);
+						//this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
+						//this.text_ext("Discription: "+this.app.discription,25,100,"#FFFFFF",1,1,0);
+						//this.text_ext("Fps: "+Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
+						//this.text_ext("Width: "+this.app.width,25,130,"#FFFFFF",1,1,0);
+						//this.text_ext("Height: "+App.client.height,25,145,"#FFFFFF",1,1,0);
+						//this.text_ext("setWidth: "+this.app.setWidth,110,130,"#FFFFFF",1,1,0);
+						//this.text_ext("setHeight: "+this.app.setHeight,110,145,"#FFFFFF",1,1,0);
+						//this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
+						//this.text_ext("Delta: "+App.client.delta,25,175,"#FFFFFF",1,1,0);
+						//this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
+						//this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
+						//this.text_ext("[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
+						this.text_ext("Log: "+App.ext.debug.text,35,this.app.setHeight-25,this.point);
+						if (App.ext.debug.strength=="Lite")
+							return;
+							
+							try {
+						//this.text_ext("_Visuals: " 	+ this.app.Math.Data.kilobyteCount(App.client._Visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
+						}catch(e){}
+						//this.text_ext("_Graphics: " + this.app.Math.Data.kilobyteCount(App.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
+						//this.text_ext("_Audio: " 	+ this.app.Math.Data.kilobyteCount(App.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
+						//this.text_ext("_State: " 	+ this.app.Math.Data.kilobyteCount(App.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
+						//this.text_ext("ext: " 		+ this.app.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
+						//this.text_ext("Total: "		+ this.app.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
+					},
+					Borders: function() {
 						this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
 						this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
 						this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
 						this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
 					},
-					all:function(){
-						//App.client._Visuals.rect(window.innerWidth/2,window.innerHeight/2,window.innerWidth,window.innerHeight,"000000",1,1,1);
-						//this.clear(-App.client.width,0,-App.client.width*2/App.client.scale,App.client.height);
-						//this.clear(+App.client.width*2,0,App.client.width*2/App.client.scale,App.client.height);
-						//this.clear(-App.client.width,-App.client.height,App.client.width*3,App.client.height*3);
+					clearBorders: function() {
+					
+						this.clear(-this.app.width,0,-this.app.width,this.app.height/this.app.scale);
+						this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
+						this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
+						this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
+					
+						return;
+						this.clear(-this.w,0,-this.w*2/this.scale,this.h);
+						this.clear(+this.w*2+2,0,this.w*2/this.scale,this.h);
+						this.clear(0,0,this.w,-this.h);	
+						this.clear(0,this.h,this.w,this.h);
+					},
+					clear_fit: function() {
+						this.clear(0,0,App.client.width,App.client.heighteight);
+					},
+					clear_wide: function() {
+						this.clear(-App.client.width,0,App.client.width*3,App.client.height);
 					},
 					clear: function(x,y,width,height) {
-						App.client._Visuals.stat = App.client._Visuals.chk(x,y,width,height,1);
-						App.client._Visuals.buffer_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
-						App.client._Visuals.settings[3][1]||App.client._Visuals.canvas_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
-					}
-				},
-				fixX:function(x){
-					return ((x*this.scale)+(this.app.width/2)-(this.app.setWidth/2)*this.scale);
-				},
-				fixY:function(y){
-					return ((y*this.scale)+(this.app.height/2)-(this.app.setHeight/2)*this.scale);
-				},
-				fixW:function(w){
-					return (w*this.scale);
-				},
-				fixH:function(h){
-					return (h*this.scale);
-				},
-				chkc:{},
-				chk:function(x,y,w,h,s,a,c,colour,font){
-					this.chkc = this.colour();
-					this.opacity(a);
-					this.colour(colour);
-					if (!this.free)	return {
-						x:this.fixX(x),
-						y:this.fixY(y),
-						w:this.fixW(w)*s,
-						h:this.fixH(h)*s,
-						s:s,
-						a:a || 0,
-						c:c || false,
-						colour:colour || this.colour(),
-						oldcol:this.chkc,
-						font:font || this.font,
-						init:this.stat.init
-					}
-					else return {
-						x:x,y:y,
-						w:w || 0,
-						h:h || 0,
-						s:s,
-						a:a || 1,
-						c:c || false,
-						colour:colour || this.colour(),
-						oldcol:this.chkc,
-						font:font,
-						init:this.stat.init
-					}
-				},
-				debug:function(){
-					if (!App.ext.debug.strength=="Normal")
-						return;
-					if ((App.ext.debug.strength=="off")||(App.ext.debug.strength=="none"))
-						return;
-					this.rect_ext(-this.app.setWidth,0,this.app.setWidth+this.app.setWidth+this.app.setWidth,this.point,1,0.1,0);
-					this.rect_ext(0,0,this.app.setWidth,this.point,1,0.1,0);
-					this.text_ext("0",	0,this.point*0.9,this.point*0.9);
-					this.text_ext(this.app.setWidth,	this.app.setWidth-25,this.point*0.9,this.point*0.9);
-					if (window.innerWidth>(this.app.setWidth*1.1)*this.scale)
+						this.stat = this.chk(x,y,width,height,1);
+						this.buffer_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+						this.settings[3][1]||this.canvas_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					},
+					background_set:function(value) {
+						this.buffer.style.background = value;
+						this.canvas.style.background = value;
+					},
+					background_get:function() {
+						return this.buffer.style.background;
+					},
+					clean:function(){
+						this.cleanAlpha?this.opacity(1):null;
+						this.colour(this.stat.oldcol);
+						this.stat.init(this.colour(),this.stat.oldcol);
+					},
+					colour:function(colour1,colour2) {
+						if (colour1)
+							{
+								return colour1&&(this.buffer_context.fillStyle=colour1);colour2&&(this.buffer_context.strokeStyle=colour2);
+							}
+							else
+							return this.buffer_context.fillStyle;
+					},
+					opacity:function(opacity) {
+						return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
+					},
+					fontT:"",
+					fontL:"",
+					font:function(font)	{ 
+						return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
+						//if (font)
+						//	this.buffer_context.font = font;
+						//return this.buffer_context.font;
+					},			
+					text_free:function(string, x, y,colour){
+						this.colour(colour);
+						this.font(Math.round(this.point*this.scale)+"px "+"sans-serif");
+						this.buffer_context.fillText(string,x-this.text_width(string)/2-this.point,y-this.point/2);
+						this.clean();
+					},
+					text_ext:function(string,x,y,colour,s,a,c,style){
+						this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
+						var f = this.font();
+						this.stat.h = this.stat.s*this.scale;
+						this.font(this.stat.h+"em "+style);
+						this.stat.h = this.point*this.stat.h;
+						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+						this.font(f);
+						this.clean();
+					},
+					text_button:function(string,x,y,colour,s,a,c,style){
+						this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
+						var f = this.font();
+						this.stat.h = this.stat.s*this.scale;
+						this.font(this.stat.h+"em "+style);
+						this.stat.h = this.point*this.stat.h;
+						if (this.touch_within_stat(this.stat))
 						{
-							this.text_free(0-this.fixX(0),	30,4+this.fixY(this.point),this.point*0.99);
-							this.text_free(this.app.width,	window.innerWidth-15,4+this.fixY(this.point),this.point*0.99);
-						}
-					//this.text_ext("Debug",	this.app.setWidth/2.5,this.point*0.9,this.point*0.9);
-					//this.text_ext(this.app.name,5,25,"#FFFFFF",4,1,0);
-					//this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
-					//this.text_ext("x "+Math.round(App.ext.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
-					//this.text_ext("x: "+Math.round(App.ext.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
-					//this.text_ext("y "+Math.round(App.ext.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
-					//this.text_ext("y: "+Math.round(App.ext.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
-					if (App.fps<20)
-						console.log(App.fps);
-					
-					var data = [
-								[this.app.name],
-								[App.code+ " " +App.codefmk],
-								[this.app.name],
-								[
-								"app.ext.input",
-								"x "+Math.round(App.ext.input.x*100)/100		,
-								"x "+Math.round(App.ext.input.window.x*100)/100,
-								"d "+App.ext.input.pressed+"   p "+App.ext.input.duration,
-								
-								
-								"y "+Math.round(App.ext.input.y*100)/100		,
-								"y "+Math.round(App.ext.input.window.y*100)/100,
-								(App.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
-								],
-								[
-								"app.client",
-								"discription","","",
-								"width" ,this.app.setWidth,this.app.width,
-								"height",this.app.setHeight,this.app.height,
-								"fps",Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(this.app.fps*1000)/1000,"",
-								"scale",this.app.scale,"",
-								"delta",this.app.delta,"",
-								"buffer","double","",
-								],
-								[
-								"app.client.state","",
-								"[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",
-								"",
-								""
-								],
-								[
-								"app.client.data","",
-								"visuals ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Visuals):"?"),"",
-								"graphics ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Graphics):"?"),"",
-								"audio ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Audio):"?"),"",
-								"state ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app.update.state.current):"?"),"",
-								"ext ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(App.ext):"?"),"",
-								"Total ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.Total():"?"),""
-								
-								]
-							];
-							
-							
-for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii)
-	{
-	for(var i=data[ii].length;0<i;--i)
-		0==i%3&&(t=0,tr=15,tt++),
-		this.text_ext(data[ii][data[ii].length-i],tr+15+p*t,25+1.1*this.point*tt,"#AAAAAA",1,1,0),
-		tr=0,
-		t++;
-	t=0;
-	tt++
-	};
-
-					//this.text_ext("D: "+App.ext.input.duration,210,55);
-					//this.text_ext("P: "+App.ext.input.pressed,160,55);
-					//(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
-					//this.text_ext("I: "+App.ext.input.window.inside+" X: "+App.ext.input.window.x+" Y: "+App.ext.input.window.y,155,70);
-					//this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
-					//this.text_ext("Discription: "+this.app.discription,25,100,"#FFFFFF",1,1,0);
-					//this.text_ext("Fps: "+Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
-					//this.text_ext("Width: "+this.app.width,25,130,"#FFFFFF",1,1,0);
-					//this.text_ext("Height: "+App.client.height,25,145,"#FFFFFF",1,1,0);
-					//this.text_ext("setWidth: "+this.app.setWidth,110,130,"#FFFFFF",1,1,0);
-					//this.text_ext("setHeight: "+this.app.setHeight,110,145,"#FFFFFF",1,1,0);
-					//this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
-					//this.text_ext("Delta: "+App.client.delta,25,175,"#FFFFFF",1,1,0);
-					//this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
-					//this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
-					//this.text_ext("[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
-					this.text_ext("Log: "+App.ext.debug.text,35,this.app.setHeight-25,this.point);
-					if (App.ext.debug.strength=="Lite")
-						return;
-						
-						try {
-					//this.text_ext("_Visuals: " 	+ this.app.Math.Data.kilobyteCount(App.client._Visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
-					}catch(e){}
-					//this.text_ext("_Graphics: " + this.app.Math.Data.kilobyteCount(App.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
-					//this.text_ext("_Audio: " 	+ this.app.Math.Data.kilobyteCount(App.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
-					//this.text_ext("_State: " 	+ this.app.Math.Data.kilobyteCount(App.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
-					//this.text_ext("ext: " 		+ this.app.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
-					//this.text_ext("Total: "		+ this.app.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
-				},
-				Borders: function() {
-					this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
-					this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
-					this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
-					this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
-				},
-				clearBorders: function() {
-				
-					this.clear(-this.app.width,0,-this.app.width,this.app.height/this.app.scale);
-					this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
-					this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
-					this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
-				
-					return;
-					this.clear(-this.w,0,-this.w*2/this.scale,this.h);
-					this.clear(+this.w*2+2,0,this.w*2/this.scale,this.h);
-					this.clear(0,0,this.w,-this.h);	
-					this.clear(0,this.h,this.w,this.h);
-				},
-				clear_fit: function() {
-					this.clear(0,0,App.client.width,App.client.heighteight);
-				},
-				clear_wide: function() {
-					this.clear(-App.client.width,0,App.client.width*3,App.client.height);
-				},
-				clear: function(x,y,width,height) {
-					this.stat = this.chk(x,y,width,height,1);
-					this.buffer_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-					this.settings[3][1]||this.canvas_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-				},
-				background_set:function(value) {
-					this.buffer.style.background = value;
-					this.canvas.style.background = value;
-				},
-				background_get:function() {
-					return this.buffer.style.background;
-				},
-				clean:function(){
-					this.cleanAlpha?this.opacity(1):null;
-					this.colour(this.stat.oldcol);
-					this.stat.init(this.colour(),this.stat.oldcol);
-				},
-				colour:function(colour1,colour2) {
-					if (colour1)
-						{
-							return colour1&&(this.buffer_context.fillStyle=colour1);colour2&&(this.buffer_context.strokeStyle=colour2);
+							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+							App.ext.cursor.set(App.ext.cursor.pointer,true);
+							//if (App.ext.input.released)
+							//	if (App.ext.input.delay<1)
+							//		loc(),App.ext.input.delay = 1;
+							(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
 						}
 						else
-						return this.buffer_context.fillStyle;
-				},
-				opacity:function(opacity) {
-					return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
-				},
-				fontT:"",
-				fontL:"",
-				font:function(font)	{ 
-					return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
-					//if (font)
-					//	this.buffer_context.font = font;
-					//return this.buffer_context.font;
-				},			
-				text_free:function(string, x, y,colour){
-					this.colour(colour);
-					this.font(Math.round(this.point*this.scale)+"px "+"sans-serif");
-					this.buffer_context.fillText(string,x-this.text_width(string)/2-this.point,y-this.point/2);
-					this.clean();
-				},
-				text_ext:function(string,x,y,colour,s,a,c,style){
-					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
-					var f = this.font();
-					this.stat.h = this.stat.s*this.scale;
-					this.font(this.stat.h+"em "+style);
-					this.stat.h = this.point*this.stat.h;
-					(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-					this.font(f);
-					this.clean();
-				},
-				text_button:function(string,x,y,colour,s,a,c,style){
-					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
-					var f = this.font();
-					this.stat.h = this.stat.s*this.scale;
-					this.font(this.stat.h+"em "+style);
-					this.stat.h = this.point*this.stat.h;
-					if (this.touch_within_stat(this.stat))
-					{
-						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
-						App.ext.cursor.set(App.ext.cursor.pointer,true);
-						//if (App.ext.input.released)
-						//	if (App.ext.input.delay<1)
-						//		loc(),App.ext.input.delay = 1;
-						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-					}
-					else
-					{
-						this.opacity(this.stat.a*0.75);
-						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-					}		
-					this.font(f);
-					this.clean();
-				},
-				within:false,
-				shadow:function(col,blur,x,y){
-					this.buffer_context.shadowColor = col;
-					this.buffer_context.shadowBlur = blur;
-					this.buffer_context.shadowOffsetX = x;
-					this.buffer_context.shadowOffsetY = y;
-				},
-				shadow_clear:function(){
-					this.buffer_context.shadowBlur = 0;
-				},
-				text_button_bg:function(string,x,y,colour,s,a,c,loc,style){
-					this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
-					
-					
-					this.shadow("#AAAAAA",1,1,1);
-					
-					var f = this.font();
-					this.stat.h = this.stat.s*this.scale;
-					this.font(this.stat.h+"em "+style);
-					this.stat.h = this.point*this.stat.h;
-					this.within = this.touch_within_stat(this.stat);
-					if (this.within)
-					{
-					this.colour("#00A0F1");
-					this.buffer_context.beginPath();
-					this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x-this.stat.w*0.2, this.stat.y-this.stat.h*0.2, this.stat.w*1.1, this.stat.h*1.1);
-					this.buffer_context.fill();
-					
-					this.colour("#DDDDDD");
-						//this.rect_ext(this.stat.x-this.stat.w/4,this.stat.y-this.stat.h/5,this.stat.w*1.1,this.stat.h*1.1,1,1,0,"#00A0F1");
-						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
-						App.ext.cursor.set(App.ext.cursor.pointer,true);
-						if (App.ext.input.released)
-							if (App.ext.input.delay<1)
-								loc(),App.ext.input.delay = 1;
+						{
+							this.opacity(this.stat.a*0.75);
+							(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+						}		
+						this.font(f);
+						this.clean();
+					},
+					within:false,
+					shadow:function(col,blur,x,y){
+						this.buffer_context.shadowColor = col;
+						this.buffer_context.shadowBlur = blur;
+						this.buffer_context.shadowOffsetX = x;
+						this.buffer_context.shadowOffsetY = y;
+					},
+					shadow_clear:function(){
+						this.buffer_context.shadowBlur = 0;
+					},
+					text_button_bg:function(string,x,y,colour,s,a,c,loc,style){
+						this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
 						
 						
-						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-					}
-					else
-					{
-						this.opacity(this.stat.a*0.75);
-						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-					}		
-					this.font(f);
-					this.clean();
-				},
-				text:function(string, x, y,colour){
-					this.text_ext(string,x,y,colour,1,1,0,"Calibri");
-				},	
-				text_shadow:function(blur,x,y,colour){
-					this.buffer_context.shadowColor = colour;
-					this.buffer_context.shadowBlur = blur;
-					this.buffer_context.shadowOffsetX = x;
-					this.buffer_context.shadowOffsetY = y;
-				},
-				rect_ext:function(x,y,w,h,s,a,c,colour){
-					this.stat = this.chk(x,y,w,h,s,a,c,colour);
-					this.buffer_context.beginPath();
-					this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-					this.buffer_context.fill();
-					
-					this.clean();
-				},	
-				rect_stroke:function(x,y,w,h,s,a,c,colour,l){
-					this.stat = this.chk(x,y,w,h,s,a,c,colour);
-					this.buffer_context.beginPath();
-					this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-					this.buffer_context.fillStyle = 'transparent';
-					this.buffer_context.fill();
-					this.buffer_context.lineWidth = l || 1;
-					this.buffer_context.strokeStyle = colour;
-					this.buffer_context.stroke();
-					
-					this.clean();
-				},	
-				rect:function (x,y,w,h,colour){
-					this.rect_ext(x,y,w,h,1,1,1,colour);
-				},
-				rect_button:function(x,y,w,h,colour,loc,c){
-					this.stat = this.chk(x,y,w,h,1,1,1,colour);
-					if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h))
-					{
-						App.ext.cursor.set(App.ext.cursor.pointer,true);
-						if (App.ext.input.released)
-							if (App.ext.input.delay<1)
-								loc(),App.ext.input.delay = 1;
-					}
-					this.rect_ext(x,y,w,h,1,1,c,colour);
-				},
-				rect_rotate:function(x,y,w,h,colour,s,a,angle){
-					this.stat = this.chk(x,y,w,h,s,a,1,colour);
-					this.buffer_context.translate(this.stat.x,this.stat.y);
-					this.buffer_context.rotate(angle*0.0174532925);
-					this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
-					this.buffer_context.rotate(-angle*0.0174532925);
-					this.buffer_context.translate(-this.stat.x,-this.stat.y);
-					this.clean();
-				},
-				rect_gradient:function(x,y,w,h,s,a,c,colour,colour2,angle){
-					this.stat = this.chk(x,y,w,h,s,a,c,colour);
-					this.buffer_context.translate(this.stat.x,this.stat.y);
-					this.buffer_context.rotate(angle*0.0174532925);
-					this.stat.c?this.grd = this.buffer_context.createLinearGradient(this.stat.w/2,0, this.stat.w/2, this.stat.h/2):this.grd = this.buffer_context.createLinearGradient(0,0, this.stat.w, this.stat.h);
-					this.buffer_context.beginPath();
-					this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
-					this.grd.addColorStop(0, colour);
-					this.grd.addColorStop(1, colour2);
-					this.buffer_context.fillStyle = this.grd;
-					this.buffer_context.fill();
-					this.buffer_context.rotate(-angle*0.0174532925);
-					this.buffer_context.translate(-this.stat.x,-this.stat.y);
-					this.clean();
-				},	
-				rect_free:function(x,y,w,h,s,a,c,colour){
-					this.stat = this.chk(x,y,w,h,s,a,c,colour);
-					this.buffer_context.beginPath();
-					(c)?this.buffer_context.rect(x-w/2, y-h/2, w, h):this.buffer_context.rect(x, y, w, h);
-					this.buffer_context.fill();
-					this.clean();
-				},	
-				image_ext:function(image,x,y,s,a,c){		
-					this.stat = this.chk(x,y,image.width,image.height,s,a,c);
-					(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-				},
-				image_centered:function(image,x,y){		
-					this.image_ext(image,x,y,1,1,true);
-				},
-				image:function(image,x,y){		
-					this.image_ext(image,x,y,1,1,false);
-				},
-				image_part:function(image,x,y,s,a,c,xx,yy,w,h){
-					this.stat = this.chk(x,y,w,h,s,a,c);
-					this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h,1,1,image.width,image.height);
-				},
-				image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
-					this.stat = this.chk(x,y,image.width,image.height,s,a,true);
-					this.buffer_context.translate(this.stat.x,this.stat.y);
-					this.buffer_context.rotate(angle*0.0174532925);
-					(this.stat.c)?this.buffer_context.drawImage(image,0-this.stat.w/2,0-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,0,0,this.stat.w,this.stat.h);
-					this.buffer_context.rotate(-angle*0.0174532925);
-					this.buffer_context.translate(-this.stat.x,-this.stat.y);
-				},
-				
-				image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
-					this.stat = this.chk(x,y,image.width*xscale,image.height*xscale,s,a,centered);
-					this.stat2 = this.chk(x,y,(image.width*xscale)*0.9,(image.height*xscale)*0.9,s,a,centered);
-					var w = false;
-					if (this.touch_within_stat(this.stat2))
-					{
-						w = true;
-						this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
-						App.ext.cursor.set(App.ext.cursor.pointer,true);
-						if (App.ext.input.released)
-							if (App.ext.input.delay<1)
-								loc(),App.ext.input.delay = 1;
+						this.shadow("#AAAAAA",1,1,1);
+						
+						var f = this.font();
+						this.stat.h = this.stat.s*this.scale;
+						this.font(this.stat.h+"em "+style);
+						this.stat.h = this.point*this.stat.h;
+						this.within = this.touch_within_stat(this.stat);
+						if (this.within)
+						{
+						this.colour("#00A0F1");
+						this.buffer_context.beginPath();
+						this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x-this.stat.w*0.2, this.stat.y-this.stat.h*0.2, this.stat.w*1.1, this.stat.h*1.1);
+						this.buffer_context.fill();
+						
+						this.colour("#DDDDDD");
+							//this.rect_ext(this.stat.x-this.stat.w/4,this.stat.y-this.stat.h/5,this.stat.w*1.1,this.stat.h*1.1,1,1,0,"#00A0F1");
+							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+							App.ext.cursor.set(App.ext.cursor.pointer,true);
+							if (App.ext.input.released)
+								if (App.ext.input.delay<1)
+									loc(),App.ext.input.delay = 1;
+							
+							
+							(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+						}
+						else
+						{
+							this.opacity(this.stat.a*0.75);
+							(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+						}		
+						this.font(f);
+						this.clean();
+					},
+					text:function(string, x, y,colour){
+						this.text_ext(string,x,y,colour,1,1,0,"Calibri");
+					},	
+					text_shadow:function(blur,x,y,colour){
+						this.buffer_context.shadowColor = colour;
+						this.buffer_context.shadowBlur = blur;
+						this.buffer_context.shadowOffsetX = x;
+						this.buffer_context.shadowOffsetY = y;
+					},
+					rect_ext:function(x,y,w,h,s,a,c,colour){
+						this.stat = this.chk(x,y,w,h,s,a,c,colour);
+						this.buffer_context.beginPath();
+						this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+						this.buffer_context.fill();
+						
+						this.clean();
+					},	
+					rect_stroke:function(x,y,w,h,s,a,c,colour,l){
+						this.stat = this.chk(x,y,w,h,s,a,c,colour);
+						this.buffer_context.beginPath();
+						this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+						this.buffer_context.fillStyle = 'transparent';
+						this.buffer_context.fill();
+						this.buffer_context.lineWidth = l || 1;
+						this.buffer_context.strokeStyle = colour;
+						this.buffer_context.stroke();
+						
+						this.clean();
+					},	
+					rect:function (x,y,w,h,colour){
+						this.rect_ext(x,y,w,h,1,1,1,colour);
+					},
+					rect_button:function(x,y,w,h,colour,loc,c){
+						this.stat = this.chk(x,y,w,h,1,1,1,colour);
+						if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h))
+						{
+							App.ext.cursor.set(App.ext.cursor.pointer,true);
+							if (App.ext.input.released)
+								if (App.ext.input.delay<1)
+									loc(),App.ext.input.delay = 1;
+						}
+						this.rect_ext(x,y,w,h,1,1,c,colour);
+					},
+					rect_rotate:function(x,y,w,h,colour,s,a,angle){
+						this.stat = this.chk(x,y,w,h,s,a,1,colour);
+						this.buffer_context.translate(this.stat.x,this.stat.y);
+						this.buffer_context.rotate(angle*0.0174532925);
+						this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+						this.buffer_context.rotate(-angle*0.0174532925);
+						this.buffer_context.translate(-this.stat.x,-this.stat.y);
+						this.clean();
+					},
+					rect_gradient:function(x,y,w,h,s,a,c,colour,colour2,angle){
+						this.stat = this.chk(x,y,w,h,s,a,c,colour);
+						this.buffer_context.translate(this.stat.x,this.stat.y);
+						this.buffer_context.rotate(angle*0.0174532925);
+						this.stat.c?this.grd = this.buffer_context.createLinearGradient(this.stat.w/2,0, this.stat.w/2, this.stat.h/2):this.grd = this.buffer_context.createLinearGradient(0,0, this.stat.w, this.stat.h);
+						this.buffer_context.beginPath();
+						this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+						this.grd.addColorStop(0, colour);
+						this.grd.addColorStop(1, colour2);
+						this.buffer_context.fillStyle = this.grd;
+						this.buffer_context.fill();
+						this.buffer_context.rotate(-angle*0.0174532925);
+						this.buffer_context.translate(-this.stat.x,-this.stat.y);
+						this.clean();
+					},	
+					rect_free:function(x,y,w,h,s,a,c,colour){
+						this.stat = this.chk(x,y,w,h,s,a,c,colour);
+						this.buffer_context.beginPath();
+						(c)?this.buffer_context.rect(x-w/2, y-h/2, w, h):this.buffer_context.rect(x, y, w, h);
+						this.buffer_context.fill();
+						this.clean();
+					},	
+					image_ext:function(image,x,y,s,a,c){		
+						this.stat = this.chk(x,y,image.width,image.height,s,a,c);
 						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					},
+					image_centered:function(image,x,y){		
+						this.image_ext(image,x,y,1,1,true);
+					},
+					image:function(image,x,y){		
+						this.image_ext(image,x,y,1,1,false);
+					},
+					image_part:function(image,x,y,s,a,c,xx,yy,w,h){
+						this.stat = this.chk(x,y,w,h,s,a,c);
+						this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h,1,1,image.width,image.height);
+					},
+					image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
+						this.stat = this.chk(x,y,image.width,image.height,s,a,true);
+						this.buffer_context.translate(this.stat.x,this.stat.y);
+						this.buffer_context.rotate(angle*0.0174532925);
+						(this.stat.c)?this.buffer_context.drawImage(image,0-this.stat.w/2,0-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,0,0,this.stat.w,this.stat.h);
+						this.buffer_context.rotate(-angle*0.0174532925);
+						this.buffer_context.translate(-this.stat.x,-this.stat.y);
+					},
+					
+					image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
+						this.stat = this.chk(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
+						this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
+						var w = false;
+						if (this.touch_within_stat(this.stat2))
+						{
+							w = true;
+							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+							App.ext.cursor.set(App.ext.cursor.pointer,true);
+							if (App.ext.input.released)
+								if (App.ext.input.delay<1)
+									loc(),App.ext.input.delay = 1;
+							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+						}
+						else
+						{
+							this.opacity(this.stat.a*0.75);
+							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+						}			
+						return w;
+					},
+					touch_within:function(x, y, w, h,c) {
+						return c?((App.ext.input.x>x-w/2&&App.ext.input.x<x+w/2&&App.ext.input.y>y-h/2&&App.ext.input.y<y+h/2)?true:false):((App.ext.input.x>x&&App.ext.input.x<x+w&&App.ext.input.y>y&&App.ext.input.y<y+h)?true:false);
+					},
+					touch_within_stat:function(stat) {
+						return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
+					},
+					line:function(x,y,x2,y2,col,a){
+						this.stat = this.chk(x,y,x2,y2,1,a,true);
+						this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
+						this.buffer_context.beginPath();
+						this.buffer_context.moveTo(this.stat.x,this.stat.y);
+						this.buffer_context.lineTo(this.stat2.x,this.stat2.y);
+						this.buffer_context.strokeStyle = col;
+						this.buffer_context.stroke();
+						this.clean();
+					},
+					lines:function(x,y,x2,y2,col,a,s){
+						this.stat = this.chk(x,y,x2,y2,1,a,true);
+						this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
+						this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
+						this.opacity(a);
+						this.buffer_context.strokeStyle = col;
+						this.buffer_context.lineTo(this.stat2.x*s,this.stat2.y*s);			
+					},
+					lineend:function(){
+						this.buffer_context.stroke();
+					},	
+					linestart:function(){
+						this.buffer_context.beginPath();
+					},
+					triangle:function(x0,y0,x1,y1,x2,y2,col,col2,width){
+					//this.buffer_context.fillStyle = col;
+					//this.buffer_context.strokeStyle = col2;
+						this.colour(col,col2);
+						this.buffer_context.lineWidth = width;
+						this.buffer_context.moveTo(x0,y0); // give the (x,y) coordinates
+						this.buffer_context.lineTo(x1,y1);
+						this.buffer_context.lineTo(x2,y2);
+						this.buffer_context.lineTo(x0,y0);
+						this.buffer_context.fill();
+						this.buffer_context.stroke();
+						this.buffer_context.closePath();
+						this.clean();
+					},
+					circle:function(x,y,r,col,a){
+						this.stat = this.chk(x,y,1,1,r,a,true,col);
+						this.buffer_context.beginPath();
+						this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s*this.scale, 0, 2 * Math.PI, false);
+						this.buffer_context.fillStyle = this.stat.colour;
+						this.buffer_context.fill();
+					},
+					circle_free:function(x,y,r,col,a){
+						this.opacity(a);
+						this.buffer_context.beginPath();
+						this.buffer_context.arc(x, y, r*this.scale, 0, 2 * Math.PI, false);
+						this.buffer_context.fillStyle = col;
+						this.buffer_context.fill();
+					},
+					text_width:function(string) {
+						return this.buffer_context.measureText(string).width; // Not WOrking
 					}
-					else
-					{
-						this.opacity(this.stat.a*0.75);
-						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-					}			
-					return w;
 				},
-				touch_within:function(x, y, w, h,c) {
-					return c?((App.ext.input.x>x-w/2&&App.ext.input.x<x+w/2&&App.ext.input.y>y-h/2&&App.ext.input.y<y+h/2)?true:false):((App.ext.input.x>x&&App.ext.input.x<x+w&&App.ext.input.y>y&&App.ext.input.y<y+h)?true:false);
-				},
-				touch_within_stat:function(stat) {
-					return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
-				},
-				line:function(x,y,x2,y2,col,a){
-					this.stat = this.chk(x,y,x2,y2,1,a,true);
-					this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
-					this.buffer_context.beginPath();
-					this.buffer_context.moveTo(this.stat.x,this.stat.y);
-					this.buffer_context.lineTo(this.stat2.x,this.stat2.y);
-					this.buffer_context.strokeStyle = col;
-					this.buffer_context.stroke();
-					this.clean();
-				},
-				lines:function(x,y,x2,y2,col,a,s){
-					this.stat = this.chk(x,y,x2,y2,1,a,true);
-					this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
-					this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
-					this.opacity(a);
-					this.buffer_context.strokeStyle = col;
-					this.buffer_context.lineTo(this.stat2.x*s,this.stat2.y*s);			
-				},
-				lineend:function(){
-					this.buffer_context.stroke();
-				},	
-				linestart:function(){
-					this.buffer_context.beginPath();
-				},
-				triangle:function(x0,y0,x1,y1,x2,y2,col,col2,width){
-				//this.buffer_context.fillStyle = col;
-				//this.buffer_context.strokeStyle = col2;
-					this.colour(col,col2);
-					this.buffer_context.lineWidth = width;
-					this.buffer_context.moveTo(x0,y0); // give the (x,y) coordinates
-					this.buffer_context.lineTo(x1,y1);
-					this.buffer_context.lineTo(x2,y2);
-					this.buffer_context.lineTo(x0,y0);
-					this.buffer_context.fill();
-					this.buffer_context.stroke();
-					this.buffer_context.closePath();
-					this.clean();
-				},
-				circle:function(x,y,r,col,a){
-					this.stat = this.chk(x,y,1,1,r,a,true,col);
-					this.buffer_context.beginPath();
-					this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s*this.scale, 0, 2 * Math.PI, false);
-					this.buffer_context.fillStyle = this.stat.colour;
-					this.buffer_context.fill();
-				},
-				circle_free:function(x,y,r,col,a){
-					this.opacity(a);
-					this.buffer_context.beginPath();
-					this.buffer_context.arc(x, y, r*this.scale, 0, 2 * Math.PI, false);
-					this.buffer_context.fillStyle = col;
-					this.buffer_context.fill();
-				},
-				text_width:function(string) {
-					return this.buffer_context.measureText(string).width; // Not WOrking
-				}
-			},
-			constructor:function(){return {
-				init:{value:function(app){
-					this.app = app;
-					this.scale = app.scale;
-					this.canvas = app.c;
-					this.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
-					this.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+				constructor:function(){return {
+					init:{value:function(app){
+						this.app = app;
+						this.scale = app.scale;
+						this.canvas = app.c;
+						this.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
+						this.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
 
-					this.buffer = app.b;
-					this.canvas_context = this.canvas.getContext("2d");
-					this.buffer_context = this.buffer.getContext("2d");
-					this.background_set("transparent");
-					this.rendering_style.innerHTML = this.rendering_style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
-					this.head.appendChild(this.rendering_style);
-					this.body();
-				}}}
-			}
-		},
-		_Cookies:{
-			prototype:{
-				list:new Array(),
-				expires:"",
-				nameEQ:"=",
-				ca:"",
-				createCookie:function(name,value,days){
-					if (days) {
-						var date = new Date();
-						date.setTime(date.getTime()+(days*24*60*60*1000));
-						this.expires = "; expires="+date.toGMTString();
-					}
-					else this.expires = "";
-					document.cookie = name+"="+value+";"+this.expires+"; path=/";
-				return this.list.push(value);
-				},
-				readCookie:function(name){
-					this.nameEQ = name + "=";
-					this.ca = document.cookie.split(';');
-					for(var i=0;i < this.ca.length;i++) {
-						var c = this.ca[i];
-						while (c.charAt(0)==' ') c = c.substring(1,c.length);
-						if (c.indexOf(this.nameEQ) == 0) return c.substring(this.nameEQ.length,c.length);
-					}
-					//return null;
-				},
-				eraseCookie:function(name){
-					this.createCookie(name,"",-1);
+						this.buffer = app.b;
+						this.canvas_context = this.canvas.getContext("2d");
+						this.buffer_context = this.buffer.getContext("2d");
+						this.background_set("transparent");
+						this.rendering_style.innerHTML = this.rendering_style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+						this.head.appendChild(this.rendering_style);
+						this.body();
+					}}}
 				}
 			},
-			constructor:function(){return {
-					init:{value:function(){
-								Debug.log('Cookies: Init');
-							return true;
+			_Cookies:{
+				prototype:{
+					list:new Array(),
+					expires:"",
+					nameEQ:"=",
+					ca:"",
+					createCookie:function(name,value,days){
+						if (days) {
+							var date = new Date();
+							date.setTime(date.getTime()+(days*24*60*60*1000));
+							this.expires = "; expires="+date.toGMTString();
+						}
+						else this.expires = "";
+						document.cookie = name+"="+value+";"+this.expires+"; path=/";
+					return this.list.push(value);
+					},
+					readCookie:function(name){
+						this.nameEQ = name + "=";
+						this.ca = document.cookie.split(';');
+						for(var i=0;i < this.ca.length;i++) {
+							var c = this.ca[i];
+							while (c.charAt(0)==' ') c = c.substring(1,c.length);
+							if (c.indexOf(this.nameEQ) == 0) return c.substring(this.nameEQ.length,c.length);
+						}
+						//return null;
+					},
+					eraseCookie:function(name){
+						this.createCookie(name,"",-1);
+					}
+				},
+				constructor:function(){return {
+						init:{value:function(){
+									Debug.log('Cookies: Init');
+								return true;
+								}
 							}
 						}
 					}
+				},
+				name:"",
+				discription:"",
+				scale:1,
+				delta:1,
+				width:0,
+				height:0,
+				setWidth:0,
+				setHeight:0,
+				resized:false,
+				targetfps:60,
+				_Main:{constructor:function(){return {name:{value:"Main"}};}},
+				c:{},
+				b:{}
+				},
+			constructor:function(a){return{
+				app:{value:a}
+				}
+			}
+		}
+	},
+	constructor:{			
+			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
+				App.init("Spice.js",480,320);
 				}
 			},
-			name:"",
-			discription:"",
-			scale:1,
-			delta:1,
-			width:0,
-			height:0,
-			setWidth:0,
-			setHeight:0,
-			resized:false,
-			targetfps:60,
-			_Main:{constructor:function(){return {name:{value:"Main"}};}},
-			c:{},
-			b:{}
-		},
-		animationFrame:	function()	{
-			document.requestNextAnimationFrame = window.requestNextAnimationFrame =
+			OnApplicationLoad:{writable:false, configurable:false, enumerable:false, value:function(){
+				//App.client = Object.create(App.client.prototype,App.client.constructor(App));
+				App.OnLoad();
+				}
+			},
+			init:{writable: true,  configurable:true, enumerable:false, value:function(name,w,h){	
+
+				(this.client = Object.create(this.client.prototype,this.client.constructor(this))).canvas();
+				(this.ext = Object.create(this.ext.prototype,this.ext.constructor(this))).init(name);
+				this.client.init(name,w,h);
+				setTimeout(
+					function(A){
+						function AppLoop(){App=A;A.client.loop(A);}
+						A.client.start(AppLoop,A.scale);
+					}(this),1600);
+				}
+			},	
+
+			scripts:{value:window.scripts},
+			codefmk:{value:'0.6.50.14.23.06.min'},
+			code:{value:"0"}
+	},
+	scripts:[],
+	mainLoop:{},
+	second:{},
+	framesT:0.0,
+	frames:0.0,
+	delta:0.0,
+	debug:false,
+	codefmk:"",
+	code:"",
+	fps:0,
+	width:320,
+	height:480
+});
+
+App = Object.create(App.prototype,App.constructor);
+addListener(document, "DOMContentLoaded", App.OnApplicationLoad);
+/*	Dynamically Loading Scripts 
+Scripts = window.scripts = [''];
+				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+App.options.paths.data+s+'" defer></'+t+">"),a.src=App.options.paths.data+s}(document,"script",window.scripts))){};
+*/
+
+/* Custom Polyfill for RequestAnimationFrame */
+document.requestNextAnimationFrame = window.requestNextAnimationFrame =
 		    (function () {
 			var originalWebkitRequestAnimationFrame = undefined;
 			var wrapper = undefined;
@@ -2257,49 +2353,4 @@ for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.st
 						}, self.timeout);
 				 };
 			  }
-		   )
-		();
-		},
-	},
-	constructor:function(){
-		return {
-			loadscripts:{value:function(){
-				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+s+'" defer></'+t+">"),a.src=s}(document,"script",window.scripts))){};
-				//this.scripts = window.scripts;
-				}
-			},
-			init:{value:function(name,w,h){
-				this.loadscripts();		
-				this.client.canvas();
-				(this.ext = Object.create(this.ext.prototype,this.ext.constructor(this))).init(name);
-				this.client.init(name,w,h);
-				this.animationFrame();
-				setTimeout(
-					function(A){
-						function AppLoop(){App=A;A.client.loop(A);}
-						A.client.start(AppLoop,A.scale);
-					}(this),1600);
-				}
-			},
-			scripts:{value:window.scripts},
-			codefmk:{value:'0.6.50.14.24.04.min'},
-			code:{value:"0"}
-		}
-	},
-	scripts:[],
-	mainLoop:{},
-	second:{},
-	framesT:0.0,
-	frames:0.0,
-	delta:0.0,
-	debug:false,
-	codefmk:"",
-	code:"",
-	fps:0
-});
-
-//console.log(App);
-App = Object.create(App.prototype,App.constructor());
-
-
-//console.log(A);
+		   )();

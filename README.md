@@ -13,45 +13,52 @@ Setting your index.html
 
 
 ```bash
-<!DOCTYPE html>
+	<!DOCTYPE html>
 	<html >
-		<head></head>
-		<body></body>
-		<script rel="prefetch" type="application/x-javascript" src="spice.js"></script>
-		<script rel="prefetch" name="main" type="text/javascript" defer>
-			_Main.prototype = {
-				init:function() {
-					this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
-					this.app.ext.debug.toggle("off");
-					this.visuals.background_set("#000000");
-					
-					//this.bg = this.graphics.load("background","Sky-Clouds-Building-Landscape-City-Toronto-Canada");
-					this.visuals.clearing.settings[0][1]=true;
-					//this.visuals.clearing.settings[2][1]=true;
-					this.app.ext.top();
-					this.w = this.app.client.setWidth;
-					this.h = this.app.client.setHeight;
-					this.app.client.c.style.pointerEvents = "none";
-					
-					return true;
-					},
-				update:function() {
-					
-					return true;
-					},
-				draw:function() {
-				console.log('eh');
-					this.visuals.rect(0,0,100,100,"FFFFFF");
-					return true;
-					}
-			};
-			App.init("Default App",320,480);
-		</script>
+	<body></body>
+	<script rel=prefetch type="application/x-javascript" src="spice.js"></script>
+	<script rel=prefetch name="main" type="text/javascript" defer>
+				App.OnLoad = function(){
+					App.init("sb",1920,480);
+				}
+				_Main.prototype = {
+					name:"Menu",
+					init:function() {
+							this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
+							this.app.ext.debug.toggle("off");
+							this.visuals.background_set("#000000");
+							this.visuals.clearing.settings[0][1]=true;
+							this.app.ext.top();
+							this.w = this.app.client.setWidth;
+							this.h = this.app.client.setHeight;
+							this.app.client.c.style.pointerEvents = "none";
+							this.rect = Object.create(_Rectangle.prototype);
+							this.x = 0;
+							this.y = 0;
+						return true;
+						},
+					update:function() {
+						return true;
+						},
+					draw:function() {
+							this.rect.draw(this.x,this.x,this.w,window.innerHeight);
+						return true;
+						}
+				};
+	</script>
 	</html>
 ```
 
 Setting up your Application
 ---------------------------
+
+OnLoad:
+
+App.OnLoad = function(){
+	App.init("sb",1920,480);
+}
+
+Note: Stylesheet loads block script execution, so if you have a <script> after a <link rel="stylesheet" ...>, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
 
 Window Scroll
 
