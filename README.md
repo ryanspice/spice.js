@@ -52,13 +52,15 @@ Setting your index.html
 Setting up your Application
 ---------------------------
 
-OnLoad:
+App.OnLoad
 
+```bash
 App.OnLoad = function(){
 	App.init("sb",1920,480);
 }
+```
 
-Note: Stylesheet loads block script execution, so if you have a <script> after a <link rel="stylesheet" ...>, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
+Note: Stylesheet loads block script execution, so if you have a '''bash <script>''' after a '''bash <link rel="stylesheet" ...>''', the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
 
 Window Scroll
 
