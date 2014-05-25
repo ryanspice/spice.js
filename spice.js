@@ -56,10 +56,10 @@ var addListener = function(obj, eventName, listener) {
 	
 	
 	
-	
-var Debug = Object.create(null);
-var Sprite = Object.create(null);
-var Sprite = Object.create(null);
+var NullObject = Object.create(null);
+var Debug = NullObject;
+var Sprite = NullObject;
+var Sprite = NullObject;
 
 
 
@@ -69,7 +69,9 @@ var App = Object.create({
 	prototype:{
 		options:{
 			canvas:{
-				
+				name:'canvas',
+				buffername:'buffer',
+				buffer:true
 			},
 			flags:{
 				canvas:true,
@@ -79,7 +81,9 @@ var App = Object.create({
 			},
 			override:{
 				keyboard:true,
-				mouse:true
+				mouse:true,
+				MSHoldVisual:false,
+				SelectStart:false
 				},
 			paths:{
 				data:"data/",
@@ -915,15 +919,67 @@ var App = Object.create({
 				}
 			}
 		},
+		canvas:{
+			prototype:{
+				canvas:NullObject,
+				buffer:NullObject,
+				canvasList:document.getElementsByTagName('canvas'),
+				getCanvas:function(){return this.canvas;},
+				getBuffer:function(){return this.buffer;},
+				setCanvas:function(c){this.canvas = c;},
+				setBuffer:function(b){this.buffer = b;},
+				createCanvas:function(){
+					var c = document.createElement("canvas");
+						c.id = this.app.options.canvas.name;
+						document.body.appendChild(c);
+					return document.getElementById(this.app.options.canvas.name);
+				},
+				createBuffer:function(){
+					var c = document.createElement("canvas");
+						c.id = this.app.options.canvas.buffername;
+						document.body.appendChild(c);
+					return document.getElementById(this.app.options.canvas.buffername);
+				}
+			},
+			constructor:function(app){return{
+				app:{value:app},
+				init:{writable: false,  configurable:false, enumerable:false, value:function(){
+						var getcanvas = document.getElementById(app.options.canvas.name);
+						if (getcanvas)
+							{
+							this.setCanvas(getcanvas);
+							if (app.options.canvas.buffer)
+								{
+								var getbuffer = document.getElementById(app.options.canvas.buffername);
+								if (getbuffer)
+									this.setBuffer(getbuffer);
+									else
+									{
+									this.createBuffer();
+									}
+								}
+							}
+							else
+							{
+							this.setCanvas(this.createCanvas());
+							if (app.options.canvas.buffer)
+								this.setBuffer(this.createBuffer());
+							}
+						}
+					}
+				}
+			}
+		},
 		client:{
 			prototype:{
 
 				canvas:function(){
 				
-				
-					if ((!App.options.flags.canvas))
-						return;
-					(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
+					//(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
+					this.c = document.getElementById(this.app.options.canvas.name);
+					this.b = document.getElementById(this.app.options.canvas.buffer);
+					//if ((!App.options.flags.canvas))
+					//	return;
 					(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
 					this._Canvas?(
 						this.visuals.canvas.style.position = "relative",
@@ -945,7 +1001,6 @@ var App = Object.create({
 				},
 				
 				init:function(name,w,h){
-				console.log(document.documentElement.scrollWidth);
 					this.name = name;
 					this.discription = "Eh";
 					this.w = this.width = this.setWidth = w;
@@ -2173,17 +2228,21 @@ var App = Object.create({
 					}
 				},
 				constructor:function(){return {
+					
 					init:{value:function(app){
 						this.app = app;
 						this.scale = app.scale;
-						this.canvas = app.c;
-						this.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
-						this.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
-
-						this.buffer = app.b;
+						this.canvas = App.canvas.canvas;
+						this.buffer = App.canvas.buffer;
 						this.canvas_context = this.canvas.getContext("2d");
 						this.buffer_context = this.buffer.getContext("2d");
 						this.background_set("transparent");
+						
+						if (!App.options.override.SelectStart)
+							App.canvas.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
+						if (!App.options.override.MSHoldVisual)
+							App.canvas.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+
 						this.rendering_style.innerHTML = this.rendering_style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
 						this.head.appendChild(this.rendering_style);
 						this.body();
@@ -2249,29 +2308,54 @@ var App = Object.create({
 			}
 		}
 	},
-	constructor:{			
-			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
-				App.init("Spice.js",480,320);
+	constructor:{	
+			init:{writable: true,  configurable:true, enumerable:false, value:function(name,w,h){	
+				this.client.init(name,w,h);
+				}
+			},		
+			Construct:{writable:false, configurable:false, enumerable:false, value:function(prototype,constructor){
+				var c = typeof constructor;
+				switch(c)
+					{
+					case 'undefined':
+						return Object.create(prototype);
+					break;
+					case 'object':
+						return Object.create(prototype,constructor);
+					break;
+					case 'function':
+						return Object.create(prototype,constructor(this));
+					break;
+					default:
+						console.log("Expected 'object' or 'function': Type is "+c);
+						return {};
+					}
 				}
 			},
 			OnApplicationLoad:{writable:false, configurable:false, enumerable:false, value:function(){
 				//App.client = Object.create(App.client.prototype,App.client.constructor(App));
+				App.OnStart();
 				App.OnLoad();
 				}
-			},
-			init:{writable: true,  configurable:true, enumerable:false, value:function(name,w,h){	
-
-				(this.client = Object.create(this.client.prototype,this.client.constructor(this))).canvas();
-				(this.ext = Object.create(this.ext.prototype,this.ext.constructor(this))).init(name);
-				this.client.init(name,w,h);
+			},	
+			OnStart:{writable:false, configurable:false, enumerable:false, value:function(){
+				
+				(this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
+				console.log(this.canvas);
+				(this.client = this.Construct(this.client.prototype,this.client.constructor)).canvas();
+				//(this.client = Object.create(this.client.prototype,this.client.constructor(this))).canvas();
+				(this.ext = this.Construct(this.ext.prototype,this.ext.constructor(this))).init(name);
 				setTimeout(
 					function(A){
 						function AppLoop(){App=A;A.client.loop(A);}
 						A.client.start(AppLoop,A.scale);
 					}(this),1600);
 				}
-			},	
-
+			},
+			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
+				App.init("Spice.js",480,320);
+				}
+			},
 			scripts:{value:window.scripts},
 			codefmk:{value:'0.6.50.14.23.06.min'},
 			code:{value:"0"}
