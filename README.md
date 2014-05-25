@@ -1,16 +1,19 @@
-Spice.js
-========
-
-HTML5 javascript framework based on canvas 2D Animation
+# Spice.js 
 
 
-To use simply apply the logic found in 'index.html', include Spice.js and you're ready to go. 
 
-Suggested implementation in WebFrames for mobile devices, fullscreen applications, and iFrames. 
+Spice.js is a clean, fast, and intuitive javascript framework designed to allow for the creation of Html5 games or apps.The framework relies heavily on [```Hardware Acceleration```](http://en.wikipedia.org/wiki/Hardware_acceleration) and the use of [```Request Animation Frame```](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame)
 
-Setting your index.html
------------------------
+Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
+To get started, check out <http://js.ryanspice.com>!
+
+## Table of contents
+
+ - [Setting your index.html](#your-index.html)
+
+
+### Your index.html
 
 ```bash
 	<!DOCTYPE html>
@@ -49,10 +52,12 @@ Setting your index.html
 	</html>
 ```
 
-Setting up your Application
----------------------------
+### Setting up your Application
 
-App.OnLoad
+
+### Initial Functions
+
+###### App.OnLoad
 
 ```bash
 App.OnLoad = function(){
@@ -60,9 +65,16 @@ App.OnLoad = function(){
 }
 ```
 
-Note: Stylesheet loads block script execution, so if you have a ```<script>``` after a ```<link rel="stylesheet" ...>```, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
+###### App.Construct
 
-Window Scroll
+```bash
+App.OnLoad = function(){
+	App.init("sb",1920,480);
+}
+```
+
+
+###### Window Scroll
 
 ```bash
 App.ext.scroll = true||false;
@@ -70,3 +82,5 @@ App.ext.scroll.x = 0;
 App.ext.scroll.y = 0;
 App.ext.scroll.seamless = true || false;
 ```
+
+##### Note: Stylesheet loads block script execution, so if you have a ```<script>``` after a ```<link rel="stylesheet" ...>```, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
