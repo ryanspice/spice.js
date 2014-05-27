@@ -3,21 +3,20 @@
 <body></body>
 <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
 <script rel=prefetch name="main" type="text/javascript" defer>
+
 			App.OnLoad = function(){
-				App.init("sb",1920,480);
+				App.init("sb",320,480);
 			}
 			_Main.prototype = {
 				name:"Menu",
 				init:function() {
 						this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
 						this.app.ext.debug.toggle("off");
-						this.visuals.background_set("#000000");
-						this.visuals.clearing.settings[0][1]=true;
-						this.app.ext.top();
+						this.app.canvas.background_set("#000000");
+						//this.app.ext.top();
 						this.w = this.app.client.setWidth;
 						this.h = this.app.client.setHeight;
-						this.app.client.c.style.pointerEvents = "none";
-						this.rect = Object.create(_Rectangle.prototype);
+						this.app.canvas.getCanvas().style.pointerEvents = "none";
 						this.x = 0;
 						this.y = 0;
 					return true;
@@ -26,9 +25,12 @@
 					return true;
 					},
 				draw:function() {
-						this.rect.draw(this.x,this.x,this.w,window.innerHeight);
+						this.visuals.rect_ext(this.x,this.y,this.w,this.h,1,1,false,"#DDDDDD");
+						this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,1,"#444444",1);
 					return true;
 					}
 			};
 </script>
+<canvas id="canvas"></canvas>
+<canvas id="buffer"></canvas>
 </html>

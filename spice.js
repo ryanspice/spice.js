@@ -9,6 +9,9 @@
 	  
 */
 "use strict";
+
+
+
 /*
 var A = Object.create(null,{name:{value:"eh"}});
 	
@@ -62,16 +65,27 @@ var Sprite = NullObject;
 var Sprite = NullObject;
 
 
-
-
-
+var TT = new Date().getTime();
 var App = Object.create({
 	prototype:{
 		options:{
 			canvas:{
 				name:'canvas',
 				buffername:'buffer',
-				buffer:true
+				buffer:false,
+				override:false,
+				color:'#0000000',
+				position:{
+					position:'absolute',
+					top:0,
+					left:window.innerWidth/2,
+					center:true,
+					z:1
+					},
+				size:{
+					width:320,
+					height:480
+					}
 			},
 			flags:{
 				canvas:true,
@@ -158,7 +172,7 @@ var App = Object.create({
 				connectDatere:new Date(),
 				scroll:{
 					event:function(evt,delta) {
-						if (App.client._Visuals.seamless)
+						if (App.client.visuals.seamless)
 							evt.preventDefault();
 						App.ext.input.wheelDelta = event.wheelDelta;
 					},
@@ -337,7 +351,7 @@ var App = Object.create({
 								this.metaAppend(this.metaTag("HandheldFriendly","True"));
 								
 								//if (this.devicewidth)
-									this.metaAppend(this.metaTag("viewport","width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"));
+									this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
 								//if (this.devicedpi)
 									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
 								Debug.log('Debug:     MetaCount/'+this.count);
@@ -415,9 +429,11 @@ var App = Object.create({
 							//	return;
 							if	((this.last==cursor)||(this.lock))
 								return;
-							//console.log(this.app.client._Visuals);
+							//console.log(this.app.client.visuals);
 							this.last = this.current;
-							this.current=this.app.client.visuals.canvas.style.cursor=this.app.client.visuals.buffer.style.cursor=cursor;
+							this.current = App.canvas.getCanvas().style.cursor;
+							if (this.app.options.canvas.buffer)
+								this.app.canvas.getBuffer().style.cursor=cursor;
 							document.body.style.cursor=cursor;
 							this.changed = true;
 							this.count++;
@@ -767,18 +783,35 @@ var App = Object.create({
 							*/
 
 
-							this.codes[186]='semi-colon'       ;
-							this.codes[187]='equalsign'        ;
-							this.codes[188]='comma'            ;
-							this.codes[189]='dash'             ;
-							this.codes[190]='period'           ;
-							this.codes[191]='forwardslash'     ;
-							this.codes[192]='graveaccent'      ;
-							this.codes[219]='openbracket'      ;
-							this.codes[220]='backslash'        ;
-							this.codes[221]='closebraket'      ;
-							this.codes[222]='singlequote'      ;
+							this.codes[186]='semi-colon';
+							this.codes[187]='equalsign';
+							this.codes[188]='comma';
+							this.codes[189]='dash';
+							this.codes[190]='period';
+							this.codes[191]='forwardslash';
+							this.codes[192]='graveaccent';
+							this.codes[219]='openbracket';
+							this.codes[220]='backslash';
+							this.codes[221]='closebraket';
+							this.codes[222]='singlequote';
 							
+							
+							if (!this.app.options.override.SelectStart)
+								this.app.canvas.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
+							if (!App.options.override.MSHoldVisual)
+								this.app.canvas.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+							var body = document.body;
+							if (!App.options.flags.mstouch)
+								body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+							if (App.options.flags.seamless)
+								body.style.overflow = "hidden";
+							if (App.options.flags.tight)
+								body.style.padding = "0px", body.style.margin = "0px auto";
+								
+								
+								
+								
+								
 							if (!this.menu) {
 									document.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
 									window.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
@@ -828,13 +861,13 @@ var App = Object.create({
 							window.addEventListener('mousewheel',App.ext.scroll.event,true);
 							if (App.ext.useragent.mouse) {
 								window.addEventListener('mousedown',function(evt) {
-										App.ext.input.listener.down(App.ext.input.position(App.client.visuals.canvas, evt),App.ext.input);
+										App.ext.input.listener.down(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
 									},true);
 								window.addEventListener('mousemove',function(evt) {
-										App.ext.input.listener.move(App.ext.input.position(App.client.visuals.canvas, evt),null,App.ext.input);
+										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt),null,App.ext.input);
 									},true);
 								window.addEventListener('mouseup',function(evt) {
-										App.ext.input.listener.up(App.ext.input.position(App.client.visuals.canvas, evt),App.ext.input);
+										App.ext.input.listener.up(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
 									},true);
 								}
 							if (!App.ext.useragent.touch) {
@@ -848,7 +881,7 @@ var App = Object.create({
 									},true);
 								window.addEventListener('touchmove',	function(evt) {
 										evt.preventDefault();
-										App.ext.input.listener.move(App.ext.input.position(App.client.visuals.canvas, evt), evt.targetTouches[0],App.ext.input);
+										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt), evt.targetTouches[0],App.ext.input);
 									},true);
 								}
 							if (App.ext.useragent.windows) {
@@ -904,16 +937,13 @@ var App = Object.create({
 			},
 			constructor:function(a){return{
 				app:{value:a},
-				init:{value:function(name){
-						(this.debug = Object.create(this.debug.prototype,this.debug.constructor(this.app))).init();
-						(this.cursor = Object.create(this.cursor.prototype,this.cursor.constructor(this.app))).init();
-						(this.useragent = Object.create(this.useragent.prototype,this.useragent.constructor())).init();
-						(this.input = Object.create(this.input.prototype,this.input.constructor(this.app))).init();
-						(this.colour = Object.create(this.colour.prototype,this.colour.constructor())).init();
-						(this.metatag = Object.create(this.metatag.prototype,this.metatag.constructor())).init();
-						this.title(name);
-						Debug.log("Framework:   Initilization: "+name);
-						Debug.log("Network:   Connection: "+!this.connect(this));
+				init:{value:function(){
+						(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
+						(this.cursor = this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
+						(this.useragent = this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
+						(this.input = this.app.Construct(this.input.prototype,this.input.constructor)).init();
+						(this.colour =	this.app.Construct(this.colour.prototype,this.colour.constructor)).init();
+						(this.metatag =	this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
 						}
 					}
 				}
@@ -921,6 +951,8 @@ var App = Object.create({
 		},
 		canvas:{
 			prototype:{
+				head:document.getElementsByTagName('head')[0],
+				rendering_style:document.createElement('style'),
 				canvas:NullObject,
 				buffer:NullObject,
 				canvasList:document.getElementsByTagName('canvas'),
@@ -939,7 +971,34 @@ var App = Object.create({
 						c.id = this.app.options.canvas.buffername;
 						document.body.appendChild(c);
 					return document.getElementById(this.app.options.canvas.buffername);
-				}
+				},
+				styleCanvas:function(){
+					this.getCanvas().style.position = this.app.options.canvas.position.position;
+					this.getCanvas().style.zIndex = this.app.options.canvas.position.z;
+					if (this.app.options.canvas.buffer)
+					{
+						this.getBuffer().style.position = this.app.options.canvas.position.position;
+						this.getBuffer().style.zIndex = this.app.options.canvas.position.z-1;
+					}
+					if (this.app.options.canvas.override)
+					{
+						this.getCanvas().style.left = this.app.options.canvas.position.left+"px";
+						this.getCanvas().style.top = this.app.options.canvas.position.top+"px";
+						if (this.app.options.canvas.buffer)
+						{
+							this.getBuffer().style.left = this.app.options.canvas.position.left+"px";
+							this.getBuffer().style.top = this.app.options.canvas.position.top+"px";
+						}
+					}
+				},
+				background_set:function(value) {
+					if (App.options.canvas.buffer)
+					this.buffer.style.background = value;
+					this.canvas.style.background = value;
+				},
+				background_get:function() {
+					return this.buffer.style.background;
+				},
 			},
 			constructor:function(app){return{
 				app:{value:app},
@@ -965,6 +1024,9 @@ var App = Object.create({
 							if (app.options.canvas.buffer)
 								this.setBuffer(this.createBuffer());
 							}
+						this.styleCanvas();
+						this.rendering_style.innerHTML = this.rendering_style.innerText = '@-ms-viewport {width:100%;height:100%;} #Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+						this.head.appendChild(this.rendering_style);
 						}
 					}
 				}
@@ -972,60 +1034,18 @@ var App = Object.create({
 		},
 		client:{
 			prototype:{
-
-				canvas:function(){
-				
-					//(this._Canvas?(this.c=document.getElementById(this._Canvas),this.b=document.getElementById(this._Buffer),this._Scale=false):(this._Scale=true,this.c=document.createElement("canvas"),this.b=document.createElement("canvas"),this.c.id="Client",this.b.id="Buffer",document.body.appendChild(this.c),document.body.appendChild(this.b)));
-					this.c = document.getElementById(this.app.options.canvas.name);
-					this.b = document.getElementById(this.app.options.canvas.buffer);
-					//if ((!App.options.flags.canvas))
-					//	return;
-					(this.visuals = this._Visuals = Object.create(this._Visuals.prototype,this._Visuals.constructor())).init(this);
-					this._Canvas?(
-						this.visuals.canvas.style.position = "relative",
-						this.visuals.canvas.style.zIndex = "1",
-						this.visuals.canvas.style.left = "0px",
-						this.visuals.canvas.style.top = "0px",
-						this.visuals.buffer.style.position = "relative",
-						this.visuals.buffer.style.zIndex = "0",
-						this.visuals.buffer.style.left = "0px",
-						this.visuals.buffer.style.top = "0px"):(    
-						this.visuals.canvas.style.position = "absolute",
-						this.visuals.canvas.style.zIndex = this.visuals.zindex,
-						this.visuals.canvas.style.top = "0px",
-						this.visuals.canvas.style.left = "0px",
-						this.visuals.buffer.style.position = "absolute",
-						this.visuals.buffer.style.zIndex = "0",
-						this.visuals.buffer.style.left = "0px",
-						this.visuals.buffer.style.top = "0px");
-				},
-				
-				init:function(name,w,h){
-					this.name = name;
-					this.discription = "Eh";
-					this.w = this.width = this.setWidth = w;
-					this.h = this.height = this.setHeight = h;
-					(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.c,this.b))).init();
-					this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
-					(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
-					(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
-					(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
-					(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
-					this._Main = Object.create(_Main.prototype,this._Main.constructor());
-					(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
-				},
 				start:function(loop,scale){
 					this.scale = scale;
 					this.client_f = loop;
 					requestNextAnimationFrame(this.client_f);
 				},
 				loop:function(a){
-					this.mute = this._Audio.update();
+					//this.mute = this._Audio.update();
 					this.scale = this.update.scale(this);
 					this.fps = this.update.step.tick(this.second,this.mainLoop,a);
 					App.ext.cursor.set("auto");
 					this.resized = this.update.size(this);
-					this._Visuals.draw(this.scale);
+					this.visuals.draw(this.scale);
 					a.ext.input.update();
 					requestNextAnimationFrame(this.client_f);
 				},
@@ -1040,46 +1060,54 @@ var App = Object.create({
 					resized:false,
 					set:0,
 					frames:0,
-					pause:function(){
-					
-					},
 					size:function(app){
 						this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w,this.last.h),new app.Math.Vec(app.width,app.height));
 						if ((this.difference.x + this.difference.y==0))
 							return false;
-						app._Visuals.canvas.width  = this.last.w = app.width;
-						app._Visuals.canvas.height = this.last.h = app.height;
-						app._Visuals.buffer.width  = this.last.w = app.width;
-						app._Visuals.buffer.height = this.last.h = app.height;
-						Debug.log(this.difference.x + this.difference.y);
-						
+						App.canvas.getCanvas().width  = this.last.w = app.width;
+						App.canvas.getCanvas().height = this.last.h = app.height;
+						App.canvas.getBuffer().width  = this.last.w = app.width;
+						App.canvas.getBuffer().height = this.last.h = app.height;
 						return true;
 						},
 					scale:function(app) {
 						if (this==window) 
-							return Debug.log('Warning: Scale: [this === window]');
+							return console.log('Warning: Scale: [this === window]');
 							else
 						if ((this.pause>0.5))
-							return Debug.log('Warning: Paused',30); 
+							return console.log('Warning: Paused',30); 
 							else
 						if (this.set==1)
-							return Debug.log('Warning: Scale: Duplicate Run',30); 
-						if (this.scaling)
-							{
-								if (window.innerHeight!==app.height)
-									app.height = window.innerHeight;
-								if (window.innerWidth!==app.innerWidth){
-									app.width = window.innerWidth;
-									
+							return console.log('Warning: Scale: Duplicate Run',30); 
+							
+						if (App.options.canvas.override)
+						{
+							if (App.options.canvas.size.width!==app.width)
+								app.width = App.options.canvas.size.width;
+							if (App.options.canvas.size.height!==app.height)
+								app.height = App.options.canvas.size.height;
+							
+							if (App.options.canvas.position.center)
+								{
+								if (App.options.canvas.size.left!==app.width/2)
+									{
+									App.canvas.getCanvas().style.left  = -app.width/2 + window.innerWidth/2+"px";
+								if (App.options.canvas.buffer)          
+									App.canvas.getBuffer().style.left  = -app.width/2 + window.innerWidth/2+"px";
 									}
-							}
-							else
-							{
-								if (window.innerHeight!==app.height)
-									app.height = app.setHeight;
-								if (window.innerWidth!==app.innerWidth)
-									app.width = app.setWidth;
-							}
+								}
+						}
+						else
+						{
+						
+						if (window.innerHeight!==app.height)
+							app.height = window.innerHeight;
+						if (window.innerWidth!==app.width)
+							app.width = window.innerWidth,console.log('');
+						}	
+						
+						
+						
 						this.set = 1;
 						this.scaler.x = app.height/app.setHeight;
 						this.scaler.y = app.width/app.setWidth;
@@ -1121,8 +1149,9 @@ var App = Object.create({
 							current:{},
 							initalized:false
 						},
-						constructor:function(){
+						constructor:function(app){
 							return	{
+								app:{value:app},
 								init:{value:function(state){
 										this.set(state,true);
 										this.initalized = true;
@@ -1133,7 +1162,8 @@ var App = Object.create({
 					},
 					step:{
 						first:function(step,app){ 
-							if (!step.Step(app))
+							
+							if ((typeof step == 'undefined')||(!step.Step(app)))
 								return;
 							this.fps = 1 * (this.clean()/step.delta * 1E3);
 							this.delta = step.targetfps / this.fps;
@@ -1161,7 +1191,7 @@ var App = Object.create({
 							return true;
 						},
 						second:function(step,app){
-							if (!step.Step(app))
+							if ((typeof step == 'undefined')||(!step.Step(app)))
 								return false;
 							this.frames++;
 							for(var s =this.addings;s>=0;--s)
@@ -1620,11 +1650,8 @@ var App = Object.create({
 					}
 				}
 			},
-			_Visuals:{
+			visuals:{
 				prototype:{
-					app:DefaultObject,
-					head:document.getElementsByTagName('head')[0],
-					rendering_style:document.createElement('style'),
 					stat:{
 							x:0,
 							y:0,
@@ -1648,114 +1675,43 @@ var App = Object.create({
 							}
 						},
 					stat2:DefaultObject,
-					canvas:DefaultObject,
-					canvas_context:DefaultObject,
-					buffer:DefaultObject,
-					buffer_context:DefaultObject,
 					alpha:0,
 					free:false,
 					point:14,
-					scale:0,
 					grd:DefaultObject,
 					zindex:1,
 					seamless:false,
 					tight:true,
 					disable:false,
-					body:function(){
-						if (!App.options.flags.mstouch)
-							document.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-						if (App.options.flags.seamless)
-							document.body.style.overflow = "hidden";
-						if (App.options.flags.tight)
-							document.body.style.padding = "0px", document.body.style.margin = "0px auto";
-					},
-					settings:[
-								["Full Clear", true],
-								["Wide Clear", true],
-								["Window Clear",false],
-								["optimized_resize",false],
-								["bufferMax",false],
-								["borders",true],
-								["disable",false]
-							],
-					init:DefaultFunction,
-					set:function(a,b){
-						return this.settings[a][1] = b;
-					},
+					buffer_target:0,
+					
+					canvas:DefaultObject,
+					buffer:DefaultObject,
+					canvas_context:DefaultObject,
+					buffer_context:DefaultObject,
+					scale:0,
 					draw:function(){
-						//!0==this.settings[1][1]?this.clear_wide():this.clear_fit());
-						//this.cleans.window();
-						if (this.disable)
-							return false;
-						this.clearing.pre();
-						if (this.app.update.state.initalized)
-							this.app.update.state.draw();
-						if (this.settings[6][1]==false)
-						{
-							this.debug();
-							this.clearing.buff(this);
-						}
-						//this.settings[2][1]?(this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight),this.canvas_context.drawImage(this.buffer,0,0)):this.canvas_context.drawImage(this.buffer,0,0);
-						//this.settings[4][1]?this.Borders():this.clearBorders();
-						this.scale = this.app.scale;
+						if (!this.app.client.fps>0)
+							return;
+						this.canvas_context.clearRect(0,0,window.innerWidth,window.innerHeight);
+						if (this.app.client.update.state.initalized)
+							this.app.client.update.state.draw();
+						this.flip();
+							//this.debug();
+						this.scale = this.app.client.scale;
 					},
-					clearing:{
-						settings:[
-								["WideClear", false],
-								["PreClear", true],
-								["BufferMax",false],
-								["Window Clear",true],
-								["optimized_resize",true],
-								["borders",true]
-							],
-						pre:function(){
-							!0==this.settings[1][1]?this.all():this.none();
-						},
-						buff:function(t){
-						
-							this.pre();
-							this.window();
-							!this.settings[2][1]?(t.canvas_context.drawImage(t.buffer,0,0),t.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight)):t.canvas_context.drawImage(t.buffer,0,0);
-						},
-						window:function(){
-							var a = App.client.width/App.client.scale;
-							var b = (App.client.setWidth*1.777)*0.5;
-							if (!this.settings[0][1]) {
-								this.clear(0-(a),0,a,App.client.setHeight);
-								this.clear(0+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
-							} else {
-								this.clear(-b*0.5-(a),0,a,App.client.setHeight);
-								this.clear(+b*0.5+(App.client.setWidth),0,App.client.setWidth+a,App.client.setHeight);
-							}
-							this.clear(-b,0,(App.client.setWidth*1.777)*2/App.client.scale,-App.client.height/App.client.scale);	
-							this.clear(-b,App.client.setHeight,(App.client.setWidth*1.777)*2/App.client.scale,App.client.height/App.client.scale);
-						},
-						none:function(){
-						
-						},
-						borders:function(){
-							this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
-							this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
-							this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
-							this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
-						},
-						all:function(){
-							//App.client._Visuals.rect(window.innerWidth/2,window.innerHeight/2,window.innerWidth,window.innerHeight,"000000",1,1,1);
-							//this.clear(-App.client.width,0,-App.client.width*2/App.client.scale,App.client.height);
-							//this.clear(+App.client.width*2,0,App.client.width*2/App.client.scale,App.client.height);
-							//this.clear(-App.client.width,-App.client.height,App.client.width*3,App.client.height*3);
-						},
-						clear: function(x,y,width,height) {
-							App.client._Visuals.stat = App.client._Visuals.chk(x,y,width,height,1);
-							App.client._Visuals.buffer_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
-							App.client._Visuals.settings[3][1]||App.client._Visuals.canvas_context.clearRect(App.client._Visuals.stat.x,App.client._Visuals.stat.y,App.client._Visuals.stat.w,App.client._Visuals.stat.h);
+					flip:function(){
+						if (this.app.options.canvas.buffer)
+						{
+							this.canvas_context.drawImage(this.buffer,0,0);
+							this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight);
 						}
 					},
 					fixX:function(x){
-						return ((x*this.scale)+(this.app.width/2)-(this.app.setWidth/2)*this.scale);
+						return ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale);
 					},
 					fixY:function(y){
-						return ((y*this.scale)+(this.app.height/2)-(this.app.setHeight/2)*this.scale);
+						return ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale);
 					},
 					fixW:function(w){
 						return (w*this.scale);
@@ -1799,17 +1755,17 @@ var App = Object.create({
 							return;
 						if ((App.ext.debug.strength=="off")||(App.ext.debug.strength=="none"))
 							return;
-						this.rect_ext(-this.app.setWidth,0,this.app.setWidth+this.app.setWidth+this.app.setWidth,this.point,1,0.1,0);
-						this.rect_ext(0,0,this.app.setWidth,this.point,1,0.1,0);
+						this.rect_ext(-this.app.client.setWidth,0,this.app.client.setWidth+this.app.client.setWidth+this.app.client.setWidth,this.point,1,0.1,0);
+						this.rect_ext(0,0,this.app.client.setWidth,this.point,1,0.1,0);
 						this.text_ext("0",	0,this.point*0.9,this.point*0.9);
-						this.text_ext(this.app.setWidth,	this.app.setWidth-25,this.point*0.9,this.point*0.9);
-						if (window.innerWidth>(this.app.setWidth*1.1)*this.scale)
+						this.text_ext(this.app.client.setWidth,	this.app.client.setWidth-25,this.point*0.9,this.point*0.9);
+						if (window.innerWidth>(this.app.client.setWidth*1.1)*this.scale)
 							{
 								this.text_free(0-this.fixX(0),	30,4+this.fixY(this.point),this.point*0.99);
-								this.text_free(this.app.width,	window.innerWidth-15,4+this.fixY(this.point),this.point*0.99);
+								this.text_free(this.app.client.width,	window.innerWidth-15,4+this.fixY(this.point),this.point*0.99);
 							}
-						//this.text_ext("Debug",	this.app.setWidth/2.5,this.point*0.9,this.point*0.9);
-						//this.text_ext(this.app.name,5,25,"#FFFFFF",4,1,0);
+						//this.text_ext("Debug",	this.app.client.setWidth/2.5,this.point*0.9,this.point*0.9);
+						//this.text_ext(this.app.client.name,5,25,"#FFFFFF",4,1,0);
 						//this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
 						//this.text_ext("x "+Math.round(App.ext.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
 						//this.text_ext("x: "+Math.round(App.ext.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
@@ -1819,9 +1775,9 @@ var App = Object.create({
 							console.log(App.fps);
 						
 						var data = [
-									[this.app.name],
+									[this.app.client.name],
 									[App.code+ " " +App.codefmk],
-									[this.app.name],
+									[this.app.client.name],
 									[
 									"app.ext.input",
 									"x "+Math.round(App.ext.input.x*100)/100		,
@@ -1836,27 +1792,27 @@ var App = Object.create({
 									[
 									"app.client",
 									"discription","","",
-									"width" ,this.app.setWidth,this.app.width,
-									"height",this.app.setHeight,this.app.height,
-									"fps",Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(this.app.fps*1000)/1000,"",
-									"scale",this.app.scale,"",
-									"delta",this.app.delta,"",
+									"width" ,this.app.client.setWidth,this.app.client.width,
+									"height",this.app.client.setHeight,this.app.client.height,
+									"fps",Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(this.app.client.fps*1000)/1000,"",
+									"scale",this.app.client.scale,"",
+									"delta",this.app.client.delta,"",
 									"buffer","double","",
 									],
 									[
 									"app.client.state","",
-									"[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",
+									"[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B",
 									"",
 									""
 									],
 									[
 									"app.client.data","",
-									"visuals ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Visuals):"?"),"",
-									"graphics ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Graphics):"?"),"",
-									"audio ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app._Audio):"?"),"",
-									"state ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(this.app.update.state.current):"?"),"",
-									"ext ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.kilobyteCount(App.ext):"?"),"",
-									"Total ",(App.ext.debug.strength!=="Lite"?this.app.Math.Data.Total():"?"),""
+									"visuals ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.visuals):"?"),"",
+									"graphics ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client._Graphics):"?"),"",
+									"audio ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client._Audio):"?"),"",
+									"state ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?"),"",
+									"ext ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?"),"",
+									"Total ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?"),""
 									
 									]
 								];
@@ -1876,66 +1832,29 @@ var App = Object.create({
 						//(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
 						//this.text_ext("I: "+App.ext.input.window.inside+" X: "+App.ext.input.window.x+" Y: "+App.ext.input.window.y,155,70);
 						//this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
-						//this.text_ext("Discription: "+this.app.discription,25,100,"#FFFFFF",1,1,0);
-						//this.text_ext("Fps: "+Math.round(this.app.fps)+"/"+this.app.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
-						//this.text_ext("Width: "+this.app.width,25,130,"#FFFFFF",1,1,0);
-						//this.text_ext("Height: "+App.client.height,25,145,"#FFFFFF",1,1,0);
-						//this.text_ext("setWidth: "+this.app.setWidth,110,130,"#FFFFFF",1,1,0);
-						//this.text_ext("setHeight: "+this.app.setHeight,110,145,"#FFFFFF",1,1,0);
+						//this.text_ext("Discription: "+this.app.client.discription,25,100,"#FFFFFF",1,1,0);
+						//this.text_ext("Fps: "+Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
+						//this.text_ext("Width: "+this.app.client.width,25,130,"#FFFFFF",1,1,0);
+						//this.text_ext("Height: "+this.app.client.height,25,145,"#FFFFFF",1,1,0);
+						//this.text_ext("setWidth: "+this.app.client.setWidth,110,130,"#FFFFFF",1,1,0);
+						//this.text_ext("setHeight: "+this.app.client.setHeight,110,145,"#FFFFFF",1,1,0);
 						//this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
-						//this.text_ext("Delta: "+App.client.delta,25,175,"#FFFFFF",1,1,0);
+						//this.text_ext("Delta: "+this.app.client.delta,25,175,"#FFFFFF",1,1,0);
 						//this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
 						//this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
-						//this.text_ext("[ "+this.app.update.state.name+" ] : "+this.app.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
-						this.text_ext("Log: "+App.ext.debug.text,35,this.app.setHeight-25,this.point);
+						//this.text_ext("[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
+						this.text_ext("Log: "+App.ext.debug.text,35,this.app.client.setHeight-25,this.point);
 						if (App.ext.debug.strength=="Lite")
 							return;
 							
 							try {
-						//this.text_ext("_Visuals: " 	+ this.app.Math.Data.kilobyteCount(App.client._Visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
+						//this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
 						}catch(e){}
-						//this.text_ext("_Graphics: " + this.app.Math.Data.kilobyteCount(App.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
-						//this.text_ext("_Audio: " 	+ this.app.Math.Data.kilobyteCount(App.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
-						//this.text_ext("_State: " 	+ this.app.Math.Data.kilobyteCount(App.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
-						//this.text_ext("ext: " 		+ this.app.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
-						//this.text_ext("Total: "		+ this.app.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
-					},
-					Borders: function() {
-						this.clear(0,0,-this.app.width,this.app.height/this.app.scale);
-						this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
-						this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
-						this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
-					},
-					clearBorders: function() {
-					
-						this.clear(-this.app.width,0,-this.app.width,this.app.height/this.app.scale);
-						this.clear(0+this.app.setWidth,0,this.app.width,this.app.height/this.app.scale);
-						this.clear(0,0,this.app.setWidth,-this.app.height/this.app.scale);	
-						this.clear(0,this.app.setHeight,this.app.setWidth,this.app.height/this.app.scale);
-					
-						return;
-						this.clear(-this.w,0,-this.w*2/this.scale,this.h);
-						this.clear(+this.w*2+2,0,this.w*2/this.scale,this.h);
-						this.clear(0,0,this.w,-this.h);	
-						this.clear(0,this.h,this.w,this.h);
-					},
-					clear_fit: function() {
-						this.clear(0,0,App.client.width,App.client.heighteight);
-					},
-					clear_wide: function() {
-						this.clear(-App.client.width,0,App.client.width*3,App.client.height);
-					},
-					clear: function(x,y,width,height) {
-						this.stat = this.chk(x,y,width,height,1);
-						this.buffer_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-						this.settings[3][1]||this.canvas_context.clearRect(this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-					},
-					background_set:function(value) {
-						this.buffer.style.background = value;
-						this.canvas.style.background = value;
-					},
-					background_get:function() {
-						return this.buffer.style.background;
+						//this.text_ext("_Graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
+						//this.text_ext("_Audio: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
+						//this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
+						//this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
+						//this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
 					},
 					clean:function(){
 						this.cleanAlpha?this.opacity(1):null;
@@ -2056,6 +1975,12 @@ var App = Object.create({
 						this.buffer_context.shadowOffsetX = x;
 						this.buffer_context.shadowOffsetY = y;
 					},
+					rect:function (x,y,w,h,colour){
+						this.rect_ext(x,y,w,h,1,1,0,colour);
+					},
+					rect_centered:function (x,y,w,h,colour){
+						this.rect_ext(x,y,w,h,1,1,1,colour);
+					},
 					rect_ext:function(x,y,w,h,s,a,c,colour){
 						this.stat = this.chk(x,y,w,h,s,a,c,colour);
 						this.buffer_context.beginPath();
@@ -2076,9 +2001,6 @@ var App = Object.create({
 						
 						this.clean();
 					},	
-					rect:function (x,y,w,h,colour){
-						this.rect_ext(x,y,w,h,1,1,1,colour);
-					},
 					rect_button:function(x,y,w,h,colour,loc,c){
 						this.stat = this.chk(x,y,w,h,1,1,1,colour);
 						if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h))
@@ -2217,36 +2139,31 @@ var App = Object.create({
 						this.buffer_context.fill();
 					},
 					circle_free:function(x,y,r,col,a){
-						this.opacity(a);
+						this.stat = this.chk(x,y,r,r,r,a,1,col);
 						this.buffer_context.beginPath();
 						this.buffer_context.arc(x, y, r*this.scale, 0, 2 * Math.PI, false);
-						this.buffer_context.fillStyle = col;
+						this.buffer_context.fillStyle = this.stat.col;
 						this.buffer_context.fill();
+						this.clean();
 					},
 					text_width:function(string) {
 						return this.buffer_context.measureText(string).width; // Not WOrking
 					}
 				},
-				constructor:function(){return {
-					
-					init:{value:function(app){
-						this.app = app;
-						this.scale = app.scale;
-						this.canvas = App.canvas.canvas;
-						this.buffer = App.canvas.buffer;
-						this.canvas_context = this.canvas.getContext("2d");
-						this.buffer_context = this.buffer.getContext("2d");
-						this.background_set("transparent");
-						
-						if (!App.options.override.SelectStart)
-							App.canvas.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
-						if (!App.options.override.MSHoldVisual)
-							App.canvas.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
-
-						this.rendering_style.innerHTML = this.rendering_style.innerText = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
-						this.head.appendChild(this.rendering_style);
-						this.body();
-					}}}
+				constructor:function(app){return {
+					app:{value:app},
+					init:{value:function(){
+							this.scale = this.app.scale;
+							this.canvas = this.app.canvas.getCanvas();
+							this.buffer = this.app.canvas.getBuffer();
+							this.canvas_context = this.canvas.getContext("2d");
+							if (this.app.options.canvas.buffer)
+								this.buffer_context = this.buffer.getContext("2d");
+								else
+								this.buffer_context = this.canvas.getContext("2d");
+							}
+						}
+					}
 				}
 			},
 			_Cookies:{
@@ -2288,7 +2205,6 @@ var App = Object.create({
 						}
 					}
 				},
-				name:"",
 				discription:"",
 				scale:1,
 				delta:1,
@@ -2298,12 +2214,26 @@ var App = Object.create({
 				setHeight:0,
 				resized:false,
 				targetfps:60,
-				_Main:{constructor:function(){return {name:{value:"Main"}};}},
-				c:{},
-				b:{}
+				_Main:{constructor:function(){return {name:{value:"Main"}};}}
 				},
 			constructor:function(a){return{
-				app:{value:a}
+				app:{value:a},
+				init:{value:function(name,w,h){
+							this.app.ext.title(name);
+							this.discription = "Eh";
+							this.w = this.width = this.setWidth = w;
+							this.h = this.height = this.setHeight = h;
+							(this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
+							(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.app.canvas.getCanvas(),this.app.canvas.getBuffer()))).init();
+							this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
+							(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
+							(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
+							(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
+							(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
+							this._Main = Object.create(_Main.prototype,this._Main.constructor());
+							(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
+						}
+					}
 				}
 			}
 		}
@@ -2333,7 +2263,6 @@ var App = Object.create({
 				}
 			},
 			OnApplicationLoad:{writable:false, configurable:false, enumerable:false, value:function(){
-				//App.client = Object.create(App.client.prototype,App.client.constructor(App));
 				App.OnStart();
 				App.OnLoad();
 				}
@@ -2341,15 +2270,15 @@ var App = Object.create({
 			OnStart:{writable:false, configurable:false, enumerable:false, value:function(){
 				
 				(this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
-				console.log(this.canvas);
-				(this.client = this.Construct(this.client.prototype,this.client.constructor)).canvas();
-				//(this.client = Object.create(this.client.prototype,this.client.constructor(this))).canvas();
-				(this.ext = this.Construct(this.ext.prototype,this.ext.constructor(this))).init(name);
+				(this.client = this.Construct(this.client.prototype,this.client.constructor));
+				(this.ext = this.Construct(this.ext.prototype,this.ext.constructor)).init();
+	
+				this.time = (( new Date().getTime())-TT)*100;
 				setTimeout(
 					function(A){
 						function AppLoop(){App=A;A.client.loop(A);}
 						A.client.start(AppLoop,A.scale);
-					}(this),1600);
+					}(this),this.time);
 				}
 			},
 			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
@@ -2357,18 +2286,15 @@ var App = Object.create({
 				}
 			},
 			scripts:{value:window.scripts},
-			codefmk:{value:'0.6.50.14.23.06.min'},
+			codefmk:{value:'0.6.50.14.26.06.min'},
 			code:{value:"0"}
 	},
 	scripts:[],
-	mainLoop:{},
-	second:{},
 	framesT:0.0,
 	frames:0.0,
 	delta:0.0,
 	debug:false,
-	codefmk:"",
-	code:"",
+	time:0,
 	fps:0,
 	width:320,
 	height:480
