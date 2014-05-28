@@ -937,7 +937,8 @@ var App = Object.create({
 			},
 			constructor:function(a){return{
 				app:{value:a},
-				init:{value:function(){
+				init:{value:function(name){
+						this.title(name);
 						(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
 						(this.cursor = this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
 						(this.useragent = this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
@@ -1335,7 +1336,7 @@ var App = Object.create({
 								return {
 								app : {value:App},
 								visuals :   {value:App.client.visuals},
-								graphics :  {value:App.client._Graphics}
+								graphics :  {value:App.client.graphics}
 								};
 							}}
 						}
@@ -1547,7 +1548,7 @@ var App = Object.create({
 						return this.aniImage;
 				}
 			},
-			_Graphics:{
+			graphics:{
 				prototype:{
 					path:"",
 					SpriteWebItems:new Array(0),
@@ -1608,7 +1609,6 @@ var App = Object.create({
 							unload:{value:function unload(name)
 							{
 								this.index[name]=null; 
-								delete this.index[name]; 
 								Debug.log('GraphicsController: unload: '+name);
 								return this.index[name];
 							}},
@@ -1621,10 +1621,10 @@ var App = Object.create({
 								img.src = this.src;
 								img.file = this.file;
 								img.name = this.name;
-								img.number = 1+ App.client._Graphics.SpriteLoadErrors++;
+								img.number = 1+ this.app.client.graphics.SpriteLoadErrors++;
 								img.onload = function() {
-										App.client._Graphics.SpriteLoadErrors--;
-										Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client._Graphics.SpriteLoadErrors));
+										this.app.client.graphics.SpriteLoadErrors--;
+										Debug.log("GraphicsController: loaded: "+this.name+":"+(this.app.client.graphics.SpriteLoadErrors));
 										
 									};
 								return img;
@@ -1641,10 +1641,10 @@ var App = Object.create({
 						return this.Sources.getByName(name); 
 					},
 				},
-				constructor:function(){return {
+				constructor:function(app){return {
+					app:{value:app},
 					init:{value:function(){
 							this.graphicsLibrary();
-							Debug.log('GraphicsController: Init');
 							return true;
 						}}
 					}
@@ -1691,14 +1691,18 @@ var App = Object.create({
 					buffer_context:DefaultObject,
 					scale:0,
 					draw:function(){
-						if (!this.app.client.fps>0)
-							return;
 						this.canvas_context.clearRect(0,0,window.innerWidth,window.innerHeight);
 						if (this.app.client.update.state.initalized)
 							this.app.client.update.state.draw();
 						this.flip();
 							//this.debug();
 						this.scale = this.app.client.scale;
+					},
+					getX:function(){
+						return App.ext.input.x-(-App.client.setWidth/2+window.innerWidth/2)+this.app.options.canvas.position.left/3;
+					},
+					getY:function(){
+						return App.ext.input.y-this.app.options.canvas.position.top;
 					},
 					flip:function(){
 						if (this.app.options.canvas.buffer)
@@ -1808,7 +1812,7 @@ var App = Object.create({
 									[
 									"app.client.data","",
 									"visuals ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.visuals):"?"),"",
-									"graphics ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client._Graphics):"?"),"",
+									"graphics ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.graphics):"?"),"",
 									"audio ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client._Audio):"?"),"",
 									"state ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?"),"",
 									"ext ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?"),"",
@@ -1850,7 +1854,7 @@ var App = Object.create({
 							try {
 						//this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
 						}catch(e){}
-						//this.text_ext("_Graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client._Graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
+						//this.text_ext("graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
 						//this.text_ext("_Audio: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
 						//this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
 						//this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
@@ -2001,16 +2005,24 @@ var App = Object.create({
 						
 						this.clean();
 					},	
-					rect_button:function(x,y,w,h,colour,loc,c){
-						this.stat = this.chk(x,y,w,h,1,1,1,colour);
-						if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h))
+					setting:true,
+					rect_button:function(x,y,w,h,s,a,colour,loc,c){
+						this.stat = this.chk(x,y,w,h,s,a,c,colour);
+						var t = false;
+						if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.c))
 						{
+							t = true;
 							App.ext.cursor.set(App.ext.cursor.pointer,true);
 							if (App.ext.input.released)
 								if (App.ext.input.delay<1)
 									loc(),App.ext.input.delay = 1;
 						}
-						this.rect_ext(x,y,w,h,1,1,c,colour);
+						if (this.setting)
+							this.rect_ext(x,y,w,h,s,a,c,colour);
+							//else
+							var ww = 1;
+							if (t)
+							this.rect_ext(x-ww,y-ww,w+ww*2,h+ww*2,s,a,c,colour);
 					},
 					rect_rotate:function(x,y,w,h,colour,s,a,angle){
 						this.stat = this.chk(x,y,w,h,s,a,1,colour);
@@ -2219,12 +2231,13 @@ var App = Object.create({
 			constructor:function(a){return{
 				app:{value:a},
 				init:{value:function(name,w,h){
-							this.app.ext.title(name);
+							(this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
 							this.discription = "Eh";
 							this.w = this.width = this.setWidth = w;
 							this.h = this.height = this.setHeight = h;
 							(this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
-							(this._Graphics = Object.create(this._Graphics.prototype,this._Graphics.constructor(this,this.app.canvas.getCanvas(),this.app.canvas.getBuffer()))).init();
+							(this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
+							
 							this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
 							(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
 							(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
@@ -2239,7 +2252,8 @@ var App = Object.create({
 		}
 	},
 	constructor:{	
-			init:{writable: true,  configurable:true, enumerable:false, value:function(name,w,h){	
+			Init:{writable: true,  configurable:true, enumerable:false, value:function(name,w,h){	
+				(this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
 				this.client.init(name,w,h);
 				}
 			},		
@@ -2268,21 +2282,20 @@ var App = Object.create({
 				}
 			},	
 			OnStart:{writable:false, configurable:false, enumerable:false, value:function(){
-				
-				(this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
 				(this.client = this.Construct(this.client.prototype,this.client.constructor));
-				(this.ext = this.Construct(this.ext.prototype,this.ext.constructor)).init();
-	
-				this.time = (( new Date().getTime())-TT)*100;
-				setTimeout(
-					function(A){
-						function AppLoop(){App=A;A.client.loop(A);}
-						A.client.start(AppLoop,A.scale);
-					}(this),this.time);
+				(this.time = (( new Date().getTime())-TT)*100);
+				setTimeout(	function(A){
+				
+								function AppLoop(){
+									App=A;
+									A.client.loop(A);
+								}
+								A.client.start(AppLoop,A.scale);
+							}(this),this.time);
 				}
 			},
 			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
-				App.init("Spice.js",480,320);
+				App.Init("Spice.js",480,320);
 				}
 			},
 			scripts:{value:window.scripts},
@@ -2294,6 +2307,7 @@ var App = Object.create({
 	frames:0.0,
 	delta:0.0,
 	debug:false,
+	
 	time:0,
 	fps:0,
 	width:320,
