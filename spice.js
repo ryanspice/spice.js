@@ -8,6 +8,11 @@
 	  Created By: Ryan Spice-Finnie
 	  
 */
+
+/*jslint node: true */
+/*jshint strict:false */
+/* jshint -W097 */
+
 "use strict";
 
 
@@ -30,28 +35,29 @@ var Properties = Object.create(null,{
 	});
 	Properties.acessor.set(1);
 console.log(Properties);*/
-var _Rectangle = {};_Rectangle.prototype = {
-	x:0,
-	y:0,
-	a:0,
-	draw:function(x,y,w,h,a,c){
-		if (this.a!=a)
-			this.a=a;
-		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
-	}
-}
-var addListener = function(obj, eventName, listener) {
-	if(obj.addEventListener)
-		obj.addEventListener(eventName, listener, false);
-		else 
+//var _Rectangle = {};
+//_Rectangle.prototype = {
+//	x: 0,
+//	y: 0,
+//	a: 0,
+//	draw: function(x,y,w,h,a,c){
+//		if (this.a!=a)
+//			this.a=a;
+//		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
+//	}
+//}
+var addListener = function (obj, eventName, listener) {
+	if (obj.addEventListener)
+        obj.addEventListener(eventName, listener, false);
+    else
 		obj.attachEvent("on" + eventName, listener);
 }
 
 
-	var sprite = Object.create(null);
-	var img = Object.create(null);
-	var Scripts, _Main = Object.create(null,{name:{value:"Main"}}),
-	Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
+var sprite = Object.create(null);
+var img = Object.create(null);
+var Scripts, _Main = Object.create(null,{name:{value:"Main"}}),
+Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
 	
 	
 
@@ -1038,17 +1044,17 @@ var App = Object.create({
 				start:function(loop,scale){
 					this.scale = scale;
 					this.client_f = loop;
-					requestNextAnimationFrame(this.client_f);
+					requestAnimationFrame(this.client_f);
 				},
 				loop:function(a){
-					//this.mute = this._Audio.update();
+					this.mute = this._Audio.update();
 					this.scale = this.update.scale(this);
 					this.fps = this.update.step.tick(this.second,this.mainLoop,a);
 					App.ext.cursor.set("auto");
 					this.resized = this.update.size(this);
 					this.visuals.draw(this.scale);
 					a.ext.input.update();
-					requestNextAnimationFrame(this.client_f);
+					requestAnimationFrame(this.client_f);
 				},
 				update:{
 					last:{w:0,h:0},
@@ -1315,6 +1321,8 @@ var App = Object.create({
 				draw:function(l){
 				
 					for (this.p=_Rain.size-1; this.p;--this.p)
+						if (_RainParticles[this.p].y>App.client.visuals.fixY(0))
+						if (_RainParticles[this.p].y<App.client.visuals.fixY(App.client.setHeight))
 						_RainParticles[this.p].draw(App.client.visuals,l);
 				},
 				update:function(){
@@ -1621,10 +1629,10 @@ var App = Object.create({
 								img.src = this.src;
 								img.file = this.file;
 								img.name = this.name;
-								img.number = 1+ this.app.client.graphics.SpriteLoadErrors++;
+								img.number = 1+ App.client.graphics.SpriteLoadErrors++;
 								img.onload = function() {
-										this.app.client.graphics.SpriteLoadErrors--;
-										Debug.log("GraphicsController: loaded: "+this.name+":"+(this.app.client.graphics.SpriteLoadErrors));
+										App.client.graphics.SpriteLoadErrors--;
+										Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client.graphics.SpriteLoadErrors));
 										
 									};
 								return img;
@@ -2080,9 +2088,9 @@ var App = Object.create({
 					
 					image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
 						this.stat = this.chk(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
-						this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
+						var s = this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
 						var w = false;
-						if (this.touch_within_stat(this.stat2))
+						if (this.touch_within_stat(s))
 						{
 							w = true;
 							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
@@ -2322,59 +2330,28 @@ Scripts = window.scripts = [''];
 */
 
 /* Custom Polyfill for RequestAnimationFrame */
-document.requestNextAnimationFrame = window.requestNextAnimationFrame =
-		    (function () {
-			var originalWebkitRequestAnimationFrame = undefined;
-			var wrapper = undefined;
-			var callback = undefined;
-			var geckoVersion = 0;
-			var userAgent = navigator.userAgent;
-			var index = 0;
-			var self = this;
-			if (window.webkitRequestAnimationFrame) 
-				{
-					wrapper = function (time) {
-					if (time === undefined) 
-						{
-							time = +new Date();
-						}
-					self.callback(time);
-				 };
-				 originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame;
-				 window.webkitRequestAnimationFrame = function (callback, element) 
-				 {
-					self.callback = callback;
-					originalWebkitRequestAnimationFrame(wrapper, element);
-				 }
-				}
-			if (window.mozRequestAnimationFrame) 
-				{
-				 index = userAgent.indexOf('rv:');
-				 if (userAgent.indexOf('Gecko') != -1) 
-					{
-					geckoVersion = userAgent.substr(index + 3, 3);
-					if (geckoVersion === '2.0') 
-						{
-					   window.mozRequestAnimationFrame = undefined;
-						}
-					}
-			  }
-			  return window.requestAnimationFrame   ||
-				 window.webkitRequestAnimationFrame ||
-				 window.mozRequestAnimationFrame    ||
-				 window.oRequestAnimationFrame      ||
-				 window.msRequestAnimationFrame     ||
-				 function (callback, element) 
-				 {
-					var start;
-					var finish;
-					window.setTimeout( function () 
-						{
-							start = +new Date();
-							callback(start);
-							finish = +new Date();
-							self.timeout = 1000 / 60 - (finish - start);
-						}, self.timeout);
-				 };
-			  }
-		   )();
+if (!Date.now)
+    Date.now = function() { return new Date().getTime(); };
+
+(function() {
+    'use strict';
+    
+    var vendors = ['webkit', 'moz'];
+    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+        var vp = vendors[i];
+        window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
+                                   || window[vp+'CancelRequestAnimationFrame']);
+    }
+    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
+        || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+        var lastTime = 0;
+        window.requestAnimationFrame = function(callback) {
+            var now = Date.now();
+            var nextTime = Math.max(lastTime + 16, now);
+            return setTimeout(function() { callback(lastTime = nextTime); },
+                              nextTime - now);
+        };
+        window.cancelAnimationFrame = clearTimeout;
+    }
+}());
