@@ -35,17 +35,17 @@ var Properties = Object.create(null,{
 	});
 	Properties.acessor.set(1);
 console.log(Properties);*/
-//var _Rectangle = {};
-//_Rectangle.prototype = {
-//	x: 0,
-//	y: 0,
-//	a: 0,
-//	draw: function(x,y,w,h,a,c){
-//		if (this.a!=a)
-//			this.a=a;
-//		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
-//	}
-//}
+var _Rectangle = {};
+_Rectangle.prototype = {
+	x: 0,
+	y: 0,
+	a: 0,
+	draw: function(x,y,w,h,a,c){
+		if (this.a!=a)
+			this.a=a;
+		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
+	}
+}
 var addListener = function (obj, eventName, listener) {
 	if (obj.addEventListener)
         obj.addEventListener(eventName, listener, false);
@@ -75,6 +75,7 @@ var TT = new Date().getTime();
 var App = Object.create({
 	prototype:{
 		options:{
+			mute:false,
 			canvas:{
 				name:'canvas',
 				buffername:'buffer',
@@ -95,14 +96,14 @@ var App = Object.create({
 			},
 			flags:{
 				canvas:true,
-				mstouch:false,
+				mstouch:true,
 				seamless:false,
 				tight:true
 			},
 			override:{
 				keyboard:true,
 				mouse:true,
-				MSHoldVisual:false,
+				MSHoldVisual:true,
 				SelectStart:false
 				},
 			paths:{
@@ -2043,8 +2044,12 @@ var App = Object.create({
 					},
 					rect_gradient:function(x,y,w,h,s,a,c,colour,colour2,angle){
 						this.stat = this.chk(x,y,w,h,s,a,c,colour);
+						return;
+						console.log(x,y,w,h,s,a,c,c,colour,colour2,angle);
+						console.log(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.s,this.stat.a,this.stat.c,this.stat.colour);
 						this.buffer_context.translate(this.stat.x,this.stat.y);
 						this.buffer_context.rotate(angle*0.0174532925);
+						
 						this.stat.c?this.grd = this.buffer_context.createLinearGradient(this.stat.w/2,0, this.stat.w/2, this.stat.h/2):this.grd = this.buffer_context.createLinearGradient(0,0, this.stat.w, this.stat.h);
 						this.buffer_context.beginPath();
 						this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
@@ -2329,6 +2334,7 @@ Scripts = window.scripts = [''];
 				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+App.options.paths.data+s+'" defer></'+t+">"),a.src=App.options.paths.data+s}(document,"script",window.scripts))){};
 */
 
+/* Custom Polyfill for RequestAnimationFrame */
 /* Custom Polyfill for RequestAnimationFrame */
 if (!Date.now)
     Date.now = function() { return new Date().getTime(); };
