@@ -96,14 +96,14 @@ var App = Object.create({
 			},
 			flags:{
 				canvas:true,
-				mstouch:true,
+				mstouch:false,
 				seamless:false,
 				tight:true
 			},
 			override:{
 				keyboard:true,
 				mouse:true,
-				MSHoldVisual:true,
+				MSHoldVisual:false,
 				SelectStart:false
 				},
 			paths:{
@@ -282,18 +282,28 @@ var App = Object.create({
 							return navigator.userAgent.match(/Android/i) ? true : false;
 						},
 						BlackBerry:function(){
-							return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+							var blackberry = navigator.userAgent.match(/BlackBerry/i);
+							var playbook = navigator.userAgent.match(/PlayBook/i);
+							var bb10 = navigator.userAgent.match(/BB10/i);
+							return blackberry||playbook||bb10 ? true : false;
 						},
 						iOS:function(){
 							return  navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
 						},
 						iemobile:false,
 						IEMobile: function(){
-							return  navigator.userAgent.match(/IEMobile/i) ? true : false;
+							var trident = navigator.userAgent.match(/IEMobile/i);
+							var windowsphone = navigator.userAgent.match(/Windows Phone/i);
+							var touch = navigator.userAgent.match(/touch/i);
+							return  trident || windowsphone || touch ? true : false;
 						},
 						ie:false,
 						IE: function(){
 							return  navigator.userAgent.match(/Trident/i) ? true : false;
+						},
+						nokia:false,
+						Nokia: function(){
+							return  navigator.userAgent.match(/Nokia/i) ? true : false;
 						},
 						any: function(){
 							return (this.Android() || this.BlackBerry() || this.iOS());
@@ -305,15 +315,17 @@ var App = Object.create({
 								this.chrome = this.Chrome();
 								this.safari = this.Safari();
 								this.mouse = this.any();
-								
 								this.iemobile = this.IEMobile();
+								this.nokia = this.Nokia();
 								this.windows = this.IEMobile() || this.IE() || !this.any();
 								
 								this.ie = this.trident = this.IE();
 								this.touch = this.any();
 								this.mouse = !this.any() || this.BlackBerry();
 								this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
-								Debug.log('UserAgent: '+this.agent);
+							
+								this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+								console.log('UserAgent: '+this.mobile);
 								}
 							}
 						}
@@ -828,7 +840,7 @@ var App = Object.create({
 									window.ondragstart   = function(evt) {evt.preventDefault(); return false; };
 								}
 								
-							if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
+							//if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
 									window.addEventListener('keydown', 	function(event) {
 										App.ext.input.codedown = App.ext.input.codes[event.keyCode];
 										if (event.ctrlKey)
@@ -864,9 +876,9 @@ var App = Object.create({
 											}
 										App.ext.input.codereleased = true;
 									},true);
-								}
+								//}
 							window.addEventListener('mousewheel',App.ext.scroll.event,true);
-							if (App.ext.useragent.mouse) {
+							//if (App.ext.useragent.mouse) {
 								window.addEventListener('mousedown',function(evt) {
 										App.ext.input.listener.down(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
 									},true);
@@ -876,8 +888,8 @@ var App = Object.create({
 								window.addEventListener('mouseup',function(evt) {
 										App.ext.input.listener.up(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
 									},true);
-								}
-							if (!App.ext.useragent.touch) {
+								//}
+							//if (!App.ext.useragent.touch) {
 								window.addEventListener('touchstart',	function(evt) {
 										evt.preventDefault();
 										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
@@ -890,8 +902,8 @@ var App = Object.create({
 										evt.preventDefault();
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt), evt.targetTouches[0],App.ext.input);
 									},true);
-								}
-							if (App.ext.useragent.windows) {
+							//	}
+							//if (App.ext.useragent.windows) {
 								window.addEventListener('MSPointerDown',function(evt) {
 										App.ext.input.listener.down(App.ext.input.position(App.client.c, evt),App.ext.input);
 									},true);
@@ -901,7 +913,7 @@ var App = Object.create({
 								window.addEventListener('MSPointerUp',	function(evt) {
 										App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
 									},true);
-								}
+								//}
 							}
 						}
 					}
@@ -1048,7 +1060,7 @@ var App = Object.create({
 					requestAnimationFrame(this.client_f);
 				},
 				loop:function(a){
-					this.mute = this._Audio.update();
+					this.mute = this.audio.update();
 					this.scale = this.update.scale(this);
 					this.fps = this.update.step.tick(this.second,this.mainLoop,a);
 					App.ext.cursor.set("auto");
@@ -1388,7 +1400,7 @@ var App = Object.create({
 					}
 				}
 			},
-			_Audio:{
+			audio:{
 				prototype:{
 					mute:false,
 					quality:0,
@@ -1396,6 +1408,13 @@ var App = Object.create({
 					audio: new Audio(),
 					sound: new Array(new Audio()),
 					length: new Array(),
+					soundbyte:function(filename,callback){
+						this.fname = new Audio(filename);
+						this.play = function play() {
+							this.fname.pause();
+							this.fname.play();
+						}
+					},
 					MultiChannelSound:function(filename,channelQ,callback){	
 						if (App.ext.useragent.ie)
 							return;
@@ -1432,9 +1451,22 @@ var App = Object.create({
 						//(this.mute)?this.sound[this.current].play():this.sound.[this.current].pause();
 						return this.mute = !this.mute;
 					},
-					set:function(index){
-						if (App.ext.useragent.ie)
+					set:function(index,reset){
+						this.sound[this.current].pause()
+						this.sound[this.current] = index;
+						try{
+							this.sound[this.current].currentTime = 0;
+							}catch(e){}
+						return;for(var i=0;i>0;--i)
+						if (App.ext.useragent.mobile){
+							index.play();
 							return;
+						}
+						else
+						{
+						index.play();	
+							return;
+						}
 						if (!this.mute)
 							{
 							this.sound[this.current].pause();
@@ -1446,6 +1478,9 @@ var App = Object.create({
 							}
 					},
 					update:function() {
+						if (typeof this.sound === 'object')
+							if (this.sound[this.current].paused)
+								this.sound[this.current].play();
 						return;
 						if (this.sound[this.current]==="undefined")
 							return;
@@ -1822,7 +1857,7 @@ var App = Object.create({
 									"app.client.data","",
 									"visuals ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.visuals):"?"),"",
 									"graphics ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.graphics):"?"),"",
-									"audio ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client._Audio):"?"),"",
+									"audio ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.audio):"?"),"",
 									"state ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?"),"",
 									"ext ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?"),"",
 									"Total ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?"),""
@@ -1864,7 +1899,7 @@ var App = Object.create({
 						//this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
 						}catch(e){}
 						//this.text_ext("graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
-						//this.text_ext("_Audio: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client._Audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
+						//this.text_ext("audio: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
 						//this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
 						//this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
 						//this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
@@ -2253,7 +2288,7 @@ var App = Object.create({
 							
 							this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
 							(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
-							(this.audio = this._Audio = Object.create(this._Audio.prototype,this._Audio.constructor())).init();
+							(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
 							(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
 							(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
 							this._Main = Object.create(_Main.prototype,this._Main.constructor());
@@ -2334,7 +2369,6 @@ Scripts = window.scripts = [''];
 				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+App.options.paths.data+s+'" defer></'+t+">"),a.src=App.options.paths.data+s}(document,"script",window.scripts))){};
 */
 
-/* Custom Polyfill for RequestAnimationFrame */
 /* Custom Polyfill for RequestAnimationFrame */
 if (!Date.now)
     Date.now = function() { return new Date().getTime(); };
