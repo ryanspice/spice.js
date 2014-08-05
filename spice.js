@@ -2115,7 +2115,8 @@ var App = Object.create({
 					},
 					image_part:function(image,x,y,s,a,c,xx,yy,w,h){
 						this.stat = this.chk(x,y,w,h,s,a,c);
-						this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h,1,1,image.width,image.height);
+						var scale = (1.1*this.stat.s)*App.client.scale;
+						(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					},
 					image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
 						this.stat = this.chk(x,y,image.width,image.height,s,a,true);
