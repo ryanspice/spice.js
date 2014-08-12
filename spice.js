@@ -96,9 +96,10 @@ var App = Object.create({
 			},
 			flags:{
 				canvas:true,
-				mstouch:false,
+				mstouch:true,
 				seamless:false,
-				tight:true
+				tight:true,
+				touchprevent:false,
 			},
 			override:{
 				keyboard:true,
@@ -891,14 +892,17 @@ var App = Object.create({
 								//}
 							//if (!App.ext.useragent.touch) {
 								window.addEventListener('touchstart',	function(evt) {
+										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
 									},true);
 								window.addEventListener('touchend',		function(evt) {
+										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.up(evt,App.ext.input);
 									},true);
 								window.addEventListener('touchmove',	function(evt) {
+										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt), evt.targetTouches[0],App.ext.input);
 									},true);
@@ -2149,9 +2153,19 @@ var App = Object.create({
 						return w;
 					},
 					touch_within:function(x, y, w, h,c) {
+						var doc = document.documentElement;
+						this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+						this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+						y = y - this.top;
+						x = x - this.left;
 						return c?((App.ext.input.x>x-w/2&&App.ext.input.x<x+w/2&&App.ext.input.y>y-h/2&&App.ext.input.y<y+h/2)?true:false):((App.ext.input.x>x&&App.ext.input.x<x+w&&App.ext.input.y>y&&App.ext.input.y<y+h)?true:false);
 					},
 					touch_within_stat:function(stat) {
+						var doc = document.documentElement;
+						this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+						this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+						stat.y = stat.y - this.top;
+						stat.x = stat.x - this.left;
 						return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
 					},
 					line:function(x,y,x2,y2,col,a){
