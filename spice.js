@@ -96,10 +96,10 @@ var App = Object.create({
 			},
 			flags:{
 				canvas:true,
-				mstouch:true,
+				mstouch:false,
 				seamless:false,
 				tight:true,
-				touchprevent:false,
+				touchprevent:true,
 			},
 			override:{
 				keyboard:true,
@@ -108,8 +108,8 @@ var App = Object.create({
 				SelectStart:false
 				},
 			paths:{
-				data:"data/",
-				images:"images/",
+				data:"",
+				images:"",
 				url:""
 			}
 		},
@@ -222,18 +222,31 @@ var App = Object.create({
 						}
 					}
 				},
+				
+				//Toggle top snap
 				top:function(){
-					App.client.update.fullscale = !App.client.update.fullscale;
+					
+					//Toggle fullscale
+					this.app.client.update.fullscale = !this.app.client.update.fullscale;
+					
 				},
+				
+				//Assign document title
 				title:function(title){
-					return document.title==title?true:(document.title=title);
+					
+					//Return document title 
+					return (document.title==title?(document.title):(document.title=title));
+					
 				},
+				
+				//Debug Object
 				debug:{
 					prototype:{
 						delay:0,
 						text:String,
 						strength:"Normal",
 						log:function(txt,n)	{
+							return true;
 							this.text = txt;
 							this.delay.value--;
 							if ((this.delay.value==0)&&(typeof n!=="undefined"))
@@ -326,7 +339,6 @@ var App = Object.create({
 								this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
 							
 								this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-								console.log('UserAgent: '+this.mobile);
 								}
 							}
 						}
@@ -334,6 +346,10 @@ var App = Object.create({
 				},
 				metatag:{
 					prototype:{
+						metaFavicon: function(img) {
+							
+							this.metaAppend(this.metaLink(img,"shortcut icon","image/png"));
+						},
 						metaLink: function(href,rel,type) {
 							this.link = document.createElement('link');
 							this.link.href = href;
@@ -476,6 +492,8 @@ var App = Object.create({
 						parent:Private,
 						x: 0,
 						y: 0,
+						touch:false,
+						touch_dist:{x:0,y:0},
 						keyup:false,keydown:false,
 						start: 		{x:0,y:0},				
 						control:false,
@@ -495,49 +513,34 @@ var App = Object.create({
 						getPressed:function(){return this.pressed;},
 						getReleased:function(){return this.released;},
 						listener:{
-							down:function(mouse,input) {
-								if (input.delay>0)
-									return;
-								input.start.x = mouse.x || input.x;
-								input.start.y = mouse.y || input.y;
+							down:function(evt) {
+								var input = App.ext.input;
+								input.x = input.start.x = evt.x || evt.clientX || 0;
+								input.y = input.start.y = evt.y || evt.clientY || 0;
 								input.pressed = true;
 								input.press = true;
-								//if ((input.pressed)||(input.delay))
-								//	return;
-								//input.pressed = true;
-								//input.press = true;
-								//
-								//
-								//
-								//
-								//
-								//
 								input.dist.x = 0;
 								input.dist.y = 0;
 							},
-							move:function(move,touch,input){
-								if (input.delay>0)
-									return;
-								//if ((input.delay))
-								//	return;
-								input.x = move.x || input.x;
-								input.y = move.y || input.y;
-								input.dist.x = (input.x-input.start.x)/App.client.scale;
-								input.dist.y = (input.y-input.start.y)/App.client.scale;
-								//((!touch) ? input.mouse_distance : input.touch_distance)(touch);
+							move:function(move,evt,input){
+								input.press = true;
+								evt = evt || {clientX:null,clientY:null};
+								input.x = move.x || evt.clientX || evt.x;
+								input.y = move.y || evt.clientY || evt.y;
+								input.dist.x = (App.ext.input.x-App.ext.input.start.x)*App.client.delta;
+								input.dist.y = (App.ext.input.y-App.ext.input.start.y)*App.client.delta;
 							},
 							up:function(mouse,input) {
 								input.end.x = mouse.x || input.x;
 								input.end.y = mouse.y || input.y;
-								input.pressed = false;
+								input.press = false;
 								input.released = true;
-								
-								input.dist.x = input.end.x-input.start.x;
-								input.dist.y = input.end.y-input.start.y;
+								input.touch = false;
+								input.dist.x = (App.ext.input.x-App.ext.input.start.x)*App.client.delta;
+								input.dist.y = (App.ext.input.y-App.ext.input.start.y)*App.client.delta;
 							},
 							touch:function(touch,input){
-								if (input.delay>0)
-									return;
+								input.touch = true;
 								input.x = touch.pageX;
 								input.y = touch.pageY;
 								input.pos.x = touch.pageX;
@@ -550,8 +553,6 @@ var App = Object.create({
 								//input.dist.y = 0;
 							},
 							keydown:function(a,input) {
-								if (input.delay>0)
-									return;
 								input.key = true;
 								input.kpressed = true;
 								input.keyPower = -a;
@@ -578,6 +579,8 @@ var App = Object.create({
 						pressed: 	false,
 						released: false,
 						press: 		false,
+						horizontal:0,
+						vertical:0,
 						delta: 0,
 						wheelDelta: 0,
 						duration: 0,
@@ -623,9 +626,12 @@ var App = Object.create({
 							this.x=x;this.y=y;
 						},
 						update:function UPDATE() {
+							this.horizontal = this.app.ext.input.checkList("a") - this.app.ext.input.checkList("d") || this.app.ext.input.checkList("leftarrow") - this.app.ext.input.checkList("rightarrow") ;//|| 0 - this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.x,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.x,-1,1);
+							this.vertical = this.app.ext.input.checkList("s") - this.app.ext.input.checkList("w") || this.app.ext.input.checkList("downarrow") - this.app.ext.input.checkList("uparrow");// || 0 + this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.y,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.y,-1,1) ;
 							this.last.x = this.x;
 							this.last.y = this.y;
 							this.press = false;
+							this.touch = 0;
 							this.window.inside = 0;
 							this.wheelDelta = 0;
 							this.pressed?this.duration++:this.duration=0;
@@ -662,7 +668,8 @@ var App = Object.create({
 							this.codereleased = 0;
 							//this.duration>0?(this.released=false);
 							//(this.released==true)?(this.released=false,this.duration=0,this.dist.x=0,this.dist.y=0):null;
-							(this.delay>0)?this.delay-=0.1:null;
+							
+							(this.delay>0)?this.delay-=Math.floor(this.delay-1*this.app.client.delta):null;
 						return true;
 						},
 					},
@@ -840,12 +847,29 @@ var App = Object.create({
 									document.ondragstart   = function(evt) {evt.preventDefault(); return false; };
 									window.ondragstart   = function(evt) {evt.preventDefault(); return false; };
 								}
-								
+								this.codeList = new Array();
+                                this.checkList = function(code){
+                                    var e = this.codeList.length-1;
+                                    for (var i = e;i>=0;--i)
+                                        if (this.codeList[i]==code)
+                                            return true;
+                                    return false;
+                                }
+                                this.popList = function(code){
+                                    var e = this.codeList.length-1;
+                                    for (var i = e;i>=0;--i)
+                                        if (this.codeList[i]==code)
+                                            this.codeList[i] = null;
+                                }
+
 							//if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
 									window.addEventListener('keydown', 	function(event) {
 										App.ext.input.codedown = App.ext.input.codes[event.keyCode];
+                                        App.ext.input.codeList.push(App.ext.input.codedown);
 										if (event.ctrlKey)
 											App.ext.input.control = true;
+								App.ext.input.pressed = true;
+								App.ext.input.released = false;
 										
 											switch(event.keyCode) 
 											{
@@ -862,6 +886,9 @@ var App = Object.create({
 									
 									window.addEventListener('keyup', 	function(event) {
 										App.ext.input.codeup = App.ext.input.codes[event.keyCode];
+                                        App.ext.input.popList(App.ext.input.codeup );
+								App.ext.input.pressed = false;
+								App.ext.input.released = true;
 										if (event.ctrlKey)
 											App.ext.input.control = false;
 											switch(event.keyCode) 
@@ -879,9 +906,10 @@ var App = Object.create({
 									},true);
 								//}
 							window.addEventListener('mousewheel',App.ext.scroll.event,true);
+							
 							//if (App.ext.useragent.mouse) {
 								window.addEventListener('mousedown',function(evt) {
-										App.ext.input.listener.down(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
+										App.ext.input.listener.down(evt);
 									},true);
 								window.addEventListener('mousemove',function(evt) {
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt),null,App.ext.input);
@@ -892,16 +920,19 @@ var App = Object.create({
 								//}
 							//if (!App.ext.useragent.touch) {
 								window.addEventListener('touchstart',	function(evt) {
+									App.ext.input.touch = true;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
 									},true);
 								window.addEventListener('touchend',		function(evt) {
+									App.ext.input.touch = false;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.up(evt,App.ext.input);
 									},true);
 								window.addEventListener('touchmove',	function(evt) {
+									App.ext.input.touch = true;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt), evt.targetTouches[0],App.ext.input);
@@ -909,12 +940,16 @@ var App = Object.create({
 							//	}
 							//if (App.ext.useragent.windows) {
 								window.addEventListener('MSPointerDown',function(evt) {
-										App.ext.input.listener.down(App.ext.input.position(App.client.c, evt),App.ext.input);
+									
+											App.ext.input.touch = true;
+											App.ext.input.listener.down(evt);
 									},true);
 								window.addEventListener('MSPointerMove',function(evt) {
-										App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),null,App.ext.input);
+									App.ext.input.touch = true;
+										App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
 									},true);
 								window.addEventListener('MSPointerUp',	function(evt) {
+									App.ext.input.touch = false;
 										App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
 									},true);
 								//}
@@ -1406,7 +1441,7 @@ var App = Object.create({
 			},
 			audio:{
 				prototype:{
-					mute:false,
+					mute:true,
 					quality:0,
 					current:0,
 					audio: new Audio(),
@@ -1452,10 +1487,11 @@ var App = Object.create({
 						}
 					},
 					toggle:function() {
-						//(this.mute)?this.sound[this.current].play():this.sound.[this.current].pause();
-						return this.mute = !this.mute;
+						this.mute = true;
 					},
 					set:function(index,reset){
+						if (!this.mute)
+							{
 						this.sound[this.current].pause()
 						this.sound[this.current] = index;
 						try{
@@ -1471,8 +1507,6 @@ var App = Object.create({
 						index.play();	
 							return;
 						}
-						if (!this.mute)
-							{
 							this.sound[this.current].pause();
 							this.current = index;
 							try{
@@ -1485,7 +1519,7 @@ var App = Object.create({
 						if (typeof this.sound === 'object')
 							if (this.sound[this.current].paused)
 								this.sound[this.current].play();
-						return;
+						return this.mute;
 						if (this.sound[this.current]==="undefined")
 							return;
 						if (this.sound[this.current].currentTime >= this.length)
@@ -1502,7 +1536,6 @@ var App = Object.create({
 				},
 				constructor:function(){return {
 					init:{value:function(){
-							Debug.log('Audio: Init');
 							return true;
 						}}
 					}
@@ -1607,6 +1640,7 @@ var App = Object.create({
 					load:function(name,file){
 						if (typeof file==="undefined")
 							file = name;
+                        file = this.app.options.paths.images + file;
 						this.Sources.append(this.SpriteAppend(name,file));
 						return this.Sources.getByName(name);
 					},
@@ -1747,10 +1781,12 @@ var App = Object.create({
 						this.scale = this.app.client.scale;
 					},
 					getX:function(){
-						return App.ext.input.x-(-App.client.setWidth/2+window.innerWidth/2)+this.app.options.canvas.position.left/3;
+						var s = App.ext.input.x-(-App.client.setWidth/2+window.innerWidth/2)+this.app.options.canvas.position.left/3;
+						return Math.round(s*100)/100;
 					},
 					getY:function(){
-						return App.ext.input.y-this.app.options.canvas.position.top;
+						var s = App.ext.input.y-this.app.options.canvas.position.top;
+						return Math.round(s*100)/100;
 					},
 					flip:function(){
 						if (this.app.options.canvas.buffer)
@@ -1760,16 +1796,20 @@ var App = Object.create({
 						}
 					},
 					fixX:function(x){
-						return ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale);
+						var s = ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale);
+						return Math.round(s*100)/100;
 					},
 					fixY:function(y){
-						return ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale);
+						var s = ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale);
+						return Math.round(s*100)/100;
 					},
 					fixW:function(w){
-						return (w*this.scale);
+						var s = (w*this.scale);
+						return Math.round(s*100)/100;
 					},
 					fixH:function(h){
-						return (h*this.scale);
+						var s = (h*this.scale);
+						return Math.round(s*100)/100;
 					},
 					chkc:{},
 					chk:function(x,y,w,h,s,a,c,colour,font){
@@ -1782,7 +1822,7 @@ var App = Object.create({
 							w:this.fixW(w)*s,
 							h:this.fixH(h)*s,
 							s:s,
-							a:a || 0,
+							a:App.client.Math.Clamp(a,0,1) || 0,
 							c:c || false,
 							colour:colour || this.colour(),
 							oldcol:this.chkc,
@@ -1791,10 +1831,10 @@ var App = Object.create({
 						}
 						else return {
 							x:x,y:y,
-							w:w || 0,
-							h:h || 0,
+							w:w*s || 0,
+							h:h*s || 0,
 							s:s,
-							a:a || 1,
+							a:App.client.Math.Clamp(a,0,1) || 1,
 							c:c || false,
 							colour:colour || this.colour(),
 							oldcol:this.chkc,
@@ -2107,9 +2147,41 @@ var App = Object.create({
 						this.buffer_context.fill();
 						this.clean();
 					},	
+					screen_fill:function(a,colour){
+						this.stat = this.chk(0,0,1,1,1,a,1,colour);
+						this.buffer_context.beginPath();
+						this.buffer_context.rect(0, 0, window.innerWidth,window.innerHeight)
+						this.buffer_context.fill();
+						this.clean();
+					},	
+                    image_count:0,
+					image_element:function(image){
+                        this.elm = document.createElement("image");
+                        this.elm.draw = function(image,x,y,s,loc,xscale,yscale,a,c) {
+                            var s = this.style;
+						      this.stat = App.client.visuals.chk(x,y,image.width,image.height,s,a,c);
+                            s.position = "fixed";
+                            s.left = this.stat.x+"px";
+                            s.top = this.stat.y+"px";
+                            s.width = this.stat.w+"px";
+                            s.height = this.stat.h+"px";
+                            s.opacity = this.stat.a;
+                            s.onclick = this.loc;
+                            this.src = image;
+                        }
+                        document.body.appendChild(this.elm);
+                        this.elm.src = image.src;
+                        return this.elm;
+						//(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					},
 					image_ext:function(image,x,y,s,a,c){		
 						this.stat = this.chk(x,y,image.width,image.height,s,a,c);
 						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					},
+					image_ext2:function(image,x,y,sx,sy,a,c){		
+						this.stat = this.chk(x,y,image.width,image.height,sx,a,c);
+						this.stat2 = this.chk(x,y,image.width,image.height,sy,a,c);
+						(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w*this.stat.s,this.stat.h*this.stat2.s):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w*this.stat.s,this.stat.h*this.stat2.s);
 					},
 					image_centered:function(image,x,y){		
 						this.image_ext(image,x,y,1,1,true);
@@ -2117,10 +2189,34 @@ var App = Object.create({
 					image:function(image,x,y){		
 						this.image_ext(image,x,y,1,1,false);
 					},
+					image_stat:function(image,x,y,s,a,c,xx,yy,w,h){
+						this.stat = this.chk(x,y,w,h,s,a,c);
+						return this.stat;
+					},
+					image_flip:function(x,y){
+						
+						this.stat = this.chk(x,y,1,1,1,1,1);
+						this.buffer_context.save();
+						this.buffer_context.scale(-1, 1);
+						this.buffer_context.translate(-this.stat.x*2, 0);
+					},
+					image_restore:function(x,y){
+			
+						//this.buffer_context.restore();
+					},
 					image_part:function(image,x,y,s,a,c,xx,yy,w,h){
 						this.stat = this.chk(x,y,w,h,s,a,c);
 						var scale = (1.1*this.stat.s)*App.client.scale;
 						(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					},
+					image_part_rotate:function(image,x,y,s,a,c,xx,yy,w,h,angle){
+						this.stat = this.chk(x,y,w,h,s,a,c);
+						var scale = (1.1*this.stat.s)*App.client.scale;
+						this.buffer_context.translate(this.stat.x,this.stat.y);
+						this.buffer_context.rotate(angle*0.0174532925);
+						(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,0-this.stat.w/2,0-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,0,0,this.stat.w,this.stat.h);
+						this.buffer_context.rotate(-angle*0.0174532925);
+						this.buffer_context.translate(-this.stat.x,-this.stat.y);
 					},
 					image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
 						this.stat = this.chk(x,y,image.width,image.height,s,a,true);
@@ -2130,7 +2226,9 @@ var App = Object.create({
 						this.buffer_context.rotate(-angle*0.0174532925);
 						this.buffer_context.translate(-this.stat.x,-this.stat.y);
 					},
-					
+					button:function(img,x,y,f){
+						this.image_button(img,x,y,1,f,true,1,1,1,1);
+					},
 					image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
 						this.stat = this.chk(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
 						var s = this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
@@ -2138,15 +2236,16 @@ var App = Object.create({
 						if (this.touch_within_stat(s))
 						{
 							w = true;
+							if (this.highlight)
 							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
 							App.ext.cursor.set(App.ext.cursor.pointer,true);
 							if (App.ext.input.released)
-								if (App.ext.input.delay<1)
-									loc(),App.ext.input.delay = 1;
+									loc(),App.ext.input.delay = 1,console.log('');;
 							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 						}
 						else
 						{
+							if (this.highlight)
 							this.opacity(this.stat.a*0.75);
 							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 						}			
@@ -2159,6 +2258,15 @@ var App = Object.create({
 						y = y - this.top;
 						x = x - this.left;
 						return c?((App.ext.input.x>x-w/2&&App.ext.input.x<x+w/2&&App.ext.input.y>y-h/2&&App.ext.input.y<y+h/2)?true:false):((App.ext.input.x>x&&App.ext.input.x<x+w&&App.ext.input.y>y&&App.ext.input.y<y+h)?true:false);
+					},
+					touch_within2:function(x, y, w, h,c) {
+						var stat = this.stat = this.chk(x,y,w,h,1,1,c);
+						var doc = document.documentElement;
+						this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+						this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+						stat.y = stat.y - this.top;
+						stat.x = stat.x - this.left;
+						return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
 					},
 					touch_within_stat:function(stat) {
 						var doc = document.documentElement;
@@ -2346,15 +2454,15 @@ var App = Object.create({
 			},	
 			OnStart:{writable:false, configurable:false, enumerable:false, value:function(){
 				(this.client = this.Construct(this.client.prototype,this.client.constructor));
-				(this.time = (( new Date().getTime())-TT)*100);
-				setTimeout(	function(A){
+				(this.time = (( new Date().getTime())-TT)*1);
+				setTimeout(	(function(){
 				
 								function AppLoop(){
-									App=A;
-									A.client.loop(A);
+									App=App;
+									App.client.loop(App);
 								}
-								A.client.start(AppLoop,A.scale);
-							}(this),this.time);
+								App.client.start(AppLoop,App.scale);
+							}),this.time);
 				}
 			},
 			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
@@ -2379,10 +2487,10 @@ var App = Object.create({
 
 App = Object.create(App.prototype,App.constructor);
 addListener(document, "DOMContentLoaded", App.OnApplicationLoad);
-/*	Dynamically Loading Scripts 
+/*	Dynamically Loading Scripts */
 Scripts = window.scripts = [''];
-				if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+App.options.paths.data+s+'" defer></'+t+">"),a.src=App.options.paths.data+s}(document,"script",window.scripts))){};
-*/
+if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+App.options.paths.data+s+'" defer></'+t+">"),a.src=App.options.paths.data+s}(document,"script",window.scripts))){};
+
 
 /* Custom Polyfill for RequestAnimationFrame */
 if (!Date.now)
