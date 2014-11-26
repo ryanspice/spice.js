@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Spice.js</title>    
+     <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
+     <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
+</head>
+<script rel="prefetch" name="main" type="text/javascript" defer>
+App.OnLoad = function()	{
+	
+	// Initalize Title and Resolution
+	App.Init("Fire",128,128);
+	
+};	
+	
+App.main = {
+	
+	name:"Animation",
+	
+	init:function() {
+		
+		this.app.canvas.background_set("#000000");
+		
+		this.app.ext.top();
+		
+		this.fireIndex = 0;
+		
+		this.fire = new Array(63);
+		
+		for (var i = 63; i>=0;i--)
+			if (i>9)
+				this.fire[i] = this.graphics.load("firewall0"+i.toString());
+			else
+				this.fire[i] = this.graphics.load("firewall00"+i.toString());
+		
+		return this;
+	},
+	update:function() {
+	
+		this.fireWidth = this.fire[0].width;
+	
+		return true;
+	},
+	draw:function() {
+		
+		var img = this.fire[this.fireIndex];
+		
+		this.visuals.image(img,0,0);
+		
+		this.visuals.image(img,-this.fireWidth,0);
+		
+		this.visuals.image(img,+this.fireWidth,0);
+		
+		this.fireIndex++;
+		
+		if (this.fireIndex>63)
+			this.fireIndex = 0;
+		
+		return true;
+		}
+};	
+</script>
+</html>
