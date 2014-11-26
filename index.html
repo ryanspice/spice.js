@@ -10,56 +10,63 @@
 	
 //Application main loop Object[init,update,draw]
 App.main= {
-			//State name
-			name:"Menu",
-			
-			//State initialize
-			init:function() {
-				
-				//Append favicon
-				this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
+//State name
+name:"Menu",
+	
+	//State initialize
+	init:function() {
 
-				//Toggle debug on or off
-				this.app.ext.debug.toggle("off");
-				
-				//Get width and height
-				this.w = this.app.client.setWidth;
-				this.h = this.app.client.setHeight;
-				
-				//Set canvas pointer events to none
-				this.app.canvas.getCanvas().style.pointerEvents = "none";
-				
-			return true;
-			},
-			
-			//State update
-			update:function() {
-			
-				//Game logic	
-			
-			return true;
-			},
-			
-			//State draw
-			draw:function() {
-				this.visuals.rect_ext(this.x,this.y,this.w,this.h,1,1,false,"#DDDDDD");
-				this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,11,"#444444",1);
-			return true;
-			}
-		};;
+		//Append favicon
+		this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
+
+		//Toggle debug on or off
+		this.app.ext.debug.toggle("off");
+
+		//Get width and height
+		this.w = this.app.client.setWidth;
+		this.h = this.app.client.setHeight;
+
+		//Set canvas pointer events to none
+		this.app.canvas.getCanvas().style.pointerEvents = "none";
+
+		return true;
+	},
+	//State update
+	update:function() {
+
+		//Game logic	
+
+		return true;
+	},
+
+		//State draw
+	draw:function() {
+
+		this.visuals.rect_ext(this.x,this.y,this.w,this.h,1,1,false,"#DDDDDD");
+		
+		this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,11,"#444444",1);
+		
+		return true;
+	}
+
+};
 
 //Application Load
 App.OnLoad = function () {
+	
+	//App.Init(title,width,height)
 
-    //App.Init(title,width,height)
-    App.Init("Spice.js", 720, 1024);
+	App.Init("Spice.js", 720, 1024);
 
-    //Set canvas background colour
-    App.canvas.background_set("#000000");
-    
-    //Assign favicon
-    App.ext.metatag.metaFavicon("images/favicon.png");
-    
+
+	//Set canvas background colour
+
+	App.canvas.background_set("#000000");
+
+	//Assign favicon
+
+	App.ext.metatag.metaFavicon("images/favicon.png");
+	
 };
 </script>
 <canvas id="canvas"></canvas>
