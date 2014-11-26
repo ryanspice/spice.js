@@ -8,16 +8,9 @@
         <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
         <script rel=prefetch type="text/javascript">
 
-					
-		//Initialize App, OnLoad
-		App.OnLoad = function(){
-			App.Init("Spice.js",320,480);
-			App.canvas.background_set("#000000");
-			App.options.paths.images = "images/";
-		}
-		
-		//Main state prototype
-		_Main.prototype = {
+
+//Application main loop Object[init,update,draw]
+App.main= {
 			//State name
 			name:"Menu",
 			
@@ -54,8 +47,21 @@
 				this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,1,"#444444",1);
 			return true;
 			}
-		};
-			
+		};;
+
+//Application Load
+App.OnLoad = function () {
+
+    //App.Init(title,width,height)
+    App.Init("Spice.js", 720, 1024);
+
+    //Set canvas background colour
+    App.canvas.background_set("#000000");
+    
+    //Assign favicon
+    App.ext.metatag.metaFavicon("images/favicon.png");
+    
+};
         </script>
         <canvas id="canvas"></canvas>
         <canvas id="buffer"></canvas>

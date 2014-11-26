@@ -1,4 +1,4 @@
-/*
+ 	/*
  ,-.                         
 (   `     o            o     
  `-.  ;-. . ,-. ,-.    , ,-. 
@@ -14,7 +14,6 @@
 /* jshint -W097 */
 
 "use strict";
-
 
 
 /*
@@ -56,8 +55,27 @@ var addListener = function (obj, eventName, listener) {
 
 var sprite = Object.create(null);
 var img = Object.create(null);
-var Scripts, _Main = Object.create(null,{name:{value:"Main"}}),
-Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}}),Secure=Object.create(Type.prototype),Private=Object.create(Type.prototype,{enumerable:{value:!0}}),Protected=Object.create(Type.prototype,{writable:{value:!0}}),Public=Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}}),DefaultFunction=function(){return !0;},DefaultFalse=function(){return !1;},DefaultObject = Object.create(null);
+
+
+//
+var Scripts;
+
+var main = Object.create(null,{name:{value:"Main"}});
+
+
+//Type Parent
+var Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}});
+
+//Types
+var Secure = Object.create(Type.prototype);
+var Private = Object.create(Type.prototype,{enumerable:{value:!0}});
+var Protected = Object.create(Type.prototype,{writable:{value:!0}});
+var Public = Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}});
+
+//Default Functions
+var DefaultFunction=function(){return !0;};
+var DefaultFalse=function(){return !1;};
+var DefaultObject = Object.create(null);
 	
 	
 
@@ -68,32 +86,188 @@ Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},config
 var NullObject = Object.create(null);
 var Debug = NullObject;
 var Sprite = NullObject;
-var Sprite = NullObject;
-
 
 var TT = new Date().getTime();
-var App = Object.create({
+var App = Object.create({	
+    
+    //App constructor 
+    constructor:{	
+            
+        //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+		Init:{
+            
+            //Config
+            writable: true,  
+            configurable:true, 
+            enumerable:false, 
+                
+            //Function
+            value:function(name,w,h){	
+                
+                var self = this;
+                
+                //Build client from prototype
+                this.client = this.Construct(this.client.prototype,this.client.constructor);
+                
+                //Build canvas from prototype
+                (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
+                
+                //Delay start the loop
+                setTimeout(	(function(){
+			
+							function AppLoop(){
+                                
+								self.client.loop();
+							}
+							self.client.initalize(AppLoop,self.scale);
+				}),this.time);
+                
+                //Initalize client
+                this.client.init(name,w,h);
+			}
+		},		
+            
+        //Construct Objects from this.Construct(prototype,[constructor])
+        Construct:{
+            
+            //Config
+            writable:false, 
+            configurable:false, 
+            enumerable:false, 
+                
+            //Function
+            value:function(prototype,constructor){
+                
+                //Grab type of constructor
+				var c = typeof constructor;
+                
+                //Return & Create object based on constructor 
+				switch(c)
+				{
+				case 'undefined':
+                        
+                    //Use only the prototype
+					return Object.create(prototype);
+                        
+				break;
+				case 'object':
+                        
+                    //Use constructor as object
+					return Object.create(prototype,constructor);
+                        
+				break;
+				case 'function':
+                        
+                    //Use constructor as function
+					return Object.create(prototype,constructor(this));
+                        
+				break;
+				default:
+                        
+                    //Expected a type
+					console.log("Expected 'object' or 'function': Type is "+c);
+				return {};
+                }
+            }
+        },
+        
+        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+ 		OnLoad:{
+            
+            //Config
+            writable:true, 
+            configurable:false, 
+            enumerable:false, 
+            
+            //Function
+            value:function(){
+                
+                //Default to App.
+                App.Init("Spice.js",480,320);
+			}
+		},
+            
+        //Runs on DOMContentLoaded
+		OnApplicationLoad:{
+            
+            //Config
+            writable:false, 
+            configurable:false, 
+            enumerable:false, 
+            t:this, 
+            
+            //Function
+            value:function(t){
+                console.log(t)
+                //Get current time
+                App.time = (( new Date().getTime())-TT)*1;
+                
+                //Run App.OnLoad
+                App.OnLoad();
+			}
+		},
+      
+        //Current Version
+		FMk:{value:'0.6.60.14.05.10.min'}
+	},
+    
+    //App prototype
 	prototype:{
+        
+        //Create a game object
+        create:function(a){
+            
+            //Create object, inheriting this.client.room
+            return Object.create(a,this.client.room);
+        },
+        
+        //App.options
 		options:{
+            
+            //Global
 			mute:false,
+            
+            
+            //Paths
+			paths:{
+				data:"data/",
+				images:"images/",
+				url:""
+			},
+            
+            //Canvas
 			canvas:{
+                
+                //Toggle the use of options.canvas
+				override:false,
+                
+                //Use canvas.name, canvas.buffer
 				name:'canvas',
 				buffername:'buffer',
+                
+                //Toggle the use of double-buffering
 				buffer:false,
-				override:false,
+                
+                //Assign canvas element background colour
 				color:'#0000000',
+                
+                //Assign canvas element position properties
 				position:{
 					position:'absolute',
 					top:0,
 					left:window.innerWidth/2,
 					center:true,
 					z:1
-					},
-				size:{
+				},
+				
+                //Assign canvas size properties
+                size:{
 					width:320,
 					height:480
-					}
+				}
 			},
+            
+            //Feature Flags
 			flags:{
 				canvas:true,
 				mstouch:false,
@@ -101,17 +275,14 @@ var App = Object.create({
 				tight:true,
 				touchprevent:true,
 			},
+            
+            //Override Functions
 			override:{
 				keyboard:true,
 				mouse:true,
 				MSHoldVisual:false,
 				SelectStart:false
-				},
-			paths:{
-				data:"",
-				images:"",
-				url:""
-			}
+				}
 		},
 		user:{
 			name		:"",
@@ -498,11 +669,17 @@ var App = Object.create({
 						start: 		{x:0,y:0},				
 						control:false,
 						window:{
+                            self:window,
 							play:15,
 							x:false,
 							y:false,
 							inside:false
 						},
+                        multi:{
+                          list:[]  
+                        },
+                        
+                        //Get Variables
 						getX:function(){return this.x;},
 						getY:function(){return this.y;},
 						getLastX:function(){return this.last.x;},
@@ -512,13 +689,49 @@ var App = Object.create({
 						getDuration:function(){return this.duration;},
 						getPressed:function(){return this.pressed;},
 						getReleased:function(){return this.released;},
+                        
+                        //Touch
+                        touched:{
+                            count:0,
+                            uplist:[],
+                            downlist:[],
+                            last:{x:0,y:0},
+                            CheckTouchUp:function(){
+                                
+                                return this.uplist[this.uplist.length-1];
+                            },
+                            CheckTouchDown:function(){
+                                
+                            },
+                        },
+                        
+                        //Listeners
 						listener:{
+                        touchpoints:0,
+                            
+                            //Input down/press polyfill
 							down:function(evt) {
+                                
+                                //Grab parent
 								var input = App.ext.input;
+                                
+                                //Save Latest X/Y or 0
 								input.x = input.start.x = evt.x || evt.clientX || 0;
 								input.y = input.start.y = evt.y || evt.clientY || 0;
+                                
+                                //Increment Touch Count
+                                input.touched.count++;
+                                
+                                //Add positions to touch list
+                                input.touched.downlist.push({x:input.x,y:input.y});
+                                
+                                //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
+                                
+                                //Flags
 								input.pressed = true;
 								input.press = true;
+                                
+                                //Reset distance
 								input.dist.x = 0;
 								input.dist.y = 0;
 							},
@@ -533,6 +746,13 @@ var App = Object.create({
 							up:function(mouse,input) {
 								input.end.x = mouse.x || input.x;
 								input.end.y = mouse.y || input.y;
+                                
+                                input.touched.uplist.push({x:input.x,y:input.y});
+                                input.touched.last = {x:input.x,y:input.y};
+                                input.touched.count--;
+                                //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
+                                
+                                
 								input.press = false;
 								input.released = true;
 								input.touch = false;
@@ -626,8 +846,10 @@ var App = Object.create({
 							this.x=x;this.y=y;
 						},
 						update:function UPDATE() {
-							this.horizontal = this.app.ext.input.checkList("a") - this.app.ext.input.checkList("d") || this.app.ext.input.checkList("leftarrow") - this.app.ext.input.checkList("rightarrow") ;//|| 0 - this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.x,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.x,-1,1);
-							this.vertical = this.app.ext.input.checkList("s") - this.app.ext.input.checkList("w") || this.app.ext.input.checkList("downarrow") - this.app.ext.input.checkList("uparrow");// || 0 + this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.y,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.y,-1,1) ;
+							this.horizontal = this.app.ext.input.checkList("a") - this.app.ext.input.checkList("d") || this.app.ext.input.checkList("leftarrow") - this.app.ext.input.checkList("rightarrow") ;
+                            this.touchH = 0 - this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.x,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.x,-1,1);
+							this.vertical = this.app.ext.input.checkList("s") - this.app.ext.input.checkList("w") || this.app.ext.input.checkList("downarrow") - this.app.ext.input.checkList("uparrow");
+                            this.touchV =  0 + this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.y,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.y,-1,1) ;
 							this.last.x = this.x;
 							this.last.y = this.y;
 							this.press = false;
@@ -847,76 +1069,113 @@ var App = Object.create({
 									document.ondragstart   = function(evt) {evt.preventDefault(); return false; };
 									window.ondragstart   = function(evt) {evt.preventDefault(); return false; };
 								}
-								this.codeList = new Array();
-                                this.checkList = function(code){
-                                    var e = this.codeList.length-1;
-                                    for (var i = e;i>=0;--i)
-                                        if (this.codeList[i]==code)
-                                            return true;
-                                    return false;
-                                }
-                                this.popList = function(code){
-                                    var e = this.codeList.length-1;
-                                    for (var i = e;i>=0;--i)
-                                        if (this.codeList[i]==code)
-                                            this.codeList[i] = null;
-                                }
-
+							this.codeList = new Array();
+                            this.checkList = function(code){
+                                var e = this.codeList.length-1;
+                                for (var i = e;i>=0;--i)
+                                    if (this.codeList[i]==code)
+                                        return true;
+                                return false;
+                            }
+                            this.popList = function(code){
+                                var e = this.codeList.length-1;
+                                for (var i = e;i>=0;--i)
+                                    if (this.codeList[i]==code)
+                                        this.codeList[i] = null;
+                            }
+                            var ub = false;
 							//if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
-									window.addEventListener('keydown', 	function(event) {
-										App.ext.input.codedown = App.ext.input.codes[event.keyCode];
-                                        App.ext.input.codeList.push(App.ext.input.codedown);
-										if (event.ctrlKey)
-											App.ext.input.control = true;
+				            window.addEventListener('keydown', 	function(event) {
+								App.ext.input.codedown = App.ext.input.codes[event.keyCode];
+                                App.ext.input.codeList.push(App.ext.input.codedown);
+								if (event.ctrlKey)
+									App.ext.input.control = true;
 								App.ext.input.pressed = true;
 								App.ext.input.released = false;
 										
-											switch(event.keyCode) 
-											{
-											case 37:App.ext.input.listener.keydown(-1,App.ext.input);break;
-											case 65:App.ext.input.listener.keydown(-1,App.ext.input);break;
-											case 39:App.ext.input.listener.keydown(1,App.ext.input);break;
-											case 68:App.ext.input.listener.keydown(1,App.ext.input);break;
-											case 40:App.ext.input.listener.downs(1,App.ext.input);break;
-											case 83:App.ext.input.listener.downs(1,App.ext.input);break;
-											case 38:App.ext.input.listener.ups(1,App.ext.input);break;
-											case 87:App.ext.input.listener.ups(1,App.ext.input);break;
-											}
-									},true);
+								switch(event.keyCode) 
+								{
+								case 37:App.ext.input.listener.keydown(-1,App.ext.input);break;
+								case 65:App.ext.input.listener.keydown(-1,App.ext.input);break;
+								case 39:App.ext.input.listener.keydown(1,App.ext.input);break;
+								case 68:App.ext.input.listener.keydown(1,App.ext.input);break;
+								case 40:App.ext.input.listener.downs(1,App.ext.input);break;
+								case 83:App.ext.input.listener.downs(1,App.ext.input);break;
+								case 38:App.ext.input.listener.ups(1,App.ext.input);break;
+								case 87:App.ext.input.listener.ups(1,App.ext.input);break;
+								}
+							},ub);
 									
-									window.addEventListener('keyup', 	function(event) {
-										App.ext.input.codeup = App.ext.input.codes[event.keyCode];
-                                        App.ext.input.popList(App.ext.input.codeup );
+							window.addEventListener('keyup', 	function(event) {
+								App.ext.input.codeup = App.ext.input.codes[event.keyCode];
+                                App.ext.input.popList(App.ext.input.codeup );
 								App.ext.input.pressed = false;
 								App.ext.input.released = true;
-										if (event.ctrlKey)
-											App.ext.input.control = false;
-											switch(event.keyCode) 
-											{
-											case 37:App.ext.input.listener.keyup(App.ext.input);break;
-											case 65:App.ext.input.listener.keyup(App.ext.input);break;
-											case 39:App.ext.input.listener.keyup(App.ext.input);break;
-											case 68:App.ext.input.listener.keyup(App.ext.input);break;
-											case 40:App.ext.input.listener.downs(2,App.ext.input);break;
-											case 83:App.ext.input.listener.downs(2,App.ext.input);break;
-											case 38:App.ext.input.listener.ups(2,App.ext.input);break;
-											case 87:App.ext.input.listener.ups(2,App.ext.input);break;
-											}
-										App.ext.input.codereleased = true;
-									},true);
-								//}
-							window.addEventListener('mousewheel',App.ext.scroll.event,true);
+								if (event.ctrlKey)
+									App.ext.input.control = false;
+									switch(event.keyCode) 
+									{
+									case 37:App.ext.input.listener.keyup(App.ext.input);break;
+									case 65:App.ext.input.listener.keyup(App.ext.input);break;
+									case 39:App.ext.input.listener.keyup(App.ext.input);break;
+									case 68:App.ext.input.listener.keyup(App.ext.input);break;
+									case 40:App.ext.input.listener.downs(2,App.ext.input);break;
+									case 83:App.ext.input.listener.downs(2,App.ext.input);break;
+									case 38:App.ext.input.listener.ups(2,App.ext.input);break;
+									case 87:App.ext.input.listener.ups(2,App.ext.input);break;
+									}
+                                App.ext.input.codereleased = true;
+							},ub);
+				            //}
 							
+                            window.addEventListener('mousewheel',App.ext.scroll.event,ub);
+                            
+                            
+                            if(window.PointerEvent) {
+                                window.addEventListener('pointerdown',function(evt) {
+                                    App.ext.input.touch = true;
+                                    App.ext.input.listener.down(evt);
+                                },ub);
+                                window.addEventListener('pointermove',function(evt) {
+                                    App.ext.input.touch = true;
+                                    App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
+                                },ub);
+                                window.addEventListener('pointerup',	function(evt) {
+                                    App.ext.input.touch = false;
+                                    App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
+                                },ub);
+                                
+                            }
+                            else
+							if (window.MSPointerEvent) {
+                                
+                                window.addEventListener('MSPointerDown',function(evt) {
+                                    App.ext.input.touch = true;
+                                    App.ext.input.listener.down(evt);
+                                },ub);
+                                window.addEventListener('MSPointerMove',function(evt) {
+                                    App.ext.input.touch = true;
+                                    App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
+                                },ub);
+                                window.addEventListener('MSPointerUp',	function(evt) {
+                                    App.ext.input.touch = false;
+                                    App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
+                                },ub);
+                                
+                            }
+                            else
+                                
+                            {
 							//if (App.ext.useragent.mouse) {
 								window.addEventListener('mousedown',function(evt) {
 										App.ext.input.listener.down(evt);
-									},true);
+									},ub);
 								window.addEventListener('mousemove',function(evt) {
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt),null,App.ext.input);
-									},true);
+									},ub);
 								window.addEventListener('mouseup',function(evt) {
 										App.ext.input.listener.up(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
-									},true);
+									},ub);
 								//}
 							//if (!App.ext.useragent.touch) {
 								window.addEventListener('touchstart',	function(evt) {
@@ -924,35 +1183,28 @@ var App = Object.create({
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
-									},true);
+									},ub);
 								window.addEventListener('touchend',		function(evt) {
 									App.ext.input.touch = false;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.up(evt,App.ext.input);
-									},true);
+									},ub);
 								window.addEventListener('touchmove',	function(evt) {
 									App.ext.input.touch = true;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt), evt.targetTouches[0],App.ext.input);
-									},true);
+									},ub);
+                            }
 							//	}
 							//if (App.ext.useragent.windows) {
-								window.addEventListener('MSPointerDown',function(evt) {
-									
-											App.ext.input.touch = true;
-											App.ext.input.listener.down(evt);
-									},true);
-								window.addEventListener('MSPointerMove',function(evt) {
-									App.ext.input.touch = true;
-										App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
-									},true);
-								window.addEventListener('MSPointerUp',	function(evt) {
-									App.ext.input.touch = false;
-										App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
-									},true);
-								//}
+                            
+                            //Microsoft Touch Events
+                            
+                            
+                            
+							//}
 							}
 						}
 					}
@@ -1010,10 +1262,10 @@ var App = Object.create({
 		},
 		canvas:{
 			prototype:{
+				canvas:Object.create(null),
+				buffer:Object.create(null),
 				head:document.getElementsByTagName('head')[0],
 				rendering_style:document.createElement('style'),
-				canvas:NullObject,
-				buffer:NullObject,
 				canvasList:document.getElementsByTagName('canvas'),
 				getCanvas:function(){return this.canvas;},
 				getBuffer:function(){return this.buffer;},
@@ -1091,24 +1343,118 @@ var App = Object.create({
 				}
 			}
 		},
+        //Application.client; handles game logic, audio, graphics, visuals
 		client:{
+            
+            //Client inherits App and Builds components
+			constructor:function(app){
+                    
+                //Build and return prototype
+                return {
+                        
+                    //Inherit app
+                    app:{value:app},
+                    
+                    //Build files for init
+                    init:{value:function(name,w,h){
+                    
+                            //Set App.client.discription to the name
+							this.discription = name;
+                    
+                            //Depreciated setWidth-height: use w + h
+                            //Set App.client.w
+                            //Set App.client.h
+                            //Set App.client.width
+                            //Set App.client.height
+                            //Set App.client.setWidth
+                            //Set App.client.setHeight
+                    
+							this.w = this.width = this.setWidth = w;
+							this.h = this.height = this.setHeight = h;
+                    
+                            //Build Extensions
+							(this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
+                    
+                            //Build Visuals
+							(this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
+                    
+                            //Build 
+							(this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
+                    
+                            //Build 
+							this.room = Object.create(this.room.prototype,this.room.constructor()).init();
+                    
+                            //Build 
+							(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
+                    
+                            //Build 
+							(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
+                    
+                            //Build 
+							(this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(this.targetfps,this.targetfps);
+                    
+                            //Build 
+							(this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,this.targetfps);
+                    
+                            //Build 
+							this.main = Object.create(this.app.main,this.main.constructor());
+                    
+                            //Build 
+							(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
+                    
+                            console.log(App);
+						}}
+                    
+				}
+                
+			},
+            
+            //Client prototype, functions
 			prototype:{
-				start:function(loop,scale){
-					this.scale = scale;
-					this.client_f = loop;
-					requestAnimationFrame(this.client_f);
-				},
+                
+                //Client initalize
+                initalize:function(loop,scale) {
+                    
+                    //scale to scale
+                    this.scale = scale;
+                    
+                    //Assign client_f to loop
+                    this.client_f = loop;
+                    
+                    //Request Animation Frame with this.client_f
+                    requestAnimationFrame(this.client_f);
+                    
+                },
+                
+                //Client features loop
 				loop:function(a){
+                    
+                    //Return true or false, update audio
 					this.mute = this.audio.update();
-					this.scale = this.update.scale(this);
-					this.fps = this.update.step.tick(this.second,this.mainLoop,a);
-					App.ext.cursor.set("auto");
+                    
+                    //Return true or false if resized, update size
 					this.resized = this.update.size(this);
-					this.visuals.draw(this.scale);
-					a.ext.input.update();
+                    
+                    //Draw frame
+					this.visuals.flip(this.scale);
+                    
+                    //Update Input
+					this.app.ext.input.update();
+                    
+                    //Update scale 
+					this.scale = this.update.scale(this);
+                    
+                    //Update frames per second
+					this.fps = this.update.step.tick(this.second,this.mainLoop,this.app);
+                    
+                    //Update client
 					requestAnimationFrame(this.client_f);
 				},
+                
+                //Client update loop
 				update:{
+                    
+                    //Cache Vars
 					last:{w:0,h:0},
 					difference:{x:0,y:0},
 					scaler:{s:1,x:1,y:1},
@@ -1119,18 +1465,36 @@ var App = Object.create({
 					resized:false,
 					set:0,
 					frames:0,
+                    
+                    //Calculate client size
 					size:function(app){
-						this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w,this.last.h),new app.Math.Vec(app.width,app.height));
+                        
+                        //Calculate difference of with and height in this frame vs last frame
+						this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w.toFixed(4),this.last.h.toFixed(4)),new app.Math.Vec(app.width.toFixed(4),app.height.toFixed(4)));
+                        
+                        //If distance has changed
 						if ((this.difference.x + this.difference.y==0))
 							return false;
-						App.canvas.getCanvas().width  = this.last.w = app.width;
-						App.canvas.getCanvas().height = this.last.h = app.height;
-						App.canvas.getBuffer().width  = this.last.w = app.width;
-						App.canvas.getBuffer().height = this.last.h = app.height;
+                        
+                        //Reassign width and height
+						app.app.canvas.getCanvas().width  = this.last.w = app.width;
+						app.app.canvas.getCanvas().height = this.last.h = app.height;
+						app.app.canvas.getBuffer().width  = this.last.w = app.width;
+						app.app.canvas.getBuffer().height = this.last.h = app.height;
+                        
 						return true;
-						},
+				    },
+                    
+                    //Calculate client scale
 					scale:function(app) {
-						if (this==window) 
+                        
+                        //Cache window
+                        var w = window;
+                        var ww = w.innerWidth;
+                        var wh = w.innerHeight;
+                        
+                        //Catch window
+						if (this==w) 
 							return console.log('Warning: Scale: [this === window]');
 							else
 						if ((this.pause>0.5))
@@ -1139,80 +1503,140 @@ var App = Object.create({
 						if (this.set==1)
 							return console.log('Warning: Scale: Duplicate Run',30); 
 							
-						if (App.options.canvas.override)
+                        //Check if overriding
+						if (app.app.options.canvas.override)
 						{
-							if (App.options.canvas.size.width!==app.width)
-								app.width = App.options.canvas.size.width;
-							if (App.options.canvas.size.height!==app.height)
-								app.height = App.options.canvas.size.height;
+                            
+                            //Set width to override 
+							if (app.app.options.canvas.size.width!==app.width)
+								app.width = app.app.options.canvas.size.width;
+                            
+                            //Set height to override 
+							if (app.app.options.canvas.size.height!==app.height)
+								app.height = app.app.options.canvas.size.height;
 							
+                            //Check if centered
 							if (App.options.canvas.position.center)
 								{
-								if (App.options.canvas.size.left!==app.width/2)
+                                
+                                //if not aligned
+								if (app.app.options.canvas.size.left!==app.width/2)
 									{
-									App.canvas.getCanvas().style.left  = -app.width/2 + window.innerWidth/2+"px";
-								if (App.options.canvas.buffer)          
-									App.canvas.getBuffer().style.left  = -app.width/2 + window.innerWidth/2+"px";
+                                        
+                                    //align
+									app.app.canvas.getCanvas().style.left  = -app.width/2 + w.innerWidth/2+"px";
+                                    
+                                    //if buffer align    
+                                    if (app.app.options.canvas.buffer)          
+									   app.app.canvas.getBuffer().style.left  = -app.width/2 + w.innerWidth/2+"px";
+                                        
 									}
 								}
 						}
 						else
 						{
-						
-						if (window.innerHeight!==app.height)
-							app.height = window.innerHeight;
-						if (window.innerWidth!==app.width)
-							app.width = window.innerWidth,console.log('');
+                            
+                            //Set height to window height
+                            if (wh!==app.height)
+                                app.height = wh;
+                            
+                            //Set width to window width
+                            if (ww!==app.width)
+                                app.width = ww;
+                            
 						}	
 						
-						
-						
+						//Calculate sccalers
 						this.set = 1;
 						this.scaler.x = app.height/app.setHeight;
 						this.scaler.y = app.width/app.setWidth;
+                        
+                        //Toggle wither or not to scale
 						(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
+                        
+                        //if scaler.s is not a number
 						if (isNaN(this.scaler.s)){this.set = 0;return;}
+                        
+                        //Scale difference
 						this.scalediff = this.scaler.s-this.lastscale;
 						
-						
-						
-						(this.scalediff)?App.ext.scroll.to(true):App.ext.scroll.to(false);
+                        //If scaled different, scroll to the top
+						(this.scalediff)?app.app.ext.scroll.to(true):app.app.ext.scroll.to(false);
+                        
 						this.set = 0;
+                        
+                        //Save scale
 						this.lastscale = this.scaler.s;
+                        
 						return this.scaler.s;
 					},
+                    
+                    //Client state object
 					state:{
+                        
+                        //State vars
+						name:"",
+						current:{},
+						initalized:false,
+                        
+                        //State prototype
 						prototype:{
+                            
+                            //State init prototype
 							init:function(){
 								if (typeof this.current.init !=='undefined')
 								this.current.init();
 							},
-							draw:function(){
-								if (typeof this.current.draw !=='undefined')
-								this.current.draw();
-							},
+                            
+                            //State update proto
 							update:function(){
 								if (typeof this.current.update !=='undefined')
-								this.current.update();
+								    this.current.update();
 							},
+                            
+                            //State draw proto
+							draw:function(){
+								if (typeof this.current.draw !=='undefined')
+								    this.current.draw();
+							},
+                            
+                            //State set
 							set:function(state,start){
-								App.ext.input.delay = 1;
-								if ((this.name=state.name)&&(this.initalized=!0)) {
+                                
+                                //Set app input delay
+								this.app.app.ext.input.delay = 1;
+                                
+                                //If state and not initialized, initalize via Object .create
+								if ((this.name=state.name)&&(this.initalized=!0)) 
+                                    {
 									if (!state.started)
-										this.current=Object.create(state,App.client._Room);
-								if (start)
-									this.current.init(),this.current.started = true;
-								};
-							},
-							name:"",
-							current:{},
-							initalized:false
+										this.current=Object.create(state,this.app.app.client.room);
+                                    
+                                    //if start, run init, current = started
+                                    if (start)
+                                        this.current.init(),this.current.started = true;
+                                    
+								    }
+							}
+                            
 						},
+                        
+                        //State constructor
 						constructor:function(app){
+                            
+                            //State Return app and init
 							return	{
+                                
+                                //State Inherit app
 								app:{value:app},
+                                
+                                //State Init function
 								init:{value:function(state){
+                                        
+                                        //State Set state
 										this.set(state,true);
+                                        
+                                        //State Initilizaed
 										this.initalized = true;
 									}
 								}
@@ -1224,7 +1648,7 @@ var App = Object.create({
 							
 							if ((typeof step == 'undefined')||(!step.Step(app)))
 								return;
-							this.fps = 1 * (this.clean()/step.delta * 1E3);
+							this.fps = 1 * (this.clean() / step.delta * 1E3);
 							this.delta = step.targetfps / this.fps;
 							this.delta = Math.ceil(this.delta*100000)/100000;
 							if ((this.delta>2.5))
@@ -1311,7 +1735,7 @@ var App = Object.create({
 						if (App.client.update.state.initalized)
 							return this.update = this.byteCount(App.client.update.state.current.update);
 							else
-							return this.update = this.byteCount(Object.create(null,App.client._Room));
+							return this.update = this.byteCount(Object.create(null,App.client.room));
 						},
 						isFunction:function(functionToCheck) {
 							 var getType = {};
@@ -1382,7 +1806,7 @@ var App = Object.create({
 						_RainParticles[_R].update();
 				}
 			},
-			_Room:{
+			room:{
 					prototype:{
 					init:DefaultObject,
 					app:DefaultObject,
@@ -1402,7 +1826,7 @@ var App = Object.create({
 						}
 					}
 				},
-			_Pace:{
+			pace:{
 				prototype:{
 				timer:	0,
 				rate:	0,
@@ -1732,8 +2156,46 @@ var App = Object.create({
 					}
 				}
 			},
+                
+                
+                
+                    
+            //
+            //Visuals prototype
+            //      
+            //      Global Scope
+            //          App.client.visuals
+            //      
+            //      Local Scope
+            //          this.visuals
+            //      
+            
+            //Visuals Object
 			visuals:{
+                
+                //Visuals Prototype
 				prototype:{
+                    
+                    //Cached
+					stat2:DefaultObject,
+					alpha:0,
+					free:false,
+					point:14,
+					grd:DefaultObject,
+					zindex:1,
+					seamless:false,
+					tight:true,
+					disable:false,
+					buffer_target:0,
+					
+					canvas:DefaultObject,
+					buffer:DefaultObject,
+					canvas_context:DefaultObject,
+					buffer_context:DefaultObject,
+					scale:0,
+					fontT:"",
+					fontL:"",
+					within:false,
 					stat:{
 							x:0,
 							y:0,
@@ -1756,61 +2218,104 @@ var App = Object.create({
 							this.oldcol = colold || 0;
 							}
 						},
-					stat2:DefaultObject,
-					alpha:0,
-					free:false,
-					point:14,
-					grd:DefaultObject,
-					zindex:1,
-					seamless:false,
-					tight:true,
-					disable:false,
-					buffer_target:0,
-					
-					canvas:DefaultObject,
-					buffer:DefaultObject,
-					canvas_context:DefaultObject,
-					buffer_context:DefaultObject,
-					scale:0,
-					draw:function(){
-						this.canvas_context.clearRect(0,0,window.innerWidth,window.innerHeight);
-						if (this.app.client.update.state.initalized)
-							this.app.client.update.state.draw();
-						this.flip();
-							//this.debug();
-						this.scale = this.app.client.scale;
-					},
-					getX:function(){
-						var s = App.ext.input.x-(-App.client.setWidth/2+window.innerWidth/2)+this.app.options.canvas.position.left/3;
-						return Math.round(s*100)/100;
-					},
-					getY:function(){
-						var s = App.ext.input.y-this.app.options.canvas.position.top;
-						return Math.round(s*100)/100;
-					},
+                    
+                    window:window,
+                    
+                    //Used to draw all sprites to the screen
 					flip:function(){
+                        
+                        //Set scale to client scale
+						this.scale = this.app.client.scale;
+                        
+                        
+                        //If double buffering 
 						if (this.app.options.canvas.buffer)
 						{
+                            //Draw buffer to canvs
 							this.canvas_context.drawImage(this.buffer,0,0);
-							this.buffer_context.clearRect(0,0,window.innerWidth,window.innerHeight);
+                            
+                            //Clear buffer
+							this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 						}
+                        else {
+                            
+                            //If not double buffering, clear canvas
+                            this.canvas_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
+                            
+                            //If initalized, draw state
+                            if (this.app.client.update.state.initalized)
+                                this.app.client.update.state.draw();
+                            
+                        }
 					},
+                                        
+                    //RequestAnimationFrame polyfill
+                    animationFrame:function(name,w,h){	
+                
+                        //Fill Date
+                        if (!Date.now)
+                            Date.now = function() { return new Date().getTime(); };
+
+                        //Fill animation frame
+                        (function() {
+                            'use strict';
+
+                            var vendors = ['webkit', 'moz'];
+                            for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+                                var vp = vendors[i];
+                                window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
+                                window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
+                                                           || window[vp+'CancelRequestAnimationFrame']);
+                            }
+                            if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
+                                || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+                                var lastTime = 0;
+                                window.requestAnimationFrame = function(callback) {
+                                    var now = Date.now();
+                                    var nextTime = Math.max(lastTime + 16, now);
+                                    return setTimeout(function() { callback(lastTime = nextTime); },
+                                                      nextTime - now);
+                                };
+                                window.cancelAnimationFrame = clearTimeout;
+                            }
+                        }());
+                    },
+                    
+                    //Get fixed X/Y positions
+                    
+					getX:function(){
+                        
+						return (this.app.ext.input.x-(-this.app.client.setWidth/2+this.window.innerWidth/2)+this.app.options.canvas.position.left/3).toFixed(2);
+					},
+                    
+					getY:function(){
+                        
+						return (this.app.ext.input.y-this.app.options.canvas.position.top).toFixed(2);
+					},
+                    
+                    //Fix positions relative to canvas
+                    
 					fixX:function(x){
-						var s = ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale);
-						return Math.round(s*100)/100;
+                        
+						return ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale).toFixed(2);
 					},
+                    
 					fixY:function(y){
-						var s = ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale);
-						return Math.round(s*100)/100;
+                        
+						return ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale).toFixed(2);
 					},
+                    
 					fixW:function(w){
-						var s = (w*this.scale);
-						return Math.round(s*100)/100;
+                        
+						return (w*this.scale).toFixed(2);
 					},
+                    
 					fixH:function(h){
-						var s = (h*this.scale);
-						return Math.round(s*100)/100;
+                        
+						return (h*this.scale).toFixed(2);
 					},
+                    
+                    //Check variables
 					chkc:{},
 					chk:function(x,y,w,h,s,a,c,colour,font){
 						this.chkc = this.colour();
@@ -1834,7 +2339,7 @@ var App = Object.create({
 							w:w*s || 0,
 							h:h*s || 0,
 							s:s,
-							a:App.client.Math.Clamp(a,0,1) || 1,
+							a:this.app.client.Math.Clamp(a,0,1) || 1,
 							c:c || false,
 							colour:colour || this.colour(),
 							oldcol:this.chkc,
@@ -1842,6 +2347,7 @@ var App = Object.create({
 							init:this.stat.init
 						}
 					},
+                    
 					debug:function(){
 						if (!App.ext.debug.strength=="Normal")
 							return;
@@ -1964,14 +2470,26 @@ var App = Object.create({
 					opacity:function(opacity) {
 						return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
 					},
-					fontT:"",
-					fontL:"",
 					font:function(font)	{ 
 						return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
 						//if (font)
 						//	this.buffer_context.font = font;
 						//return this.buffer_context.font;
 					},			
+					shadow:function(col,blur,x,y){
+						this.buffer_context.shadowColor = col;
+						this.buffer_context.shadowBlur = blur;
+						this.buffer_context.shadowOffsetX = x;
+						this.buffer_context.shadowOffsetY = y;
+					},
+					shadow_clear:function(){
+						this.buffer_context.shadowBlur = 0;
+					},
+            
+                    //
+                    //Visuals Text Functions
+                    //
+            
 					text_free:function(string, x, y,colour){
 						this.colour(colour);
 						this.font(Math.round(this.point*this.scale)+"px "+"sans-serif");
@@ -2010,16 +2528,6 @@ var App = Object.create({
 						}		
 						this.font(f);
 						this.clean();
-					},
-					within:false,
-					shadow:function(col,blur,x,y){
-						this.buffer_context.shadowColor = col;
-						this.buffer_context.shadowBlur = blur;
-						this.buffer_context.shadowOffsetX = x;
-						this.buffer_context.shadowOffsetY = y;
-					},
-					shadow_clear:function(){
-						this.buffer_context.shadowBlur = 0;
 					},
 					text_button_bg:function(string,x,y,colour,s,a,c,loc,style){
 						this.stat = this.chk(x,y,this.text_width(string),s,s,a,c,colour);
@@ -2067,6 +2575,12 @@ var App = Object.create({
 						this.buffer_context.shadowOffsetX = x;
 						this.buffer_context.shadowOffsetY = y;
 					},
+            
+            
+                    //
+                    //Visuals Rectangle Functions
+                    //
+            
 					rect:function (x,y,w,h,colour){
 						this.rect_ext(x,y,w,h,1,1,0,colour);
 					},
@@ -2229,6 +2743,12 @@ var App = Object.create({
 					button:function(img,x,y,f){
 						this.image_button(img,x,y,1,f,true,1,1,1,1);
 					},
+					button_scaled:function(img,x,y,s,f){
+						this.image_button(img,x,y,s,f,true,1,1,1,1);
+					},
+					buttonH:function(img,x,y,s,f){
+						this.image_buttonH(img,x,y,s,f,true,1,1,1,1);
+					},
 					image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
 						this.stat = this.chk(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
 						var s = this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
@@ -2240,7 +2760,29 @@ var App = Object.create({
 							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
 							App.ext.cursor.set(App.ext.cursor.pointer,true);
 							if (App.ext.input.released)
-									loc(),App.ext.input.delay = 1,console.log('');;
+									loc(),App.ext.input.delay = 1;
+							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+						}
+						else
+						{
+							if (this.highlight)
+							this.opacity(this.stat.a*0.75);
+							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+						}			
+						return w;
+					},
+					image_buttonH:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
+						this.stat = this.chk(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
+						var s = this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
+						var w = false;
+						if (this.touch_within_stat(s,true))
+						{
+							w = true;
+							if (this.highlight)
+							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
+							App.ext.cursor.set(App.ext.cursor.pointer,true);
+							if (App.ext.input.pressed)
+									loc(),App.ext.input.delay = 1;
 							(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 						}
 						else
@@ -2268,13 +2810,20 @@ var App = Object.create({
 						stat.x = stat.x - this.left;
 						return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
 					},
-					touch_within_stat:function(stat) {
+					touch_within_stat:function(stat,r) {
 						var doc = document.documentElement;
-						this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-						this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+                        var w = window;
+						this.left = (w.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+						this.top = (w.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
 						stat.y = stat.y - this.top;
 						stat.x = stat.x - this.left;
-						return stat.c?((App.ext.input.x>stat.x-stat.w/2&&App.ext.input.x<stat.x+stat.w/2&&App.ext.input.y>stat.y-stat.h/2&&App.ext.input.y<stat.y+stat.h/2)?true:false):((App.ext.input.x>stat.x&&App.ext.input.x<stat.x+stat.w&&App.ext.input.y>stat.y&&App.ext.input.y<stat.y+stat.h)?true:false);
+                        var x = App.ext.input.x;
+                        var y = App.ext.input.y;
+                        
+                        if (!r){
+                        x = App.ext.input.touched.last.x;
+                        y = App.ext.input.touched.last.y;}
+						return stat.c?((x>stat.x-stat.w/2&&x<stat.x+stat.w/2&&y>stat.y-stat.h/2&&y<stat.y+stat.h/2)?true:false):((y>stat.x&&x<stat.x+stat.w&&y>stat.y&&y<stat.y+stat.h)?true:false);
 					},
 					line:function(x,y,x2,y2,col,a){
 						this.stat = this.chk(x,y,x2,y2,1,a,true);
@@ -2336,6 +2885,7 @@ var App = Object.create({
 				constructor:function(app){return {
 					app:{value:app},
 					init:{value:function(){
+                            this.animationFrame();
 							this.scale = this.app.scale;
 							this.canvas = this.app.canvas.getCanvas();
 							this.buffer = this.app.canvas.getBuffer();
@@ -2397,124 +2947,11 @@ var App = Object.create({
 				setHeight:0,
 				resized:false,
 				targetfps:60,
-				_Main:{constructor:function(){return {name:{value:"Main"}};}}
-				},
-			constructor:function(a){return{
-				app:{value:a},
-				init:{value:function(name,w,h){
-							(this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
-							this.discription = "Eh";
-							this.w = this.width = this.setWidth = w;
-							this.h = this.height = this.setHeight = h;
-							(this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
-							(this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
-							
-							this._Room = Object.create(this._Room.prototype,this._Room.constructor()).init();
-							(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
-							(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
-							(this.mainLoop = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(this.targetfps,this.targetfps);
-							(this.second = Object.create(this._Pace.prototype,this._Pace.constructor(this))).init(1.0,this.targetfps);
-							this._Main = Object.create(_Main.prototype,this._Main.constructor());
-							(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor())).init(this._Main);
-						}
-					}
+				main:{constructor:function(){return {name:{value:"Main"}};}}
 				}
-			}
-		}
+		},
 	},
-	constructor:{	
-			Init:{writable: true,  configurable:true, enumerable:false, value:function(name,w,h){	
-				(this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
-				this.client.init(name,w,h);
-				}
-			},		
-			Construct:{writable:false, configurable:false, enumerable:false, value:function(prototype,constructor){
-				var c = typeof constructor;
-				switch(c)
-					{
-					case 'undefined':
-						return Object.create(prototype);
-					break;
-					case 'object':
-						return Object.create(prototype,constructor);
-					break;
-					case 'function':
-						return Object.create(prototype,constructor(this));
-					break;
-					default:
-						console.log("Expected 'object' or 'function': Type is "+c);
-						return {};
-					}
-				}
-			},
-			OnApplicationLoad:{writable:false, configurable:false, enumerable:false, value:function(){
-				App.OnStart();
-				App.OnLoad();
-				}
-			},	
-			OnStart:{writable:false, configurable:false, enumerable:false, value:function(){
-				(this.client = this.Construct(this.client.prototype,this.client.constructor));
-				(this.time = (( new Date().getTime())-TT)*1);
-				setTimeout(	(function(){
-				
-								function AppLoop(){
-									App=App;
-									App.client.loop(App);
-								}
-								App.client.start(AppLoop,App.scale);
-							}),this.time);
-				}
-			},
-			OnLoad:{writable:true, configurable:false, enumerable:false, value:function(){
-				App.Init("Spice.js",480,320);
-				}
-			},
-			scripts:{value:window.scripts},
-			codefmk:{value:'0.6.50.14.26.06.min'},
-			code:{value:"0"}
-	},
-	scripts:[],
-	framesT:0.0,
-	frames:0.0,
-	delta:0.0,
-	debug:false,
-	
-	time:0,
-	fps:0,
-	width:320,
-	height:480
 });
 
 App = Object.create(App.prototype,App.constructor);
 addListener(document, "DOMContentLoaded", App.OnApplicationLoad);
-/*	Dynamically Loading Scripts */
-Scripts = window.scripts = [''];
-if ((!function(e,t,r){function n(){for(;d[0]&&"loaded"==d[0][f];)c=d.shift(),c[o]=!i.parentNode.insertBefore(c,i)}for(var s,a,c,d=[],i=e.scripts[0],o="onreadystatechange",f="readyState";s=r.shift();)a=e.createElement(t),"async"in i?(a.async=!1,e.head.appendChild(a)):i[f]?(d.push(a),a[o]=n):e.write("<"+t+' src="'+App.options.paths.data+s+'" defer></'+t+">"),a.src=App.options.paths.data+s}(document,"script",window.scripts))){};
-
-
-/* Custom Polyfill for RequestAnimationFrame */
-if (!Date.now)
-    Date.now = function() { return new Date().getTime(); };
-
-(function() {
-    'use strict';
-    
-    var vendors = ['webkit', 'moz'];
-    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
-        var vp = vendors[i];
-        window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
-                                   || window[vp+'CancelRequestAnimationFrame']);
-    }
-    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
-        || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
-        var lastTime = 0;
-        window.requestAnimationFrame = function(callback) {
-            var now = Date.now();
-            var nextTime = Math.max(lastTime + 16, now);
-            return setTimeout(function() { callback(lastTime = nextTime); },
-                              nextTime - now);
-        };
-        window.cancelAnimationFrame = clearTimeout;
-    }
-}());
