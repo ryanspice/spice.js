@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html >
-    <head>
-        <meta charset="UTF-8">
-        <title>Spice.js</title>    
-    </head>
-    <body>
-        <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
-        <script rel=prefetch type="text/javascript">
-
-
+<head>
+    <meta charset="UTF-8">
+    <title>Spice.js</title>    
+    <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
+</head>
+<body>
+<script rel=prefetch type="text/javascript">
+	
 //Application main loop Object[init,update,draw]
 App.main= {
 			//State name
@@ -44,7 +43,7 @@ App.main= {
 			//State draw
 			draw:function() {
 				this.visuals.rect_ext(this.x,this.y,this.w,this.h,1,1,false,"#DDDDDD");
-				this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,1,"#444444",1);
+				this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,11,"#444444",1);
 			return true;
 			}
 		};;
@@ -62,8 +61,8 @@ App.OnLoad = function () {
     App.ext.metatag.metaFavicon("images/favicon.png");
     
 };
-        </script>
-        <canvas id="canvas"></canvas>
-        <canvas id="buffer"></canvas>
-    </body>
+</script>
+<canvas id="canvas"></canvas>
+<canvas id="buffer"></canvas>
+</body>
 </html>
