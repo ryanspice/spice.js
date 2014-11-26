@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Spice.js</title>    
+     <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
+     <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
+	<style>
+		.background {position:fixed;height:100%;width:100%;background:url('toronto.jpg');background-size:100%;};
+	</style>
+</head>
+<body>
+<script rel=prefetch type="text/javascript">
+	
+//Application main loop Object[init,update,draw]
+App.main= {
+//State name
+name:"Menu",
+	//State name
+	name:"Menu",
+		
+	//State initialize
+	init:function() {
+			
+			//Append favicon
+		this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("../../stan.png","shortcut icon","image/png"));
+
+		//Toggle debug on or off
+		this.app.ext.debug.toggle("off");
+	
+		//Get width and height
+		this.w = this.app.client.setWidth;
+		this.h = this.app.client.setHeight;
+	
+		//Set canvas pointer events to none
+		this.app.canvas.getCanvas().style.pointerEvents = "none";
+	
+		return true;
+	},
+	
+	//State update
+	update:function() {
+
+		//Game logic	
+
+		return true;
+	},
+
+	//State draw
+	draw:function() {
+		
+		particlesDraw(this.app)
+		
+		return true;
+	}
+};
+
+//Application Load
+App.OnLoad = function () {
+	
+	//App.Init(title,width,height)
+
+	App.Init("SpiceJS - Particles",1920,1080);
+
+	//Snap to top
+	App.ext.top();
+	
+	//Set canvas background colour
+
+	App.canvas.background_set("transparent");
+
+	//Assign favicon
+
+	App.ext.metatag.metaFavicon("images/favicon.png");
+	
+};
+</script>
+<div class="background">
+	
+</div>
+<canvas id="canvas"></canvas>
+<canvas id="buffer"></canvas>
+</body>
+</html>
