@@ -2,7 +2,7 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>Spice.js</title>    
+    <title>SpiceJS</title>    
     <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
 </head>
 <body>
@@ -10,28 +10,17 @@
 	
 //Application main loop Object[init,update,draw]
 App.main= {
-//State name
-name:"Menu",
 	
-	//State initialize
+	name:"Example",
+
 	init:function() {
 
 		//Append favicon
-		this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
-
-		//Toggle debug on or off
-		this.app.ext.debug.toggle("off");
-
-		//Get width and height
-		this.w = this.app.client.setWidth;
-		this.h = this.app.client.setHeight;
-
-		//Set canvas pointer events to none
-		this.app.canvas.getCanvas().style.pointerEvents = "none";
-
+		this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("stan.png","shortcut icon","image/png"));
+		
 		return true;
 	},
-	//State update
+	
 	update:function() {
 
 		//Game logic	
@@ -39,11 +28,14 @@ name:"Menu",
 		return true;
 	},
 
-		//State draw
 	draw:function() {
-
-		this.visuals.rect_ext(this.x,this.y,this.w,this.h,1,1,false,"#DDDDDD");
 		
+		//Draw Logic
+		
+		//Draw Rectangle ( x , y, width, height, scale, alpha, centered, colour)
+		this.visuals.rect_ext(0,0,this.app.client.setWidth,this.app.client.setHeight,1,1,false,"#DDDDDD");
+		
+		//Draw Circle ( x , y, radius, colour, alpha)
 		this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,11,"#444444",1);
 		
 		return true;
@@ -51,23 +43,20 @@ name:"Menu",
 
 };
 
-//Application Load
+//Application OnLoad
 App.OnLoad = function () {
 	
 	//App.Init(title,width,height)
+	App.Init("SpiceJS", 720, 1024);
 
-	App.Init("Spice.js", 720, 1024);
-
-
-	//Set canvas background colour
-
-	App.canvas.background_set("#000000");
+	//Set canvas background colour ( colour )
+	App.canvas.background_set("#FFFFFF");
 
 	//Assign favicon
-
 	App.ext.metatag.metaFavicon("images/favicon.png");
 	
 };
+	
 </script>
 <canvas id="canvas"></canvas>
 <canvas id="buffer"></canvas>
