@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>SpiceJS</title>    
+    <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
+	<script rel=prefetch type="application/x-javascript" src="background.js"></script>
+    <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
+</head>
+<script rel="prefetch" name="main" type="text/javascript" defer>
+//Application Load
+App.OnLoad = function()	{
+	
+	// Initalize Title and Resolution
+	App.Init("Parralax",600,420);
+	
+	//Snap to top
+	App.ext.top();
+	
+	//Set canvas background colour
+	App.canvas.background_set("#000000");
+	
+	//Assign favicon
+	App.ext.metatag.metaFavicon("../../stan.png");
+	
+};	
+
+//Application main loop Object[init,update,draw]
+App.main= {
+	
+	name:"Background",
+	
+	init:function() {
+	
+		//State Initilization
+		
+		return true;
+	},
+	
+	update:function() {
+
+		//Update logic	
+		this.app.client.update.state.set(Snowboarding.Menu,true);
+
+		return true;
+	},
+	
+	draw:function() {
+		
+		//Draw logic
+		
+		return true;
+	}
+	
+};
+</script>
+</html>
