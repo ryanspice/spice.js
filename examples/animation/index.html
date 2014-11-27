@@ -2,15 +2,26 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>Spice.js</title>    
+    <title>SpiceJS</title>    
      <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
      <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
 </head>
 <script rel="prefetch" name="main" type="text/javascript" defer>
+	
+//Application Load
 App.OnLoad = function()	{
 	
 	// Initalize Title and Resolution
 	App.Init("Fire",128,128);
+	
+	//Snap to top
+	App.ext.top();
+	
+	//Set canvas background colour
+	App.canvas.background_set("#000000");
+	
+	//Assign favicon
+	App.ext.metatag.metaFavicon("../../stan.png");
 	
 };	
 	
@@ -20,45 +31,71 @@ App.main = {
 	
 	init:function() {
 		
-		this.app.canvas.background_set("#000000");
+		//State Initilization
 		
-		this.app.ext.top();
-		
+		//Setup animation index
 		this.fireIndex = 0;
 		
+		//Setup fire width
+		this.fireWidth = 0;
+		
+		//Setup fire animation array 
 		this.fire = new Array(63);
 		
+		//Fill fire animation array
 		for (var i = 63; i>=0;i--)
 			if (i>9)
 				this.fire[i] = this.graphics.load("firewall0"+i.toString());
 			else
 				this.fire[i] = this.graphics.load("firewall00"+i.toString());
 		
-		return this;
+		return true;
 	},
 	update:function() {
 	
-		this.fireWidth = this.fire[0].width;
+		//Update Logic
+		
+		//If still loading, return
+		if (this.graphics.getErrors())
+			return false;
+		else
+		{
+			//if done loading, set fireWidth to the width of fire
+			if (this.fireWidth == 0)
+				this.fireWidth = this.fire[0].width;
+		}
 	
 		return true;
 	},
+	
 	draw:function() {
 		
+		//Draw Logic
+		
+		//If still loading, return
+		if (this.graphics.getErrors())
+			return false;
+		
+		//Store img pointer
 		var img = this.fire[this.fireIndex];
 		
+		//Draw img
 		this.visuals.image(img,0,0);
 		
 		this.visuals.image(img,-this.fireWidth,0);
 		
 		this.visuals.image(img,+this.fireWidth,0);
 		
+		//Increase animation index
 		this.fireIndex++;
 		
+		//Loop animation index
 		if (this.fireIndex>63)
 			this.fireIndex = 0;
 		
 		return true;
 		}
+	
 };	
 </script>
 </html>

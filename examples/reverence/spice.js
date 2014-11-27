@@ -1,9 +1,9 @@
- 	/*
+/*
  ,-.                         
 (   `     o            o     
  `-.  ;-. . ,-. ,-.    , ,-. 
 .   ) | | | |   |-'    | `-. 
- `-'  |-' ' `-' `-'  | `-' 
+ `-'  |-' ' `-' `-' o  | `-' 
       '               -'     
 	  Created By: Ryan Spice-Finnie
 	  
@@ -271,7 +271,7 @@ var App = Object.create({
 			flags:{
 				canvas:true,
 				mstouch:false,
-				seamless:false,
+				seamless:true,
 				tight:true,
 				touchprevent:true,
 			},
