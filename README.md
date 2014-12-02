@@ -1,9 +1,3 @@
-Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
-
-To get started, check out <http://js.ryanspice.com>!
-
-## table of contents
-
 [examples]: #examples
 [particle]: #particle
 [animations]: #animations
@@ -15,10 +9,16 @@ To get started, check out <http://js.ryanspice.com>!
 [setting up your application]: #setting-up-your-application
 [further readings...]: #further-readings
 
+Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
+
+To get started, check out <http://js.ryanspice.com>!
+
+## table of contents
+
 * [getting started][getting started]
- * [essential functions](essential functions)
+ * [essential functions][essential functions]
  * [setting up your application][setting up your application]
- * [further readings...][further readings]
+ * [further readings...][further readings...]
  
 * [examples][examples]
  * [particle][particle]
