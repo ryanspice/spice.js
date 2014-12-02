@@ -2,9 +2,15 @@
 ##table
 
 
-* [eh][id]
-* []()
-* []()
+* [examples][examples]
+* [particle][particle]
+* [animations][animations]
+* [parallax][parallax]
+
+[examples]: #examples
+[particle]: #particle
+[animations]: #animations
+[parallax]: #parallax
 
 ##getting started
 
