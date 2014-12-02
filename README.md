@@ -11,9 +11,16 @@ __P__rior to recent times developers had to rely on functions such as setTimeout
 ##examples
 
 ### particle
-<span style="float:left;width:100%;height:180px;"><iframe style="float:left;margin-right:12px;" src = "https://ryanspice.com/rain/"></iframe>
-Rain Particle System<br/><br/>
-This example shows how SpiceJS, in combination with Object.create methods, can create fast and flexible particle systems on the fly. <br/><br/>View<br/>Download
+
+
+This example shows how SpiceJS, in combination with Object.create methods, can create fast and flexible particle systems on the fly.
+<br/><br/>
+reference: [Vector Math](http://higherorderfun.com/blog/2012/06/03/math-for-game-programmers-05-vector-cheat-sheet/), [Object.create()](http://www.htmlgoodies.com/beyond/javascript/object.create-the-new-way-to-create-objects-in-javascript.html), [Object Creation Patterns](http://www.htmlgoodies.com/html5/javascript/some-useful-javascript-object-creation-patterns.html#fbid=T4GDU9yVQOc)
+ <br/><br/>
+[view](https://github.com/ryanspice/spice.js/tree/master/examples/particles)
+[view](https://github.com/ryanspice/spice.js/tree/master/examples/particles)
+<br/>
+[download]
 </span>
 ### animations
 
