@@ -19,7 +19,7 @@ To get started, check out <http://js.ryanspice.com>!
 [setting up your application]: #setting
 [documentation]: #documentation
 
-* [credit][credit]
+* [getting started](#getting started)
 * [examples][examples]
  * [particle][particle]
  * [animations][animations]
