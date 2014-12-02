@@ -221,6 +221,14 @@ var App = Object.create({
             return Object.create(a,this.client.room);
         },
         
+		getCurrent:{
+			return this.client.update.state.current;	
+		},
+		
+		setOptions:{
+			return this.options = options;
+		},
+		
         //App.options
 		options:{
             
