@@ -28,9 +28,9 @@ To get started, check out <http://js.ryanspice.com>!
 
 ## getting started
 
-<b>B</b>efore you start developing your App in SpiceJS, it is reccomended to have some knowledge of Object.create and Prototype javascript notation. 
+<b>B</b>efore you start developing your App in SpiceJS, it is recommended to have some knowledge of Object.create and Prototype javascript notation. 
 
-<b>S</b>piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports Html5 and Html5 Hardware Accelleration will have a nice time.
+<b>S</b>piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports Html5 and Html5 Hardware Acceleration will have a nice time.
 
 <b>T</b>he framework is designed on providing you the most efficient way to develop a cross platform, multi touch, and multi resolution application with ease.
 
@@ -41,28 +41,52 @@ To get started, check out <http://js.ryanspice.com>!
 
 ### essential functions
 
- 
-
 ###### App.OnLoad
+
+For you to define options before the application begins, Every SpiceJS App must include an App.OnLoad override function.
 
 ```bash
 App.OnLoad = function(){
 
-	App.Init("sb",1920,480);
+	App.Init("Title",1920,480);
+	
 };
 ```
+
+Calling App.Init(title,width,height) allows you assign a designated width and height target for the canvas. 'title' will be assigned to the webpages document title.
+
 
 ###### App.main
 
+This is what an empty App.main override function looks like. Without any logic the application won't noticeably do anything aside from positioning and scaling the canvas. 
+
 ```bash
 App.main = {
+
  init:function(){},
+ 
  update:function(){},
+ 
  draw:function(){}	
+ 
+ 
 };
+
+
+
 ```
 
+
+
+
+
+You can access the current state of the loop by calling ```App.client.update.state.current```, or ```App.getCurrent()```. This returns the current state object.
+
 ###### App.options
+
+Normally you find your options object inside SpiceJS, however during App.OnLoad, you can override settings, call functions, and make underlying changes to SpiceJS before the application starts. 
+
+You can do this by calling ```App.options = options;```, or ```App.setOptions(options)```. This returns a true or false based on successful completion.
 
 ```bash
 var options = {
@@ -70,12 +94,15 @@ var options = {
             //Global
 			mute:false,
             
-            
             //Paths
 			paths:{
+			
 				data:"data/",
+				
 				images:"images/",
+				
 				url:""
+				
 			},
             
             //Canvas
@@ -96,23 +123,31 @@ var options = {
                 
                 //Assign canvas element position properties
 				position:{
+				
 					position:'absolute',
+					
 					top:0,
+					
 					left:window.innerWidth/2,
+					
 					center:true,
+					
 					z:1
+					
 				},
 				
                 //Assign canvas size properties
                 size:{
+				
 					width:320,
+					
 					height:480
+					
 				}
+				
 			}
 ```
-
-###### Note: Stylesheet loads block script execution, so if you have a ```<script>``` after a ```<link rel="stylesheet" ...>```, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
-
+Note: Stylesheet loads block script execution, so if you have a ```<script>``` after a ```<link rel="stylesheet" ...>```, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
 
 ### setting up your application
 
@@ -145,7 +180,7 @@ An example of the above essential functions used to create a basic SpiceJS App.
 	</html>
 ```
 
-### further reading...
+### further readings...
 
 You can read the [Documentation](http://js.ryanspice.com/) and more on SpiceJS and how to create SpiceJS apps at http://js.ryanspice.com/. 
 
@@ -189,7 +224,7 @@ teaching points: <i>external files, loading screen, parallaxing</i>
 
 ### isometric
 
-Using mutliple arrays to store map background and object data. This example previews scaling and panning an isometric randomly generated map. 
+Using multiple arrays to store map background and object data. This example previews scaling and panning an isometric randomly generated map. 
 
 teaching points: <i>sprites, blitting, viewport, drawing and working with isometric data</i>
 
