@@ -2,7 +2,7 @@ Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
 To get started, check out <http://js.ryanspice.com>!
 
-##table
+## table of contents
 
 [examples]: #examples
 [particle]: #particle
@@ -11,15 +11,19 @@ To get started, check out <http://js.ryanspice.com>!
 [isometric]: #isometric
 [credit]: #credit
 [documentation]: #documentation
-[index.html]: #index.html
-[setting up your application]: #setting
-[documentation]: #documentation
 
-* [getting started](#getting-started)
- * [particle][particle]
- * [animations][animations]
- * [parallax][parallax]
- * [isometric][isometric]
+
+
+[index.html]: #index.html
+
+[getting started]: #getting-started
+[setting up your application]: #setting-up-your-application
+[further readings...]: #further-readings...
+
+* [getting started][getting started]
+ * [essential functions](#essential functions)
+ * [setting up your application][setting-up-your-application]
+ * [further readings...][further readings...]
  
 * [examples][examples]
  * [particle][particle]
@@ -28,24 +32,26 @@ To get started, check out <http://js.ryanspice.com>!
  * [isometric][isometric]
 * [documentation][documentation]
  * [index.html][index.html]
- * [setting up your application][setting up your application]
+ * [setting up your application][#setting-up-your-application]
  * [further reading..](http://js.ryanspice.com/)
 
 
-##getting started
+## getting started
 
-__B__efore you start developing your App in SpiceJS, it is reccomended to have some knowledge of Object.create and Prototype javascript notation. 
+<b>B</b>efore you start developing your App in SpiceJS, it is reccomended to have some knowledge of Object.create and Prototype javascript notation. 
 
-__S__piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports Html5 and Html5 Hardware Accelleration will have a nice time.
+<b>S</b>piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports Html5 and Html5 Hardware Accelleration will have a nice time.
 
-__T__he framework is designed on providing you the most efficient way to develop a cross platform, multi touch, and multi resolution application with ease.
+<b>T</b>he framework is designed on providing you the most efficient way to develop a cross platform, multi touch, and multi resolution application with ease.
 
-__P__rior to recent times developers had to rely on functions such as setTimeout(), however, up to date browsers can support a new feature called requestAnimationFrame() which can provide a high calculation of Frame Rate. This allows developers to create extensive programs, and fully animated games.
+<b>P</b>rior to recent times developers had to rely on functions such as setTimeout(), however, up to date browsers can support a new feature called requestAnimationFrame() which can provide a high calculation of Frame Rate. This allows developers to create extensive programs, and fully animated games.
 
 [```Hardware Acceleration```](http://en.wikipedia.org/wiki/Hardware_acceleration) 
 [```Request Animation Frame```](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame)
 
-### Initial Functions
+### essential functions
+
+ 
 
 ###### App.OnLoad
 
@@ -117,7 +123,43 @@ var options = {
 
 ###### Note: Stylesheet loads block script execution, so if you have a ```<script>``` after a ```<link rel="stylesheet" ...>```, the page will not finish parsing - and DOMContentLoaded will not fire - until the stylesheet is loaded.
 
-##examples
+
+### setting up your application
+
+An example of the above essential functions used to create a basic SpiceJS App.
+
+```bash
+	<!DOCTYPE html>
+	<html >
+		<head>
+			<script rel=prefetch type="application/x-javascript" src="spice.js"></script>
+			<script rel=prefetch name="main" type="text/javascript" defer>
+						App.OnLoad = function(){
+							App.init("sb",1920,480);
+						}
+						App.main = {
+							name:"Menu",
+							init:function() {
+								return true;
+								},
+							update:function() {
+								return true;
+								},
+							draw:function() {
+								return true;
+								}
+						};
+			</script>
+		</head>
+		<body></body>
+	</html>
+```
+
+### further reading...
+
+You can read the [Documentation](http://js.ryanspice.com/) and more on SpiceJS and how to create SpiceJS apps at http://js.ryanspice.com/. 
+
+## examples
 
 ### particle
 
