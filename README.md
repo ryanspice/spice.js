@@ -8,7 +8,6 @@
 
 ##getting started
 
-[id]: #examples
 
 
 __B__efore you start developing your App in SpiceJS, it is reccomended to have some knowledge of Object.create and Prototype javascript notation. 
