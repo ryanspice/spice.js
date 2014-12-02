@@ -1,7 +1,3 @@
-
-[```Hardware Acceleration```](http://en.wikipedia.org/wiki/Hardware_acceleration) 
-[```Request Animation Frame```](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame)
-
 Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
 To get started, check out <http://js.ryanspice.com>!
@@ -19,7 +15,12 @@ To get started, check out <http://js.ryanspice.com>!
 [setting up your application]: #setting
 [documentation]: #documentation
 
-* [getting started](#getting started)
+* [getting started](#getting-started)
+ * [particle][particle]
+ * [animations][animations]
+ * [parallax][parallax]
+ * [isometric][isometric]
+ 
 * [examples][examples]
  * [particle][particle]
  * [animations][animations]
@@ -32,8 +33,6 @@ To get started, check out <http://js.ryanspice.com>!
 
 
 ##getting started
-
-
 
 __B__efore you start developing your App in SpiceJS, it is reccomended to have some knowledge of Object.create and Prototype javascript notation. 
 
@@ -168,51 +167,4 @@ teaching points: <i>sprites, blitting, viewport, drawing and working with isomet
 
 [download](https://github.com/ryanspice/spice.js/blob/master/examples/isometric/isometric.7z)
 
-
-## documentation
-### index.html
-
-```bash
-	<!DOCTYPE html>
-	<html >
-	<body></body>
-	<script rel=prefetch type="application/x-javascript" src="spice.js"></script>
-	<script rel=prefetch name="main" type="text/javascript" defer>
-				App.OnLoad = function(){
-					App.init("sb",1920,480);
-				}
-				_Main.prototype = {
-					name:"Menu",
-					init:function() {
-							this.app.ext.metatag.metaAppend(this.app.ext.metatag.metaLink("icon.png","shortcut icon","image/png"));
-							this.app.ext.debug.toggle("off");
-							this.visuals.background_set("#000000");
-							this.visuals.clearing.settings[0][1]=true;
-							this.app.ext.top();
-							this.w = this.app.client.setWidth;
-							this.h = this.app.client.setHeight;
-							this.app.client.c.style.pointerEvents = "none";
-							this.rect = Object.create(_Rectangle.prototype);
-							this.x = 0;
-							this.y = 0;
-						return true;
-						},
-					update:function() {
-						return true;
-						},
-					draw:function() {
-							this.rect.draw(this.x,this.x,this.w,window.innerHeight);
-						return true;
-						}
-				};
-	</script>
-	</html>
-```
-
-### setting up your application
-
-### further reading...
-
-You can read the [Documentation](http://js.ryanspice.com/) and more on SpiceJS and how to create SpiceJS apps at http://js.ryanspice.com/. 
- 
 
