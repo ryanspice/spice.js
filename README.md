@@ -9,32 +9,22 @@ To get started, check out <http://js.ryanspice.com>!
 [animations]: #animations
 [parallax]: #parallax
 [isometric]: #isometric
-[credit]: #credit
-[documentation]: #documentation
-
-
-
-[index.html]: #index.html
 
 [getting started]: #getting-started
+[essential functions]: #essential-functions
 [setting up your application]: #setting-up-your-application
-[further readings...]: #further-readings...
+[further readings...]: #further-readings
 
 * [getting started][getting started]
- * [essential functions](#essential functions)
- * [setting up your application][setting-up-your-application]
- * [further readings...][further readings...]
+ * [essential functions](essential functions)
+ * [setting up your application][setting up your application]
+ * [further readings...][further readings]
  
 * [examples][examples]
  * [particle][particle]
  * [animations][animations]
  * [parallax][parallax]
  * [isometric][isometric]
-* [documentation][documentation]
- * [index.html][index.html]
- * [setting up your application][#setting-up-your-application]
- * [further reading..](http://js.ryanspice.com/)
-
 
 ## getting started
 
