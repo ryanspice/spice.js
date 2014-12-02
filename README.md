@@ -1,6 +1,25 @@
-# Spice.js 
 
+##getting started
+__B__efore you start developing your App in SpiceJS, it is reccomended to have some knowledge of Object.create and Prototype javascript notation. 
 
+__S__piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports Html5 and Html5 Hardware Accelleration will have a nice time.
+
+__T__he framework is designed on providing you the most efficient way to develop a cross platform, multi touch, and multi resolution application with ease.
+
+__P__rior to recent times developers had to rely on functions such as setTimeout(), however, up to date browsers can support a new feature called requestAnimationFrame() which can provide a high calculation of Frame Rate. This allows developers to create extensive programs, and fully animated games.
+
+##examples
+
+### particle
+<span style="float:left;width:100%;height:180px;"><iframe style="float:left;margin-right:12px;" src = "https://ryanspice.com/rain/"></iframe>
+Rain Particle System<br/><br/>
+This example shows how SpiceJS, in combination with Object.create methods, can create fast and flexible particle systems on the fly. <br/><br/>View<br/>Download
+</span>
+### animations
+
+### parallax
+
+### isometric
 
 Spice.js is a clean, fast, and intuitive javascript framework designed to allow for the creation of Html5 games or apps.The framework relies heavily on [```Hardware Acceleration```](http://en.wikipedia.org/wiki/Hardware_acceleration) and the use of [```Request Animation Frame```](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame)
 
