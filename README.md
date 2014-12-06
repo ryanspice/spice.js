@@ -11,18 +11,24 @@
 [further readings...]: #further-readings
 [features]: #features
 
+[completed]:$completed;
+[in-testing]:$in-testing;
+
 Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
-To get started, check out <http://js.ryanspice.com>!
+To get started, check out [the documentation](http://js.ryanspice.com)!
 
 ## table of contents
 
-* [features][features]
-* [coming soon][coming soon]
+* [features][features]	
+	
+	* [completed][completed]
+	* [in-testing][in-testing]
+	* [coming soon][coming soon]
 * [getting started][getting started]
- * [essential functions][essential functions]
- * [setting up your application][setting up your application]
- * [further readings...][further readings...]
+	* [essential functions][essential functions]
+	* [setting up your application][setting up your application]
+	* [further readings...][further readings...]
  
 * [examples][examples]
  * [particle][particle]
@@ -31,6 +37,13 @@ To get started, check out <http://js.ryanspice.com>!
  * [isometric][isometric]
 
 ## features	 
+
+<ul>
+	 <ul>Cross-Browser</ul>
+	 <ul>Lightweight</ul>
+	  <ul>No dependencies</ul>
+</ul>
+
 ####completed
 <ul>
 	 <li>game state logic</li>
@@ -38,7 +51,7 @@ To get started, check out <http://js.ryanspice.com>!
 	  <li>fps and delta time calculations</li>
 	 <li>graphics handling</li>
 	 <li>advanced scaling</li>
-	 </ul>
+</ul>
 
 ####in-testing
 <ul>
@@ -47,14 +60,14 @@ To get started, check out <http://js.ryanspice.com>!
 	 <li>advanced drawing (blending, elements, buttons)</li>
 	  <li>double buffering</li>
 	  <li>linear and radial collision</li>
-	 </ul>
+</ul>
 
 ####coming soon
  <ul>
 	 <li>Independent Application</li>
 	 <i>enable the ability to instantiate multiple app canvases on a single page</i>
 	 <li>Multi-Channel Audio</li>
-	 <i>IE is my main testing device, and audio is a hassle, and so this is on hold</i>
+	 <i>IE Mobile is my main testing device, and audio is a hassle, and so this is on hold</i>
 	 <li>Cookies</li>
 	 <i>plans to incorporate cookies is not prioritized and I am currently using [Cookies.js by Scott Hamper](https://github.com/ScottHamper/Cookies)</i>
 	 </ul>
