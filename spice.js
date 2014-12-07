@@ -214,16 +214,21 @@ var App = Object.create({
     //App prototype
 	prototype:{
         
-        //Create a game object
+        //Constructors 
+		
         create:function(a){
             
             //Create object, inheriting this.client.room
             return Object.create(a,this.client.room);
         },
         
+		//Getters
+		
 		getCurrent:{
 			return this.client.update.state.current;	
 		},
+		
+		//Setters
 		
 		setOptions:{
 			return this.options = options;
@@ -292,6 +297,7 @@ var App = Object.create({
 				SelectStart:false
 				}
 		},
+		
 		user:{
 			name		:"",
 			id			:"",
@@ -347,8 +353,11 @@ var App = Object.create({
 				}
 			})
 		},
+		
 		ext:{
 			prototype:{
+				
+				//Needs refractoring
 				freezeonfocus:false,
 				fps:0,
 				ping:0,
@@ -357,6 +366,8 @@ var App = Object.create({
 				connectionAttempts:0,
 				connectDate:new Date(),
 				connectDatere:new Date(),
+				
+				//ReFractoring
 				scroll:{
 					event:function(evt,delta) {
 						if (App.client.visuals.seamless)
@@ -386,6 +397,8 @@ var App = Object.create({
 					x:0,
 					y:1
 				},
+				
+				//Custom Click
 				click:function(event, anchorObj) {
 					if (anchorObj.click) {
 						anchorObj.click();
@@ -401,6 +414,8 @@ var App = Object.create({
 						}
 					}
 				},
+				
+				//Public functions
 				
 				//Toggle top snap
 				top:function(){
@@ -418,7 +433,7 @@ var App = Object.create({
 					
 				},
 				
-				//Debug Object
+				//default Objects
 				debug:{
 					prototype:{
 						delay:0,
@@ -665,6 +680,7 @@ var App = Object.create({
 						}
 					}
 				},
+				
 				input:{
 					prototype:{
 						init:false,
@@ -1218,6 +1234,8 @@ var App = Object.create({
 					}
 				}
 				},
+				
+				//connection info
 				con:false,
 				connection:null,
 				connect:function(app){
@@ -1268,6 +1286,7 @@ var App = Object.create({
 				}
 			}
 		},
+		
 		canvas:{
 			prototype:{
 				canvas:Object.create(null),
@@ -1351,6 +1370,7 @@ var App = Object.create({
 				}
 			}
 		},
+		
         //Application.client; handles game logic, audio, graphics, visuals
 		client:{
             
