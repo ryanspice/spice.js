@@ -1,12 +1,11 @@
- 	/*
- ,-.                         
-(   `     o            o     
- `-.  ;-. . ,-. ,-.    , ,-. 
-.   ) | | | |   |-'    | `-. 
- `-'  |-' ' `-' `-'  | `-' 
-      '               -'     
+/*
+███████╗██████╗ ██╗ ██████╗███████╗     ██╗███████╗
+██╔════╝██╔══██╗██║██╔════╝██╔════╝     ██║██╔════╝
+███████╗██████╔╝██║██║     █████╗       ██║███████╗
+╚════██║██╔═══╝ ██║██║     ██╔══╝  ██   ██║╚════██║
+███████║██║     ██║╚██████╗███████╗╚█████╔╝███████║
+╚══════╝╚═╝     ╚═╝ ╚═════╝╚══════╝ ╚════╝ ╚══════╝
 	  Created By: Ryan Spice-Finnie
-	  
 */
 
 /*jslint node: true */
@@ -16,94 +15,36 @@
 "use strict";
 
 
-/*
-var A = Object.create(null,{name:{value:"eh"}});
-	
-	
-var Properties = Object.create(null,{
-		value:{
-				writeable:true,
-				configurable:true,
-				value:""
-			},
-		acessor:{
-			configurable:false,
-			get:function(){return this.value;},
-			Set:function(v){this.value = v;}
-		}
-	});
-	Properties.acessor.set(1);
-console.log(Properties);*/
-var _Rectangle = {};
-_Rectangle.prototype = {
-	x: 0,
-	y: 0,
-	a: 0,
-	draw: function(x,y,w,h,a,c){
-		if (this.a!=a)
-			this.a=a;
-		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
-	}
-}
-var addListener = function (obj, eventName, listener) {
-	if (obj.addEventListener)
-        obj.addEventListener(eventName, listener, false);
-    else
-		obj.attachEvent("on" + eventName, listener);
-}
+//Time at which this document begins
+var TimeToLive = new Date().getTime();
 
-
-var sprite = Object.create(null);
-var img = Object.create(null);
-
-
-//
-var Scripts;
-
-var main = Object.create(null,{name:{value:"Main"}});
-
-
-//Type Parent
-var Type=Object.create(null,{prototype:{value:{value:null,writable:{value:!1},configurable:{value:!1},enumerable:{value:!1},set:function(a){this.value=a;return this}}}});
-
-//Types
-var Secure = Object.create(Type.prototype);
-var Private = Object.create(Type.prototype,{enumerable:{value:!0}});
-var Protected = Object.create(Type.prototype,{writable:{value:!0}});
-var Public = Object.create(Type.prototype,{writable:{value:!0},configurable:{value:!0},enumerable:{value:!0}});
-
-//Default Functions
-var DefaultFunction=function(){return !0;};
-var DefaultFalse=function(){return !1;};
-var DefaultObject = Object.create(null);
-	
-	
-
-	
-	
-	
-	
-var NullObject = Object.create(null);
-var Debug = NullObject;
-var Sprite = NullObject;
-
-var TT = new Date().getTime();
 var App = Object.create({	
-    
-    //App constructor 
+  
     constructor:{	
-            
+		
+        //Version Number
+		VN:{
+            //Config
+            writable: false,  
+            configurable:false, 
+            enumerable:true, 
+			
+			//VN
+			value:'0.6.60.14.09.12.min'
+		},
+		
         //Build Client, Instantiate Loop, Build Canvas, Initalize Client
 		Init:{
             
             //Config
-            writable: true,  
-            configurable:true, 
+            writable: false,  
+            configurable:false, 
             enumerable:false, 
                 
             //Function
             value:function(name,w,h){	
                 
+				//Store self
                 var self = this;
                 
                 //Build client from prototype
@@ -127,6 +68,59 @@ var App = Object.create({
 			}
 		},		
             
+        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+ 		OnLoad:{
+            
+            //Config
+            writable:true, 
+            configurable:false, 
+            enumerable:false, 
+            
+            //Function
+            value:function(){
+                
+                //Default to App.
+                App.Init("Spice.js",480,320);
+			}
+		},
+            
+        //Runs on DOMContentLoaded
+		OnApplicationLoad:{
+            
+            //Config
+            writable:false, 
+            configurable:false, 
+            enumerable:false, 
+			
+            //Function
+            value:function(evt,app){
+				
+				console.log(this);
+				
+                //Run App.OnLoad
+                App.OnLoad();
+			}
+		},
+		
+        //AddEvent Listener
+		Listener:{
+            
+            //Config
+            writable:false, 
+            configurable:false, 
+            enumerable:false, 
+			
+            //Function
+			value:function (obj, evt, listener) {
+				
+				//If addEventListener exist, add it, otherwise attachEvent
+				if (obj.addEventListener)
+					obj.addEventListener(evt, listener, false);
+				else
+					obj.attachEvent("on" + evt, listener);
+			}	
+		},
+		
         //Construct Objects from this.Construct(prototype,[constructor])
         Construct:{
             
@@ -170,135 +164,101 @@ var App = Object.create({
                 }
             }
         },
-        
-        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
- 		OnLoad:{
-            
-            //Config
-            writable:true, 
-            configurable:false, 
-            enumerable:false, 
-            
-            //Function
-            value:function(){
-                
-                //Default to App.
-                App.Init("Spice.js",480,320);
-			}
-		},
-            
-        //Runs on DOMContentLoaded
-		OnApplicationLoad:{
-            
-            //Config
-            writable:false, 
-            configurable:false, 
-            enumerable:false, 
-            t:this, 
-            
-            //Function
-            value:function(t){
-                console.log(t)
-                //Get current time
-                App.time = (( new Date().getTime())-TT)*1;
-                
-                //Run App.OnLoad
-                App.OnLoad();
-			}
-		},
-      
-        //Current Version
-		FMk:{value:'0.6.60.14.05.10.min'}
+		
+		//App.create for creating objects with app, visuals and graphics inherited
+		create:{writable:true, configurable:false, enumerable:false, value:function(a){ return this.Construct(a||{},this.client.room); } },
+		
+		//Getters for Common Data
+		getFps:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.fps; } },
+		getCurrent:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.state.current; } },
+		
+		getDelta:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.delta; } },
+		getScale:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.scale; } },
+		
+		getWidth:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.setWidth; } },
+		getHeight:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.setHeight; } },
+		
+		getScaledWidth:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.width; } },
+		getScaledHeight:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.height; } },
+		time:{writable:true, configurable:false, enumerable:false, value:0 },
 	},
     
-    //App prototype
 	prototype:{
         
         //Constructors 
-		
-        create:function(a){
-            
-            //Create object, inheriting this.client.room
-            return Object.create(a,this.client.room);
-        },
         
-		//Getters
 		
-		getCurrent:{
-			return this.client.update.state.current;	
-		},
 		
-		//Setters
 		
-		setOptions:{
-			return this.options = options;
-		},
+        //Global Options Panel
+		//	These options have effect OnLoad only. 
 		
-        //App.options
 		options:{
-            
-            //Global
+			targetfps:60,
 			mute:false,
-            
-            
-            //Paths
 			paths:{
 				data:"data/",
 				images:"images/",
 				url:""
 			},
-            
-            //Canvas
 			canvas:{
-                
-                //Toggle the use of options.canvas
-				override:false,
-                
-                //Use canvas.name, canvas.buffer
-				name:'canvas',
-				buffername:'buffer',
-                
-                //Toggle the use of double-buffering
-				buffer:false,
-                
-                //Assign canvas element background colour
-				color:'#0000000',
-                
-                //Assign canvas element position properties
-				position:{
+				override:false,			//Toggle the use of options.canvas
+				name:'canvas',			//Use canvas.name
+				buffername:'buffer',	//Use canvas.buffer
+				buffer:false,			//Toggle the use of double-buffering
+				color:'#0000000',		//Assign canvas element background colour
+				position:{				//Assign canvas element position properties
 					position:'absolute',
 					top:0,
 					left:window.innerWidth/2,
 					center:true,
 					z:1
 				},
-				
-                //Assign canvas size properties
-                size:{
+                size:{					//Assign canvas size properties
 					width:320,
 					height:480
 				}
 			},
-            
-            //Feature Flags
-			flags:{
+			flags:{						//Feature Flags
 				canvas:true,
 				mstouch:false,
 				seamless:false,
 				tight:true,
 				touchprevent:true,
 			},
-            
-            //Override Functions
-			override:{
+			override:{					//Override Functions
 				keyboard:true,
 				mouse:true,
 				MSHoldVisual:false,
 				SelectStart:false
-				}
+				},
+            get:function(attr){ 
+				if (attr)
+					{
+						for (var attrname in this) 
+							if (attrname==attr) return attrname; 
+						return {};
+					}
+				else
+				return this;
+			},
+			set:function(options){
+				
+				for (var attrname in options) { this[attrname] = options[attrname]; };
+						
+				return this;
+			}
 		},
 		
+		//Facebook User Information
+		//	Current API structure is depreciated, and therefore this is unsuable
+		
 		user:{
+			//	//To ensure your data is filled, use a callback return your response data.
+			//	var facebook = function(){ return App.user.pull();};
+			//
+			//	//Your facebook ID, callback function(){}
+			//	App.user.fbconnect(id, facebook) 
 			name		:"",
 			id			:"",
 			locale		:"",
@@ -306,19 +266,13 @@ var App = Object.create({
 			updated_time:"",
 			timezone	:"",
 			quotes		:"",
-			info:Object.create({
-				response:{},
-				facebook:function(response){
-					this.response = response;
-					App.user.name = this.response.name;
-					App.user.id = this.response.id;
-					App.user.locale = this.response.locale;
-					App.user.gender = this.response.gender;
-					App.user.updated_time = this.response.updated_time;
-					App.user.timezone = this.response.timezone;
-					App.user.quotes = this.response.quotes;
-				},
-				connect:function con(appid){
+			response	:{},
+			
+			//returns the response object
+			get:function(){return this.response;},
+			
+			//facebook connection
+			fbconnect:function con(appid,callback){
 					window.fbAsyncInit = function() {
 					FB.init({
 					appId      : appid,
@@ -345,27 +299,138 @@ var App = Object.create({
 					console.log('Welcome!  Fetching your information.... ');
 					
 					FB.api('/me', function(response) {
-						App.user.info.facebook(response);
-					console.log(App.user);
+						App.user.facebook(response);
+						callback(response);
 					  console.log('Good to see you, ' + response.name + '.');
 					});
 				  }
-				}
-			})
+				},
+			
+			//facebook callback
+			facebook:function(response){
+				this.response = response;
+				this.name = this.response.name;
+				this.id = this.response.id;
+				this.locale = this.response.locale;
+				this.gender = this.response.gender;
+				this.updated_time = this.response.updated_time;
+				this.timezone = this.response.timezone;
+				this.quotes = this.response.quotes;
+			}
+			
 		},
+		
+        //App.ext - Client extensions
+		//	These operations are extended variations on the canvas API. 
 		
 		ext:{
 			prototype:{
 				
+				//UserAgent Information
+				//	Assists in detecting the platform that you are running on.
+				useragent:{
+					//	//Since your useragent doesnt change, you can simply query the following.
+					//	.useragent.agent 		//Your navigator.useragent, 
+					//	.useragent.mouse 		// true or false
+					//	.useragent.touch 		//
+					//	.useragent.keyboard 	/
+					//	.useragent.windows 	
+					//	.useragent.chrome 	
+					//	.useragent.safari 	
+					//	.useragent.iemobile 	
+					//	.useragent.nokia 	
+					//	.useragent.ie 	
+					//	.useragent.blackberry 	
+					//	.useragent.playbook 	
+					//	.useragent.bb10 	
+					//	.useragent.mobile 	
+					prototype:{
+						agent:String,
+						mouse:false,
+						touch:false,
+						keyboard:false,
+						windows:false,
+						chrome:false,
+						safari:false,
+						iemobile:false,
+						nokia:false,
+						ie:false,
+						iOs:false,
+						blackberry:false,
+						playbook:false,
+						bb10:false,
+						mobile:false,
+						Chrome: function(){
+							return this.chrome = navigator.userAgent.match(/Chrome/i) ? true : false;
+						},
+						Safari: function(){
+							return this.safari = navigator.userAgent.match(/Safari/i) ? true : false;
+						},
+						Android: function(){
+							this.android = navigator.userAgent.match(/Android/i);
+							return this.android ? true : false;
+						},
+						BlackBerry:function(){
+							this.blackberry = navigator.userAgent.match(/BlackBerry/i);
+							this.playbook = navigator.userAgent.match(/PlayBook/i);
+							this.bb10 = navigator.userAgent.match(/BB10/i);
+							return this.blackberry||this.playbook||this.bb10 ? true : false;
+						},
+						iOS:function(){
+							return  this.iOs = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+						},
+						IEMobile: function(){
+							var trident = navigator.userAgent.match(/IEMobile/i);
+							var windowsphone = navigator.userAgent.match(/Windows Phone/i);
+							var touch = navigator.userAgent.match(/touch/i);
+							return  trident || windowsphone || touch ? true : false;
+						},
+						IE: function(){
+							return  navigator.userAgent.match(/Trident/i) ? true : false;
+						},
+						Nokia: function(){
+							return  navigator.userAgent.match(/Nokia/i) ? true : false;
+						},
+						any: function(){
+							return (this.Android() || this.BlackBerry() || this.iOS());
+						}
+					},
+					constructor:function(){return {
+						init:{value:function(){
+								this.agent = navigator.userAgent;
+								this.chrome = this.Chrome();
+								this.safari = this.Safari();
+								this.mouse = this.any();
+								this.iemobile = this.IEMobile();
+								this.nokia = this.Nokia();
+								this.windows = this.IEMobile() || this.IE() || !this.any();
+								
+								this.ie = this.trident = this.IE();
+								this.touch = this.any();
+								this.mouse = !this.any() || this.BlackBerry();
+								this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
+							
+								this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+							
+								this.BlackBerry();
+								this.iOS();
+								this.Android();
+							
+								}
+							}
+						}
+					}
+				},
+				
 				//Needs refractoring
-				freezeonfocus:false,
-				fps:0,
-				ping:0,
-				offline:false,
-				delta_speed:0,
-				connectionAttempts:0,
-				connectDate:new Date(),
-				connectDatere:new Date(),
+				//freezeonfocus:false,
+				//fps:0,
+				//ping:0,
+				//offline:false,
+				//delta_speed:0,
+				//connectionAttempts:0,
+				//connectDate:new Date(),
+				//connectDatere:new Date(),
 				
 				//ReFractoring
 				scroll:{
@@ -465,79 +530,17 @@ var App = Object.create({
 						app:{value:a},
 						init:{value:function(){
 									this.log('Debug:     '+this.strength);
-									Debug = this;
 								}
 							}
 						}
 					}
 				},
-				useragent:{
-					prototype:{
-						agent:String,
-						mouse:false,
-						touch:false,
-						keyboard:false,
-						windows:false,
-						chrome:false,
-						safari:false,
-						Chrome: function(){
-							return this.chrome = navigator.userAgent.match(/Chrome/i) ? true : false;
-						},
-						Safari: function(){
-							return this.safari = navigator.userAgent.match(/Safari/i) ? true : false;
-						},
-						Android: function(){
-							return navigator.userAgent.match(/Android/i) ? true : false;
-						},
-						BlackBerry:function(){
-							var blackberry = navigator.userAgent.match(/BlackBerry/i);
-							var playbook = navigator.userAgent.match(/PlayBook/i);
-							var bb10 = navigator.userAgent.match(/BB10/i);
-							return blackberry||playbook||bb10 ? true : false;
-						},
-						iOS:function(){
-							return  navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
-						},
-						iemobile:false,
-						IEMobile: function(){
-							var trident = navigator.userAgent.match(/IEMobile/i);
-							var windowsphone = navigator.userAgent.match(/Windows Phone/i);
-							var touch = navigator.userAgent.match(/touch/i);
-							return  trident || windowsphone || touch ? true : false;
-						},
-						ie:false,
-						IE: function(){
-							return  navigator.userAgent.match(/Trident/i) ? true : false;
-						},
-						nokia:false,
-						Nokia: function(){
-							return  navigator.userAgent.match(/Nokia/i) ? true : false;
-						},
-						any: function(){
-							return (this.Android() || this.BlackBerry() || this.iOS());
-						}
-					},
-					constructor:function(){return {
-						init:{value:function(){
-								this.agent = navigator.userAgent;
-								this.chrome = this.Chrome();
-								this.safari = this.Safari();
-								this.mouse = this.any();
-								this.iemobile = this.IEMobile();
-								this.nokia = this.Nokia();
-								this.windows = this.IEMobile() || this.IE() || !this.any();
-								
-								this.ie = this.trident = this.IE();
-								this.touch = this.any();
-								this.mouse = !this.any() || this.BlackBerry();
-								this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
-							
-								this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-								}
-							}
-						}
-					}
-				},
+				
+				
+				
+				
+				
+				
 				metatag:{
 					prototype:{
 						metaFavicon: function(img) {
@@ -584,7 +587,7 @@ var App = Object.create({
 									this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
 								//if (this.devicedpi)
 									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
-								Debug.log('Debug:     MetaCount/'+this.count);
+								//Debug.log('Debug:     MetaCount/'+this.count);
 							return true;
 							}
 						}
@@ -613,8 +616,8 @@ var App = Object.create({
 					},
 					constructor:function(){return {
 						init:{value:function(){
-									this.set(this.Black);
-									Debug.log("Colour:    "+this.Current[0]+"/"+this.Current[1]);
+									//this.set(this.Black);
+									//console.log("Colour:    "+this.Current[0]+"/"+this.Current[1]);
 								}
 							}
 						}
@@ -667,7 +670,7 @@ var App = Object.create({
 							document.body.style.cursor=cursor;
 							this.changed = true;
 							this.count++;
-							Debug.log("Cursor:    "+this.current+" - "+this.last);
+							//Debug.log("Cursor:    "+this.current+" - "+this.last);
 						}
 					},
 					constructor:function(a){return{
@@ -681,10 +684,13 @@ var App = Object.create({
 					}
 				},
 				
+				
+				//App.ext.input || App.input
 				input:{
 					prototype:{
 						init:false,
-						parent:Private,
+						
+						//Accessable Variables
 						x: 0,
 						y: 0,
 						touch:false,
@@ -801,7 +807,7 @@ var App = Object.create({
 								input.kpressed = true;
 								input.keyPower = -a;
 								input.keyPower 	= input.keyPower;
-								Debug.log(input.key + " " + input.keyPower);
+								//Debug.log(input.key + " " + input.keyPower);
 							},
 							keyup:function(input) {
 								input.key = false;
@@ -1243,7 +1249,7 @@ var App = Object.create({
 					if ((this.offline)||(this.connectionAttempts>0))
 						return this.offline = this.con;
 					this.connectionAttempts++;
-					Debug.log("Network:   Attempt: "+this.connectionAttempts);
+					//Debug.log("Network:   Attempt: "+this.connectionAttempts);
 					if (window.XMLHttpRequest)
 						this.connection = new XMLHttpRequest();
 						else
@@ -1281,6 +1287,7 @@ var App = Object.create({
 						(this.input = this.app.Construct(this.input.prototype,this.input.constructor)).init();
 						(this.colour =	this.app.Construct(this.colour.prototype,this.colour.constructor)).init();
 						(this.metatag =	this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
+						this.time = (( new Date().getTime())-TimeToLive)*1;
 						}
 					}
 				}
@@ -1419,10 +1426,10 @@ var App = Object.create({
 							(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
                     
                             //Build 
-							(this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(this.targetfps,this.targetfps);
+							(this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(app.options.targetfps,app.options.targetfps);
                     
                             //Build 
-							(this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,this.targetfps);
+							(this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
                     
                             //Build 
 							this.main = Object.create(this.app.main,this.main.constructor());
@@ -1430,7 +1437,7 @@ var App = Object.create({
                             //Build 
 							(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
                     
-                            console.log(App);
+                            //console.log(App);
 						}}
                     
 				}
@@ -1683,9 +1690,9 @@ var App = Object.create({
 								this.delta = 2.5;
 								
 							if (this.delta!==this.delta+1)
-								App.delta = App.client.delta = this.delta_speed = this.delta;
+								App.client.delta = this.delta_speed = this.delta;
 								else
-								App.delta = App.client.delta = this.delta_speed = 1;
+								App.client.delta = this.delta_speed = 1;
 								//console.log(this.delta);
 							/* Increment Time to increase performance */
 								if (this.fps==0)
@@ -1836,10 +1843,10 @@ var App = Object.create({
 			},
 			room:{
 					prototype:{
-					init:DefaultObject,
-					app:DefaultObject,
-					visuals:DefaultObject,
-					graphics:DefaultObject,
+					init:(Object.create(null)),
+					app:(Object.create(null)),
+					visuals:(Object.create(null)),
+					graphics:(Object.create(null)),
 					started:false,
 					Started:{value:function(){return function() {var a = this.Started;App.set_scale();this.Started = true; return a};}}
 					},
@@ -1880,7 +1887,7 @@ var App = Object.create({
 				},
 				constructor:function(){return {
 					init:{value:function(rate,fps){
-							Debug.log('Pace: Init');
+							//Debug.log('Pace: Init');
 							this.targetfps = fps;
 							this.timer = new Date().getTime();
 							this.rate = rate/1000.0;
@@ -2084,6 +2091,7 @@ var App = Object.create({
 			graphics:{
 				prototype:{
 					path:"",
+					Sprite:Object.create(null),
 					SpriteWebItems:new Array(0),
 					SpriteLoadNumber:0,
 					SpriteLoadErrors:0,
@@ -2114,14 +2122,14 @@ var App = Object.create({
 						return this.SpriteWebItems[name];
 					},
 					graphicsLibrary:function(){
-						Sprite = Object.create(null);
+						this.sprite = Object.create(null);
 						this.Sources = Object.create(null);
 						this.Sources.prototype = {	
 							get:function get(){return this.index;},
 							getByName:function getByName(name){return this.index[name];},
 							getName:function getName(name){return this.index[name].name;},
 						}
-						Sprite = Object.create(this.Base,
+						this.sprite = Object.create(this.Base,
 						{
 							constructor:function Sprite(path,filename){this.path=path;this.filename=filename;return path;},
 							src:	{value:"S:undefined"},
@@ -2138,12 +2146,12 @@ var App = Object.create({
 									return;
 								this.index[image.name]=image; 
 								this.count++;
-								Debug.log("GraphicsController: load: "+image.name + ":"+this.count);
+								//Debug.log("GraphicsController: load: "+image.name + ":"+this.count);
 							}},
 							unload:{value:function unload(name)
 							{
 								this.index[name]=null; 
-								Debug.log('GraphicsController: unload: '+name);
+								//Debug.log('GraphicsController: unload: '+name);
 								return this.index[name];
 							}},
 						});
@@ -2158,14 +2166,14 @@ var App = Object.create({
 								img.number = 1+ App.client.graphics.SpriteLoadErrors++;
 								img.onload = function() {
 										App.client.graphics.SpriteLoadErrors--;
-										Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client.graphics.SpriteLoadErrors));
+										//Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client.graphics.SpriteLoadErrors));
 										
 									};
 								return img;
 							},
 						unload:function() {
 								this.Sources.unload(this.name);
-								Debug.log("GraphicsController: unload: "+image.name + ":"+this.count);
+								//Debug.log("GraphicsController: unload: "+image.name + ":"+this.count);
 							}
 					},
 					getErrors:function(){
@@ -2205,21 +2213,21 @@ var App = Object.create({
 				prototype:{
                     
                     //Cached
-					stat2:DefaultObject,
+					stat2:(Object.create(null)),
 					alpha:0,
 					free:false,
 					point:14,
-					grd:DefaultObject,
+					grd:(Object.create(null)),
 					zindex:1,
 					seamless:false,
 					tight:true,
 					disable:false,
 					buffer_target:0,
 					
-					canvas:DefaultObject,
-					buffer:DefaultObject,
-					canvas_context:DefaultObject,
-					buffer_context:DefaultObject,
+					canvas:(Object.create(null)),
+					buffer:(Object.create(null)),
+					canvas_context:(Object.create(null)),
+					buffer_context:(Object.create(null)),
 					scale:0,
 					fontT:"",
 					fontL:"",
@@ -2891,6 +2899,15 @@ var App = Object.create({
 						this.buffer_context.closePath();
 						this.clean();
 					},
+					quadraticCurve:function(x,y,x2,y2,a,col){
+						this.stat = this.chk(x,y,1,1,1,a,true,col);
+						this.stat2 = this.chk(x2,y2,1,1,1,a,true,col);
+						this.buffer_context.beginPath();
+						this.buffer_context.quadraticCurveTo(this.stat.x, this.stat.y, this.stat2.x, this.stat2.y);
+						this.buffer_context.strokeStyle = this.stat.colour;
+						this.buffer_context.stroke();
+						this.buffer_context.fill();
+					},
 					circle:function(x,y,r,col,a){
 						this.stat = this.chk(x,y,1,1,r,a,true,col);
 						this.buffer_context.beginPath();
@@ -2959,7 +2976,7 @@ var App = Object.create({
 				},
 				constructor:function(){return {
 						init:{value:function(){
-									Debug.log('Cookies: Init');
+									//Debug.log('Cookies: Init');
 								return true;
 								}
 							}
@@ -2967,19 +2984,50 @@ var App = Object.create({
 					}
 				},
 				discription:"",
-				scale:1,
-				delta:1,
-				width:0,
-				height:0,
-				setWidth:0,
-				setHeight:0,
-				resized:false,
-				targetfps:60,
 				main:{constructor:function(){return {name:{value:"Main"}};}}
 				}
 		},
 	},
 });
 
+
 App = Object.create(App.prototype,App.constructor);
-addListener(document, "DOMContentLoaded", App.OnApplicationLoad);
+App.Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
+/*
+var A = Object.create(null,{name:{value:"eh"}});
+	
+	
+var Properties = Object.create(null,{
+		value:{
+				writeable:true,
+				configurable:true,
+				value:""
+			},
+		acessor:{
+			configurable:false,
+			get:function(){return this.value;},
+			Set:function(v){this.value = v;}
+		}
+	});
+	Properties.acessor.set(1);
+console.log(Properties);
+var _Rectangle = {};
+_Rectangle.prototype = {
+	x: 0,
+	y: 0,
+	a: 0,
+	draw: function(x,y,w,h,a,c){
+		if (this.a!=a)
+			this.a=a;
+		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
+	}
+}
+
+
+
+
+//
+var main = Object.create(null,{name:{value:"Main"}});
+
+
+*/
