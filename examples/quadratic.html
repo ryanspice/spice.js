@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>SpiceJS</title>    
+    <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
+</head>
+<body>
+<script rel="prefetch" name="main" type="text/javascript" defer>
+	
+//Application OnLoad
+App.OnLoad = function () {
+	
+	//App.Init(title,width,height)
+	App.Init("SpiceJS", 480, 25);
+
+	//Set canvas background colour ( colour )
+	App.canvas.background_set("transparent");
+
+	//Assign favicon
+	App.ext.metatag.metaFavicon("images/favicon.png");
+	var opt = {x:0}
+		console.log(App.options.set(opt));
+};
+	
+//Application main loop Object[init,update,draw]
+App.main= {
+	
+	name:"Example",
+
+	init:function() {
+
+		//Initialization Logic
+		this.steve = this.app.create({x:0,y:0});
+		var height = 25;
+		this.getY = function(i,timeStep){return App.client.setHeight/2 + (height/2) * (1 + Math.sin((timeStep * (i/5500 + 0.02)) % 2*Math.PI));}
+		this.timeStep = 0;
+		this.count = 256;
+		this.accel = 0;
+		return true;
+	},
+	
+	update:function() {
+
+		//Game logic	
+		//this.steve.x++;
+
+		return true;
+	},
+
+	draw:function() {
+		
+		//Draw Logic
+		
+		//Draw Rectangle ( x , y, width, height, scale, alpha, centered, colour)
+		//this.visuals.rect_ext(0,0,this.app.client.setWidth,this.app.client.setHeight,1,1,false,"#DDDDDD");
+		
+		//Draw Circle ( x , y, radius, colour, alpha)
+		var a = 1.9;
+		//this.visuals.circle_free(this.app.ext.input.x,this.app.ext.input.y,11,"#444444",1);
+		for (var i = 0; i < this.count; i++ ){
+			
+			//if (0+a*i>this.app.getWidth())
+			//	continue;
+			this.visuals.quadraticCurve(0+a*i,this.getY(i,this.timeStep),+a*(i+1),this.getY(i+1,this.timeStep),1,"#6666FF");
+			
+			this.visuals.circle_free(0+a*i,this.getY(i,this.timeStep),+a*(i+1),this.getY(i+1,this.timeStep),11,"#444444",1);
+			
+			if (this.app.ext.useragent.mobile)
+				continue;
+			
+	}
+		
+		
+		this.timeStep+=this.accel+=0.025*App.getDelta();
+		return true;
+	}
+
+};
+
+	
+</script>
+<canvas id="canvas"></canvas>
+<canvas id="buffer"></canvas>
+</body>
+</html>
