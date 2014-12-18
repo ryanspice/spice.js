@@ -181,6 +181,7 @@ var App = Object.create({
 		getScaledWidth:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.width; } },
 		getScaledHeight:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.height; } },
 		time:{writable:true, configurable:false, enumerable:false, value:0 },
+		main:{writable:true, configurable:false, enumerable:false, value:{name:"Main",init:function() {},update:function() {},draw:function() {return true;}} },
 	},
     
 	prototype:{
@@ -328,12 +329,14 @@ var App = Object.create({
 				
 				//UserAgent Information
 				//	Assists in detecting the platform that you are running on.
+				
 				useragent:{
-					//	//Since your useragent doesnt change, you can simply query the following.
-					//	.useragent.agent 		//Your navigator.useragent, 
-					//	.useragent.mouse 		// true or false
-					//	.useragent.touch 		//
-					//	.useragent.keyboard 	/
+					
+					//	Since your useragent doesnt change, you can simply query the following.
+					//	.useragent.agent 		Your navigator.useragent, 
+					//	.useragent.mouse 		 true or false
+					//	.useragent.touch 		
+					//	.useragent.keyboard 	
 					//	.useragent.windows 	
 					//	.useragent.chrome 	
 					//	.useragent.safari 	
@@ -344,6 +347,7 @@ var App = Object.create({
 					//	.useragent.playbook 	
 					//	.useragent.bb10 	
 					//	.useragent.mobile 	
+					
 					prototype:{
 						agent:String,
 						mouse:false,
@@ -395,34 +399,333 @@ var App = Object.create({
 							return (this.Android() || this.BlackBerry() || this.iOS());
 						}
 					},
-					constructor:function(){return {
-						init:{value:function(){
-								this.agent = navigator.userAgent;
-								this.chrome = this.Chrome();
-								this.safari = this.Safari();
-								this.mouse = this.any();
-								this.iemobile = this.IEMobile();
-								this.nokia = this.Nokia();
-								this.windows = this.IEMobile() || this.IE() || !this.any();
-								
-								this.ie = this.trident = this.IE();
-								this.touch = this.any();
-								this.mouse = !this.any() || this.BlackBerry();
-								this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
+					
+					constructor:function(){
+						
+						//Return constructed useragent object
+						return {
+								init:{value:function(){
+									
+									//Populate values
+									this.agent = navigator.userAgent;
+									this.chrome = this.Chrome();
+									this.safari = this.Safari();
+									this.mouse = this.any();
+									this.iemobile = this.IEMobile();
+									this.nokia = this.Nokia();
+									this.windows = this.IEMobile() || this.IE() || !this.any();
+
+									this.ie = this.trident = this.IE();
+									this.touch = this.any();
+									this.mouse = !this.any() || this.BlackBerry();
+									this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
+
+									this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+
+									this.BlackBerry();
+									this.iOS();
+									this.Android();
+									
+									return true;
+								}
+							}
+						}
+						
+					}
+					
+				},
+				
+				//Cookie Storage
+				//	Polyfill provided by ScottHamper 
+				//	https://github.com/ScottHamper/Cookies#api-reference
+				
+				cookies:{
+					
+					prototype:{
+
+						//Cookies Polyfill by ScottHamper 
+						//	https://github.com/ScottHamper/Cookies#api-reference
+						polyfill:function(){ 
+							(function (global, undefined) {
+								'use strict';
+
+								var factory = function (window) {
+									if (typeof window.document !== 'object') {
+										throw new Error('Cookies.js requires a `window` with a `document` object');
+									}
+
+									var Cookies = function (key, value, options) {
+										return arguments.length === 1 ?
+											Cookies.get(key) : Cookies.set(key, value, options);
+									};
+
+									// Allows for setter injection in unit tests
+									Cookies._document = window.document;
+
+									// Used to ensure cookie keys do not collide with
+									// built-in `Object` properties
+									Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
+
+									Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+
+									Cookies.defaults = {
+										path: '/',
+										secure: false
+									};
+
+									Cookies.get = function (key) {
+										if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
+											Cookies._renewCache();
+										}
+
+										return Cookies._cache[Cookies._cacheKeyPrefix + key];
+									};
+
+									Cookies.set = function (key, value, options) {
+										options = Cookies._getExtendedOptions(options);
+										options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
+
+										Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
+
+										return Cookies;
+									};
+
+									Cookies.expire = function (key, options) {
+										return Cookies.set(key, undefined, options);
+									};
+
+									Cookies._getExtendedOptions = function (options) {
+										return {
+											path: options && options.path || Cookies.defaults.path,
+											domain: options && options.domain || Cookies.defaults.domain,
+											expires: options && options.expires || Cookies.defaults.expires,
+											secure: options && options.secure !== undefined ?  options.secure : Cookies.defaults.secure
+										};
+									};
+
+									Cookies._isValidDate = function (date) {
+										return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
+									};
+
+									Cookies._getExpiresDate = function (expires, now) {
+										now = now || new Date();
+
+										if (typeof expires === 'number') {
+											expires = expires === Infinity ?
+												Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
+										} else if (typeof expires === 'string') {
+											expires = new Date(expires);
+										}
+
+										if (expires && !Cookies._isValidDate(expires)) {
+											throw new Error('`expires` parameter cannot be converted to a valid Date instance');
+										}
+
+										return expires;
+									};
+
+									Cookies._generateCookieString = function (key, value, options) {
+										key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
+										key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
+										value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
+										options = options || {};
+
+										var cookieString = key + '=' + value;
+										cookieString += options.path ? ';path=' + options.path : '';
+										cookieString += options.domain ? ';domain=' + options.domain : '';
+										cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
+										cookieString += options.secure ? ';secure' : '';
+
+										return cookieString;
+									};
+
+									Cookies._getCacheFromString = function (documentCookie) {
+										var cookieCache = {};
+										var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
+
+										for (var i = 0; i < cookiesArray.length; i++) {
+											var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+
+											if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
+												cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+											}
+										}
+
+										return cookieCache;
+									};
+
+									Cookies._getKeyValuePairFromCookieString = function (cookieString) {
+										// "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
+										var separatorIndex = cookieString.indexOf('=');
+
+										// IE omits the "=" when the cookie value is an empty string
+										separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
+
+										return {
+											key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
+											value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
+										};
+									};
+
+									Cookies._renewCache = function () {
+										Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
+										Cookies._cachedDocumentCookie = Cookies._document.cookie;
+									};
+
+									Cookies._areEnabled = function () {
+										var testKey = 'cookies.js';
+										var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
+										Cookies.expire(testKey);
+										return areEnabled;
+									};
+
+									Cookies.enabled = Cookies._areEnabled();
+
+									return Cookies;
+								};
+
+								var cookiesExport = typeof global.document === 'object' ? factory(global) : factory;
+
+								// AMD support
+								if (typeof define === 'function' && define.amd) {
+									define(function () { return cookiesExport; });
+								// CommonJS/Node.js support
+								} else if (typeof exports === 'object') {
+									// Support Node.js specific `module.exports` (which can be a function)
+									if (typeof module === 'object' && typeof module.exports === 'object') {
+										exports = module.exports = cookiesExport;
+									}
+									// But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+									exports.Cookies = cookiesExport;
+								} else {
+									global.Cookies = cookiesExport;
+								}
+							})(typeof window === 'undefined' ? this : window);
+							return Cookies;
+},
+
+					},
+					
+					constructor:function(){
+						
+						//Return constructed cookie object.
+						return {init:{value:function(){
+
+									//execute polyfill
+									return this.polyfill();
+								}
+							}
+						}
+					}
+					
+				},
+				
+				
+				//MetaTag Handler
+				//	Assists in dynamically applying metatags.
+				//	Automatically applies Microsoft, Apple and common metatags. 
+				
+				metatag:{
+					
+					prototype:{
+						
+						//Default injected tags
+						ms_taphighlight:"no",
+						apple_webapp:"yes",
+						apple_statusbar:"black",
+						devicedpi:true,
+						devicewidth:true,
+						
+						//Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+						metaFavicon: function(img) {
 							
-								this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+							this.metaAppend(this.metaLink(img,"shortcut icon","image/png"));
+						},
+						
+						//Construct a standard metaLink element
+						metaLink: function(href,rel,type) {
 							
-								this.BlackBerry();
-								this.iOS();
-								this.Android();
+							//Create link element
+							this.link = document.createElement('link');
 							
+							//Assign element values
+							this.link.href = href;
+							this.link.rel = rel;		
+							this.link.type = type;	
+							
+							//Return link
+							return this.link;
+						},
+						
+						//Construct a standard metaTag element 
+						metaTag: function(name,content) {
+							
+							//Create link element
+							this.meta = document.createElement('meta');
+							
+							//Assign element values
+							this.meta.content = content;
+							this.meta.name = name;
+							
+							//Return tag
+							return this.meta;
+						},
+						
+						//Append a meta object to the <head>
+						metaAppend: function(meta) {
+							
+							//Append child to header
+							if (this.head.appendChild(meta))
+								{
+								//Count number of headers
+								this.count++;
+
+								//Return success
+								return true;
+								}
+							else
+								return false;
+							
+						},
+						
+						//Cached data
+						head:document.getElementsByTagName('head')[0],
+						link:null,
+						meta:null,
+						count:0
+
+					},
+
+					constructor:function(){
+						
+						//Return constructed metatag object.
+						return {init:{value:function(){
+
+									//execute polyfill
+									this.metaAppend(this.metaTag("msapplication-tap-highlight",this.ms_taphighlight));
+									this.metaAppend(this.metaTag("apple-mobile-web-app-capable",this.apple_webapp));
+									this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style",this.apple_statusbar));
+									this.metaAppend(this.metaTag("cursor-event-mode","native"));
+									this.metaAppend(this.metaTag("touch-event-mode","native"));
+									this.metaAppend(this.metaTag("HandheldFriendly","True"));
+
+									//if (this.devicewidth)
+									this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
+									//if (this.devicedpi)
+									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
+							
+									//Return this
+									return this;
 								}
 							}
 						}
 					}
 				},
 				
-				//Needs refractoring
+				
+				// The Following Needs refractoring
+				
+				
 				//freezeonfocus:false,
 				//fps:0,
 				//ping:0,
@@ -536,64 +839,7 @@ var App = Object.create({
 					}
 				},
 				
-				
-				
-				
-				
-				
-				metatag:{
-					prototype:{
-						metaFavicon: function(img) {
-							
-							this.metaAppend(this.metaLink(img,"shortcut icon","image/png"));
-						},
-						metaLink: function(href,rel,type) {
-							this.link = document.createElement('link');
-							this.link.href = href;
-							this.link.rel = rel;		
-							this.link.type = type;	
-							return this.link;
-						},
-						metaTag: function(name,content) {
-							this.meta = document.createElement('meta');
-							this.meta.content = content;
-							this.meta.name = name;
-							return this.meta;
-						},
-						metaAppend: function(meta) {
-							this.head.appendChild(meta);
-							this.count++;
-						},
-						link:document.createElement('link'),
-						meta:document.createElement('meta'),
-						head:document.getElementsByTagName('head')[0],
-						count:0,
-						ms_taphighlight:"no",
-						apple_webapp:"yes",
-						apple_statusbar:"black",
-						devicedpi:true,
-						devicewidth:true
-					},
-					constructor:function(){return {
-						init:{value:function(){
-								this.metaAppend(this.metaTag("msapplication-tap-highlight",this.ms_taphighlight));
-								this.metaAppend(this.metaTag("apple-mobile-web-app-capable",this.apple_webapp));
-								this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style",this.apple_statusbar));
-								this.metaAppend(this.metaTag("cursor-event-mode","native"));
-								this.metaAppend(this.metaTag("touch-event-mode","native"));
-								this.metaAppend(this.metaTag("HandheldFriendly","True"));
-								
-								//if (this.devicewidth)
-									this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
-								//if (this.devicedpi)
-									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
-								//Debug.log('Debug:     MetaCount/'+this.count);
-							return true;
-							}
-						}
-					}
-				}
-				},
+			
 				colour:{
 					prototype:{
 						Teal		:["#008299",	"#00A0B1"],
@@ -683,7 +929,6 @@ var App = Object.create({
 						}
 					}
 				},
-				
 				
 				//App.ext.input || App.input
 				input:{
@@ -1286,7 +1531,12 @@ var App = Object.create({
 						(this.useragent = this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
 						(this.input = this.app.Construct(this.input.prototype,this.input.constructor)).init();
 						(this.colour =	this.app.Construct(this.colour.prototype,this.colour.constructor)).init();
-						(this.metatag =	this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
+						this.metatag = (this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
+					
+                           //Build 
+						this.cookies = (this.app.Construct(this.cookies.prototype,this.cookies.constructor())).init();
+					
+							console.log(this.cookies);
 						this.time = (( new Date().getTime())-TimeToLive)*1;
 						}
 					}
@@ -1378,7 +1628,8 @@ var App = Object.create({
 			}
 		},
 		
-        //Application.client; handles game logic, audio, graphics, visuals
+        //Application.client; 
+		//	Handles game logic, audio, graphics, visuals
 		client:{
             
             //Client inherits App and Builds components
@@ -1420,9 +1671,6 @@ var App = Object.create({
 							this.room = Object.create(this.room.prototype,this.room.constructor()).init();
                     
                             //Build 
-							(this.cookies = this._Cookies = Object.create(this._Cookies.prototype,this._Cookies.constructor())).init();
-                    
-                            //Build 
 							(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
                     
                             //Build 
@@ -1432,13 +1680,13 @@ var App = Object.create({
 							(this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
                     
                             //Build 
-							this.main = Object.create(this.app.main,this.main.constructor());
+							this.main = Object.create(this.app.main);
                     
                             //Build 
 							(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
                     
-                            //console.log(App);
-						}}
+						}
+					}
                     
 				}
                 
@@ -1736,97 +1984,97 @@ var App = Object.create({
 						fps:1
 					}
 				},
-				Math:{
-					Vec: function(x,y){
-						this.x = x;
-						this.y = y;
-					},
-					Clamp:function(x,min,max){
-						return x < min ? min : (x > max ? max : x);
-					},
-					Wrap:function(x,min,max){
-						return x < min ? max : (x > max ? min : x);
-					},
+			Math:{
+				Vec: function(x,y){
+					this.x = x;
+					this.y = y;
+				},
+				Clamp:function(x,min,max){
+					return x < min ? min : (x > max ? max : x);
+				},
+				Wrap:function(x,min,max){
+					return x < min ? max : (x > max ? min : x);
+				},
+				Difference:function(a,b){
+					return a-b;
+				},
+				Pythageon:function(a,b){
+					return Math.sqrt((a*a) + (b*b));
+				},
+				Vector:{
+					x:0,y:0,
 					Difference:function(a,b){
-						return a-b;
+						return {x:a.x-b.x,y:a.y-b.y};
 					},
-					Pythageon:function(a,b){
-						return Math.sqrt((a*a) + (b*b));
-					},
-					Vector:{
-						x:0,y:0,
-						Difference:function(a,b){
-							return {x:a.x-b.x,y:a.y-b.y};
-						},
-						Sum:function(a,b){
-							return {x:a.x+b.x,y:a.y+b.y};
-						}
-					},
-					Data:{
-						Total:function(){
-						return this.total = this.kilobyteCount(App);
-						},
-						Update:function(){
-						if (App.client.update.state.initalized)
-							return this.update = this.byteCount(App.client.update.state.current.update);
-							else
-							return this.update = this.byteCount(Object.create(null,App.client.room));
-						},
-						isFunction:function(functionToCheck) {
-							 var getType = {};
-							 return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-						},
-						byteCount:function (object) {
-							if (this.isFunction(object))
-								return this.byteCountF(object.toString().length*2);
-							this.objectList = [];
-							this.stack = [ object ];
-							this.bytes = 0;
-							while ( this.stack.length ) {
-								this.value = this.stack.pop();
-								if ( typeof this.value === 'trueean' ) {
-									this.bytes += 4;
-								}
-								else if ( typeof this.value === 'string' ) {
-									this.bytes += this.value.length * 2;
-								}
-								else if ( typeof this.value === 'number' ) {
-									this.bytes += 8;
-								}
-								else if	(typeof this.value === 'object' && this.objectList.indexOf( this.value ) === -1) {
-									this.objectList.push( this.value );
-									for( i in this.value ) {
-										if ((this.value[i]==object)||(this.value[i]==window)){
-											if ((this.selfCount>0)||(this.value[i]==window))
-												{
-													this.selfCount = 0;
-													break;
-												}
-											this.selfCount++;
-										}
-										this.stack.push( this.value[ i ] );
-									}
-								}
-							}
-							return this.bytes;
-						},
-						byteCountF:function(s){
-							return encodeURI(s).split(/%..|./).length - 1;
-						},
-						kilobyteCount:function(object){
-							return  Math.round((this.byteCount(object)*this.KB)*100)/100;
-						},
-						kb:0.0078125,
-						KB:0.0009765625,
-						objectList:[{}],
-						selfCount:0,
-						update:0,
-						stack:[{}],
-						value:{},
-						bytes:0,
-						total:0,
+					Sum:function(a,b){
+						return {x:a.x+b.x,y:a.y+b.y};
 					}
 				},
+				Data:{
+					Total:function(){
+					return this.total = this.kilobyteCount(App);
+					},
+					Update:function(){
+					if (App.client.update.state.initalized)
+						return this.update = this.byteCount(App.client.update.state.current.update);
+						else
+						return this.update = this.byteCount(Object.create(null,App.client.room));
+					},
+					isFunction:function(functionToCheck) {
+						 var getType = {};
+						 return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+					},
+					byteCount:function (object) {
+						if (this.isFunction(object))
+							return this.byteCountF(object.toString().length*2);
+						this.objectList = [];
+						this.stack = [ object ];
+						this.bytes = 0;
+						while ( this.stack.length ) {
+							this.value = this.stack.pop();
+							if ( typeof this.value === 'trueean' ) {
+								this.bytes += 4;
+							}
+							else if ( typeof this.value === 'string' ) {
+								this.bytes += this.value.length * 2;
+							}
+							else if ( typeof this.value === 'number' ) {
+								this.bytes += 8;
+							}
+							else if	(typeof this.value === 'object' && this.objectList.indexOf( this.value ) === -1) {
+								this.objectList.push( this.value );
+								for( i in this.value ) {
+									if ((this.value[i]==object)||(this.value[i]==window)){
+										if ((this.selfCount>0)||(this.value[i]==window))
+											{
+												this.selfCount = 0;
+												break;
+											}
+										this.selfCount++;
+									}
+									this.stack.push( this.value[ i ] );
+								}
+							}
+						}
+						return this.bytes;
+					},
+					byteCountF:function(s){
+						return encodeURI(s).split(/%..|./).length - 1;
+					},
+					kilobyteCount:function(object){
+						return  Math.round((this.byteCount(object)*this.KB)*100)/100;
+					},
+					kb:0.0078125,
+					KB:0.0009765625,
+					objectList:[{}],
+					selfCount:0,
+					update:0,
+					stack:[{}],
+					value:{},
+					bytes:0,
+					total:0,
+				}
+			},
 			Particles:{
 				p:0,
 				draw:function(l){
@@ -2944,48 +3192,8 @@ var App = Object.create({
 					}
 				}
 			},
-			_Cookies:{
-				prototype:{
-					list:new Array(),
-					expires:"",
-					nameEQ:"=",
-					ca:"",
-					createCookie:function(name,value,days){
-						if (days) {
-							var date = new Date();
-							date.setTime(date.getTime()+(days*24*60*60*1000));
-							this.expires = "; expires="+date.toGMTString();
-						}
-						else this.expires = "";
-						document.cookie = name+"="+value+";"+this.expires+"; path=/";
-					return this.list.push(value);
-					},
-					readCookie:function(name){
-						this.nameEQ = name + "=";
-						this.ca = document.cookie.split(';');
-						for(var i=0;i < this.ca.length;i++) {
-							var c = this.ca[i];
-							while (c.charAt(0)==' ') c = c.substring(1,c.length);
-							if (c.indexOf(this.nameEQ) == 0) return c.substring(this.nameEQ.length,c.length);
-						}
-						//return null;
-					},
-					eraseCookie:function(name){
-						this.createCookie(name,"",-1);
-					}
-				},
-				constructor:function(){return {
-						init:{value:function(){
-									//Debug.log('Cookies: Init');
-								return true;
-								}
-							}
-						}
-					}
-				},
-				discription:"",
-				main:{constructor:function(){return {name:{value:"Main"}};}}
-				}
+	
+			}
 		},
 	},
 });
