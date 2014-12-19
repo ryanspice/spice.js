@@ -17,7 +17,7 @@ window.apps = new Array();
 window.appsNextId = 0;
 
 //Time at which this document begins
-var TimeToLive = new Date().getTime();
+var TimeToBuild = new Date().getTime();
 
 var App = Object.create({	
   
@@ -241,6 +241,7 @@ var App = Object.create({
 				images:"images/",
 				url:""
 			},
+			
 			canvas:{
 				override:false,			//Toggle the use of options.canvas
 				name:'canvas',			//Use canvas.name
@@ -259,6 +260,7 @@ var App = Object.create({
 					height:480
 				}
 			},
+			
 			flags:{						//Feature Flags
 				canvas:true,
 				mstouch:false,
@@ -266,29 +268,35 @@ var App = Object.create({
 				tight:true,
 				touchprevent:true,
 			},
+			
 			override:{					//Override Functions
 				keyboard:true,
 				mouse:true,
 				MSHoldVisual:false,
-				SelectStart:false
-				},
+				SelectStart:false,
+				ContextMenu:true,
+				Drag:true
+			},
+			
             get:function(attr){ 
 				if (attr)
 					{
 						//var f = new Function("return App.options"+
 						for (var attrname in this) 
 							if (attrname==attr) return eval("App.options." + attrname ); 
-						return false;
+						return null;
 					}
 				else
 				return this;
 			},
+			
 			set:function(options){
 				
 				for (var attrname in options) { this[attrname] = options[attrname]; };
 						
 				return this;
 			}
+			
 		},
 		
 		//Facebook User Information
@@ -1037,8 +1045,10 @@ var App = Object.create({
 					}
 				},
 				
-				//Public functions
 				
+				///////////////////////////////////////////////
+			//	Debug - Needs Refractoring
+				///////////////////////////////////////////////
 				
 				//default Objects
 				debug:{
@@ -1078,8 +1088,12 @@ var App = Object.create({
 					}
 				},
 				
-				//App.ext.input || App.input
+				///////////////////////////////////////////////
+			//	Input - Needs Refractoring
+				///////////////////////////////////////////////
+				
 				input:{
+					
 					prototype:{
 						init:false,
 						
@@ -1091,6 +1105,8 @@ var App = Object.create({
 						keyup:false,keydown:false,
 						start: 		{x:0,y:0},				
 						control:false,
+						doc:document,
+						body:document.body,
 						window:{
                             self:window,
 							play:15,
@@ -1318,184 +1334,209 @@ var App = Object.create({
 						return true;
 						},
 					},
+					
 					constructor:function(a){return{
+						
 						app:{value:a},
+						
 						codes:{value:new Array()},
-						init:{value:function(a){
+						
+						populateCodes:{value:function(){
+								//Keyboard codes
+								this.codes[0]  = '';
+								this.codes[1]  = '';
+								this.codes[2]  = '';
+								this.codes[3]  = '';
+								this.codes[4]  = '';
+								this.codes[5]  = '';
+								this.codes[6]  = '';
+								this.codes[7]  = '';
+								this.codes[8]  ='backspace';
+								this.codes[9]  ='tab'                ;
+								this.codes[13] ='enter'             ;
+								this.codes[16] ='shift'             ;
+								this.codes[17] ='ctrl'              ;
+								this.codes[18] ='alt'               ;
+								this.codes[19] ='pause/break'       ;
+								this.codes[20] ='capslock'          ;
+								this.codes[27] ='escape'            ;
+								this.codes[32] ='space'            ;
+								this.codes[33] ='pageup'            ;
+								this.codes[34] ='pagedown'          ;
+								this.codes[35] ='end'               ;
+								this.codes[36] ='home'              ;
+								this.codes[37] ='leftarrow'         ;
+								this.codes[38] ='uparrow'           ;
+								this.codes[39] ='rightarrow'        ;
+								this.codes[40] ='downarrow'         ;
+								this.codes[45] ='insert'            ;
+								this.codes[46] ='delete'            ;
+								this.codes[48] ='0'                 ;
+								this.codes[49] ='1'                 ;
+								this.codes[50] ='2'                 ;
+								this.codes[51] ='3'                 ;
+								this.codes[52] ='4'                 ;
+								this.codes[53] ='5'                 ;
+								this.codes[54] ='6'                 ;
+								this.codes[55] ='7'                 ;
+								this.codes[56] ='8'                 ;
+								this.codes[57] ='9'                 ;
+								this.codes[65] ='a'                 ;
+								this.codes[66] ='b'                 ;
+								this.codes[67] ='c'                 ;
+								this.codes[68] ='d'                 ;
+								this.codes[69] ='e'                 ;
+								this.codes[70] ='f'                 ;
+								this.codes[71] ='g'                 ;
+								this.codes[72] ='h'                 ;
+								this.codes[73] ='i'                 ;
+								this.codes[74] ='j'                 ;
+								this.codes[75] ='k'                 ;
+								this.codes[76] ='l'                 ;
+								this.codes[77] ='m'                 ;
+								this.codes[78] ='n'                 ;
+								this.codes[79] ='o'                 ;
+								this.codes[80] ='p'                 ;
+								this.codes[81] ='q'                 ;
+								this.codes[82] ='r'                 ;
+								this.codes[83] ='s'                 ;
+								this.codes[84] ='t'                 ;
+								this.codes[85] ='u'                 ;
+								this.codes[86] ='v'                 ;
+								this.codes[87] ='w'                 ;
+								this.codes[88] ='x'                 ;
+								this.codes[89] ='y'                 ;
+								this.codes[90] ='z'                 ;
+								this.codes[91] ='leftwindowkey'     ;
+								this.codes[92] ='rightwindowkey'    ;
+								this.codes[93] ='selectkey'         ;
+								this.codes[96] ='numpad0'           ;
+								this.codes[97] ='numpad1'           ;
+								this.codes[98] ='numpad2'           ;
+								this.codes[99] ='numpad3'           ;
+								this.codes[100]='numpad4'          ;
+								this.codes[101]='numpad5'          ;
+								this.codes[102]='numpad6'          ;
+								this.codes[103]='numpad7'          ;
+								this.codes[104]='numpad8'          ;
+								this.codes[105]='numpad9'          ;
+								this.codes[106]='multiply'         ;
+								this.codes[107]='add'              ;
+								this.codes[109]='subtract'         ;
+								this.codes[110]='decimalpoint'     ;
+								this.codes[111]='divide'           ;
+								this.codes[112]='f1'               ;
+								this.codes[113]='f2'               ;
+								this.codes[114]='f3'               ;
+								this.codes[115]='f4'               ;
+								this.codes[116]='f5'               ;
+								this.codes[117]='f6'               ;
+								this.codes[118]='f7'               ;
+								this.codes[119]='f8'               ;
+								this.codes[120]='f9'               ;
+								this.codes[121]='f10'              ;
+								this.codes[122]='f11'              ;
+								this.codes[123]='f12'              ;
+								this.codes[144]='numlock'          ;
+								this.codes[145]='scrolllock'       ;
+
+								//"Nintendo Wii" 
+								this.codes[175]='Up (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+								this.codes[176]='Down (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+								this.codes[177]='Left (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+								this.codes[178]='Right (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+
+								this.codes[170]='- (Wii?)';		//(CAUTION! ALSO ZOOMS OUT)
+								this.codes[174]='+ (Wii?)';		//(CAUTION! ALSO ZOOMS IN)
+								this.codes[172]='1 (Wii?)';		//
+								this.codes[173]='2 (Wii?)';		//(CAUTION! ALSO SPLITS SCREEN INTO SINGLE COLUMN MODE)
+
+
+								/*
+								PS3:
+								Platform: "PLAYSTATION 3"
+								Up: 38
+								Down: 40
+								Left: 37
+								Right: 39
+								X: 63 (CAUTION! ALSO CLICKS)
+								Nintendo 3ds:
+								Platform: "Nintendo 3ds"
+								Up: 38
+								Down: 40
+								Left: 37
+								Right: 39
+								LG Smart TV:
+								Platform: "Linux 35230"
+								0-9: 48-57
+								Play: 445
+								Pause: 19
+								Rewind: 412
+								FF: 417
+								*/
+
+
+								this.codes[186]='semi-colon';
+								this.codes[187]='equalsign';
+								this.codes[188]='comma';
+								this.codes[189]='dash';
+								this.codes[190]='period';
+								this.codes[191]='forwardslash';
+								this.codes[192]='graveaccent';
+								this.codes[219]='openbracket';
+								this.codes[220]='backslash';
+								this.codes[221]='closebraket';
+								this.codes[222]='singlequote';
+							}
+						},
+						
+						preventDefault:{value:function(e) { e.preventDefault(); }},
+						
+						init:{value:function(){
+						
+							//Add listener for mousewheel
+							this.app.Listener(this.window.self,'mousewheel',this.app.ext.scroll.event);
 							
-							this.app.Listener(window,'mousewheel',this.app.ext.scroll.event);
+							//Override selection
+							if (!this.app.options.get("override").SelectStart)
+								this.app.Listener(this.app.canvas.canvas,'selectstart',this.preventDefault);
 							
-							this.codes[0]  = '';
-							this.codes[1]  = '';
-							this.codes[2]  = '';
-							this.codes[3]  = '';
-							this.codes[4]  = '';
-							this.codes[5]  = '';
-							this.codes[6]  = '';
-							this.codes[7]  = '';
-							this.codes[8]  ='backspace';
-							this.codes[9]  ='tab'                ;
-							this.codes[13] ='enter'             ;
-							this.codes[16] ='shift'             ;
-							this.codes[17] ='ctrl'              ;
-							this.codes[18] ='alt'               ;
-							this.codes[19] ='pause/break'       ;
-							this.codes[20] ='capslock'          ;
-							this.codes[27] ='escape'            ;
-							this.codes[32] ='space'            ;
-							this.codes[33] ='pageup'            ;
-							this.codes[34] ='pagedown'          ;
-							this.codes[35] ='end'               ;
-							this.codes[36] ='home'              ;
-							this.codes[37] ='leftarrow'         ;
-							this.codes[38] ='uparrow'           ;
-							this.codes[39] ='rightarrow'        ;
-							this.codes[40] ='downarrow'         ;
-							this.codes[45] ='insert'            ;
-							this.codes[46] ='delete'            ;
-							this.codes[48] ='0'                 ;
-							this.codes[49] ='1'                 ;
-							this.codes[50] ='2'                 ;
-							this.codes[51] ='3'                 ;
-							this.codes[52] ='4'                 ;
-							this.codes[53] ='5'                 ;
-							this.codes[54] ='6'                 ;
-							this.codes[55] ='7'                 ;
-							this.codes[56] ='8'                 ;
-							this.codes[57] ='9'                 ;
-							this.codes[65] ='a'                 ;
-							this.codes[66] ='b'                 ;
-							this.codes[67] ='c'                 ;
-							this.codes[68] ='d'                 ;
-							this.codes[69] ='e'                 ;
-							this.codes[70] ='f'                 ;
-							this.codes[71] ='g'                 ;
-							this.codes[72] ='h'                 ;
-							this.codes[73] ='i'                 ;
-							this.codes[74] ='j'                 ;
-							this.codes[75] ='k'                 ;
-							this.codes[76] ='l'                 ;
-							this.codes[77] ='m'                 ;
-							this.codes[78] ='n'                 ;
-							this.codes[79] ='o'                 ;
-							this.codes[80] ='p'                 ;
-							this.codes[81] ='q'                 ;
-							this.codes[82] ='r'                 ;
-							this.codes[83] ='s'                 ;
-							this.codes[84] ='t'                 ;
-							this.codes[85] ='u'                 ;
-							this.codes[86] ='v'                 ;
-							this.codes[87] ='w'                 ;
-							this.codes[88] ='x'                 ;
-							this.codes[89] ='y'                 ;
-							this.codes[90] ='z'                 ;
-							this.codes[91] ='leftwindowkey'     ;
-							this.codes[92] ='rightwindowkey'    ;
-							this.codes[93] ='selectkey'         ;
-							this.codes[96] ='numpad0'           ;
-							this.codes[97] ='numpad1'           ;
-							this.codes[98] ='numpad2'           ;
-							this.codes[99] ='numpad3'           ;
-							this.codes[100]='numpad4'          ;
-							this.codes[101]='numpad5'          ;
-							this.codes[102]='numpad6'          ;
-							this.codes[103]='numpad7'          ;
-							this.codes[104]='numpad8'          ;
-							this.codes[105]='numpad9'          ;
-							this.codes[106]='multiply'         ;
-							this.codes[107]='add'              ;
-							this.codes[109]='subtract'         ;
-							this.codes[110]='decimalpoint'     ;
-							this.codes[111]='divide'           ;
-							this.codes[112]='f1'               ;
-							this.codes[113]='f2'               ;
-							this.codes[114]='f3'               ;
-							this.codes[115]='f4'               ;
-							this.codes[116]='f5'               ;
-							this.codes[117]='f6'               ;
-							this.codes[118]='f7'               ;
-							this.codes[119]='f8'               ;
-							this.codes[120]='f9'               ;
-							this.codes[121]='f10'              ;
-							this.codes[122]='f11'              ;
-							this.codes[123]='f12'              ;
-							this.codes[144]='numlock'          ;
-							this.codes[145]='scrolllock'       ;
-
-							//"Nintendo Wii" 
-							this.codes[175]='Up (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-							this.codes[176]='Down (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-							this.codes[177]='Left (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-							this.codes[178]='Right (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-
-							this.codes[170]='- (Wii?)';		//(CAUTION! ALSO ZOOMS OUT)
-							this.codes[174]='+ (Wii?)';		//(CAUTION! ALSO ZOOMS IN)
-							this.codes[172]='1 (Wii?)';		//
-							this.codes[173]='2 (Wii?)';		//(CAUTION! ALSO SPLITS SCREEN INTO SINGLE COLUMN MODE)
-
-
-							/*
-							PS3:
-							Platform: "PLAYSTATION 3"
-							Up: 38
-							Down: 40
-							Left: 37
-							Right: 39
-							X: 63 (CAUTION! ALSO CLICKS)
-							Nintendo 3ds:
-							Platform: "Nintendo 3ds"
-							Up: 38
-							Down: 40
-							Left: 37
-							Right: 39
-							LG Smart TV:
-							Platform: "Linux 35230"
-							0-9: 48-57
-							Play: 445
-							Pause: 19
-							Rewind: 412
-							FF: 417
-							*/
-
-
-							this.codes[186]='semi-colon';
-							this.codes[187]='equalsign';
-							this.codes[188]='comma';
-							this.codes[189]='dash';
-							this.codes[190]='period';
-							this.codes[191]='forwardslash';
-							this.codes[192]='graveaccent';
-							this.codes[219]='openbracket';
-							this.codes[220]='backslash';
-							this.codes[221]='closebraket';
-							this.codes[222]='singlequote';
+							//Override hold to touch
+							if (!this.app.options.get("override").MSHoldVisual)
+								this.app.Listener(this.app.canvas.canvas,'MSHoldVisual',this.preventDefault);
+							
+							//Override context menu
+							if (this.app.options.get("override").ContextMenu) {
+								this.doc.oncontextmenu = this.preventDefault;
+								this.window.self.oncontextmenu = this.preventDefault;
+							}
+							
+							//Override drag
+							if (this.app.options.get("override").Drag) {
+								this.doc.ondragstart   = this.preventDefault;
+								this.window.self.ondragstart   = this.preventDefault;
+							}
 							
 							
-							if (!this.app.options.override.SelectStart)
-								this.app.canvas.canvas.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
-							if (!App.options.override.MSHoldVisual)
-								this.app.canvas.canvas.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
-							var body = document.body;
-							if (!App.options.flags.mstouch)
+							
+							var body = this.doc.body;
+							if (this.app.options.get("flags").mstouch) 
 								body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-							if (App.options.flags.seamless)
+							
+							if (this.app.options.get("flags").seamless) 
 								body.style.overflow = "hidden";
-							if (App.options.flags.tight)
+							
+							if (this.app.options.get("flags").tight) 
 								body.style.padding = "0px", body.style.margin = "0px auto";
 								
 								
-								
-								
-								
-							if (!this.menu) {
-									document.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
-									window.oncontextmenu = function(evt) {evt.preventDefault(); return false; };
-								}
-							if (!this.drag) {
-									document.ondragstart   = function(evt) {evt.preventDefault(); return false; };
-									window.ondragstart   = function(evt) {evt.preventDefault(); return false; };
-								}
+							//Supported Keyboard Codes
+							this.populateCodes();
+							
+							//Keybaord code list
 							this.codeList = new Array();
+							
+							//Keybaord code check
                             this.checkList = function(code){
                                 var e = this.codeList.length-1;
                                 for (var i = e;i>=0;--i)
@@ -1503,12 +1544,15 @@ var App = Object.create({
                                         return true;
                                 return false;
                             }
+							
+							//Kayboard list pop
                             this.popList = function(code){
                                 var e = this.codeList.length-1;
                                 for (var i = e;i>=0;--i)
                                     if (this.codeList[i]==code)
                                         this.codeList[i] = null;
                             }
+							
                             var ub = false;
 							//if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
 				            window.addEventListener('keydown', 	function(event) {
@@ -1631,6 +1675,7 @@ var App = Object.create({
                             
                             
 							//}
+							return this;
 							}
 						}
 					}
@@ -1644,29 +1689,22 @@ var App = Object.create({
 					
 						this.app.setTitle(name);
 					
-					
 						this.useragent = (this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
 					
 						this.metatag = (this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
 					
-						this.cookies = (this.app.Construct(this.cookies.prototype,this.cookies.constructor())).init();
+						this.cookies = (this.app.Construct(this.cookies.prototype,this.cookies.constructor)).init();
 						
 						this.cursor = (this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
 					
 						this.connect = (this.app.Construct(this.connect.prototype,this.connect.constructor)).init();
 					
-						this.scroll = (this.app.Construct(this.scroll.prototype,this.scroll.constructor(a))).init();
+						this.scroll = (this.app.Construct(this.scroll.prototype,this.scroll.constructor)).init();
 						
 						//(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
-						//(this.cursor = this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
-						(this.input = this.app.Construct(this.input.prototype,this.input.constructor)).init();
-						//(this.colour =	this.app.Construct(this.colour.prototype,this.colour.constructor)).init();
+						this.input = (this.app.Construct(this.input.prototype,this.input.constructor)).init();
 					
-                           //Build 
-					
-						this.time = (( new Date().getTime())-TimeToLive)*1;
-					
-					
+						this.time = (( new Date().getTime())-TimeToBuild)*1;
 						}
 					}
 				}
