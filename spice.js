@@ -1555,7 +1555,7 @@ var App = Object.create({
 							
                             var ub = false;
 							//if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
-				            window.addEventListener('keydown', 	function(event) {
+				            this.app.Listener(this.window.self,'keydown', 	function(event) {
 								App.ext.input.codedown = App.ext.input.codes[event.keyCode];
                                 App.ext.input.codeList.push(App.ext.input.codedown);
 								if (event.ctrlKey)
@@ -1576,7 +1576,7 @@ var App = Object.create({
 								}
 							},ub);
 									
-							window.addEventListener('keyup', 	function(event) {
+							this.app.Listener(this.window.self,'keyup', 	function(event) {
 								App.ext.input.codeup = App.ext.input.codes[event.keyCode];
                                 App.ext.input.popList(App.ext.input.codeup );
 								App.ext.input.pressed = false;
@@ -1598,19 +1598,19 @@ var App = Object.create({
 							},ub);
 				            //}
 							
-                            //window.addEventListener('mousewheel',App.ext.scroll.event,ub);
+                            //this.app.Listener(this.window.self,'mousewheel',App.ext.scroll.event,ub);
                             
                             
                             if(window.PointerEvent) {
-                                window.addEventListener('pointerdown',function(evt) {
+                                this.app.Listener(this.window.self,'pointerdown',function(evt) {
                                     App.ext.input.touch = true;
                                     App.ext.input.listener.down(evt);
                                 },ub);
-                                window.addEventListener('pointermove',function(evt) {
+                                this.app.Listener(this.window.self,'pointermove',function(evt) {
                                     App.ext.input.touch = true;
                                     App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
                                 },ub);
-                                window.addEventListener('pointerup',	function(evt) {
+                                this.app.Listener(this.window.self,'pointerup',	function(evt) {
                                     App.ext.input.touch = false;
                                     App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
                                 },ub);
@@ -1619,15 +1619,15 @@ var App = Object.create({
                             else
 							if (window.MSPointerEvent) {
                                 
-                                window.addEventListener('MSPointerDown',function(evt) {
+                                this.app.Listener(this.window.self,'MSPointerDown',function(evt) {
                                     App.ext.input.touch = true;
                                     App.ext.input.listener.down(evt);
                                 },ub);
-                                window.addEventListener('MSPointerMove',function(evt) {
+                                this.app.Listener(this.window.self,'MSPointerMove',function(evt) {
                                     App.ext.input.touch = true;
                                     App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
                                 },ub);
-                                window.addEventListener('MSPointerUp',	function(evt) {
+                                this.app.Listener(this.window.self,'MSPointerUp',	function(evt) {
                                     App.ext.input.touch = false;
                                     App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
                                 },ub);
@@ -1637,30 +1637,30 @@ var App = Object.create({
                                 
                             {
 							//if (App.ext.useragent.mouse) {
-								window.addEventListener('mousedown',function(evt) {
+								this.app.Listener(this.window.self,'mousedown',function(evt) {
 										App.ext.input.listener.down(evt);
 									},ub);
-								window.addEventListener('mousemove',function(evt) {
+								this.app.Listener(this.window.self,'mousemove',function(evt) {
 										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt),null,App.ext.input);
 									},ub);
-								window.addEventListener('mouseup',function(evt) {
+								this.app.Listener(this.window.self,'mouseup',function(evt) {
 										App.ext.input.listener.up(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
 									},ub);
 								//}
 							//if (!App.ext.useragent.touch) {
-								window.addEventListener('touchstart',	function(evt) {
+								this.app.Listener(this.window.self,'touchstart',	function(evt) {
 									App.ext.input.touch = true;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
 									},ub);
-								window.addEventListener('touchend',		function(evt) {
+								this.app.Listener(this.window.self,'touchend',		function(evt) {
 									App.ext.input.touch = false;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
 										App.ext.input.listener.up(evt,App.ext.input);
 									},ub);
-								window.addEventListener('touchmove',	function(evt) {
+								this.app.Listener(this.window.self,'touchmove',	function(evt) {
 									App.ext.input.touch = true;
 										if (App.options.flags.touchprevent)
 										evt.preventDefault();
