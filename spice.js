@@ -19,6 +19,9 @@ window.appsNextId = 0;
 //Time at which this document begins
 var TimeToBuild = new Date().getTime();
 
+var Sprite = {};
+var sprite = {};
+var img = {};
 var App = Object.create({	
   
     constructor:{	
@@ -2508,16 +2511,15 @@ var App = Object.create({
 			graphics:{
 				prototype:{
 					path:"",
-					Sprite:Object.create(null),
 					SpriteWebItems:new Array(0),
 					SpriteLoadNumber:0,
 					SpriteLoadErrors:0,
 					SpriteLoadTime:0,
 					Sources:{},
 					load:function(name,file){
+						console.log( this.app.options.get("paths").images)
 						if (typeof file==="undefined")
-							file = name;
-                        file = this.app.options.paths.images + file;
+							file =  this.app.options.get("paths").images+""+name;
 						this.Sources.append(this.SpriteAppend(name,file));
 						return this.Sources.getByName(name);
 					},
@@ -2539,14 +2541,14 @@ var App = Object.create({
 						return this.SpriteWebItems[name];
 					},
 					graphicsLibrary:function(){
-						this.sprite = Object.create(null);
+						Sprite = Object.create(null);
 						this.Sources = Object.create(null);
 						this.Sources.prototype = {	
 							get:function get(){return this.index;},
 							getByName:function getByName(name){return this.index[name];},
 							getName:function getName(name){return this.index[name].name;},
 						}
-						this.sprite = Object.create(this.Base,
+						Sprite = Object.create(this.Base,
 						{
 							constructor:function Sprite(path,filename){this.path=path;this.filename=filename;return path;},
 							src:	{value:"S:undefined"},
@@ -2563,12 +2565,10 @@ var App = Object.create({
 									return;
 								this.index[image.name]=image; 
 								this.count++;
-								//Debug.log("GraphicsController: load: "+image.name + ":"+this.count);
 							}},
 							unload:{value:function unload(name)
 							{
 								this.index[name]=null; 
-								//Debug.log('GraphicsController: unload: '+name);
 								return this.index[name];
 							}},
 						});
@@ -2583,14 +2583,12 @@ var App = Object.create({
 								img.number = 1+ App.client.graphics.SpriteLoadErrors++;
 								img.onload = function() {
 										App.client.graphics.SpriteLoadErrors--;
-										//Debug.log("GraphicsController: loaded: "+this.name+":"+(App.client.graphics.SpriteLoadErrors));
 										
 									};
 								return img;
 							},
 						unload:function() {
 								this.Sources.unload(this.name);
-								//Debug.log("GraphicsController: unload: "+image.name + ":"+this.count);
 							}
 					},
 					getErrors:function(){
