@@ -99,6 +99,7 @@ var App = Object.create({
 				
                 //Run App.OnLoad
                 App.OnLoad();
+				
 			}
 		},
 		
@@ -170,17 +171,27 @@ var App = Object.create({
 		
 		//Getters for Common Data
 		getFps:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.fps; } },
+		
 		getCurrent:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.state.current; } },
 		
 		getDelta:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.delta; } },
+		
 		getScale:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.scale; } },
 		
 		getWidth:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.setWidth; } },
+		
 		getHeight:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.setHeight; } },
 		
 		getScaledWidth:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.width; } },
+		
 		getScaledHeight:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.height; } },
+				
+		setTitle:{writable:false, configurable:false, enumerable:false, value:function(title){ return (document.title==title?(document.title):(document.title=title)); } },
+		
+		toggleWidescreen:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.fullscale = !this.client.update.fullscale; } },
+		
 		time:{writable:true, configurable:false, enumerable:false, value:0 },
+		
 		main:{writable:true, configurable:false, enumerable:false, value:{name:"Main",init:function() {},update:function() {},draw:function() {return true;}} },
 	},
     
@@ -195,6 +206,7 @@ var App = Object.create({
 		//	These options have effect OnLoad only. 
 		
 		options:{
+			drag:0,
 			targetfps:60,
 			mute:false,
 			paths:{
@@ -325,6 +337,7 @@ var App = Object.create({
 		//	These operations are extended variations on the canvas API. 
 		
 		ext:{
+			
 			prototype:{
 				
 				//UserAgent Information
@@ -332,24 +345,14 @@ var App = Object.create({
 				
 				useragent:{
 					
-					//	Since your useragent doesnt change, you can simply query the following.
-					//	.useragent.agent 		Your navigator.useragent, 
-					//	.useragent.mouse 		 true or false
-					//	.useragent.touch 		
-					//	.useragent.keyboard 	
-					//	.useragent.windows 	
-					//	.useragent.chrome 	
-					//	.useragent.safari 	
-					//	.useragent.iemobile 	
-					//	.useragent.nokia 	
-					//	.useragent.ie 	
-					//	.useragent.blackberry 	
-					//	.useragent.playbook 	
-					//	.useragent.bb10 	
-					//	.useragent.mobile 	
+					//	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
 					
 					prototype:{
-						agent:String,
+						
+						//Cached Navigator.userAgent
+						agent:navigator.userAgent,
+						
+						//
 						mouse:false,
 						touch:false,
 						keyboard:false,
@@ -359,45 +362,75 @@ var App = Object.create({
 						iemobile:false,
 						nokia:false,
 						ie:false,
-						iOs:false,
+						ios:false,
 						blackberry:false,
 						playbook:false,
 						bb10:false,
 						mobile:false,
-						Chrome: function(){
-							return this.chrome = navigator.userAgent.match(/Chrome/i) ? true : false;
+						
+						//Match user agent for IE
+						IE: function(){
+							
+							return  this.agent.match(/Trident/i) ? true : false;
 						},
-						Safari: function(){
-							return this.safari = navigator.userAgent.match(/Safari/i) ? true : false;
-						},
-						Android: function(){
-							this.android = navigator.userAgent.match(/Android/i);
-							return this.android ? true : false;
-						},
-						BlackBerry:function(){
-							this.blackberry = navigator.userAgent.match(/BlackBerry/i);
-							this.playbook = navigator.userAgent.match(/PlayBook/i);
-							this.bb10 = navigator.userAgent.match(/BB10/i);
-							return this.blackberry||this.playbook||this.bb10 ? true : false;
-						},
+						
+						//Match user agent for iOS
 						iOS:function(){
-							return  this.iOs = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+							
+							return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
 						},
+						
+						//Match user agent for Nokia
+						Nokia: function(){
+							
+							return  this.agent.match(/Nokia/i) ? true : false;
+						},
+						
+						//Determine mobile or windows based on useragent
+						Mobile: function(){
+							
+							return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+						},
+						
+						//Match user agent for Chrome
+						Chrome: function(){
+							
+							return this.chrome = this.agent.match(/Chrome/i) ? true : false;
+						},
+						
+						//Match user agent for Safari
+						Safari: function(){
+							
+							return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
+						},
+						
+						Desktop: function(){
+							
+							return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
+						},
+						
+						//Match user agent for Android
+						Android: function(){
+							return this.agent.match(/Android/i) ? true : false;
+						},
+						
+						//Match user agent for IEMobile
 						IEMobile: function(){
-							var trident = navigator.userAgent.match(/IEMobile/i);
-							var windowsphone = navigator.userAgent.match(/Windows Phone/i);
-							var touch = navigator.userAgent.match(/touch/i);
+							
+							var trident = this.agent.match(/IEMobile/i);
+							var windowsphone = this.agent.match(/Windows Phone/i);
+							var touch = this.agent.match(/touch/i);
+							
 							return  trident || windowsphone || touch ? true : false;
 						},
-						IE: function(){
-							return  navigator.userAgent.match(/Trident/i) ? true : false;
+						
+						//Match user agent for Blackberry
+						BlackBerry:function(){
+							this.playbook = this.agent.match(/PlayBook/i) || false;
+							this.bb10 = this.agent.match(/BB10/i) || false;
+							return this.agent.match(/BlackBerry/i)||this.playbook||this.bb10 ? true : false;
 						},
-						Nokia: function(){
-							return  navigator.userAgent.match(/Nokia/i) ? true : false;
-						},
-						any: function(){
-							return (this.Android() || this.BlackBerry() || this.iOS());
-						}
+						
 					},
 					
 					constructor:function(){
@@ -406,31 +439,31 @@ var App = Object.create({
 						return {
 								init:{value:function(){
 									
-									//Populate values
-									this.agent = navigator.userAgent;
+									
+									//Query Browser
 									this.chrome = this.Chrome();
 									this.safari = this.Safari();
-									this.mouse = this.any();
 									this.iemobile = this.IEMobile();
 									this.nokia = this.Nokia();
-									this.windows = this.IEMobile() || this.IE() || !this.any();
-
 									this.ie = this.trident = this.IE();
-									this.touch = this.any();
-									this.mouse = !this.any() || this.BlackBerry();
-									this.keyboard = this.windows ||  this.BlackBerry() || !this.any();
-
-									this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-
-									this.BlackBerry();
-									this.iOS();
-									this.Android();
 									
-									return true;
+									this.blackberry = this.BlackBerry();
+									this.ios = this.iOS();
+									this.android = this.Android();
+									
+									this.touch = this.Mobile();
+									this.mouse = !this.Mobile() || this.BlackBerry();
+									
+									this.keyboard = this.Desktop() ||  this.BlackBerry();
+
+
+									this.Mobile();
+									this.Desktop();
+									
+									return this;
 								}
 							}
 						}
-						
 					}
 					
 				},
@@ -446,6 +479,7 @@ var App = Object.create({
 						//Cookies Polyfill by ScottHamper 
 						//	https://github.com/ScottHamper/Cookies#api-reference
 						polyfill:function(){ 
+							
 							(function (global, undefined) {
 								'use strict';
 
@@ -620,7 +654,6 @@ var App = Object.create({
 					
 				},
 				
-				
 				//MetaTag Handler
 				//	Assists in dynamically applying metatags.
 				//	Automatically applies Microsoft, Apple and common metatags. 
@@ -720,11 +753,143 @@ var App = Object.create({
 							}
 						}
 					}
+					
+				},
+				
+				//Cursor Handler
+				//	Logs last cursor and allows to easily change the cursor on the fly
+				
+				cursor:{
+					
+					prototype:{
+						
+						//Cached cursor types
+						auto		: "auto",
+						inherit		: "inherit",
+						crosshair	: "crosshair",
+						def			: "default",
+						help		: "help",
+						move		: "move",
+						pointer		: "pointer", 
+						progress	: "progress",
+						text		: "text",
+						wait		: "wait",
+						eresize		: "e-resize",
+						neresize	: "ne-resize",
+						nwresize	: "nw-resize",
+						nresize		: "n-resize",
+						seresize	: "se-resize",
+						swresize	: "sw-resize",
+						sresize		: "s-resize",
+						wresize		: "w-resize",
+						
+						//Properties
+						current 	: "auto",
+						last 		: "auto",
+						changed		:false,
+						count		:0,
+						lock		:0,
+						delay		:4,
+						
+						set:function(cursor,lock){
+							
+							if	((this.last==cursor)||(this.lock))
+								return;
+							
+							this.last = this.current;
+							
+							this.current = cursor;
+							
+							if (this.app.options.canvas.buffer)
+								this.app.canvas.getBuffer().style.cursor=this.current;
+								this.app.canvas.getCanvas().style.cursor=this.current;
+							
+							document.body.style.cursor=this.current;
+							
+							this.changed = true;
+							this.count++;
+						},
+						
+					},
+					
+					constructor:function(a){
+						
+						return{app:{value:a},init:{value:function(){
+							
+									this.set(this.wait);
+							
+									return this;
+								},			
+							}
+						}
+					}
+					
+				},
+				
+				
+				
+				
+				
+				//Artificially Click An Element on Event (Event,Element)
+				click:function(event, anchorObj) {
+					
+					//If .click
+					if (anchorObj.click) 
+						anchorObj.click();
+						else 
+					if(document.createEvent) 
+						{
+						if(event.target !== anchorObj) 
+							{
+							var evt = document.createEvent("MouseEvents"); 
+							evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
+							var allowDefault = anchorObj.dispatchEvent(evt);
+							// you can check allowDefault for false to see if
+							// any handler called evt.preventDefault().
+							// Firefox will *not* redirect to anchorObj.href
+							// for you. However every other browser will.
+							}
+						}
 				},
 				
 				
 				// The Following Needs refractoring
 				
+					//Colour (Color for 'Mericans) Handler
+					//	Assists in dynamically changing the colour of the canvas draws.
+					//	Automatically applies Microsoft, Apple and common metatags. 
+					/*
+					colour:{
+						prototype:{
+							Teal		:["#008299",	"#00A0B1"],
+							Blue		:["#2672EC",	"#2E8DEF"],
+							Purple		:["#8C0095",	"#A700AE"],
+							DarkPurple	:["#5133AB",	"#643EBF"],
+							Red			:["#AC193D",	"#BF1E4B"],
+							Orange		:["#D24726",	"#DC572E"],
+							Green		:["#008A00",	"#00A600"],
+							SkyBlue		:["#094AB2",	"#0A5BC4"],
+							White		:["#AFAFAF",	"#F9FAF2"],
+							Black		:["#0F0F0F",	"#A1A1A1"],
+							Current		:["#0F0F0F",	"#AFAFAF"],
+							shade		:0,
+							getCurrent	:function(){return this.Current},
+							get			:function(){var g = (this.shade)?this.Current[0]:this.Current[1];return g;},
+							getAlt		:function(){var g = (this.shade)?this.Current[1]:this.Current[0];return g;},
+							set			:function(set){this.Current = set; var g = (this.shade)?this.Current[0]:this.Current[1];return this.Current;},
+							setAlt		:function(set){this.shade = set;}
+						},
+
+						constructor:function(){
+							return {init:{value:function(){
+										//this.set(this.Black);
+										//console.log("Colour:    "+this.Current[0]+"/"+this.Current[1]);
+									}
+								}
+							}
+						}
+					},
+					*/
 				
 				//freezeonfocus:false,
 				//fps:0,
@@ -766,40 +931,8 @@ var App = Object.create({
 					y:1
 				},
 				
-				//Custom Click
-				click:function(event, anchorObj) {
-					if (anchorObj.click) {
-						anchorObj.click();
-						} else if(document.createEvent) {
-						if(event.target !== anchorObj) {
-						var evt = document.createEvent("MouseEvents"); 
-						evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
-						var allowDefault = anchorObj.dispatchEvent(evt);
-						// you can check allowDefault for false to see if
-						// any handler called evt.preventDefault().
-						// Firefox will *not* redirect to anchorObj.href
-						// for you. However every other browser will.
-						}
-					}
-				},
-				
 				//Public functions
 				
-				//Toggle top snap
-				top:function(){
-					
-					//Toggle fullscale
-					this.app.client.update.fullscale = !this.app.client.update.fullscale;
-					
-				},
-				
-				//Assign document title
-				title:function(title){
-					
-					//Return document title 
-					return (document.title==title?(document.title):(document.title=title));
-					
-				},
 				
 				//default Objects
 				debug:{
@@ -833,97 +966,6 @@ var App = Object.create({
 						app:{value:a},
 						init:{value:function(){
 									this.log('Debug:     '+this.strength);
-								}
-							}
-						}
-					}
-				},
-				
-			
-				colour:{
-					prototype:{
-						Teal		:["#008299",	"#00A0B1"],
-						Blue		:["#2672EC",	"#2E8DEF"],
-						Purple		:["#8C0095",	"#A700AE"],
-						DarkPurple	:["#5133AB",	"#643EBF"],
-						Red			:["#AC193D",	"#BF1E4B"],
-						Orange		:["#D24726",	"#DC572E"],
-						Green		:["#008A00",	"#00A600"],
-						SkyBlue		:["#094AB2",	"#0A5BC4"],
-						White		:["#AFAFAF",	"#F9FAF2"],
-						Black		:["#0F0F0F",	"#A1A1A1"],
-						Current		:["#0F0F0F",	"#AFAFAF"],
-						shade		:0,
-						getCurrent	:function(){return this.Current},
-						get			:function(){var g = (this.shade)?this.Current[0]:this.Current[1];return g;},
-						getAlt		:function(){var g = (this.shade)?this.Current[1]:this.Current[0];return g;},
-						set			:function(set){this.Current = set; var g = (this.shade)?this.Current[0]:this.Current[1];return this.Current;},
-						setAlt		:function(set){this.shade = set;}
-					},
-					constructor:function(){return {
-						init:{value:function(){
-									//this.set(this.Black);
-									//console.log("Colour:    "+this.Current[0]+"/"+this.Current[1]);
-								}
-							}
-						}
-					}
-				},
-				cursor:{
-					prototype:{
-						auto		: "auto",
-						inherit		: "inherit",
-						crosshair	: "crosshair",
-						def			: "default",
-						help		: "help",
-						move		: "move",
-						pointer		: "pointer", 
-						progress	: "progress",
-						text		: "text",
-						wait		: "wait",
-						eresize		: "e-resize",
-						neresize	: "ne-resize",
-						nwresize	: "nw-resize",
-						nresize		: "n-resize",
-						seresize	: "se-resize",
-						swresize	: "sw-resize",
-						sresize		: "s-resize",
-						wresize		: "w-resize",
-						current 	: "auto",
-						last 		: "auto",
-						delay 		: 2,
-						changed		:false,
-						count		:0,
-						lock		:0,
-						set:function(cursor,lock){
-							//if (this.delay>0){
-							//	this.delay--;this.count=0;this.changed=false;return;}
-							//	else
-							//	delay =1;
-							if (this.lock >0)
-								this.lock--;
-							if (lock)
-								this.lock += 1;
-							//if (this.changed==true)
-							//	return;
-							if	((this.last==cursor)||(this.lock))
-								return;
-							//console.log(this.app.client.visuals);
-							this.last = this.current;
-							this.current = App.canvas.getCanvas().style.cursor;
-							if (this.app.options.canvas.buffer)
-								this.app.canvas.getBuffer().style.cursor=cursor;
-							document.body.style.cursor=cursor;
-							this.changed = true;
-							this.count++;
-							//Debug.log("Cursor:    "+this.current+" - "+this.last);
-						}
-					},
-					constructor:function(a){return{
-						app:{value:a},
-						init:{value:function(){
-									//this.set(this.wait);
-									setTimeout(function(){App.ext.cursor.set(App.ext.cursor.def)},2000);
 								}
 							}
 						}
@@ -1525,19 +1567,28 @@ var App = Object.create({
 			constructor:function(a){return{
 				app:{value:a},
 				init:{value:function(name){
-						this.title(name);
-						(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
-						(this.cursor = this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
-						(this.useragent = this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
-						(this.input = this.app.Construct(this.input.prototype,this.input.constructor)).init();
-						(this.colour =	this.app.Construct(this.colour.prototype,this.colour.constructor)).init();
+					
+						this.app.setTitle(name);
+					
+					
+						this.useragent = (this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
+					
 						this.metatag = (this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
 					
-                           //Build 
 						this.cookies = (this.app.Construct(this.cookies.prototype,this.cookies.constructor())).init();
+						
+						this.cursor = (this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
+						
+						//(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
+						//(this.cursor = this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
+						(this.input = this.app.Construct(this.input.prototype,this.input.constructor)).init();
+						//(this.colour =	this.app.Construct(this.colour.prototype,this.colour.constructor)).init();
 					
-							console.log(this.cookies);
+                           //Build 
+					
 						this.time = (( new Date().getTime())-TimeToLive)*1;
+					
+					
 						}
 					}
 				}
@@ -1706,6 +1757,8 @@ var App = Object.create({
                     
                     //Request Animation Frame with this.client_f
                     requestAnimationFrame(this.client_f);
+					
+					this.app.ext.cursor.set(this.app.ext.cursor.def);
                     
                 },
                 
@@ -2488,7 +2541,7 @@ var App = Object.create({
 							s:0,
 							a:0,
 							c:0,
-							colour:"",
+							colour:"",	
 							oldcol:"",
 							init:function(col, colold){
 							this.x = 0;
@@ -2509,9 +2562,10 @@ var App = Object.create({
 					flip:function(){
                         
                         //Set scale to client scale
-						this.scale = this.app.client.scale;
-                        
-                        
+						this.scale = this.app.client.scale
+						
+                        this.screen_fill(1,this.app.options.canvas.background);
+						
                         //If double buffering 
 						if (this.app.options.canvas.buffer)
 						{
@@ -2519,12 +2573,12 @@ var App = Object.create({
 							this.canvas_context.drawImage(this.buffer,0,0);
                             
                             //Clear buffer
-							this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
+							//this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 						}
                         else {
                             
                             //If not double buffering, clear canvas
-                            this.canvas_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
+                            //this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
                             
                             //If initalized, draw state
                             if (this.app.client.update.state.initalized)

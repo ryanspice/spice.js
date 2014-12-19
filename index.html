@@ -12,15 +12,15 @@
 App.OnLoad = function () {
 	
 	//App.Init(title,width,height)
-	App.Init("SpiceJS", 480, 25);
+	App.Init("SpiceJS", 720, 320);
 
 	//Set canvas background colour ( colour )
-	App.canvas.background_set("transparent");
+	App.canvas.background_set("#000000");
 
 	//Assign favicon
 	App.ext.metatag.metaFavicon("images/favicon.png");
 	var opt = {x:0}
-		console.log(App.options.set(opt));
+	App.options.set(opt);
 };
 	
 //Application main loop Object[init,update,draw]
@@ -29,7 +29,7 @@ App.main= {
 	name:"Example",
 
 	init:function() {
-
+		
 		//Initialization Logic
 		return true;
 	},
@@ -43,6 +43,8 @@ App.main= {
 	draw:function() {
 		
 		//Draw Logic
+		this.visuals.rect_ext(0,0,this.app.getWidth(),this.app.getHeight(),1,0.1,0,"#FFFF00");
+		
 		return true;
 	}
 
