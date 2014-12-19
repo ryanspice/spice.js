@@ -13,7 +13,8 @@
 /* jshint -W097 */
 
 "use strict";
-
+window.apps = new Array();
+window.appsNextId = 0;
 
 //Time at which this document begins
 var TimeToLive = new Date().getTime();
@@ -30,10 +31,10 @@ var App = Object.create({
             enumerable:true, 
 			
 			//VN
-			value:'0.6.60.14.09.12.min'
+			value:'0.6.60.14.18.12.min'
 		},
 		
-        //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+        //Build Client, Instantiate Loop, Build Canvas, Initalize Client					//CHECK APP
 		Init:{
             
             //Config
@@ -56,19 +57,25 @@ var App = Object.create({
                 //Delay start the loop
                 setTimeout(	(function(){
 			
-							function AppLoop(){
-                                
-								self.client.loop();
+							function AppLoop(){ 
+								self.client.loop(); 
 							}
+					
 							self.client.initalize(AppLoop,self.scale);
+					
 				}),this.time);
                 
                 //Initalize client
                 this.client.init(name,w,h);
+				
+				this.id = window.appsNextId;
+				window.apps[this.id] = this;
+				window.appsNextId++;
+				
 			}
 		},		
             
-        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+        //Run by OnApplicationLoad, App.OnLoad to be overwritten.							//CHECK APP
  		OnLoad:{
             
             //Config
@@ -82,9 +89,10 @@ var App = Object.create({
                 //Default to App.
                 App.Init("Spice.js",480,320);
 			}
+			
 		},
             
-        //Runs on DOMContentLoaded
+        //Runs on DOMContentLoaded															//CHECK APP
 		OnApplicationLoad:{
             
             //Config
@@ -94,8 +102,6 @@ var App = Object.create({
 			
             //Function
             value:function(evt,app){
-				
-				console.log(this);
 				
                 //Run App.OnLoad
                 App.OnLoad();
@@ -169,10 +175,36 @@ var App = Object.create({
 		//App.create for creating objects with app, visuals and graphics inherited
 		create:{writable:true, configurable:false, enumerable:false, value:function(a){ return this.Construct(a||{},this.client.room); } },
 		
+		//Allows artificial clicking of elements
+		click:{writable:false, configurable:false, enumerable:false, value:function(event, anchorObj) {
+					
+					//If .click
+					if (anchorObj.click) 
+						anchorObj.click();
+						else 
+					if(document.createEvent) 
+						{
+						if(event.target !== anchorObj) 
+							{
+							var evt = document.createEvent("MouseEvents"); 
+							evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
+							var allowDefault = anchorObj.dispatchEvent(evt);
+							// you can check allowDefault for false to see if
+							// any handler called evt.preventDefault().
+							// Firefox will *not* redirect to anchorObj.href
+							// for you. However every other browser will.
+							}
+						}
+				} },
+		
 		//Getters for Common Data
 		getFps:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.fps; } },
 		
 		getCurrent:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.state.current; } },
+		
+		getConnection:{writable:false, configurable:false, enumerable:false, value:function(){ return this.ext.connect.offline; } },
+		getConnectionError:{writable:false, configurable:false, enumerable:false, value:function(){ return this.ext.connect.error; } },
+		getConnectionAttempts:{writable:false, configurable:false, enumerable:false, value:function(){ return this.ext.connect.connectionAttempts; } },
 		
 		getDelta:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.delta; } },
 		
@@ -196,11 +228,6 @@ var App = Object.create({
 	},
     
 	prototype:{
-        
-        //Constructors 
-        
-		
-		
 		
         //Global Options Panel
 		//	These options have effect OnLoad only. 
@@ -248,9 +275,10 @@ var App = Object.create({
             get:function(attr){ 
 				if (attr)
 					{
+						//var f = new Function("return App.options"+
 						for (var attrname in this) 
-							if (attrname==attr) return attrname; 
-						return {};
+							if (attrname==attr) return eval("App.options." + attrname ); 
+						return false;
 					}
 				else
 				return this;
@@ -826,109 +854,187 @@ var App = Object.create({
 					
 				},
 				
+				//Connection Controller
+				//	Assists in making ajax calls and allows you to test your connection.
+				//	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
 				
-				
-				
-				
-				//Artificially Click An Element on Event (Event,Element)
-				click:function(event, anchorObj) {
+				connect:{
 					
-					//If .click
-					if (anchorObj.click) 
-						anchorObj.click();
-						else 
-					if(document.createEvent) 
-						{
-						if(event.target !== anchorObj) 
-							{
-							var evt = document.createEvent("MouseEvents"); 
-							evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
-							var allowDefault = anchorObj.dispatchEvent(evt);
-							// you can check allowDefault for false to see if
-							// any handler called evt.preventDefault().
-							// Firefox will *not* redirect to anchorObj.href
-							// for you. However every other browser will.
-							}
-						}
-				},
-				
-				
-				// The Following Needs refractoring
-				
-					//Colour (Color for 'Mericans) Handler
-					//	Assists in dynamically changing the colour of the canvas draws.
-					//	Automatically applies Microsoft, Apple and common metatags. 
-					/*
-					colour:{
-						prototype:{
-							Teal		:["#008299",	"#00A0B1"],
-							Blue		:["#2672EC",	"#2E8DEF"],
-							Purple		:["#8C0095",	"#A700AE"],
-							DarkPurple	:["#5133AB",	"#643EBF"],
-							Red			:["#AC193D",	"#BF1E4B"],
-							Orange		:["#D24726",	"#DC572E"],
-							Green		:["#008A00",	"#00A600"],
-							SkyBlue		:["#094AB2",	"#0A5BC4"],
-							White		:["#AFAFAF",	"#F9FAF2"],
-							Black		:["#0F0F0F",	"#A1A1A1"],
-							Current		:["#0F0F0F",	"#AFAFAF"],
-							shade		:0,
-							getCurrent	:function(){return this.Current},
-							get			:function(){var g = (this.shade)?this.Current[0]:this.Current[1];return g;},
-							getAlt		:function(){var g = (this.shade)?this.Current[1]:this.Current[0];return g;},
-							set			:function(set){this.Current = set; var g = (this.shade)?this.Current[0]:this.Current[1];return this.Current;},
-							setAlt		:function(set){this.shade = set;}
+					prototype:{
+						
+						//Properties
+						offline:false,
+						connectionAttempts:0,
+						error:null,
+						window:window,
+						
+						//An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
+						load:function(address,callback,arg0,arg1){
+							
+							var xmlhttp;
+							if (window.XMLHttpRequest)
+							  {// code for IE7+, Firefox, Chrome, Opera, Safari
+							  xmlhttp=new XMLHttpRequest();
+							  }
+							else
+							  {// code for IE6, IE5
+							  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+							  }
+							xmlhttp.onreadystatechange=function()
+							  {
+							  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+								{
+									callback(xmlhttp.response,arg0,arg1);
+								}
+							  }
+							xmlhttp.open("GET",address,true);
+							xmlhttp.send();
+							
 						},
+						
+						//An aJax request to check wither or not you are connected to the internet
+						// jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
+						hostReachable:function(){
+							
+							//if local host return offline
+							if ((this.window.location.hostname).toString()=="127.0.0.1")
+								return false;
+							
+							// Handle IE and more capable browsers
+							var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
+							var status;
+							
+							
+							// Open new request as a HEAD to the root hostname with a random param to bust the cache
+							xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
 
-						constructor:function(){
-							return {init:{value:function(){
-										//this.set(this.Black);
-										//console.log("Colour:    "+this.Current[0]+"/"+this.Current[1]);
-									}
+							// Issue request and handle response
+							try {
+								xhr.send();
+								return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
+								
+							} catch (error) {
+								
+								if (this.connectionAttempts<1)
+									this.connectionAttempts++,this.hostReachable();
+								this.error = error;
+								return false;
+							}	
+							
+						},
+						
+						test:function(app){
+							
+							return this.offline = this.hostReachable();
+						}
+						
+					},
+					
+					constructor:function(){
+						
+						//Return constructed cookie object.
+						return {init:{value:function(){
+							
+									//Execute a test on the connection
+									this.test();
+							
+									return this;
 								}
 							}
 						}
-					},
-					*/
+					}
+					
+				},
 				
-				//freezeonfocus:false,
-				//fps:0,
-				//ping:0,
-				//offline:false,
-				//delta_speed:0,
-				//connectionAttempts:0,
-				//connectDate:new Date(),
-				//connectDatere:new Date(),
+				///////////////////////////////////////////////
+				//Scroll to/scrolling - Needs Testing
+				///////////////////////////////////////////////
+				//	this.scrollto = true;
+				//
+				//	if (this.scrollto){this.app.ext.scroll.to(0,1000);
+				//	this.scrollto = this.app.ext.scroll.update();}
 				
-				//ReFractoring
-				scroll:{
-					event:function(evt,delta) {
-						if (App.client.visuals.seamless)
-							evt.preventDefault();
-						App.ext.input.wheelDelta = event.wheelDelta;
-					},
-					blockforce:false,
-					to:function(force) {
-						if (force)
-							if (this.blockforce)
-							window.scrollTo(this.x,this.y);
+				scroll:{														//CHECK APP
+					
+					prototype:{
+						
+						//Properties
+						accel:1,
+						window:window,
+						doc:document.documentElement,
+						
+						active:null,
+						target:{x:0,y:0},
+						x:0,
+						y:1,
+						
+						//ScrollWheel Event
+						event:function(evt,delta) {
 							
-						//if (document.documentElement.offsetLeft!==0)
-						//	window.scrollTo(0,document.documentElement.offsetTop)
-						//if ((this.lock)||(force))
-						//{
-						//window.scrollTo(this.x,this.y);
-						//if (this.y<0)
-						//	this.y = 0;
-						//	else
-						//	if (this.y>document.documentElement.clientHeight)
-						//		this.y=document.documentElement.clientHeight;
-						//}
-						//console.log(this.y);
+							if (App.options.get("seamless"))
+								evt.preventDefault();
+							App.ext.input.wheelDelta = evt.wheelDelta;
+							
+							var doc = document.documentElement;
+							var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+							var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+
+							App.ext.scroll.target.x = left;
+							App.ext.scroll.target.y = top-evt.wheelDelta;
+							App.ext.scroll.x = left;
+							App.ext.scroll.y = top-evt.wheelDelta;
+							//App.ext.scroll.active = false;
+						},
+						
+						//Update the position for smooth scrolling
+						update:function(x,y){
+
+							var left = (this.window.pageXOffset || this.doc.scrollLeft) - (this.doc.clientLeft || 0);
+							var top = (this.window.pageYOffset || this.doc.scrollTop)  - (this.doc.clientTop || 0);
+							
+							//if (!this.active)
+							//	return; 
+							
+								
+							var LD = Math.round(-this.x+this.target.x)/10;
+							var YD = Math.round(-this.y+this.target.y)/10;
+							 
+							if (left<this.target.x) 
+								this.x+=this.accel*LD;
+							if (left>this.target.x)
+								this.x+=this.accel*LD;
+							if (top<this.target.y)
+								this.y+=this.accel*YD;
+							if (top>this.target.y)
+								this.y+=this.accel*YD;
+
+							this.window.scrollTo(this.x,this.y);
+
+							if ((Math.round(this.x/10) == Math.round(this.target.x/10))&&
+							(Math.round(this.y/10) == Math.round(this.target.y/10)))
+								return false;
+								return true;
+						},
+
+						//Set position,
+						to:function(x,y) {
+
+							this.target.x = x;
+							this.target.y = y;
+							
+						}
+						
 					},
-					lock:{x:true,y:false},
-					x:0,
-					y:1
+					
+					constructor:function(a){return {
+						app:{value:a},
+						init:{value:function(){
+									this.to(0,0);
+									return this;
+								}
+							}
+						}
+					}
 				},
 				
 				//Public functions
@@ -1215,7 +1321,10 @@ var App = Object.create({
 					constructor:function(a){return{
 						app:{value:a},
 						codes:{value:new Array()},
-						init:{value:function Initalize(a){
+						init:{value:function(a){
+							
+							this.app.Listener(window,'mousewheel',this.app.ext.scroll.event);
+							
 							this.codes[0]  = '';
 							this.codes[1]  = '';
 							this.codes[2]  = '';
@@ -1445,7 +1554,7 @@ var App = Object.create({
 							},ub);
 				            //}
 							
-                            window.addEventListener('mousewheel',App.ext.scroll.event,ub);
+                            //window.addEventListener('mousewheel',App.ext.scroll.event,ub);
                             
                             
                             if(window.PointerEvent) {
@@ -1528,41 +1637,6 @@ var App = Object.create({
 				}
 				},
 				
-				//connection info
-				con:false,
-				connection:null,
-				connect:function(app){
-				return;
-					if ((this.offline)||(this.connectionAttempts>0))
-						return this.offline = this.con;
-					this.connectionAttempts++;
-					//Debug.log("Network:   Attempt: "+this.connectionAttempts);
-					if (window.XMLHttpRequest)
-						this.connection = new XMLHttpRequest();
-						else
-						this.connection = new ActiveXObject("Microsoft.XMLHTTP");
-					this.connection.onreadystatechange = function()
-						{
-						if (this.connection.readyState==4 && connection.status==200)
-							{
-							this.offline = this.con = false;
-							this.connectDatere = new Date;
-							this.connectDatere = this.connectDatere.getTime();
-							this.ping = this.connectDatere - this.connectDate;
-							}
-							else
-							{
-							this.offline = this.con = true;
-							this.ping = 1;
-							}
-						}
-						try {
-							this.connection.open("GET","http://www.google.com",true);
-							this.connection.send();
-							} 
-					catch(e){Debug.log('No0ernet');}
-					return this.offline = this.con;
-				}
 			},
 			constructor:function(a){return{
 				app:{value:a},
@@ -1578,6 +1652,10 @@ var App = Object.create({
 						this.cookies = (this.app.Construct(this.cookies.prototype,this.cookies.constructor())).init();
 						
 						this.cursor = (this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
+					
+						this.connect = (this.app.Construct(this.connect.prototype,this.connect.constructor)).init();
+					
+						this.scroll = (this.app.Construct(this.scroll.prototype,this.scroll.constructor(a))).init();
 						
 						//(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
 						//(this.cursor = this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
