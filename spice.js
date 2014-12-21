@@ -53,10 +53,13 @@ var App = Object.create({
                 
                 //Build client from prototype
                 this.client = this.Construct(this.client.prototype,this.client.constructor);
+				
                 
                 //Build canvas from prototype
                 (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
+				this.input = this.Construct(this.input.prototype,this.input.constructor).init();;
                 
+				
                 //Delay start the loop
                 setTimeout(	(function(){
 			
@@ -121,13 +124,15 @@ var App = Object.create({
             enumerable:false, 
 			
             //Function
-			value:function (obj, evt, listener) {
+			value:function (obj, evt, listener, param) {
 				
 				//If addEventListener exist, add it, otherwise attachEvent
 				if (obj.addEventListener)
 					obj.addEventListener(evt, listener, false);
 				else
 					obj.attachEvent("on" + evt, listener);
+				
+				obj.app = this;
 			}	
 		},
 		
@@ -958,98 +963,6 @@ var App = Object.create({
 				},
 				
 				///////////////////////////////////////////////
-				//Scroll to/scrolling - Needs Testing
-				///////////////////////////////////////////////
-				//	this.scrollto = true;
-				//
-				//	if (this.scrollto){this.app.ext.scroll.to(0,1000);
-				//	this.scrollto = this.app.ext.scroll.update();}
-				
-				scroll:{														//CHECK APP
-					
-					prototype:{
-						
-						//Properties
-						accel:1,
-						window:window,
-						doc:document.documentElement,
-						
-						active:null,
-						target:{x:0,y:0},
-						x:0,
-						y:1,
-						
-						//ScrollWheel Event
-						event:function(evt,delta) {
-							
-							if (App.options.get("seamless"))
-								evt.preventDefault();
-							App.ext.input.wheelDelta = evt.wheelDelta;
-							
-							var doc = document.documentElement;
-							var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-							var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-
-							App.ext.scroll.target.x = left;
-							App.ext.scroll.target.y = top-evt.wheelDelta;
-							App.ext.scroll.x = left;
-							App.ext.scroll.y = top-evt.wheelDelta;
-							//App.ext.scroll.active = false;
-						},
-						
-						//Update the position for smooth scrolling
-						update:function(x,y){
-
-							var left = (this.window.pageXOffset || this.doc.scrollLeft) - (this.doc.clientLeft || 0);
-							var top = (this.window.pageYOffset || this.doc.scrollTop)  - (this.doc.clientTop || 0);
-							
-							//if (!this.active)
-							//	return; 
-							
-								
-							var LD = Math.round(-this.x+this.target.x)/10;
-							var YD = Math.round(-this.y+this.target.y)/10;
-							 
-							if (left<this.target.x) 
-								this.x+=this.accel*LD;
-							if (left>this.target.x)
-								this.x+=this.accel*LD;
-							if (top<this.target.y)
-								this.y+=this.accel*YD;
-							if (top>this.target.y)
-								this.y+=this.accel*YD;
-
-							this.window.scrollTo(this.x,this.y);
-
-							if ((Math.round(this.x/10) == Math.round(this.target.x/10))&&
-							(Math.round(this.y/10) == Math.round(this.target.y/10)))
-								return false;
-								return true;
-						},
-
-						//Set position,
-						to:function(x,y) {
-
-							this.target.x = x;
-							this.target.y = y;
-							
-						}
-						
-					},
-					
-					constructor:function(a){return {
-						app:{value:a},
-						init:{value:function(){
-									this.to(0,0);
-									return this;
-								}
-							}
-						}
-					}
-				},
-				
-				
-				///////////////////////////////////////////////
 			//	Debug - Needs Refractoring
 				///////////////////////////////////////////////
 				
@@ -1095,600 +1008,14 @@ var App = Object.create({
 			//	Input - Needs Refractoring
 				///////////////////////////////////////////////
 				
-				input:{
-					
-					prototype:{
-						init:false,
-						
-						//Accessable Variables
-						x: 0,
-						y: 0,
-						touch:false,
-						touch_dist:{x:0,y:0},
-						keyup:false,keydown:false,
-						start: 		{x:0,y:0},				
-						control:false,
-						doc:document,
-						body:document.body,
-						window:{
-                            self:window,
-							play:15,
-							x:false,
-							y:false,
-							inside:false
-						},
-                        multi:{
-                          list:[]  
-                        },
-                        
-                        //Get Variables
-						getX:function(){return this.x;},
-						getY:function(){return this.y;},
-						getLastX:function(){return this.last.x;},
-						getLastY:function(){return this.last.y;},
-						getStartX:function(){return this.start.x;},
-						getStartY:function(){return this.start.y;},
-						getDuration:function(){return this.duration;},
-						getPressed:function(){return this.pressed;},
-						getReleased:function(){return this.released;},
-                        
-                        //Touch
-                        touched:{
-                            count:0,
-                            uplist:[],
-                            downlist:[],
-                            last:{x:0,y:0},
-                            CheckTouchUp:function(){
-                                
-                                return this.uplist[this.uplist.length-1];
-                            },
-                            CheckTouchDown:function(){
-                                
-                            },
-                        },
-                        
-                        //Listeners
-						listener:{
-                        touchpoints:0,
-                            
-                            //Input down/press polyfill
-							down:function(evt) {
-                                
-                                //Grab parent
-								var input = App.ext.input;
-                                
-                                //Save Latest X/Y or 0
-								input.x = input.start.x = evt.x || evt.clientX || 0;
-								input.y = input.start.y = evt.y || evt.clientY || 0;
-                                
-                                //Increment Touch Count
-                                input.touched.count++;
-                                
-                                //Add positions to touch list
-                                input.touched.downlist.push({x:input.x,y:input.y});
-                                
-                                //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
-                                
-                                //Flags
-								input.pressed = true;
-								input.press = true;
-                                
-                                //Reset distance
-								input.dist.x = 0;
-								input.dist.y = 0;
-							},
-							move:function(move,evt,input){
-								input.press = true;
-								evt = evt || {clientX:null,clientY:null};
-								input.x = move.x || evt.clientX || evt.x;
-								input.y = move.y || evt.clientY || evt.y;
-								input.dist.x = (App.ext.input.x-App.ext.input.start.x)*App.client.delta;
-								input.dist.y = (App.ext.input.y-App.ext.input.start.y)*App.client.delta;
-							},
-							up:function(mouse,input) {
-								input.end.x = mouse.x || input.x;
-								input.end.y = mouse.y || input.y;
-                                
-                                input.touched.uplist.push({x:input.x,y:input.y});
-                                input.touched.last = {x:input.x,y:input.y};
-                                input.touched.count--;
-                                //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
-                                
-                                
-								input.press = false;
-								input.released = true;
-								input.touch = false;
-								input.dist.x = (App.ext.input.x-App.ext.input.start.x)*App.client.delta;
-								input.dist.y = (App.ext.input.y-App.ext.input.start.y)*App.client.delta;
-							},
-							touch:function(touch,input){
-								input.touch = true;
-								input.x = touch.pageX;
-								input.y = touch.pageY;
-								input.pos.x = touch.pageX;
-								input.pos.y = touch.pageY;
-								input.start.x = touch.pageX;
-								input.start.y = touch.pageY;
-								input.released = false;
-								input.duration = 0;
-								//input.dist.x = 0;
-								//input.dist.y = 0;
-							},
-							keydown:function(a,input) {
-								input.key = true;
-								input.kpressed = true;
-								input.keyPower = -a;
-								input.keyPower 	= input.keyPower;
-								//Debug.log(input.key + " " + input.keyPower);
-							},
-							keyup:function(input) {
-								input.key = false;
-								input.keyPower = 0;
-								input.kreleased = true;
-								input.kpressed = false;
-							}
-							,
-							ups:function(a,input){
-								a==1?input.keyup=true:input.keyup=false;
-								
-							},
-							downs:function(a,input){
-								if (input.delay>0)
-									return;
-								a==1?input.keydown=true:input.keydown=false;
-							}
-						},
-						pressed: 	false,
-						released: false,
-						press: 		false,
-						horizontal:0,
-						vertical:0,
-						delta: 0,
-						wheelDelta: 0,
-						duration: 0,
-						dist: {x:0,y:0},
-						pos: {x:0,y:0},
-						
-						last: {x:0,y:0},
-						end: {x:0,y:0},
-						delay:0,
-						key:false,
-						keyPower:0,
-						menu:false,
-						drag:false,
-						confine:false,
-						position:function(canvas,evt) {
-							if ((!canvas)||(!evt))
-									return false;
-							return {x: evt.clientX,y: evt.clientY};
-						},
-						mouse:function() {
-							if (!App.ext.input.pressed)
-								App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input,App.ext.input.start);
-						},
-						mouse_distance:function() {
-							if (!App.ext.input.pressed)
-								App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input.start,App.ext.input.end);
-						},
-						touch_distance:function(touch) {
-							if (!touch)
-								return;
-							App.ext.input.x = touch.pageX;
-							App.ext.input.y = touch.pageY;
-							//if (!App.ext.input.input.pressed)
-								App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input.start,App.ext.input.end);
-						},
-						get_angle: function(){
-							return 57.2957795 * Math.atan2(this.end.y-this.start.y,this.end.x-this.start.x);
-						},
-						get_delta: function(){
-							return this.dist.x*this.dist.x+this.dist.y*this.dist.y;
-						},
-						set: function(x,y){
-							this.x=x;this.y=y;
-						},
-						update:function UPDATE() {
-							this.horizontal = this.app.ext.input.checkList("a") - this.app.ext.input.checkList("d") || this.app.ext.input.checkList("leftarrow") - this.app.ext.input.checkList("rightarrow") ;
-                            this.touchH = 0 - this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.x,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.x,-1,1);
-							this.vertical = this.app.ext.input.checkList("s") - this.app.ext.input.checkList("w") || this.app.ext.input.checkList("downarrow") - this.app.ext.input.checkList("uparrow");
-                            this.touchV =  0 + this.app.client.Math.Clamp(this.app.ext.input.pressed*this.app.ext.input.dist.y,-1,1) || 0 + this.app.client.Math.Clamp(this.app.ext.input.touch*this.app.ext.input.dist.y,-1,1) ;
-							this.last.x = this.x;
-							this.last.y = this.y;
-							this.press = false;
-							this.touch = 0;
-							this.window.inside = 0;
-							this.wheelDelta = 0;
-							this.pressed?this.duration++:this.duration=0;
-							
-							this.confine?(
-								((this.y<this.app.client.visuals.fixY(0))?
-									(this.window.y=0,this.window.inside -= 1):
-										((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-											(this.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.window.inside += 1):
-											(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
-										),
-										((this.x<this.app.client.visuals.fixX(0))?
-											(this.window.x = 0,this.window.inside -=1):
-											((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-												(this.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.window.inside += 1):
-												(this.window.x = -this.app.client.visuals.fixX(0)+this.x)
-											)
-										)
-									)
-								):((this.y<this.app.client.visuals.fixY(0))?
-										(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
-										((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-											(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
-											(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
-									),
-									((this.x<this.app.client.visuals.fixX(0))?
-										(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
-										((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-											(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
-											(this.window.x=-this.app.client.visuals.fixX(0)+this.x)
-										)
-									));
-							this.released?(this.released=false,this.dist.x=0,this.dist.y=0):null;
-							this.codereleased = 0;
-							//this.duration>0?(this.released=false);
-							//(this.released==true)?(this.released=false,this.duration=0,this.dist.x=0,this.dist.y=0):null;
-							
-							(this.delay>0)?this.delay-=Math.floor(this.delay-1*this.app.client.delta):null;
-						return true;
-						},
-					},
-					
-					constructor:function(a){return{
-						
-						app:{value:a},
-						
-						codes:{value:new Array()},
-						
-						populateCodes:{value:function(){
-								//Keyboard codes
-								this.codes[0]  = '';
-								this.codes[1]  = '';
-								this.codes[2]  = '';
-								this.codes[3]  = '';
-								this.codes[4]  = '';
-								this.codes[5]  = '';
-								this.codes[6]  = '';
-								this.codes[7]  = '';
-								this.codes[8]  ='backspace';
-								this.codes[9]  ='tab'                ;
-								this.codes[13] ='enter'             ;
-								this.codes[16] ='shift'             ;
-								this.codes[17] ='ctrl'              ;
-								this.codes[18] ='alt'               ;
-								this.codes[19] ='pause/break'       ;
-								this.codes[20] ='capslock'          ;
-								this.codes[27] ='escape'            ;
-								this.codes[32] ='space'            ;
-								this.codes[33] ='pageup'            ;
-								this.codes[34] ='pagedown'          ;
-								this.codes[35] ='end'               ;
-								this.codes[36] ='home'              ;
-								this.codes[37] ='leftarrow'         ;
-								this.codes[38] ='uparrow'           ;
-								this.codes[39] ='rightarrow'        ;
-								this.codes[40] ='downarrow'         ;
-								this.codes[45] ='insert'            ;
-								this.codes[46] ='delete'            ;
-								this.codes[48] ='0'                 ;
-								this.codes[49] ='1'                 ;
-								this.codes[50] ='2'                 ;
-								this.codes[51] ='3'                 ;
-								this.codes[52] ='4'                 ;
-								this.codes[53] ='5'                 ;
-								this.codes[54] ='6'                 ;
-								this.codes[55] ='7'                 ;
-								this.codes[56] ='8'                 ;
-								this.codes[57] ='9'                 ;
-								this.codes[65] ='a'                 ;
-								this.codes[66] ='b'                 ;
-								this.codes[67] ='c'                 ;
-								this.codes[68] ='d'                 ;
-								this.codes[69] ='e'                 ;
-								this.codes[70] ='f'                 ;
-								this.codes[71] ='g'                 ;
-								this.codes[72] ='h'                 ;
-								this.codes[73] ='i'                 ;
-								this.codes[74] ='j'                 ;
-								this.codes[75] ='k'                 ;
-								this.codes[76] ='l'                 ;
-								this.codes[77] ='m'                 ;
-								this.codes[78] ='n'                 ;
-								this.codes[79] ='o'                 ;
-								this.codes[80] ='p'                 ;
-								this.codes[81] ='q'                 ;
-								this.codes[82] ='r'                 ;
-								this.codes[83] ='s'                 ;
-								this.codes[84] ='t'                 ;
-								this.codes[85] ='u'                 ;
-								this.codes[86] ='v'                 ;
-								this.codes[87] ='w'                 ;
-								this.codes[88] ='x'                 ;
-								this.codes[89] ='y'                 ;
-								this.codes[90] ='z'                 ;
-								this.codes[91] ='leftwindowkey'     ;
-								this.codes[92] ='rightwindowkey'    ;
-								this.codes[93] ='selectkey'         ;
-								this.codes[96] ='numpad0'           ;
-								this.codes[97] ='numpad1'           ;
-								this.codes[98] ='numpad2'           ;
-								this.codes[99] ='numpad3'           ;
-								this.codes[100]='numpad4'          ;
-								this.codes[101]='numpad5'          ;
-								this.codes[102]='numpad6'          ;
-								this.codes[103]='numpad7'          ;
-								this.codes[104]='numpad8'          ;
-								this.codes[105]='numpad9'          ;
-								this.codes[106]='multiply'         ;
-								this.codes[107]='add'              ;
-								this.codes[109]='subtract'         ;
-								this.codes[110]='decimalpoint'     ;
-								this.codes[111]='divide'           ;
-								this.codes[112]='f1'               ;
-								this.codes[113]='f2'               ;
-								this.codes[114]='f3'               ;
-								this.codes[115]='f4'               ;
-								this.codes[116]='f5'               ;
-								this.codes[117]='f6'               ;
-								this.codes[118]='f7'               ;
-								this.codes[119]='f8'               ;
-								this.codes[120]='f9'               ;
-								this.codes[121]='f10'              ;
-								this.codes[122]='f11'              ;
-								this.codes[123]='f12'              ;
-								this.codes[144]='numlock'          ;
-								this.codes[145]='scrolllock'       ;
-
-								//"Nintendo Wii" 
-								this.codes[175]='Up (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-								this.codes[176]='Down (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-								this.codes[177]='Left (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-								this.codes[178]='Right (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
-
-								this.codes[170]='- (Wii?)';		//(CAUTION! ALSO ZOOMS OUT)
-								this.codes[174]='+ (Wii?)';		//(CAUTION! ALSO ZOOMS IN)
-								this.codes[172]='1 (Wii?)';		//
-								this.codes[173]='2 (Wii?)';		//(CAUTION! ALSO SPLITS SCREEN INTO SINGLE COLUMN MODE)
-
-
-								/*
-								PS3:
-								Platform: "PLAYSTATION 3"
-								Up: 38
-								Down: 40
-								Left: 37
-								Right: 39
-								X: 63 (CAUTION! ALSO CLICKS)
-								Nintendo 3ds:
-								Platform: "Nintendo 3ds"
-								Up: 38
-								Down: 40
-								Left: 37
-								Right: 39
-								LG Smart TV:
-								Platform: "Linux 35230"
-								0-9: 48-57
-								Play: 445
-								Pause: 19
-								Rewind: 412
-								FF: 417
-								*/
-
-
-								this.codes[186]='semi-colon';
-								this.codes[187]='equalsign';
-								this.codes[188]='comma';
-								this.codes[189]='dash';
-								this.codes[190]='period';
-								this.codes[191]='forwardslash';
-								this.codes[192]='graveaccent';
-								this.codes[219]='openbracket';
-								this.codes[220]='backslash';
-								this.codes[221]='closebraket';
-								this.codes[222]='singlequote';
-							}
-						},
-						
-						preventDefault:{value:function(e) { e.preventDefault(); }},
-						
-						init:{value:function(){
-						
-							//Add listener for mousewheel
-							this.app.Listener(this.window.self,'mousewheel',this.app.ext.scroll.event);
-							
-							//Override selection
-							if (!this.app.options.get("override").SelectStart)
-								this.app.Listener(this.app.canvas.canvas,'selectstart',this.preventDefault);
-							
-							//Override hold to touch
-							if (!this.app.options.get("override").MSHoldVisual)
-								this.app.Listener(this.app.canvas.canvas,'MSHoldVisual',this.preventDefault);
-							
-							//Override context menu
-							if (this.app.options.get("override").ContextMenu) {
-								this.doc.oncontextmenu = this.preventDefault;
-								this.window.self.oncontextmenu = this.preventDefault;
-							}
-							
-							//Override drag
-							if (this.app.options.get("override").Drag) {
-								this.doc.ondragstart   = this.preventDefault;
-								this.window.self.ondragstart   = this.preventDefault;
-							}
-							
-							
-							
-							var body = this.doc.body;
-							if (this.app.options.get("flags").mstouch) 
-								body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-							
-							if (this.app.options.get("flags").seamless) 
-								body.style.overflow = "hidden";
-							
-							if (this.app.options.get("flags").tight) 
-								body.style.padding = "0px", body.style.margin = "0px auto";
-								
-								
-							//Supported Keyboard Codes
-							this.populateCodes();
-							
-							//Keybaord code list
-							this.codeList = new Array();
-							
-							//Keybaord code check
-                            this.checkList = function(code){
-                                var e = this.codeList.length-1;
-                                for (var i = e;i>=0;--i)
-                                    if (this.codeList[i]==code)
-                                        return true;
-                                return false;
-                            }
-							
-							//Kayboard list pop
-                            this.popList = function(code){
-                                var e = this.codeList.length-1;
-                                for (var i = e;i>=0;--i)
-                                    if (this.codeList[i]==code)
-                                        this.codeList[i] = null;
-                            }
-							
-                            var ub = false;
-							//if ((App.ext.useragent.keyboard)||(App.options.override.keyboard)) {
-				            this.app.Listener(this.window.self,'keydown', 	function(event) {
-								App.ext.input.codedown = App.ext.input.codes[event.keyCode];
-                                App.ext.input.codeList.push(App.ext.input.codedown);
-								if (event.ctrlKey)
-									App.ext.input.control = true;
-								App.ext.input.pressed = true;
-								App.ext.input.released = false;
-										
-								switch(event.keyCode) 
-								{
-								case 37:App.ext.input.listener.keydown(-1,App.ext.input);break;
-								case 65:App.ext.input.listener.keydown(-1,App.ext.input);break;
-								case 39:App.ext.input.listener.keydown(1,App.ext.input);break;
-								case 68:App.ext.input.listener.keydown(1,App.ext.input);break;
-								case 40:App.ext.input.listener.downs(1,App.ext.input);break;
-								case 83:App.ext.input.listener.downs(1,App.ext.input);break;
-								case 38:App.ext.input.listener.ups(1,App.ext.input);break;
-								case 87:App.ext.input.listener.ups(1,App.ext.input);break;
-								}
-							},ub);
-									
-							this.app.Listener(this.window.self,'keyup', 	function(event) {
-								App.ext.input.codeup = App.ext.input.codes[event.keyCode];
-                                App.ext.input.popList(App.ext.input.codeup );
-								App.ext.input.pressed = false;
-								App.ext.input.released = true;
-								if (event.ctrlKey)
-									App.ext.input.control = false;
-									switch(event.keyCode) 
-									{
-									case 37:App.ext.input.listener.keyup(App.ext.input);break;
-									case 65:App.ext.input.listener.keyup(App.ext.input);break;
-									case 39:App.ext.input.listener.keyup(App.ext.input);break;
-									case 68:App.ext.input.listener.keyup(App.ext.input);break;
-									case 40:App.ext.input.listener.downs(2,App.ext.input);break;
-									case 83:App.ext.input.listener.downs(2,App.ext.input);break;
-									case 38:App.ext.input.listener.ups(2,App.ext.input);break;
-									case 87:App.ext.input.listener.ups(2,App.ext.input);break;
-									}
-                                App.ext.input.codereleased = true;
-							},ub);
-				            //}
-							
-                            //this.app.Listener(this.window.self,'mousewheel',App.ext.scroll.event,ub);
-                            
-                            
-                            if(window.PointerEvent) {
-                                this.app.Listener(this.window.self,'pointerdown',function(evt) {
-                                    App.ext.input.touch = true;
-                                    App.ext.input.listener.down(evt);
-                                },ub);
-                                this.app.Listener(this.window.self,'pointermove',function(evt) {
-                                    App.ext.input.touch = true;
-                                    App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
-                                },ub);
-                                this.app.Listener(this.window.self,'pointerup',	function(evt) {
-                                    App.ext.input.touch = false;
-                                    App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
-                                },ub);
-                                
-                            }
-                            else
-							if (window.MSPointerEvent) {
-                                
-                                this.app.Listener(this.window.self,'MSPointerDown',function(evt) {
-                                    App.ext.input.touch = true;
-                                    App.ext.input.listener.down(evt);
-                                },ub);
-                                this.app.Listener(this.window.self,'MSPointerMove',function(evt) {
-                                    App.ext.input.touch = true;
-                                    App.ext.input.listener.move(App.ext.input.position(App.client.c, evt),evt,App.ext.input);
-                                },ub);
-                                this.app.Listener(this.window.self,'MSPointerUp',	function(evt) {
-                                    App.ext.input.touch = false;
-                                    App.ext.input.listener.up(App.ext.input.position(App.client.c, evt),App.ext.input);
-                                },ub);
-                                
-                            }
-                            else
-                                
-                            {
-							//if (App.ext.useragent.mouse) {
-								this.app.Listener(this.window.self,'mousedown',function(evt) {
-										App.ext.input.listener.down(evt);
-									},ub);
-								this.app.Listener(this.window.self,'mousemove',function(evt) {
-										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt),null,App.ext.input);
-									},ub);
-								this.app.Listener(this.window.self,'mouseup',function(evt) {
-										App.ext.input.listener.up(App.ext.input.position(App.canvas.getCanvas(), evt),App.ext.input);
-									},ub);
-								//}
-							//if (!App.ext.useragent.touch) {
-								this.app.Listener(this.window.self,'touchstart',	function(evt) {
-									App.ext.input.touch = true;
-										if (App.options.flags.touchprevent)
-										evt.preventDefault();
-										App.ext.input.listener.touch(evt.targetTouches[0],App.ext.input);
-									},ub);
-								this.app.Listener(this.window.self,'touchend',		function(evt) {
-									App.ext.input.touch = false;
-										if (App.options.flags.touchprevent)
-										evt.preventDefault();
-										App.ext.input.listener.up(evt,App.ext.input);
-									},ub);
-								this.app.Listener(this.window.self,'touchmove',	function(evt) {
-									App.ext.input.touch = true;
-										if (App.options.flags.touchprevent)
-										evt.preventDefault();
-										App.ext.input.listener.move(App.ext.input.position(App.canvas.getCanvas(), evt), evt.targetTouches[0],App.ext.input);
-									},ub);
-                            }
-							//	}
-							//if (App.ext.useragent.windows) {
-                            
-                            //Microsoft Touch Events
-                            
-                            
-                            
-							//}
-							return this;
-							}
-						}
-					}
-				}
-				},
 				
 			},
-			constructor:function(a){return{
-				app:{value:a},
-				init:{value:function(name){
+			constructor:function(app){
+				return{
+					
+					app:{value:app},
+					
+					init:{value:function(name){
 					
 						this.app.setTitle(name);
 					
@@ -1702,10 +1029,11 @@ var App = Object.create({
 					
 						this.connect = (this.app.Construct(this.connect.prototype,this.connect.constructor)).init();
 					
-						this.scroll = (this.app.Construct(this.scroll.prototype,this.scroll.constructor)).init();
 						
 						//(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
-						this.input = (this.app.Construct(this.input.prototype,this.input.constructor)).init();
+					
+						//this.input = (this.app.Construct(this.input.prototype,this.input.constructor)).init();
+					
 					
 						this.time = (( new Date().getTime())-TimeToBuild)*1;
 						}
@@ -1714,6 +1042,779 @@ var App = Object.create({
 			}
 		},
 		
+		input:{
+			
+			prototype:{
+                
+				//Cache vars
+				
+				x: 0, 
+				y: 0,	
+				delay:0,
+				duration: 0,
+				press:false,
+				pressed:false,
+				released:false,
+				
+				end: {x:0,y:0},
+				pos: {x:0,y:0},
+				dist: {x:0,y:0},
+				start:{x:0,y:0},		
+				last: {x:0,y:0},
+				
+				touch:false,
+				touch_dist:{x:0,y:0},
+				
+				key:false,
+				keyPower:0,
+				keyup:false,
+				keydown:false,
+				control:false,
+				
+				doc:document,
+				body:document.body,
+				window:{
+                    self:window,
+					play:15,
+					x:false,
+					y:false,
+					inside:false
+				},
+				
+				
+                
+				init:function(){
+
+					this.scroll = (this.app.Construct(this.scroll.prototype,this.scroll.constructor)).init();
+					
+					//Selection
+					if (!this.app.options.get("override").SelectStart)
+						this.app.Listener(this.app.canvas.canvas,'selectstart',this.preventDefault);
+
+					//Override hold to touch
+
+					if (!this.app.options.get("override").MSHoldVisual)
+						this.app.Listener(this.app.canvas.canvas,'MSHoldVisual',this.preventDefault);
+
+					//Override context menu
+
+					if (this.app.options.get("override").ContextMenu) {
+						this.doc.oncontextmenu = this.preventDefault;
+						this.window.self.oncontextmenu = this.preventDefault;
+}
+
+					//Override drag
+					if (this.app.options.get("override").Drag) {
+						this.doc.ondragstart   = this.preventDefault;
+						this.window.self.ondragstart   = this.preventDefault;
+					}
+
+					//Flags
+					if (this.app.options.get("flags").mstouch) 
+						this.doc.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+
+
+					if (this.app.options.get("flags").seamless) 
+						this.doc.body.style.overflow = "hidden";
+
+					if (this.app.options.get("flags").tight) 
+						this.doc.body.style.padding = "0px", this.doc.body.style.margin = "0px auto";
+
+
+
+
+					// Pointer events
+					if(this.window.self.PointerEvent) {
+
+							//Modern Events
+							this.app.Listener(this.window.self,'pointerdown',function(evt) {
+								
+								if (!evt.target.app)
+									return;
+									evt.target.app.ext.input.touch = true;
+									evt.target.app.ext.input.listener.down(evt);
+								});
+							this.app.Listener(this.window.self,'pointermove',function(evt) {
+								
+								if (!evt.target.app)
+									return;
+									evt.target.app.ext.input.touch = true;
+									evt.target.app.ext.input.listener.move(evt);
+								});
+							this.app.Listener(this.window.self,'pointerup',	function(evt) {
+								
+								if (!evt.target.app)
+									return;
+									evt.target.app.ext.input.touch = false;
+									evt.target.app.ext.input.listener.up(evt);
+								});
+
+						} else	
+					if (this.window.self.MSPointerEvent) {
+
+							//MS Pointer Events
+							this.app.Listener(this.window.self,'MSPointerDown',function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.touch = true;
+									evt.target.app.input.listener.down(evt);
+								});
+							this.app.Listener(this.window.self,'MSPointerMove',function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.touch = true;
+									evt.target.app.input.listener.move(evt);
+								});
+							this.app.Listener(this.window.self,'MSPointerUp',	function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.touch = false;
+									evt.target.app.input.listener.up(evt);
+								});
+
+						}	
+					else {
+
+							//Legacy Mouse and Touch Events
+							this.app.Listener(this.window.self,'mousedown',function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.listener.down(evt);
+								});
+							this.app.Listener(this.window.self,'mousemove',function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.listener.move(evt);
+								});
+							this.app.Listener(this.window.self,'mouseup',function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.touch = false;
+									evt.target.app.input.listener.up(evt,evt);
+								});
+							
+							this.app.Listener(this.window.self,'touchstart',	function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.touch = true;
+									evt.target.app.input.listener.touch(evt.targetTouches[0]);
+									if (evt.target.app.options.flags.touchprevent)
+										evt.preventDefault();
+								});
+						
+							this.app.Listener(this.window.self,'touchmove',	function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									if (evt.target.app.options.flags.touchprevent)
+										evt.preventDefault();
+									evt.target.app.input.touch = true;
+									evt.target.app.input.listener.move(evt,evt.targetTouches[0]);
+								});
+							this.app.Listener(this.window.self,'touchend',		function(evt) {
+								
+									if (!evt.target.app)
+										return;
+									evt.target.app.input.touch = false;
+									evt.target.app.input.listener.up(evt);
+									if (evt.target.app.options.flags.touchprevent)
+										evt.preventDefault();
+								});
+
+						}
+
+					//Add listener for mousewheel
+					this.app.Listener(this.window.self,'mousewheel',this.scroll.event);
+					
+					this.app.Listener(this.window.self,'keydown',function(evt){
+							
+							if (this.app.input.preventNext==true)
+								evt.preventDefault();
+							this.app.input.preventNext = false;
+							this.app.input.codedown = this.app.input.codes[evt.keyCode];
+							this.app.input.codeList.push(this.app.input.codedown);
+							if (evt.ctrlKey)
+								this.app.input.control = true;
+							this.app.input.pressed = true;
+							this.app.input.released = false;
+	
+							this.app.input.listener.key_down(this.app);	
+						});
+						
+					this.app.Listener(this.window.self,'keyup',function(evt) {
+							
+							if (this.app.input.preventNext)
+								evt.preventDefault();
+							this.app.input.preventNext = false;
+							this.app.input.codeup = this.app.input.codes[evt.keyCode];
+							this.app.input.keyboardPop(this.app.input.codeup);
+							this.app.input.control = false;
+							this.app.input.pressed = false;
+							this.app.input.released = true;
+							this.app.input.true = true;
+							
+							this.app.input.listener.key_up(this.app);	
+						});
+					
+					//Supported Keyboard Codes
+					this.populateCodes();
+					
+				return this;
+				},
+					
+		
+				///////////////////////////////////////////////
+				//Scroll to/scrolling - Needs Testing
+				///////////////////////////////////////////////
+				//	this.scrollto = true;
+				//
+				//	if (this.scrollto){this.app.ext.scroll.to(0,1000);
+				//	this.scrollto = this.app.ext.scroll.update();}
+
+				scroll:{														//CHECK APP
+
+					prototype:{
+
+						//Properties
+						accel:1,
+						window:window,
+						doc:document.documentElement,
+
+						active:null,
+						target:{x:0,y:0},
+						x:0,
+						y:1,
+
+						//ScrollWheel Event
+						event:function(evt,delta) {
+
+							if (App.options.get("seamless"))
+								evt.preventDefault();
+							App.input.wheelDelta = evt.wheelDelta;
+
+							var doc = document.documentElement;
+							var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+							var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+
+							App.input.scroll.target.x = left;
+							App.input.scroll.target.y = top-evt.wheelDelta;
+							App.input.scroll.x = left;
+							App.input.scroll.y = top-evt.wheelDelta;
+							//App.ext.scroll.active = false;
+						},
+
+						//Update the position for smooth scrolling
+						update:function(x,y){
+
+							var left = (this.window.pageXOffset || this.doc.scrollLeft) - (this.doc.clientLeft || 0);
+							var top = (this.window.pageYOffset || this.doc.scrollTop)  - (this.doc.clientTop || 0);
+
+							//if (!this.active)
+							//	return; 
+
+
+							var LD = Math.round(-this.x+this.target.x)/10;
+							var YD = Math.round(-this.y+this.target.y)/10;
+
+							if (left<this.target.x) 
+								this.x+=this.accel*LD;
+							if (left>this.target.x)
+								this.x+=this.accel*LD;
+							if (top<this.target.y)
+								this.y+=this.accel*YD;
+							if (top>this.target.y)
+								this.y+=this.accel*YD;
+
+							this.window.scrollTo(this.x,this.y);
+
+							if ((Math.round(this.x/10) == Math.round(this.target.x/10))&&
+							(Math.round(this.y/10) == Math.round(this.target.y/10)))
+								return false;
+								return true;
+						},
+
+						//Set position,
+						to:function(x,y) {
+
+							this.target.x = x;
+							this.target.y = y;
+
+						}
+
+					},
+
+					constructor:function(a){return {
+						app:{value:a},
+						init:{value:function(){
+									this.to(0,0);
+									return this;
+								}
+							}
+						}
+					}
+				},
+		
+				
+                multi:{
+                  list:[]  
+                },
+				
+                //Touch
+                touched:{
+                    count:0,
+                    uplist:[],
+                    downlist:[],
+                    last:{x:0,y:0},
+                    CheckTouchUp:function(){
+                        
+                        return this.uplist[this.uplist.length-1];
+                    },
+                    CheckTouchDown:function(){
+                        
+                    },
+                },
+				
+                //Listeners
+				listener:{
+					
+                	touchpoints:0,
+                    
+                    //Input down/press polyfill
+					down:function(evt) {
+                        
+                        //Grab parent
+						var input = evt.target.app.input;
+                        
+                        //Save Latest X/Y or 0
+						input.x = input.start.x = evt.x || evt.clientX || 0;
+						input.y = input.start.y = evt.y || evt.clientY || 0;
+                        
+                        //Increment Touch Count
+                        input.touched.count++;
+                        
+                        //Add positions to touch list
+                        input.touched.downlist.push({x:input.x,y:input.y});
+                        
+                        //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
+                        
+                        //Flags
+						input.pressed = true;
+						input.press = true;
+                        
+                        //Reset distance
+						input.dist.x = 0;
+						input.dist.y = 0;
+					},
+					
+					//input move fill
+					move:function(evt){
+                        
+                        //Grab parent
+						var input = evt.target.app.input;
+						
+						evt = evt || {clientX:null,clientY:null};
+						
+						//sET PRESS
+						input.press = true;
+						input.x = evt.clientX || evt.x;
+						input.y = evt.clientY || evt.y;
+						input.dist.x = (input.x-input.start.x)*evt.target.app.getDelta();
+						input.dist.y = (input.y-input.start.y)*evt.target.app.getDelta();
+					},
+					
+					up:function(evt) {
+						
+						var input = evt.target.app.input;
+						
+						input.end.x = evt.x || input.x;
+						input.end.y = evt.y || input.y;
+                        
+                        input.touched.uplist.push({x:input.x,y:input.y});
+                        input.touched.last = {x:input.x,y:input.y};
+                        input.touched.count--;
+                        //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
+                        
+                        
+						input.press = false;
+						input.pressed = false;
+						input.released = true;
+						input.touch = false;
+						input.dist.x = (App.input.x-App.input.start.x)*App.client.delta;
+						input.dist.y = (App.input.y-App.input.start.y)*App.client.delta;
+					},
+					
+					key_down:function(evt){
+						evt.input.key = true;
+						evt.input.kpressed = true;
+					},
+					
+					key_up:function(evt){
+						evt.input.key = false;
+						evt.input.kpressed = false;
+						evt.input.kreleased = true;
+						evt.input.kpressed = false;
+					},
+					
+					touch:function(touch){
+						
+						var input = evt.target.app.input;
+						
+						input.touch = true;
+						input.x = touch.pageX;
+						input.y = touch.pageY;
+						input.pos.x = touch.pageX;
+						input.pos.y = touch.pageY;
+						input.start.x = touch.pageX;
+						input.start.y = touch.pageY;
+						input.released = false;
+						input.duration = 0;
+						
+					},
+					
+				},
+				
+				codes:new Array(),
+                codeList:new Array(),
+				confine:false,
+				preventNext:true,
+				preventDefault:function(e) { e.preventDefault(); },
+				preventNextInput:function() { return this.preventNext = true; },
+				
+				mouse:function() {
+					if (!App.ext.input.pressed)
+						App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input,App.ext.input.start);
+				},
+				mouse_distance:function() {
+					if (!App.ext.input.pressed)
+						App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input.start,App.ext.input.end);
+				},
+				touch_distance:function(touch) {
+					if (!touch)
+						return;
+					App.ext.input.x = touch.pageX;
+					App.ext.input.y = touch.pageY;
+					//if (!App.ext.input.input.pressed)
+						App.ext.input.dist =  App.client.Math.Vector.Difference(App.ext.input.start,App.ext.input.end);
+				},
+				
+				update:function UPDATE() {
+					
+					//Reset last positions
+					this.last.x = this.x;
+					this.last.y = this.y;
+					
+					//Confine x,y
+					this.confined();	
+					
+					//Reset variables
+					this.press = false;
+					this.touch = 0;
+					this.window.inside = 0;
+					this.wheelDelta = 0;
+					
+					//If pressed, increase duration, otherwise reset
+					this.pressed?this.duration++:this.duration=0;
+					
+					//if released, reset release and distance. else nothing.
+					this.released?(this.released=false,this.dist.x=0,this.dist.y=0):null;
+					
+					//reset code released, unused?
+					this.codereleased = 0;
+					
+					//decrease delay if delay>0
+					(this.delay>0)?this.delay-=Math.floor(this.delay-1*this.app.getDelta()):null;
+					
+				return true;
+				},
+				
+				//Confine input's to inside the canvas only. 
+				confined:function(){
+					
+					this.confine?(
+						((this.y<this.app.client.visuals.fixY(0))?
+							(this.window.y=0,this.window.inside -= 1):
+								((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+									(this.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.window.inside += 1):
+									(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
+								),
+								((this.x<this.app.client.visuals.fixX(0))?
+									(this.window.x = 0,this.window.inside -=1):
+									((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+										(this.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.window.inside += 1):
+										(this.window.x = -this.app.client.visuals.fixX(0)+this.x)
+									)
+								)
+							)
+						):((this.y<this.app.client.visuals.fixY(0))?
+								(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
+								((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+									(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
+									(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
+							),
+							((this.x<this.app.client.visuals.fixX(0))?
+								(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
+								((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+									(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
+									(this.window.x=-this.app.client.visuals.fixX(0)+this.x)
+								)
+							));
+					
+				},
+				
+				//Populate supported codes
+				populateCodes:function(){
+						//Keyboard codes
+						this.codes[0]  ='';
+						this.codes[1]  ='';
+						this.codes[2]  ='';
+						this.codes[3]  ='';
+						this.codes[4]  ='';
+						this.codes[5]  ='';
+						this.codes[6]  ='';
+						this.codes[7]  ='';
+						this.codes[8]  ='backspace';
+						this.codes[9]  ='tab'                ;
+						this.codes[13] ='enter'             ;
+						this.codes[16] ='shift'             ;
+						this.codes[17] ='ctrl'              ;
+						this.codes[18] ='alt'               ;
+						this.codes[19] ='pause/break'       ;
+						this.codes[20] ='capslock'          ;
+						this.codes[27] ='escape'            ;
+						this.codes[32] ='space'            ;
+						this.codes[33] ='pageup'            ;
+						this.codes[34] ='pagedown'          ;
+						this.codes[35] ='end'               ;
+						this.codes[36] ='home'              ;
+						this.codes[37] ='leftarrow'         ;
+						this.codes[38] ='uparrow'           ;
+						this.codes[39] ='rightarrow'        ;
+						this.codes[40] ='downarrow'         ;
+						this.codes[45] ='insert'            ;
+						this.codes[46] ='delete'            ;
+						this.codes[48] ='0'                 ;
+						this.codes[49] ='1'                 ;
+						this.codes[50] ='2'                 ;
+						this.codes[51] ='3'                 ;
+						this.codes[52] ='4'                 ;
+						this.codes[53] ='5'                 ;
+						this.codes[54] ='6'                 ;
+						this.codes[55] ='7'                 ;
+						this.codes[56] ='8'                 ;
+						this.codes[57] ='9'                 ;
+						this.codes[65] ='a'                 ;
+						this.codes[66] ='b'                 ;
+						this.codes[67] ='c'                 ;
+						this.codes[68] ='d'                 ;
+						this.codes[69] ='e'                 ;
+						this.codes[70] ='f'                 ;
+						this.codes[71] ='g'                 ;
+						this.codes[72] ='h'                 ;
+						this.codes[73] ='i'                 ;
+						this.codes[74] ='j'                 ;
+						this.codes[75] ='k'                 ;
+						this.codes[76] ='l'                 ;
+						this.codes[77] ='m'                 ;
+						this.codes[78] ='n'                 ;
+						this.codes[79] ='o'                 ;
+						this.codes[80] ='p'                 ;
+						this.codes[81] ='q'                 ;
+						this.codes[82] ='r'                 ;
+						this.codes[83] ='s'                 ;
+						this.codes[84] ='t'                 ;
+						this.codes[85] ='u'                 ;
+						this.codes[86] ='v'                 ;
+						this.codes[87] ='w'                 ;
+						this.codes[88] ='x'                 ;
+						this.codes[89] ='y'                 ;
+						this.codes[90] ='z'                 ;
+						this.codes[91] ='leftwindowkey'     ;
+						this.codes[92] ='rightwindowkey'    ;
+						this.codes[93] ='selectkey'         ;
+						this.codes[96] ='numpad0'           ;
+						this.codes[97] ='numpad1'           ;
+						this.codes[98] ='numpad2'           ;
+						this.codes[99] ='numpad3'           ;
+						this.codes[100]='numpad4'          ;
+						this.codes[101]='numpad5'          ;
+						this.codes[102]='numpad6'          ;
+						this.codes[103]='numpad7'          ;
+						this.codes[104]='numpad8'          ;
+						this.codes[105]='numpad9'          ;
+						this.codes[106]='multiply'         ;
+						this.codes[107]='add'              ;
+						this.codes[109]='subtract'         ;
+						this.codes[110]='decimalpoint'     ;
+						this.codes[111]='divide'           ;
+						this.codes[112]='f1'               ;
+						this.codes[113]='f2'               ;
+						this.codes[114]='f3'               ;
+						this.codes[115]='f4'               ;
+						this.codes[116]='f5'               ;
+						this.codes[117]='f6'               ;
+						this.codes[118]='f7'               ;
+						this.codes[119]='f8'               ;
+						this.codes[120]='f9'               ;
+						this.codes[121]='f10'              ;
+						this.codes[122]='f11'              ;
+						this.codes[123]='f12'              ;
+						this.codes[144]='numlock'          ;
+						this.codes[145]='scrolllock'       ;
+
+						//"Nintendo Wii" 
+						this.codes[175]='Up (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+						this.codes[176]='Down (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+						this.codes[177]='Left (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+						this.codes[178]='Right (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
+
+						this.codes[170]='- (Wii?)';		//(CAUTION! ALSO ZOOMS OUT)
+						this.codes[174]='+ (Wii?)';		//(CAUTION! ALSO ZOOMS IN)
+						this.codes[172]='1 (Wii?)';		//
+						this.codes[173]='2 (Wii?)';		//(CAUTION! ALSO SPLITS SCREEN INTO SINGLE COLUMN MODE)
+
+
+						/*
+						PS3:
+						Platform: "PLAYSTATION 3"
+						Up: 38
+						Down: 40
+						Left: 37
+						Right: 39
+						X: 63 (CAUTION! ALSO CLICKS)
+						Nintendo 3ds:
+						Platform: "Nintendo 3ds"
+						Up: 38
+						Down: 40
+						Left: 37
+						Right: 39
+						LG Smart TV:
+						Platform: "Linux 35230"
+						0-9: 48-57
+						Play: 445
+						Pause: 19
+						Rewind: 412
+						FF: 417
+						*/
+
+
+						this.codes[186]='semi-colon';
+						this.codes[187]='equalsign';
+						this.codes[188]='comma';
+						this.codes[189]='dash';
+						this.codes[190]='period';
+						this.codes[191]='forwardslash';
+						this.codes[192]='graveaccent';
+						this.codes[219]='openbracket';
+						this.codes[220]='backslash';
+						this.codes[221]='closebraket';
+						this.codes[222]='singlequote';
+					
+				},
+				
+				//Check the array of supported codes
+				keyboardCheck:function(code){
+					
+                	var e = this.codeList.length-1;
+                	for (var i = e;i>=0;--i)
+                	    if (this.codeList[i]==code)
+                	        return true;
+					
+                return false;
+                },
+				
+				//Add code to array
+				keyboardPop:function(code){
+                        var e = this.codeList.length-1;
+                        for (var i = e;i>=0;--i)
+                            if (this.codeList[i]==code)
+                                this.codeList[i] = null;
+                }
+				
+			},
+			
+			constructor:function(app){
+				
+				return{
+					//
+					app:{writable:true, configurable:true, enumerable:false, value:app},
+					//
+					getX:{writable:false, configurable:false, enumerable:false, value:function(){return this.x;}},
+					//
+					getY:{writable:false, configurable:false, enumerable:false, value:function(){return this.y;}},
+					//
+					getLastX:{writable:false, configurable:false, enumerable:false, value:function(){return this.last.x;}},
+					//
+					getLastY:{writable:false, configurable:false, enumerable:false, value:function(){return this.last.y;}},
+					//
+					getStartX:{writable:false, configurable:false, enumerable:false, value:function(){return this.start.x;}},
+					//
+					getStartY:{writable:false, configurable:false, enumerable:false, value:function(){return this.start.y;}},
+					//
+					getDuration:{writable:false, configurable:false, enumerable:false, value:function(){return this.duration;}},
+					//
+					getTouched:{writable:false, configurable:false, enumerable:false, value:function(){return this.touch;}},
+					//
+					getPressed:{writable:false, configurable:false, enumerable:false, value:function(){return this.pressed;}},
+					//
+					getReleased:{writable:false, configurable:false, enumerable:false, value:function(){return this.released;}},
+					//
+					getPosition:{writable:false, configurable:false, enumerable:false, value:function(canvas,evt) {
+						if ((!canvas)||(!evt))
+								return false;
+						return {x: evt.clientX,y: evt.clientY};
+					}},
+					//
+					getAngle:{writable:false, configurable:false, enumerable:false, value: function(){
+
+						//Convert to degrees
+						return 57.2957795 * Math.atan2(this.end.y-this.start.y,this.end.x-this.start.x);
+					}},
+					//
+					getAngleDistance:{writable:false, configurable:false, enumerable:false, value: function(){
+
+						//Return the delta between x and y
+						var delta = (this.dist.x*this.dist.x+this.dist.y*this.dist.y)/2;
+						return delta;
+					}},
+					//
+					getHorizontal:{writable:false, configurable:false, enumerable:false, value:function(){
+
+						var wasd = this.app.ext.input.keyboardCheck("a") - this.app.ext.input.keyboardCheck("d");
+						var arrows = this.app.ext.input.keyboardCheck("leftarrow") - this.app.ext.input.keyboardCheck("rightarrow") ;
+						var mouse = -this.getPressed()*this.app.ext.input.dist.x;
+						var touch = -this.getTouched()*this.app.ext.input.dist.x;
+
+
+						var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
+						var touched = this.app.client.Math.Clamp(mouse || touch,-1,1);
+
+						return {keyboard:keyboard,touch:touched};
+					}},
+					//
+					getVertical:{writable:false, configurable:false, enumerable:false, value:function(){
+
+						var wasd = this.app.ext.input.keyboardCheck("s") - this.app.ext.input.keyboardCheck("w");
+						var arrows = this.app.ext.input.keyboardCheck("downarrow") - this.app.ext.input.keyboardCheck("uparrow");
+						var mouse = this.getPressed()*this.app.ext.input.dist.y;
+						var touch = this.getTouched()*this.app.ext.input.dist.y;
+
+
+						var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
+						var touched = this.app.client.Math.Clamp(mouse || touch,-1,1);
+
+						return {keyboard:keyboard,touch:touched};
+					}},
+
+				}
+			}
+		},
 		canvas:{
 			prototype:{
 				canvas:Object.create(null),
@@ -1894,7 +1995,7 @@ var App = Object.create({
 					this.visuals.flip(this.scale);
                     
                     //Update Input
-					this.app.ext.input.update();
+					this.app.input.update();
                     
                     //Update scale 
 					this.scale = this.update.scale(this);
@@ -2016,7 +2117,7 @@ var App = Object.create({
 						this.scalediff = this.scaler.s-this.lastscale;
 						
                         //If scaled different, scroll to the top
-						(this.scalediff)?app.app.ext.scroll.to(true):app.app.ext.scroll.to(false);
+						(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
                         
 						this.set = 0;
                         
@@ -2058,8 +2159,9 @@ var App = Object.create({
                             //State set
 							set:function(state,start){
                                 
+								console.log(this.input);
                                 //Set app input delay
-								this.app.app.ext.input.delay = 1;
+								//this.app.input.delay = 1;
                                 
                                 //If state and not initialized, initalize via Object .create
 								if ((this.name=state.name)&&(this.initalized=!0)) 
