@@ -9,18 +9,18 @@
 <script rel="prefetch" name="main" type="text/javascript" defer>
 	
 //Application OnLoad
-App.OnLoad = function () {
+App.OnLoad = function (self) {
 	
 	//App.Init(title,width,height)
-	App.Init("SpiceJS", 720, 320);
+	self.Init("SpiceJS", 720, 320);
 
 	//Set canvas background colour ( colour )
-	App.canvas.background_set("#000000");
+	self.canvas.setBackground("#000000");
 
 	//Assign favicon
-	App.ext.metatag.metaFavicon("images/favicon.png");
+	self.ext.metatag.metaFavicon("images/favicon.png");
 	var opt = {x:0}
-	App.options.set(opt);
+	self.options.set(opt);
 };
 	
 //Application main loop Object[init,update,draw]
@@ -31,12 +31,15 @@ App.main= {
 	init:function() {
 		
 		//Initialization Logic
+		this.img = this.graphics.load("../stan");
 		return true;
 	},
 	
 	update:function() {
-
+		
 		//Game logic	
+		//console.log(this.app.ext.input.preventNextInput()&&this.app.ext.input.keyboardCheck("t")&&this.app.ext.input.keyboardCheck("ctrl"))
+		//console.log(this.app.ext.input.keyboardCheck("r")&&this.app.ext.input.keyboardCheck("ctrl"))
 		return true;
 	},
 
@@ -44,6 +47,7 @@ App.main= {
 		
 		//Draw Logic
 		this.visuals.rect_ext(0,0,this.app.getWidth(),this.app.getHeight(),1,0.1,0,"#FFFF00");
+		this.visuals.image(this.img,0,0);
 		
 		return true;
 	}
