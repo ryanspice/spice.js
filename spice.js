@@ -12,19 +12,41 @@
 /*jshint strict:false */
 /* jshint -W097 */
 
-"use strict";
-window.apps = new Array();
-window.appsNextId = 0;
-
 //Time at which this document begins
-var TimeToBuild = new Date().getTime();
-
+var Steve;
 var Sprite = {};
 var sprite = {};
 var img = {};
+
+"use strict";
+var SpiceJS = Object.create(
+	{
+		init:function()
+			{
+			this.window = window;
+			if (!this.window	.apps)
+				this.window	.apps = new Array(1);
+
+			if (!this.window	.appsNextId>=0)
+				this.window	.appsNextId = 0;
+			this.TimeToBuild = new Date().getTime();
+			return this;
+			},
+		get:function()
+			{
+				console.log(this)
+			return App;
+			},
+		proto:App
+	}).init();
+
+
 var App = Object.create({	
   
-    constructor:{	
+    constructor:function(){
+		
+		
+		return {	
 		
         //Version Number
 		VN:{
@@ -37,7 +59,7 @@ var App = Object.create({
 			value:'0.6.60.14.18.12.min'
 		},
 		
-        //Build Client, Instantiate Loop, Build Canvas, Initalize Client					//CHECK APP
+        //Build Client, Instantiate Loop, Build Canvas, Initalize Client
 		Init:{
             
             //Config
@@ -50,6 +72,13 @@ var App = Object.create({
                 
 				//Store self
                 var self = this;
+				
+				
+				
+				this.id = window.appsNextId;
+				window.apps[this.id] = this;
+				window.appsNextId++;
+				
                 
                 //Build client from prototype
                 this.client = this.Construct(this.client.prototype,this.client.constructor);
@@ -57,7 +86,6 @@ var App = Object.create({
                 
                 //Build canvas from prototype
                 (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
-				this.input = this.Construct(this.input.prototype,this.input.constructor).init();;
                 
 				
                 //Delay start the loop
@@ -74,14 +102,11 @@ var App = Object.create({
                 //Initalize client
                 this.client.init(name,w,h);
 				
-				this.id = window.appsNextId;
-				window.apps[this.id] = this;
-				window.appsNextId++;
-				
+				this.input = this.Construct(this.input.prototype,this.input.constructor).init();
 			}
 		},		
             
-        //Run by OnApplicationLoad, App.OnLoad to be overwritten.							//CHECK APP
+        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
  		OnLoad:{
             
             //Config
@@ -90,15 +115,15 @@ var App = Object.create({
             enumerable:false, 
             
             //Function
-            value:function(){
+            value:function(self){
                 
                 //Default to App.
-                App.Init("Spice.js",480,320);
+                self.Init("Spice.js",480,320);
 			}
 			
 		},
             
-        //Runs on DOMContentLoaded															//CHECK APP
+        //Runs on DOMContentLoaded
 		OnApplicationLoad:{
             
             //Config
@@ -107,10 +132,10 @@ var App = Object.create({
             enumerable:false, 
 			
             //Function
-            value:function(evt,app){
+            value:function(evt){
 				
-                //Run App.OnLoad
-                App.OnLoad();
+                //Run .OnLoad
+                evt.target.app.OnLoad(evt.target.app);
 				
 			}
 		},
@@ -132,7 +157,7 @@ var App = Object.create({
 				else
 					obj.attachEvent("on" + evt, listener);
 				
-				obj.app = this;
+				obj.app = window.apps[this.id] = this;
 			}	
 		},
 		
@@ -147,8 +172,22 @@ var App = Object.create({
             //Function
             value:function(prototype,constructor){
                 
+				var isObj = false;
+				var obj = prototype;
+				var proto = prototype;
+				var construct = constructor;
+				var ret = {};
+				
+				if (typeof obj.prototype !== 'undefined')
+				if (typeof obj.constructor !== 'undefined')
+					{
+						construct = obj.constructor;
+						proto = obj.prototype;
+						isObj = true;
+					}
+
                 //Grab type of constructor
-				var c = typeof constructor;
+				var c = typeof construct;
                 
                 //Return & Create object based on constructor 
 				switch(c)
@@ -156,29 +195,39 @@ var App = Object.create({
 				case 'undefined':
                         
                     //Use only the prototype
-					return Object.create(prototype);
+					ret = Object.create(proto);
                         
 				break;
 				case 'object':
                         
                     //Use constructor as object
-					return Object.create(prototype,constructor);
+					ret = Object.create(proto,construct);
                         
 				break;
 				case 'function':
                         
                     //Use constructor as function
-					return Object.create(prototype,constructor(this));
+					ret = Object.create(proto,construct(this));
                         
 				break;
 				default:
                         
                     //Expected a type
 					console.log("Expected 'object' or 'function': Type is "+c);
-				return {};
                 }
+				if (isObj)
+					prototype = ret;
+				
+				return ret;
             }
         },
+		
+		//id:{writable:true, configurable:false, enumerable:false, value:0 },
+		//canvas:{writable:true, configurable:false, enumerable:false, value:0 },
+		//client:{writable:true, configurable:false, enumerable:false, value:0 },
+		//ext:{writable:true, configurable:false, enumerable:false, value:0 },
+		
+		
 		
 		//App.create for creating objects with app, visuals and graphics inherited
 		create:{writable:true, configurable:false, enumerable:false, value:function(a){ return this.Construct(a||{},this.client.room); } },
@@ -228,14 +277,22 @@ var App = Object.create({
 				
 		setTitle:{writable:false, configurable:false, enumerable:false, value:function(title){ return (document.title==title?(document.title):(document.title=title)); } },
 		
+		setState:{writable:false, configurable:false, enumerable:false, value:function(state){ return this.client.update.state.set(state,true); } },
+		
 		toggleWidescreen:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.fullscale = !this.client.update.fullscale; } },
 		
 		time:{writable:true, configurable:false, enumerable:false, value:0 },
 		
+		
+		
 		main:{writable:true, configurable:false, enumerable:false, value:{name:"Main",init:function() {},update:function() {},draw:function() {return true;}} },
+	}
+	
 	},
     
 	prototype:{
+		
+		//Prototype Vars
 		
         //Global Options Panel
 		//	These options have effect OnLoad only. 
@@ -307,8 +364,9 @@ var App = Object.create({
 			
 		},
 		
-		//Facebook User Information
+		//Facebook User Information		
 		//	Current API structure is depreciated, and therefore this is unsuable
+		//	Constructor not implemented
 		
 		user:{
 			//	//To ensure your data is filled, use a callback return your response data.
@@ -382,6 +440,33 @@ var App = Object.create({
 		
 		ext:{
 			
+			constructor:function(app){
+				
+				return{
+					app:{writable:false, configurable:false, enumerable:false, value:app},
+							
+					init:{writable:false, configurable:false, enumerable:false,value:function(name){
+					
+						//Set app/document title
+						
+						this.app.setTitle(name);
+					
+						//Construct App.ext components
+						
+						this.app.Construct(this.useragent).init();
+						
+						this.app.Construct(this.metatag).init();
+						
+						this.app.Construct(this.cookies).init();
+						
+						this.app.Construct(this.cursor).init();
+						
+						this.app.Construct(this.connect).init();
+						
+						}
+					}
+				}
+			},
 			prototype:{
 				
 				//UserAgent Information
@@ -477,13 +562,14 @@ var App = Object.create({
 						
 					},
 					
-					constructor:function(){
+					constructor:function(app){
 						
 						//Return constructed useragent object
 						return {
-								init:{value:function(){
-									
-									
+							app:{writable:false, configurable:false, enumerable:false, value:app},
+							
+							init:{writable:false, configurable:false, enumerable:false, value:function(){
+								
 									//Query Browser
 									this.chrome = this.Chrome();
 									this.safari = this.Safari();
@@ -504,7 +590,8 @@ var App = Object.create({
 									this.Mobile();
 									this.Desktop();
 									
-									return this;
+									this.app.ext.useragent = this;
+									//return this;
 								}
 							}
 						}
@@ -517,6 +604,20 @@ var App = Object.create({
 				//	https://github.com/ScottHamper/Cookies#api-reference
 				
 				cookies:{
+					
+					constructor:function(app){
+
+						return{
+							app:{writable:false, configurable:false, enumerable:false, value:app},
+									
+							init:{value:function(){
+
+									//execute polyfill
+									return this.polyfill();
+								}
+							}
+						}
+					},
 					
 					prototype:{
 
@@ -682,18 +783,6 @@ var App = Object.create({
 							return Cookies;
 },
 
-					},
-					
-					constructor:function(){
-						
-						//Return constructed cookie object.
-						return {init:{value:function(){
-
-									//execute polyfill
-									return this.polyfill();
-								}
-							}
-						}
 					}
 					
 				},
@@ -703,6 +792,35 @@ var App = Object.create({
 				//	Automatically applies Microsoft, Apple and common metatags. 
 				
 				metatag:{
+					
+					constructor:function(app){
+						
+						//Return constructed metatag object.
+						return {
+							app:{writable:false, configurable:false, enumerable:false, value:app},
+							
+							init:{value:function(){
+
+									//execute polyfill
+									this.metaAppend(this.metaTag("msapplication-tap-highlight",this.ms_taphighlight));
+									this.metaAppend(this.metaTag("apple-mobile-web-app-capable",this.apple_webapp));
+									this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style",this.apple_statusbar));
+									this.metaAppend(this.metaTag("cursor-event-mode","native"));
+									this.metaAppend(this.metaTag("touch-event-mode","native"));
+									this.metaAppend(this.metaTag("HandheldFriendly","True"));
+
+									//if (this.devicewidth)
+									this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
+									//if (this.devicedpi)
+									this.metaAppend(this.metaTag("viewport","target-densitydpi="+this.app.client.setWidth));
+							
+									this.app.ext.metatag = this;
+									//Return this
+									return this;
+								}
+							}
+						}
+					},
 					
 					prototype:{
 						
@@ -771,39 +889,29 @@ var App = Object.create({
 						meta:null,
 						count:0
 
-					},
-
-					constructor:function(){
-						
-						//Return constructed metatag object.
-						return {init:{value:function(){
-
-									//execute polyfill
-									this.metaAppend(this.metaTag("msapplication-tap-highlight",this.ms_taphighlight));
-									this.metaAppend(this.metaTag("apple-mobile-web-app-capable",this.apple_webapp));
-									this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style",this.apple_statusbar));
-									this.metaAppend(this.metaTag("cursor-event-mode","native"));
-									this.metaAppend(this.metaTag("touch-event-mode","native"));
-									this.metaAppend(this.metaTag("HandheldFriendly","True"));
-
-									//if (this.devicewidth)
-									this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
-									//if (this.devicedpi)
-									this.metaAppend(this.metaTag("viewport","target-densitydpi="+App.client.setWidth));
-							
-									//Return this
-									return this;
-								}
-							}
-						}
 					}
-					
+
 				},
 				
 				//Cursor Handler
 				//	Logs last cursor and allows to easily change the cursor on the fly
 				
 				cursor:{
+					
+					constructor:function(app){
+						
+						//Return constructed metatag object.
+						return {
+							app:{writable:false, configurable:false, enumerable:false, value:app},
+							init:{value:function(){
+							
+									this.set(this.wait);
+							
+									this.app.ext.cursor = this;
+								},			
+							}
+						}
+					},
 					
 					prototype:{
 						
@@ -856,17 +964,7 @@ var App = Object.create({
 						
 					},
 					
-					constructor:function(a){
-						
-						return{app:{value:a},init:{value:function(){
-							
-									this.set(this.wait);
-							
-									return this;
-								},			
-							}
-						}
-					}
+
 					
 				},
 				
@@ -875,6 +973,22 @@ var App = Object.create({
 				//	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
 				
 				connect:{
+					
+					constructor:function(app){
+						
+						//Return constructed metatag object.
+						return {
+							app:{writable:false, configurable:false, enumerable:false, value:app},
+							init:{value:function(){
+							
+									//Execute a test on the connection
+									this.test();
+							
+									this.app.ext.connect = this;
+								}
+							}
+						}
+					},
 					
 					prototype:{
 						
@@ -946,108 +1060,22 @@ var App = Object.create({
 						
 					},
 					
-					constructor:function(){
-						
-						//Return constructed cookie object.
-						return {init:{value:function(){
-							
-									//Execute a test on the connection
-									this.test();
-							
-									return this;
-								}
-							}
-						}
-					}
 					
-				},
-				
-				///////////////////////////////////////////////
-			//	Debug - Needs Refractoring
-				///////////////////////////////////////////////
-				
-				//default Objects
-				debug:{
-					prototype:{
-						delay:0,
-						text:String,
-						strength:"Normal",
-						log:function(txt,n)	{
-							return true;
-							this.text = txt;
-							this.delay.value--;
-							if ((this.delay.value==0)&&(typeof n!=="undefined"))
-								this.delay.value=n;
-							if ((this.delay.value==0)||(this.delay.value==1)||(typeof n ==="undefined"))
-								if (this.app.debug)
-									if (App.debug==true)
-									//console.log("SJS:"+txt);
-							return true;
-						},
-						toggle:function(txt) {
-							if ((txt=="lite")||(txt=="Lite")||(txt==1))
-								this.strength = "Lite";
-							if ((txt=="off")||(txt=="none")||(txt==0))
-								this.strength = "none";
-							if ((txt=="normal")||(txt=="Normal")||(txt==2))
-								this.strength = "Normal";
-							return this.app.debug = !this.app.debug;
-						}
-					},
-					constructor:function(a){return {
-						app:{value:a},
-						init:{value:function(){
-									this.log('Debug:     '+this.strength);
-								}
-							}
-						}
-					}
-				},
-				
-				///////////////////////////////////////////////
-			//	Input - Needs Refractoring
-				///////////////////////////////////////////////
-				
-				
-			},
-			constructor:function(app){
-				return{
+
 					
-					app:{value:app},
-					
-					init:{value:function(name){
-					
-						this.app.setTitle(name);
-					
-						this.useragent = (this.app.Construct(this.useragent.prototype,this.useragent.constructor)).init();
-					
-						this.metatag = (this.app.Construct(this.metatag.prototype,this.metatag.constructor)).init();
-					
-						this.cookies = (this.app.Construct(this.cookies.prototype,this.cookies.constructor)).init();
-						
-						this.cursor = (this.app.Construct(this.cursor.prototype,this.cursor.constructor)).init();
-					
-						this.connect = (this.app.Construct(this.connect.prototype,this.connect.constructor)).init();
-					
-						
-						//(this.debug = this.app.Construct(this.debug.prototype,this.debug.constructor)).init();
-					
-						//this.input = (this.app.Construct(this.input.prototype,this.input.constructor)).init();
-					
-					
-						this.time = (( new Date().getTime())-TimeToBuild)*1;
-						}
-					}
 				}
+				
 			}
 		},
 		
+			///////////////////////////////////////////////
+		//	Input - Needs Testing
+			///////////////////////////////////////////////
 		input:{
 			
 			prototype:{
                 
 				//Cache vars
-				
 				x: 0, 
 				y: 0,	
 				delay:0,
@@ -1055,22 +1083,18 @@ var App = Object.create({
 				press:false,
 				pressed:false,
 				released:false,
-				
 				end: {x:0,y:0},
 				pos: {x:0,y:0},
 				dist: {x:0,y:0},
 				start:{x:0,y:0},		
 				last: {x:0,y:0},
-				
 				touch:false,
 				touch_dist:{x:0,y:0},
-				
 				key:false,
 				keyPower:0,
 				keyup:false,
 				keydown:false,
 				control:false,
-				
 				doc:document,
 				body:document.body,
 				window:{
@@ -1080,9 +1104,9 @@ var App = Object.create({
 					y:false,
 					inside:false
 				},
-				
-				
                 
+				//Initalization, adds listeners.
+				
 				init:function(){
 
 					this.scroll = (this.app.Construct(this.scroll.prototype,this.scroll.constructor)).init();
@@ -1131,22 +1155,22 @@ var App = Object.create({
 								
 								if (!evt.target.app)
 									return;
-									evt.target.app.ext.input.touch = true;
-									evt.target.app.ext.input.listener.down(evt);
+									evt.target.app.input.touch = true;
+									evt.target.app.input.listener.down(evt);
 								});
 							this.app.Listener(this.window.self,'pointermove',function(evt) {
 								
 								if (!evt.target.app)
 									return;
-									evt.target.app.ext.input.touch = true;
-									evt.target.app.ext.input.listener.move(evt);
+									evt.target.app.input.touch = true;
+									evt.target.app.input.listener.move(evt);
 								});
 							this.app.Listener(this.window.self,'pointerup',	function(evt) {
 								
 								if (!evt.target.app)
 									return;
-									evt.target.app.ext.input.touch = false;
-									evt.target.app.ext.input.listener.up(evt);
+									evt.target.app.input.touch = false;
+									evt.target.app.input.listener.up(evt);
 								});
 
 						} else	
@@ -1484,7 +1508,7 @@ var App = Object.create({
                 codeList:new Array(),
 				confine:false,
 				preventNext:true,
-				preventDefault:function(e) { e.preventDefault(); },
+				preventDefault:function(e) {  e.preventDefault(); return e.target.app; },
 				preventNextInput:function() { return this.preventNext = true; },
 				
 				mouse:function() {
@@ -1815,56 +1839,101 @@ var App = Object.create({
 				}
 			}
 		},
+		
+        //App.canvas - Canvas Element
+		//	These operations are extended variations on the canvas API. 
+		
 		canvas:{
+			
 			prototype:{
+				
+				//Cache canvas vars
 				canvas:Object.create(null),
 				buffer:Object.create(null),
 				head:document.getElementsByTagName('head')[0],
 				rendering_style:document.createElement('style'),
 				canvasList:document.getElementsByTagName('canvas'),
+				doc:document,
+				
+				//Gets
+				
 				getCanvas:function(){return this.canvas;},
+				
 				getBuffer:function(){return this.buffer;},
+				
 				setCanvas:function(c){this.canvas = c;},
+				
 				setBuffer:function(b){this.buffer = b;},
+				
+				setBackground:function(value) {
+				
+					if (this.app.options.canvas.buffer)
+						this.buffer.style.background = value;
+					
+					this.canvas.style.background = value;
+				
+				},
+				
+				getBackground:function() {
+					
+					return this.buffer.style.background;
+				},
+				
 				createCanvas:function(){
-					var c = document.createElement("canvas");
-						c.id = this.app.options.canvas.name;
-						document.body.appendChild(c);
-					return document.getElementById(this.app.options.canvas.name);
+					
+					var c = this.doc.createElement("canvas");
+					
+					c.id = this.app.options.canvas.name;
+					
+					this.doc.body.appendChild(c);
+					
+					return this.doc.getElementById(this.app.options.canvas.name);
 				},
+				
 				createBuffer:function(){
-					var c = document.createElement("canvas");
-						c.id = this.app.options.canvas.buffername;
-						document.body.appendChild(c);
-					return document.getElementById(this.app.options.canvas.buffername);
+					
+					var c = this.doc.createElement("canvas");
+					
+					c.id = this.app.options.canvas.buffername;
+					
+					this.doc.body.appendChild(c);
+					
+					return this.doc.getElementById(this.app.options.canvas.buffername);
 				},
+				
+				//Style canvas
+				
 				styleCanvas:function(){
+					
 					this.getCanvas().style.position = this.app.options.canvas.position.position;
+					
 					this.getCanvas().style.zIndex = this.app.options.canvas.position.z;
+					
 					if (this.app.options.canvas.buffer)
 					{
 						this.getBuffer().style.position = this.app.options.canvas.position.position;
+						
 						this.getBuffer().style.zIndex = this.app.options.canvas.position.z-1;
 					}
+					
 					if (this.app.options.canvas.override)
 					{
+						
 						this.getCanvas().style.left = this.app.options.canvas.position.left+"px";
+						
 						this.getCanvas().style.top = this.app.options.canvas.position.top+"px";
+						
 						if (this.app.options.canvas.buffer)
 						{
 							this.getBuffer().style.left = this.app.options.canvas.position.left+"px";
+							
 							this.getBuffer().style.top = this.app.options.canvas.position.top+"px";
 						}
+						
 					}
+					
 				},
-				background_set:function(value) {
-					if (App.options.canvas.buffer)
-					this.buffer.style.background = value;
-					this.canvas.style.background = value;
-				},
-				background_get:function() {
-					return this.buffer.style.background;
-				},
+				
 			},
 			constructor:function(app){return{
 				app:{value:app},
@@ -1979,6 +2048,8 @@ var App = Object.create({
                     requestAnimationFrame(this.client_f);
 					
 					this.app.ext.cursor.set(this.app.ext.cursor.def);
+					
+					this.app.ext.time = (( new Date().getTime())-SpiceJS.TimeToBuild)*1;
                     
                 },
                 
@@ -3468,9 +3539,8 @@ var App = Object.create({
 	},
 });
 
-
-App = Object.create(App.prototype,App.constructor);
-App.Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
+console.log(App);
+(App = Object.create(SpiceJS.get().prototype,SpiceJS.get().constructor())).Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
 /*
 var A = Object.create(null,{name:{value:"eh"}});
 	
