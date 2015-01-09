@@ -6,6 +6,12 @@
     <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
 </head>
 <body>
+	<script>
+	
+console.log(SpiceJS);
+console.log(App);
+	</script>
+	
 <script rel="prefetch" name="main" type="text/javascript" defer>
 	
 //Application OnLoad
@@ -21,6 +27,7 @@ App.OnLoad = function (self) {
 	self.ext.metatag.metaFavicon("images/favicon.png");
 	var opt = {x:0}
 	self.options.set(opt);
+	console.log('eh');
 };
 	
 //Application main loop Object[init,update,draw]

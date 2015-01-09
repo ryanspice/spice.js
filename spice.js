@@ -23,31 +23,35 @@ var SpiceJS = Object.create(
 	{
 		init:function()
 			{
-			this.window = window;
-			if (!this.window	.apps)
-				this.window	.apps = new Array(1);
+				this.window = window;
+				this.controller.init(this.window);
+				
+				if (!this.window.apps)
+					this.window	.apps = new Array(1);
 
-			if (!this.window	.appsNextId>=0)
-				this.window	.appsNextId = 0;
-			this.TimeToBuild = new Date().getTime();
+				if (!this.window.appsNextId>=0)
+					this.window	.appsNextId = 0;
+				this.TimeToBuild = new Date().getTime();
+				
 			return this;
+			},
+		controller:{
+				init:function(window)
+				{
+					
+				},
+				
+			
 			},
 		get:function()
 			{
-				console.log(this)
-			return App;
+			return this.proto;
 			},
-		proto:App
-	}).init();
-
-
-var App = Object.create({	
+		create:function(){
+			
+			return Object.create({	
   
-    constructor:function(){
-		
-		
-		return {	
-		
+    constructor:{	
         //Version Number
 		VN:{
             //Config
@@ -286,8 +290,6 @@ var App = Object.create({
 		
 		
 		main:{writable:true, configurable:false, enumerable:false, value:{name:"Main",init:function() {},update:function() {},draw:function() {return true;}} },
-	}
-	
 	},
     
 	prototype:{
@@ -3538,9 +3540,23 @@ var App = Object.create({
 		},
 	},
 });
+			
+		}
 
-console.log(App);
-(App = Object.create(SpiceJS.get().prototype,SpiceJS.get().constructor())).Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
+	}).init();
+
+
+
+
+
+
+var App = SpiceJS.create();
+//App = Object.create(App.constructor,App.prototype);
+App = Object.create(App.prototype,App.constructor);
+
+App.Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
+//(App = Object.create(SpiceJS.get().prototype,SpiceJS.get().constructor())).Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
+						  
 /*
 var A = Object.create(null,{name:{value:"eh"}});
 	
