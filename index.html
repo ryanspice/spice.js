@@ -6,39 +6,37 @@
     <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
 </head>
 <body>
+	<!--
 	<script>
-	
-console.log(SpiceJS);
-console.log(App);
+		SpiceJS.create();
 	</script>
-	
+-->
 <script rel="prefetch" name="main" type="text/javascript" defer>
+var Application = SpiceJS.create();
 	
 //Application OnLoad
-App.OnLoad = function (self) {
+Application.OnLoad = function (self) {
 	
-	//App.Init(title,width,height)
 	self.Init("SpiceJS", 720, 320);
-
-	//Set canvas background colour ( colour )
+	
 	self.canvas.setBackground("#000000");
+	
+	//self.options.set({paths:{images:""}});
+	
+	self.ext.metatag.metaFavicon("favicon.png");
 
-	//Assign favicon
-	self.ext.metatag.metaFavicon("images/favicon.png");
-	var opt = {x:0}
-	self.options.set(opt);
-	console.log('eh');
 };
 	
 //Application main loop Object[init,update,draw]
-App.main= {
+Application.main= {
 	
 	name:"Example",
 
 	init:function() {
 		
 		//Initialization Logic
-		this.img = this.graphics.load("../stan");
+		this.img = this.graphics.load("../favicon");
+		
 		return true;
 	},
 	
@@ -47,21 +45,18 @@ App.main= {
 		//Game logic	
 		//console.log(this.app.ext.input.preventNextInput()&&this.app.ext.input.keyboardCheck("t")&&this.app.ext.input.keyboardCheck("ctrl"))
 		//console.log(this.app.ext.input.keyboardCheck("r")&&this.app.ext.input.keyboardCheck("ctrl"))
+		
 		return true;
 	},
 
 	draw:function() {
 		
-		//Draw Logic
-		this.visuals.rect_ext(0,0,this.app.getWidth(),this.app.getHeight(),1,0.1,0,"#FFFF00");
 		this.visuals.image(this.img,0,0);
 		
 		return true;
 	}
 
 };
-
-	
 </script>
 </body>
 </html>
