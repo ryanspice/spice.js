@@ -14,42 +14,61 @@
 
 //Time at which this document begins
 var Steve;
-var Sprite = {};
-var sprite = {};
-var img = {};
 
 "use strict";
-var SpiceJS = Object.create(
-	{
-		init:function()
-			{
-				this.window = window;
-				this.controller.init(this.window);
-				
-				if (!this.window.apps)
-					this.window	.apps = new Array(1);
 
-				if (!this.window.appsNextId>=0)
-					this.window	.appsNextId = 0;
-				this.TimeToBuild = new Date().getTime();
+//SpiceJS
+//	Creates a SpiceJS object which acts as a controller for your application.
+//	SpiceJS.init() - builts variables into the window for keeping track of the application(s)
+//	SpiceJS.get() - returns the app prototype
+//	SpiceJS.create() - returns an instanciated app
+//	SpiceJS.controller - Object
+//					.list()	- returns a list of currently running applications. Returns app if only one exists.
+//
+//
+var SpiceJS = Object.create({
+	
+		//
+		init:function(){
+			
+			this.window = window;
+			
+			if (!this.window.apps)
+				this.window	.apps = new Array(1);
+
+			if (!this.window.appsNextId>=0)
+				this.window	.appsNextId = 0;
+			this.TimeToBuild = new Date().getTime();
 				
 			return this;
-			},
+		},
+	
+		//
 		controller:{
-				init:function(window)
-				{
-					
-				},
+			
+			list:function(){
 				
-			
+				if (window.apps.length>1)
+					return window.apps;
+					else
+					return window.apps[0];
 			},
-		get:function()
-			{
+			
+		
+		},
+	
+		//
+		get:function(){
+			
 			return this.proto;
-			},
+		},
+	
+		//
 		create:function(){
-			
-			return Object.create({	
+		
+			//temp stores the app during the create process, it is then returned
+			var temp = {};
+			temp = Object.create({	
   
     constructor:{	
         //Version Number
@@ -60,7 +79,7 @@ var SpiceJS = Object.create(
             enumerable:true, 
 			
 			//VN
-			value:'0.6.60.14.18.12.min'
+			value:'0.6.70.15.08.01.min'
 		},
 		
         //Build Client, Instantiate Loop, Build Canvas, Initalize Client
@@ -77,20 +96,11 @@ var SpiceJS = Object.create(
 				//Store self
                 var self = this;
 				
-				
-				
-				this.id = window.appsNextId;
-				window.apps[this.id] = this;
-				window.appsNextId++;
-				
-                
                 //Build client from prototype
                 this.client = this.Construct(this.client.prototype,this.client.constructor);
-				
                 
                 //Build canvas from prototype
                 (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
-                
 				
                 //Delay start the loop
                 setTimeout(	(function(){
@@ -120,8 +130,8 @@ var SpiceJS = Object.create(
             
             //Function
             value:function(self){
-                
                 //Default to App.
+				console.log(self);
                 self.Init("Spice.js",480,320);
 			}
 			
@@ -345,14 +355,38 @@ var SpiceJS = Object.create(
 				Drag:true
 			},
 			
+			//Return Options Value
             get:function(attr){ 
+				
+				//If Attribute
 				if (attr)
+				{
+					
+					//Get list of apps
+					var list = SpiceJS.controller.list();
+					
+					//list is object
+					if (typeof list == "object")
 					{
-						//var f = new Function("return App.options"+
+						//return window.apps.option. 
 						for (var attrname in this) 
-							if (attrname==attr) return eval("App.options." + attrname ); 
-						return null;
+							if (attrname==attr) 
+								return eval("list.options." + attrname ); 
 					}
+					else
+					{
+						for(var i = window.apps.length-1;i>=0;i--) 
+							for(var attrname in this) 
+								if (attrname==attr) 
+								{
+									var l = [];
+									l.push(eval("list["+i+"].options." + attrname ));
+								}
+						return l;
+					}
+					
+				return null;
+				}
 				else
 				return this;
 			},
@@ -1139,7 +1173,6 @@ var SpiceJS = Object.create(
 					if (this.app.options.get("flags").mstouch) 
 						this.doc.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
 
-
 					if (this.app.options.get("flags").seamless) 
 						this.doc.body.style.overflow = "hidden";
 
@@ -1472,8 +1505,8 @@ var SpiceJS = Object.create(
 						input.pressed = false;
 						input.released = true;
 						input.touch = false;
-						input.dist.x = (App.input.x-App.input.start.x)*App.client.delta;
-						input.dist.y = (App.input.y-App.input.start.y)*App.client.delta;
+						input.dist.x = (input.x-input.start.x)*input.app.client.delta;
+						input.dist.y = (input.y-input.start.y)*input.app.client.delta;
 					},
 					
 					key_down:function(evt){
@@ -1940,13 +1973,13 @@ var SpiceJS = Object.create(
 			constructor:function(app){return{
 				app:{value:app},
 				init:{writable: false,  configurable:false, enumerable:false, value:function(){
-						var getcanvas = document.getElementById(app.options.canvas.name);
+						var getcanvas = document.getElementById(this.app.options.canvas.name);
 						if (getcanvas)
 							{
 							this.setCanvas(getcanvas);
 							if (app.options.canvas.buffer)
 								{
-								var getbuffer = document.getElementById(app.options.canvas.buffername);
+								var getbuffer = document.getElementById(this.app.options.canvas.buffername);
 								if (getbuffer)
 									this.setBuffer(getbuffer);
 									else
@@ -1973,22 +2006,15 @@ var SpiceJS = Object.create(
         //Application.client; 
 		//	Handles game logic, audio, graphics, visuals
 		client:{
-            
-            //Client inherits App and Builds components
-			constructor:function(app){
-                    
-                //Build and return prototype
-                return {
-                        
-                    //Inherit app
-                    app:{value:app},
-                    
-                    //Build files for init
-                    init:{value:function(name,w,h){
+			constructor:function(app){return{
+				app:{value:app},
+				init:{writable: false,  configurable:false, enumerable:false, value:function(name,w,h){
                     
                             //Set App.client.discription to the name
 							this.discription = name;
-                    
+                    		
+							
+							
                             //Depreciated setWidth-height: use w + h
                             //Set App.client.w
                             //Set App.client.h
@@ -2010,7 +2036,7 @@ var SpiceJS = Object.create(
 							(this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
                     
                             //Build 
-							this.room = Object.create(this.room.prototype,this.room.constructor()).init();
+							this.room = Object.create(this.room.prototype,this.room.constructor(this.app)).init();
                     
                             //Build 
 							(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
@@ -2067,6 +2093,7 @@ var SpiceJS = Object.create(
                     //Draw frame
 					this.visuals.flip(this.scale);
                     
+					
                     //Update Input
 					this.app.input.update();
                     
@@ -2145,7 +2172,7 @@ var SpiceJS = Object.create(
 								app.height = app.app.options.canvas.size.height;
 							
                             //Check if centered
-							if (App.options.canvas.position.center)
+							if (app.options.canvas.position.center)
 								{
                                 
                                 //if not aligned
@@ -2190,7 +2217,7 @@ var SpiceJS = Object.create(
 						this.scalediff = this.scaler.s-this.lastscale;
 						
                         //If scaled different, scroll to the top
-						(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
+						//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
                         
 						this.set = 0;
                         
@@ -2232,7 +2259,7 @@ var SpiceJS = Object.create(
                             //State set
 							set:function(state,start){
                                 
-								console.log(this.input);
+								//console.log(this.input);
                                 //Set app input delay
 								//this.app.input.delay = 1;
                                 
@@ -2275,7 +2302,7 @@ var SpiceJS = Object.create(
 					},
 					step:{
 						first:function(step,app){ 
-							
+							this.app = app;
 							if ((typeof step == 'undefined')||(!step.Step(app)))
 								return;
 							this.fps = 1 * (this.clean() / step.delta * 1E3);
@@ -2283,11 +2310,10 @@ var SpiceJS = Object.create(
 							this.delta = Math.ceil(this.delta*100000)/100000;
 							if ((this.delta>2.5))
 								this.delta = 2.5;
-								
 							if (this.delta!==this.delta+1)
-								App.client.delta = this.delta_speed = this.delta;
+								this.app.client.delta = this.delta_speed = this.delta;
 								else
-								App.client.delta = this.delta_speed = 1;
+								this.app.client.delta = this.delta_speed = 1;
 								//console.log(this.delta);
 							/* Increment Time to increase performance */
 								if (this.fps==0)
@@ -2299,7 +2325,7 @@ var SpiceJS = Object.create(
 							return;
 						},
 						focus:function(){
-							if (App.ext.freezeonfocus)
+							if (this.app.ext.freezeonfocus)
 								return document.hasFocus();
 							return true;
 						},
@@ -2438,21 +2464,36 @@ var SpiceJS = Object.create(
 			},
 			room:{
 					prototype:{
-					init:(Object.create(null)),
-					app:(Object.create(null)),
-					visuals:(Object.create(null)),
-					graphics:(Object.create(null)),
-					started:false,
-					Started:{value:function(){return function() {var a = this.Started;App.set_scale();this.Started = true; return a};}}
-					},
-					constructor:function(){return {
-						init:{value:function(){
-								return {
-								app : {value:App},
-								visuals :   {value:App.client.visuals},
-								graphics :  {value:App.client.graphics}
+						init:null,
+						app:null,
+						visuals:null,
+						graphics:null,
+						started:false,
+						Started:{
+							value:function(){
+								return function() {
+									var a = this.Started;
+									//this.app.set_scale();
+									this.Started = true; 
+									return a;
 								};
-							}}
+							
+							}
+						}
+					},
+					
+			constructor:function(app){return{
+				app:{value:app},
+				visuals:{value:app.client.visuals},
+				graphics:{value:app.client.graphics},
+				init:{writable: false,  configurable:false, enumerable:false, value:function(){
+								return {
+								app : {value:app},
+								visuals :   {value:app.client.visuals},
+								graphics :  {value:app.client.graphics}
+								};
+							}
+					 }
 						}
 					}
 				},
@@ -2691,8 +2732,10 @@ var SpiceJS = Object.create(
 					SpriteLoadErrors:0,
 					SpriteLoadTime:0,
 					Sources:{},
+					Sprite:{},
+					sprite:{},
+					img:{},
 					load:function(name,file){
-						console.log( this.app.options.get("paths").images)
 						if (typeof file==="undefined")
 							file =  this.app.options.get("paths").images+""+name;
 						this.Sources.append(this.SpriteAppend(name,file));
@@ -2700,11 +2743,11 @@ var SpiceJS = Object.create(
 					},
 					SpriteCreate:function(file,src,name){		
 						this.SpriteLoadNumber++;
-						this.SpriteLoadTime += (10*App.delta_speed)*this.SpriteLoadNumber;
-						return sprite = Object.create(Sprite,{file:{value:file},src:{value:src},name:{value:name}});
+						this.SpriteLoadTime += (10*this.app.delta_speed)*this.SpriteLoadNumber;
+						return this.sprite = Object.create(this.Sprite,{file:{value:file},src:{value:src},name:{value:name}});
 					},
 					SpriteAppend:function(name,file){	
-						return (img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
+						return (this.img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
 					},
 					SpriteUnload:function(name,file){
 						delete this.Sources.getByName(name);
@@ -2716,14 +2759,14 @@ var SpiceJS = Object.create(
 						return this.SpriteWebItems[name];
 					},
 					graphicsLibrary:function(){
-						Sprite = Object.create(null);
+						this.Sprite = Object.create(null);
 						this.Sources = Object.create(null);
 						this.Sources.prototype = {	
 							get:function get(){return this.index;},
 							getByName:function getByName(name){return this.index[name];},
 							getName:function getName(name){return this.index[name].name;},
 						}
-						Sprite = Object.create(this.Base,
+						this.Sprite = Object.create(this.Base,
 						{
 							constructor:function Sprite(path,filename){this.path=path;this.filename=filename;return path;},
 							src:	{value:"S:undefined"},
@@ -2755,9 +2798,9 @@ var SpiceJS = Object.create(
 								img.src = this.src;
 								img.file = this.file;
 								img.name = this.name;
-								img.number = 1+ App.client.graphics.SpriteLoadErrors++;
+								img.number = 1+ window.apps[0].client.graphics.SpriteLoadErrors++;
 								img.onload = function() {
-										App.client.graphics.SpriteLoadErrors--;
+										window.apps[0].client.graphics.SpriteLoadErrors--;
 										
 									};
 								return img;
@@ -2954,7 +2997,7 @@ var SpiceJS = Object.create(
 							w:this.fixW(w)*s,
 							h:this.fixH(h)*s,
 							s:s,
-							a:App.client.Math.Clamp(a,0,1) || 0,
+							a:this.app.client.Math.Clamp(a,0,1) || 0,
 							c:c || false,
 							colour:colour || this.colour(),
 							oldcol:this.chkc,
@@ -3098,6 +3141,7 @@ var SpiceJS = Object.create(
 						return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
 					},
 					font:function(font)	{ 
+						return this.canvas_context.font = this.buffer_context.font=this.fontT=font;
 						return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
 						//if (font)
 						//	this.buffer_context.font = font;
@@ -3129,7 +3173,10 @@ var SpiceJS = Object.create(
 						this.stat.h = this.stat.s*this.scale;
 						this.font(this.stat.h+"em "+style);
 						this.stat.h = this.point*this.stat.h;
-						(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+						
+						this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2);
+						
+						//(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
 						this.font(f);
 						this.clean();
 					},
@@ -3141,8 +3188,8 @@ var SpiceJS = Object.create(
 						this.stat.h = this.point*this.stat.h;
 						if (this.touch_within_stat(this.stat))
 						{
-							this.opacity(this.stat.a-(App.ext.input.pressed*0.2));
-							App.ext.cursor.set(App.ext.cursor.pointer,true);
+							this.opacity(this.stat.a-(this.app.ext.input.pressed*0.2));
+							this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
 							//if (App.ext.input.released)
 							//	if (App.ext.input.delay<1)
 							//		loc(),App.ext.input.delay = 1;
@@ -3539,59 +3586,20 @@ var SpiceJS = Object.create(
 			}
 		},
 	},
-});
 			
+			});
+			
+			temp = Object.create(temp.prototype,temp.constructor);
+			
+			temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+				
+			temp.id = this.window.appsNextId;
+			
+			this.window.apps[temp.id] = temp;
+			
+			this.window.appsNextId++;
+				
+			return this.window.apps[temp.id];		
 		}
 
 	}).init();
-
-
-
-
-
-
-var App = SpiceJS.create();
-//App = Object.create(App.constructor,App.prototype);
-App = Object.create(App.prototype,App.constructor);
-
-App.Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
-//(App = Object.create(SpiceJS.get().prototype,SpiceJS.get().constructor())).Listener(document, "DOMContentLoaded", App.OnApplicationLoad);
-						  
-/*
-var A = Object.create(null,{name:{value:"eh"}});
-	
-	
-var Properties = Object.create(null,{
-		value:{
-				writeable:true,
-				configurable:true,
-				value:""
-			},
-		acessor:{
-			configurable:false,
-			get:function(){return this.value;},
-			Set:function(v){this.value = v;}
-		}
-	});
-	Properties.acessor.set(1);
-console.log(Properties);
-var _Rectangle = {};
-_Rectangle.prototype = {
-	x: 0,
-	y: 0,
-	a: 0,
-	draw: function(x,y,w,h,a,c){
-		if (this.a!=a)
-			this.a=a;
-		App.client.visuals.rect_ext(this.x+x,this.y+y,w,h,1,this.a,0,c||"#111111");
-	}
-}
-
-
-
-
-//
-var main = Object.create(null,{name:{value:"Main"}});
-
-
-*/
