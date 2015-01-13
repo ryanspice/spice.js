@@ -2,61 +2,56 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>SpiceJS</title>    
+    <title>Application</title>    
     <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
 </head>
 <body>
-	<!--
-	<script>
-		SpiceJS.create();
-	</script>
--->
 <script rel="prefetch" name="main" type="text/javascript" defer>
-var Application = SpiceJS.create();
-	
-//Application OnLoad
-Application.OnLoad = function (self) {
-	
-	self.Init("SpiceJS", 720, 320);
-	
-	self.canvas.setBackground("#000000");
-	
-	//self.options.set({paths:{images:""}});
-	
-	self.ext.metatag.metaFavicon("favicon.png");
+	var Application = SpiceJS.create();
 
-};
-	
-//Application main loop Object[init,update,draw]
-Application.main= {
-	
-	name:"Example",
+	//Application OnLoad
+	Application.OnLoad = function (self) {
 
-	init:function() {
-		
-		//Initialization Logic
-		this.img = this.graphics.load("../favicon");
-		
-		return true;
-	},
-	
-	update:function() {
-		
-		//Game logic	
-		//console.log(this.app.ext.input.preventNextInput()&&this.app.ext.input.keyboardCheck("t")&&this.app.ext.input.keyboardCheck("ctrl"))
-		//console.log(this.app.ext.input.keyboardCheck("r")&&this.app.ext.input.keyboardCheck("ctrl"))
-		
-		return true;
-	},
+		self.Init("Example SpiceJS", 720, 320);
 
-	draw:function() {
-		
-		this.visuals.image(this.img,0,0);
-		
-		return true;
-	}
+		self.canvas.setBackground("#000000");
 
-};
+		//self.options.set({paths:{images:""}});
+
+		self.ext.metatag.metaFavicon("favicon.png");
+
+	};
+
+	//Application main loop Object[init,update,draw]
+	Application.main= {
+
+		name:"Example",
+
+		init:function() {
+
+			//Initialization Logic
+			this.img = this.graphics.load("../favicon");
+
+			return true;
+		},
+
+		update:function() {
+
+			//Game logic	
+			//console.log(this.app.ext.input.preventNextInput()&&this.app.ext.input.keyboardCheck("t")&&this.app.ext.input.keyboardCheck("ctrl"))
+			//console.log(this.app.ext.input.keyboardCheck("r")&&this.app.ext.input.keyboardCheck("ctrl"))
+
+			return true;
+		},
+
+		draw:function() {
+
+			this.visuals.image(this.img,0,0);
+
+			return true;
+		}
+
+	};
 </script>
 </body>
 </html>
