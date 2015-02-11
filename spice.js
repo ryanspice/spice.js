@@ -2867,6 +2867,7 @@ return;
 							tight:true,
 							disable:false,
 							buffer_target:0,
+							bleed:1,
 
 							canvas:(Object.create(null)),
 							buffer:(Object.create(null)),
@@ -2907,7 +2908,7 @@ return;
 								//Set scale to client scale
 								this.scale = this.app.client.scale
 
-								this.screen_fill(1,this.app.options.canvas.background);
+								this.screen_fill(this.bleed,this.app.options.canvas.background);
 
 								//If double buffering 
 								if (this.app.options.canvas.buffer)
@@ -3434,6 +3435,45 @@ return;
 								this.buffer_context.rotate(-angle*0.0174532925);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
 							},
+							
+							setBleed:function(threshold){
+								this.bleed = threshold;	
+							},
+							
+							rotate_at:function(angle,x,y){
+								if (typeof x === "object")
+									var x = x.x, y = y.y;
+									else
+									var x = x, y = y;
+								
+								this.stat = this.chk(x,y,1,1,1,1,1);
+								this.buffer_context.translate(-this.stat.x,-this.stat.y);
+								
+								this.buffer_context.rotate(angle*0.0174532925);
+								
+							},
+							
+							
+							rotate:function(angle){
+								
+								return this.buffer_context.rotate(angle*0.0174532925);
+								
+							},
+							
+							//visuals.translate ({x,y}) (x,y) 
+							translate:function(x,y){
+								
+								if (typeof x === "object")
+									var x = x.x, y = y.y;
+									else
+									var x = x, y = y;
+								
+								this.stat = this.chk(x,y,1,1,1,1,1);
+								return this.buffer_context.translate(-this.stat.x,-this.stat.y);
+								
+							},
+							
+							
 							button:function(img,x,y,f){
 								this.image_button(img,x,y,1,f,true,1,1,1,1);
 							},
