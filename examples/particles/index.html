@@ -12,25 +12,25 @@
 <body>
 <script rel="prefetch" name="main" type="text/javascript" defer>
 	
+var Application = SpiceJS.create();
+
 //Application Load
-App.OnLoad = function () {
-	
-	// Initalize Title and Resolution
-	App.Init("SpiceJS - Particles",1920,1080);
+Application.OnLoad = function (self) {
 
-	//Snap to top
-	App.ext.top();
-	
-	//Set canvas background colour
-	App.canvas.background_set("transparent");
 
-	//Assign favicon
-	App.ext.metatag.metaFavicon("../../stan.png");
+		self.Init("SpiceJS - Particles",1024,720);
 	
+
+		self.canvas.setBackground("000000");
+	
+		self.client.visuals.bleed = 0.3;
+		//self.options.set({paths:{images:""}});
+
+		self.ext.metatag.metaFavicon("../../stan.png");
+
 };
-	
 //Application main loop Object[init,update,draw]
-App.main= {
+Application.main= {
 	
 	name:"Particles",
 	
@@ -61,7 +61,5 @@ App.main= {
 <div class="background">
 	
 </div>
-<canvas id="canvas"></canvas>
-<canvas id="buffer"></canvas>
 </body>
 </html>
