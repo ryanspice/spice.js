@@ -2901,14 +2901,59 @@ return;
 								},
 
 							window:window,
-
+							
+							
+							getData:function(){
+								
+							
+								var width = this.buffer.width;
+								var height = this.buffer.height;	
+								
+								var imageData = this.buffer_context.getImageData(0,0,width,height);
+								
+								var w2 = width/2;
+								var d = imageData.data;
+								for(y=0; y<=height;y++){
+									inpos = y * width * 4;
+									outpos = inpos+ w2 *4;
+									for (x = 0; x<w2;x++) {
+										var r = d[inpos++];
+										var g = d[inpos++];
+										var b = d[inpos++];
+										var a = d[inpos++];
+										 b = Math.min(255,b);
+										if ((r==0)&&(g==0)&&(b==0))
+										{
+											inpos++;
+											inpos++;
+											inpos++;
+										imageData.data[inpos++] = 0;
+										}
+										else
+										{
+											inpos++;
+											inpos++;
+											inpos++;
+											inpos++;
+										}
+									}
+								}
+								this.buffer_context.putImageData(imageData,0,0);	
+								
+							},
+							
+							
 							//Used to draw all sprites to the screen
 							flip:function(){
 
+								var fillStyle = this.app.canvas.canvas.style.background=="transparent";
+								//this.buffer_context.save();
 								//Set scale to client scale
-								this.scale = this.app.client.scale
+								this.scale = this.app.client.scale;
+								
 
-								this.screen_fill(this.bleed,this.app.options.canvas.background);
+								if (fillStyle==false)
+								this.screen_fill(this.app.client.visuals.bleed,this.app.options.canvas.background);
 
 								//If double buffering 
 								if (this.app.options.canvas.buffer)
@@ -2917,18 +2962,21 @@ return;
 									this.canvas_context.drawImage(this.buffer,0,0);
 
 									//Clear buffer
-									//this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
+									if (fillStyle==true)
+									this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 								}
 								else {
 
 									//If not double buffering, clear canvas
-									//this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
+									if (fillStyle==true)
+									this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 
 									//If initalized, draw state
 									if (this.app.client.update.state.initalized)
 										this.app.client.update.state.draw();
 
 								}
+								//this.buffer_context.restore();
 							},
 
 							//RequestAnimationFrame polyfill
