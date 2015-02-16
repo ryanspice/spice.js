@@ -3015,12 +3015,12 @@ return;
 
 							getX:function(){
 
-								return (this.app.ext.input.x-(-this.app.client.setWidth/2+this.window.innerWidth/2)+this.app.options.canvas.position.left/3).toFixed(2);
+								return (this.app.input.x-(-this.app.getWidth()/2+this.window.innerWidth/2)+this.app.options.canvas.position.left/3).toFixed(2);
 							},
 
 							getY:function(){
 
-								return (this.app.ext.input.y-this.app.options.canvas.position.top).toFixed(2);
+								return (this.app.input.y-this.app.options.canvas.position.top).toFixed(2);
 							},
 
 							//Fix positions relative to canvas
