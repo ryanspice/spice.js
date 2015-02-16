@@ -1853,10 +1853,10 @@ return;
 							//
 							getHorizontal:{writable:false, configurable:false, enumerable:false, value:function(){
 
-								var wasd = this.app.ext.input.keyboardCheck("a") - this.app.ext.input.keyboardCheck("d");
-								var arrows = this.app.ext.input.keyboardCheck("leftarrow") - this.app.ext.input.keyboardCheck("rightarrow") ;
-								var mouse = -this.getPressed()*this.app.ext.input.dist.x;
-								var touch = -this.getTouched()*this.app.ext.input.dist.x;
+								var wasd = this.app.input.keyboardCheck("a") - this.app.ext.input.keyboardCheck("d");
+								var arrows = this.app.input.keyboardCheck("leftarrow") - this.app.ext.input.keyboardCheck("rightarrow") ;
+								var mouse = -this.getPressed()*this.app.input.dist.x;
+								var touch = -this.getTouched()*this.app.input.dist.x;
 
 
 								var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
@@ -3564,10 +3564,10 @@ return;
 								{
 									w = true;
 									if (this.highlight)
-									this.opacity(this.stat.a-(App.input.pressed*0.2));
-									App.ext.cursor.set(App.ext.cursor.pointer,true);
-									if (App.input.pressed)
-											loc(),App.input.delay = 1;
+									this.opacity(this.stat.a-(this.app.input.pressed*0.2));
+									this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
+									if (this.app.input.pressed)
+											loc(),this.app.input.delay = 1;
 									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 								}
 								else
