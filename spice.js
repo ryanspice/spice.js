@@ -8,8 +8,8 @@
 	  Created By: Ryan Spice-Finnie
 */
 
-/*jslint node: true */
-/*jshint strict:false */
+/* jslint node: true */
+/* jshint strict:false */
 /* jshint -W097 */
 
 //Time at which this document begins
@@ -27,16 +27,16 @@ var Steve;
 //
 //
 var SpiceJS = Object.create({
-	
+
 	//Initalize window components for referencing SpiceJS
 	init:function(){
-		
+
 		//cache start time
 		this.TimeToBuild = new Date().getTime();
-		
+
 		//cache window
 		this.window = window;
-		
+
 		//if no apps have been defined, create a new array
 		if (!this.window.apps)
 			this.window	.apps = new Array(1);
@@ -44,44 +44,44 @@ var SpiceJS = Object.create({
 		//if appsNextId isnt larger or equal to 0 assign it to 0
 		if (!this.window.appsNextId>=0)
 			this.window	.appsNextId = 0;
-				
+
 		return this;
 	},
-	
+
 	//return details and information on the current apps
 	controller:{
-		
+
 		list:function(){
-			
+
 			if (window.apps.length>1)
 				return window.apps;
 				else
 				return window.apps[0];
 		},
-		
-	
+
+
 	},
-	
+
 	//
 	get:function(){
-		
+
 		return this.proto;
 	},
-	
+
 	//
 	create:function(){
-	
+
 		//temp stores the app during the create process, it is then returned
 		var temp = {};
-		temp = Object.create({	
-  
-			constructor:{	
+		temp = Object.create({
+
+			constructor:{
 				//Version Number
 				VN:{
 					//Config
-					writable: false,  
-					configurable:false, 
-					enumerable:true, 
+					writable: false,
+					configurable:false,
+					enumerable:true,
 
 					//VN
 					value:'0.6.70.15.08.01.min'
@@ -91,12 +91,12 @@ var SpiceJS = Object.create({
 				Init:{
 
 					//Config
-					writable: false,  
-					configurable:false, 
-					enumerable:false, 
+					writable: false,
+					configurable:false,
+					enumerable:false,
 
 					//Function
-					value:function(name,w,h){	
+					value:function(name,w,h){
 
 						//Store self
 						var self = this;
@@ -110,8 +110,8 @@ var SpiceJS = Object.create({
 						//Delay start the loop
 						setTimeout(	(function(){
 
-									function AppLoop(){ 
-										self.client.loop(); 
+									function AppLoop(){
+										self.client.loop();
 									}
 
 									self.client.initalize(AppLoop,self.scale);
@@ -123,22 +123,22 @@ var SpiceJS = Object.create({
 
 						this.input = this.Construct(this.input.prototype,this.input.constructor).init();
 					}
-				},		
+				},
 
 				//Run by OnApplicationLoad, App.OnLoad to be overwritten.
 				OnLoad:{
 
 					//Config
-					writable:true, 
-					configurable:false, 
-					enumerable:false, 
+					writable:true,
+					configurable:false,
+					enumerable:false,
 
 					//Function
 					value:function(self){
-						
+
 						//Default to App.
 						self.Init("Spice.js",480,320);
-						
+
 					}
 
 				},
@@ -147,9 +147,9 @@ var SpiceJS = Object.create({
 				OnApplicationLoad:{
 
 					//Config
-					writable:false, 
-					configurable:false, 
-					enumerable:false, 
+					writable:false,
+					configurable:false,
+					enumerable:false,
 
 					//Function
 					value:function(evt){
@@ -164,9 +164,9 @@ var SpiceJS = Object.create({
 				Listener:{
 
 					//Config
-					writable:false, 
-					configurable:false, 
-					enumerable:false, 
+					writable:false,
+					configurable:false,
+					enumerable:false,
 
 					//Function
 					value:function (obj, evt, listener, param) {
@@ -178,20 +178,20 @@ var SpiceJS = Object.create({
 							obj.attachEvent("on" + evt, listener);
 
 						obj.app = window.apps[this.id] = this;
-					}	
+					}
 				},
 
 				//Construct Objects from this.Construct(prototype,[constructor])
 				Construct:{
 
 					//Config
-					writable:false, 
-					configurable:false, 
-					enumerable:false, 
+					writable:false,
+					configurable:false,
+					enumerable:false,
 
 					//Function
 					value:function(prototype,constructor){
-						
+
 						//Cache vars
 						var isObj = false;
 						var obj = prototype;
@@ -211,7 +211,7 @@ var SpiceJS = Object.create({
 						//Grab type of constructor
 						var c = typeof construct;
 
-						//Return & Create object based on constructor 
+						//Return & Create object based on constructor
 						switch(c)
 						{
 						case 'undefined':
@@ -248,20 +248,20 @@ var SpiceJS = Object.create({
 				//canvas:{writable:true, configurable:false, enumerable:false, value:0 },
 				//client:{writable:true, configurable:false, enumerable:false, value:0 },
 				//ext:{writable:true, configurable:false, enumerable:false, value:0 },
-				
+
 				//Allows artificial clicking of elements
 				click:{writable:false, configurable:false, enumerable:false, value:function(event, anchorObj) {
 
 						//If .click
-						if (anchorObj.click) 
+						if (anchorObj.click)
 							anchorObj.click();
-							else 
-						if(document.createEvent) 
+							else
+						if(document.createEvent)
 						{
-							if(event.target !== anchorObj) 
+							if(event.target !== anchorObj)
 							{
-								var evt = document.createEvent("MouseEvents"); 
-								evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null); 
+								var evt = document.createEvent("MouseEvents");
+								evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 								var allowDefault = anchorObj.dispatchEvent(evt);
 								// you can check allowDefault for false to see if
 								// any handler called evt.preventDefault().
@@ -269,9 +269,9 @@ var SpiceJS = Object.create({
 								// for you. However every other browser will.
 							}
 						}
-					} 
+					}
 				},
-				
+
 				//App.create for creating objects with app, visuals and graphics inherited
 				create:{writable:true, configurable:false, enumerable:false, value:function(a){ return this.Construct(a||{},this.client.room); } },
 
@@ -281,9 +281,9 @@ var SpiceJS = Object.create({
 				getCurrent:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.state.current; } },
 
 				getConnection:{writable:false, configurable:false, enumerable:false, value:function(){ return this.ext.connect.offline; } },
-				
+
 				getConnectionError:{writable:false, configurable:false, enumerable:false, value:function(){ return this.ext.connect.error; } },
-				
+
 				getConnectionAttempts:{writable:false, configurable:false, enumerable:false, value:function(){ return this.ext.connect.connectionAttempts; } },
 
 				getDelta:{writable:false, configurable:false, enumerable:false, value:function(){ return this.client.update.step.delta; } },
@@ -308,13 +308,13 @@ var SpiceJS = Object.create({
 
 				main:{writable:true, configurable:false, enumerable:false, value:{name:"Main",init:function() {},update:function() {},draw:function() {return true;}} }
 			},
-    
+
 			prototype:{
 
 				//Prototype Vars
 
 				//Global Options Panel
-				//	These options have effect OnLoad only. 
+				//	These options have effect OnLoad only.
 
 				options:{
 					drag:0,
@@ -361,53 +361,53 @@ var SpiceJS = Object.create({
 						ContextMenu:true,
 						Drag:true
 					},
-			
+
 			//Return Options Value
-            get:function(attr){ 
-				
+            get:function(attr){
+
 				//If Attribute
 				if (attr)
 				{
-					
+
 					//Get list of apps
 					var list = SpiceJS.controller.list();
-					
+
 					//list is object
 					if (typeof list == "object")
 					{
-						//return window.apps.option. 
-						for (var attrname in this) 
-							if (attrname==attr) 
-								return eval("list.options." + attrname ); 
+						//return window.apps.option.
+						for (var attrname in this)
+							if (attrname==attr)
+								return eval("list.options." + attrname );
 					}
 					else
 					{
-						for(var i = window.apps.length-1;i>=0;i--) 
-							for(var attrname in this) 
-								if (attrname==attr) 
+						for(var i = window.apps.length-1;i>=0;i--)
+							for(var attrname in this)
+								if (attrname==attr)
 								{
 									var l = [];
 									l.push(eval("list["+i+"].options." + attrname ));
 								}
 						return l;
 					}
-					
+
 				return null;
 				}
 				else
 				return this;
 			},
-			
+
 			set:function(options){
-				
+
 				for (var attrname in options) { this[attrname] = options[attrname]; };
-						
+
 				return this;
 			}
-			
+
 		},
-		
-				//Facebook User Information		
+
+				//Facebook User Information
 				//	Current API structure is depreciated, and therefore this is unsuable
 				//	Constructor not implemented
 
@@ -416,7 +416,7 @@ var SpiceJS = Object.create({
 					//	var facebook = function(){ return App.user.pull();};
 					//
 					//	//Your facebook ID, callback function(){}
-					//	App.user.fbconnect(id, facebook) 
+					//	App.user.fbconnect(id, facebook)
 					name		:"",
 					id			:"",
 					locale		:"",
@@ -451,8 +451,8 @@ var SpiceJS = Object.create({
 						   ref.parentNode.insertBefore(js, ref);
 						  }(document));
 
-						  // Here we run a very simple Flappy of the Graph API after login is successful. 
-						  // This testAPI() function is only called in those cases. 
+						  // Here we run a very simple Flappy of the Graph API after login is successful.
+						  // This testAPI() function is only called in those cases.
 						  function testAPI() {
 							console.log('Welcome!  Fetching your information.... ');
 
@@ -477,16 +477,16 @@ var SpiceJS = Object.create({
 					}
 
 				},
-		
+
 				//App.ext - Client extensions
-				//	These operations are extended variations on the canvas API. 
+				//	These operations are extended variations on the canvas API.
 
 				ext:{
 
 					constructor:function(app){
 
 						return{
-							
+
 							app:{writable:false, configurable:false, enumerable:false, value:app},
 
 							init:{writable:false, configurable:false, enumerable:false,value:function(name){
@@ -642,9 +642,9 @@ var SpiceJS = Object.create({
 							}
 
 						},
-				
+
 						//Cookie Storage
-						//	Polyfill provided by ScottHamper 
+						//	Polyfill provided by ScottHamper
 						//	https://github.com/ScottHamper/Cookies#api-reference
 
 						cookies:{
@@ -665,9 +665,9 @@ var SpiceJS = Object.create({
 
 							prototype:{
 
-								//Cookies Polyfill by ScottHamper 
+								//Cookies Polyfill by ScottHamper
 								//	https://github.com/ScottHamper/Cookies#api-reference
-								polyfill:function(){ 
+								polyfill:function(){
 
 									(function (global, undefined) {
 										'use strict';
@@ -833,7 +833,7 @@ var SpiceJS = Object.create({
 
 						//MetaTag Handler
 						//	Assists in dynamically applying metatags.
-						//	Automatically applies Microsoft, Apple and common metatags. 
+						//	Automatically applies Microsoft, Apple and common metatags.
 
 						metatag:{
 
@@ -889,14 +889,14 @@ var SpiceJS = Object.create({
 
 									//Assign element values
 									this.link.href = href;
-									this.link.rel = rel;		
-									this.link.type = type;	
+									this.link.rel = rel;
+									this.link.type = type;
 
 									//Return link
 									return this.link;
 								},
 
-								//Construct a standard metaTag element 
+								//Construct a standard metaTag element
 								metaTag: function(name,content) {
 
 									//Create link element
@@ -952,7 +952,7 @@ var SpiceJS = Object.create({
 											this.set(this.wait);
 
 											this.app.ext.cursor = this;
-										},			
+										},
 									}
 								}
 							},
@@ -966,7 +966,7 @@ var SpiceJS = Object.create({
 								def			: "default",
 								help		: "help",
 								move		: "move",
-								pointer		: "pointer", 
+								pointer		: "pointer",
 								progress	: "progress",
 								text		: "text",
 								wait		: "wait",
@@ -1093,7 +1093,7 @@ return;
 											this.connectionAttempts++,this.hostReachable();
 										this.error = error;
 										return false;
-									}	
+									}
 
 								},
 
@@ -1103,15 +1103,15 @@ return;
 								}
 
 							},
-					
-					
 
-					
+
+
+
 				}
-				
+
 			}
 		},
-		
+
 					///////////////////////////////////////////////
 				//	Input - Needs Testing
 					///////////////////////////////////////////////
@@ -1120,8 +1120,8 @@ return;
 					prototype:{
 
 						//Cache vars
-						x: 0, 
-						y: 0,	
+						x: 0,
+						y: 0,
 						delay:0,
 						duration: 0,
 						press:false,
@@ -1130,7 +1130,7 @@ return;
 						end: {x:0,y:0},
 						pos: {x:0,y:0},
 						dist: {x:0,y:0},
-						start:{x:0,y:0},		
+						start:{x:0,y:0},
 						last: {x:0,y:0},
 						touch:false,
 						touch_dist:{x:0,y:0},
@@ -1178,13 +1178,13 @@ return;
 							}
 
 							//Flags
-							if (this.app.options.get("flags").mstouch) 
+							if (this.app.options.get("flags").mstouch)
 								this.doc.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
 
-							if (this.app.options.get("flags").seamless) 
+							if (this.app.options.get("flags").seamless)
 								this.doc.body.style.overflow = "hidden";
 
-							if (this.app.options.get("flags").tight) 
+							if (this.app.options.get("flags").tight)
 								this.doc.body.style.padding = "0px", this.doc.body.style.margin = "0px auto";
 
 
@@ -1216,7 +1216,7 @@ return;
 											evt.target.app.input.listener.up(evt);
 										});
 
-								} else	
+								} else
 							if (this.window.self.MSPointerEvent) {
 
 									//MS Pointer Events
@@ -1242,7 +1242,7 @@ return;
 											evt.target.app.input.listener.up(evt);
 										});
 
-								}	
+								}
 							else {
 
 									//Legacy Mouse and Touch Events
@@ -1312,7 +1312,7 @@ return;
 									this.app.input.pressed = true;
 									this.app.input.released = false;
 
-									this.app.input.listener.key_down(this.app);	
+									this.app.input.listener.key_down(this.app);
 								});
 
 							this.app.Listener(this.window.self,'keyup',function(evt) {
@@ -1327,7 +1327,7 @@ return;
 									this.app.input.released = true;
 									this.app.input.true = true;
 
-									this.app.input.listener.key_up(this.app);	
+									this.app.input.listener.key_up(this.app);
 								});
 
 							//Supported Keyboard Codes
@@ -1384,13 +1384,13 @@ return;
 									var top = (this.window.pageYOffset || this.doc.scrollTop)  - (this.doc.clientTop || 0);
 
 									//if (!this.active)
-									//	return; 
+									//	return;
 
 
 									var LD = Math.round(-this.x+this.target.x)/10;
 									var YD = Math.round(-this.y+this.target.y)/10;
 
-									if (left<this.target.x) 
+									if (left<this.target.x)
 										this.x+=this.accel*LD;
 									if (left>this.target.x)
 										this.x+=this.accel*LD;
@@ -1430,7 +1430,7 @@ return;
 
 
 						multi:{
-						  list:[]  
+						  list:[]
 						},
 
 						//Touch
@@ -1578,7 +1578,7 @@ return;
 							this.last.y = this.y;
 
 							//Confine x,y
-							this.confined();	
+							this.confined();
 
 							//Reset variables
 							this.press = false;
@@ -1601,7 +1601,7 @@ return;
 						return true;
 						},
 
-						//Confine input's to inside the canvas only. 
+						//Confine input's to inside the canvas only.
 						confined:function(){
 
 							this.confine?(
@@ -1735,7 +1735,7 @@ return;
 								this.codes[144]='numlock'          ;
 								this.codes[145]='scrolllock'       ;
 
-								//"Nintendo Wii" 
+								//"Nintendo Wii"
 								this.codes[175]='Up (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
 								this.codes[176]='Down (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
 								this.codes[177]='Left (Wii?)';	//(CAUTION! ALSO SCROLLS UP)
@@ -1882,9 +1882,9 @@ return;
 						}
 					}
 				},
-		
+
 				//App.canvas - Canvas Element
-				//	These operations are extended variations on the canvas API. 
+				//	These operations are extended variations on the canvas API.
 
 				canvas:{
 
@@ -2010,17 +2010,17 @@ return;
 						}
 					}
 				},
-		
-				//Application.client; 
+
+				//Application.client;
 				//	Handles game logic, audio, graphics, visuals
 				client:{
-					
+
 					constructor:function(app){
-						
+
 						return{
-						
+
 							app:{value:app},
-						
+
 							init:{writable: false,configurable:false,enumerable:false,value:function(name,w,h){
 
 								//Set App.client.discription to the name
@@ -2043,25 +2043,25 @@ return;
 								//Build Visuals
 								(this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
 
-								//Build 
+								//Build
 								(this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
 
-								//Build 
+								//Build
 								this.room = Object.create(this.room.prototype,this.room.constructor(this.app)).init();
 
-								//Build 
+								//Build
 								(this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
 
-								//Build 
+								//Build
 								(this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(app.options.targetfps,app.options.targetfps);
 
-								//Build 
+								//Build
 								(this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
 
-								//Build 
+								//Build
 								this.main = Object.create(this.app.main);
 
-								//Build 
+								//Build
 								(this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
 
 								}
@@ -2108,7 +2108,7 @@ return;
 							//Update Input
 							this.app.input.update();
 
-							//Update scale 
+							//Update scale
 							this.scale = this.update.scale(this);
 
 							//Update frames per second
@@ -2161,24 +2161,24 @@ return;
 								var wh = w.innerHeight;
 
 								//Catch window
-								if (this==w) 
+								if (this==w)
 									return console.log('Warning: Scale: [this === window]');
 									else
 								if ((this.pause>0.5))
-									return console.log('Warning: Paused',30); 
+									return console.log('Warning: Paused',30);
 									else
 								if (this.set==1)
-									return console.log('Warning: Scale: Duplicate Run',30); 
+									return console.log('Warning: Scale: Duplicate Run',30);
 
 								//Check if overriding
 								if (app.app.options.canvas.override)
 								{
 
-									//Set width to override 
+									//Set width to override
 									if (app.app.options.canvas.size.width!==app.width)
 										app.width = app.app.options.canvas.size.width;
 
-									//Set height to override 
+									//Set height to override
 									if (app.app.options.canvas.size.height!==app.height)
 										app.height = app.app.options.canvas.size.height;
 
@@ -2193,8 +2193,8 @@ return;
 											//align
 											app.app.canvas.getCanvas().style.left  = -app.width/2 + w.innerWidth/2+"px";
 
-											//if buffer align    
-											if (app.app.options.canvas.buffer)          
+											//if buffer align
+											if (app.app.options.canvas.buffer)
 											   app.app.canvas.getBuffer().style.left  = -app.width/2 + w.innerWidth/2+"px";
 
 											}
@@ -2211,7 +2211,7 @@ return;
 									if (ww!==app.width)
 										app.width = ww;
 
-								}	
+								}
 
 								//Calculate sccalers
 								this.set = 1;
@@ -2275,7 +2275,7 @@ return;
 										//this.app.input.delay = 1;
 
 										//If state and not initialized, initalize via Object .create
-										if ((this.name=state.name)&&(this.initalized=!0)) 
+										if ((this.name=state.name)&&(this.initalized=!0))
 											{
 											if (!state.started)
 												this.current=Object.create(state,this.app.app.client.room);
@@ -2312,7 +2312,7 @@ return;
 								}
 							},
 							step:{
-								first:function(step,app){ 
+								first:function(step,app){
 									this.app = app;
 									if ((typeof step == 'undefined')||(!step.Step(app)))
 										return;
@@ -2350,7 +2350,7 @@ return;
 									this.addings = 0;
 								},
 								tick:function(a,b,app){
-									this.first(a,app); 	
+									this.first(a,app);
 									this.second(b,app); /* Game Loop, Increment Frames */
 									return this.fps;
 								},
@@ -2485,7 +2485,7 @@ return;
 										return function() {
 											var a = this.Started;
 											//this.app.set_scale();
-											this.Started = true; 
+											this.Started = true;
 											return a;
 										};
 
@@ -2514,12 +2514,12 @@ return;
 						rate:	0,
 						offset:	0,
 						delta:	1,
-						Time:	function(app) 
+						Time:	function(app)
 							{
 								this.timer = new Date().getTime();
 								return this.timer - this.offset;
 							},
-						Step:	function(app)	
+						Step:	function(app)
 							{
 								this.delta = this.Time(app);
 								var step = this.rate*this.delta;
@@ -2527,7 +2527,7 @@ return;
 									this.offset+=Math.floor(step)/this.rate;
 								return (step - 1.0)>0.0?true:false;
 							},
-						GetStepsPerSecond:	function()	
+						GetStepsPerSecond:	function()
 							{
 								return 1000.0/this.delta;
 							}
@@ -2560,7 +2560,7 @@ return;
 									this.fname.play();
 								}
 							},
-							MultiChannelSound:function(filename,channelQ,callback){	
+							MultiChannelSound:function(filename,channelQ,callback){
 								if (App.ext.useragent.ie)
 									return;
 								this.fname = filename;
@@ -2610,7 +2610,7 @@ return;
 								}
 								else
 								{
-								index.play();	
+								index.play();
 									return;
 								}
 									this.sound[this.current].pause();
@@ -2752,12 +2752,12 @@ return;
 								this.Sources.append(this.SpriteAppend(name,file));
 								return this.Sources.getByName(name);
 							},
-							SpriteCreate:function(file,src,name){		
+							SpriteCreate:function(file,src,name){
 								this.SpriteLoadNumber++;
 								this.SpriteLoadTime += (10*this.app.delta_speed)*this.SpriteLoadNumber;
 								return this.sprite = Object.create(this.Sprite,{file:{value:file},src:{value:src},name:{value:name}});
 							},
-							SpriteAppend:function(name,file){	
+							SpriteAppend:function(name,file){
 								return (this.img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
 							},
 							SpriteUnload:function(name,file){
@@ -2772,7 +2772,7 @@ return;
 							graphicsLibrary:function(){
 								this.Sprite = Object.create(null);
 								this.Sources = Object.create(null);
-								this.Sources.prototype = {	
+								this.Sources.prototype = {
 									get:function get(){return this.index;},
 									getByName:function getByName(name){return this.index[name];},
 									getName:function getName(name){return this.index[name].name;},
@@ -2792,12 +2792,12 @@ return;
 									{
 										if (this.index[image.name]==image)
 											return;
-										this.index[image.name]=image; 
+										this.index[image.name]=image;
 										this.count++;
 									}},
 									unload:{value:function unload(name)
 									{
-										this.index[name]=null; 
+										this.index[name]=null;
 										return this.index[name];
 									}},
 								});
@@ -2821,10 +2821,10 @@ return;
 									}
 							},
 							getErrors:function(){
-								return this.SpriteLoadErrors; 
+								return this.SpriteLoadErrors;
 							},
 							getImage:function(name){
-								return this.Sources.getByName(name); 
+								return this.Sources.getByName(name);
 							},
 						},
 						constructor:function(app){return {
@@ -2842,13 +2842,13 @@ return;
 
 					//
 					//Visuals prototype
-					//      
+					//
 					//      Global Scope
 					//          App.client.visuals
-					//      
+					//
 					//      Local Scope
 					//          this.visuals
-					//      
+					//
 
 					//Visuals Object
 					visuals:{
@@ -2885,7 +2885,7 @@ return;
 									s:0,
 									a:0,
 									c:0,
-									colour:"",	
+									colour:"",
 									oldcol:"",
 									init:function(col, colold){
 									this.x = 0;
@@ -2901,16 +2901,16 @@ return;
 								},
 
 							window:window,
-							
-							
+
+
 							getData:function(){
-								
-							
+
+
 								var width = this.buffer.width;
-								var height = this.buffer.height;	
-								
+								var height = this.buffer.height;
+
 								var imageData = this.buffer_context.getImageData(0,0,width,height);
-								
+
 								var w2 = width/2;
 								var d = imageData.data;
 								for(y=0; y<=height;y++){
@@ -2938,11 +2938,11 @@ return;
 										}
 									}
 								}
-								this.buffer_context.putImageData(imageData,0,0);	
-								
+								this.buffer_context.putImageData(imageData,0,0);
+
 							},
-							
-							
+
+
 							//Used to draw all sprites to the screen
 							flip:function(){
 
@@ -2950,12 +2950,12 @@ return;
 								//this.buffer_context.save();
 								//Set scale to client scale
 								this.scale = this.app.client.scale;
-								
+
 
 								if (fillStyle==false)
 								this.screen_fill(this.app.client.visuals.bleed,this.app.options.canvas.background);
 
-								//If double buffering 
+								//If double buffering
 								if (this.app.options.canvas.buffer)
 								{
 									//Draw buffer to canvs
@@ -2980,7 +2980,7 @@ return;
 							},
 
 							//RequestAnimationFrame polyfill
-							animationFrame:function(name,w,h){	
+							animationFrame:function(name,w,h){
 
 								//Fill Date
 								if (!Date.now)
@@ -3200,13 +3200,13 @@ return;
 							opacity:function(opacity) {
 								return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
 							},
-							font:function(font)	{ 
+							font:function(font)	{
 								return this.canvas_context.font = this.buffer_context.font=this.fontT=font;
 								return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
 								//if (font)
 								//	this.buffer_context.font = font;
 								//return this.buffer_context.font;
-							},			
+							},
 							shadow:function(col,blur,x,y){
 								this.buffer_context.shadowColor = col;
 								this.buffer_context.shadowBlur = blur;
@@ -3259,7 +3259,7 @@ return;
 								{
 									this.opacity(this.stat.a*0.75);
 									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-								}		
+								}
 								this.font(f);
 								this.clean();
 							},
@@ -3299,13 +3299,13 @@ return;
 								{
 									this.opacity(this.stat.a*0.75);
 									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
-								}		
+								}
 								this.font(f);
 								this.clean();
 							},
 							text:function(string, x, y,colour){
 								this.text_ext(string,x,y,colour,1,1,0,"Calibri");
-							},	
+							},
 							text_shadow:function(blur,x,y,colour){
 								this.buffer_context.shadowColor = colour;
 								this.buffer_context.shadowBlur = blur;
@@ -3331,7 +3331,7 @@ return;
 								this.buffer_context.fill();
 
 								this.clean();
-							},	
+							},
 							rect_stroke:function(x,y,w,h,s,a,c,colour,l){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
 								this.buffer_context.beginPath();
@@ -3343,7 +3343,7 @@ return;
 								this.buffer_context.stroke();
 
 								this.clean();
-							},	
+							},
 							setting:true,
 							rect_button:function(x,y,w,h,s,a,colour,loc,c){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
@@ -3390,21 +3390,21 @@ return;
 								this.buffer_context.rotate(-angle*0.0174532925);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
 								this.clean();
-							},	
+							},
 							rect_free:function(x,y,w,h,s,a,c,colour){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
 								this.buffer_context.beginPath();
 								(c)?this.buffer_context.rect(x-w/2, y-h/2, w, h):this.buffer_context.rect(x, y, w, h);
 								this.buffer_context.fill();
 								this.clean();
-							},	
+							},
 							screen_fill:function(a,colour){
 								this.stat = this.chk(0,0,1,1,1,a,1,colour);
 								this.buffer_context.beginPath();
 								this.buffer_context.rect(0, 0, window.innerWidth,window.innerHeight)
 								this.buffer_context.fill();
 								this.clean();
-							},	
+							},
 							image_count:0,
 							image_element:function(image){
 								this.elm = document.createElement("image");
@@ -3425,19 +3425,19 @@ return;
 								return this.elm;
 								//(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 							},
-							image_ext:function(image,x,y,s,a,c){		
+							image_ext:function(image,x,y,s,a,c){
 								this.stat = this.chk(x,y,image.width,image.height,s,a,c);
 								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 							},
-							image_ext2:function(image,x,y,sx,sy,a,c){		
+							image_ext2:function(image,x,y,sx,sy,a,c){
 								this.stat = this.chk(x,y,image.width,image.height,sx,a,c);
 								this.stat2 = this.chk(x,y,image.width,image.height,sy,a,c);
 								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w*this.stat.s,this.stat.h*this.stat2.s):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w*this.stat.s,this.stat.h*this.stat2.s);
 							},
-							image_centered:function(image,x,y){		
+							image_centered:function(image,x,y){
 								this.image_ext(image,x,y,1,1,true);
 							},
-							image:function(image,x,y){		
+							image:function(image,x,y){
 								this.image_ext(image,x,y,1,1,false);
 							},
 							image_stat:function(image,x,y,s,a,c,xx,yy,w,h){
@@ -3458,16 +3458,16 @@ return;
 							image_part:function(image,x,y,s,a,c,xx,yy,w,h){
 								this.stat = this.chk(x,y,w,h,s,a,c);
 								var scale = (1.1*this.stat.s)*this.app.getScale();
-								
-							
-									
+
+
+
 								(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-									
-									
+
+
 							},
 							image_part_rotate:function(image,x,y,s,a,c,xx,yy,w,h,angle){
 								this.stat = this.chk(x,y,w,h,s,a,c);
-									
+
 								var scale = (1.1*this.stat.s)*this.app.getScale();
 								this.buffer_context.translate(this.stat.x,this.stat.y);
 								this.buffer_context.rotate(angle*0.0174532925);
@@ -3483,45 +3483,45 @@ return;
 								this.buffer_context.rotate(-angle*0.0174532925);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
 							},
-							
+
 							setBleed:function(threshold){
-								this.bleed = threshold;	
+								this.bleed = threshold;
 							},
-							
+
 							rotate_at:function(angle,x,y){
 								if (typeof x === "object")
 									var x = x.x, y = y.y;
 									else
 									var x = x, y = y;
-								
+
 								this.stat = this.chk(x,y,1,1,1,1,1);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
-								
+
 								this.buffer_context.rotate(angle*0.0174532925);
-								
+
 							},
-							
-							
+
+
 							rotate:function(angle){
-								
+
 								return this.buffer_context.rotate(angle*0.0174532925);
-								
+
 							},
-							
-							//visuals.translate ({x,y}) (x,y) 
+
+							//visuals.translate ({x,y}) (x,y)
 							translate:function(x,y){
-								
+
 								if (typeof x === "object")
 									var x = x.x, y = y.y;
 									else
 									var x = x, y = y;
-								
+
 								this.stat = this.chk(x,y,1,1,1,1,1);
 								return this.buffer_context.translate(-this.stat.x,-this.stat.y);
-								
+
 							},
-							
-							
+
+
 							button:function(img,x,y,f){
 								this.image_button(img,x,y,1,f,true,1,1,1,1);
 							},
@@ -3553,7 +3553,7 @@ return;
 									if (this.highlight)
 									this.opacity(this.stat.a*0.75);
 									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-								}			
+								}
 								return w;
 							},
 							image_buttonH:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
@@ -3575,7 +3575,7 @@ return;
 									if (this.highlight)
 									this.opacity(this.stat.a*0.75);
 									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-								}			
+								}
 								return w;
 							},
 							touch_within:function(x, y, w, h,c) {
@@ -3626,11 +3626,11 @@ return;
 								this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
 								this.opacity(a);
 								this.buffer_context.strokeStyle = col;
-								this.buffer_context.lineTo(this.stat2.x*s,this.stat2.y*s);			
+								this.buffer_context.lineTo(this.stat2.x*s,this.stat2.y*s);
 							},
 							lineend:function(){
 								this.buffer_context.stroke();
-							},	
+							},
 							linestart:function(){
 								this.buffer_context.beginPath();
 							},
@@ -3693,24 +3693,24 @@ return;
 							}
 						}
 					},
-	
+
 			}
 		},
 	},
-			
+
 			});
-			
+
 			temp = Object.create(temp.prototype,temp.constructor);
-			
+
 			temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-				
+
 			temp.id = this.window.appsNextId;
-			
+
 			this.window.apps[temp.id] = temp;
-			
+
 			this.window.appsNextId++;
-				
-			return this.window.apps[temp.id];		
+
+			return this.window.apps[temp.id];
 		}
 
 	}).init();
