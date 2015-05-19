@@ -1,23 +1,17 @@
 /*
-███████╗██████╗ ██╗ ██████╗███████╗     ██╗███████╗
-██╔════╝██╔══██╗██║██╔════╝██╔════╝     ██║██╔════╝
-███████╗██████╔╝██║██║     █████╗       ██║███████╗
-╚════██║██╔═══╝ ██║██║     ██╔══╝  ██   ██║╚════██║
-███████║██║     ██║╚██████╗███████╗╚█████╔╝███████║
-╚══════╝╚═╝     ╚═╝ ╚═════╝╚══════╝ ╚════╝ ╚══════╝
-	  Created By: Ryan Spice-Finnie
+
+	SpiceJS
+		Created By: Ryan Tyler Spice-Finnie
+		
 */
 
 /* jslint node: true */
 /* jshint strict:false */
 /* jshint -W097 */
 
-//Time at which this document begins
-var Steve;
+//Time: The time in x which this document begins
 
-"use strict";
-
-//SpiceJS
+//SpiceJS:
 //	Creates a SpiceJS object which acts as a controller for your application.
 //	SpiceJS.init() - builts variables into the window for keeping track of the application(s)
 //	SpiceJS.get() - returns the app prototype
@@ -26,6 +20,16 @@ var Steve;
 //					.list()	- returns a list of currently running applications. Returns app if only one exists.
 //
 //
+
+
+
+var Steve;
+
+"use strict";
+var LOG_ENABLE = (false);
+
+var log = ((LOG_ENABLE)?console.log(log):function(){});
+
 var SpiceJS = Object.create({
 
 	//Initalize window components for referencing SpiceJS
@@ -137,7 +141,7 @@ var SpiceJS = Object.create({
 					value:function(self){
 
 						//Default to App.
-						self.Init("Spice.js",480,320);
+						self.Init("",480,320);
 
 					}
 
@@ -156,6 +160,7 @@ var SpiceJS = Object.create({
 
 						//Run .OnLoad
 						evt.target.app.OnLoad(evt.target.app);
+						log(evt.target.app.getCurrent().name+': OnApplicationLoad');
 
 					}
 				},
@@ -235,7 +240,7 @@ var SpiceJS = Object.create({
 						default:
 
 							//Expected a type
-							console.log("Expected 'object' or 'function': Type is "+c);
+							log("Expected 'object' or 'function': Type is "+c);
 						}
 						if (isObj)
 							prototype = ret;
@@ -331,20 +336,32 @@ var SpiceJS = Object.create({
 						name:'canvas',			//Use canvas.name
 						buffername:'buffer',	//Use canvas.buffer
 						buffer:false,			//Toggle the use of double-buffering
-						color:'#0000000',		//Assign canvas element background colour
+						color:'#000000',		//Assign canvas element background colour
 						position:{				//Assign canvas element position properties
+							//position:'absolute',
+							//top:0,
+							//left:window.innerWidth/2,
+							//center:true,
+							//z:1
 							position:'absolute',
-							top:0,
-							left:window.innerWidth/2,
-							center:true,
+							top:"",
+							left:window.innerWidth*2,
+							//left:"",
+							center:false,
 							z:1
 						},
 						size:{					//Assign canvas size properties
-							width:320,
-							height:480
+							width:window.innerWidth,
+							height:window.innerHeight
 						}
 					},
 
+					msFlags:{
+					
+						msZoom:false,
+						
+					},
+					
 					flags:{						//Feature Flags
 						canvas:true,
 						mstouch:false,
@@ -454,12 +471,12 @@ var SpiceJS = Object.create({
 						  // Here we run a very simple Flappy of the Graph API after login is successful.
 						  // This testAPI() function is only called in those cases.
 						  function testAPI() {
-							console.log('Welcome!  Fetching your information.... ');
+							log('Welcome!  Fetching your information.... ');
 
 							FB.api('/me', function(response) {
 								App.user.facebook(response);
 								callback(response);
-							  console.log('Good to see you, ' + response.name + '.');
+							  log('Good to see you, ' + response.name + '.');
 							});
 						  }
 						},
@@ -856,9 +873,12 @@ var SpiceJS = Object.create({
 											//if (this.devicewidth)
 											this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
 											//if (this.devicedpi)
-											this.metaAppend(this.metaTag("viewport","target-densitydpi="+this.app.client.setWidth));
+											this.metaAppend(this.metaTag("viewport","target-densitydpi="+this.app.client.setWidth+",-webkit-min-device-pixel-ratio=1,min-resolution:="+this.app.client.setWidth+",-moz-device-pixel-ratio=1"));
+										
+											this.metaAppend(this.metaTag("viewport","user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
 
 											this.app.ext.metatag = this;
+										
 											//Return this
 											return this;
 										}
@@ -1355,38 +1375,71 @@ return;
 								doc:document.documentElement,
 
 								active:null,
+                                reverse:false,
 								target:{x:0,y:0},
 								x:0,
 								y:1,
+                                a:false,
 
 								//ScrollWheel Event
 								event:function(evt,delta) {
-
 									if (App.options.get("seamless"))
+                                    this.app.input.scroll.a = true;
+                                    
+									if (this.app.options.get("seamless"))
 										evt.preventDefault();
-									App.input.wheelDelta = evt.wheelDelta;
+                                    
+									this.app.input.wheelDelta = evt.wheelDelta;
 
 									var doc = document.documentElement;
 									var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 									var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-
-									App.input.scroll.target.x = left;
-									App.input.scroll.target.y = top-evt.wheelDelta;
-									App.input.scroll.x = left;
-									App.input.scroll.y = top-evt.wheelDelta;
+                                    
+                                    
+                                    //Flip for horizontal scrolling
+                                    if (this.reverse)
+                                    {
+                                        this.app.input.scroll.target.x = left;
+                                        this.app.input.scroll.target.y = top-evt.wheelDelta;
+                                        this.app.input.scroll.x = left;
+                                        this.app.input.scroll.y = top-evt.wheelDelta;
+                                    }
+                                    else{
+                                        this.app.input.scroll.target.y = 0;
+                                        this.app.input.scroll.target.x = left-evt.wheelDelta;
+                                        this.app.input.scroll.y = 0;
+                                        this.app.input.scroll.x = left-evt.wheelDelta;
+                                    }
 									//App.ext.scroll.active = false;
 								},
-
+                                up:function(){
+                                    
+                                    var transitionSpeed = 1;
+                                    
+                                    if (this.target.x>this.x)
+                                        this.x+=this.app.client.Math.Clamp(Math.floor((this.target.x-this.x)*(transitionSpeed)),1,100),this.a=true;
+                                    
+                                    if (this.target.x<this.x)
+                                        this.x-=this.app.client.Math.Clamp(Math.floor((this.x-this.target.x)*(transitionSpeed)),1,100),this.a=true;
+                                    
+										this.x = this.app.client.Math.Clamp(this.x,0,window.innerWidth*3);
+										this.target.x = this.app.client.Math.Clamp(this.target.x,0,window.innerWidth*3);
+									
+                                    //if (this.a)
+									this.window.scrollTo(this.x,this.y),this.a = false;
+                                    log(this.x,this.y);
+                                    
+                                },
 								//Update the position for smooth scrolling
 								update:function(x,y){
-
+									
 									var left = (this.window.pageXOffset || this.doc.scrollLeft) - (this.doc.clientLeft || 0);
 									var top = (this.window.pageYOffset || this.doc.scrollTop)  - (this.doc.clientTop || 0);
 
-									//if (!this.active)
-									//	return;
-
-
+									/* DEACTIVATE IF CONFUSED */
+									if (!this.active)
+										return;
+									
 									var LD = Math.round(-this.x+this.target.x)/10;
 									var YD = Math.round(-this.y+this.target.y)/10;
 
@@ -1853,8 +1906,8 @@ return;
 							//
 							getHorizontal:{writable:false, configurable:false, enumerable:false, value:function(){
 
-								var wasd = this.app.input.keyboardCheck("a") - this.app.ext.input.keyboardCheck("d");
-								var arrows = this.app.input.keyboardCheck("leftarrow") - this.app.ext.input.keyboardCheck("rightarrow") ;
+								var wasd = this.app.input.keyboardCheck("a") - this.app.input.keyboardCheck("d");
+								var arrows = this.app.input.keyboardCheck("leftarrow") - this.app.input.keyboardCheck("rightarrow") ;
 								var mouse = -this.getPressed()*this.app.input.dist.x;
 								var touch = -this.getTouched()*this.app.input.dist.x;
 
@@ -1867,10 +1920,10 @@ return;
 							//
 							getVertical:{writable:false, configurable:false, enumerable:false, value:function(){
 
-								var wasd = this.app.ext.input.keyboardCheck("s") - this.app.ext.input.keyboardCheck("w");
-								var arrows = this.app.ext.input.keyboardCheck("downarrow") - this.app.ext.input.keyboardCheck("uparrow");
-								var mouse = this.getPressed()*this.app.ext.input.dist.y;
-								var touch = this.getTouched()*this.app.ext.input.dist.y;
+								var wasd = this.app.input.keyboardCheck("s") - this.app.input.keyboardCheck("w");
+								var arrows = this.app.input.keyboardCheck("downarrow") - this.app.input.keyboardCheck("uparrow");
+								var mouse = this.getPressed()*this.app.input.dist.y;
+								var touch = this.getTouched()*this.app.input.dist.y;
 
 
 								var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
@@ -2162,13 +2215,13 @@ return;
 
 								//Catch window
 								if (this==w)
-									return console.log('Warning: Scale: [this === window]');
+									return log('Warning: Scale: [this === window]');
 									else
 								if ((this.pause>0.5))
-									return console.log('Warning: Paused',30);
+									return log('Warning: Paused',30);
 									else
 								if (this.set==1)
-									return console.log('Warning: Scale: Duplicate Run',30);
+									return log('Warning: Scale: Duplicate Run',30);
 
 								//Check if overriding
 								if (app.app.options.canvas.override)
@@ -2183,7 +2236,7 @@ return;
 										app.height = app.app.options.canvas.size.height;
 
 									//Check if centered
-									if (app.options.canvas.position.center)
+									if (app.app.options.canvas.position.center)
 										{
 
 										//if not aligned
@@ -2270,7 +2323,7 @@ return;
 									//State set
 									set:function(state,start){
 
-										//console.log(this.input);
+										//log(this.input);
 										//Set app input delay
 										//this.app.input.delay = 1;
 
@@ -2325,7 +2378,7 @@ return;
 										this.app.client.delta = this.delta_speed = this.delta;
 										else
 										this.app.client.delta = this.delta_speed = 1;
-										//console.log(this.delta);
+										//log(this.delta);
 									/* Increment Time to increase performance */
 										if (this.fps==0)
 											return;
@@ -3100,7 +3153,7 @@ return;
 								//this.text_ext("y "+Math.round(App.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
 								//this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
 								if (App.fps<20)
-									console.log(App.fps);
+									log("FPSLow: "+App.fps);
 
 								var data = [
 											[this.app.client.name],
@@ -3248,7 +3301,7 @@ return;
 								this.stat.h = this.point*this.stat.h;
 								if (this.touch_within_stat(this.stat))
 								{
-									this.opacity(this.stat.a-(this.app.ext.input.pressed*0.2));
+									this.opacity(this.stat.a-(this.app.input.pressed*0.2));
 									this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
 									//if (App.input.released)
 									//	if (App.input.delay<1)
@@ -3375,8 +3428,8 @@ return;
 							rect_gradient:function(x,y,w,h,s,a,c,colour,colour2,angle){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
 								return;
-								console.log(x,y,w,h,s,a,c,c,colour,colour2,angle);
-								console.log(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.s,this.stat.a,this.stat.c,this.stat.colour);
+								//log(x,y,w,h,s,a,c,c,colour,colour2,angle);
+								//log(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.s,this.stat.a,this.stat.c,this.stat.colour);
 								this.buffer_context.translate(this.stat.x,this.stat.y);
 								this.buffer_context.rotate(angle*0.0174532925);
 
@@ -3649,20 +3702,98 @@ return;
 								this.clean();
 							},
 							quadraticCurve:function(x,y,x2,y2,a,col){
+								var t = this.buffer_context.strokeStyle;
+								var tF = this.buffer_context.fillStyle;
 								this.stat = this.chk(x,y,1,1,1,a,true,col);
 								this.stat2 = this.chk(x2,y2,1,1,1,a,true,col);
 								this.buffer_context.beginPath();
 								this.buffer_context.quadraticCurveTo(this.stat.x, this.stat.y, this.stat2.x, this.stat2.y);
-								this.buffer_context.strokeStyle = this.stat.colour;
+								this.buffer_context.strokeStyle = col;	
 								this.buffer_context.stroke();
 								this.buffer_context.fill();
+								this.stat = this.chk(x,y,1,1,1,a,true,t);
+								this.stat2 = this.chk(x2,y2,1,1,1,a,true,t);
+								
+								this.buffer_context.strokeStyle = t;
+								this.buffer_context.fillStyle = tF;
 							},
-							circle:function(x,y,r,col,a){
+							
+							/* visuals.paths */
+							
+							paths:{
+							
+								
+								//list of paths
+								_initalized:false
+								,_count:false
+								
+								//Reinitalize the objects functions,
+								//Required for use
+								
+								,init:function(visuals){
+									
+									this.list = [];
+									
+									this.visuals = visuals;
+									
+									this._initalized = true;
+									
+									this._count = 0;
+									
+									return this;
+									
+								}
+								
+								,list:[]
+								
+								,render:function(path){
+									
+									var list = path.list;
+									var length = path.list.length;
+									var i = 0;
+									
+									
+									for(i=0;i<=length-1;i++)
+										this.visuals.rect(list[i].x,list[i].y,1,1,"#FFFFFF");
+									
+									return true;
+								}
+								
+								,addPath:function(id,tempX,tempY){
+									var path =  {name:id,x:tempX,y:tempY};
+									path.addPoint = this.addPoint;
+									path.list = [];
+									path.p = this;
+									console.log(path);
+									
+									
+									var t = this.list.push(path);
+									 t.p = this;
+									return this.list[this._count++];
+								}
+								
+								,addPoint:function(tempX,tempY){
+									
+									log(this.list.push({x:this.x+tempX,y:this.y+tempY}));
+									
+								}
+								
+							}
+							
+							
+							
+							
+							
+							
+							
+							
+							,circle:function(x,y,r,col,a){
 								this.stat = this.chk(x,y,1,1,r,a,true,col);
 								this.buffer_context.beginPath();
 								this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s*this.scale, 0, 2 * Math.PI, false);
 								this.buffer_context.fillStyle = this.stat.colour;
 								this.buffer_context.fill();
+								this.clean();
 							},
 							circle_free:function(x,y,r,col,a){
 								this.stat = this.chk(x,y,r,r,r,a,1,col);
@@ -3692,8 +3823,7 @@ return;
 								}
 							}
 						}
-					},
-
+					}, 
 			}
 		},
 	},
