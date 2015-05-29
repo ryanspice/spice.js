@@ -2,113 +2,116 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>SpiceJS</title>    
-     <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
+    <title>ReverenceBackground Example</title>    
      <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
 </head>
-<script rel="prefetch" name="main" type="text/javascript" defer>
-	
-//Application Load
-App.OnLoad = function()	{
-	
-	// Initalize Title and Resolution
-    App.Init("ReverenceBackground Html5", 1024,720);
+<body>
+	<script rel=prefetch type="application/x-javascript" src="particles.js" defer></script>
+	<script rel="prefetch" name="main" type="text/javascript" defer>
+		var App = SpiceJS.create();
 
-	//Set canvas background colour
-	App.canvas.background_set("#000000");
-	
-	//Assign favicon
-	App.ext.metatag.metaFavicon("../../stan.png");
-	
-};	
-		
-		//Main state prototype
-var ReverenceBackground = {
-	
-	name:"Menu",
-	
-	init:function() {
-		
-		//State initilization
-		
-		//Setup X
-		this.backgroundX = 0;
-		
-       //Load images
-       this.img_backgrounds = new Array(6);
+		//Application Load
 
-       var bgl = this.img_backgrounds.length-1;
-		
-       //Loop through array length and load corrisponding image
-       for(var i = bgl;i>0;--i)
-           this.img_backgrounds[ bgl-i] = this.graphics.load("reverenceBackground"+i+".min");
-		this.art_backgrounds_stars = new Array();
+		App.OnLoad = function(self)	{
 
-		this.art_backgrounds_stars[0] = App.client.graphics.load("art_backgrounds_stars0");
-		this.art_backgrounds_stars[1] = App.client.graphics.load("art_backgrounds_stars1");
-		this.art_backgrounds_stars[2] = App.client.graphics.load("space/1");
-		this.art_backgrounds_stars[3] = App.client.graphics.load("space/2");
-		this.art_backgrounds_stars[4] = App.client.graphics.load("space/3");
-		this.art_backgrounds_stars[5] = App.client.graphics.load("space/4");
-		
-		
-	return true;
-	},
-	draw_bgs:function(image,x,y,x2,y2,s,a){
-		
-		var win = window;
-		
-		var w = 2*(win.innerWidth/this.app.client.scale);
-		var ww = (win.innerWidth/this.app.client.scale);
-		x = x ;
-		y = y ;
-		var bx, by, by_first, iw, ih;
-		iw = Math.round(image.width*s);
-		ih = Math.round(image.height*s);
-		by = Math.round((this.app.client.setHeight+(-y2-this.app.client.setHeight)*1*1) % ih - ih);
-		by_first = by;
-		for (bx = Math.round((w+(x2+w)*s) % iw - iw); bx < w+iw; bx += iw)
-			for (by = by_first; by < this.app.client.setHeight+ih; by += ih)
-				this.visuals.image_ext(image,bx-ww,by,s,a,1);
-		
-	},
-	
-	//State update
-	update:function() {
-	
-		//Game logic	
-		this.backgroundX+=1;
-		return true;
-	},
-	
-	draw:function() {
-		
-		//Draw Logic
-		
-		var l = this.img_backgrounds.length-1;
-		var math = Math;
-		
-		for(var i = 1;i<l;++i)
-		{
-			this.visuals.image_ext(this.img_backgrounds[ i],math.sin( -this.backgroundX/360/i)*1000-1200+0+(i*600),00,1,0.9);
-		}
-		
-		var a = 0.75+Math.sin(-1/this.app.client.setWidth/2)*0.1;
-		this.draw_bgs(this.art_backgrounds_stars[2],this.backgroundX,0,this.backgroundX,0,2,a);
-		
-		this.draw_bgs(this.art_backgrounds_stars[5],this.backgroundX,0,this.backgroundX/2,0,2,a);
-		
-		this.draw_bgs(this.art_backgrounds_stars[3],this.backgroundX,0,this.backgroundX/3,0,2,a);
-		this.draw_bgs(this.art_backgrounds_stars[4],this.backgroundX,0,this.backgroundX/4,0,2,a);
-		
-		return true;
-	}
-};
-	
-//Application main loop Object[init,update,draw]
-App.main= ReverenceBackground;
-</script>
-<canvas id="canvas"></canvas>
-<canvas id="buffer"></canvas>
+			// Initalize Title and Resolution
+			self.Init("ReverenceBackground Html5", 1024,720);
+
+			//Set canvas background colour
+			self.canvas.setBackground("#000000");
+
+			//Assign favicon
+			self.ext.metatag.metaFavicon("../../favicon.png");
+
+		};	
+
+				//Main state prototype
+		var ReverenceBackground = {
+
+			name:"Menu",
+
+			init:function() {
+
+				//State initilization
+
+				//Setup X
+				this.backgroundX = 0;
+
+			   //Load images
+			   this.img_backgrounds = new Array(6);
+
+			   var bgl = this.img_backgrounds.length-1;
+
+			   //Loop through array length and load corrisponding image
+			   for(var i = bgl;i>0;--i)
+				   this.img_backgrounds[ bgl-i] = this.graphics.load("reverenceBackground"+i+".min");
+				this.art_backgrounds_stars = new Array();
+
+				//this.art_backgrounds_stars[0] = App.client.graphics.load("art_backgrounds_stars0");
+				//this.art_backgrounds_stars[1] = App.client.graphics.load("art_backgrounds_stars1");
+				this.art_backgrounds_stars[2] = App.client.graphics.load("space/1");
+				this.art_backgrounds_stars[3] = App.client.graphics.load("space/2");
+				this.art_backgrounds_stars[4] = App.client.graphics.load("space/3");
+				this.art_backgrounds_stars[5] = App.client.graphics.load("space/4");
+
+
+			return true;
+			},
+			draw_bgs:function(image,x,y,x2,y2,s,a){
+
+				var win = window;
+
+				var w = 2*(win.innerWidth/this.app.client.scale);
+				var ww = (win.innerWidth/this.app.client.scale);
+				x = x ;
+				y = y ;
+				var bx, by, by_first, iw, ih;
+				iw = Math.round(image.width*s);
+				ih = Math.round(image.height*s);
+				by = Math.round((this.app.client.setHeight+(-y2-this.app.client.setHeight)*1*1) % ih - ih);
+				by_first = by;
+				for (bx = Math.round((w+(x2+w)*s) % iw - iw); bx < w+iw; bx += iw)
+					for (by = by_first; by < this.app.client.setHeight+ih; by += ih)
+						this.visuals.image_ext(image,bx-ww,by,s,a,1);
+
+			},
+
+			//State update
+			update:function() {
+
+				//Game logic	
+				this.backgroundX+=1;
+				return true;
+			},
+
+			draw:function() {
+
+				//Draw Logic
+
+				var l = this.img_backgrounds.length-1;
+				var math = Math;
+
+				for(var i = 1;i<l;++i)
+				{
+					this.visuals.image_ext(this.img_backgrounds[ i],math.sin( -this.backgroundX/360/i)*1000-1200+0+(i*600),00,1,0.9);
+				}
+
+				var a = 0.75+Math.sin(-1/this.app.client.setWidth/2)*0.1;
+				this.draw_bgs(this.art_backgrounds_stars[2],this.backgroundX,0,this.backgroundX,0,2,a);
+
+				this.draw_bgs(this.art_backgrounds_stars[5],this.backgroundX,0,this.backgroundX/2,0,2,a);
+
+				this.draw_bgs(this.art_backgrounds_stars[3],this.backgroundX,0,this.backgroundX/3,0,2,a);
+				this.draw_bgs(this.art_backgrounds_stars[4],this.backgroundX,0,this.backgroundX/4,0,2,a);
+
+				return true;
+			}
+		};
+
+		//Application main loop Object[init,update,draw]
+		App.main= ReverenceBackground;
+	</script>
+	<canvas id="canvas"></canvas>
+	<canvas id="buffer"></canvas>
 </body>
 </html>
