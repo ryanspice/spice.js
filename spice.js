@@ -26,9 +26,9 @@
 var Steve;
 
 "use strict";
-var LOG_ENABLE = (false);
+var LOG_ENABLE = (true);
 
-var log = ((LOG_ENABLE)?console.log(log):function(){});
+var log = ((LOG_ENABLE)?function(log){console.log(log)}:function(){});
 
 var SpiceJS = Object.create({
 
@@ -244,7 +244,8 @@ var SpiceJS = Object.create({
 						}
 						if (isObj)
 							prototype = ret;
-
+						
+						
 						return ret;
 					}
 				},
@@ -336,7 +337,7 @@ var SpiceJS = Object.create({
 						name:'canvas',			//Use canvas.name
 						buffername:'buffer',	//Use canvas.buffer
 						buffer:false,			//Toggle the use of double-buffering
-						color:'#000000',		//Assign canvas element background colour
+						background:'#000000',		//Assign canvas element background colour
 						position:{				//Assign canvas element position properties
 							//position:'absolute',
 							//top:0,
@@ -1383,7 +1384,8 @@ return;
 
 								//ScrollWheel Event
 								event:function(evt,delta) {
-									if (App.options.get("seamless"))
+									
+									if (this.app.options.get("seamless"))
                                     this.app.input.scroll.a = true;
                                     
 									if (this.app.options.get("seamless"))
@@ -1966,7 +1968,7 @@ return;
 							if (this.app.options.canvas.buffer)
 								this.buffer.style.background = value;
 
-							this.canvas.style.background = value;
+							this.app.options.canvas.background = this.canvas.style.background = value;
 
 						},
 
@@ -2052,7 +2054,7 @@ return;
 									else
 									{
 									this.setCanvas(this.createCanvas());
-									if (app.options.canvas.buffer)
+									if (this.app.options.canvas.buffer)
 										this.setBuffer(this.createBuffer());
 									}
 								this.styleCanvas();
@@ -2926,6 +2928,7 @@ return;
 							buffer:(Object.create(null)),
 							canvas_context:(Object.create(null)),
 							buffer_context:(Object.create(null)),
+							fillStyle:null,
 							scale:0,
 							fontT:"",
 							fontL:"",
@@ -2996,17 +2999,19 @@ return;
 							},
 
 
-							//Used to draw all sprites to the screen
+							//Used to batch draw all sprites to the screen
+								// 
+							
 							flip:function(){
 
-								var fillStyle = this.app.canvas.canvas.style.background=="transparent";
+								this.fillStyle = (this.app.canvas.canvas.style.background=="transparent");
 								//this.buffer_context.save();
 								//Set scale to client scale
 								this.scale = this.app.client.scale;
 
 
-								if (fillStyle==false)
-								this.screen_fill(this.app.client.visuals.bleed,this.app.options.canvas.background);
+								if (this.fillStyle==false)
+									this.screen_fill(this.app.client.visuals.bleed,this.app.options.canvas.background);
 
 								//If double buffering
 								if (this.app.options.canvas.buffer)
@@ -3015,13 +3020,13 @@ return;
 									this.canvas_context.drawImage(this.buffer,0,0);
 
 									//Clear buffer
-									if (fillStyle==true)
+									if (this.fillStyle==true)
 									this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 								}
 								else {
 
 									//If not double buffering, clear canvas
-									if (fillStyle==true)
+									if (this.fillStyle==true)
 									this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 
 									//If initalized, draw state
@@ -3478,6 +3483,53 @@ return;
 								return this.elm;
 								//(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 							},
+							image_replacecol:function(image,x,y,s,a,c,colour){
+								
+								this.stat = this.chk(x,y,image.width,image.height,s,a,c);
+								
+								var is = new Image();
+								is.src = image;
+								
+								function getBase64Image(img) {
+											// Create an empty canvas element
+											var canvas = document.createElement("canvas");
+											canvas.width = img.width;
+											canvas.height = img.height;
+
+											// Copy the image contents to the canvas
+											var ctx = canvas.getContext("2d");
+											ctx.drawImage(img, 0, 0);
+
+											// Get the data-URL formatted image
+											// Firefox supports PNG and JPEG. You could check img.src to
+											// guess the original format, but be aware the using "image/jpg"
+											// will re-encode the image.
+											//var dataURL = canvas.toDataURL("image/png");
+											var dataURL = ctx.getImageData(0,0, canvas.width, canvas.height);
+
+											return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+										}
+								var imageData = getBase64Image(image);
+								is.src = getBase64Image(is);
+								image = is;
+								var pixel = imageData.data;
+
+								var r=0, g=1, b=2,a=3;
+								for (var p = 0; p<pixel.length; p+=4)
+								{
+								  if (
+									  pixel[p+r] == 0 &&
+									  pixel[p+g] == 0 &&
+									  pixel[p+b] == 0) // if white then change alpha to 0
+								  {pixel[p+a] = 255;}
+								}
+
+								ctx.putImageData(imageData,0,0);
+								image.src = c.toDataURL('image/png');
+								
+								
+								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+							},
 							image_ext:function(image,x,y,s,a,c){
 								this.stat = this.chk(x,y,image.width,image.height,s,a,c);
 								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
@@ -3764,7 +3816,7 @@ return;
 									path.addPoint = this.addPoint;
 									path.list = [];
 									path.p = this;
-									console.log(path);
+									//console.log(path);
 									
 									
 									var t = this.list.push(path);
@@ -3774,7 +3826,7 @@ return;
 								
 								,addPoint:function(tempX,tempY){
 									
-									log(this.list.push({x:this.x+tempX,y:this.y+tempY}));
+									(this.list.push({x:this.x+tempX,y:this.y+tempY}));
 									
 								}
 								
