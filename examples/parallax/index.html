@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html >
 <head>
-    <meta charset="UTF-8">
-    <title>SpiceJS</title>    
-    <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
-	<script rel=prefetch type="application/x-javascript" src="background.js"></script>
+	<meta charset="UTF-8">
+    <title>Application</title>    
     <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
 </head>
+<script rel=prefetch type="application/x-javascript" src="particles.js" defer></script>
+<script rel=prefetch type="application/x-javascript" src="background.js" defer></script>
 <script rel="prefetch" name="main" type="text/javascript" defer>
 //Application Load
-App.OnLoad = function()	{
+
+var App = SpiceJS.create();
+	
+App.OnLoad = function(self)	{
 	
 	// Initalize Title and Resolution
-	App.Init("Parralax",600,420);
+	self.Init("Parralax",600,420);
 	
 	//Snap to top
-	App.ext.top();
+	self.toggleWidescreen();
 	
 	//Set canvas background colour
-	App.canvas.background_set("#000000");
 	
 	//Assign favicon
-	App.ext.metatag.metaFavicon("../../stan.png");
+	self.ext.metatag.metaFavicon("../../favicon.png");
 	
 };	
 
@@ -33,6 +35,7 @@ App.main= {
 	init:function() {
 	
 		//State Initilization
+	this.app.canvas.setBackground("#000000");
 		
 		return true;
 	},

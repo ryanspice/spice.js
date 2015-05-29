@@ -37,14 +37,14 @@ Snowboarding.Menu = {
 		
 		
 		this.gallerySnowBackgrounds = [];
-		this.gallerySnowBackgrounds[0] = this.graphics.load("eh","SnowBoarding/bg_m1.min");
-		this.gallerySnowBackgrounds[1] = this.graphics.load("be","SnowBoarding/bg_m2.min");
-		this.gallerySnowBackgrounds[2] = this.graphics.load("ce","SnowBoarding/bg_fog1.min");
-		this.gallerySnowBackgrounds[3] = this.graphics.load("de","SnowBoarding/bg_fog2.min");
-		this.gallerySnowBackgrounds[4] = this.graphics.load("ee","SnowBoarding/bg_cloud1.min");
-		this.gallerySnowBackgrounds[5] = this.graphics.load("ef","SnowBoarding/bg_cloud2.min");
-		this.gallerySnowBackgrounds[6] = this.graphics.load("je","SnowBoarding/bg_m3.min");
-		this.gallerySnowBackgrounds[7] = this.graphics.load("je","SnowBoarding/background_SnowBoarding");
+		this.gallerySnowBackgrounds[0] = this.graphics.load("bg_m1.min");
+		this.gallerySnowBackgrounds[1] = this.graphics.load("bg_m2.min");
+		this.gallerySnowBackgrounds[2] = this.graphics.load("bg_fog1.min");
+		this.gallerySnowBackgrounds[3] = this.graphics.load("bg_fog2.min");
+		this.gallerySnowBackgrounds[4] = this.graphics.load("bg_cloud1.min");
+		this.gallerySnowBackgrounds[5] = this.graphics.load("bg_cloud2.min");
+		this.gallerySnowBackgrounds[6] = this.graphics.load("bg_m3.min");
+		this.gallerySnowBackgrounds[7] = this.graphics.load("background_SnowBoarding");
 		
 		this.sel =0;
 		this.WaterY = 0;
@@ -52,13 +52,12 @@ Snowboarding.Menu = {
 		this.cloudX = 0;
 		this.cloudSize = 25;
 		this.cx=[];
-		this.cc = 20 + Math.floor(this.app.client.setWidth/this.cloudSize);
+		this.cc = 20 + Math.floor(this.app.getWidth()/this.cloudSize);
 
 		for(var i=this.cc;i>=0;--i)
 			this.cx[i] = i*this.cloudSize;
 
 		
-		this.app.canvas.background_set("#000000");
 		this.lfogY = 0;
 		
 		this.sy = 0;
@@ -66,11 +65,11 @@ Snowboarding.Menu = {
     return true;
     },
 	update:function() {
-		this.FogY-=1*this.app.delta;
+		this.FogY-=1*this.app.getDelta();
 		this.lastFogY = this.fogY;
 		this.fogY = Math.sin(this.FogY/100);
-		this.y+=(this.v*this.s)*(this.app.delta);
-		this.StartAlpha+= 0.03*this.End*this.app.delta;
+		this.y+=(this.v*this.s)*(this.app.getDelta());
+		this.StartAlpha+= 0.03*this.End*this.app.getDelta();
 		
 		this.backgroundPos = Math.sin(this.y/this.app.client.setWidth);
 		this.FogY2 =(1+Math.sin(this.FogY/180)*0.5);
@@ -78,7 +77,7 @@ Snowboarding.Menu = {
 		this.FogY4 =(0.6+Math.sin(this.FogY/90)*0.5);
 			
 		0.9<this.StartAlpha&&(this.StartAlpha=0.9);-3>this.StartAlpha&&(this.StartAlpha=-3);
-		this.y<-this.gallerySnowBackgrounds[0].width/4?1>this.v&&(this.v+=0.001*this.app.delta):this.y>this.gallerySnowBackgrounds[0].width/4&&-1<this.v&&(this.v-=0.001*this.app.delta);
+		this.y<-this.gallerySnowBackgrounds[0].width/4?1>this.v&&(this.v+=0.001*this.app.getDelta()):this.y>this.gallerySnowBackgrounds[0].width/4&&-1<this.v&&(this.v-=0.001*this.app.getDelta());
 		
 		if (this.WaterY<0)
 			{
