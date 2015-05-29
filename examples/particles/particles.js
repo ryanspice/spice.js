@@ -1,4 +1,6 @@
-
+/* Rain Particles SpiceJS Example - particles.js
+		ryanspice.com
+*/
 
 /// Global Variables
 
@@ -58,7 +60,7 @@ particlesType.prototype = {
 		this.position.x += this.velocity.x;
 		this.position.y += this.velocity.y;
 		
-		if (this.position.y>window.innerHeight*(0.85+Math.random()*0.25))
+		if (this.position.y>-this.position.x/10+window.innerHeight*(0.75+Math.random()*0.25))
 			this.splash();
 		
 		return true;
@@ -105,7 +107,7 @@ for (Leave = particlesNumber-1; Leave>=0; Leave--)
 //draw particles
 
 var particlesDraw = function(app) {
-	
+	app.client.visuals.clean();
 	app.client.visuals.linestart();
 	app.client.visuals.free = true;
 	var x;

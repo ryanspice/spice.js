@@ -3,63 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>SpiceJS</title>    
-     <script rel=prefetch type="application/x-javascript" src="particles.js"></script>
      <script rel=prefetch type="application/x-javascript" src="../../spice.js"></script>
 	<style>
-		.background {position:fixed;height:100%;width:100%;background:url('toronto.jpg');background-size:100%;};
+		.background {position:fixed;height:100%;width:100%;background:url('http://i.imgur.com/6C0wjyp.jpg');background-size:100%;};
 	</style>
 </head>
 <body>
-<script rel="prefetch" name="main" type="text/javascript" defer>
-	
-var Application = SpiceJS.create();
+	<script rel=prefetch type="application/x-javascript" src="particles.js" defer></script>
+	<script rel="prefetch" name="main" type="text/javascript" defer>
 
-//Application Load
-Application.OnLoad = function (self) {
+		var Application = SpiceJS.create();
 
+		//Application Load
+		Application.OnLoad = function (self) {
 
-		self.Init("SpiceJS - Particles",1024,720);
-	
+			self.Init("SpiceJS - Particles",1024,720);
 
-		self.canvas.setBackground("000000");
-	
-		self.client.visuals.bleed = 0.3;
-		//self.options.set({paths:{images:""}});
+			self.canvas.setBackground('transparent');
 
-		self.ext.metatag.metaFavicon("../../stan.png");
+			self.canvas.canvas.style.opacity = 0.3;
 
-};
-//Application main loop Object[init,update,draw]
-Application.main= {
-	
-	name:"Particles",
-	
-	init:function() {
-	
-		//State Initilization
-		
-		return true;
-	},
-	
-	update:function() {
+			self.ext.metatag.metaFavicon("../../favicon.png");
 
-		//Update logic	
+		};
 
-		return true;
-	},
-	
-	draw:function() {
-		
-		//Draw logic stored in particles.js
-		particlesDraw(this.app)
-		
-		return true;
-	}
-	
-};
-</script>
-<div class="background">
-	
-</div>
+		Application.main= {
+
+			name:"Particles",
+
+			init:function() {
+
+				return true;
+			},
+
+			update:function() {
+
+				return true;
+			},
+
+			draw:function() {
+
+				particlesDraw(this.app)
+
+				return true;
+			}
+
+		};
+
+	</script>
+	<div class="background">
+
+	</div>
 </body>
 </html>
