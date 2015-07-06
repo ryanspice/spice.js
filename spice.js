@@ -88,7 +88,7 @@ var SpiceJS = Object.create({
 					enumerable:true,
 
 					//VN
-					value:'0.6.70.15.08.01.min'
+					value:'0.6.71.15.08.01.min'
 				},
 
 				//Build Client, Instantiate Loop, Build Canvas, Initalize Client
@@ -1585,12 +1585,17 @@ return;
 							},
 
 							touch:function(touch){
-
-								var input = evt.target.app.input;
-
+								
+								try {
+								var input = evt.target.app.input || touch;
+								} catch (e){
+									var input = touch; console.log(touch);								
+								};
 								input.touch = true;
 								input.x = touch.pageX;
 								input.y = touch.pageY;
+								input.pos = {x:0,y:0};
+								input.start = {x:0,y:0};
 								input.pos.x = touch.pageX;
 								input.pos.y = touch.pageY;
 								input.start.x = touch.pageX;
@@ -2801,28 +2806,48 @@ return;
 							Sprite:{},
 							sprite:{},
 							img:{},
+							
 							load:function(name,file){
+								
 								if (typeof file==="undefined")
 									file =  this.app.options.get("paths").images+""+name;
+								
 								this.Sources.append(this.SpriteAppend(name,file));
+								
 								return this.Sources.getByName(name);
+								
 							},
+							
 							SpriteCreate:function(file,src,name){
+								
 								this.SpriteLoadNumber++;
+								
 								this.SpriteLoadTime += (10*this.app.delta_speed)*this.SpriteLoadNumber;
+								
 								return this.sprite = Object.create(this.Sprite,{file:{value:file},src:{value:src},name:{value:name}});
+								
 							},
+							
 							SpriteAppend:function(name,file){
+								
 								return (this.img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
+								
 							},
+							
 							SpriteUnload:function(name,file){
+								
 								delete this.Sources.getByName(name);
 								//return this.SpriteLoad(name,file);
+								
 							},
+							
 							webLoad:function(name,address){
+								
 								this.SpriteWebItems[name] = new Image();
+								
 								this.SpriteWebItems[name].src = address;
 								return this.SpriteWebItems[name];
+								
 							},
 							graphicsLibrary:function(){
 								this.Sprite = Object.create(null);
@@ -3005,6 +3030,9 @@ return;
 							flip:function(){
 
 								this.fillStyle = (this.app.canvas.canvas.style.background=="transparent");
+								
+								
+								
 								//this.buffer_context.save();
 								//Set scale to client scale
 								this.scale = this.app.client.scale;
@@ -3292,9 +3320,9 @@ return;
 								this.font(this.stat.h+"em "+style);
 								this.stat.h = this.point*this.stat.h;
 
-								this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2);
+								this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2));
 
-								//(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+								//(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
 								this.font(f);
 								this.clean();
 							},
@@ -3311,12 +3339,12 @@ return;
 									//if (App.input.released)
 									//	if (App.input.delay<1)
 									//		loc(),App.input.delay = 1;
-									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
 								}
 								else
 								{
 									this.opacity(this.stat.a*0.75);
-									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
 								}
 								this.font(f);
 								this.clean();
@@ -3336,7 +3364,7 @@ return;
 								{
 								this.colour("#00A0F1");
 								this.buffer_context.beginPath();
-								this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x-this.stat.w*0.2, this.stat.y-this.stat.h*0.2, this.stat.w*1.1, this.stat.h*1.1);
+								this.stat.c?this.buffer_context.rect(this.stat.x-Math.floor(this.stat.w/2), this.stat.y-Math.floor(this.stat.h/2), this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x-this.stat.w*0.2, this.stat.y-this.stat.h*0.2, this.stat.w*1.1, this.stat.h*1.1);
 								this.buffer_context.fill();
 
 								this.colour("#DDDDDD");
@@ -3351,12 +3379,12 @@ return;
 									}
 
 
-									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
 								}
 								else
 								{
 									this.opacity(this.stat.a*0.75);
-									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-this.stat.w/2-this.stat.s,this.stat.y-this.stat.h/2):this.buffer_context.fillText(string,this.stat.x,this.stat.y+this.stat.h/2);
+									(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
 								}
 								this.font(f);
 								this.clean();
@@ -3385,7 +3413,7 @@ return;
 							rect_ext:function(x,y,w,h,s,a,c,colour){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
 								this.buffer_context.beginPath();
-								this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+								this.stat.c?this.buffer_context.rect(this.stat.x-Math.floor(this.stat.w/2), this.stat.y-Math.floor(this.stat.h/2), this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
 								this.buffer_context.fill();
 
 								this.clean();
@@ -3393,7 +3421,7 @@ return;
 							rect_stroke:function(x,y,w,h,s,a,c,colour,l){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
 								this.buffer_context.beginPath();
-								this.stat.c?this.buffer_context.rect(this.stat.x-this.stat.w/2, this.stat.y-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+								this.stat.c?this.buffer_context.rect(this.stat.x-Math.floor(this.stat.w/2), this.stat.y-Math.floor(this.stat.h/2), this.stat.w, this.stat.h):this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
 								this.buffer_context.fillStyle = 'transparent';
 								this.buffer_context.fill();
 								this.buffer_context.lineWidth = l || 1;
@@ -3425,22 +3453,27 @@ return;
 								this.stat = this.chk(x,y,w,h,s,a,1,colour);
 								this.buffer_context.translate(this.stat.x,this.stat.y);
 								this.buffer_context.rotate(angle*0.0174532925);
-								this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+								this.stat.c?this.buffer_context.rect(0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2), this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
 								this.buffer_context.rotate(-angle*0.0174532925);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
 								this.clean();
 							},
 							rect_gradient:function(x,y,w,h,s,a,c,colour,colour2,angle){
 								this.stat = this.chk(x,y,w,h,s,a,c,colour);
-								return;
-								//log(x,y,w,h,s,a,c,c,colour,colour2,angle);
-								//log(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.s,this.stat.a,this.stat.c,this.stat.colour);
 								this.buffer_context.translate(this.stat.x,this.stat.y);
 								this.buffer_context.rotate(angle*0.0174532925);
-
-								this.stat.c?this.grd = this.buffer_context.createLinearGradient(this.stat.w/2,0, this.stat.w/2, this.stat.h/2):this.grd = this.buffer_context.createLinearGradient(0,0, this.stat.w, this.stat.h);
+								
+								if (!this.stat.w)
+									return
+								if (!this.stat.h)
+									return
+								if (!this.stat.x)
+									return
+								if (!this.stat.y)
+									return
+								this.stat.c?this.grd = this.buffer_context.createLinearGradient(Math.floor(this.stat.w/2),0, Math.floor(this.stat.w/2), Math.floor(this.stat.h/2)):this.grd = this.buffer_context.createLinearGradient(0,0, this.stat.w, this.stat.h);
 								this.buffer_context.beginPath();
-								this.stat.c?this.buffer_context.rect(0-this.stat.w/2,0-this.stat.h/2, this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+								this.stat.c?this.buffer_context.rect(0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2), this.stat.w, this.stat.h):this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
 								this.grd.addColorStop(0, colour);
 								this.grd.addColorStop(1, colour2);
 								this.buffer_context.fillStyle = this.grd;
@@ -3481,7 +3514,7 @@ return;
 								document.body.appendChild(this.elm);
 								this.elm.src = image.src;
 								return this.elm;
-								//(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+								//(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 							},
 							image_replacecol:function(image,x,y,s,a,c,colour){
 								
@@ -3528,19 +3561,19 @@ return;
 								image.src = c.toDataURL('image/png');
 								
 								
-								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 							},
 							image_ext:function(image,x,y,s,a,c){
 								this.stat = this.chk(x,y,image.width,image.height,s,a,c);
-								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 							},
 							image_ext2:function(image,x,y,sx,sy,a,c){
 								this.stat = this.chk(x,y,image.width,image.height,sx,a,c);
 								this.stat2 = this.chk(x,y,image.width,image.height,sy,a,c);
-								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w*this.stat.s,this.stat.h*this.stat2.s):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w*this.stat.s,this.stat.h*this.stat2.s);
+								(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w*this.stat.s,this.stat.h*this.stat2.s):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w*this.stat.s,this.stat.h*this.stat2.s);
 							},
-							image_centered:function(image,x,y){
-								this.image_ext(image,x,y,1,1,true);
+							image_centered:function(image,x,y,a){
+								this.image_ext(image,x,y,1,a,true);
 							},
 							image:function(image,x,y){
 								this.image_ext(image,x,y,1,1,false);
@@ -3566,7 +3599,7 @@ return;
 
 
 
-								(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+								(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 
 
 							},
@@ -3576,7 +3609,7 @@ return;
 								var scale = (1.1*this.stat.s)*this.app.getScale();
 								this.buffer_context.translate(this.stat.x,this.stat.y);
 								this.buffer_context.rotate(angle*0.0174532925);
-								(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,0-this.stat.w/2,0-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,0,0,this.stat.w,this.stat.h);
+								(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,0,0,this.stat.w,this.stat.h);
 								this.buffer_context.rotate(-angle*0.0174532925);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
 							},
@@ -3584,11 +3617,64 @@ return;
 								this.stat = this.chk(x,y,image.width,image.height,s,a,true);
 								this.buffer_context.translate(this.stat.x,this.stat.y);
 								this.buffer_context.rotate(angle*0.0174532925);
-								(this.stat.c)?this.buffer_context.drawImage(image,0-this.stat.w/2,0-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,0,0,this.stat.w,this.stat.h);
+								(this.stat.c)?this.buffer_context.drawImage(image,0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,0,0,this.stat.w,this.stat.h);
 								this.buffer_context.rotate(-angle*0.0174532925);
 								this.buffer_context.translate(-this.stat.x,-this.stat.y);
 							},
 
+							texture:function(texture,xx,yy,w,h,yoff,xoff,xonly,xo,yo){
+								
+								var yoff = yoff||0;
+								var yo = yo||0;
+								var xo = xo||0;
+								var y = 0;
+								var img = texture;
+								var width =w;
+								var height = h;
+
+								var s = 1;
+
+								var bh = img.height;
+								var img_width = img.width;
+								var img_height = img.height;
+
+								var img_width_scaled = +img_width*s;
+								var img_height_scaled =+img_height*s;
+								
+								var offy = yy;
+								var offx = xx;
+
+								var by = Math.round((offy/s+height+(-yoff/s-height))%img_height_scaled-img_height_scaled);
+								var by_first = by;
+
+
+
+								var bx =  +(offx/s+(width*s))%img_width_scaled-img_width_scaled;
+
+								var span_width = (width+img_width)*s+img_width_scaled;
+								var span_height = (height+bh)*s+img_height_scaled;
+								
+								
+								
+								if (xonly)
+									span_width = 0;
+								for (bx; bx < span_width; bx += img_width_scaled)
+								{
+									var x = (bx-(width*s)/2)-1*bx/img_width;
+
+									for (by = by_first; by < span_height; by += img_height_scaled)
+									{
+										var y = (-by+height*s)+1*by/bh;
+
+										this.image(img,xo+x,yo+y,s,1,true);
+
+									}
+								}
+
+							},
+							
+							
+							
 							setBleed:function(threshold){
 								this.bleed = threshold;
 							},
@@ -3651,13 +3737,13 @@ return;
 											loc();
 										this.app.input.delay = 1;
 									}
-									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 								}
 								else
 								{
 									if (this.highlight)
 									this.opacity(this.stat.a*0.75);
-									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 								}
 								return w;
 							},
@@ -3673,13 +3759,13 @@ return;
 									this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
 									if (this.app.input.pressed)
 											loc(),this.app.input.delay = 1;
-									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 								}
 								else
 								{
 									if (this.highlight)
 									this.opacity(this.stat.a*0.75);
-									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-this.stat.w/2,this.stat.y-this.stat.h/2,this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+									(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 								}
 								return w;
 							},
