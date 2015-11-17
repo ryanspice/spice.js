@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Application</title>    
+    <script rel=prefetch type="application/x-javascript" src="spice.js"></script>
+</head>
+<body>
+<script rel="prefetch" name="main" type="text/javascript" defer>
+	var Application = SpiceJS.create();
+
+	console.log(Application);
+	//Application OnLoad
+	Application.OnLoad = function (self) {
+
+		self.Init("Example SpiceJS", 720, 320);
+
+		self.canvas.setBackground("#000000");
+
+		//self.options.set({paths:{images:""}});
+
+		self.ext.metatag.metaFavicon("favicon.png");
+
+	};
+
+	//Application main loop Object[init,update,draw]
+	Application.main= {
+
+		name:"Example",
+
+		init:function() {
+
+			//Initialization Logic
+			this.img = this.graphics.load("../favicon");
+
+			return true;
+		},
+
+		update:function() {
+
+			//Game logic	
+			//console.log(this.app.ext.input.preventNextInput()&&this.app.ext.input.keyboardCheck("t")&&this.app.ext.input.keyboardCheck("ctrl"))
+			//console.log(this.app.ext.input.keyboardCheck("r")&&this.app.ext.input.keyboardCheck("ctrl"))
+
+			return true;
+		},
+
+		draw:function() {
+
+			this.visuals.rotate_at(25,-this.img.width/2,-this.img.height/2);
+			this.visuals.image(this.img,0,0);
+			this.visuals.setBleed(0.9);
+			return true;
+		}
+
+	};
+</script>
+</body>
+</html>
