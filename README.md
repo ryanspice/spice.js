@@ -48,45 +48,31 @@ Current documentation is for an older version of SpiceJS.
 
 ####completed
 <ul>
-	 <li>game state logic</li>
-	 <li>object inheritance </li>
-	  <li>fps and delta time calculations</li>
-	 <li>graphics handling</li>
-	 <li>advanced scaling</li>
+	<li>game state logic</li>
+	<li>object inheritance </li>
+	<li>fps and delta time calculations</li>
+	<li>graphics handling</li>
+	<li>advanced scaling</li>
+	<li>app options</li>
 </ul>
 
 ####in-testing
 <ul>
-	 <li>app options</li>
-	  <li>multi-touch + mouse & keyboard input detection</li>
-	 <li>advanced drawing (blending, elements, buttons)</li>
-	  <li>double buffering</li>
-	  <li>linear and radial collision</li>
+	<li>multi-touch + mouse & keyboard input detection</li>
+	<li>advanced drawing (blending, elements, buttons)</li>
+	<li>double buffering</li>
+	<li>linear and radial collision</li>
+	<i>ability to instantiate multiple app canvases on a single page</i>
 </ul>
 
 ####coming soon
  <ul>
-	 <li>Independent Application</li>
-	 <i>enable the ability to instantiate multiple app canvases on a single page</i>
 	 <li>Multi-Channel Audio</li>
 	 <i>IE Mobile is my main testing device, and audio is a hassle, and so this is on hold</i>
 	 <li>Cookies</li>
 	 <i>plans to incorporate cookies is not prioritized and I am currently using [Cookies.js by Scott Hamper](https://github.com/ScottHamper/Cookies)</i>
 	 </ul>
 
-## getting started
-
-<b>B</b>efore you start developing your App in SpiceJS, it is recommended to have some knowledge of Object.create and Prototype javascript notation.
-
-<b>S</b>piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports [```Request Animation Frame```](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame) and [```Hardware Acceleration```](http://en.wikipedia.org/wiki/Hardware_acceleration)  will have a nice time.
-
-<b>T</b>he framework is designed on providing you the most efficient way to develop a cross platform, multi touch, and multi resolution application with JavaScript.
-
-<b>P</b>rior to recent times developers had to rely on functions such as setTimeout(), however, up to date browsers can support a new feature called requestAnimationFrame() which can provide a high calculation of Frame Rate. This allows developers to create extensive programs, and fully animated games.
-
-### further readings...
-#####[Documentation](http://js.ryanspice.com/)
-You can read the [Documentation](http://js.ryanspice.com/) and more on SpiceJS and how to create SpiceJS apps [here](http://js.ryanspice.com/).
 
 ## examples
 
