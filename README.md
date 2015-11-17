@@ -18,10 +18,12 @@ Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
 To get started, check out [the documentation](http://js.ryanspice.com)!
 
+Current documentation is for an older version of SpiceJS. 
+
 ## table of contents
 
-* [features][features]	
-	
+* [features][features]
+
 	* [completed][completed]
 	* [in-testing][in-testing]
 	* [coming soon][coming soon]
@@ -29,7 +31,7 @@ To get started, check out [the documentation](http://js.ryanspice.com)!
 	* [essential functions][essential functions]
 	* [setting up your application][setting up your application]
 	* [further readings...][further readings...]
- 
+
 * [examples][examples]
  * [particle][particle]
  * [animations][animations]
@@ -71,10 +73,10 @@ To get started, check out [the documentation](http://js.ryanspice.com)!
 	 <li>Cookies</li>
 	 <i>plans to incorporate cookies is not prioritized and I am currently using [Cookies.js by Scott Hamper](https://github.com/ScottHamper/Cookies)</i>
 	 </ul>
-	 
-## getting started	
 
-<b>B</b>efore you start developing your App in SpiceJS, it is recommended to have some knowledge of Object.create and Prototype javascript notation. 
+## getting started
+
+<b>B</b>efore you start developing your App in SpiceJS, it is recommended to have some knowledge of Object.create and Prototype javascript notation.
 
 <b>S</b>piceJS, designed heavily on the Canvas API, has support across most popular devices and browsers. Any device which supports [```Request Animation Frame```](https://developer.mozilla.org/en/docs/Web/API/window.requestAnimationFrame) and [```Hardware Acceleration```](http://en.wikipedia.org/wiki/Hardware_acceleration)  will have a nice time.
 
@@ -85,46 +87,46 @@ To get started, check out [the documentation](http://js.ryanspice.com)!
 
 
 ### essential functions
-##### Setup 
+##### Setup
 
 After your ```<body> </body>``` you want to add your code into a script tag:
 
  ```<script rel="prefetch" name="main" type="text/javascript" defer></script> ```
 
-Note: *You may load an external JavaScript file with the same code.* 
+Note: *You may load an external JavaScript file with the same code.*
 
 ##### App.OnLoad
 
 For you to specify options before the application begins.
-Every app must include an *App.OnLoad* override function. 
+Every app must include an *App.OnLoad* override function.
 
 ```bash
 App.OnLoad = function(){
 
 	//App.Init(String::title, Int::width, Int::height)
 	App.Init("Title", 1920, 480);
-	
+
 };
 ```
 
 ##### App.main
 
-The application won't noticeably do anything aside from positioning and scaling the canvas at this point, and so what you want to do here is simply add your game logic in the correct place, and once the application starts up, it will replace its default loop with yours. 
+The application won't noticeably do anything aside from positioning and scaling the canvas at this point, and so what you want to do here is simply add your game logic in the correct place, and once the application starts up, it will replace its default loop with yours.
 
-This is what an empty *App.main* override function looks like. 
+This is what an empty *App.main* override function looks like.
 
-You must have these functions in order for the application loop to function properly. 
+You must have these functions in order for the application loop to function properly.
 
 ```bash
 App.main = {
 
  init:function(){},
- 
+
  update:function(){},
- 
- draw:function(){}	
- 
- 
+
+ draw:function(){}
+
+
 };
 ```
 
@@ -134,67 +136,67 @@ Note: *state shifting is implemented but disabled, support for multiple rooms/st
 
 ##### App.options
 
-Normally you find your options object inside SpiceJS, however during App.OnLoad, you can override settings, and make underlying changes to SpiceJS before the application starts. 
+Normally you find your options object inside SpiceJS, however during App.OnLoad, you can override settings, and make underlying changes to SpiceJS before the application starts.
 
-You can do this by calling ```App.options = options```, ```App.options.* = *```, or ```App.setOptions(options) [soon]```. 
+You can do this by calling ```App.options = options```, ```App.options.* = *```, or ```App.setOptions(options) [soon]```.
 
 ```bash
 var options = {
-            
+
             //Global
 			mute:false,
-            
+
             //Paths
 			paths:{
-			
+
 				data:"data/",
-				
+
 				images:"images/",
-				
+
 				url:""
-				
+
 			},
-            
+
             //Canvas
 			canvas:{
-                
+
                 //Toggle the use of options.canvas
 				override:false,
-                
+
                 //Use canvas.name, canvas.buffer
 				name:'canvas',
 				buffername:'buffer',
-                
+
                 //Toggle the use of double-buffering
 				buffer:false,
-                
+
                 //Assign canvas element background colour
 				color:'#0000000',
-                
+
                 //Assign canvas element position properties
 				position:{
-				
+
 					position:'absolute',
-					
+
 					top:0,
-					
+
 					left:window.innerWidth/2,
-					
+
 					center:true,
-					
+
 					z:1
-					
+
 				},
-				
+
                 //Assign canvas size properties
                 size:{
-				
+
 					width:320,
-					
+
 					height:480
-					
+
 				}
-				
+
 			}
 ```
 ### setting up your application
@@ -272,7 +274,7 @@ teaching points: <i>sprites, blitting, animations</i>
 
 [download](https://github.com/ryanspice/spice.js/blob/master/examples/parallax/parallax.7z)
 
-A small example previewing what it's like to use multiple backgrounds on a parallaxing path. 
+A small example previewing what it's like to use multiple backgrounds on a parallaxing path.
 
 teaching points: <i>external files, loading screen, parallaxing</i>
 
@@ -286,11 +288,8 @@ teaching points: <i>external files, loading screen, parallaxing</i>
 
 [download](https://github.com/ryanspice/spice.js/blob/master/examples/isometric/isometric.7z)
 
-Using multiple arrays to store map background and object data. This example previews scaling and panning an isometric randomly generated map. 
+Using multiple arrays to store map background and object data. This example previews scaling and panning an isometric randomly generated map.
 
 teaching points: <i>sprites, blitting, viewport, drawing and working with isometric data</i>
 
 [```JavaScript Comma Operator```](http://javascriptweblog.wordpress.com/2011/04/04/the-javascript-comma-operator/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+JavascriptJavascript+%28JavaScript%2C+JavaScript%29), [```Object.create()```](http://www.htmlgoodies.com/beyond/javascript/object.create-the-new-way-to-create-objects-in-javascript.html), [```Object Creation Patterns```](http://www.htmlgoodies.com/html5/javascript/some-useful-javascript-object-creation-patterns.html#fbid=T4GDU9yVQOc)
-
-
-
