@@ -1,5 +1,8 @@
 var path = require('path');
 
+require("babel-core/register");
+require("babel-polyfill");
+
 var env = process.argv.indexOf('--env') === -1 ? false : true;
 
 var source = {
@@ -44,7 +47,7 @@ if (env===true)
 
 var webpackConfig = {
 
-    entry:source.input.path + source.input.js,
+    entry: ["babel-polyfill", source.input.path + source.input.js],
 
     output: {
 
@@ -58,8 +61,23 @@ var webpackConfig = {
 
     loaders: [
 
-        { test: path.join(__dirname, 'src/js'),loader: 'babel-loader' }
+    //    { test: path.join(__dirname, 'src/'), exclude: /node_modules/, loader: "babel-loader"}
+        {
+          loader: "babel-loader",
 
+          // Skip any files outside of your project's `src` directory
+          include: [
+            path.resolve(__dirname, "src"),
+          ],
+
+          // Only run `.js` and `.jsx` files through Babel
+          test: /\.jsx?$/,
+
+          // Options to configure babel with
+          query: {
+            presets: ['es2015', 'stage-0']
+          }
+        }
     ]
 
     },
