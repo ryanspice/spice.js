@@ -34,7 +34,7 @@ import Input from './modules/input.js';
 
 import Cookies from './modules/cookies.js';
 
-console.log(Cookies);
+//console.log(Cookies);
 
 window.Stats = Statistics;
 
@@ -62,7 +62,7 @@ var SpiceJS = window.SpiceJS = Object.create({
 	//Initalize SpiceJS Controller
 	init:function(){
 
-        let time = this.TimeToBuild = new Date().getTime();
+        //let time = this.TimeToBuild = new Date().getTime();
 
 		this.window = window;
 
@@ -590,7 +590,9 @@ var SpiceJS = window.SpiceJS = Object.create({
 
 						  // Here we run a very simple Flappy of the Graph API after login is successful.
 						  // This testAPI() function is only called in those cases.
-						  function testAPI() {
+
+                          /*
+                          function testAPI() {
 							log('Welcome!  Fetching your information.... ');
 
 							FB.api('/me', function(response) {
@@ -599,6 +601,9 @@ var SpiceJS = window.SpiceJS = Object.create({
 							  log('Good to see you, ' + response.name + '.');
 							});
 						  }
+
+
+                          */
 						},
 
 					//facebook callback
@@ -2973,6 +2978,23 @@ return;
 								y = this.app.input.touched.last.y;}
 								return stat.c?((x>stat.x-stat.w/2&&x<stat.x+stat.w/2&&y>stat.y-stat.h/2&&y<stat.y+stat.h/2)?true:false):((y>stat.x&&x<stat.x+stat.w&&y>stat.y&&y<stat.y+stat.h)?true:false);
 							},
+
+                            line2:function(vec,vec2,col,a,free){
+
+                                let x = vec.x;
+                                let y = vec.y;
+                                let x2 = vec2.x;
+                                let y2 = vec2.y;
+								this.stat = this.chk(x,y,x2,y2,1,a,true);
+								this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
+								this.buffer_context.beginPath();
+								this.buffer_context.moveTo(this.stat.x,this.stat.y);
+								this.buffer_context.lineTo(this.stat2.x,this.stat2.y);
+								this.buffer_context.strokeStyle = col;
+								this.buffer_context.stroke();
+
+                            },
+
 							line:function(x,y,x2,y2,col,a){
 								this.stat = this.chk(x,y,x2,y2,1,a,true);
 								this.stat2 = this.chk(x2,y2,x2,y2,1,a,true);
@@ -3090,14 +3112,44 @@ return;
 
 							}
 
+                            /*
 
+                                circle now allows passing vectors
 
+                                Test: argument based functions
+                                    Method1:
+                                        if based on first argument
+                                            Method2 (unused):
+                                                inherit _circle function and pass accordingly
 
+                            */
 
+							,circle:function(XVec,YR,RC,CA,A){
 
+                                let x, y, r, col , a;
 
+                                x = XVec;
+                                y = YR;
+                                r = RC;
+                                col = CA;
+                                a = A;
 
-							,circle:function(x,y,r,col,a){
+                                if (typeof x === 'object')
+                                {
+
+                                    x = XVec.x;
+                                    y = XVec.y;
+                                    r = YR;
+                                    col = RC;
+                                    a = CA;
+
+                                }
+
+                                this._circle(x,y,r,col,a);
+
+							}
+
+							,_circle:function(x,y,r,col,a){
 								this.stat = this.chk(x,y,1,1,r,a,true,col);
 								this.buffer_context.beginPath();
 								this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s*this.scale, 0, 2 * Math.PI, false);
@@ -3144,6 +3196,8 @@ return;
 
 			temp = Object.create(temp.prototype,temp.constructor);
 
+            temp.window = this.window;
+            temp.document = document;
 
 			temp.id = this.window.appsNextId;
 

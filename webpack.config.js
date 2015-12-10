@@ -59,7 +59,7 @@ if (env===true)
     webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html, template:'./src/index.html' }));
 }
 
-var webpackConfig = {
+module.exports = {
 
     entry: ["babel-polyfill", source.input.path + source.input.js],
 
@@ -75,35 +75,34 @@ var webpackConfig = {
 
         loaders: [
 
-        //    { test: path.join(__dirname, 'src/'), exclude: /node_modules/, loader: "babel-loader"}
             {
+
               loader: "babel-loader",
 
-              // Skip any files outside of your project's `src` directory
-              include: [
-                path.resolve(__dirname, "src"),
-              ],
+              include: [path.resolve(__dirname, "src")],
 
-              // Only run `.js` and `.jsx` files through Babel
               test: /\.jsx?$/
+
           },
 
           {
+
             test: /\.scss$/,
+
             loaders: ["style", "css", "sass"]
+
           }
 
         ],
 
         sassLoader: {
+
           includePaths: [path.resolve(__dirname, "./css")]
+
         }
+
     },
 
     plugins: webpackPlugins
 
 };
-
-//require('./src/main.js')
-
-module.exports = webpackConfig;

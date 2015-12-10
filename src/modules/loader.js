@@ -1,4 +1,5 @@
 import SJSClass from './sjsclass.js';
+
 export default class Loader extends SJSClass {
 
 	constructor(app) {
@@ -17,18 +18,16 @@ export default class Loader extends SJSClass {
 
 		if (!this.getImageReference(name).complete) {
 
-			var _this = this;
-			//console.log('Failed:' + name + " : " + this.ImageBuffer);
+			setTimeout(()=> {
 
-			setTimeout(function() {
-				_this.checkLoaded(name)
+				this.checkLoaded(name);
+
 			}, this.ImageBufferTime);
 
 		} else {
 
-
-			//console.log('Loaded: ' + name + " : " + this.ImageBuffer.length);
 			this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
+
 		}
 	}
 
@@ -40,8 +39,11 @@ export default class Loader extends SJSClass {
 	getImageReference(string) {
 
 		let elementPos = this.ImageCache.map(function(img) {
+
 			return img.string;
+
 		}).indexOf(string);
+
 		let objectFound = this.ImageCache[elementPos];
 
 		return objectFound;
@@ -50,18 +52,19 @@ export default class Loader extends SJSClass {
 	loadImage(string) {
 
 		let name = string;
+
 		let img = this.graphics.load(string);
+
 		let cacheIndex = this.ImageCache.push(img);
 
 		img.string = name;
 
-
 		this.ImageBuffer.push(name);
+		
+		setTimeout(()=> {
 
-		var _this = this;
+			this.checkLoaded(name)
 
-		setTimeout(function() {
-			_this.checkLoaded(name)
 		}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
 
 		return this.ImageCache[cacheIndex - 1];

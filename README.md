@@ -54,12 +54,17 @@ Current documentation is for an older version of SpiceJS.
 	<li>graphics handling</li>
 	<li>advanced scaling</li>
 	<li>app options</li>
+	<li>cookies</li>
+	<li>particles</li>
+	<li>graphics loader</li>
 </ul>
 
 ####in-testing
 <ul>
 	<li>multi-touch + mouse & keyboard input detection</li>
 	<li>advanced drawing (blending, elements, buttons)</li>
+	<li>drawing using vectors</li>
+	<li>pathing</li>
 	<li>double buffering</li>
 	<li>linear and radial collision</li>
 	<i>ability to instantiate multiple app canvases on a single page</i>
@@ -69,8 +74,6 @@ Current documentation is for an older version of SpiceJS.
  <ul>
 	 <li>Multi-Channel Audio</li>
 	 <i>IE Mobile is my main testing device, and audio is a hassle, and so this is on hold</i>
-	 <li>Cookies</li>
-	 <i>plans to incorporate cookies is not prioritized and I am currently using [Cookies.js by Scott Hamper](https://github.com/ScottHamper/Cookies)</i>
 	 </ul>
 
 
