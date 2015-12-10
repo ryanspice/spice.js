@@ -5,6 +5,21 @@ require("babel-polyfill");
 
 var env = process.argv.indexOf('--env') === -1 ? false : true;
 
+var spawn = require('child_process').spawn;
+
+
+function run_cmd(cmd, args, callBack ) {
+    var child = spawn(cmd, args);
+    var resp = "";
+
+    child.stdout.on('data', function (buffer) { resp += buffer.toString() });
+    child.stdout.on('end', function() { callBack (resp) });
+} // ()
+
+
+run_cmd( "C:/Git/spice.js/logs/loggins.bat", ["a","b","c","d"], function(text) { console.log (text) });
+
+
 var source = {
 
     input:{
@@ -42,7 +57,6 @@ if (env===true)
     webpackPlugins.push(new webpackUglifyJsPlugin({ minimize: true }));
 
     webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html, template:'./src/index.html' }));
-
 }
 
 var webpackConfig = {
@@ -59,32 +73,37 @@ var webpackConfig = {
 
     module: {
 
-    loaders: [
+        loaders: [
 
-    //    { test: path.join(__dirname, 'src/'), exclude: /node_modules/, loader: "babel-loader"}
-        {
-          loader: "babel-loader",
+        //    { test: path.join(__dirname, 'src/'), exclude: /node_modules/, loader: "babel-loader"}
+            {
+              loader: "babel-loader",
 
-          // Skip any files outside of your project's `src` directory
-          include: [
-            path.resolve(__dirname, "src"),
-          ],
+              // Skip any files outside of your project's `src` directory
+              include: [
+                path.resolve(__dirname, "src"),
+              ],
 
-          // Only run `.js` and `.jsx` files through Babel
-          test: /\.jsx?$/,
+              // Only run `.js` and `.jsx` files through Babel
+              test: /\.jsx?$/
+          },
 
-          // Options to configure babel with
-          query: {
-            presets: ['es2015', 'stage-0']
+          {
+            test: /\.scss$/,
+            loaders: ["style", "css", "sass"]
           }
-        }
-    ]
 
+        ],
+
+        sassLoader: {
+          includePaths: [path.resolve(__dirname, "./css")]
+        }
     },
 
     plugins: webpackPlugins
 
 };
 
+//require('./src/main.js')
 
 module.exports = webpackConfig;

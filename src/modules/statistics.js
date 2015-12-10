@@ -1,60 +1,54 @@
-var utils = utils || {};
+import utils from './utils.js';
 
-utils.FNV_OFFSET_32 = 0x811c9dc5;
-
-utils.randomHash = function(){
-
-    utils.FNV_OFFSET_32 = '#'+Math.floor(Math.random()*16777215).toString(16);
-
-}
-
-utils.hashFnv32a = function (input) {
-
-    var hval = utils.FNV_OFFSET_32;
-
-    // Strips unicode bits, only the lower 8 bits of the values are used
-    for (var i = 0; i < input.length; i++) {
-
-        hval = hval ^ (input.charCodeAt(i) & 0xFF);
-
-        hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
-
-    }
-
-    return hval >>> 0;
-}
-
-utils.toHex = function (val) {
-
-    return ("0000000" + (val >>> 0).toString(16)).substr(-8);
-
-}
-
-function wait(t){
-
-  return new Promise((r) => setTimeout(r, t));
-
-}
-
-window.wait = wait;
-
-class Log { }
-
-class Build {
-
-    static build;
-
-    static scriptloadtime;
-
-    static uptime;
-
-}
+import * as StatisticTypes from './statisticstypes.js';
 
 class StatisticsController {
 
-    constructor(){
+    static get logs() {
 
-        this.logs = this.constructor.logs;
+        return this.monitor.logs;
+
+    }
+
+    static set logs(value) {
+
+        this.monitor = value;
+
+    }
+
+    static get monitor() {
+
+        return this._monitor;
+
+    }
+
+    static set monitor(value) {
+
+        this._monitor = value;
+
+    }
+
+    get count() {
+
+        return this.monitor.count;
+
+    }
+
+    set count(value) {
+
+        this.monitor.count = value;
+
+    }
+
+    get details() {
+
+        return StatisticsController._details;
+
+    }
+
+    set details(value) {
+
+        this._details = StatisticsController._details;
 
     }
 
@@ -77,8 +71,6 @@ class StatisticsController {
 
             return Object.keys(this.logs);
 
-            break;
-
             case 'details':
 
             return Object.create(
@@ -86,124 +78,191 @@ class StatisticsController {
               Object.getOwnPropertyDescriptors(this.logs)
             );
 
-            break;
-
             case 'entries':
 
             return Object.entries(this.logs);
-
-            break;
 
             case 'values':
 
             return Object.values(this.logs);
 
-            break;
-
         }
 
     }
 
-    static get logs() { return this.monitor.logs; }
+    constructor(){
 
-    static set logs(value) { this.monitor = value; }
+        this.logs = this.constructor.logs;
+        this.count = 0;
 
-    static get monitor() { return this._monitor; }
-
-    static set monitor(value) { this._monitor = value; }
-
-    get details() { return StatisticsController._details; }
-
-    set details(value) { this._details = StatisticsController._details; }
-
+    }
 
 }
 
-export default class Statistics extends StatisticsController {
+class Statistics extends StatisticsController {
 
-        constructor(){
+    constructor(){
 
-            super();
+        super();
+
+    }
+
+    async log(){
+
+        let name = '';
+
+        let curLog = this.logs;
+
+        let newLog = {};
+
+        let hashLog = {};
+
+        let time = (new Date().getTime());
+
+        let time2 = (new Date().getTime());
+
+        let timeHash = this.count + time;
+
+        timeHash = utils.hashFnv32a(timeHash.toString());
+
+        if (typeof arguments[2] != 'undefined')
+        {
+
+            name = arguments[2];
+
+            if (name=='compile')
+                newLog = curLog[name] || new StatisticTypes.Compile(name);
+            else
+            if (name=='build')
+                newLog = curLog[name] || new StatisticTypes.Build(name);
+            else
+            if (name=='loop')
+                newLog = curLog[name] || new StatisticTypes.Loop(name);
+            else
+            if (name=='state')
+                newLog = curLog[name] || new StatisticTypes.App(name);
+            else
+                newLog = curLog[name] || new StatisticTypes.Log(name);
+
+            hashLog = newLog[ this.count + " " +arguments[0]] || new StatisticTypes.Log(name);
+
+            hashLog = arguments[1];
+
+            newLog[arguments[0]] = hashLog;
+
+            curLog[name] = newLog;
+
+        }
+        else {
+
+            name = arguments[0];
+
+            if (name=='compile')
+                newLog = curLog[name] || new StatisticTypes.Compile(name);
+            else
+            if (name=='build')
+                newLog = curLog[name] || new StatisticTypes.Build(name);
+            else
+            if (name=='loop')
+                newLog = curLog[name] || new StatisticTypes.Loop(name);
+            else
+            if (name=='state')
+                newLog = curLog[name] || new StatisticTypes.App(name);
+            else
+                newLog = curLog[name] || new StatisticTypes.Log(name);
+
+            hashLog = newLog[ this.count + " " +arguments[0]] || new StatisticTypes.Log(name);
+
+            hashLog = arguments[1];
+
+            newLog[arguments[0]] = hashLog;
+
+            curLog[name] = newLog;
 
         }
 
-        async log(){
+        this.count++;
 
-            let name = '';
+        this.logs = curLog;
 
-            let curLog = this.logs;
+    }
 
-            let newLog = {};
+    async monitor(func,arg){
 
-            let hashLog = {};
+        let startTime = new Date().getTime();
 
-            let time = (new Date().getTime());
+        await func(arg);
 
-            let time2 = (new Date().getTime());
+        let endTime = new Date().getTime();
 
-            let timeHash = this.count + time;
+        this.log("time",(-startTime+endTime),func.name);
 
-            timeHash = utils.hashFnv32a(timeHash.toString());
+        return startTime - endTime;
+    }
 
-            if (typeof arguments[2] != 'undefined')
-            {
+    convertArrayOfObjectsToCSV(args) {
+        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
-                name = arguments[2];
-
-                if (name=='build')
-                    newLog = curLog[name] || new Build(name);
-                else
-                    newLog = curLog[name] || new Log(name);
-
-                hashLog = newLog[ this.count + " " +arguments[0]] || new Log();
-
-                hashLog = arguments[1];
-
-                newLog[arguments[0]] = hashLog;
-
-                curLog[name] = newLog;
-
-            }
-            else {
-
-                name = arguments[0];
-
-                if (name=='build')
-                    newLog = curLog[name] || new Build(name);
-                else
-                    newLog = curLog[name] || new Log(name);
-
-                hashLog = newLog[ this.count + " " +arguments[0]] || new Log();
-
-                hashLog = arguments[1];
-
-                newLog[arguments[0]] = hashLog;
-
-                curLog[name] = newLog;
-
-            }
-
-            this.count++;
-
-            this.logs = curLog;
-
+        data = args.data || null;
+        if (data == null || !data.length) {
+            return null;
         }
 
-        async monitor(func,arg){
+        columnDelimiter = args.columnDelimiter || ',';
+        lineDelimiter = args.lineDelimiter || '\n';
 
-            let startTime = new Date().getTime();
+        keys = Object.keys(data[0]);
+
+        result = '';
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        data.forEach(function(item) {
+            ctr = 0;
+            keys.forEach(function(key) {
+                if (ctr > 0) result += columnDelimiter;
+
+                result += item[key];
+                ctr++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
+    }
+
+    writeToCSV(name){
+        
+        var logStream = fs.createWriteStream('log.txt', {'flags': 'a'});
+        // use {'flags': 'a'} to append and {'flags': 'w'} to erase and write a new file
+        logStream.write('Initial line...');
+        logStream.end('this is the end line');
 
 
-            this.log("tStart",(startTime),func.name);
 
-            await func(arg);
 
-            let endTime = new Date().getTime();
+        let dataString = "";
+        var data =this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
 
-            this.log("tEnd",(endTime),func.name);
-            this.log("tDiff",(-startTime+endTime),func.name);
 
-            return startTime - endTime;
-        }
+        console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
+
+        var csvContent = "data:text/csv;charset=utf-8,";
+        data.forEach(function(infoArray, index){
+
+           dataString = infoArray.join(",");
+           csvContent += index < data.length ? dataString+ "\n" : dataString;
+
+        });
+
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", name+".csv");
+        link.click();
+
+    }
 
 }
+
+export default Statistics;

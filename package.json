@@ -1,0 +1,39 @@
+{
+  "name": "sjs",
+  "version": "0.0.1",
+  "description": "Html5 Canvas API Framework",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "babel-loader": "^6.2.0",
+    "babel-core": "^6.2.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-polyfill": "^6.2.0",
+    "babel-preset-stage-0": "^6.1.18",
+    "webpack": "^1.12.9",
+    "html-webpack-plugin": "^1.7.0",
+    "babel": "^6.1.18"
+  },
+  "devDependencies": {
+    "fs": "0.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanspice/spice.js.git"
+  },
+  "keywords": [
+    "games",
+    "html5",
+    "javascript",
+    "game"
+  ],
+  "author": "Ryan Spice",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanspice/spice.js/issues"
+  },
+  "homepage": "https://github.com/ryanspice/spice.js#readme"
+}

@@ -15,16 +15,36 @@
 		Research need for confining cursor
 */
 
-
-
-
 const Windows = window.Windows =  (typeof Windows=='undefined'?window:Windows);
 
+//import Loader from './modules/loader.js';
+
+import * as utils from './modules/utils.js';
+window.utils = utils.default;
+
+import Particles from './modules/particles.js';
+
+import SJSParticleController from './modules/particles.js';
+
+window.SJSParticleController = SJSParticleController;
+
 import Statistics from './modules/statistics.js';
+
 import Input from './modules/input.js';
+
+import Cookies from './modules/cookies.js';
+
+console.log(Cookies);
+
 window.Stats = Statistics;
 
 var stallon = 0;
+
+
+
+
+
+
 
 
 var Steve;
@@ -32,9 +52,10 @@ var LOG_ENABLE = (false);
 
 var log = ((LOG_ENABLE)?function(log){console.log(log)}:function(){});
 
-window.scripts = [
-///'js/background.js'
- ];
+if (typeof window.scripts != 'array')
+{
+    window.scripts = [];
+}
 
 var SpiceJS = window.SpiceJS = Object.create({
 
@@ -56,22 +77,6 @@ var SpiceJS = window.SpiceJS = Object.create({
         //Setup Statistics and Monitoring
         this.statistics = new this.statistics(this);
 
-        //Include Javascript
-        //     Monitor code time
-        this.statistics.monitor(() => function() {
-
-            ! function(e, t, r) {
-                function n() {
-                    for (; d[0] && "loaded" == d[0][f];) c = d.shift(), c[o] = !i.parentNode.insertBefore(c, i)
-                }
-                for (var s, a, c, d = [], i = e.scripts[0], o = "onreadystatechange", f = "readyState"; s = r.shift();) a = e.createElement(t), "" in i ? (a.async = !1, e.head.appendChild(a)) : i[f] ? (d.push(a), a[o] = n) : e.write("<" + t + ' src="' + s + '" defer></' + t + ">"), a.src = s
-            }(document, "script", window.scripts);
-
-        }, 0).then(() => this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build'))
-
-        //Log build time
-        this.statistics.log("build",time);
-
 		return this;
 	},
 
@@ -80,7 +85,10 @@ var SpiceJS = window.SpiceJS = Object.create({
 	//return details and information on the current apps
 	controller:{
 
-		list:function(){
+		list:function(id){
+
+            if (id)
+                return window.apps[id];
 
 			if (window.apps.length>1)
 				return window.apps;
@@ -109,28 +117,57 @@ var SpiceJS = window.SpiceJS = Object.create({
 
 	//
 
-    create:function(win){
+    create:function(target){
 
-        this.t = null;
-        SpiceJS.statistics.monitor(() => {
+        let tempReference = {};
 
-            this.t = this.create2(win);
+        let tempReferenceId = null;
 
-        }).then(function(){
+        let listReference = null;
 
+        let time = new Date().getTime();
 
-        });
+        this.statistics.monitor(()=> {
 
-        return this.t;
+                this.name = "scriptloadtime";
+
+                window.utils.loadExternalJS(window.scripts);
+
+                tempReference = this.create2();
+
+                tempReferenceId = (tempReference.id);
+
+            }).then(() => {
+
+                        this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+                        listReference = this.controller.list(tempReferenceId);
+
+                        this.statistics.monitor(() => {
+
+                                this.name = "loadtime";
+
+                                this.initListeners(listReference);
+
+                            }).then(() => {
+
+                                    this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+                                    this.statistics.log("build",time);
+
+                                });
+
+                })
+
+        return tempReference;
 
     },
 
-	create2:function(win){
+	create2:function(){
 
 
-        this.window = win || window;
+        this.window = window;
 
-        console.log(SpiceJS.logs('values'))
 		//temp stores the app during the create process, it is then returned
 		var temp = {};
 		temp = Object.create({
@@ -747,189 +784,7 @@ var SpiceJS = window.SpiceJS = Object.create({
 						//	Polyfill provided by ScottHamper
 						//	https://github.com/ScottHamper/Cookies#api-reference
 
-						cookies:{
-
-							constructor:function(app){
-
-								return{
-									app:{writable:false, configurable:false, enumerable:false, value:app},
-
-									init:{value:function(){
-
-											//execute polyfill
-											return this.polyfill();
-										}
-									}
-								}
-							},
-
-							prototype:{
-
-								//Cookies Polyfill by ScottHamper
-								//	https://github.com/ScottHamper/Cookies#api-reference
-								polyfill:function(){
-
-									(function (global, undefined) {
-										'use strict';
-
-										var factory = function (window) {
-											if (typeof window.document !== 'object') {
-												throw new Error('Cookies.js requires a `window` with a `document` object');
-											}
-
-											var Cookies = window.Cookies = function (key, value, options) {
-												return arguments.length === 1 ?
-													Cookies.get(key) : Cookies.set(key, value, options);
-											};
-
-											// Allows for setter injection in unit tests
-											Cookies._document = window.document;
-
-											// Used to ensure cookie keys do not collide with
-											// built-in `Object` properties
-											Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
-
-											Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-											Cookies.defaults = {
-												path: '/',
-												secure: false
-											};
-
-											Cookies.get = function (key) {
-												if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-													Cookies._renewCache();
-												}
-
-												return Cookies._cache[Cookies._cacheKeyPrefix + key];
-											};
-
-											Cookies.set = function (key, value, options) {
-												options = Cookies._getExtendedOptions(options);
-												options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
-
-												Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
-
-												return Cookies;
-											};
-
-											Cookies.expire = function (key, options) {
-												return Cookies.set(key, undefined, options);
-											};
-
-											Cookies._getExtendedOptions = function (options) {
-												return {
-													path: options && options.path || Cookies.defaults.path,
-													domain: options && options.domain || Cookies.defaults.domain,
-													expires: options && options.expires || Cookies.defaults.expires,
-													secure: options && options.secure !== undefined ?  options.secure : Cookies.defaults.secure
-												};
-											};
-
-											Cookies._isValidDate = function (date) {
-												return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
-											};
-
-											Cookies._getExpiresDate = function (expires, now) {
-												now = now || new Date();
-
-												if (typeof expires === 'number') {
-													expires = expires === Infinity ?
-														Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
-												} else if (typeof expires === 'string') {
-													expires = new Date(expires);
-												}
-
-												if (expires && !Cookies._isValidDate(expires)) {
-													throw new Error('`expires` parameter cannot be converted to a valid Date instance');
-												}
-
-												return expires;
-											};
-
-											Cookies._generateCookieString = function (key, value, options) {
-												key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-												key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
-												value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-												options = options || {};
-
-												var cookieString = key + '=' + value;
-												cookieString += options.path ? ';path=' + options.path : '';
-												cookieString += options.domain ? ';domain=' + options.domain : '';
-												cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-												cookieString += options.secure ? ';secure' : '';
-
-												return cookieString;
-											};
-
-											Cookies._getCacheFromString = function (documentCookie) {
-												var cookieCache = {};
-												var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
-
-												for (var i = 0; i < cookiesArray.length; i++) {
-													var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-													if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-														cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
-													}
-												}
-
-												return cookieCache;
-											};
-
-											Cookies._getKeyValuePairFromCookieString = function (cookieString) {
-												// "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
-												var separatorIndex = cookieString.indexOf('=');
-
-												// IE omits the "=" when the cookie value is an empty string
-												separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
-
-												return {
-													key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
-													value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
-												};
-											};
-
-											Cookies._renewCache = function () {
-												Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
-												Cookies._cachedDocumentCookie = Cookies._document.cookie;
-											};
-
-											Cookies._areEnabled = function () {
-												var testKey = 'cookies.js';
-												var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-												Cookies.expire(testKey);
-												return areEnabled;
-											};
-
-											Cookies.enabled = Cookies._areEnabled();
-
-											return Cookies;
-										};
-
-										var cookiesExport = typeof global.document === 'object' ? factory(global) : factory;
-
-										// AMD support
-										if (typeof define === 'function' && define.amd) {
-											define(function () { return cookiesExport; });
-										// CommonJS/Node.js support
-										} else if (typeof exports === 'object') {
-											// Support Node.js specific `module.exports` (which can be a function)
-											if (typeof module === 'object' && typeof module.exports === 'object') {
-												exports = module.exports = cookiesExport;
-											}
-											// But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-											exports.Cookies = cookiesExport;
-										} else {
-											global.Cookies = cookiesExport;
-										}
-									})(typeof window === 'undefined' ? this : window);
-									return Cookies;
-		},
-
-							}
-
-						},
+						cookies:Cookies,
 
 						//MetaTag Handler
 						//	Assists in dynamically applying metatags.
@@ -1458,7 +1313,7 @@ return;
 
 						loop:function(a){
 
-                            SpiceJS.statistics.monitor(() => {
+                            let loop = () => {
 
         						//Return true or false if resized, update size
         						this.resized = this.update.size(this);
@@ -1475,10 +1330,12 @@ return;
         						//Update client
         						requestAnimationFrame(this.client_f);
 
-                            }).then(function(){
+                            }
 
-                                //this.statistics.log("fps",this.fps,'build');
-                                //this.statistics.log("scale",this.scale,'build');
+                            SpiceJS.statistics.monitor(loop).then(function(){
+
+                                SpiceJS.statistics.log("fps",SpiceJS.controller.list().getFps(),'state');
+                                SpiceJS.statistics.log("scale",SpiceJS.controller.list().getScale(),'state');
 
                             });
 
@@ -2381,38 +2238,6 @@ return;
 								//this.buffer_context.restore();
 							},
 
-							//RequestAnimationFrame polyfill
-							animationFrame:function(name,w,h){
-
-								//Fill Date
-								if (!Date.now)
-									Date.now = function() { return new Date().getTime(); };
-
-								//Fill animation frame
-								(function() {
-									'use strict';
-
-									var vendors = ['webkit', 'moz'];
-									for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
-										var vp = vendors[i];
-										window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-										window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
-																   || window[vp+'CancelRequestAnimationFrame']);
-									}
-									if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
-										|| !window.requestAnimationFrame || !window.cancelAnimationFrame) {
-										var lastTime = 0;
-										window.requestAnimationFrame = function(callback) {
-											var now = Date.now();
-											var nextTime = Math.max(lastTime + 16, now);
-											return setTimeout(function() { callback(lastTime = nextTime); },
-															  nextTime - now);
-										};
-										window.cancelAnimationFrame = clearTimeout;
-									}
-								}());
-							},
-
 							//Get fixed X/Y positions
 
 							getX:function(){
@@ -3295,7 +3120,9 @@ return;
 						constructor:function(app){return {
 							app:{value:app},
 							init:{value:function(){
-									this.animationFrame();
+
+                                    window.utils.requestAnimationFrame(name,0,0);
+
 									this.scale = this.app.scale;
 									this.canvas = this.app.canvas.getCanvas();
 									this.buffer = this.app.canvas.getBuffer();
@@ -3317,7 +3144,6 @@ return;
 
 			temp = Object.create(temp.prototype,temp.constructor);
 
-			temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
 			temp.id = this.window.appsNextId;
 
@@ -3326,6 +3152,14 @@ return;
 			this.window.appsNextId++;
 
 			return this.window.apps[temp.id];
-		}
+		},
+
+        initListeners:function(temp){
+
+
+            			temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+
+            return temp;
+        }
 
 	}).init();

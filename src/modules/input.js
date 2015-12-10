@@ -3,18 +3,9 @@ import SJSClass from './sjsclass.js';
 
 export default class Input extends SJSClass {
 
-    static steve = {
-
-
-
-    }
-
     constructor(app,pointerPoint){
 
         super(app);
-
-
-
 
         this.x = 0;
 		this.y = 0;
@@ -43,23 +34,15 @@ export default class Input extends SJSClass {
         this.codeList = [];
         this.confine = false;
         this.preventNext = true;
+
         this.multi = {
+
           list:[]
+
         };
 
-        /*
-        window:{
-            self:window,
-            play:15,
-            x:false,
-            y:false,
-            inside:false
-        },
-
-
-        */
-
         this.doc = document;
+
         this.window = window;
 
         this.name = "eh";
@@ -100,7 +83,7 @@ export default class Input extends SJSClass {
 
 				input.touched.uplist.push({x:input.x,y:input.y});
 				input.touched.last = {x:input.x,y:input.y};
-				input.touched.count;
+				input.touched.count = 0;
 
 				input.press = false;
 				input.pressed = false;
@@ -156,11 +139,17 @@ export default class Input extends SJSClass {
 
 					if (input.dist.x>0)
 						if (this.mouse_lastx>input.dist.x)
-							input.start.x = input.x, input.dist.x = 0;
+                        {
+							input.start.x = input.x;
+                            input.dist.x = 0;
+                        }
 
 					if (input.dist.x<0)
 						if (this.mouse_lastx<input.dist.x)
-							input.start.x = input.x, input.dist.x = 0;
+                        {
+							input.start.x = input.x;
+                            input.dist.x = 0;
+                        }
 
 					this.mouse_lastx =  input.dist.x;
                 }
@@ -202,6 +191,8 @@ export default class Input extends SJSClass {
                     //if (this.app.options.get("overridescroll")==false)
                         return;
 
+
+                    /*
                     this.app.input.wheelDelta = evt.wheelDelta;
 
                     var doc = document.documentElement;
@@ -223,7 +214,7 @@ export default class Input extends SJSClass {
                            this.app.input.scroll.y = 0;
                            this.app.input.scroll.x = left-evt.wheelDelta;
                        }
-
+                      */
                     //App.ext.scroll.active = false;$
 
                 },
