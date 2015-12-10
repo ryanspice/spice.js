@@ -1,8 +1,7 @@
 
 import SJSClass from './sjsclass.js';
-import Loader from './loader.js';
 
-/////Snowparticles
+import Loader from './loader.js';
 
 let xOff = 0;
 

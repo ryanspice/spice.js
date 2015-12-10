@@ -1,16 +1,168 @@
 
 import SJSClass from './sjsclass.js';
 
-export default class Input extends SJSClass {
+import Vector from './vector';
+
+class SJSInputController extends SJSClass {
+
+    static _x = 0;
+    static _y = 0;
+    static _last = new Vector();
+    static _duration = 0;
+
+    get x() {
+
+        return this.constructor._x;
+
+    }
+
+    set x(value) {
+
+        this.constructor._x = value;
+
+    }
+
+    get y() {
+
+        return this.constructor._y;
+
+    }
+
+    set y(value) {
+
+        this.constructor._y = value;
+
+    }
+
+    get last() {
+
+        return this.constructor._last;
+
+    }
+
+    set last(value) {
+
+        this.constructor._last = value;
+
+    }
+
+    get duration() {
+
+        return this.constructor._duration;
+
+    }
+
+    set duration(value) {
+
+        this.constructor._duration = value;
+
+    }
+
+    get angle() {
+
+        return 57.2957795 * Math.atan2(this.end.y-this.start.y,this.end.x-this.start.x);
+
+    }
+
+    get angleDelta() {
+
+        var delta = (this.dist.x*this.dist.x+this.dist.y*this.dist.y)/2;
+        return delta;
+
+    }
+
+    get position() {
+
+        return new Vector(this.x,this.y);
+
+    }
+
+    setup_microsoft(){
+
+        //touch-action: none;
+
+        if (window.PointerEvent) {
+          // Pointer events are supported.
+
+          // Test for touch capable hardware
+          if(navigator.maxTouchPoints) {
+
+
+
+          }
+
+          // Test for multi-touch capable hardware
+          if(navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {
+
+
+
+          }
+
+          // Check the maximum number of touch points the hardware supports
+          var touchPoints = navigator.maxTouchPoints;
+
+        }
+
+        window.addEventListener('pointerdown', pointerdownHandler, false);
+
+        function pointerdownHandler (evt) {
+              evt.target.setPointerCapture(evt.pointerId);
+        }
+
+        element.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
+
+         // Disables visual
+        element.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+        // Disables menu
+        element.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+
+    }
+
+    update(){
+
+
+        this.last = new Vector(this.x,this.y);
+
+		this.confineMouse();
+
+		//Reset variables
+		this.press = false;
+		this.touch = 0;
+		this.app.window.inside = 0;
+		this.wheelDelta = 0;
+
+		this.pressed?this.duration++:this.duration=0;
+
+		this.released?(this.released=false,this.dist.x=0,this.dist.y=0):null;
+
+        this.winupdate();
+
+        if (this.delay>0)   {
+
+            this.delay -= Math.floor(this.delay-1*this.app.getDelta());
+
+        }
+
+		//reset code released, unused?
+		this.codereleased = 0;
+
+        return true;
+    }
+
+}
+
+
+
+export default class Input extends SJSInputController {
 
     constructor(app,pointerPoint){
 
         super(app);
 
-        this.x = 0;
-		this.y = 0;
+        this.pointerPoint = pointerPoint;//this.support(pointerPoint);
+
+
 		this.delay = 0;
-		this.duration =  0;
 		this.press = false;
 		this.pressed = false;
 		this.released = false;
@@ -18,11 +170,11 @@ export default class Input extends SJSClass {
 		this.pos =  {x:0,y:0};
 		this.dist =  {x:0,y:0};
 		this.start = {x:0,y:0};
-		this.last =  {x:0,y:0};
         this.touch=false;
         this.touch_dist={x:0,y:0};
 
         this.key=false;
+
         this.keyPower=0;
         this.keyup=false;
         this.keydown=false;
@@ -41,13 +193,7 @@ export default class Input extends SJSClass {
 
         };
 
-        this.doc = document;
 
-        this.window = window;
-
-        this.name = "eh";
-
-        this.pointerPoint = pointerPoint;
 
 
         this.init_options();
@@ -233,7 +379,7 @@ export default class Input extends SJSClass {
                     this.target.x = this.app.client.Math.Clamp(this.target.x,0,window.innerWidth*3);
 
                     //if (this.a)
-                    //this.window.scrollTo(this.x,this.y),this.a = false;
+                    //this.app.window.scrollTo(this.x,this.y),this.a = false;
 
                     log(this.x,this.y);
 
@@ -243,8 +389,8 @@ export default class Input extends SJSClass {
 
                 update:function(x,y){
 
-                    var left = (this.window.pageXOffset || this.doc.scrollLeft) - (this.doc.clientLeft || 0);
-                    var top = (this.window.pageYOffset || this.doc.scrollTop)  - (this.doc.clientTop || 0);
+                    var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
+                    var top = (this.app.window.pageYOffset || this.app.document.scrollTop)  - (this.app.document.clientTop || 0);
 
                     /* DEACTIVATE IF CONFUSED */
                     if (!this.active)
@@ -262,7 +408,7 @@ export default class Input extends SJSClass {
                     if (top>this.target.y)
                         this.y+=this.accel*YD;
 
-                //	this.window.scrollTo(this.x,this.y);
+                //	this.app.window.scrollTo(this.x,this.y);
 
                     if ((Math.round(this.x/10) == Math.round(this.target.x/10))&&
                         (Math.round(this.y/10) == Math.round(this.target.y/10)))
@@ -442,6 +588,7 @@ export default class Input extends SJSClass {
 
     }
 
+
     init_options(){
 
         /*	Overrides the selection start event for selecting events	*/
@@ -459,15 +606,15 @@ export default class Input extends SJSClass {
         /* Overrides the ContextMenu event */
 
         if (this.app.options.get("override").ContextMenu) {
-            this.doc.oncontextmenu = this.preventDefault;
-            this.window.self.oncontextmenu = this.preventDefault;
+            this.app.document.oncontextmenu = this.preventDefault;
+            this.app.window.self.oncontextmenu = this.preventDefault;
         }
 
         /*	Overrides dragstart event		*/
 
         if (this.app.options.get("override").Drag) {
-            this.doc.ondragstart   = this.preventDefault;
-            this.window.self.ondragstart   = this.preventDefault;
+            this.app.document.ondragstart   = this.preventDefault;
+            this.app.window.self.ondragstart   = this.preventDefault;
         }
 
         /*	CSS based Overrides
@@ -479,15 +626,15 @@ export default class Input extends SJSClass {
         */
 
         if (this.app.options.get("flags").mstouch){
-            this.doc.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+            this.app.document.body.setAttribute("style","-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
         }
 
         if (this.app.options.get("flags").seamless){
-            this.doc.body.style.overflow = "hidden";
+            this.app.document.body.style.overflow = "hidden";
         }
 
         if (this.app.options.get("flags").tight){
-            this.doc.body.style.padding = "0px", this.doc.body.style.margin = "0px auto";
+            this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
         }
 
     }
@@ -498,7 +645,7 @@ export default class Input extends SJSClass {
 
 		this.populateCodes();
 
-		this.app.Listener(this.window.self,'keydown',function(evt){
+		this.app.Listener(this.app.window.self,'keydown',function(evt){
 
 				if (this.app.input.preventNext==true)
 					evt.preventDefault();
@@ -518,7 +665,7 @@ export default class Input extends SJSClass {
 
 		});
 
-		this.app.Listener(this.window.self,'keyup',function(evt) {
+		this.app.Listener(this.app.window.self,'keyup',function(evt) {
 
 				if (this.app.input.preventNext)
 					evt.preventDefault();
@@ -552,7 +699,7 @@ export default class Input extends SJSClass {
 
 		/* mousewheel event			*/
 
-		//this.app.Listener(this.window.self,'mousewheel',this.scroll.event);
+		//this.app.Listener(this.app.window.self,'mousewheel',this.scroll.event);
 
 		/*
 
@@ -563,17 +710,17 @@ export default class Input extends SJSClass {
 				- Legacy Mouse and Touch Events
 
 		*/
-		var typeofEvent =( 0 || this.window.self.PointerEvent || this.window.self.MSPointerEvent );
+		var typeofEvent =( 0 || this.app.window.self.PointerEvent || this.app.window.self.MSPointerEvent );
 		var events = [];
 		var _functions = [];
-		var self = this.window.self;
+		var self = this.app.window.self;
 
 
         /*
 
 		switch (typeofEvent) {
 
-			case this.window.self.PointerEvent:
+			case this.app.window.self.PointerEvent:
 
 				events = [
 					'pointerdown',
@@ -589,7 +736,7 @@ export default class Input extends SJSClass {
 
 			break;
 
-			case this.window.self.MSPointerEvent:
+			case this.app.window.self.MSPointerEvent:
 
 				events = [
 					'MSPointerDown',
@@ -645,9 +792,9 @@ export default class Input extends SJSClass {
 
 
 
-		if	(this.window.self.PointerEvent){
+		if	(this.app.window.self.PointerEvent){
 
-			this.app.Listener(this.window.self,'pointerdown',function(evt) {
+			this.app.Listener(this.app.window.self,'pointerdown',function(evt) {
 
 				if (!evt.target.app)
 					return;
@@ -656,7 +803,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'pointermove',function(evt) {
+			this.app.Listener(this.app.window.self,'pointermove',function(evt) {
 
 				if (!evt.target.app)
 					return;
@@ -665,7 +812,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'pointerup',	function(evt) {
+			this.app.Listener(this.app.window.self,'pointerup',	function(evt) {
 
 				if (!evt.target.app)
 					return;
@@ -676,10 +823,10 @@ export default class Input extends SJSClass {
 
 		}
 		else
-		if (this.window.self.MSPointerEvent) {
+		if (this.app.window.self.MSPointerEvent) {
 
 				//MS Pointer Events
-				this.app.Listener(this.window.self,'MSPointerDown',function(evt) {
+				this.app.Listener(this.app.window.self,'MSPointerDown',function(evt) {
 
 						if (!evt.target.app)
 							return;
@@ -688,7 +835,7 @@ export default class Input extends SJSClass {
 
 				});
 
-				this.app.Listener(this.window.self,'MSPointerMove',function(evt) {
+				this.app.Listener(this.app.window.self,'MSPointerMove',function(evt) {
 
 						if (!evt.target.app)
 							return;
@@ -697,7 +844,7 @@ export default class Input extends SJSClass {
 
 				});
 
-				this.app.Listener(this.window.self,'MSPointerUp',	function(evt) {
+				this.app.Listener(this.app.window.self,'MSPointerUp',	function(evt) {
 
 						if (!evt.target.app)
 							return;
@@ -710,7 +857,7 @@ export default class Input extends SJSClass {
 		else
 		{
 
-			this.app.Listener(this.window.self,'mousedown',function(evt) {
+			this.app.Listener(this.app.window.self,'mousedown',function(evt) {
 
 					if (!evt.target.app)
 						return;
@@ -719,7 +866,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'mousemove',function(evt) {
+			this.app.Listener(this.app.window.self,'mousemove',function(evt) {
 
 					if (!evt.target.app)
 						return;
@@ -728,7 +875,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'mouseup',function(evt) {
+			this.app.Listener(this.app.window.self,'mouseup',function(evt) {
 
 					if (!evt.target.app)
 						return;
@@ -738,7 +885,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'touchstart',	function(evt) {
+			this.app.Listener(this.app.window.self,'touchstart',	function(evt) {
 
 					if (!evt.target.app)
 						return;
@@ -751,7 +898,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'touchmove',	function(evt) {
+			this.app.Listener(this.app.window.self,'touchmove',	function(evt) {
 
 					if (!evt.target.app)
 						return;
@@ -764,7 +911,7 @@ export default class Input extends SJSClass {
 
 			});
 
-			this.app.Listener(this.window.self,'touchend',		function(evt) {
+			this.app.Listener(this.app.window.self,'touchend',		function(evt) {
 
 					if (!evt.target.app)
 						return;
@@ -778,7 +925,6 @@ export default class Input extends SJSClass {
 
 		}
     }
-
 
     detect(){
 
@@ -914,218 +1060,192 @@ export default class Input extends SJSClass {
 
     }
 
-    		update() {
-
-
-    			//Reset last positions
-    			this.last.x = this.x;
-    			this.last.y = this.y;
-
-    			//Confine x,y
-    			this.confined();
-
-    			//Reset variables
-    			this.press = false;
-    			this.touch = 0;
-    			this.window.inside = 0;
-    			this.wheelDelta = 0;
-
-    			//If pressed, increase duration, otherwise reset
-    			this.pressed?this.duration++:this.duration=0;
-
-    			//if released, reset release and distance. else nothing.
-    			this.released?(this.released=false,this.dist.x=0,this.dist.y=0):null;
-
-                this.winupdate();
-
-    			//reset code released, unused?
-    			this.codereleased = 0;
-
-    			//decrease delay if delay>0
-    			(this.delay>0)?this.delay-=Math.floor(this.delay-1*this.app.getDelta()):null;
 
 
 
+	/*
+
+		Populates this.codes with an array of codes
+
+	*/
+
+	populateCodes(){
+
+		// Keyboard Codes 0 - whatever, includes keypad, wii and controllers
+
+		this.codes = [],this.codes[0]="",this.codes[1]="",this.codes[2]="",this.codes[3]="",this.codes[4]="",this.codes[5]="",this.codes[6]="",this.codes[7]="",this.codes[8]="backspace",this.codes[9]="tab",this.codes[13]="enter",this.codes[16]="shift",this.codes[17]="ctrl",this.codes[18]="alt",this.codes[19]="pause/break",this.codes[20]="capslock",this.codes[27]="escape",this.codes[32]="space",this.codes[33]="pageup",this.codes[34]="pagedown",this.codes[35]="end",this.codes[36]="home",this.codes[37]="leftarrow",this.codes[38]="uparrow",this.codes[39]="rightarrow",this.codes[40]="downarrow",this.codes[45]="insert",this.codes[46]="delete",this.codes[48]="0",this.codes[49]="1",this.codes[50]="2",this.codes[51]="3",this.codes[52]="4",this.codes[53]="5",this.codes[54]="6",this.codes[55]="7",this.codes[56]="8",this.codes[57]="9",this.codes[65]="a",this.codes[66]="b",this.codes[67]="c",this.codes[68]="d",this.codes[69]="e",this.codes[70]="f",this.codes[71]="g",this.codes[72]="h",this.codes[73]="i",this.codes[74]="j",this.codes[75]="k",this.codes[76]="l",this.codes[77]="m",this.codes[78]="n",this.codes[79]="o",this.codes[80]="p",this.codes[81]="q",this.codes[82]="r",this.codes[83]="s",this.codes[84]="t",this.codes[85]="u",this.codes[86]="v",this.codes[87]="w",this.codes[88]="x",this.codes[89]="y",this.codes[90]="z",this.codes[91]="leftwindowkey",this.codes[92]="rightwindowkey",this.codes[93]="selectkey",this.codes[96]="numpad0",this.codes[97]="numpad1",this.codes[98]="numpad2",this.codes[99]="numpad3",this.codes[100]="numpad4",this.codes[101]="numpad5",this.codes[102]="numpad6",this.codes[103]="numpad7",this.codes[104]="numpad8",this.codes[105]="numpad9",this.codes[106]="multiply",this.codes[107]="add",this.codes[109]="subtract",this.codes[110]="decimalpoint",this.codes[111]="divide",this.codes[112]="f1",this.codes[113]="f2",this.codes[114]="f3",this.codes[115]="f4",this.codes[116]="f5",this.codes[117]="f6",this.codes[118]="f7",this.codes[119]="f8",this.codes[120]="f9",this.codes[121]="f10",this.codes[122]="f11",this.codes[123]="f12",this.codes[144]="numlock",this.codes[145]="scrolllock",this.codes[175]="Up (Wii?)",this.codes[176]="Down (Wii?)",this.codes[177]="Left (Wii?)",this.codes[178]="Right (Wii?)",this.codes[170]="- (Wii?)",this.codes[174]="+ (Wii?)",this.codes[172]="1 (Wii?)",this.codes[173]="2 (Wii?)",this.codes[186]="semi-colon",this.codes[187]="equalsign",this.codes[188]="comma",this.codes[189]="dash",this.codes[190]="period",this.codes[191]="forwardslash",this.codes[192]="graveaccent",this.codes[219]="openbracket",this.codes[220]="backslash",this.codes[221]="closebraket",this.codes[222]="singlequote";
+
+	}
+
+	/*
+
+		Check if keyboard key is pressed
+
+	*/
+
+	keyboardCheck(code){
+
+		var e = this.codeList.length-1;
+
+		for (var i = e;i>=0;--i)
+			if (this.codeList[i]==code)
+				return true;
+
+	     return false;
+	}
+
+	/*
+
+		Add code to array
+
+	*/
+
+	keyboardPop(code){
+
+		var e = this.codeList.length-1;
+		for (var i = e;i>=0;--i)
+			if (this.codeList[i]==code)
+				this.codeList[i] = null;
+
+	}
+
+	/*
+		Unused? Legacy Functions
+	*/
+
+	mouse() {
+
+		if (!App.input.pressed)
+			App.input.dist =  App.client.Math.Vector.Difference(App.ext.input,App.input.start);
+
+	}
+
+	mouse_distance() {
+
+		if (!App.input.pressed)
+			App.input.dist =  App.client.Math.Vector.Difference(App.input.start,App.input.end);
+
+	}
+
+	touch_distance(touch) {
+
+		if (!touch)
+			return;
+		App.input.x = touch.pageX||touch.clientX;
+		App.input.y = touch.pageY||touch.clientX;
+		//if (!App.input.input.pressed)
+			App.input.dist =  App.client.Math.Vector.Difference(App.input.start,App.input.end);
+
+	}
+
+    getPosition(canvas,evt) {
+
+                console.log('eh');
+
+        if ((!canvas)||(!evt))
+                return false;
+        return {x: evt.clientX,y: evt.clientY};
+
+    }
+    //
+    _getAngle(){
+
+        //Convert to degrees
+        return 57.2957795 * Math.atan2(this.end.y-this.start.y,this.end.x-this.start.x);
+    }
+    //
+    _getAngleDistance(){
+
+        //Return the delta between x and y
+        var delta = (this.dist.x*this.dist.x+this.dist.y*this.dist.y)/2;
+        return delta;
+    }
+    //
+    _getHorizontal(){
+
+        var wasd = this.app.input.keyboardCheck("a") - this.app.input.keyboardCheck("d");
+        var arrows = this.app.input.keyboardCheck("leftarrow") - this.app.input.keyboardCheck("rightarrow") ;
+        var mouse = -this.getPressed()*this.app.input.dist.x;
+        var touch = -this.getTouched()*this.app.input.dist.x;
 
 
-    		return true;
-    		}
+        var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
+        var touched = this.app.client.Math.Clamp(mouse || touch,-1,1);
+
+        return {keyboard:keyboard,touch:touched};
+    }
+    //
+    _getVertical(){
+
+        var wasd = this.app.input.keyboardCheck("s") - this.app.input.keyboardCheck("w");
+        var arrows = this.app.input.keyboardCheck("downarrow") - this.app.input.keyboardCheck("uparrow");
+        var mouse = this.getPressed()*this.app.input.dist.y;
+        var touch = this.getTouched()*this.app.input.dist.y;
 
 
-            		confined(){
+        var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
+        var touched = this.app.client.Math.Clamp(mouse || touch,-1,1);
 
-            			this.confine?(
-            				((this.y<this.app.client.visuals.fixY(0))?
-            					(this.window.y=0,this.window.inside -= 1):
-            						((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-            							(this.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.window.inside += 1):
-            							(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
-            						),
-            						((this.x<this.app.client.visuals.fixX(0))?
-            							(this.window.x = 0,this.window.inside -=1):
-            							((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-            								(this.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.window.inside += 1):
-            								(this.window.x = -this.app.client.visuals.fixX(0)+this.x)
-            							)
-            						)
-            					)
-            				):((this.y<this.app.client.visuals.fixY(0))?
-            						(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
-            						((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-            							(this.window.y=-this.app.client.visuals.fixY(0)+this.y):
-            							(this.window.y=-this.app.client.visuals.fixY(0)+this.y)
-            					),
-            					((this.x<this.app.client.visuals.fixX(0))?
-            						(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
-            						((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-            							(this.window.x=-this.app.client.visuals.fixX(0)+this.x):
-            							(this.window.x=-this.app.client.visuals.fixX(0)+this.x)
-            						)
-            					));
+        return {keyboard:keyboard,touch:touched};
+    }
 
-            		}
+    //
+    //
+    _getStartX(){return this.start.x;}
+    //
+    _getStartY(){return this.start.y;}
+    //
+    _getDuration(){return this.duration;}
+    //
+    _getTouched(){return this.touch;}
+    //
+    _getPressed(){return this.pressed;}
+    //
+    _getReleased(){return this.released;}
 
-            		/*
+    	/*
 
-            			Populates this.codes with an array of codes
+    		Confine Mouse To Canvas
 
-            		*/
+    	*/
 
-            		populateCodes(){
+    	confineMouse(){
 
-            			// Keyboard Codes 0 - whatver, includes keypad, wii and controllers
+            //Temporary Disable
 
-            			this.codes = [],this.codes[0]="",this.codes[1]="",this.codes[2]="",this.codes[3]="",this.codes[4]="",this.codes[5]="",this.codes[6]="",this.codes[7]="",this.codes[8]="backspace",this.codes[9]="tab",this.codes[13]="enter",this.codes[16]="shift",this.codes[17]="ctrl",this.codes[18]="alt",this.codes[19]="pause/break",this.codes[20]="capslock",this.codes[27]="escape",this.codes[32]="space",this.codes[33]="pageup",this.codes[34]="pagedown",this.codes[35]="end",this.codes[36]="home",this.codes[37]="leftarrow",this.codes[38]="uparrow",this.codes[39]="rightarrow",this.codes[40]="downarrow",this.codes[45]="insert",this.codes[46]="delete",this.codes[48]="0",this.codes[49]="1",this.codes[50]="2",this.codes[51]="3",this.codes[52]="4",this.codes[53]="5",this.codes[54]="6",this.codes[55]="7",this.codes[56]="8",this.codes[57]="9",this.codes[65]="a",this.codes[66]="b",this.codes[67]="c",this.codes[68]="d",this.codes[69]="e",this.codes[70]="f",this.codes[71]="g",this.codes[72]="h",this.codes[73]="i",this.codes[74]="j",this.codes[75]="k",this.codes[76]="l",this.codes[77]="m",this.codes[78]="n",this.codes[79]="o",this.codes[80]="p",this.codes[81]="q",this.codes[82]="r",this.codes[83]="s",this.codes[84]="t",this.codes[85]="u",this.codes[86]="v",this.codes[87]="w",this.codes[88]="x",this.codes[89]="y",this.codes[90]="z",this.codes[91]="leftwindowkey",this.codes[92]="rightwindowkey",this.codes[93]="selectkey",this.codes[96]="numpad0",this.codes[97]="numpad1",this.codes[98]="numpad2",this.codes[99]="numpad3",this.codes[100]="numpad4",this.codes[101]="numpad5",this.codes[102]="numpad6",this.codes[103]="numpad7",this.codes[104]="numpad8",this.codes[105]="numpad9",this.codes[106]="multiply",this.codes[107]="add",this.codes[109]="subtract",this.codes[110]="decimalpoint",this.codes[111]="divide",this.codes[112]="f1",this.codes[113]="f2",this.codes[114]="f3",this.codes[115]="f4",this.codes[116]="f5",this.codes[117]="f6",this.codes[118]="f7",this.codes[119]="f8",this.codes[120]="f9",this.codes[121]="f10",this.codes[122]="f11",this.codes[123]="f12",this.codes[144]="numlock",this.codes[145]="scrolllock",this.codes[175]="Up (Wii?)",this.codes[176]="Down (Wii?)",this.codes[177]="Left (Wii?)",this.codes[178]="Right (Wii?)",this.codes[170]="- (Wii?)",this.codes[174]="+ (Wii?)",this.codes[172]="1 (Wii?)",this.codes[173]="2 (Wii?)",this.codes[186]="semi-colon",this.codes[187]="equalsign",this.codes[188]="comma",this.codes[189]="dash",this.codes[190]="period",this.codes[191]="forwardslash",this.codes[192]="graveaccent",this.codes[219]="openbracket",this.codes[220]="backslash",this.codes[221]="closebraket",this.codes[222]="singlequote";
+            return false;
 
-            			/*
+            /*
+    		this.confine?(
+    			((this.y<this.app.client.visuals.fixY(0))?
+    				(this.app.window.y=0,this.app.window.inside -= 1):
+    					((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+    						(this.app.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.app.window.inside += 1):
+    						(this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
+    					),
+    					((this.x<this.app.client.visuals.fixX(0))?
+    						(this.app.window.x = 0,this.app.window.inside -=1):
+    						((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+    							(this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.app.window.inside += 1):
+    							(this.app.window.x = -this.app.client.visuals.fixX(0)+this.x)
+    						)
+    					)
+    				)
+    			):((this.y<this.app.client.visuals.fixY(0))?
+    					(this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
+    					((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+    						(this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
+    						(this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
+    				),
+    				((this.x<this.app.client.visuals.fixX(0))?
+    					(this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
+    					((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+    						(this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
+    						(this.app.window.x=-this.app.client.visuals.fixX(0)+this.x)
+    					)
+    				));
+            */
+    	}
 
-
-
-            			*/
-            		}
-
-            		/*
-
-            			Check if keyboard key is pressed
-
-            		*/
-
-            		keyboardCheck(code){
-
-            			var e = this.codeList.length-1;
-            			for (var i = e;i>=0;--i)
-            				if (this.codeList[i]==code)
-            					return true;
-
-            		return false;
-            		}
-
-            		/*
-
-            			Add code to array
-
-            		*/
-
-            		keyboardPop(code){
-            				var e = this.codeList.length-1;
-            				for (var i = e;i>=0;--i)
-            					if (this.codeList[i]==code)
-            						this.codeList[i] = null;
-            		}
-
-            		/*
-            			Unused? Legacy Functions
-            		*/
-
-            		mouse() {
-
-            			if (!App.input.pressed)
-            				App.input.dist =  App.client.Math.Vector.Difference(App.ext.input,App.input.start);
-
-            		}
-            		mouse_distance() {
-
-            			if (!App.input.pressed)
-            				App.input.dist =  App.client.Math.Vector.Difference(App.input.start,App.input.end);
-
-            		}
-
-            		touch_distance(touch) {
-
-            			if (!touch)
-            				return;
-            			App.input.x = touch.pageX||touch.clientX;
-            			App.input.y = touch.pageY||touch.clientX;
-            			//if (!App.input.input.pressed)
-            				App.input.dist =  App.client.Math.Vector.Difference(App.input.start,App.input.end);
-
-            		}
-
-                    getPosition(canvas,evt) {
-                        if ((!canvas)||(!evt))
-                                return false;
-                        return {x: evt.clientX,y: evt.clientY};
-                    }
-                    //
-                    getAngle(){
-
-                        //Convert to degrees
-                        return 57.2957795 * Math.atan2(this.end.y-this.start.y,this.end.x-this.start.x);
-                    }
-                    //
-                    getAngleDistance(){
-
-                        //Return the delta between x and y
-                        var delta = (this.dist.x*this.dist.x+this.dist.y*this.dist.y)/2;
-                        return delta;
-                    }
-                    //
-                    getHorizontal(){
-
-                        var wasd = this.app.input.keyboardCheck("a") - this.app.input.keyboardCheck("d");
-                        var arrows = this.app.input.keyboardCheck("leftarrow") - this.app.input.keyboardCheck("rightarrow") ;
-                        var mouse = -this.getPressed()*this.app.input.dist.x;
-                        var touch = -this.getTouched()*this.app.input.dist.x;
-
-
-                        var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
-                        var touched = this.app.client.Math.Clamp(mouse || touch,-1,1);
-
-                        return {keyboard:keyboard,touch:touched};
-                    }
-                    //
-                    getVertical(){
-
-                        var wasd = this.app.input.keyboardCheck("s") - this.app.input.keyboardCheck("w");
-                        var arrows = this.app.input.keyboardCheck("downarrow") - this.app.input.keyboardCheck("uparrow");
-                        var mouse = this.getPressed()*this.app.input.dist.y;
-                        var touch = this.getTouched()*this.app.input.dist.y;
-
-
-                        var keyboard = this.app.client.Math.Clamp(wasd || arrows,-1,1);
-                        var touched = this.app.client.Math.Clamp(mouse || touch,-1,1);
-
-                        return {keyboard:keyboard,touch:touched};
-                    }
-
-                    getX(){return this.x;}
-                    //
-                    getY(){return this.y;}
-                    //
-                    getLastX(){return this.last.x;}
-                    //
-                    getLastY(){return this.last.y;}
-                    //
-                    getStartX(){return this.start.x;}
-                    //
-                    getStartY(){return this.start.y;}
-                    //
-                    getDuration(){return this.duration;}
-                    //
-                    getTouched(){return this.touch;}
-                    //
-                    getPressed(){return this.pressed;}
-                    //
-                    getReleased(){return this.released;}
 
 }

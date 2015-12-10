@@ -5916,12 +5916,7 @@
 
 	                                particle.draw();
 	                        }
-
-	                        this.input_test();
 	                }
-	        }, {
-	                key: 'input_test',
-	                value: function input_test() {}
 	        }]);
 
 	        return SJSParticleController;
