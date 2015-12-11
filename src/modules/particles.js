@@ -222,8 +222,10 @@ class SJSParticle extends SJSClass {
 
     draw(){
 
+        if (this.app.getScale()<0.8)
+        this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+        else
         this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
     }
 

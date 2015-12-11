@@ -6048,8 +6048,7 @@
 	                key: 'draw',
 	                value: function draw() {
 
-	                        this.visuals.image_part_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.alpha, 1, +this.offx, this.offy, 32, 32, this.vel.x + this.pos.y);
-	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        if (this.app.getScale() < 0.8) this.visuals.rect_ext(this.pos.x, this.pos.y, 5, 5, 0.2 + this.scale / 10, this.alpha, 1, "#FFFFFF", +this.offx, this.offy, 32, 32, this.vel.x + this.pos.y);else this.visuals.image_part_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.alpha, 1, +this.offx, this.offy, 32, 32, this.vel.x + this.pos.y);
 	                }
 	        }]);
 
@@ -6666,21 +6665,17 @@
 /* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
-	var _sjsclass = __webpack_require__(194);
+	var _inputcontroller2 = __webpack_require__(205);
 
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	var _vector = __webpack_require__(200);
-
-	var _vector2 = _interopRequireDefault(_vector);
+	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6690,1162 +6685,323 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var SJSInputController = (function (_SJSClass) {
-	    _inherits(SJSInputController, _SJSClass);
+	var Input = (function (_inputcontroller) {
+	        _inherits(Input, _inputcontroller);
 
-	    function SJSInputController() {
-	        _classCallCheck(this, SJSInputController);
+	        function Input(app, pointerPoint) {
+	                _classCallCheck(this, Input);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(SJSInputController).apply(this, arguments));
-	    }
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
 
-	    _createClass(SJSInputController, [{
-	        key: 'setup_microsoft',
-	        value: function setup_microsoft() {
+	                _this.delay = 0;
+	                _this.touch = false;
+	                _this.touch_dist = { x: 0, y: 0 };
 
-	            //touch-action: none;
+	                _this.key = false;
+	                _this.keyPower = 0;
+	                _this.keyup = false;
+	                _this.keydown = false;
 
-	            if (window.PointerEvent) {
-	                // Pointer events are supported.
+	                _this.codes = [];
+	                _this.codeList = [];
 
-	                // Test for touch capable hardware
-	                if (navigator.maxTouchPoints) {}
+	                _this.control = false;
 
-	                // Test for multi-touch capable hardware
-	                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
+	                _this.confine = false;
 
-	                // Check the maximum number of touch points the hardware supports
-	                var touchPoints = navigator.maxTouchPoints;
-	            }
+	                _this.preventNext = true;
 
-	            window.addEventListener('pointerdown', pointerdownHandler, false);
+	                _this.init_options();
 
-	            function pointerdownHandler(evt) {
-	                evt.target.setPointerCapture(evt.pointerId);
-	            }
+	                _this.keyController.init(_this.app);
 
-	            element.addEventListener("selectstart", function (e) {
-	                e.preventDefault();
-	            }, false);
+	                var down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
+	                var up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
+	                var move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
+	                var scroll = _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
 
-	            // Disables visual
-	            element.addEventListener("MSHoldVisual", function (e) {
-	                e.preventDefault();
-	            }, false);
-	            // Disables menu
-	            element.addEventListener("contextmenu", function (e) {
-	                e.preventDefault();
-	            }, false);
+	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
+
+	                _this.setup_universalMultitouch();
+	                //this.setup_msUniversalAppTouch();
+
+	                return _this;
 	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
 
-	            this.last = new _vector2.default(this.x, this.y);
-
-	            this.confineMouse();
-
-	            //Reset variables
-	            this.press = false;
-	            this.touch = 0;
-	            this.app.window.inside = 0;
-	            this.wheelDelta = 0;
-
-	            this.pressed ? this.duration++ : this.duration = 0;
-
-	            this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
-
-	            this.winupdate();
-
-	            if (this.delay > 0) {
-
-	                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
-	            }
-
-	            //reset code released, unused?
-	            this.codereleased = 0;
-
-	            return true;
-	        }
-	    }, {
-	        key: 'x',
-	        get: function get() {
-
-	            return this.constructor._x;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._x = value;
-	        }
-	    }, {
-	        key: 'y',
-	        get: function get() {
-
-	            return this.constructor._y;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._y = value;
-	        }
-	    }, {
-	        key: 'last',
-	        get: function get() {
-
-	            return this.constructor._last;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._last = value;
-	        }
-	    }, {
-	        key: 'duration',
-	        get: function get() {
-
-	            return this.constructor._duration;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._duration = value;
-	        }
-	    }, {
-	        key: 'angle',
-	        get: function get() {
-
-	            return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
-	        }
-	    }, {
-	        key: 'angleDelta',
-	        get: function get() {
-
-	            var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
-	            return delta;
-	        }
-	    }, {
-	        key: 'position',
-	        get: function get() {
-
-	            return new _vector2.default(this.x, this.y);
-	        }
-	    }]);
-
-	    return SJSInputController;
-	})(_sjsclass2.default);
-
-	SJSInputController._x = 0;
-	SJSInputController._y = 0;
-	SJSInputController._last = new _vector2.default();
-	SJSInputController._duration = 0;
-
-	var Input = (function (_SJSInputController) {
-	    _inherits(Input, _SJSInputController);
-
-	    function Input(app, pointerPoint) {
-	        _classCallCheck(this, Input);
-
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
-
-	        _this2.pointerPoint = pointerPoint; //this.support(pointerPoint);
-
-	        _this2.delay = 0;
-	        _this2.press = false;
-	        _this2.pressed = false;
-	        _this2.released = false;
-	        _this2.end = { x: 0, y: 0 };
-	        _this2.pos = { x: 0, y: 0 };
-	        _this2.dist = { x: 0, y: 0 };
-	        _this2.start = { x: 0, y: 0 };
-	        _this2.touch = false;
-	        _this2.touch_dist = { x: 0, y: 0 };
-
-	        _this2.key = false;
-
-	        _this2.keyPower = 0;
-	        _this2.keyup = false;
-	        _this2.keydown = false;
-
-	        _this2.control = false;
-
-	        _this2.body = document.body;
-	        _this2.codes = [];
-	        _this2.codeList = [];
-	        _this2.confine = false;
-	        _this2.preventNext = true;
-
-	        _this2.multi = {
-
-	            list: []
-
-	        };
-
-	        _this2.init_options();
-
-	        if (!_this2.pointerPoint) _this2.init_pointerEvents();
-
-	        if (!_this2.pointerPoint) _this2.init_keys();
-
-	        _this2.detect();
-
-	        _this2.controls = {
-
-	            app: null,
-
-	            mouse_lastx: null,
-
-	            up: function up(data) {
-
-	                var input;
-
-	                if (!this.app) this.app = data.app;
-
-	                input = this.app.input;
-
-	                input.end.x = data.x;
-	                input.end.y = data.y;
-
-	                input.touched.uplist.push({ x: input.x, y: input.y });
-	                input.touched.last = { x: input.x, y: input.y };
-	                input.touched.count = 0;
-
-	                input.press = false;
-	                input.pressed = false;
-	                input.released = true;
-	                input.touch = false;
-	                input.dist.x = (input.x - input.start.x) * this.app.getScale();
-	                input.dist.y = (input.y - input.start.y) * this.app.getScale();
-
-	                return true;
-	            },
-
-	            down: function down(data) {
-
-	                var input;
-
-	                if (!this.app) this.app = data.app;
-
-	                input = this.app.input;
-
-	                input.x = input.start.x = data.x;
-	                input.y = input.start.y = data.y;
-
-	                input.press = true;
-	                input.pressed = true;
-
-	                input.dist.x = 0;
-	                input.dist.y = 0;
-
-	                input.touched.downlist.push({ x: input.x, y: input.y });
-
-	                return true;
-	            },
-
-	            move: function move(data) {
-
-	                var input;
-
-	                if (!this.app) this.app = data.app;
-
-	                input = this.app.input;
-
-	                if (input.pressed) {
-	                    input.press = true;
-	                    input.x = data.x;
-	                    input.y = data.y;
-	                    input.dist.x = (input.x - input.start.x) * this.app.getScale();
-	                    input.dist.y = (input.y - input.start.y) * this.app.getScale();
-
-	                    if (input.dist.x > 0) if (this.mouse_lastx > input.dist.x) {
-	                        input.start.x = input.x;
-	                        input.dist.x = 0;
-	                    }
-
-	                    if (input.dist.x < 0) if (this.mouse_lastx < input.dist.x) {
-	                        input.start.x = input.x;
-	                        input.dist.x = 0;
-	                    }
-
-	                    this.mouse_lastx = input.dist.x;
+	        _createClass(Input, [{
+	                key: "preventDefault",
+	                value: function preventDefault(e) {
+	                        e.preventDefault();return e.target.app;
 	                }
-
-	                return true;
-	            }
-
-	        };
-
-	        _this2.scroll = {
-
-	            prototype: {
-
-	                /* Cache */
-
-	                x: 0,
-	                y: 1,
-	                target: { x: 0, y: 0 },
-
-	                accel: 1,
-
-	                active: null,
-	                reverse: false,
-	                a: false,
-
-	                window: window,
-	                doc: document.documentElement,
-
-	                //ScrollWheel Event
-	                event: function event(evt, delta) {
-
-	                    if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
-
-	                    if (this.app.options.get("seamless")) evt.preventDefault();
-
-	                    //if (this.app.options.get("overridescroll")==false)
-	                    return;
-
-	                    /*
-	                    this.app.input.wheelDelta = evt.wheelDelta;
-	                      var doc = document.documentElement;
-	                    var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	                    var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-	                           //Flip for horizontal scrolling
-	                       if (this.reverse)
-	                       {
-	                           this.app.input.scroll.target.x = left;
-	                           this.app.input.scroll.target.y = top-evt.wheelDelta;
-	                           this.app.input.scroll.x = left;
-	                           this.app.input.scroll.y = top-evt.wheelDelta;
-	                       }
-	                       else{
-	                           this.app.input.scroll.target.y = 0;
-	                           this.app.input.scroll.target.x = left-evt.wheelDelta;
-	                           this.app.input.scroll.y = 0;
-	                           this.app.input.scroll.x = left-evt.wheelDelta;
-	                       }
-	                      */
-	                    //App.ext.scroll.active = false;$
-	                },
-
-	                up: function up() {
-
-	                    var transitionSpeed = 1;
-
-	                    if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
-
-	                    if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
-
-	                    this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
-	                    this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
-
-	                    //if (this.a)
-	                    //this.app.window.scrollTo(this.x,this.y),this.a = false;
-
-	                    log(this.x, this.y);
-	                },
-
-	                //Update the position for smooth scrolling
-
-	                update: function update(x, y) {
-
-	                    var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
-	                    var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
-
-	                    /* DEACTIVATE IF CONFUSED */
-	                    if (!this.active) return;
-
-	                    var LD = Math.round(-this.x + this.target.x) / 10;
-	                    var YD = Math.round(-this.y + this.target.y) / 10;
-
-	                    if (left < this.target.x) this.x += this.accel * LD;
-	                    if (left > this.target.x) this.x += this.accel * LD;
-	                    if (top < this.target.y) this.y += this.accel * YD;
-	                    if (top > this.target.y) this.y += this.accel * YD;
-
-	                    //	this.app.window.scrollTo(this.x,this.y);
-
-	                    if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
-
-	                    return true;
-	                },
-
-	                //Set position,
-
-	                to: function to(x, y) {
-
-	                    this.target.x = x;
-	                    this.target.y = y;
+	        }, {
+	                key: "preventNextInput",
+	                value: function preventNextInput() {
+	                        return this.preventNext = true;
 	                }
+	        }, {
+	                key: "confineMouse",
+	                value: function confineMouse() {
 
-	            },
+	                        //Temporary Disable
 
-	            constructor: function constructor(a) {
-	                return {
-	                    app: { value: a },
-	                    init: { value: function value() {
-	                            this.to(0, 0);
-	                            return this;
+	                        return false;
+
+	                        /*
+	                        this.confine?(
+	                        ((this.y<this.app.client.visuals.fixY(0))?
+	                        (this.app.window.y=0,this.app.window.inside -= 1):
+	                        ((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+	                        (this.app.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.app.window.inside += 1):
+	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
+	                        ),
+	                        ((this.x<this.app.client.visuals.fixX(0))?
+	                        (this.app.window.x = 0,this.app.window.inside -=1):
+	                        ((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+	                        (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.app.window.inside += 1):
+	                        (this.app.window.x = -this.app.client.visuals.fixX(0)+this.x)
+	                        )
+	                        )
+	                        )
+	                        ):((this.y<this.app.client.visuals.fixY(0))?
+	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
+	                        ((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
+	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
+	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
+	                        ),
+	                        ((this.x<this.app.client.visuals.fixX(0))?
+	                        (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
+	                        ((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
+	                        (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
+	                        (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x)
+	                        )
+	                        ));
+	                        */
+	                }
+	        }, {
+	                key: "init_options",
+	                value: function init_options() {
+
+	                        /*	Overrides the selection start event for selecting events	*/
+
+	                        if (!this.app.options.get("override").SelectStart) {
+	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
 	                        }
-	                    }
-	                };
-	            }
 
-	        }, _this2.listener = {
+	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
 
-	            touchpoints: 0,
+	                        if (!this.app.options.get("override").MSHoldVisual) {
+	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
+	                        }
 
-	            //Input down/press polyfill
-	            down: function down(evt) {
-	                //Grab parent
-	                var input = evt.target.app.input;
+	                        /* Overrides the ContextMenu event */
 
-	                //Save Latest X/Y or 0
+	                        if (this.app.options.get("override").ContextMenu) {
+	                                this.app.document.oncontextmenu = this.preventDefault;
+	                                this.app.window.self.oncontextmenu = this.preventDefault;
+	                        }
 
-	                input.x = input.start.x = evt.x || evt.clientX || evt.pageX;
-	                input.y = input.start.y = evt.y || evt.clientY || evt.pageY;
+	                        /*	Overrides dragstart event		*/
 
-	                //Increment Touch Count
-	                input.touched.count++;
+	                        if (this.app.options.get("override").Drag) {
+	                                this.app.document.ondragstart = this.preventDefault;
+	                                this.app.window.self.ondragstart = this.preventDefault;
+	                        }
 
-	                //Add positions to touch list
-	                input.touched.downlist.push({ x: input.x, y: input.y });
+	                        /*	CSS based Overrides
+	                                  - mstouch
+	                                - seamless ( toggles overflow )
+	                                - tight ( zeros padding and margin )
+	                          */
 
-	                //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
+	                        if (this.app.options.get("flags").mstouch) {
+	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+	                        }
 
-	                //Flags
-	                if (!Windows) input.pressed = true;
-	                if (!Windows) input.press = true;
+	                        if (this.app.options.get("flags").seamless) {
+	                                this.app.document.body.style.overflow = "hidden";
+	                        }
 
-	                //Reset distance
-	                input.dist.x = 0;
-	                input.dist.y = 0;
-	            },
-
-	            //input move fill
-
-	            mouse_last: 0,
-	            move: function move(evt) {
-
-	                //Grab parent
-	                var input = evt.target.app.input;
-
-	                evt = evt || input || { clientX: null, clientY: null };
-
-	                var mouse_last = this.mouse_last;
-	                //sET PRESS
-
-	                if (input.pressed) {
-	                    if (!Windows) input.press = true;
-	                    input.x = evt.clientX || evt.x || evt.pageX;
-	                    input.y = evt.clientY || evt.y || evt.pageY;
-	                    input.dist.x = (input.x - input.start.x) * evt.target.app.getScale();
-	                    input.dist.y = (input.y - input.start.y) * evt.target.app.getScale();
-
-	                    if (input.dist.x > 0) if (this.mouse_last > input.dist.x) input.start.x = input.x, input.dist.x = 0;
-
-	                    if (input.dist.x < 0) if (this.mouse_last < input.dist.x) input.start.x = input.x, input.dist.x = 0;
-
-	                    this.mouse_last = input.dist.x;
+	                        if (this.app.options.get("flags").tight) {
+	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
+	                        }
 	                }
-	            },
+	        }, {
+	                key: "update",
+	                value: function update() {
 
-	            up: function up(evt) {
+	                        this.confineMouse();
 
-	                var input = evt.target.app.input;
+	                        //Reset variables
+	                        this.press = false;
+	                        this.touch = 0;
+	                        this.app.window.inside = 0;
+	                        this.wheelDelta = 0;
 
-	                input.end.x = evt.x || input.x;
-	                input.end.y = evt.y || input.y;
+	                        this.pressed ? this.duration++ : this.duration = 0;
 
-	                input.touched.uplist.push({ x: input.x, y: input.y });
-	                input.touched.last = { x: input.x, y: input.y };
-	                input.touched.count--;
-	                //Track touch downs, make CheckTouchDown and CheckTouchUp for buttons
+	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
 
-	                input.press = false;
-	                input.pressed = false;
-	                input.released = true;
-	                input.touch = false;
-	                input.dist.x = (input.x - input.start.x) * evt.target.app.getScale();
-	                input.dist.y = (input.y - input.start.y) * evt.target.app.getScale();
-	            },
+	                        //this.setup_msUniversalAppTouch();
 
-	            key_down: function key_down(evt) {
-	                evt.input.key = true;
-	                evt.input.kpressed = true;
-	            },
+	                        if (this.delay > 0) {
 
-	            key_up: function key_up(evt) {
-	                evt.input.key = false;
-	                evt.input.kpressed = false;
-	                evt.input.kreleased = true;
-	                evt.input.kpressed = false;
-	            },
+	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	                        }
 
-	            touch: function touch(evt) {
-	                return;
-	                //	var input = touch.target.app.input;
+	                        //reset code released, unused?
+	                        this.codereleased = 0;
 
-	                //log(input,touch);
-	                try {
-	                    var input = evt.target.app.input || evt;
-	                } catch (e) {
-	                    var input = evt;log(evt);
-	                };
-	                input.touch = true;
-
-	                input.x = evt.clientX || evt.x || evt.pageX;
-	                input.y = evt.clientY || evt.y || evt.pageY;
-
-	                input.pos = { x: 0, y: 0 };
-	                input.pos.x = evt.pageX || evt.clientX;
-	                input.pos.y = evt.pageY || evt.clientY;
-	                input.released = false;
-	                input.duration = 0;
-	            }
-
-	        };
-
-	        _this2.touched = {
-
-	            count: 0,
-	            uplist: [],
-	            downlist: [],
-	            last: { x: 0, y: 0 },
-	            CheckTouchUp: function CheckTouchUp() {
-
-	                return this.uplist[this.uplist.length - 1];
-	            },
-	            CheckTouchDown: function CheckTouchDown() {}
-
-	        };
-
-	        _this2.scroll = _this2.app.Construct(_this2.scroll.prototype, _this2.scroll.constructor).init();
-
-	        return _this2;
-	    }
-
-	    _createClass(Input, [{
-	        key: 'init_options',
-	        value: function init_options() {
-
-	            /*	Overrides the selection start event for selecting events	*/
-
-	            if (!this.app.options.get("override").SelectStart) {
-	                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
-	            }
-
-	            /*	Overrides the 'holdtouch, MSHoldVisual' event */
-
-	            if (!this.app.options.get("override").MSHoldVisual) {
-	                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
-	            }
-
-	            /* Overrides the ContextMenu event */
-
-	            if (this.app.options.get("override").ContextMenu) {
-	                this.app.document.oncontextmenu = this.preventDefault;
-	                this.app.window.self.oncontextmenu = this.preventDefault;
-	            }
-
-	            /*	Overrides dragstart event		*/
-
-	            if (this.app.options.get("override").Drag) {
-	                this.app.document.ondragstart = this.preventDefault;
-	                this.app.window.self.ondragstart = this.preventDefault;
-	            }
-
-	            /*	CSS based Overrides
-	                      - mstouch
-	                    - seamless ( toggles overflow )
-	                    - tight ( zeros padding and margin )
-	              */
-
-	            if (this.app.options.get("flags").mstouch) {
-	                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-	            }
-
-	            if (this.app.options.get("flags").seamless) {
-	                this.app.document.body.style.overflow = "hidden";
-	            }
-
-	            if (this.app.options.get("flags").tight) {
-	                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
-	            }
-	        }
-	    }, {
-	        key: 'init_keys',
-	        value: function init_keys() {
-
-	            /* 	Key Down and Key Up Events - Populates supported codes */
-
-	            this.populateCodes();
-
-	            this.app.Listener(this.app.window.self, 'keydown', function (evt) {
-
-	                if (this.app.input.preventNext == true) evt.preventDefault();
-
-	                this.app.input.preventNext = false;
-	                this.app.input.codedown = this.app.input.codes[evt.keyCode];
-
-	                this.app.input.codeList.push(this.app.input.codedown);
-
-	                if (evt.ctrlKey) this.app.input.control = true;
-
-	                this.app.input.pressed = true;
-	                this.app.input.released = false;
-
-	                this.app.input.listener.key_down(this.app);
-	            });
-
-	            this.app.Listener(this.app.window.self, 'keyup', function (evt) {
-
-	                if (this.app.input.preventNext) evt.preventDefault();
-
-	                this.app.input.preventNext = false;
-	                this.app.input.codeup = this.app.input.codes[evt.keyCode];
-
-	                this.app.input.keyboardPop(this.app.input.codeup);
-
-	                this.app.input.control = false;
-	                this.app.input.pressed = false;
-	                this.app.input.released = true;
-	                this.app.input.true = true;
-
-	                this.app.input.listener.key_up(this.app);
-	            });
-	        }
-	    }, {
-	        key: 'init_win',
-	        value: function init_win() {
-
-	            // this.upointer = window.WinPointer;
-	            // console.log(this.upointer);
-	            this.wininitalize = false;
-	            this.winpoint = null;
-	        }
-	    }, {
-	        key: 'init_pointerEvents',
-	        value: function init_pointerEvents() {
-
-	            /* mousewheel event			*/
-
-	            //this.app.Listener(this.app.window.self,'mousewheel',this.scroll.event);
-
-	            /*
-	            			Pointer events
-	            				- Modern Touch Events
-	            		- MS Pointer Events
-	            		- Legacy Mouse and Touch Events
-	            		*/
-	            var typeofEvent = 0 || this.app.window.self.PointerEvent || this.app.window.self.MSPointerEvent;
-	            var events = [];
-	            var _functions = [];
-	            var self = this.app.window.self;
-
-	            /*
-	            switch (typeofEvent) {
-	            case this.app.window.self.PointerEvent:
-	            events = [
-	            'pointerdown',
-	            'pointerup',
-	            'pointermove'
-	            ];
-	            _functions = [
-	            function(){},
-	            function(){},
-	            function(){}
-	            ]
-	            break;
-	            case this.app.window.self.MSPointerEvent:
-	            events = [
-	            'MSPointerDown',
-	            'MSPointerMove',
-	            'MSPointerUp'
-	            ];
-	            _functions = [
-	            function(){},
-	            function(){},
-	            function(){}
-	            ]
-	            break;
-	            case 'touch':
-	            events = [
-	            'touchdown',
-	            'touchup',
-	            'touchmove'
-	            ];
-	            _functions = [
-	            function(){},
-	            function(){},
-	            function(){}
-	            ]
-	            break;
-	            default:
-	            events = [
-	            'mousedown',
-	            'mouseup',
-	            'mousemove'
-	            ];
-	            _functions = [
-	            function(){},
-	            function(){},
-	            function(){}
-	            ]
-	            break;
-	            }
-	              */
-
-	            for (var e = events.length - 1; e > 0; e--) {
-	                this.app.Listener(self, events[e], _function);
-	            }if (this.app.window.self.PointerEvent) {
-
-	                this.app.Listener(this.app.window.self, 'pointerdown', function (evt) {
-
-	                    if (!evt.target.app) return;
-	                    evt.target.app.input.touch = true;
-	                    evt.target.app.input.listener.down(evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'pointermove', function (evt) {
-
-	                    if (!evt.target.app) return;
-	                    evt.target.app.input.touch = true;
-	                    evt.target.app.input.listener.move(evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'pointerup', function (evt) {
-
-	                    if (!evt.target.app) return;
-	                    evt.target.app.input.touch = false;
-	                    evt.target.app.input.listener.up(evt);
-	                });
-	            } else if (this.app.window.self.MSPointerEvent) {
-
-	                //MS Pointer Events
-	                this.app.Listener(this.app.window.self, 'MSPointerDown', function (evt) {
-
-	                    if (!evt.target.app) return;
-	                    evt.target.app.input.touch = true;
-	                    evt.target.app.input.listener.down(evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'MSPointerMove', function (evt) {
-
-	                    if (!evt.target.app) return;
-	                    evt.target.app.input.touch = true;
-	                    evt.target.app.input.listener.move(evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'MSPointerUp', function (evt) {
-
-	                    if (!evt.target.app) return;
-	                    evt.target.app.input.touch = false;
-	                    evt.target.app.input.listener.up(evt);
-	                });
-	            } else {
-
-	                this.app.Listener(this.app.window.self, 'mousedown', function (evt) {
-
-	                    if (!evt.target.app) return;
-
-	                    evt.target.app.input.listener.down(evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'mousemove', function (evt) {
-
-	                    if (!evt.target.app) return;
-
-	                    evt.target.app.input.listener.move(evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'mouseup', function (evt) {
-
-	                    if (!evt.target.app) return;
-
-	                    evt.target.app.input.touch = false;
-	                    evt.target.app.input.listener.up(evt, evt);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'touchstart', function (evt) {
-
-	                    if (!evt.target.app) return;
-
-	                    evt.target.app.input.touch = true;
-	                    evt.target.app.input.listener.touch(evt.targetTouches[0]);
-
-	                    if (evt.target.app.options.flags.touchprevent) evt.preventDefault();
-	                });
-
-	                this.app.Listener(this.app.window.self, 'touchmove', function (evt) {
-
-	                    if (!evt.target.app) return;
-
-	                    if (evt.target.app.options.flags.touchprevent) evt.preventDefault();
-
-	                    evt.target.app.input.touch = true;
-	                    evt.target.app.input.listener.move(evt, evt.targetTouches[0]);
-	                });
-
-	                this.app.Listener(this.app.window.self, 'touchend', function (evt) {
-
-	                    if (!evt.target.app) return;
-
-	                    evt.target.app.input.touch = false;
-	                    evt.target.app.input.listener.up(evt);
-
-	                    if (evt.target.app.options.flags.touchprevent) evt.preventDefault();
-	                });
-	            }
-	        }
-	    }, {
-	        key: 'detect',
-	        value: function detect() {
-
-	            // if (window.winPointer)
-	            //     this.init_win();
-	            // else
-	            //     log("No Win");
-
-	        }
-	    }, {
-	        key: 'preventDefault',
-	        value: function preventDefault(e) {
-	            e.preventDefault();return e.target.app;
-	        }
-	    }, {
-	        key: 'preventNextInput',
-	        value: function preventNextInput() {
-	            return this.preventNext = true;
-	        }
-	    }, {
-	        key: 'winupdate',
-	        value: function winupdate() {
-
-	            var i = 0;
-
-	            var data = {
-	                app: this.app,
-	                x: 0,
-	                y: 0
-	            };
-
-	            if (this.pressed == false && this.lastpressed == true) {
-	                this.released = true, this.dist.x = 0, this.dist.y = 0;
-
-	                this.controls.up(data);
-	            }
-
-	            this.lastpressed = this.pressed;
-
-	            if (!this.wininitalize) try {
-
-	                var w = Windows;
-	                var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-
-	                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
-	                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
-	                this.wininitalize = true;
-
-	                data = {
-	                    app: this.app,
-	                    x: this.winposition.x,
-	                    y: this.winposition.y
-	                };
-	            } catch (e) {
-
-	                data = {
-	                    app: this.app,
-	                    x: 0,
-	                    y: 0
-	                };
-	            } else {
-	                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-	                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
-	                this.pressed = this.winpoint.isInContact;
-	                this.pointerDevice = this.winpoint.pointerDevice;
-
-	                var pt = this.pointerPoint.getCurrentPoint(1);
-	                var ptTargetProperties = pt.properties;
-
-	                if (this.released) {
-
-	                    var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
-
-	                    switch (pt.pointerDevice.pointerDeviceType) {
-	                        case "mouse":
-	                        case 2:
-	                            details += "\nPointer type: mouse";
-	                            details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
-	                            details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
-	                            details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
-	                            details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
-	                            details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
-	                            break;
-	                        case "pen":
-	                            details += "\nPointer type: pen";
-	                            if (pt.isInContact) {
-	                                details += "\nPressure: " + ptTargetProperties.pressure;
-	                                details += "\nrotation: " + ptTargetProperties.rotation;
-	                                details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
-	                            }
-	                            break;
-	                        case "touch":
-	                            details += "\nPointer type: touch";
-	                            details += "\nPressure: " + ptTargetProperties.pressure;
-	                            details += "\nrotation: " + ptTargetProperties.rotation;
-	                            details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                            details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                            break;
-	                        default:
-	                            details += "\nPointer type: " + "n/a";
-	                            break;
-	                    }
-	                    details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
-	                    //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
-	                    //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
-	                    //console.log(pt.pointerDevice);
-	                    //console.log(details);
+	                        return true;
 	                }
-	                i = this.winpoint;
+	        }, {
+	                key: "setup_universalMultitouch",
+	                value: function setup_universalMultitouch() {
 
-	                data.x = this.winposition.x;
-	                data.y = this.winposition.y;
+	                        //touch-action: none;
 
-	                if (this.pressed == true && this.lastpressed == true) this.controls.move(data);
-	            }
+	                        if (window.PointerEvent) {
+	                                // Pointer events are supported.
 
-	            if (this.pressed == true && this.lastpressed == false) this.controls.down(data);
+	                                // Test for touch capable hardware
+	                                if (navigator.maxTouchPoints) {}
 
-	            // console.log(i)
-	            //  if (Windows)
-	            //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
-	            //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
-	        }
+	                                // Test for multi-touch capable hardware
+	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
 
-	        /*
-	        
-	        	Populates this.codes with an array of codes
-	        
-	        */
+	                                // Check the maximum number of touch points the hardware supports
+	                                var touchPoints = navigator.maxTouchPoints;
+	                        }
 
-	    }, {
-	        key: 'populateCodes',
-	        value: function populateCodes() {
+	                        /*
+	                            this.multi = {
+	                            list:[]
+	                          };
+	                                */
 
-	            // Keyboard Codes 0 - whatever, includes keypad, wii and controllers
+	                        this.touched = {
 
-	            this.codes = [], this.codes[0] = "", this.codes[1] = "", this.codes[2] = "", this.codes[3] = "", this.codes[4] = "", this.codes[5] = "", this.codes[6] = "", this.codes[7] = "", this.codes[8] = "backspace", this.codes[9] = "tab", this.codes[13] = "enter", this.codes[16] = "shift", this.codes[17] = "ctrl", this.codes[18] = "alt", this.codes[19] = "pause/break", this.codes[20] = "capslock", this.codes[27] = "escape", this.codes[32] = "space", this.codes[33] = "pageup", this.codes[34] = "pagedown", this.codes[35] = "end", this.codes[36] = "home", this.codes[37] = "leftarrow", this.codes[38] = "uparrow", this.codes[39] = "rightarrow", this.codes[40] = "downarrow", this.codes[45] = "insert", this.codes[46] = "delete", this.codes[48] = "0", this.codes[49] = "1", this.codes[50] = "2", this.codes[51] = "3", this.codes[52] = "4", this.codes[53] = "5", this.codes[54] = "6", this.codes[55] = "7", this.codes[56] = "8", this.codes[57] = "9", this.codes[65] = "a", this.codes[66] = "b", this.codes[67] = "c", this.codes[68] = "d", this.codes[69] = "e", this.codes[70] = "f", this.codes[71] = "g", this.codes[72] = "h", this.codes[73] = "i", this.codes[74] = "j", this.codes[75] = "k", this.codes[76] = "l", this.codes[77] = "m", this.codes[78] = "n", this.codes[79] = "o", this.codes[80] = "p", this.codes[81] = "q", this.codes[82] = "r", this.codes[83] = "s", this.codes[84] = "t", this.codes[85] = "u", this.codes[86] = "v", this.codes[87] = "w", this.codes[88] = "x", this.codes[89] = "y", this.codes[90] = "z", this.codes[91] = "leftwindowkey", this.codes[92] = "rightwindowkey", this.codes[93] = "selectkey", this.codes[96] = "numpad0", this.codes[97] = "numpad1", this.codes[98] = "numpad2", this.codes[99] = "numpad3", this.codes[100] = "numpad4", this.codes[101] = "numpad5", this.codes[102] = "numpad6", this.codes[103] = "numpad7", this.codes[104] = "numpad8", this.codes[105] = "numpad9", this.codes[106] = "multiply", this.codes[107] = "add", this.codes[109] = "subtract", this.codes[110] = "decimalpoint", this.codes[111] = "divide", this.codes[112] = "f1", this.codes[113] = "f2", this.codes[114] = "f3", this.codes[115] = "f4", this.codes[116] = "f5", this.codes[117] = "f6", this.codes[118] = "f7", this.codes[119] = "f8", this.codes[120] = "f9", this.codes[121] = "f10", this.codes[122] = "f11", this.codes[123] = "f12", this.codes[144] = "numlock", this.codes[145] = "scrolllock", this.codes[175] = "Up (Wii?)", this.codes[176] = "Down (Wii?)", this.codes[177] = "Left (Wii?)", this.codes[178] = "Right (Wii?)", this.codes[170] = "- (Wii?)", this.codes[174] = "+ (Wii?)", this.codes[172] = "1 (Wii?)", this.codes[173] = "2 (Wii?)", this.codes[186] = "semi-colon", this.codes[187] = "equalsign", this.codes[188] = "comma", this.codes[189] = "dash", this.codes[190] = "period", this.codes[191] = "forwardslash", this.codes[192] = "graveaccent", this.codes[219] = "openbracket", this.codes[220] = "backslash", this.codes[221] = "closebraket", this.codes[222] = "singlequote";
-	        }
+	                                count: 0,
+	                                uplist: [],
+	                                downlist: [],
+	                                last: { x: 0, y: 0 },
+	                                CheckTouchUp: function CheckTouchUp() {
 
-	        /*
-	        
-	        	Check if keyboard key is pressed
-	        
-	        */
+	                                        return this.uplist[this.uplist.length - 1];
+	                                },
+	                                CheckTouchDown: function CheckTouchDown() {}
 
-	    }, {
-	        key: 'keyboardCheck',
-	        value: function keyboardCheck(code) {
+	                        };
+	                }
+	        }, {
+	                key: "setup_msUniversalAppTouch",
+	                value: function setup_msUniversalAppTouch() {
 
-	            var e = this.codeList.length - 1;
+	                        var i = 0;
 
-	            for (var i = e; i >= 0; --i) {
-	                if (this.codeList[i] == code) return true;
-	            }return false;
-	        }
+	                        var data = {
+	                                app: this.app,
+	                                x: 0,
+	                                y: 0
+	                        };
 
-	        /*
-	        
-	        	Add code to array
-	        
-	        */
+	                        if (this.pressed == false && this.lastpressed == true) {
+	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
 
-	    }, {
-	        key: 'keyboardPop',
-	        value: function keyboardPop(code) {
+	                                this.controls.up(data);
+	                        }
 
-	            var e = this.codeList.length - 1;
-	            for (var i = e; i >= 0; --i) {
-	                if (this.codeList[i] == code) this.codeList[i] = null;
-	            }
-	        }
+	                        this.lastpressed = this.pressed;
 
-	        /*
-	        	Unused? Legacy Functions
-	        */
+	                        if (!this.wininitalize) try {
 
-	    }, {
-	        key: 'mouse',
-	        value: function mouse() {
+	                                var w = Windows;
+	                                var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
 
-	            if (!App.input.pressed) App.input.dist = App.client.Math.Vector.Difference(App.ext.input, App.input.start);
-	        }
-	    }, {
-	        key: 'mouse_distance',
-	        value: function mouse_distance() {
+	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
+	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
+	                                this.wininitalize = true;
 
-	            if (!App.input.pressed) App.input.dist = App.client.Math.Vector.Difference(App.input.start, App.input.end);
-	        }
-	    }, {
-	        key: 'touch_distance',
-	        value: function touch_distance(touch) {
+	                                data = {
+	                                        app: this.app,
+	                                        x: this.winposition.x,
+	                                        y: this.winposition.y
+	                                };
+	                        } catch (e) {
 
-	            if (!touch) return;
-	            App.input.x = touch.pageX || touch.clientX;
-	            App.input.y = touch.pageY || touch.clientX;
-	            //if (!App.input.input.pressed)
-	            App.input.dist = App.client.Math.Vector.Difference(App.input.start, App.input.end);
-	        }
-	    }, {
-	        key: 'getPosition',
-	        value: function getPosition(canvas, evt) {
+	                                data = {
+	                                        app: this.app,
+	                                        x: 0,
+	                                        y: 0
+	                                };
+	                        } else {
+	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
+	                                this.pressed = this.winpoint.isInContact;
+	                                this.pointerDevice = this.winpoint.pointerDevice;
 
-	            console.log('eh');
+	                                var pt = this.pointerPoint.getCurrentPoint(1);
+	                                var ptTargetProperties = pt.properties;
 
-	            if (!canvas || !evt) return false;
-	            return { x: evt.clientX, y: evt.clientY };
-	        }
-	        //
+	                                if (this.released) {
 
-	    }, {
-	        key: '_getAngle',
-	        value: function _getAngle() {
+	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
 
-	            //Convert to degrees
-	            return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
-	        }
-	        //
+	                                        switch (pt.pointerDevice.pointerDeviceType) {
+	                                                case "mouse":
+	                                                case 2:
+	                                                        details += "\nPointer type: mouse";
+	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
+	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
+	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
+	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
+	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
+	                                                        break;
+	                                                case "pen":
+	                                                        details += "\nPointer type: pen";
+	                                                        if (pt.isInContact) {
+	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
+	                                                        }
+	                                                        break;
+	                                                case "touch":
+	                                                        details += "\nPointer type: touch";
+	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                        break;
+	                                                default:
+	                                                        details += "\nPointer type: " + "n/a";
+	                                                        break;
+	                                        }
+	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
+	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
+	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
+	                                        //console.log(pt.pointerDevice);
+	                                        //console.log(details);
+	                                }
+	                                i = this.winpoint;
 
-	    }, {
-	        key: '_getAngleDistance',
-	        value: function _getAngleDistance() {
+	                                data.x = this.winposition.x;
+	                                data.y = this.winposition.y;
 
-	            //Return the delta between x and y
-	            var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
-	            return delta;
-	        }
-	        //
+	                                if (this.pressed == true && this.lastpressed == true) this.controls.move(data);
+	                        }
 
-	    }, {
-	        key: '_getHorizontal',
-	        value: function _getHorizontal() {
+	                        if (this.pressed == true && this.lastpressed == false) this.controls.down(data);
 
-	            var wasd = this.app.input.keyboardCheck("a") - this.app.input.keyboardCheck("d");
-	            var arrows = this.app.input.keyboardCheck("leftarrow") - this.app.input.keyboardCheck("rightarrow");
-	            var mouse = -this.getPressed() * this.app.input.dist.x;
-	            var touch = -this.getTouched() * this.app.input.dist.x;
+	                        // console.log(i)
+	                        //  if (Windows)
+	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
+	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
+	                }
+	        }]);
 
-	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
-
-	            return { keyboard: keyboard, touch: touched };
-	        }
-	        //
-
-	    }, {
-	        key: '_getVertical',
-	        value: function _getVertical() {
-
-	            var wasd = this.app.input.keyboardCheck("s") - this.app.input.keyboardCheck("w");
-	            var arrows = this.app.input.keyboardCheck("downarrow") - this.app.input.keyboardCheck("uparrow");
-	            var mouse = this.getPressed() * this.app.input.dist.y;
-	            var touch = this.getTouched() * this.app.input.dist.y;
-
-	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
-
-	            return { keyboard: keyboard, touch: touched };
-	        }
-
-	        //
-	        //
-
-	    }, {
-	        key: '_getStartX',
-	        value: function _getStartX() {
-	            return this.start.x;
-	        }
-	        //
-
-	    }, {
-	        key: '_getStartY',
-	        value: function _getStartY() {
-	            return this.start.y;
-	        }
-	        //
-
-	    }, {
-	        key: '_getDuration',
-	        value: function _getDuration() {
-	            return this.duration;
-	        }
-	        //
-
-	    }, {
-	        key: '_getTouched',
-	        value: function _getTouched() {
-	            return this.touch;
-	        }
-	        //
-
-	    }, {
-	        key: '_getPressed',
-	        value: function _getPressed() {
-	            return this.pressed;
-	        }
-	        //
-
-	    }, {
-	        key: '_getReleased',
-	        value: function _getReleased() {
-	            return this.released;
-	        }
-
-	        /*
-	         		Confine Mouse To Canvas
-	         	*/
-
-	    }, {
-	        key: 'confineMouse',
-	        value: function confineMouse() {
-
-	            //Temporary Disable
-
-	            return false;
-
-	            /*
-	            this.confine?(
-	            ((this.y<this.app.client.visuals.fixY(0))?
-	            (this.app.window.y=0,this.app.window.inside -= 1):
-	            ((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-	            (this.app.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.app.window.inside += 1):
-	            (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
-	            ),
-	            ((this.x<this.app.client.visuals.fixX(0))?
-	            (this.app.window.x = 0,this.app.window.inside -=1):
-	            ((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-	            (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.app.window.inside += 1):
-	            (this.app.window.x = -this.app.client.visuals.fixX(0)+this.x)
-	            )
-	            )
-	            )
-	            ):((this.y<this.app.client.visuals.fixY(0))?
-	            (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
-	            ((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-	            (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
-	            (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
-	            ),
-	            ((this.x<this.app.client.visuals.fixX(0))?
-	            (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
-	            ((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-	            (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
-	            (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x)
-	            )
-	            ));
-	            */
-	        }
-	    }]);
-
-	    return Input;
-	})(SJSInputController);
+	        return Input;
+	})(_inputcontroller3.default);
 
 	exports.default = Input;
 
@@ -8065,38 +7221,677 @@
 	    function Vector(x, y) {
 	        _classCallCheck(this, Vector);
 
-	        this.x = x;
-	        this.y = y;
+	        this.x = x || this.constructor._x;
+	        this.y = y || this.constructor._y;
 	    }
 
 	    _createClass(Vector, [{
-	        key: "x",
+	        key: "position",
 	        set: function set(value) {
 
-	            this.constructor._x = value;
+	            this._x = value.x;
+	            this._y = value.y;
 	        },
 	        get: function get() {
 
-	            return this.constructor._x;
+	            return new Vector(this._x, this._y);
+	        }
+	    }, {
+	        key: "x",
+	        set: function set(value) {
+
+	            this._x = value;
+	        },
+	        get: function get() {
+
+	            return this._x;
 	        }
 	    }, {
 	        key: "y",
 	        get: function get() {
 
-	            return this.constructor._y;
+	            return this._y;
 	        },
 	        set: function set(value) {
 
-	            this.constructor._y = value;
+	            this._y = value;
+	        }
+	    }], [{
+	        key: "_x",
+	        set: function set(value) {
+
+	            this.position[0] = value;
+	        },
+	        get: function get() {
+
+	            return this.position[0];
+	        }
+	    }, {
+	        key: "_y",
+	        set: function set(value) {
+
+	            this.position[1] = value;
+	        },
+	        get: function get() {
+
+	            return this.position[1];
 	        }
 	    }]);
 
 	    return Vector;
 	})();
 
+	Vector.position = {};
 	Vector._x = 0;
 	Vector._y = 0;
 	exports.default = Vector;
+
+/***/ },
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _vector = __webpack_require__(200);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	var _sjsclass = __webpack_require__(194);
+
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	var _inputlistener = __webpack_require__(206);
+
+	var _inputlistener2 = _interopRequireDefault(_inputlistener);
+
+	var _inputkeycontroller = __webpack_require__(207);
+
+	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
+
+	var _inputscrollcontroller = __webpack_require__(208);
+
+	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var inputcontroller = (function (_SJSClass) {
+	        _inherits(inputcontroller, _SJSClass);
+
+	        function inputcontroller() {
+	                _classCallCheck(this, inputcontroller);
+
+	                return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
+	        }
+
+	        _createClass(inputcontroller, [{
+	                key: 'x',
+	                get: function get() {
+
+	                        return this.constructor._x;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._x = value;
+	                }
+	        }, {
+	                key: 'y',
+	                get: function get() {
+
+	                        return this.constructor._y;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._y = value;
+	                }
+	        }, {
+	                key: 'last',
+	                get: function get() {
+
+	                        return this.constructor._last;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._last = value;
+	                }
+	        }, {
+	                key: 'pos',
+	                get: function get() {
+
+	                        return this.constructor._pos;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._pos = value;
+	                }
+	        }, {
+	                key: 'dist',
+	                get: function get() {
+
+	                        return this.constructor._dist;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._dist = value;
+	                }
+	        }, {
+	                key: 'end',
+	                get: function get() {
+
+	                        return this.constructor._end;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._end = value;
+	                }
+	        }, {
+	                key: 'start',
+	                get: function get() {
+
+	                        return this.constructor._start;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._start = value;
+	                }
+	        }, {
+	                key: 'duration',
+	                get: function get() {
+
+	                        return this.constructor._duration;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._duration = value;
+	                }
+	        }, {
+	                key: 'angle',
+	                get: function get() {
+
+	                        return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
+	                }
+	        }, {
+	                key: 'angleDelta',
+	                get: function get() {
+
+	                        var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
+	                        return delta;
+	                }
+	        }, {
+	                key: 'position',
+	                get: function get() {
+
+	                        return new _vector2.default(this.x, this.y);
+	                },
+	                set: function set(value) {
+
+	                        this.x = value.x;
+	                        this.y = value.y;
+	                }
+	        }, {
+	                key: 'released',
+	                get: function get() {
+
+	                        return this.constructor._released;
+	                },
+	                set: function set(value) {
+
+	                        return this.constructor._released = value;
+	                }
+	        }, {
+	                key: 'pressed',
+	                get: function get() {
+
+	                        return this.constructor._pressed;
+	                },
+	                set: function set(value) {
+
+	                        return this.constructor._pressed = value;
+	                }
+	        }, {
+	                key: 'keyController',
+	                get: function get() {
+
+	                        return this.constructor._keyController;
+	                },
+	                set: function set(value) {
+
+	                        return this.constructor._keyController = value;
+	                }
+	        }, {
+	                key: 'scrollController',
+	                get: function get() {
+
+	                        return this.constructor._scrollController;
+	                },
+	                set: function set(value) {
+
+	                        return this.constructor._scrollController = value;
+	                }
+	        }], [{
+	                key: 'pointerup',
+	                value: function pointerup(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+
+	                        if (typeof evt.target.app === 'undefined') return;
+
+	                        var input = evt.target.app.input;
+
+	                        var x = evt.x || evt.clientX || evt.pageX;
+
+	                        var y = evt.y || evt.clientY || evt.pageY;
+
+	                        input.last = input.end = new _vector2.default(x, y);
+
+	                        input.pressed = false;
+
+	                        return true;
+	                }
+	        }, {
+	                key: 'pointermove',
+	                value: function pointermove(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
+
+	                        var input = evt.target.app.input;
+	                        var x = evt.x || evt.clientX || evt.pageX;
+	                        var y = evt.y || evt.clientY || evt.pageY;
+
+	                        var mouse_last = this.mouse_last;
+
+	                        input.last = input.position = new _vector2.default(x, y);
+
+	                        if (input.pressed) {
+
+	                                var dx = (input.x - input.start.x) * evt.target.app.getScale();
+	                                var dy = (input.y - input.start.y) * evt.target.app.getScale();
+	                                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
+	                        }
+
+	                        if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
+
+	                        if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
+
+	                        this.mouse_last = input.dist.x;
+	                }
+	        }, {
+	                key: 'pointerdown',
+	                value: function pointerdown(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
+
+	                        var input = evt.target.app.input;
+
+	                        var x = evt.x || evt.clientX || evt.pageX;
+
+	                        var y = evt.y || evt.clientY || evt.pageY;
+
+	                        input.start = new _vector2.default(x, y);
+
+	                        input.pressed = true;
+
+	                        input.touch = true;
+
+	                        input.touched.count++;
+
+	                        input.touched.downlist.push(input.position);
+
+	                        input.dist = new _vector2.default(0, 0);
+	                }
+	        }]);
+
+	        return inputcontroller;
+	})(_sjsclass2.default);
+
+	inputcontroller._x = 0;
+	inputcontroller._y = 0;
+	inputcontroller._last = new _vector2.default(0, 0);
+	inputcontroller._pos = new _vector2.default(0, 0);
+	inputcontroller._dist = new _vector2.default(0, 0);
+	inputcontroller._end = new _vector2.default(0, 0);
+	inputcontroller._start = new _vector2.default(0, 0);
+	inputcontroller._duration = 0;
+	inputcontroller._pressed = false;
+	inputcontroller._released = false;
+	inputcontroller._Listener = _inputlistener2.default;
+	inputcontroller._keyController = new _inputkeycontroller2.default();
+	inputcontroller._scrollController = _inputscrollcontroller2.default;
+	exports.default = inputcontroller;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/*
+
+	    SJSInputListener
+	        [listener0,listener1,listener2,element,function]
+
+	        let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
+	        let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
+	        let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
+
+	*/
+
+	var InputListener = (function () {
+	    function InputListener(a, b, c, d, elm, evt) {
+	        _classCallCheck(this, InputListener);
+
+	        this.elm = elm;
+
+	        if (window.PointerEvent) this.msPointer(a, evt);else if (window.MSPointerEvent) this.Pointer(b, evt);else this.mousePointer(c, evt);
+
+	        if ('ontouchstart' in window || navigator.maxTouchPoints) this.touchPointer(d, evt);
+	    }
+
+	    _createClass(InputListener, [{
+	        key: 'msPointer',
+	        value: function msPointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+	    }, {
+	        key: 'Pointer',
+	        value: function Pointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+	    }, {
+	        key: 'touchPointer',
+	        value: function touchPointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+	    }, {
+	        key: 'mousePointer',
+	        value: function mousePointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+	    }]);
+
+	    return InputListener;
+	})();
+
+	exports.default = InputListener;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var inputkeycontroller = (function () {
+	    function inputkeycontroller() {
+	        _classCallCheck(this, inputkeycontroller);
+	    }
+
+	    _createClass(inputkeycontroller, [{
+	        key: "key_down",
+	        value: function key_down(evt) {
+	            evt.input.key = true;
+	            evt.input.kpressed = true;
+	        }
+	    }, {
+	        key: "key_up",
+	        value: function key_up(evt) {
+	            evt.input.key = false;
+	            evt.input.kpressed = false;
+	            evt.input.kreleased = true;
+	            evt.input.kpressed = false;
+	        }
+	    }, {
+	        key: "keyboardCheck",
+	        value: function keyboardCheck(code) {
+
+	            var e = this.codeList.length - 1;
+
+	            for (var i = e; i >= 0; --i) {
+	                if (this.codeList[i] == code) return true;
+	            }return false;
+	        }
+	    }, {
+	        key: "keyboardPop",
+	        value: function keyboardPop(code) {
+
+	            var e = this.codeList.length - 1;
+	            for (var i = e; i >= 0; --i) {
+	                if (this.codeList[i] == code) this.codeList[i] = null;
+	            }
+	        }
+	    }, {
+	        key: "init",
+	        value: function init(app) {
+
+	            app.Listener(app.window.self, 'keydown', function (evt) {
+
+	                if (app.input.preventNext == true) evt.preventDefault();
+
+	                app.input.preventNext = false;
+
+	                app.input.codedown = app.input.keyController.keyCodes[evt.keyCode];
+
+	                app.input.codeList.push(app.input.codedown);
+
+	                if (evt.ctrlKey) app.input.control = true;
+
+	                app.input.pressed = true;
+	                app.input.released = false;
+
+	                app.input.keyController.key_down(app);
+	            });
+
+	            app.Listener(app.window.self, 'keyup', function (evt) {
+
+	                if (app.input.preventNext) evt.preventDefault();
+
+	                app.input.preventNext = false;
+	                app.input.codeup = app.input.keyController.keyCodes[evt.keyCode];
+
+	                app.input.keyController.keyboardPop(app.input.codeup);
+
+	                app.input.control = false;
+	                app.input.pressed = false;
+	                app.input.released = true;
+	                app.input.true = true;
+
+	                app.input.keyController.key_up(app);
+	            });
+
+	            return this.codes;
+	        }
+	    }, {
+	        key: "codeList",
+	        get: function get() {
+
+	            return this.constructor._codeList;
+	        }
+	    }, {
+	        key: "keyCodes",
+	        get: function get() {
+
+	            return this.constructor._keyCodes;
+	        }
+	    }], [{
+	        key: "_keyCodes",
+	        get: function get() {
+
+	            this.codes = [], this.codes[0] = "", this.codes[1] = "", this.codes[2] = "", this.codes[3] = "", this.codes[4] = "", this.codes[5] = "", this.codes[6] = "", this.codes[7] = "", this.codes[8] = "backspace", this.codes[9] = "tab", this.codes[13] = "enter", this.codes[16] = "shift", this.codes[17] = "ctrl", this.codes[18] = "alt", this.codes[19] = "pause/break", this.codes[20] = "capslock", this.codes[27] = "escape", this.codes[32] = "space", this.codes[33] = "pageup", this.codes[34] = "pagedown", this.codes[35] = "end", this.codes[36] = "home", this.codes[37] = "leftarrow", this.codes[38] = "uparrow", this.codes[39] = "rightarrow", this.codes[40] = "downarrow", this.codes[45] = "insert", this.codes[46] = "delete", this.codes[48] = "0", this.codes[49] = "1", this.codes[50] = "2", this.codes[51] = "3", this.codes[52] = "4", this.codes[53] = "5", this.codes[54] = "6", this.codes[55] = "7", this.codes[56] = "8", this.codes[57] = "9", this.codes[65] = "a", this.codes[66] = "b", this.codes[67] = "c", this.codes[68] = "d", this.codes[69] = "e", this.codes[70] = "f", this.codes[71] = "g", this.codes[72] = "h", this.codes[73] = "i", this.codes[74] = "j", this.codes[75] = "k", this.codes[76] = "l", this.codes[77] = "m", this.codes[78] = "n", this.codes[79] = "o", this.codes[80] = "p", this.codes[81] = "q", this.codes[82] = "r", this.codes[83] = "s", this.codes[84] = "t", this.codes[85] = "u", this.codes[86] = "v", this.codes[87] = "w", this.codes[88] = "x", this.codes[89] = "y", this.codes[90] = "z", this.codes[91] = "leftwindowkey", this.codes[92] = "rightwindowkey", this.codes[93] = "selectkey", this.codes[96] = "numpad0", this.codes[97] = "numpad1", this.codes[98] = "numpad2", this.codes[99] = "numpad3", this.codes[100] = "numpad4", this.codes[101] = "numpad5", this.codes[102] = "numpad6", this.codes[103] = "numpad7", this.codes[104] = "numpad8", this.codes[105] = "numpad9", this.codes[106] = "multiply", this.codes[107] = "add", this.codes[109] = "subtract", this.codes[110] = "decimalpoint", this.codes[111] = "divide", this.codes[112] = "f1", this.codes[113] = "f2", this.codes[114] = "f3", this.codes[115] = "f4", this.codes[116] = "f5", this.codes[117] = "f6", this.codes[118] = "f7", this.codes[119] = "f8", this.codes[120] = "f9", this.codes[121] = "f10", this.codes[122] = "f11", this.codes[123] = "f12", this.codes[144] = "numlock", this.codes[145] = "scrolllock", this.codes[175] = "Up (Wii?)", this.codes[176] = "Down (Wii?)", this.codes[177] = "Left (Wii?)", this.codes[178] = "Right (Wii?)", this.codes[170] = "- (Wii?)", this.codes[174] = "+ (Wii?)", this.codes[172] = "1 (Wii?)", this.codes[173] = "2 (Wii?)", this.codes[186] = "semi-colon", this.codes[187] = "equalsign", this.codes[188] = "comma", this.codes[189] = "dash", this.codes[190] = "period", this.codes[191] = "forwardslash", this.codes[192] = "graveaccent", this.codes[219] = "openbracket", this.codes[220] = "backslash", this.codes[221] = "closebraket", this.codes[222] = "singlequote";
+
+	            return this.codes;
+	        }
+	    }]);
+
+	    return inputkeycontroller;
+	})();
+
+	inputkeycontroller._codeList = [];
+	exports.default = inputkeycontroller;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var inputscrollcontroller = {
+
+	        prototype: {
+
+	                /* Cache */
+
+	                x: 0,
+	                y: 1,
+	                target: { x: 0, y: 0 },
+
+	                accel: 1,
+
+	                active: null,
+	                reverse: false,
+	                a: false,
+
+	                window: window,
+	                doc: document.documentElement,
+
+	                //ScrollWheel Event
+	                event: function event(evt, delta) {
+
+	                        if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
+
+	                        if (this.app.options.get("seamless")) evt.preventDefault();
+
+	                        //if (this.app.options.get("overridescroll")==false)
+	                        return;
+
+	                        /*
+	                        this.app.input.wheelDelta = evt.wheelDelta;
+	                          var doc = document.documentElement;
+	                        var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	                        var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+	                               //Flip for horizontal scrolling
+	                           if (this.reverse)
+	                           {
+	                               this.app.input.scroll.target.x = left;
+	                               this.app.input.scroll.target.y = top-evt.wheelDelta;
+	                               this.app.input.scroll.x = left;
+	                               this.app.input.scroll.y = top-evt.wheelDelta;
+	                           }
+	                           else{
+	                               this.app.input.scroll.target.y = 0;
+	                               this.app.input.scroll.target.x = left-evt.wheelDelta;
+	                               this.app.input.scroll.y = 0;
+	                               this.app.input.scroll.x = left-evt.wheelDelta;
+	                           }
+	                          */
+	                        //App.ext.scroll.active = false;$
+	                },
+
+	                up: function up() {
+
+	                        var transitionSpeed = 1;
+
+	                        if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
+
+	                        if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
+
+	                        this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
+	                        this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
+
+	                        //if (this.a)
+	                        //this.app.window.scrollTo(this.x,this.y),this.a = false;
+
+	                        log(this.x, this.y);
+	                },
+
+	                //Update the position for smooth scrolling
+
+	                update: function update(x, y) {
+
+	                        var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
+	                        var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
+
+	                        /* DEACTIVATE IF CONFUSED */
+	                        if (!this.active) return;
+
+	                        var LD = Math.round(-this.x + this.target.x) / 10;
+	                        var YD = Math.round(-this.y + this.target.y) / 10;
+
+	                        if (left < this.target.x) this.x += this.accel * LD;
+	                        if (left > this.target.x) this.x += this.accel * LD;
+	                        if (top < this.target.y) this.y += this.accel * YD;
+	                        if (top > this.target.y) this.y += this.accel * YD;
+
+	                        //	this.app.window.scrollTo(this.x,this.y);
+
+	                        if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
+
+	                        return true;
+	                },
+
+	                //Set position,
+
+	                to: function to(x, y) {
+
+	                        this.target.x = x;
+	                        this.target.y = y;
+	                }
+
+	        },
+
+	        constructor: function constructor(a) {
+	                return {
+	                        app: { value: a },
+	                        init: { value: function value() {
+	                                        this.to(0, 0);
+	                                        return this;
+	                                }
+	                        }
+	                };
+	        }
+
+	};
+
+	exports.default = inputscrollcontroller;
 
 /***/ }
 /******/ ]);

@@ -57,11 +57,12 @@ Current documentation is for an older version of SpiceJS.
 	<li>cookies</li>
 	<li>particles</li>
 	<li>graphics loader</li>
+	<li>multi-touch + mouse & keyboard input detection</li>
 </ul>
 
 ####in-testing
 <ul>
-	<li>multi-touch + mouse & keyboard input detection</li>
+	<li>Device Input Testing </li>
 	<li>advanced drawing (blending, elements, buttons)</li>
 	<li>drawing using vectors</li>
 	<li>pathing</li>
@@ -73,8 +74,7 @@ Current documentation is for an older version of SpiceJS.
 ####coming soon
  <ul>
 	 <li>Multi-Channel Audio</li>
-	 <i>IE Mobile is my main testing device, and audio is a hassle, and so this is on hold</i>
-	 </ul>
+ </ul>
 
 
 ## examples

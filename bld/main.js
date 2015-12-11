@@ -36,23 +36,28 @@ Application.main= {
 
 		this.particleController.draw();
 
+
+        this.visuals.text("Position: "+this.app.input.position.x,this.app.getWidth()/2,20,"#FFFFFF");
+        this.visuals.text("Last: "+this.app.input.last.x,this.app.getWidth()/2,40,"#FFFFFF");
+        this.visuals.text("Start: "+this.app.input.start.x,this.app.getWidth()/2,60,"#FFFFFF");
+        this.visuals.text("End: "+this.app.input.end.x,this.app.getWidth()/2,80,"#FFFFFF");
+        this.visuals.text("Distance: "+this.app.input.dist.x,this.app.getWidth()/2,100,"#FFFFFF");
+
+        var position = this.app.input.position;
+        var start = this.app.input.start;
+        var end = this.app.input.end;
+
         this.visuals.free = true;
 
-        this.visuals.text("p"+this.app.input.position.x,20,20,"#FFFFFF");
-        this.visuals.text("l"+this.app.input.last.x,20,40,"#FFFFFF");
-        this.visuals.text("s"+this.app.input.start.x,20,60,"#FFFFFF");
-        this.visuals.text("e"+this.app.input.end.x,20,80,"#FFFFFF");
-        this.visuals.text("d"+this.app.input.dist.x,20,100,"#FFFFFF");
-
-        this.visuals.line2(this.app.input.position,{x:0,y:0},"#FFFFFF",1)
+        this.visuals.line2(position,start,"#FFFFFF",1)
+        this.visuals.line2(start,end,"#FFFFFF",0.5)
 
         this.visuals.circle(this.app.input.position,this.app.input.duration,"#FFFFFF",1)
 
         this.visuals.free = false;
 
-
-        if (this.app.input.released)
-            console.log(this.app.input.angleDelta);
+        //if (this.app.input.released)
+        //    console.log(this.app.input.angleDelta);
 
         return true;
     }
