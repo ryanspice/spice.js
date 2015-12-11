@@ -25,7 +25,7 @@ export default class inputcontroller extends SJSClass {
         static _keyController = new inputkeycontroller();
         static _scrollController = inputscrollcontroller;
 
-        static pointerup(evt){
+        static _pointerup(evt){
 
             if (typeof evt === 'undefined')
                 return;
@@ -46,7 +46,7 @@ export default class inputcontroller extends SJSClass {
             return true;
         }
 
-        static pointermove(evt){
+        static _pointermove(evt){
 
             if (typeof evt === 'undefined')
                 return;
@@ -81,7 +81,7 @@ export default class inputcontroller extends SJSClass {
 
         }
 
-        static pointerdown(evt){
+        static _pointerdown(evt){
 
             if (typeof evt === 'undefined')
                 return;
@@ -108,6 +108,29 @@ export default class inputcontroller extends SJSClass {
 
         }
 
+        pointerup(evt){
+
+            //console.log(evt.target.app.input.constructor._pointerup);
+
+            let target = evt.target.app.input.constructor;
+
+            target._pointerup(evt);
+
+        }
+        pointermove(evt){
+
+            let target = evt.target.app.input.constructor;
+
+            target._pointermove(evt);
+
+        }
+        pointerdown(evt){
+
+            let target = evt.target.app.input.constructor;
+
+            target._pointerdown(evt);
+
+        }
         get x() {
 
             return this.constructor._x;

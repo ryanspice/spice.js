@@ -190,7 +190,7 @@ export default class Input extends inputcontroller {
         }
 
 
-        /*
+
 
 
         this.multi = {
@@ -198,7 +198,7 @@ export default class Input extends inputcontroller {
           list:[]
 
         };
-                */
+
 
 		this.touched = {
 

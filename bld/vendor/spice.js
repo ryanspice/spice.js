@@ -6872,11 +6872,11 @@
 	                                var touchPoints = navigator.maxTouchPoints;
 	                        }
 
-	                        /*
-	                            this.multi = {
-	                            list:[]
-	                          };
-	                                */
+	                        this.multi = {
+
+	                                list: []
+
+	                        };
 
 	                        this.touched = {
 
@@ -7340,6 +7340,32 @@
 	        }
 
 	        _createClass(inputcontroller, [{
+	                key: 'pointerup',
+	                value: function pointerup(evt) {
+
+	                        //console.log(evt.target.app.input.constructor._pointerup);
+
+	                        var target = evt.target.app.input.constructor;
+
+	                        target._pointerup(evt);
+	                }
+	        }, {
+	                key: 'pointermove',
+	                value: function pointermove(evt) {
+
+	                        var target = evt.target.app.input.constructor;
+
+	                        target._pointermove(evt);
+	                }
+	        }, {
+	                key: 'pointerdown',
+	                value: function pointerdown(evt) {
+
+	                        var target = evt.target.app.input.constructor;
+
+	                        target._pointerdown(evt);
+	                }
+	        }, {
 	                key: 'x',
 	                get: function get() {
 
@@ -7484,8 +7510,8 @@
 	                        return this.constructor._scrollController = value;
 	                }
 	        }], [{
-	                key: 'pointerup',
-	                value: function pointerup(evt) {
+	                key: '_pointerup',
+	                value: function _pointerup(evt) {
 
 	                        if (typeof evt === 'undefined') return;
 
@@ -7504,8 +7530,8 @@
 	                        return true;
 	                }
 	        }, {
-	                key: 'pointermove',
-	                value: function pointermove(evt) {
+	                key: '_pointermove',
+	                value: function _pointermove(evt) {
 
 	                        if (typeof evt === 'undefined') return;
 	                        if (typeof evt.target.app === 'undefined') return;
@@ -7532,8 +7558,8 @@
 	                        this.mouse_last = input.dist.x;
 	                }
 	        }, {
-	                key: 'pointerdown',
-	                value: function pointerdown(evt) {
+	                key: '_pointerdown',
+	                value: function _pointerdown(evt) {
 
 	                        if (typeof evt === 'undefined') return;
 	                        if (typeof evt.target.app === 'undefined') return;
