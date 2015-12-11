@@ -32,9 +32,6 @@ window.SJSParticleController = Particles;
 
 let Steve = "cool";
 
-var LOG_ENABLE = (false);
-
-var log = ((LOG_ENABLE)?function(log){console.log(log)}:function(){});
 
 if (typeof window.scripts != 'array')
 {
