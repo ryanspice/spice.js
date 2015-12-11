@@ -15,12 +15,13 @@
 		Research need for confining cursor
 */
 
+let Steve = "cool";
+
 const Windows = window.Windows =  (typeof Windows=='undefined'?window:Windows);
 
 import * as utils from './modules/utils.js';
 
 import Input from './modules/input.js';
-
 import Loader from './modules/loader.js';
 import Cookies from './modules/cookies.js';
 import Particles from './modules/particles.js';
@@ -29,8 +30,6 @@ import Statistics from './modules/statistics.js';
 window.utils = utils.default;
 window.Stats = Statistics;
 window.SJSParticleController = Particles;
-
-let Steve = "cool";
 
 
 if (typeof window.scripts != 'array')

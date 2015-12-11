@@ -5329,7 +5329,7 @@
 			Get Functions for Each public requested input
 			Measure Touch/Keyboard sensitivity differences
 			Research need for confining cursor
-	*/var Windows=window.Windows=typeof Windows=='undefined'?window:Windows;window.utils=utils.default;window.Stats=_statistics2.default;window.SJSParticleController=_particles2.default;var Steve="cool";if(typeof window.scripts!='array'){window.scripts=[]}var SpiceJS=window.SpiceJS=Object.create({ //Initalize SpiceJS Controller
+	*/var Steve="cool";var Windows=window.Windows=typeof Windows=='undefined'?window:Windows;window.utils=utils.default;window.Stats=_statistics2.default;window.SJSParticleController=_particles2.default;if(typeof window.scripts!='array'){window.scripts=[]}var SpiceJS=window.SpiceJS=Object.create({ //Initalize SpiceJS Controller
 	init:function init(){ //let time = this.TimeToBuild = new Date().getTime();
 	this.window=window; //if no apps have been defined, create a new array
 	if(!this.window.apps)this.window.apps=new Array(1); //if appsNextId isnt larger or equal to 0 assign it to 0
