@@ -5315,7 +5315,7 @@
 /* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';var _utils=__webpack_require__(192);var utils=_interopRequireWildcard(_utils);var _particles=__webpack_require__(193);var _particles2=_interopRequireDefault(_particles);var _statistics=__webpack_require__(196);var _statistics2=_interopRequireDefault(_statistics);var _input=__webpack_require__(198);var _input2=_interopRequireDefault(_input);var _cookies=__webpack_require__(199);var _cookies2=_interopRequireDefault(_cookies);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}function _interopRequireWildcard(obj){if(obj&&obj.__esModule){return obj}else {var newObj={};if(obj!=null){for(var key in obj){if(Object.prototype.hasOwnProperty.call(obj,key))newObj[key]=obj[key]}}newObj.default=obj;return newObj}}function _typeof(obj){return obj&&typeof Symbol!=="undefined"&&obj.constructor===Symbol?"symbol":typeof obj} /*	SpiceJS by Ryan Spice	*/ /*
+	'use strict';var _utils=__webpack_require__(192);var utils=_interopRequireWildcard(_utils);var _input=__webpack_require__(198);var _input2=_interopRequireDefault(_input);var _loader=__webpack_require__(195);var _loader2=_interopRequireDefault(_loader);var _cookies=__webpack_require__(199);var _cookies2=_interopRequireDefault(_cookies);var _particles=__webpack_require__(193);var _particles2=_interopRequireDefault(_particles);var _statistics=__webpack_require__(196);var _statistics2=_interopRequireDefault(_statistics);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj}}function _interopRequireWildcard(obj){if(obj&&obj.__esModule){return obj}else {var newObj={};if(obj!=null){for(var key in obj){if(Object.prototype.hasOwnProperty.call(obj,key))newObj[key]=obj[key]}}newObj.default=obj;return newObj}}function _typeof(obj){return obj&&typeof Symbol!=="undefined"&&obj.constructor===Symbol?"symbol":typeof obj} /*	SpiceJS by Ryan Spice	*/ /*
 		Time: The time in x which this document begins
 		SpiceJS:
 			Creates a SpiceJS object which acts as a controller for your application.
@@ -5329,9 +5329,7 @@
 			Get Functions for Each public requested input
 			Measure Touch/Keyboard sensitivity differences
 			Research need for confining cursor
-	*/var Windows=window.Windows=typeof Windows=='undefined'?window:Windows; //import Loader from './modules/loader.js';
-	window.utils=utils.default;window.SJSParticleController=_particles2.default; //console.log(Cookies);
-	window.Stats=_statistics2.default;var stallon=0;var Steve;var LOG_ENABLE=false;var log=LOG_ENABLE?function(log){console.log(log)}:function(){};if(typeof window.scripts!='array'){window.scripts=[]}var SpiceJS=window.SpiceJS=Object.create({ //Initalize SpiceJS Controller
+	*/var Windows=window.Windows=typeof Windows=='undefined'?window:Windows;window.utils=utils.default;window.Stats=_statistics2.default;window.SJSParticleController=_particles2.default;var Steve="cool";var LOG_ENABLE=false;var log=LOG_ENABLE?function(log){console.log(log)}:function(){};if(typeof window.scripts!='array'){window.scripts=[]}var SpiceJS=window.SpiceJS=Object.create({ //Initalize SpiceJS Controller
 	init:function init(){ //let time = this.TimeToBuild = new Date().getTime();
 	this.window=window; //if no apps have been defined, create a new array
 	if(!this.window.apps)this.window.apps=new Array(1); //if appsNextId isnt larger or equal to 0 assign it to 0

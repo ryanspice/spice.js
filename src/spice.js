@@ -17,37 +17,21 @@
 
 const Windows = window.Windows =  (typeof Windows=='undefined'?window:Windows);
 
-//import Loader from './modules/loader.js';
-
 import * as utils from './modules/utils.js';
-window.utils = utils.default;
-
-import Particles from './modules/particles.js';
-
-import SJSParticleController from './modules/particles.js';
-
-window.SJSParticleController = SJSParticleController;
-
-import Statistics from './modules/statistics.js';
 
 import Input from './modules/input.js';
 
+import Loader from './modules/loader.js';
 import Cookies from './modules/cookies.js';
+import Particles from './modules/particles.js';
+import Statistics from './modules/statistics.js';
 
-//console.log(Cookies);
-
+window.utils = utils.default;
 window.Stats = Statistics;
+window.SJSParticleController = Particles;
 
-var stallon = 0;
+let Steve = "cool";
 
-
-
-
-
-
-
-
-var Steve;
 var LOG_ENABLE = (false);
 
 var log = ((LOG_ENABLE)?function(log){console.log(log)}:function(){});
