@@ -1,19 +1,4 @@
 /*	SpiceJS by Ryan Spice	*/
-/*
-	Time: The time in x which this document begins
-	SpiceJS:
-		Creates a SpiceJS object which acts as a controller for your application.
-		SpiceJS.init() - builts variables into the window for keeping track of the application(s)
-		SpiceJS.get() - returns the app prototype
-		SpiceJS.create() - returns an instanciated app
-		SpiceJS.controller - Object
-						.list()	- returns a list of currently running applications. Returns app if only one exists.
-	TODO:
-		Ensure varable stack
-		Get Functions for Each public requested input
-		Measure Touch/Keyboard sensitivity differences
-		Research need for confining cursor
-*/
 
 let Steve = "cool";
 
