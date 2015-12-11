@@ -146,7 +146,7 @@ var SpiceJS = window.SpiceJS = Object.create({
 					enumerable:true,
 
 					//VN
-					value:'0.7.0.15.11.17'
+					value:'0.7.0.15.12.11'
 				},
 
 				//Build Client, Instantiate Loop, Build Canvas, Initalize Client
@@ -243,7 +243,7 @@ var SpiceJS = window.SpiceJS = Object.create({
 
 						//Run .OnLoad
 						evt.target.app.OnLoad(evt.target.app);
-						log(evt.target.app.getCurrent().name+': OnApplicationLoad');
+					console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
 
 					}
 				},
@@ -323,7 +323,7 @@ var SpiceJS = window.SpiceJS = Object.create({
 						default:
 
 							//Expected a type
-							log("Expected 'object' or 'function': Type is "+c);
+						console.log("Expected 'object' or 'function': Type is "+c);
 						}
 						if (isObj)
 							prototype = ret;
@@ -558,7 +558,7 @@ var SpiceJS = window.SpiceJS = Object.create({
 
                           /*
                           function testAPI() {
-							log('Welcome!  Fetching your information.... ');
+						console.log('Welcome!  Fetching your information.... ');
 
 							FB.api('/me', function(response) {
 								App.user.facebook(response);
@@ -2297,7 +2297,7 @@ return;
 								//this.text_ext("y "+Math.round(App.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
 								//this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
 								if (App.fps<20)
-									log("FPSLow: "+App.fps);
+								console.log("FPSLow: "+App.fps);
 
 								var data = [
 											[this.app.client.name],

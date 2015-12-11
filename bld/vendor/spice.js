@@ -5327,7 +5327,7 @@
 	var temp={};temp=Object.create({constructor:{ //Version Number
 	VN:{ //Config
 	writable:false,configurable:false,enumerable:true, //VN
-	value:'0.7.0.15.11.17'}, //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+	value:'0.7.0.15.12.11'}, //Build Client, Instantiate Loop, Build Canvas, Initalize Client
 	Init:{ //Config
 	writable:false,configurable:false,enumerable:false, //Function
 	value:function value(name,w,h){var _this2=this; //Store self
@@ -5358,7 +5358,7 @@
 	OnApplicationLoad:{ //Config
 	writable:false,configurable:false,enumerable:false, //Function
 	value:function value(evt){ //Run .OnLoad
-	evt.target.app.OnLoad(evt.target.app);log(evt.target.app.getCurrent().name+': OnApplicationLoad')}}, //AddEvent Listener
+	evt.target.app.OnLoad(evt.target.app);console.log(evt.target.app.getCurrent().name+': OnApplicationLoad')}}, //AddEvent Listener
 	Listener:{ //Config
 	writable:false,configurable:false,enumerable:false, //Function
 	value:function value(obj,evt,listener,param){ //If addEventListener exist, add it, otherwise attachEvent
@@ -5373,7 +5373,7 @@
 	ret=Object.create(proto);break;case 'object': //Use constructor as object
 	ret=Object.create(proto,construct);break;case 'function': //Use constructor as function
 	ret=Object.create(proto,construct(this));break;default: //Expected a type
-	log("Expected 'object' or 'function': Type is "+c);}if(isObj)prototype=ret;return ret}}, //id:{writable:true, configurable:false, enumerable:false, value:0 },
+	console.log("Expected 'object' or 'function': Type is "+c);}if(isObj)prototype=ret;return ret}}, //id:{writable:true, configurable:false, enumerable:false, value:0 },
 	//canvas:{writable:true, configurable:false, enumerable:false, value:0 },
 	//client:{writable:true, configurable:false, enumerable:false, value:0 },
 	//ext:{writable:true, configurable:false, enumerable:false, value:0 },
@@ -5426,7 +5426,7 @@
 	// This testAPI() function is only called in those cases.
 	/*
 	                          function testAPI() {
-								log('Welcome!  Fetching your information.... ');
+							console.log('Welcome!  Fetching your information.... ');
 
 								FB.api('/me', function(response) {
 									App.user.facebook(response);
@@ -5631,7 +5631,7 @@
 	//this.text_ext("x: "+Math.round(App.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
 	//this.text_ext("y "+Math.round(App.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
 	//this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
-	if(App.fps<20)log("FPSLow: "+App.fps);var data=[[this.app.client.name],[App.code+" "+App.codefmk],[this.app.client.name],["app.ext.input","x "+Math.round(App.input.x*100)/100,"x "+Math.round(App.input.window.x*100)/100,"d "+App.input.pressed+"   p "+App.input.duration,"y "+Math.round(App.input.y*100)/100,"y "+Math.round(App.input.window.y*100)/100,App.ext.useragent.trident?"Input: "+"Touch":"Input: Mouse"],["app.client","discription","","","width",this.app.client.setWidth,this.app.client.width,"height",this.app.client.setHeight,this.app.client.height,"fps",Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(this.app.client.fps*1000)/1000,"","scale",this.app.client.scale,"","delta",this.app.client.delta,"","buffer","double",""],["app.client.state","","[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B","",""],["app.client.data","","visuals ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.visuals):"?","","graphics ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.graphics):"?","","audio ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.audio):"?","","state ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?","","ext ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?","","Total ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?",""]];for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii){for(var i=data[ii].length;0<i;--i){0==i%3&&(t=0,tr=15,tt++),this.text_ext(data[ii][data[ii].length-i],tr+15+p*t,25+1.1*this.point*tt,"#AAAAAA",1,1,0),tr=0,t++}t=0;tt++}; //this.text_ext("D: "+App.input.duration,210,55);
+	if(App.fps<20)console.log("FPSLow: "+App.fps);var data=[[this.app.client.name],[App.code+" "+App.codefmk],[this.app.client.name],["app.ext.input","x "+Math.round(App.input.x*100)/100,"x "+Math.round(App.input.window.x*100)/100,"d "+App.input.pressed+"   p "+App.input.duration,"y "+Math.round(App.input.y*100)/100,"y "+Math.round(App.input.window.y*100)/100,App.ext.useragent.trident?"Input: "+"Touch":"Input: Mouse"],["app.client","discription","","","width",this.app.client.setWidth,this.app.client.width,"height",this.app.client.setHeight,this.app.client.height,"fps",Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(this.app.client.fps*1000)/1000,"","scale",this.app.client.scale,"","delta",this.app.client.delta,"","buffer","double",""],["app.client.state","","[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B","",""],["app.client.data","","visuals ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.visuals):"?","","graphics ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.graphics):"?","","audio ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.audio):"?","","state ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?","","ext ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?","","Total ",App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?",""]];for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii){for(var i=data[ii].length;0<i;--i){0==i%3&&(t=0,tr=15,tt++),this.text_ext(data[ii][data[ii].length-i],tr+15+p*t,25+1.1*this.point*tt,"#AAAAAA",1,1,0),tr=0,t++}t=0;tt++}; //this.text_ext("D: "+App.input.duration,210,55);
 	//this.text_ext("P: "+App.input.pressed,160,55);
 	//(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
 	//this.text_ext("I: "+App.input.window.inside+" X: "+App.input.window.x+" Y: "+App.input.window.y,155,70);
