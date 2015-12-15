@@ -52,7 +52,7 @@ Application.main= {
         this.visuals.line2(position,start,"#FFFFFF",1)
         this.visuals.line2(start,end,"#FFFFFF",0.5)
 
-        this.visuals.circle(this.app.input.position,this.app.input.duration,"#FFFFFF",1)
+        //this.visuals.circle(this.app.input.position,this.app.input.duration,"#FFFFFF",1)
 
         this.visuals.free = false;
 
