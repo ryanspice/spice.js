@@ -1,5 +1,6 @@
 
 import _visuals from './visuals.js';
+
 export default {
 
     constructor:function(app){

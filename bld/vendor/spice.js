@@ -5317,164 +5317,21 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 	Object.defineProperty(exports, "__esModule", {
-	        value: true
+	  value: true
 	});
 
-	var _statistics2 = __webpack_require__(203);
+	var _controller2 = __webpack_require__(216);
 
-	var _statistics3 = _interopRequireDefault(_statistics2);
-
-	var _application2 = __webpack_require__(212);
-
-	var _application3 = _interopRequireDefault(_application2);
-
-	var _loader = __webpack_require__(200);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	var _particles = __webpack_require__(202);
-
-	var _particles2 = _interopRequireDefault(_particles);
+	var _controller3 = _interopRequireDefault(_controller2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/*	SpiceJS by Ryan Spice	*/
 
 	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
 
-	var SJSController = (function () {
-	        _createClass(SJSController, [{
-	                key: 'get',
-	                value: function get() {
-
-	                        return this.proto;
-	                }
-	        }, {
-	                key: 'create',
-	                value: function create(target) {
-	                        var _this = this;
-
-	                        var tempReference = {};
-
-	                        var tempReferenceId = null;
-
-	                        var listReference = null;
-
-	                        var time = new Date().getTime();
-
-	                        this.statistics.monitor(function () {
-
-	                                _this.name = "scriptloadtime";
-
-	                                window.utils.loadExternalJS(window.scripts);
-
-	                                tempReference = _this.generatePrototype();
-
-	                                tempReferenceId = tempReference.id;
-	                        }).then(function () {
-
-	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-	                                listReference = _this.controller.list(tempReferenceId);
-
-	                                _this.statistics.monitor(function () {
-
-	                                        _this.name = "loadtime";
-
-	                                        _this.initListeners(listReference);
-	                                }).then(function () {
-
-	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-	                                        _this.statistics.log("build", time);
-	                                });
-	                        });
-
-	                        return tempReference;
-	                }
-	        }, {
-	                key: 'generatePrototype',
-	                value: function generatePrototype() {
-
-	                        this.window = window;
-
-	                        //temp stores the app during the create process, it is then returned
-	                        var temp = {};
-
-	                        temp = _application3.default;
-
-	                        temp = Object.create(temp.prototype, temp.constructor);
-
-	                        temp.window = this.window;
-
-	                        temp.document = document;
-
-	                        temp.id = this.window.appsNextId;
-
-	                        this.window.apps[temp.id] = temp;
-
-	                        this.window.appsNextId++;
-
-	                        return this.window.apps[temp.id];
-	                }
-	        }, {
-	                key: 'initListeners',
-	                value: function initListeners(temp) {
-
-	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-	                        return temp;
-	                }
-	        }]);
-
-	        function SJSController() {
-	                _classCallCheck(this, SJSController);
-
-	                this.window = window;
-
-	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
-
-	                this.window.SpiceJS = this;
-	                this.window.SJS = this;
-
-	                //if no apps have been defined, create a new array
-	                if (!this.window.apps) this.window.apps = new Array(1);
-
-	                //if appsNextId isnt larger or equal to 0 assign it to 0
-	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
-
-	                //Setup Statistics and Monitoring
-	                this.statistics = new this.constructor._statistics(this);
-
-	                //Reference static controller
-	                this.controller = this.constructor._controller;
-	        }
-
-	        return SJSController;
-	})();
-
-	SJSController._statistics = _statistics3.default;
-	SJSController._controller = {
-
-	        list: function list(id) {
-
-	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
-	        }
-
-	};
-	exports.default = SpiceJS = new SJSController();
-
-	//To be built into application (to override current)
-
-	//To be built into application
-
-	// Temporary for snowflakes
-	window.SJSParticleController = _particles2.default;
+	exports.default = SpiceJS = new _controller3.default();
 
 /***/ },
 /* 192 */
@@ -9934,9 +9791,24 @@
 
 	var _ext3 = _interopRequireDefault(_ext2);
 
+	var _loader = __webpack_require__(200);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	var _particles = __webpack_require__(202);
+
+	var _particles2 = _interopRequireDefault(_particles);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	//To be built into application (to override current)
+
+	//To be built into application
+
+	// Temporary for snowflakes
+	window.SJSParticleController = _particles2.default;
 
 	exports.default = Object.create({
 
@@ -10573,6 +10445,152 @@
 	})(_inputcontroller3.default);
 
 	exports.default = Input;
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _statistics2 = __webpack_require__(203);
+
+	var _statistics3 = _interopRequireDefault(_statistics2);
+
+	var _application2 = __webpack_require__(212);
+
+	var _application3 = _interopRequireDefault(_application2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SJSController = (function () {
+	        _createClass(SJSController, [{
+	                key: 'get',
+	                value: function get() {
+
+	                        return this.proto;
+	                }
+	        }, {
+	                key: 'create',
+	                value: function create(target) {
+	                        var _this = this;
+
+	                        var tempReference = {};
+
+	                        var tempReferenceId = null;
+
+	                        var listReference = null;
+
+	                        var time = new Date().getTime();
+
+	                        this.statistics.monitor(function () {
+
+	                                _this.name = "scriptloadtime";
+
+	                                window.utils.loadExternalJS(window.scripts);
+
+	                                tempReference = _this.generatePrototype();
+
+	                                tempReferenceId = tempReference.id;
+	                        }).then(function () {
+
+	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+	                                listReference = _this.controller.list(tempReferenceId);
+
+	                                _this.statistics.monitor(function () {
+
+	                                        _this.name = "loadtime";
+
+	                                        _this.initListeners(listReference);
+	                                }).then(function () {
+
+	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+	                                        _this.statistics.log("build", time);
+	                                });
+	                        });
+
+	                        return tempReference;
+	                }
+	        }, {
+	                key: 'generatePrototype',
+	                value: function generatePrototype() {
+
+	                        this.window = window;
+
+	                        //temp stores the app during the create process, it is then returned
+	                        var temp = {};
+
+	                        temp = _application3.default;
+
+	                        temp = Object.create(temp.prototype, temp.constructor);
+
+	                        temp.window = this.window;
+
+	                        temp.document = document;
+
+	                        temp.id = this.window.appsNextId;
+
+	                        this.window.apps[temp.id] = temp;
+
+	                        this.window.appsNextId++;
+
+	                        return this.window.apps[temp.id];
+	                }
+	        }, {
+	                key: 'initListeners',
+	                value: function initListeners(temp) {
+
+	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+
+	                        return temp;
+	                }
+	        }]);
+
+	        function SJSController() {
+	                _classCallCheck(this, SJSController);
+
+	                this.window = window;
+
+	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
+
+	                this.window.SpiceJS = this;
+	                this.window.SJS = this;
+
+	                //if no apps have been defined, create a new array
+	                if (!this.window.apps) this.window.apps = new Array(1);
+
+	                //if appsNextId isnt larger or equal to 0 assign it to 0
+	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
+
+	                //Setup Statistics and Monitoring
+	                this.statistics = new this.constructor._statistics(this);
+
+	                //Reference static controller
+	                this.controller = this.constructor._controller;
+	        }
+
+	        return SJSController;
+	})();
+
+	SJSController._statistics = _statistics3.default;
+	SJSController._controller = {
+
+	        list: function list(id) {
+
+	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
+	        }
+
+	};
+	exports.default = SJSController;
 
 /***/ }
 /******/ ]);

@@ -11,6 +11,15 @@ import _user from './user.js';
 
 import _ext from './ext.js';
 
+//To be built into application (to override current)
+import Loader from './loader.js';
+
+//To be built into application
+import Particles from './particles.js';
+
+// Temporary for snowflakes
+window.SJSParticleController = Particles;
+
 export default Object.create({
 
 constructor:{
