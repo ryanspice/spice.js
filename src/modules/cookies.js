@@ -159,14 +159,16 @@ var Cookies = {
                 };
 
                 var cookiesExport = typeof global.document === 'object' ? factory(global) : factory;
-
+                var AMD = (typeof define === 'function' && define.amd);
+                var objectExports = (typeof exports === 'object');
+                var moduleExports =  (typeof module === 'object' && typeof module.exports === 'object');
                 // AMD support
-                if (typeof define === 'function' && define.amd) {
+                if (AMD) {
                     define(function () { return cookiesExport; });
                 // CommonJS/Node.js support
-                } else if (typeof exports === 'object') {
+            } else if (objectExports) {
                     // Support Node.js specific `module.exports` (which can be a function)
-                    if (typeof module === 'object' && typeof module.exports === 'object') {
+                    if (moduleExports) {
                         exports = module.exports = cookiesExport;
                     }
                     // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)

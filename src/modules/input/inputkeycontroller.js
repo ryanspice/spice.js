@@ -58,7 +58,7 @@ export default class inputkeycontroller {
 
             app.Listener(app.window.self,'keydown',function(evt){
 
-                    if (app.input.preventNext==true)
+                    if (app.input.preventNext===true)
                         evt.preventDefault();
 
                     app.input.preventNext = false;

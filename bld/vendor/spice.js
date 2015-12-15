@@ -5320,40 +5320,16 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	                    value: true
+	        value: true
 	});
 
-	var _utils = __webpack_require__(192);
+	var _statistics2 = __webpack_require__(203);
 
-	var utils = _interopRequireWildcard(_utils);
+	var _statistics3 = _interopRequireDefault(_statistics2);
 
-	var _options2 = __webpack_require__(206);
+	var _application2 = __webpack_require__(212);
 
-	var _options3 = _interopRequireDefault(_options2);
-
-	var _user2 = __webpack_require__(208);
-
-	var _user3 = _interopRequireDefault(_user2);
-
-	var _ext2 = __webpack_require__(209);
-
-	var _ext3 = _interopRequireDefault(_ext2);
-
-	var _input2 = __webpack_require__(193);
-
-	var _input3 = _interopRequireDefault(_input2);
-
-	var _visuals = __webpack_require__(205);
-
-	var _visuals2 = _interopRequireDefault(_visuals);
-
-	var _client2 = __webpack_require__(210);
-
-	var _client3 = _interopRequireDefault(_client2);
-
-	var _canvas2 = __webpack_require__(207);
-
-	var _canvas3 = _interopRequireDefault(_canvas2);
+	var _application3 = _interopRequireDefault(_application2);
 
 	var _loader = __webpack_require__(200);
 
@@ -5363,446 +5339,142 @@
 
 	var _particles2 = _interopRequireDefault(_particles);
 
-	var _statistics = __webpack_require__(203);
-
-	var _statistics2 = _interopRequireDefault(_statistics);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/*	SpiceJS by Ryan Spice	*/
 
-	var Steve = "cool";
-
 	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
 
-	window.utils = utils.default;
-	window.Stats = _statistics2.default;
-	window.SJSParticleController = _particles2.default;
+	var SJSController = (function () {
+	        _createClass(SJSController, [{
+	                key: 'get',
+	                value: function get() {
 
-	if (typeof window.scripts != 'array') {
-	                    window.scripts = [];
-	}
+	                        return this.proto;
+	                }
+	        }, {
+	                key: 'create',
+	                value: function create(target) {
+	                        var _this = this;
 
-	var SpiceJS = (function () {
-	                    function SpiceJS() {
-	                                        _classCallCheck(this, SpiceJS);
+	                        var tempReference = {};
 
-	                                        this.window = window;
-	                                        this.window.SpiceJS = this;
-	                                        this.window.SJS = this;
+	                        var tempReferenceId = null;
 
-	                                        //if no apps have been defined, create a new array
-	                                        if (!this.window.apps) this.window.apps = new Array(1);
+	                        var listReference = null;
 
-	                                        //if appsNextId isnt larger or equal to 0 assign it to 0
-	                                        if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
+	                        var time = new Date().getTime();
 
-	                                        //Setup Statistics and Monitoring
-	                                        this.statistics = new this.constructor._statistics(this);
-	                                        this.controller = Object.create(this.constructor._controller);
-	                    }
+	                        this.statistics.monitor(function () {
 
-	                    _createClass(SpiceJS, [{
-	                                        key: 'logs',
-	                                        value: function logs() {
+	                                _this.name = "scriptloadtime";
 
-	                                                            this.statistics.log("uptime", new Date().getTime() - this.TimeToBuild, 'build');
+	                                window.utils.loadExternalJS(window.scripts);
 
-	                                                            return this.statistics.details(type);
-	                                        }
-	                    }, {
-	                                        key: 'get',
-	                                        value: function get() {
+	                                tempReference = _this.generatePrototype();
 
-	                                                            return this.proto;
-	                                        }
-	                    }, {
-	                                        key: 'create',
-	                                        value: function create(target) {
-	                                                            var _this = this;
+	                                tempReferenceId = tempReference.id;
+	                        }).then(function () {
 
-	                                                            var tempReference = {};
+	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
 
-	                                                            var tempReferenceId = null;
+	                                listReference = _this.controller.list(tempReferenceId);
 
-	                                                            var listReference = null;
+	                                _this.statistics.monitor(function () {
 
-	                                                            var time = new Date().getTime();
+	                                        _this.name = "loadtime";
 
-	                                                            this.statistics.monitor(function () {
+	                                        _this.initListeners(listReference);
+	                                }).then(function () {
 
-	                                                                                _this.name = "scriptloadtime";
+	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
 
-	                                                                                window.utils.loadExternalJS(window.scripts);
+	                                        _this.statistics.log("build", time);
+	                                });
+	                        });
 
-	                                                                                tempReference = _this.create2();
+	                        return tempReference;
+	                }
+	        }, {
+	                key: 'generatePrototype',
+	                value: function generatePrototype() {
 
-	                                                                                tempReferenceId = tempReference.id;
-	                                                            }).then(function () {
+	                        this.window = window;
 
-	                                                                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+	                        //temp stores the app during the create process, it is then returned
+	                        var temp = {};
 
-	                                                                                listReference = _this.controller.list(tempReferenceId);
+	                        temp = _application3.default;
 
-	                                                                                _this.statistics.monitor(function () {
+	                        temp = Object.create(temp.prototype, temp.constructor);
 
-	                                                                                                    _this.name = "loadtime";
+	                        temp.window = this.window;
 
-	                                                                                                    _this.initListeners(listReference);
-	                                                                                }).then(function () {
+	                        temp.document = document;
 
-	                                                                                                    _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+	                        temp.id = this.window.appsNextId;
 
-	                                                                                                    _this.statistics.log("build", time);
-	                                                                                });
-	                                                            });
+	                        this.window.apps[temp.id] = temp;
 
-	                                                            return tempReference;
-	                                        }
-	                    }, {
-	                                        key: 'create2',
-	                                        value: function create2() {
+	                        this.window.appsNextId++;
 
-	                                                            this.window = window;
+	                        return this.window.apps[temp.id];
+	                }
+	        }, {
+	                key: 'initListeners',
+	                value: function initListeners(temp) {
 
-	                                                            //temp stores the app during the create process, it is then returned
-	                                                            var temp = {};
-	                                                            temp = Object.create({
+	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
-	                                                                                constructor: {
-	                                                                                                    //Version Number
-	                                                                                                    VN: {
-	                                                                                                                        //Config
-	                                                                                                                        writable: false,
-	                                                                                                                        configurable: false,
-	                                                                                                                        enumerable: true,
+	                        return temp;
+	                }
+	        }]);
 
-	                                                                                                                        //VN
-	                                                                                                                        value: '0.7.0.15.12.11'
-	                                                                                                    },
+	        function SJSController() {
+	                _classCallCheck(this, SJSController);
 
-	                                                                                                    //Build Client, Instantiate Loop, Build Canvas, Initalize Client
-	                                                                                                    Init: {
+	                this.window = window;
 
-	                                                                                                                        //Config
-	                                                                                                                        writable: false,
-	                                                                                                                        configurable: false,
-	                                                                                                                        enumerable: false,
+	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
 
-	                                                                                                                        //Function
-	                                                                                                                        value: function value(name, w, h) {
-	                                                                                                                                            var _this2 = this;
+	                this.window.SpiceJS = this;
+	                this.window.SJS = this;
 
-	                                                                                                                                            //Store self
-	                                                                                                                                            var self = this;
+	                //if no apps have been defined, create a new array
+	                if (!this.window.apps) this.window.apps = new Array(1);
 
-	                                                                                                                                            //Build client from prototype
-	                                                                                                                                            this.client = this.Construct(this.client.prototype, this.client.constructor);
+	                //if appsNextId isnt larger or equal to 0 assign it to 0
+	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
 
-	                                                                                                                                            //Build canvas from prototype
-	                                                                                                                                            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+	                //Setup Statistics and Monitoring
+	                this.statistics = new this.constructor._statistics(this);
 
-	                                                                                                                                            setTimeout(function () {
+	                //Reference static controller
+	                this.controller = this.constructor._controller;
+	        }
 
-	                                                                                                                                                                function AppLoop() {
-	                                                                                                                                                                                    self.client.loop();
-	                                                                                                                                                                }
-
-	                                                                                                                                                                function AppLoopData() {
-	                                                                                                                                                                                    self.client.loopData();
-	                                                                                                                                                                }
-
-	                                                                                                                                                                _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-	                                                                                                                                            }, this.time);
-
-	                                                                                                                                            //Delay start the loop
-	                                                                                                                                            /*
-	                                                                                                                                                  OLD NON PROMISE BASED LOOP, build fallback
-	                                                                                                                                              setTimeout(	(function(){
-	                                                                                                                                                          function AppLoop(){
-	                                                                                                                                                            self.client.loop();
-	                                                                                                                                                        }
-	                                                                                                                                                          function AppLoopData(){
-	                                                                                                                                                            self.client.loopData();
-	                                                                                                                                                        }
-	                                                                                                                                                          self.client.initalize(AppLoop,AppLoopData,self.scale);
-	                                                                                                                                              }),this.time);
-	                                                                                                                                            */
-	                                                                                                                                            //Initalize client
-	                                                                                                                                            this.client.init(name, w, h);
-
-	                                                                                                                                            // INIT INPUT
-
-	                                                                                                                                            this.input = new this.input(this);
-	                                                                                                                        }
-
-	                                                                                                    },
-
-	                                                                                                    //Run by OnApplicationLoad, App.OnLoad to be overwritten.
-	                                                                                                    OnLoad: {
-
-	                                                                                                                        //Config
-	                                                                                                                        writable: true,
-	                                                                                                                        configurable: false,
-	                                                                                                                        enumerable: false,
-
-	                                                                                                                        //Function
-	                                                                                                                        value: function value(self) {
-
-	                                                                                                                                            //Default to App.
-	                                                                                                                                            self.Init("", 480, 320);
-	                                                                                                                        }
-
-	                                                                                                    },
-
-	                                                                                                    //Runs on DOMContentLoaded
-	                                                                                                    OnApplicationLoad: {
-
-	                                                                                                                        //Config
-	                                                                                                                        writable: false,
-	                                                                                                                        configurable: false,
-	                                                                                                                        enumerable: false,
-
-	                                                                                                                        //Function
-	                                                                                                                        value: function value(evt) {
-
-	                                                                                                                                            //Run .OnLoad
-	                                                                                                                                            evt.target.app.OnLoad(evt.target.app);
-	                                                                                                                                            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-	                                                                                                                        }
-	                                                                                                    },
-
-	                                                                                                    //AddEvent Listener
-	                                                                                                    Listener: {
-
-	                                                                                                                        //Config
-	                                                                                                                        writable: false,
-	                                                                                                                        configurable: false,
-	                                                                                                                        enumerable: false,
-
-	                                                                                                                        //Function
-	                                                                                                                        value: function value(obj, evt, listener, param) {
-
-	                                                                                                                                            //If addEventListener exist, add it, otherwise attachEvent
-	                                                                                                                                            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
-
-	                                                                                                                                            obj.app = window.apps[this.id] = this;
-	                                                                                                                        }
-	                                                                                                    },
-
-	                                                                                                    //Construct Objects from this.Construct(prototype,[constructor])
-	                                                                                                    Construct: {
-
-	                                                                                                                        //Config
-	                                                                                                                        writable: false,
-	                                                                                                                        configurable: false,
-	                                                                                                                        enumerable: false,
-
-	                                                                                                                        //Function
-	                                                                                                                        value: function value(prototype, constructor) {
-
-	                                                                                                                                            //Cache vars
-	                                                                                                                                            var isObj = false;
-	                                                                                                                                            var obj = prototype;
-	                                                                                                                                            var proto = prototype;
-	                                                                                                                                            var construct = constructor;
-	                                                                                                                                            var ret = {};
-
-	                                                                                                                                            //if prototype contains a prototype and constructor
-	                                                                                                                                            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-	                                                                                                                                                                construct = obj.constructor;
-	                                                                                                                                                                proto = obj.prototype;
-	                                                                                                                                                                isObj = true;
-	                                                                                                                                            }
-
-	                                                                                                                                            //Grab type of constructor
-	                                                                                                                                            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
-
-	                                                                                                                                            //Return & Create object based on constructor
-	                                                                                                                                            switch (c) {
-	                                                                                                                                                                case 'undefined':
-
-	                                                                                                                                                                                    //Use only the prototype
-	                                                                                                                                                                                    ret = Object.create(proto);
-
-	                                                                                                                                                                                    break;
-	                                                                                                                                                                case 'object':
-
-	                                                                                                                                                                                    //Use constructor as object
-	                                                                                                                                                                                    ret = Object.create(proto, construct);
-
-	                                                                                                                                                                                    break;
-	                                                                                                                                                                case 'function':
-
-	                                                                                                                                                                                    //Use constructor as function
-	                                                                                                                                                                                    ret = Object.create(proto, construct(this));
-
-	                                                                                                                                                                                    break;
-	                                                                                                                                                                default:
-
-	                                                                                                                                                                                    //Expected a type
-	                                                                                                                                                                                    console.log("Expected 'object' or 'function': Type is " + c);
-	                                                                                                                                            }
-	                                                                                                                                            if (isObj) prototype = ret;
-
-	                                                                                                                                            return ret;
-	                                                                                                                        }
-	                                                                                                    },
-
-	                                                                                                    //id:{writable:true, configurable:false, enumerable:false, value:0 },
-	                                                                                                    //canvas:{writable:true, configurable:false, enumerable:false, value:0 },
-	                                                                                                    //client:{writable:true, configurable:false, enumerable:false, value:0 },
-	                                                                                                    //ext:{writable:true, configurable:false, enumerable:false, value:0 },
-
-	                                                                                                    //Allows artificial clicking of elements
-	                                                                                                    click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
-
-	                                                                                                                                            //If .click
-	                                                                                                                                            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
-	                                                                                                                                                                if (event.target !== anchorObj) {
-	                                                                                                                                                                                    var evt = document.createEvent("MouseEvents");
-	                                                                                                                                                                                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-	                                                                                                                                                                                    var allowDefault = anchorObj.dispatchEvent(evt);
-	                                                                                                                                                                                    // you can check allowDefault for false to see if
-	                                                                                                                                                                                    // any handler called evt.preventDefault().
-	                                                                                                                                                                                    // Firefox will *not* redirect to anchorObj.href
-	                                                                                                                                                                                    // for you. However every other browser will.
-	                                                                                                                                                                }
-	                                                                                                                                            }
-	                                                                                                                        }
-	                                                                                                    },
-
-	                                                                                                    //App.create for creating objects with app, visuals and graphics inherited
-	                                                                                                    create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
-	                                                                                                                                            return this.Construct(a || {}, this.client.room);
-	                                                                                                                        } },
-
-	                                                                                                    //Getters for Common Data
-	                                                                                                    getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.update.step.fps;
-	                                                                                                                        } },
-
-	                                                                                                    getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.update.state.current;
-	                                                                                                                        } },
-
-	                                                                                                    getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.ext.connect.offline;
-	                                                                                                                        } },
-
-	                                                                                                    getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.ext.connect.error;
-	                                                                                                                        } },
-
-	                                                                                                    getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.ext.connect.connectionAttempts;
-	                                                                                                                        } },
-
-	                                                                                                    getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.update.step.delta;
-	                                                                                                                        } },
-
-	                                                                                                    getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.scale;
-	                                                                                                                        } },
-
-	                                                                                                    getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.setWidth;
-	                                                                                                                        } },
-
-	                                                                                                    getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.setHeight;
-	                                                                                                                        } },
-
-	                                                                                                    getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.width;
-	                                                                                                                        } },
-
-	                                                                                                    getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.height;
-	                                                                                                                        } },
-
-	                                                                                                    setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
-	                                                                                                                                            return document.title == title ? document.title : document.title = title;
-	                                                                                                                        } },
-
-	                                                                                                    setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
-	                                                                                                                                            return this.client.update.state.set(state, true);
-	                                                                                                                        } },
-
-	                                                                                                    toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                                                                                                                            return this.client.update.fullscale = !this.client.update.fullscale;
-	                                                                                                                        } },
-
-	                                                                                                    time: { writable: true, configurable: false, enumerable: false, value: 0 },
-
-	                                                                                                    main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	                                                                                                                                                                return true;
-	                                                                                                                                            } } }
-	                                                                                },
-
-	                                                                                prototype: {
-
-	                                                                                                    options: _options3.default,
-
-	                                                                                                    user: _user3.default,
-
-	                                                                                                    ext: _ext3.default,
-
-	                                                                                                    input: _input3.default,
-
-	                                                                                                    canvas: _canvas3.default,
-
-	                                                                                                    client: _client3.default
-
-	                                                                                }
-
-	                                                            });
-
-	                                                            temp = Object.create(temp.prototype, temp.constructor);
-
-	                                                            temp.window = this.window;
-	                                                            temp.document = document;
-
-	                                                            temp.id = this.window.appsNextId;
-
-	                                                            this.window.apps[temp.id] = temp;
-
-	                                                            this.window.appsNextId++;
-
-	                                                            return this.window.apps[temp.id];
-	                                        }
-	                    }, {
-	                                        key: 'initListeners',
-	                                        value: function initListeners(temp) {
-
-	                                                            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-	                                                            return temp;
-	                                        }
-	                    }]);
-
-	                    return SpiceJS;
+	        return SJSController;
 	})();
 
-	SpiceJS._statistics = _statistics2.default;
-	SpiceJS._controller = {
+	SJSController._statistics = _statistics3.default;
+	SJSController._controller = {
 
-	                    list: function list(id) {
+	        list: function list(id) {
 
-	                                        if (id) return window.apps[id];
-
-	                                        if (window.apps.length > 1) return window.apps;else return window.apps[0];
-	                    }
+	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
+	        }
 
 	};
-	exports.default = SpiceJS = new SpiceJS();
+	exports.default = SpiceJS = new SJSController();
+
+	//To be built into application (to override current)
+
+	//To be built into application
+
+	// Temporary for snowflakes
+	window.SJSParticleController = _particles2.default;
 
 /***/ },
 /* 192 */
@@ -5907,353 +5579,12 @@
 
 	window.wait = wait;
 
-	exports.default = utils;
+	window.utils = utils;
+
+	exports.default = window.utils;
 
 /***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _inputcontroller2 = __webpack_require__(194);
-
-	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Input = (function (_inputcontroller) {
-	        _inherits(Input, _inputcontroller);
-
-	        function Input(app, pointerPoint) {
-	                _classCallCheck(this, Input);
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
-
-	                _this.delay = 0;
-	                _this.touch = false;
-	                _this.touch_dist = { x: 0, y: 0 };
-
-	                _this.key = false;
-	                _this.keyPower = 0;
-	                _this.keyup = false;
-	                _this.keydown = false;
-
-	                _this.codes = [];
-	                _this.codeList = [];
-
-	                _this.control = false;
-
-	                _this.confine = false;
-
-	                _this.preventNext = true;
-
-	                _this.init_options();
-
-	                _this.keyController.init(_this.app);
-
-	                var down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
-	                var up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
-	                var move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
-	                var scroll = _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
-
-	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
-
-	                _this.setup_universalMultitouch();
-	                //this.setup_msUniversalAppTouch();
-
-	                return _this;
-	        }
-
-	        _createClass(Input, [{
-	                key: "preventDefault",
-	                value: function preventDefault(e) {
-	                        e.preventDefault();return e.target.app;
-	                }
-	        }, {
-	                key: "preventNextInput",
-	                value: function preventNextInput() {
-	                        return this.preventNext = true;
-	                }
-	        }, {
-	                key: "confineMouse",
-	                value: function confineMouse() {
-
-	                        //Temporary Disable
-
-	                        return false;
-
-	                        /*
-	                        this.confine?(
-	                        ((this.y<this.app.client.visuals.fixY(0))?
-	                        (this.app.window.y=0,this.app.window.inside -= 1):
-	                        ((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-	                        (this.app.window.y=this.app.client.visuals.fixW(this.app.client.setHeight),this.app.window.inside += 1):
-	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
-	                        ),
-	                        ((this.x<this.app.client.visuals.fixX(0))?
-	                        (this.app.window.x = 0,this.app.window.inside -=1):
-	                        ((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-	                        (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth),this.app.window.inside += 1):
-	                        (this.app.window.x = -this.app.client.visuals.fixX(0)+this.x)
-	                        )
-	                        )
-	                        )
-	                        ):((this.y<this.app.client.visuals.fixY(0))?
-	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
-	                        ((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
-	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y):
-	                        (this.app.window.y=-this.app.client.visuals.fixY(0)+this.y)
-	                        ),
-	                        ((this.x<this.app.client.visuals.fixX(0))?
-	                        (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
-	                        ((this.x>this.app.client.visuals.fixX(this.app.client.setWidth))?
-	                        (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x):
-	                        (this.app.window.x=-this.app.client.visuals.fixX(0)+this.x)
-	                        )
-	                        ));
-	                        */
-	                }
-	        }, {
-	                key: "init_options",
-	                value: function init_options() {
-
-	                        /*	Overrides the selection start event for selecting events	*/
-
-	                        if (!this.app.options.get("override").SelectStart) {
-	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
-	                        }
-
-	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
-
-	                        if (!this.app.options.get("override").MSHoldVisual) {
-	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
-	                        }
-
-	                        /* Overrides the ContextMenu event */
-
-	                        if (this.app.options.get("override").ContextMenu) {
-	                                this.app.document.oncontextmenu = this.preventDefault;
-	                                this.app.window.self.oncontextmenu = this.preventDefault;
-	                        }
-
-	                        /*	Overrides dragstart event		*/
-
-	                        if (this.app.options.get("override").Drag) {
-	                                this.app.document.ondragstart = this.preventDefault;
-	                                this.app.window.self.ondragstart = this.preventDefault;
-	                        }
-
-	                        /*	CSS based Overrides
-	                                  - mstouch
-	                                - seamless ( toggles overflow )
-	                                - tight ( zeros padding and margin )
-	                          */
-
-	                        if (this.app.options.get("flags").mstouch) {
-	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-	                        }
-
-	                        if (this.app.options.get("flags").seamless) {
-	                                this.app.document.body.style.overflow = "hidden";
-	                        }
-
-	                        if (this.app.options.get("flags").tight) {
-	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
-	                        }
-	                }
-	        }, {
-	                key: "update",
-	                value: function update() {
-
-	                        this.confineMouse();
-
-	                        //Reset variables
-	                        this.press = false;
-	                        this.touch = 0;
-	                        this.app.window.inside = 0;
-	                        this.wheelDelta = 0;
-
-	                        this.pressed ? this.duration++ : this.duration = 0;
-
-	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
-
-	                        //this.setup_msUniversalAppTouch();
-
-	                        if (this.delay > 0) {
-
-	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
-	                        }
-
-	                        //reset code released, unused?
-	                        this.codereleased = 0;
-
-	                        return true;
-	                }
-	        }, {
-	                key: "setup_universalMultitouch",
-	                value: function setup_universalMultitouch() {
-
-	                        //touch-action: none;
-
-	                        if (window.PointerEvent) {
-	                                // Pointer events are supported.
-
-	                                // Test for touch capable hardware
-	                                if (navigator.maxTouchPoints) {}
-
-	                                // Test for multi-touch capable hardware
-	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
-
-	                                // Check the maximum number of touch points the hardware supports
-	                                var touchPoints = navigator.maxTouchPoints;
-	                        }
-
-	                        this.multi = {
-
-	                                list: []
-
-	                        };
-
-	                        this.touched = {
-
-	                                count: 0,
-	                                uplist: [],
-	                                downlist: [],
-	                                last: { x: 0, y: 0 },
-	                                CheckTouchUp: function CheckTouchUp() {
-
-	                                        return this.uplist[this.uplist.length - 1];
-	                                },
-	                                CheckTouchDown: function CheckTouchDown() {}
-
-	                        };
-	                }
-	        }, {
-	                key: "setup_msUniversalAppTouch",
-	                value: function setup_msUniversalAppTouch() {
-
-	                        var i = 0;
-
-	                        var data = {
-	                                app: this.app,
-	                                x: 0,
-	                                y: 0
-	                        };
-
-	                        if (this.pressed == false && this.lastpressed == true) {
-	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
-
-	                                this.controls.up(data);
-	                        }
-
-	                        this.lastpressed = this.pressed;
-
-	                        if (!this.wininitalize) try {
-
-	                                var w = Windows;
-	                                var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-
-	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
-	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
-	                                this.wininitalize = true;
-
-	                                data = {
-	                                        app: this.app,
-	                                        x: this.winposition.x,
-	                                        y: this.winposition.y
-	                                };
-	                        } catch (e) {
-
-	                                data = {
-	                                        app: this.app,
-	                                        x: 0,
-	                                        y: 0
-	                                };
-	                        } else {
-	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
-	                                this.pressed = this.winpoint.isInContact;
-	                                this.pointerDevice = this.winpoint.pointerDevice;
-
-	                                var pt = this.pointerPoint.getCurrentPoint(1);
-	                                var ptTargetProperties = pt.properties;
-
-	                                if (this.released) {
-
-	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
-
-	                                        switch (pt.pointerDevice.pointerDeviceType) {
-	                                                case "mouse":
-	                                                case 2:
-	                                                        details += "\nPointer type: mouse";
-	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
-	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
-	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
-	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
-	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
-	                                                        break;
-	                                                case "pen":
-	                                                        details += "\nPointer type: pen";
-	                                                        if (pt.isInContact) {
-	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
-	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
-	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
-	                                                        }
-	                                                        break;
-	                                                case "touch":
-	                                                        details += "\nPointer type: touch";
-	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
-	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
-	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                                        break;
-	                                                default:
-	                                                        details += "\nPointer type: " + "n/a";
-	                                                        break;
-	                                        }
-	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
-	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
-	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
-	                                        //console.log(pt.pointerDevice);
-	                                        //console.log(details);
-	                                }
-	                                i = this.winpoint;
-
-	                                data.x = this.winposition.x;
-	                                data.y = this.winposition.y;
-
-	                                if (this.pressed == true && this.lastpressed == true) this.controls.move(data);
-	                        }
-
-	                        if (this.pressed == true && this.lastpressed == false) this.controls.down(data);
-
-	                        // console.log(i)
-	                        //  if (Windows)
-	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
-	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
-	                }
-	        }]);
-
-	        return Input;
-	})(_inputcontroller3.default);
-
-	exports.default = Input;
-
-/***/ },
+/* 193 */,
 /* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6306,7 +5637,8 @@
 	                key: 'pointerup',
 	                value: function pointerup(evt) {
 
-	                        //console.log(evt.target.app.input.constructor._pointerup);
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
 
 	                        var target = evt.target.app.input.constructor;
 
@@ -6316,6 +5648,9 @@
 	                key: 'pointermove',
 	                value: function pointermove(evt) {
 
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
+
 	                        var target = evt.target.app.input.constructor;
 
 	                        target._pointermove(evt);
@@ -6323,6 +5658,9 @@
 	        }, {
 	                key: 'pointerdown',
 	                value: function pointerdown(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
 
 	                        var target = evt.target.app.input.constructor;
 
@@ -6476,10 +5814,6 @@
 	                key: '_pointerup',
 	                value: function _pointerup(evt) {
 
-	                        if (typeof evt === 'undefined') return;
-
-	                        if (typeof evt.target.app === 'undefined') return;
-
 	                        var input = evt.target.app.input;
 
 	                        var x = evt.x || evt.clientX || evt.pageX;
@@ -6496,14 +5830,11 @@
 	                key: '_pointermove',
 	                value: function _pointermove(evt) {
 
-	                        if (typeof evt === 'undefined') return;
-	                        if (typeof evt.target.app === 'undefined') return;
-
 	                        var input = evt.target.app.input;
 	                        var x = evt.x || evt.clientX || evt.pageX;
 	                        var y = evt.y || evt.clientY || evt.pageY;
 
-	                        var mouse_last = this.mouse_last;
+	                        //var mouse_last = this.mouse_last;
 
 	                        input.last = input.position = new _vector2.default(x, y);
 
@@ -6523,9 +5854,6 @@
 	        }, {
 	                key: '_pointerdown',
 	                value: function _pointerdown(evt) {
-
-	                        if (typeof evt === 'undefined') return;
-	                        if (typeof evt.target.app === 'undefined') return;
 
 	                        var input = evt.target.app.input;
 
@@ -6808,7 +6136,7 @@
 
 	            app.Listener(app.window.self, 'keydown', function (evt) {
 
-	                if (app.input.preventNext == true) evt.preventDefault();
+	                if (app.input.preventNext === true) evt.preventDefault();
 
 	                app.input.preventNext = false;
 
@@ -7109,7 +6437,7 @@
 /* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -7276,16 +6604,18 @@
 	                };
 
 	                var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-
+	                var AMD = "function" === 'function' && __webpack_require__(214);
+	                var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
+	                var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
 	                // AMD support
-	                if (true) {
+	                if (AMD) {
 	                    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
 	                        return cookiesExport;
 	                    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	                    // CommonJS/Node.js support
-	                } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+	                } else if (objectExports) {
 	                        // Support Node.js specific `module.exports` (which can be a function)
-	                        if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object') {
+	                        if (moduleExports) {
 	                            exports = module.exports = cookiesExport;
 	                        }
 	                        // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
@@ -7302,6 +6632,7 @@
 	};
 
 	exports.default = Cookies;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(213)(module)))
 
 /***/ },
 /* 202 */
@@ -8022,28 +7353,37 @@
 	    //Visuals Prototype
 	    prototype: {
 
-	        //Cached
-	        stat2: Object.create(null),
-	        alpha: 0,
+	        //draw flags
+
 	        free: false,
-	        point: 14,
-	        grd: Object.create(null),
-	        zindex: 1,
+	        alpha: 0,
 	        seamless: false,
 	        tight: true,
 	        disable: false,
-	        buffer_target: 0,
+
+	        //draw vars
 	        bleed: 1,
+	        point: 14,
+	        zindex: 1,
+	        buffer_target: 0,
+	        scale: 0,
+	        fillStyle: null,
+	        fontT: "",
+	        fontL: "",
+
+	        //Objects
+	        stat2: Object.create(null),
+	        grd: Object.create(null),
 
 	        canvas: Object.create(null),
 	        buffer: Object.create(null),
 	        canvas_context: Object.create(null),
 	        buffer_context: Object.create(null),
-	        fillStyle: null,
-	        scale: 0,
-	        fontT: "",
-	        fontL: "",
+
 	        within: false,
+
+	        //Draw Vars Buffer
+
 	        stat: {
 	            x: 0,
 	            y: 0,
@@ -8085,7 +7425,7 @@
 	                    var r = d[inpos++];
 	                    var g = d[inpos++];
 	                    var b = d[inpos++];
-	                    var a = d[inpos++];
+	                    //var a = d[inpos++];
 	                    b = Math.min(255, b);
 	                    if (r == 0 && g == 0 && b == 0) {
 	                        inpos++;
@@ -8103,9 +7443,6 @@
 	            this.buffer_context.putImageData(imageData, 0, 0);
 	        },
 
-	        //Used to batch draw all sprites to the screen
-	        //
-
 	        flip: function flip() {
 
 	            this.fillStyle = this.app.canvas.canvas.style.background == "transparent";
@@ -8114,7 +7451,7 @@
 	            //Set scale to client scale
 	            this.scale = this.app.client.scale;
 
-	            if (this.fillStyle == false) this.screen_fill(this.app.client.visuals.bleed, this.app.options.canvas.background);
+	            if (this.fillStyle === false) this.screen_fill(this.app.client.visuals.bleed, this.app.options.canvas.background);
 
 	            //If double buffering
 	            if (this.app.options.canvas.buffer) {
@@ -8122,11 +7459,11 @@
 	                this.canvas_context.drawImage(this.buffer, 0, 0);
 
 	                //Clear buffer
-	                if (this.fillStyle == true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
+	                if (this.fillStyle === true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
 	            } else {
 
 	                //If not double buffering, clear canvas
-	                if (this.fillStyle == true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
+	                if (this.fillStyle === true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
 
 	                //If initalized, draw state
 	                if (this.app.client.update.state.initalized) this.app.client.update.state.draw();
@@ -8261,9 +7598,11 @@
 	            this.colour(this.stat.oldcol);
 	            this.stat.init(this.colour(), this.stat.oldcol);
 	        },
+
 	        colour: function colour(colour1, colour2) {
+
 	            if (colour1) {
-	                return colour1 && (this.buffer_context.fillStyle = colour1);colour2 && (this.buffer_context.strokeStyle = colour2);
+	                return colour1 && (this.buffer_context.fillStyle = colour1); //colour2&&(this.buffer_context.strokeStyle=colour2);
 	            } else return this.buffer_context.fillStyle;
 	        },
 	        opacity: function opacity(_opacity) {
@@ -8271,7 +7610,7 @@
 	        },
 	        font: function font(_font) {
 	            return this.canvas_context.font = this.buffer_context.font = this.fontT = _font;
-	            return _font != this.fontT && (this.canvas_context.font = this.buffer_context.font = this.fontT = _font ? _font : this.fontL);
+	            //return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
 	            //if (font)
 	            //	this.buffer_context.font = font;
 	            //return this.buffer_context.font;
@@ -8562,14 +7901,15 @@
 	        },
 	        image_part: function image_part(image, x, y, s, a, c, xx, yy, w, h) {
 	            this.stat = this.chk(x, y, w, h, s, a, c);
-	            var scale = 1.1 * this.stat.s * this.app.getScale();
+
+	            //var scale = (1.1*this.stat.s)*this.app.getScale();
 
 	            this.stat.c ? this.buffer_context.drawImage(image, xx, yy, w, h, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, xx, yy, w, h, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
 	        },
 	        image_part_rotate: function image_part_rotate(image, x, y, s, a, c, xx, yy, w, h, angle) {
 	            this.stat = this.chk(x, y, w, h, s, a, c);
 
-	            var scale = 1.1 * this.stat.s * this.app.getScale();
+	            //var scale = (1.1*this.stat.s)*this.app.getScale();
 	            this.buffer_context.translate(this.stat.x, this.stat.y);
 	            this.buffer_context.rotate(angle * 0.0174532925);
 	            this.stat.c ? this.buffer_context.drawImage(image, xx, yy, w, h, 0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, xx, yy, w, h, 0, 0, this.stat.w, this.stat.h);
@@ -9687,26 +9027,32 @@
 	                                                                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
 	                                                                hostReachable: function hostReachable() {
 	                                                                                return;
-	                                                                                //if local host return offline
-	                                                                                if (this.window.location.hostname.toString() == "127.0.0.1") return false;
-
-	                                                                                // Handle IE and more capable browsers
-	                                                                                var xhr = new (this.window.ActiveXObject || XMLHttpRequest)("Microsoft.XMLHTTP");
-	                                                                                var status;
-
-	                                                                                // Open new request as a HEAD to the root hostname with a random param to bust the cache
-	                                                                                xhr.open("HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false);
-
-	                                                                                // Issue request and handle response
-	                                                                                try {
-	                                                                                                xhr.send();
-	                                                                                                return xhr.status >= 200 && xhr.status < 300 || xhr.status === 304;
-	                                                                                } catch (error) {
-
-	                                                                                                if (this.connectionAttempts < 1) this.connectionAttempts++, this.hostReachable();
-	                                                                                                this.error = error;
-	                                                                                                return false;
-	                                                                                }
+	                                                                                /*
+	                                                                                                    //if local host return offline
+	                                                                                                    if ((this.window.location.hostname).toString()=="127.0.0.1")
+	                                                                                                        return false;
+	                                                                                
+	                                                                                                    // Handle IE and more capable browsers
+	                                                                                                    var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
+	                                                                                                    var status;
+	                                                                                
+	                                                                                
+	                                                                                                    // Open new request as a HEAD to the root hostname with a random param to bust the cache
+	                                                                                                    xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
+	                                                                                
+	                                                                                                    // Issue request and handle response
+	                                                                                                    try {
+	                                                                                                        xhr.send();
+	                                                                                                        return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
+	                                                                                
+	                                                                                                    } catch (error) {
+	                                                                                
+	                                                                                                        if (this.connectionAttempts<1)
+	                                                                                                            this.connectionAttempts++,this.hostReachable();
+	                                                                                                        this.error = error;
+	                                                                                                        return false;
+	                                                                                                    }
+	                                                                                */
 	                                                                },
 
 	                                                                test: function test(app) {
@@ -10307,34 +9653,48 @@
 	                        try {
 	                            this.sound[this.current].currentTime = 0;
 	                        } catch (e) {}
-	                        return;for (var i = 0; i > 0; --i) {
-	                            if (App.ext.useragent.mobile) {
-	                                index.play();
-	                                return;
-	                            } else {
-	                                index.play();
-	                                return;
-	                            }
-	                        }this.sound[this.current].pause();
-	                        this.current = index;
-	                        try {
-	                            index.currentTime = 0;
-	                        } catch (e) {}
-	                        index.play();
+
+	                        return;
+
+	                        /*
+	                                                for(var i=0;i>0;--i)
+	                                                if (App.ext.useragent.mobile){
+	                                                    index.play();
+	                                                    return;
+	                                                }
+	                                                else
+	                                                {
+	                                                index.play();
+	                                                    return;
+	                                                }
+	                        
+	                                                    this.sound[this.current].pause();
+	                                                    this.current = index;
+	                                                    try{
+	                                                    index.currentTime = 0;
+	                                                    }catch(e){}
+	                                                    index.play();
+	                                                    */
 	                    }
 	                },
 	                update: function update() {
 	                    if (_typeof(this.sound) === 'object') if (this.sound[this.current].paused) this.sound[this.current].play();
-	                    return this.mute;
-	                    if (this.sound[this.current] === "undefined") return;
-	                    if (this.sound[this.current].currentTime >= this.length) {
-	                        if (++this.current == soundtrackQ) {
+	                    return;
+
+	                    /*
+	                      this.mute;
+	                    if (this.sound[this.current]==="undefined")
+	                        return;
+	                    if (this.sound[this.current].currentTime >= this.length)
+	                    {
+	                        if (++this.current == soundtrackQ)
+	                        {
 	                            this.current = 0;
 	                        }
-
-	                        this.sound[this.current].currentTime = 0;
+	                          this.sound[this.current].currentTime = 0;
 	                        this.sound[this.current].play();
 	                    }
+	                        */
 	                }
 	            },
 	            constructor: function constructor() {
@@ -10538,6 +9898,681 @@
 	        visuals: _visuals3.default
 	    }
 	};
+
+/***/ },
+/* 211 */,
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _options2 = __webpack_require__(206);
+
+	var _options3 = _interopRequireDefault(_options2);
+
+	var _input2 = __webpack_require__(215);
+
+	var _input3 = _interopRequireDefault(_input2);
+
+	var _client2 = __webpack_require__(210);
+
+	var _client3 = _interopRequireDefault(_client2);
+
+	var _canvas2 = __webpack_require__(207);
+
+	var _canvas3 = _interopRequireDefault(_canvas2);
+
+	var _user2 = __webpack_require__(208);
+
+	var _user3 = _interopRequireDefault(_user2);
+
+	var _ext2 = __webpack_require__(209);
+
+	var _ext3 = _interopRequireDefault(_ext2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	exports.default = Object.create({
+
+	   constructor: {
+	      //Version Number
+	      VN: {
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: true,
+
+	         //VN
+	         value: '0.7.0.15.12.11'
+	      },
+
+	      //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+	      Init: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(name, w, h) {
+	            var _this = this;
+
+	            //Store self
+	            var self = this;
+
+	            //Build client from prototype
+	            this.client = this.Construct(this.client.prototype, this.client.constructor);
+
+	            //Build canvas from prototype
+	            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+
+	            setTimeout(function () {
+
+	               function AppLoop() {
+	                  self.client.loop();
+	               }
+
+	               function AppLoopData() {
+	                  self.client.loopData();
+	               }
+
+	               _this.client.initalize(AppLoop, AppLoopData, _this.scale);
+	            }, this.time);
+
+	            //Delay start the loop
+	            /*
+	                  OLD NON PROMISE BASED LOOP, build fallback
+	              setTimeout(	(function(){
+	                          function AppLoop(){
+	                            self.client.loop();
+	                        }
+	                          function AppLoopData(){
+	                            self.client.loopData();
+	                        }
+	                          self.client.initalize(AppLoop,AppLoopData,self.scale);
+	              }),this.time);
+	            */
+	            //Initalize client
+	            this.client.init(name, w, h);
+
+	            // INIT INPUT
+
+	            this.input = new this.input(this);
+	         }
+
+	      },
+
+	      //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+	      OnLoad: {
+
+	         //Config
+	         writable: true,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(self) {
+
+	            //Default to App.
+	            self.Init("", 480, 320);
+	         }
+
+	      },
+
+	      //Runs on DOMContentLoaded
+	      OnApplicationLoad: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(evt) {
+
+	            //Run .OnLoad
+	            evt.target.app.OnLoad(evt.target.app);
+	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+	         }
+
+	      },
+
+	      //AddEvent Listener
+	      Listener: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(obj, evt, listener, param) {
+
+	            //If addEventListener exist, add it, otherwise attachEvent
+	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
+
+	            obj.app = window.apps[this.id] = this;
+	         }
+
+	      },
+
+	      //Construct Objects from this.Construct(prototype,[constructor])
+	      Construct: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(prototype, constructor) {
+
+	            //Cache vars
+	            var isObj = false;
+	            var obj = prototype;
+	            var proto = prototype;
+	            var construct = constructor;
+	            var ret = {};
+
+	            //if prototype contains a prototype and constructor
+	            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+	               construct = obj.constructor;
+	               proto = obj.prototype;
+	               isObj = true;
+	            }
+
+	            //Grab type of constructor
+	            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+	            //Return & Create object based on constructor
+	            switch (c) {
+	               case 'undefined':
+
+	                  //Use only the prototype
+	                  ret = Object.create(proto);
+
+	                  break;
+	               case 'object':
+
+	                  //Use constructor as object
+	                  ret = Object.create(proto, construct);
+
+	                  break;
+	               case 'function':
+
+	                  //Use constructor as function
+	                  ret = Object.create(proto, construct(this));
+
+	                  break;
+	               default:
+
+	                  //Expected a type
+	                  console.log("Expected 'object' or 'function': Type is " + c);
+	            }
+	            if (isObj) prototype = ret;
+
+	            return ret;
+	         }
+
+	      },
+
+	      //Allows artificial clicking of elements
+	      click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
+
+	            //If .click
+	            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
+
+	               if (event.target !== anchorObj) {
+
+	                  var evt = document.createEvent("MouseEvents");
+
+	                  evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+	                  anchorObj.dispatchEvent(evt);
+	               }
+	            }
+	         }
+
+	      },
+
+	      //App.create for creating objects with app, visuals and graphics inherited
+	      create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
+	            return this.Construct(a || {}, this.client.room);
+	         } },
+
+	      //Getters for Common Data
+	      getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.step.fps;
+	         } },
+
+	      getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.state.current;
+	         } },
+
+	      getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.ext.connect.offline;
+	         } },
+
+	      getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.ext.connect.error;
+	         } },
+
+	      getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.ext.connect.connectionAttempts;
+	         } },
+
+	      getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.step.delta;
+	         } },
+
+	      getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.scale;
+	         } },
+
+	      getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.setWidth;
+	         } },
+
+	      getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.setHeight;
+	         } },
+
+	      getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.width;
+	         } },
+
+	      getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.height;
+	         } },
+
+	      setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
+	            return document.title == title ? document.title : document.title = title;
+	         } },
+
+	      setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
+	            return this.client.update.state.set(state, true);
+	         } },
+
+	      toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.fullscale = !this.client.update.fullscale;
+	         } },
+
+	      time: { writable: true, configurable: false, enumerable: false, value: 0 },
+
+	      main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	               return true;
+	            } } }
+	   },
+
+	   prototype: {
+
+	      options: _options3.default,
+
+	      user: _user3.default,
+
+	      ext: _ext3.default,
+
+	      input: _input3.default,
+
+	      canvas: _canvas3.default,
+
+	      client: _client3.default
+
+	   }
+
+	});
+
+/***/ },
+/* 213 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 214 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _inputcontroller2 = __webpack_require__(194);
+
+	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Input = (function (_inputcontroller) {
+	        _inherits(Input, _inputcontroller);
+
+	        function Input(app, pointerPoint) {
+	                _classCallCheck(this, Input);
+
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
+
+	                _this.delay = 0;
+
+	                _this.touch = false;
+
+	                _this.touch_dist = { x: 0, y: 0 };
+
+	                _this.key = false;
+
+	                _this.keyPower = 0;
+
+	                _this.keyup = false;
+
+	                _this.keydown = false;
+
+	                _this.codes = [];
+
+	                _this.codeList = [];
+
+	                _this.control = false;
+
+	                _this.confine = false;
+
+	                _this.preventNext = true;
+
+	                _this.init_options();
+
+	                _this.keyController.init(_this.app);
+
+	                _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
+
+	                _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
+
+	                _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
+
+	                _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
+
+	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
+
+	                _this.setup_universalMultitouch();
+
+	                //this.setup_msUniversalAppTouch();
+
+	                return _this;
+	        }
+
+	        _createClass(Input, [{
+	                key: "preventDefault",
+	                value: function preventDefault(e) {
+	                        e.preventDefault();return e.target.app;
+	                }
+	        }, {
+	                key: "preventNextInput",
+	                value: function preventNextInput() {
+	                        return this.preventNext = true;
+	                }
+	        }, {
+	                key: "confineMouse",
+	                value: function confineMouse() {
+
+	                        return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
+	                }
+	        }, {
+	                key: "init_options",
+	                value: function init_options() {
+
+	                        /*	Overrides the selection start event for selecting events	*/
+
+	                        if (!this.app.options.get("override").SelectStart) {
+	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
+	                        }
+
+	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
+
+	                        if (!this.app.options.get("override").MSHoldVisual) {
+	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
+	                        }
+
+	                        /* Overrides the ContextMenu event */
+
+	                        if (this.app.options.get("override").ContextMenu) {
+	                                this.app.document.oncontextmenu = this.preventDefault;
+	                                this.app.window.self.oncontextmenu = this.preventDefault;
+	                        }
+
+	                        /*	Overrides dragstart event		*/
+
+	                        if (this.app.options.get("override").Drag) {
+	                                this.app.document.ondragstart = this.preventDefault;
+	                                this.app.window.self.ondragstart = this.preventDefault;
+	                        }
+
+	                        /*	CSS based Overrides
+	                                  - mstouch
+	                                - seamless ( toggles overflow )
+	                                - tight ( zeros padding and margin )
+	                          */
+
+	                        if (this.app.options.get("flags").mstouch) {
+	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+	                        }
+
+	                        if (this.app.options.get("flags").seamless) {
+	                                this.app.document.body.style.overflow = "hidden";
+	                        }
+
+	                        if (this.app.options.get("flags").tight) {
+	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
+	                        }
+	                }
+	        }, {
+	                key: "update",
+	                value: function update() {
+
+	                        this.confineMouse();
+
+	                        //Reset variables
+	                        this.press = false;
+	                        this.touch = 0;
+	                        this.app.window.inside = 0;
+	                        this.wheelDelta = 0;
+
+	                        this.pressed ? this.duration++ : this.duration = 0;
+
+	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
+
+	                        //this.setup_msUniversalAppTouch();
+
+	                        if (this.delay > 0) {
+
+	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	                        }
+
+	                        //reset code released, unused?
+	                        this.codereleased = 0;
+
+	                        return true;
+	                }
+	        }, {
+	                key: "setup_universalMultitouch",
+	                value: function setup_universalMultitouch() {
+
+	                        //touch-action: none;
+
+	                        if (window.PointerEvent) {
+	                                // Pointer events are supported.
+
+	                                // Test for touch capable hardware
+	                                if (navigator.maxTouchPoints) {}
+
+	                                // Test for multi-touch capable hardware
+	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
+
+	                                // Check the maximum number of touch points the hardware supports
+	                                //var touchPoints = navigator.maxTouchPoints;
+	                        }
+
+	                        this.multi = {
+
+	                                list: []
+
+	                        };
+
+	                        this.touched = {
+
+	                                count: 0,
+	                                uplist: [],
+	                                downlist: [],
+	                                last: { x: 0, y: 0 },
+	                                CheckTouchUp: function CheckTouchUp() {
+
+	                                        return this.uplist[this.uplist.length - 1];
+	                                },
+	                                CheckTouchDown: function CheckTouchDown() {}
+
+	                        };
+	                }
+	        }, {
+	                key: "setup_msUniversalAppTouch",
+	                value: function setup_msUniversalAppTouch() {
+
+	                        var i = 0;
+
+	                        var data = {
+	                                app: this.app,
+	                                x: 0,
+	                                y: 0
+	                        };
+
+	                        if (this.pressed === false && this.lastpressed === true) {
+	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
+
+	                                this.controls.up(data);
+	                        }
+
+	                        this.lastpressed = this.pressed;
+
+	                        if (!this.wininitalize) try {
+
+	                                //var w = Windows;
+	                                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+
+	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
+	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
+	                                this.wininitalize = true;
+
+	                                data = {
+	                                        app: this.app,
+	                                        x: this.winposition.x,
+	                                        y: this.winposition.y
+	                                };
+	                        } catch (e) {
+
+	                                data = {
+	                                        app: this.app,
+	                                        x: 0,
+	                                        y: 0
+	                                };
+	                        } else {
+	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
+	                                this.pressed = this.winpoint.isInContact;
+	                                this.pointerDevice = this.winpoint.pointerDevice;
+
+	                                var pt = this.pointerPoint.getCurrentPoint(1);
+	                                var ptTargetProperties = pt.properties;
+
+	                                if (this.released) {
+
+	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
+
+	                                        switch (pt.pointerDevice.pointerDeviceType) {
+	                                                case "mouse":
+	                                                case 2:
+	                                                        details += "\nPointer type: mouse";
+	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
+	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
+	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
+	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
+	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
+	                                                        break;
+	                                                case "pen":
+	                                                        details += "\nPointer type: pen";
+	                                                        if (pt.isInContact) {
+	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
+	                                                        }
+	                                                        break;
+	                                                case "touch":
+	                                                        details += "\nPointer type: touch";
+	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                        break;
+	                                                default:
+	                                                        details += "\nPointer type: " + "n/a";
+	                                                        break;
+	                                        }
+	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
+	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
+	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
+	                                        //console.log(pt.pointerDevice);
+	                                        //console.log(details);
+	                                }
+	                                i = this.winpoint;
+
+	                                data.x = this.winposition.x;
+	                                data.y = this.winposition.y;
+
+	                                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
+	                        }
+
+	                        if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
+
+	                        // console.log(i)
+	                        //  if (Windows)
+	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
+	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
+	                }
+	        }]);
+
+	        return Input;
+	})(_inputcontroller3.default);
+
+	exports.default = Input;
 
 /***/ }
 /******/ ]);

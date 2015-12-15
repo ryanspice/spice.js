@@ -1,5 +1,5 @@
 
-import inputcontroller from './input/inputcontroller.js';
+import inputcontroller from './inputcontroller.js';
 
 export default class Input extends inputcontroller {
 
@@ -8,15 +8,21 @@ export default class Input extends inputcontroller {
         super(app);
 
 		this.delay = 0;
+
         this.touch=false;
+
         this.touch_dist={x:0,y:0};
 
         this.key=false;
+
         this.keyPower=0;
+
         this.keyup=false;
+
         this.keydown=false;
 
         this.codes = [];
+
         this.codeList = [];
 
         this.control = false;
@@ -25,20 +31,22 @@ export default class Input extends inputcontroller {
 
         this.preventNext = true;
 
-
         this.init_options();
 
         this.keyController.init(this.app);
 
-        let down = new this.constructor._Listener("pointerdown","MSPointerDown","mousedown","touchstart",this.app.window,this.pointerdown);
-        let up = new this.constructor._Listener("pointerup","MSPointerUp","mouseup","touchmove",this.app.window,this.pointerup);
-        let move = new this.constructor._Listener("pointermove","MSPointerMove","mousemove","touchend",this.app.window,this.pointermove);
-        let scroll = this.scrollController = (this.app.Construct(this.scrollController.prototype,this.scrollController.constructor)).init();
+        this.down = new this.constructor._Listener("pointerdown","MSPointerDown","mousedown","touchstart",this.app.window,this.pointerdown);
 
+        this.up = new this.constructor._Listener("pointerup","MSPointerUp","mouseup","touchmove",this.app.window,this.pointerup);
+
+        this.move = new this.constructor._Listener("pointermove","MSPointerMove","mousemove","touchend",this.app.window,this.pointermove);
+
+        this.scrollController = (this.app.Construct(this.scrollController.prototype,this.scrollController.constructor)).init();
 
         this.pointerPoint = pointerPoint;//this.support(pointerPoint);
 
         this.setup_universalMultitouch();
+
         //this.setup_msUniversalAppTouch();
 
     }
@@ -49,12 +57,7 @@ export default class Input extends inputcontroller {
 
 	confineMouse(){
 
-        //Temporary Disable
-
-        return false;
-
-        /*
-		this.confine?(
+        return this.confine?(
 			((this.y<this.app.client.visuals.fixY(0))?
 				(this.app.window.y=0,this.app.window.inside -= 1):
 					((this.y>this.app.client.visuals.fixY(this.app.client.setHeight))?
@@ -82,7 +85,6 @@ export default class Input extends inputcontroller {
 						(this.app.window.x=-this.app.client.visuals.fixX(0)+this.x)
 					)
 				));
-        */
 	}
 
     init_options(){
@@ -185,7 +187,7 @@ export default class Input extends inputcontroller {
           }
 
           // Check the maximum number of touch points the hardware supports
-          var touchPoints = navigator.maxTouchPoints;
+          //var touchPoints = navigator.maxTouchPoints;
 
         }
 
@@ -229,7 +231,7 @@ export default class Input extends inputcontroller {
         }
 
 
-        if ((this.pressed==false)&&(this.lastpressed==true))
+        if ((this.pressed===false)&&(this.lastpressed===true))
         {
             this.released = true,this.dist.x=0,this.dist.y=0;
 
@@ -241,8 +243,8 @@ export default class Input extends inputcontroller {
         if (!this.wininitalize)
         try {
 
-            var w = Windows;
-            var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+            //var w = Windows;
+            //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
 
 
             this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
@@ -323,14 +325,14 @@ export default class Input extends inputcontroller {
             data.y = this.winposition.y;
 
 
-        if ((this.pressed==true)&&(this.lastpressed==true))
+        if ((this.pressed===true)&&(this.lastpressed===true))
             this.controls.move(data);
 
         }
 
 
 
-        if ((this.pressed==true)&&(this.lastpressed==false))
+        if ((this.pressed===true)&&(this.lastpressed===false))
             this.controls.down(data);
 
        // console.log(i)

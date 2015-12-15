@@ -62,7 +62,6 @@ Current documentation is for an older version of SpiceJS.
 
 ####in-testing
 <ul>
-	<li>Device Input Testing </li>
 	<li>advanced drawing (blending, elements, buttons)</li>
 	<li>drawing using vectors</li>
 	<li>pathing</li>
@@ -74,6 +73,7 @@ Current documentation is for an older version of SpiceJS.
 ####coming soon
  <ul>
 	 <li>Multi-Channel Audio</li>
+ 	<li>smooth page scrolling</li>
  </ul>
 
 

@@ -96,5 +96,6 @@ utils.loadExternalJS = function(scripts) {
 
 window.wait = wait;
 
+window.utils = utils;
 
-export default utils;
+export default window.utils;

@@ -411,6 +411,7 @@ export default {
                 // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
                 hostReachable:function(){
 return;
+/*
                     //if local host return offline
                     if ((this.window.location.hostname).toString()=="127.0.0.1")
                         return false;
@@ -435,7 +436,7 @@ return;
                         this.error = error;
                         return false;
                     }
-
+*/
                 },
 
                 test:function(app){

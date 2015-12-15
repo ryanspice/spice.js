@@ -27,12 +27,6 @@ export default class inputcontroller extends SJSClass {
 
         static _pointerup(evt){
 
-            if (typeof evt === 'undefined')
-                return;
-
-            if (typeof evt.target.app === 'undefined')
-                return;
-
             let input = evt.target.app.input;
 
             let x = evt.x || evt.clientX || evt.pageX;
@@ -48,16 +42,11 @@ export default class inputcontroller extends SJSClass {
 
         static _pointermove(evt){
 
-            if (typeof evt === 'undefined')
-                return;
-            if (typeof evt.target.app === 'undefined')
-                return;
-
             let input = evt.target.app.input;
             let x = evt.x || evt.clientX || evt.pageX;
             let y = evt.y || evt.clientY || evt.pageY;
 
-            var mouse_last = this.mouse_last;
+            //var mouse_last = this.mouse_last;
 
             input.last = input.position = new Vector(x,y);
 
@@ -83,11 +72,6 @@ export default class inputcontroller extends SJSClass {
 
         static _pointerdown(evt){
 
-            if (typeof evt === 'undefined')
-                return;
-            if (typeof evt.target.app === 'undefined')
-                return;
-
             let input = evt.target.app.input;
 
             let x = evt.x || evt.clientX || evt.pageX;
@@ -110,27 +94,43 @@ export default class inputcontroller extends SJSClass {
 
         pointerup(evt){
 
-            //console.log(evt.target.app.input.constructor._pointerup);
+            if (typeof evt === 'undefined')
+                return;
+            if (typeof evt.target.app === 'undefined')
+                return;
 
             let target = evt.target.app.input.constructor;
 
             target._pointerup(evt);
 
         }
+
         pointermove(evt){
+
+            if (typeof evt === 'undefined')
+                return;
+            if (typeof evt.target.app === 'undefined')
+                return;
 
             let target = evt.target.app.input.constructor;
 
             target._pointermove(evt);
 
         }
+
         pointerdown(evt){
+
+            if (typeof evt === 'undefined')
+                return;
+            if (typeof evt.target.app === 'undefined')
+                return;
 
             let target = evt.target.app.input.constructor;
 
             target._pointerdown(evt);
 
         }
+
         get x() {
 
             return this.constructor._x;

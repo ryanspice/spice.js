@@ -37,11 +37,11 @@ Application.main= {
 		this.particleController.draw();
 
 
-        this.visuals.text("Position: "+this.app.input.position.x,this.app.getWidth()/2,20,"#FFFFFF");
-        this.visuals.text("Last: "+this.app.input.last.x,this.app.getWidth()/2,40,"#FFFFFF");
-        this.visuals.text("Start: "+this.app.input.start.x,this.app.getWidth()/2,60,"#FFFFFF");
-        this.visuals.text("End: "+this.app.input.end.x,this.app.getWidth()/2,80,"#FFFFFF");
-        this.visuals.text("Distance: "+this.app.input.dist.x,this.app.getWidth()/2,100,"#FFFFFF");
+        this.visuals.text("Position: "+this.app.input.position.x,this.app.getWidth()/4,20,"#FFFFFF");
+        this.visuals.text("Last: "+this.app.input.last.x,this.app.getWidth()/4,40,"#FFFFFF");
+        this.visuals.text("Start: "+this.app.input.start.x,this.app.getWidth()/4,60,"#FFFFFF");
+        this.visuals.text("End: "+this.app.input.end.x,this.app.getWidth()/4,80,"#FFFFFF");
+        this.visuals.text("Distance: "+this.app.input.dist.x,this.app.getWidth()/4,100,"#FFFFFF");
 
         var position = this.app.input.position;
         var start = this.app.input.start;

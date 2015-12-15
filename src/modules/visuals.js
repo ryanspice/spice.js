@@ -5,28 +5,38 @@ visuals = {
     //Visuals Prototype
     prototype:{
 
-        //Cached
-        stat2:(Object.create(null)),
-        alpha:0,
+        //draw flags
+
         free:false,
-        point:14,
-        grd:(Object.create(null)),
-        zindex:1,
+        alpha:0,
         seamless:false,
         tight:true,
         disable:false,
-        buffer_target:0,
+
+        //draw vars
         bleed:1,
+        point:14,
+        zindex:1,
+        buffer_target:0,
+        scale:0,
+        fillStyle:null,
+        fontT:"",
+        fontL:"",
+
+        //Objects
+        stat2:(Object.create(null)),
+        grd:(Object.create(null)),
 
         canvas:(Object.create(null)),
         buffer:(Object.create(null)),
         canvas_context:(Object.create(null)),
         buffer_context:(Object.create(null)),
-        fillStyle:null,
-        scale:0,
-        fontT:"",
-        fontL:"",
+
+
         within:false,
+
+        //Draw Vars Buffer
+
         stat:{
                 x:0,
                 y:0,
@@ -70,7 +80,7 @@ visuals = {
                     var r = d[inpos++];
                     var g = d[inpos++];
                     var b = d[inpos++];
-                    var a = d[inpos++];
+                    //var a = d[inpos++];
                      b = Math.min(255,b);
                     if ((r==0)&&(g==0)&&(b==0))
                     {
@@ -92,10 +102,6 @@ visuals = {
 
         },
 
-
-        //Used to batch draw all sprites to the screen
-            //
-
         flip:function(){
 
             this.fillStyle = (this.app.canvas.canvas.style.background=="transparent");
@@ -107,7 +113,7 @@ visuals = {
             this.scale = this.app.client.scale;
 
 
-            if (this.fillStyle==false)
+            if (this.fillStyle===false)
                 this.screen_fill(this.app.client.visuals.bleed,this.app.options.canvas.background);
 
             //If double buffering
@@ -117,13 +123,13 @@ visuals = {
                 this.canvas_context.drawImage(this.buffer,0,0);
 
                 //Clear buffer
-                if (this.fillStyle==true)
+                if (this.fillStyle===true)
                 this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
             }
             else {
 
                 //If not double buffering, clear canvas
-                if (this.fillStyle==true)
+                if (this.fillStyle===true)
                 this.buffer_context.clearRect(0,0,this.window.innerWidth,this.window.innerHeight);
 
                 //If initalized, draw state
@@ -312,20 +318,23 @@ visuals = {
             this.colour(this.stat.oldcol);
             this.stat.init(this.colour(),this.stat.oldcol);
         },
-        colour:function(colour1,colour2) {
+
+        colour:function colour(colour1,colour2) {
+
             if (colour1)
                 {
-                    return colour1&&(this.buffer_context.fillStyle=colour1);colour2&&(this.buffer_context.strokeStyle=colour2);
+                    return colour1&&(this.buffer_context.fillStyle=colour1);//colour2&&(this.buffer_context.strokeStyle=colour2);
                 }
                 else
                 return this.buffer_context.fillStyle;
+
         },
         opacity:function(opacity) {
             return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
         },
         font:function(font)	{
             return this.canvas_context.font = this.buffer_context.font=this.fontT=font;
-            return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
+            //return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
             //if (font)
             //	this.buffer_context.font = font;
             //return this.buffer_context.font;
@@ -635,7 +644,8 @@ visuals = {
         },
         image_part:function(image,x,y,s,a,c,xx,yy,w,h){
             this.stat = this.chk(x,y,w,h,s,a,c);
-            var scale = (1.1*this.stat.s)*this.app.getScale();
+
+            //var scale = (1.1*this.stat.s)*this.app.getScale();
 
 
 
@@ -646,7 +656,7 @@ visuals = {
         image_part_rotate:function(image,x,y,s,a,c,xx,yy,w,h,angle){
             this.stat = this.chk(x,y,w,h,s,a,c);
 
-            var scale = (1.1*this.stat.s)*this.app.getScale();
+            //var scale = (1.1*this.stat.s)*this.app.getScale();
             this.buffer_context.translate(this.stat.x,this.stat.y);
             this.buffer_context.rotate(angle*0.0174532925);
             (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,0,0,this.stat.w,this.stat.h);

@@ -631,34 +631,45 @@ export default {
             set:function(index,reset){
                 if (!this.mute)
                     {
-                this.sound[this.current].pause()
-                this.sound[this.current] = index;
-                try{
-                    this.sound[this.current].currentTime = 0;
-                    }catch(e){}
-                return;for(var i=0;i>0;--i)
-                if (App.ext.useragent.mobile){
-                    index.play();
-                    return;
+                        this.sound[this.current].pause()
+                        this.sound[this.current] = index;
+                        try{
+                            this.sound[this.current].currentTime = 0;
+                            }catch(e){}
+
+                        return;
+
+
+/*
+                        for(var i=0;i>0;--i)
+                        if (App.ext.useragent.mobile){
+                            index.play();
+                            return;
+                        }
+                        else
+                        {
+                        index.play();
+                            return;
+                        }
+
+                            this.sound[this.current].pause();
+                            this.current = index;
+                            try{
+                            index.currentTime = 0;
+                            }catch(e){}
+                            index.play();
+                            */
                 }
-                else
-                {
-                index.play();
-                    return;
-                }
-                    this.sound[this.current].pause();
-                    this.current = index;
-                    try{
-                    index.currentTime = 0;
-                    }catch(e){}
-                    index.play();
-                    }
             },
             update:function() {
                 if (typeof this.sound === 'object')
                     if (this.sound[this.current].paused)
                         this.sound[this.current].play();
-                return this.mute;
+                return
+
+                /*
+
+                this.mute;
                 if (this.sound[this.current]==="undefined")
                     return;
                 if (this.sound[this.current].currentTime >= this.length)
@@ -671,6 +682,9 @@ export default {
                     this.sound[this.current].currentTime = 0;
                     this.sound[this.current].play();
                 }
+
+
+                */
             }
         },
         constructor:function(){return {
