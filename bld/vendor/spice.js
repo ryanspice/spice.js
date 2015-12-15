@@ -5317,6 +5317,12 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	                    value: true
+	});
+
 	var _utils = __webpack_require__(192);
 
 	var utils = _interopRequireWildcard(_utils);
@@ -5367,6 +5373,8 @@
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	/*	SpiceJS by Ryan Spice	*/
 
 	var Steve = "cool";
@@ -5378,438 +5386,423 @@
 	window.SJSParticleController = _particles2.default;
 
 	if (typeof window.scripts != 'array') {
-					window.scripts = [];
+	                    window.scripts = [];
 	}
 
-	var SpiceJS = window.SpiceJS = Object.create({
+	var SpiceJS = (function () {
+	                    function SpiceJS() {
+	                                        _classCallCheck(this, SpiceJS);
 
-					//Initalize SpiceJS Controller
-					init: function init() {
+	                                        this.window = window;
+	                                        this.window.SpiceJS = this;
+	                                        this.window.SJS = this;
 
-									//let time = this.TimeToBuild = new Date().getTime();
+	                                        //if no apps have been defined, create a new array
+	                                        if (!this.window.apps) this.window.apps = new Array(1);
 
-									this.window = window;
+	                                        //if appsNextId isnt larger or equal to 0 assign it to 0
+	                                        if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
 
-									//if no apps have been defined, create a new array
-									if (!this.window.apps) this.window.apps = new Array(1);
+	                                        //Setup Statistics and Monitoring
+	                                        this.statistics = new this.constructor._statistics(this);
+	                                        this.controller = Object.create(this.constructor._controller);
+	                    }
 
-									//if appsNextId isnt larger or equal to 0 assign it to 0
-									if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
+	                    _createClass(SpiceJS, [{
+	                                        key: 'logs',
+	                                        value: function logs() {
 
-									//Setup Statistics and Monitoring
-									this.statistics = new this.statistics(this);
+	                                                            this.statistics.log("uptime", new Date().getTime() - this.TimeToBuild, 'build');
 
-									return this;
-					},
+	                                                            return this.statistics.details(type);
+	                                        }
+	                    }, {
+	                                        key: 'get',
+	                                        value: function get() {
 
-					statistics: _statistics2.default,
+	                                                            return this.proto;
+	                                        }
+	                    }, {
+	                                        key: 'create',
+	                                        value: function create(target) {
+	                                                            var _this = this;
 
-					//return details and information on the current apps
-					controller: {
+	                                                            var tempReference = {};
 
-									list: function list(id) {
+	                                                            var tempReferenceId = null;
 
-													if (id) return window.apps[id];
+	                                                            var listReference = null;
 
-													if (window.apps.length > 1) return window.apps;else return window.apps[0];
-									}
+	                                                            var time = new Date().getTime();
 
-					},
+	                                                            this.statistics.monitor(function () {
 
-					//
+	                                                                                _this.name = "scriptloadtime";
 
-					logs: function logs(type) {
+	                                                                                window.utils.loadExternalJS(window.scripts);
 
-									this.statistics.log("uptime", new Date().getTime() - this.TimeToBuild, 'build');
+	                                                                                tempReference = _this.create2();
 
-									return this.statistics.details(type);
-					},
+	                                                                                tempReferenceId = tempReference.id;
+	                                                            }).then(function () {
 
-					get: function get() {
+	                                                                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
 
-									return this.proto;
-					},
+	                                                                                listReference = _this.controller.list(tempReferenceId);
 
-					//
+	                                                                                _this.statistics.monitor(function () {
 
-					create: function create(target) {
-									var _this = this;
+	                                                                                                    _this.name = "loadtime";
 
-									var tempReference = {};
+	                                                                                                    _this.initListeners(listReference);
+	                                                                                }).then(function () {
 
-									var tempReferenceId = null;
+	                                                                                                    _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
 
-									var listReference = null;
+	                                                                                                    _this.statistics.log("build", time);
+	                                                                                });
+	                                                            });
 
-									var time = new Date().getTime();
+	                                                            return tempReference;
+	                                        }
+	                    }, {
+	                                        key: 'create2',
+	                                        value: function create2() {
 
-									this.statistics.monitor(function () {
+	                                                            this.window = window;
 
-													_this.name = "scriptloadtime";
+	                                                            //temp stores the app during the create process, it is then returned
+	                                                            var temp = {};
+	                                                            temp = Object.create({
 
-													window.utils.loadExternalJS(window.scripts);
+	                                                                                constructor: {
+	                                                                                                    //Version Number
+	                                                                                                    VN: {
+	                                                                                                                        //Config
+	                                                                                                                        writable: false,
+	                                                                                                                        configurable: false,
+	                                                                                                                        enumerable: true,
 
-													tempReference = _this.create2();
+	                                                                                                                        //VN
+	                                                                                                                        value: '0.7.0.15.12.11'
+	                                                                                                    },
 
-													tempReferenceId = tempReference.id;
-									}).then(function () {
+	                                                                                                    //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+	                                                                                                    Init: {
 
-													_this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+	                                                                                                                        //Config
+	                                                                                                                        writable: false,
+	                                                                                                                        configurable: false,
+	                                                                                                                        enumerable: false,
 
-													listReference = _this.controller.list(tempReferenceId);
+	                                                                                                                        //Function
+	                                                                                                                        value: function value(name, w, h) {
+	                                                                                                                                            var _this2 = this;
 
-													_this.statistics.monitor(function () {
+	                                                                                                                                            //Store self
+	                                                                                                                                            var self = this;
 
-																	_this.name = "loadtime";
+	                                                                                                                                            //Build client from prototype
+	                                                                                                                                            this.client = this.Construct(this.client.prototype, this.client.constructor);
 
-																	_this.initListeners(listReference);
-													}).then(function () {
+	                                                                                                                                            //Build canvas from prototype
+	                                                                                                                                            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
 
-																	_this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+	                                                                                                                                            setTimeout(function () {
 
-																	_this.statistics.log("build", time);
-													});
-									});
+	                                                                                                                                                                function AppLoop() {
+	                                                                                                                                                                                    self.client.loop();
+	                                                                                                                                                                }
 
-									return tempReference;
-					},
+	                                                                                                                                                                function AppLoopData() {
+	                                                                                                                                                                                    self.client.loopData();
+	                                                                                                                                                                }
 
-					create2: function create2() {
+	                                                                                                                                                                _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+	                                                                                                                                            }, this.time);
+
+	                                                                                                                                            //Delay start the loop
+	                                                                                                                                            /*
+	                                                                                                                                                  OLD NON PROMISE BASED LOOP, build fallback
+	                                                                                                                                              setTimeout(	(function(){
+	                                                                                                                                                          function AppLoop(){
+	                                                                                                                                                            self.client.loop();
+	                                                                                                                                                        }
+	                                                                                                                                                          function AppLoopData(){
+	                                                                                                                                                            self.client.loopData();
+	                                                                                                                                                        }
+	                                                                                                                                                          self.client.initalize(AppLoop,AppLoopData,self.scale);
+	                                                                                                                                              }),this.time);
+	                                                                                                                                            */
+	                                                                                                                                            //Initalize client
+	                                                                                                                                            this.client.init(name, w, h);
 
-									this.window = window;
+	                                                                                                                                            // INIT INPUT
 
-									//temp stores the app during the create process, it is then returned
-									var temp = {};
-									temp = Object.create({
+	                                                                                                                                            this.input = new this.input(this);
+	                                                                                                                        }
 
-													constructor: {
-																	//Version Number
-																	VN: {
-																					//Config
-																					writable: false,
-																					configurable: false,
-																					enumerable: true,
+	                                                                                                    },
 
-																					//VN
-																					value: '0.7.0.15.12.11'
-																	},
+	                                                                                                    //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+	                                                                                                    OnLoad: {
 
-																	//Build Client, Instantiate Loop, Build Canvas, Initalize Client
-																	Init: {
+	                                                                                                                        //Config
+	                                                                                                                        writable: true,
+	                                                                                                                        configurable: false,
+	                                                                                                                        enumerable: false,
 
-																					//Config
-																					writable: false,
-																					configurable: false,
-																					enumerable: false,
+	                                                                                                                        //Function
+	                                                                                                                        value: function value(self) {
 
-																					//Function
-																					value: function value(name, w, h) {
-																									var _this2 = this;
+	                                                                                                                                            //Default to App.
+	                                                                                                                                            self.Init("", 480, 320);
+	                                                                                                                        }
 
-																									//Store self
-																									var self = this;
+	                                                                                                    },
 
-																									//Build client from prototype
-																									this.client = this.Construct(this.client.prototype, this.client.constructor);
+	                                                                                                    //Runs on DOMContentLoaded
+	                                                                                                    OnApplicationLoad: {
 
-																									//Build canvas from prototype
-																									(this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+	                                                                                                                        //Config
+	                                                                                                                        writable: false,
+	                                                                                                                        configurable: false,
+	                                                                                                                        enumerable: false,
 
-																									setTimeout(function () {
+	                                                                                                                        //Function
+	                                                                                                                        value: function value(evt) {
+
+	                                                                                                                                            //Run .OnLoad
+	                                                                                                                                            evt.target.app.OnLoad(evt.target.app);
+	                                                                                                                                            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+	                                                                                                                        }
+	                                                                                                    },
+
+	                                                                                                    //AddEvent Listener
+	                                                                                                    Listener: {
+
+	                                                                                                                        //Config
+	                                                                                                                        writable: false,
+	                                                                                                                        configurable: false,
+	                                                                                                                        enumerable: false,
+
+	                                                                                                                        //Function
+	                                                                                                                        value: function value(obj, evt, listener, param) {
+
+	                                                                                                                                            //If addEventListener exist, add it, otherwise attachEvent
+	                                                                                                                                            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
+
+	                                                                                                                                            obj.app = window.apps[this.id] = this;
+	                                                                                                                        }
+	                                                                                                    },
+
+	                                                                                                    //Construct Objects from this.Construct(prototype,[constructor])
+	                                                                                                    Construct: {
+
+	                                                                                                                        //Config
+	                                                                                                                        writable: false,
+	                                                                                                                        configurable: false,
+	                                                                                                                        enumerable: false,
+
+	                                                                                                                        //Function
+	                                                                                                                        value: function value(prototype, constructor) {
+
+	                                                                                                                                            //Cache vars
+	                                                                                                                                            var isObj = false;
+	                                                                                                                                            var obj = prototype;
+	                                                                                                                                            var proto = prototype;
+	                                                                                                                                            var construct = constructor;
+	                                                                                                                                            var ret = {};
+
+	                                                                                                                                            //if prototype contains a prototype and constructor
+	                                                                                                                                            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+	                                                                                                                                                                construct = obj.constructor;
+	                                                                                                                                                                proto = obj.prototype;
+	                                                                                                                                                                isObj = true;
+	                                                                                                                                            }
+
+	                                                                                                                                            //Grab type of constructor
+	                                                                                                                                            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+	                                                                                                                                            //Return & Create object based on constructor
+	                                                                                                                                            switch (c) {
+	                                                                                                                                                                case 'undefined':
+
+	                                                                                                                                                                                    //Use only the prototype
+	                                                                                                                                                                                    ret = Object.create(proto);
+
+	                                                                                                                                                                                    break;
+	                                                                                                                                                                case 'object':
+
+	                                                                                                                                                                                    //Use constructor as object
+	                                                                                                                                                                                    ret = Object.create(proto, construct);
+
+	                                                                                                                                                                                    break;
+	                                                                                                                                                                case 'function':
+
+	                                                                                                                                                                                    //Use constructor as function
+	                                                                                                                                                                                    ret = Object.create(proto, construct(this));
+
+	                                                                                                                                                                                    break;
+	                                                                                                                                                                default:
+
+	                                                                                                                                                                                    //Expected a type
+	                                                                                                                                                                                    console.log("Expected 'object' or 'function': Type is " + c);
+	                                                                                                                                            }
+	                                                                                                                                            if (isObj) prototype = ret;
+
+	                                                                                                                                            return ret;
+	                                                                                                                        }
+	                                                                                                    },
+
+	                                                                                                    //id:{writable:true, configurable:false, enumerable:false, value:0 },
+	                                                                                                    //canvas:{writable:true, configurable:false, enumerable:false, value:0 },
+	                                                                                                    //client:{writable:true, configurable:false, enumerable:false, value:0 },
+	                                                                                                    //ext:{writable:true, configurable:false, enumerable:false, value:0 },
 
-																													function AppLoop() {
-																																	self.client.loop();
-																													}
-
-																													function AppLoopData() {
-																																	self.client.loopData();
-																													}
-
-																													_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-																									}, this.time);
-
-																									//Delay start the loop
-																									/*
-	                              OLD NON PROMISE BASED LOOP, build fallback
-	                        setTimeout(	(function(){
-	                        function AppLoop(){
-	                        self.client.loop();
-	                        }
-	                        function AppLoopData(){
-	                        self.client.loopData();
-	                        }
-	                        self.client.initalize(AppLoop,AppLoopData,self.scale);
-	                        }),this.time);
-	                        */
-																									//Initalize client
-																									this.client.init(name, w, h);
-
-																									// INIT INPUT
+	                                                                                                    //Allows artificial clicking of elements
+	                                                                                                    click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
 
-																									this.input = new this.input(this);
-																					}
+	                                                                                                                                            //If .click
+	                                                                                                                                            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
+	                                                                                                                                                                if (event.target !== anchorObj) {
+	                                                                                                                                                                                    var evt = document.createEvent("MouseEvents");
+	                                                                                                                                                                                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	                                                                                                                                                                                    var allowDefault = anchorObj.dispatchEvent(evt);
+	                                                                                                                                                                                    // you can check allowDefault for false to see if
+	                                                                                                                                                                                    // any handler called evt.preventDefault().
+	                                                                                                                                                                                    // Firefox will *not* redirect to anchorObj.href
+	                                                                                                                                                                                    // for you. However every other browser will.
+	                                                                                                                                                                }
+	                                                                                                                                            }
+	                                                                                                                        }
+	                                                                                                    },
 
-																	},
+	                                                                                                    //App.create for creating objects with app, visuals and graphics inherited
+	                                                                                                    create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
+	                                                                                                                                            return this.Construct(a || {}, this.client.room);
+	                                                                                                                        } },
 
-																	//Run by OnApplicationLoad, App.OnLoad to be overwritten.
-																	OnLoad: {
+	                                                                                                    //Getters for Common Data
+	                                                                                                    getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.update.step.fps;
+	                                                                                                                        } },
 
-																					//Config
-																					writable: true,
-																					configurable: false,
-																					enumerable: false,
+	                                                                                                    getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.update.state.current;
+	                                                                                                                        } },
 
-																					//Function
-																					value: function value(self) {
+	                                                                                                    getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.ext.connect.offline;
+	                                                                                                                        } },
 
-																									//Default to App.
-																									self.Init("", 480, 320);
-																					}
+	                                                                                                    getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.ext.connect.error;
+	                                                                                                                        } },
 
-																	},
+	                                                                                                    getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.ext.connect.connectionAttempts;
+	                                                                                                                        } },
 
-																	//Runs on DOMContentLoaded
-																	OnApplicationLoad: {
+	                                                                                                    getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.update.step.delta;
+	                                                                                                                        } },
 
-																					//Config
-																					writable: false,
-																					configurable: false,
-																					enumerable: false,
-
-																					//Function
-																					value: function value(evt) {
-
-																									//Run .OnLoad
-																									evt.target.app.OnLoad(evt.target.app);
-																									console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-																					}
-																	},
-
-																	//AddEvent Listener
-																	Listener: {
-
-																					//Config
-																					writable: false,
-																					configurable: false,
-																					enumerable: false,
-
-																					//Function
-																					value: function value(obj, evt, listener, param) {
-
-																									//If addEventListener exist, add it, otherwise attachEvent
-																									if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
-
-																									obj.app = window.apps[this.id] = this;
-																					}
-																	},
-
-																	//Construct Objects from this.Construct(prototype,[constructor])
-																	Construct: {
-
-																					//Config
-																					writable: false,
-																					configurable: false,
-																					enumerable: false,
-
-																					//Function
-																					value: function value(prototype, constructor) {
-
-																									//Cache vars
-																									var isObj = false;
-																									var obj = prototype;
-																									var proto = prototype;
-																									var construct = constructor;
-																									var ret = {};
-
-																									//if prototype contains a prototype and constructor
-																									if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-																													construct = obj.constructor;
-																													proto = obj.prototype;
-																													isObj = true;
-																									}
-
-																									//Grab type of constructor
-																									var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
-
-																									//Return & Create object based on constructor
-																									switch (c) {
-																													case 'undefined':
-
-																																	//Use only the prototype
-																																	ret = Object.create(proto);
-
-																																	break;
-																													case 'object':
-
-																																	//Use constructor as object
-																																	ret = Object.create(proto, construct);
-
-																																	break;
-																													case 'function':
-
-																																	//Use constructor as function
-																																	ret = Object.create(proto, construct(this));
-
-																																	break;
-																													default:
-
-																																	//Expected a type
-																																	console.log("Expected 'object' or 'function': Type is " + c);
-																									}
-																									if (isObj) prototype = ret;
-
-																									return ret;
-																					}
-																	},
-
-																	//id:{writable:true, configurable:false, enumerable:false, value:0 },
-																	//canvas:{writable:true, configurable:false, enumerable:false, value:0 },
-																	//client:{writable:true, configurable:false, enumerable:false, value:0 },
-																	//ext:{writable:true, configurable:false, enumerable:false, value:0 },
-
-																	//Allows artificial clicking of elements
-																	click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
+	                                                                                                    getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.scale;
+	                                                                                                                        } },
 
-																									//If .click
-																									if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
-																													if (event.target !== anchorObj) {
-																																	var evt = document.createEvent("MouseEvents");
-																																	evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-																																	var allowDefault = anchorObj.dispatchEvent(evt);
-																																	// you can check allowDefault for false to see if
-																																	// any handler called evt.preventDefault().
-																																	// Firefox will *not* redirect to anchorObj.href
-																																	// for you. However every other browser will.
-																													}
-																									}
-																					}
-																	},
+	                                                                                                    getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.setWidth;
+	                                                                                                                        } },
 
-																	//App.create for creating objects with app, visuals and graphics inherited
-																	create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
-																									return this.Construct(a || {}, this.client.room);
-																					} },
+	                                                                                                    getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.setHeight;
+	                                                                                                                        } },
 
-																	//Getters for Common Data
-																	getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.update.step.fps;
-																					} },
+	                                                                                                    getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.width;
+	                                                                                                                        } },
 
-																	getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.update.state.current;
-																					} },
+	                                                                                                    getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.height;
+	                                                                                                                        } },
 
-																	getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.ext.connect.offline;
-																					} },
+	                                                                                                    setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
+	                                                                                                                                            return document.title == title ? document.title : document.title = title;
+	                                                                                                                        } },
 
-																	getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.ext.connect.error;
-																					} },
+	                                                                                                    setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
+	                                                                                                                                            return this.client.update.state.set(state, true);
+	                                                                                                                        } },
 
-																	getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.ext.connect.connectionAttempts;
-																					} },
+	                                                                                                    toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                                                                                                                            return this.client.update.fullscale = !this.client.update.fullscale;
+	                                                                                                                        } },
 
-																	getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.update.step.delta;
-																					} },
+	                                                                                                    time: { writable: true, configurable: false, enumerable: false, value: 0 },
 
-																	getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.scale;
-																					} },
+	                                                                                                    main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	                                                                                                                                                                return true;
+	                                                                                                                                            } } }
+	                                                                                },
 
-																	getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.setWidth;
-																					} },
+	                                                                                prototype: {
 
-																	getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.setHeight;
-																					} },
+	                                                                                                    options: _options3.default,
 
-																	getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.width;
-																					} },
+	                                                                                                    user: _user3.default,
 
-																	getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.height;
-																					} },
+	                                                                                                    ext: _ext3.default,
 
-																	setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
-																									return document.title == title ? document.title : document.title = title;
-																					} },
+	                                                                                                    input: _input3.default,
 
-																	setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
-																									return this.client.update.state.set(state, true);
-																					} },
+	                                                                                                    canvas: _canvas3.default,
 
-																	toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
-																									return this.client.update.fullscale = !this.client.update.fullscale;
-																					} },
+	                                                                                                    client: _client3.default
 
-																	time: { writable: true, configurable: false, enumerable: false, value: 0 },
+	                                                                                }
 
-																	main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-																													return true;
-																									} } }
-													},
+	                                                            });
 
-													prototype: {
+	                                                            temp = Object.create(temp.prototype, temp.constructor);
 
-																	//Prototype Vars
+	                                                            temp.window = this.window;
+	                                                            temp.document = document;
 
-																	//Global Options Panel
-																	//	These options have effect OnLoad only.
+	                                                            temp.id = this.window.appsNextId;
 
-																	options: _options3.default,
+	                                                            this.window.apps[temp.id] = temp;
 
-																	//Facebook User Information
-																	//	Current API structure is depreciated, and therefore this is unsuable
-																	//	Constructor not implemented
+	                                                            this.window.appsNextId++;
 
-																	user: _user3.default,
+	                                                            return this.window.apps[temp.id];
+	                                        }
+	                    }, {
+	                                        key: 'initListeners',
+	                                        value: function initListeners(temp) {
 
-																	//App.ext - Client extensions
-																	//	These operations are extended variations on the canvas API.
+	                                                            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
-																	ext: _ext3.default,
+	                                                            return temp;
+	                                        }
+	                    }]);
 
-																	input: _input3.default,
+	                    return SpiceJS;
+	})();
 
-																	//App.canvas - Canvas Element
-																	//	These operations are extended variations on the canvas API.
+	SpiceJS._statistics = _statistics2.default;
+	SpiceJS._controller = {
 
-																	canvas: _canvas3.default,
+	                    list: function list(id) {
 
-																	//Application.client;
-																	//	Handles game logic, audio, graphics, visuals
-																	client: _client3.default
-													}
+	                                        if (id) return window.apps[id];
 
-									});
+	                                        if (window.apps.length > 1) return window.apps;else return window.apps[0];
+	                    }
 
-									temp = Object.create(temp.prototype, temp.constructor);
-
-									temp.window = this.window;
-									temp.document = document;
-
-									temp.id = this.window.appsNextId;
-
-									this.window.apps[temp.id] = temp;
-
-									this.window.appsNextId++;
-
-									return this.window.apps[temp.id];
-					},
-
-					initListeners: function initListeners(temp) {
-
-									temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-									return temp;
-					}
-
-	}).init();
+	};
+	exports.default = SpiceJS = new SpiceJS();
 
 /***/ },
 /* 192 */
