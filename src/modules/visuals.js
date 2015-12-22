@@ -29,8 +29,11 @@ visuals = {
 
         canvas:(Object.create(null)),
         buffer:(Object.create(null)),
+        blitter:(Object.create(null)),
         canvas_context:(Object.create(null)),
         buffer_context:(Object.create(null)),
+        blitter_context:(Object.create(null)),
+        blitter_image:new Image,
 
 
         within:false,
@@ -331,27 +334,23 @@ visuals = {
         blit:function(img,offx,offy) {
 
 
-            var _img = document.createElement("img");
+            var _img = this.blitter_image;
+            var canvas =this.blitter;
+            var ctx = this.blitter_context;
 
-            // Create an empty canvas element
-            var canvas = document.createElement("canvas");
-            var ctx = canvas.getContext("2d");
-
-            canvas.width = img.width / 16;
-            canvas.height = img.height;
             canvas.style.background = 'transparent';
             canvas.background = 'transparent';
+            canvas.width = img.width / 16;
+            canvas.height = img.height / 16;
 
             //    ctx.beginPath();
             //    ctx.arc(75, 75, 70, 0, Math.PI*2, true);
             //    ctx.closePath();
             //    ctx.fill();
 
-            canvas.width = img.width / 16;
-            canvas.height = img.height / 16;
-            ctx.drawImage(img, 0, 0);
+        //    ctx.drawImage(img, 0, 0);
 
-            ctx.drawImage(img, offx, offy, 32, 32, 0, 0, img.width / 16, img.height / 16);
+            ctx.drawImage(img, 0, 0, 32, 32, 0, 0, img.width / 16, img.height / 16);
             //(img,sx,sy,swidth,sheight,x,y,width,height);
 
             SJS.statistics.monitor(function () {
@@ -360,41 +359,10 @@ visuals = {
                 window.T = _img;
             }, 10).then(function () {
 
-                console.log(_img.src);
             }, 10);
 
             return _img;
 
-            var canvas2 =this.app.canvas.canvas.getContext('2d');
-            var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
-
-
-            //var canvas2_data = canvas2.getImageData(0,0,100,100);
-
-            //var canvas2_img = new Image();
-            //canvas2_img.src = canvas2_data;
-
-
-            // Copy the image contents to the canvas
-            //this.visuals.putData(canvas2_data,0,0);
-
-
-            //var newData = canvas2.getImageData(0,0,img.width,img.height);
-
-            //ctx.putImageData(canvas2_data,0,0);
-
-            //ctx.drawImage(canvas2_img, 0, 0);
-            console.log(img);
-                                                            ctx.drawImage(img, 0, 0);
-
-            var _img = document.createElement("img");
-
-            _img.src =  canvas.toDataURL("image/png");
-            console.log(canvas.toDataURL("image/png"));
-//                        ctx.drawImage(img, 0, 0);
-            //var newData2 = ctx.getImageData(0,0,img.width,img.height);
-
-            return _img;
         },
 
 
@@ -1524,10 +1492,15 @@ visuals = {
 
                 this.buffer = this.app.canvas.getBuffer();
 
-                let attribs = {alpha:false};
+                this.blitter = this.app.canvas.getBlitter();
+
+                let attribs = {alpha:true};
+
+                this.blitter_context = this.blitter.getContext("2d",attribs);
+
+                attribs = {alpha:false};
 
                 this.canvas_context = this.canvas.getContext("2d",attribs);
-
 
                 if (this.app.options.canvas.buffer)
                     this.buffer_context = this.buffer.getContext("2d",attribs);

@@ -166,7 +166,6 @@ export default class Loader extends SJSClass {
 
 		//}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
 		this.asyncLoadCacheIndex = cacheIndex;
-		console.log(this.asyncLoadCacheIndex);
 
 		return this.ImageCache[cacheIndex - 1];
 	}

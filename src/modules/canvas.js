@@ -5,6 +5,7 @@ export default {
         //Cache canvas vars
         canvas:{},
         buffer:{},
+        blitter:{},
         head:document.getElementsByTagName('head')[0],
         rendering_style:document.createElement('style'),
         canvasList:document.getElementsByTagName('canvas'),
@@ -12,10 +13,12 @@ export default {
 
         //Gets
 
+        getBlitter:function(){return this.blitter;},
         getCanvas:function(){return this.canvas;},
 
         getBuffer:function(){return this.buffer;},
 
+        setBlitter:function(c){this.blitter = c;},
         setCanvas:function(c){this.canvas = c;},
 
         setBuffer:function(b){this.buffer = b;},
@@ -54,6 +57,17 @@ export default {
             this.doc.body.appendChild(c);
 
             return this.doc.getElementById(this.app.options.canvas.buffername);
+        },
+
+        createBlitter:function(){
+
+            var c = this.doc.createElement("canvas");
+
+            c.id = 'blitter';
+
+            this.doc.body.appendChild(c);
+
+            return this.doc.getElementById('blitter');
         },
 
         //Style canvas
@@ -114,6 +128,7 @@ export default {
                     if (this.app.options.canvas.buffer)
                         this.setBuffer(this.createBuffer());
                     }
+                    this.setBlitter(this.createBlitter());
                 this.styleCanvas();
                 this.rendering_style.innerHTML = this.rendering_style.innerText = '@-ms-viewport {width:100%;height:100%;} #Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
                 this.head.appendChild(this.rendering_style);

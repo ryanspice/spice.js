@@ -18,8 +18,11 @@ export default class SJSParticleController extends Loader {
         this.particleLimit = 1500;
 
         this.flakes = new Image();
+        this.flakes0 = new Image();
 
         this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
+
+//        this.asyncLoadImageData('../flakes','flakes0', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
 
 
     }
@@ -121,7 +124,7 @@ class SJSParticle extends SJSClass {
 
         this.color    = marker;
 
-        this.scale = (2*Math.random()*2)*Application.getScale();
+        this.scale = (3*Math.random()*6)*Application.getScale();
 
         this.start = 30 + Math.random()*180;
 
@@ -254,7 +257,7 @@ class SJSParticle extends SJSClass {
         //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
         //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
-        this.visuals.image(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.vel.x-this.pos.y,this.alpha,1,1);
+        this.visuals.image_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.vel.x-this.pos.y,this.alpha,1,1);
     }
 
 }

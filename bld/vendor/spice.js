@@ -8629,8 +8629,11 @@
 
 	        canvas: Object.create(null),
 	        buffer: Object.create(null),
+	        blitter: Object.create(null),
 	        canvas_context: Object.create(null),
 	        buffer_context: Object.create(null),
+	        blitter_context: Object.create(null),
+	        blitter_image: new Image(),
 
 	        within: false,
 
@@ -8898,65 +8901,30 @@
 
 	        blit: function blit(img, offx, offy) {
 
-	            var _img = document.createElement("img");
+	            var _img = this.blitter_image;
+	            var canvas = this.blitter;
+	            var ctx = this.blitter_context;
 
-	            // Create an empty canvas element
-	            var canvas = document.createElement("canvas");
-	            var ctx = canvas.getContext("2d");
-
-	            canvas.width = img.width / 16;
-	            canvas.height = img.height;
 	            canvas.style.background = 'transparent';
 	            canvas.background = 'transparent';
+	            canvas.width = img.width / 16;
+	            canvas.height = img.height / 16;
 
 	            //    ctx.beginPath();
 	            //    ctx.arc(75, 75, 70, 0, Math.PI*2, true);
 	            //    ctx.closePath();
 	            //    ctx.fill();
 
-	            canvas.width = img.width / 16;
-	            canvas.height = img.height / 16;
-	            ctx.drawImage(img, 0, 0);
+	            //    ctx.drawImage(img, 0, 0);
 
-	            ctx.drawImage(img, offx, offy, 32, 32, 0, 0, img.width / 16, img.height / 16);
+	            ctx.drawImage(img, 0, 0, 32, 32, 0, 0, img.width / 16, img.height / 16);
 	            //(img,sx,sy,swidth,sheight,x,y,width,height);
 
 	            SJS.statistics.monitor(function () {
 
 	                _img.src = canvas.toDataURL("image/png");
 	                window.T = _img;
-	            }, 10).then(function () {
-
-	                console.log(_img.src);
-	            }, 10);
-
-	            return _img;
-
-	            var canvas2 = this.app.canvas.canvas.getContext('2d');
-	            var canvas2_data = canvas2.getImageData(0, 0, img.width, img.height);
-
-	            //var canvas2_data = canvas2.getImageData(0,0,100,100);
-
-	            //var canvas2_img = new Image();
-	            //canvas2_img.src = canvas2_data;
-
-	            // Copy the image contents to the canvas
-	            //this.visuals.putData(canvas2_data,0,0);
-
-	            //var newData = canvas2.getImageData(0,0,img.width,img.height);
-
-	            //ctx.putImageData(canvas2_data,0,0);
-
-	            //ctx.drawImage(canvas2_img, 0, 0);
-	            console.log(img);
-	            ctx.drawImage(img, 0, 0);
-
-	            var _img = document.createElement("img");
-
-	            _img.src = canvas.toDataURL("image/png");
-	            console.log(canvas.toDataURL("image/png"));
-	            //                        ctx.drawImage(img, 0, 0);
-	            //var newData2 = ctx.getImageData(0,0,img.width,img.height);
+	            }, 10).then(function () {}, 10);
 
 	            return _img;
 	        },
@@ -9925,7 +9893,13 @@
 
 	                    this.buffer = this.app.canvas.getBuffer();
 
-	                    var attribs = { alpha: false };
+	                    this.blitter = this.app.canvas.getBlitter();
+
+	                    var attribs = { alpha: true };
+
+	                    this.blitter_context = this.blitter.getContext("2d", attribs);
+
+	                    attribs = { alpha: false };
 
 	                    this.canvas_context = this.canvas.getContext("2d", attribs);
 
@@ -9977,6 +9951,7 @@
 	                //Cache canvas vars
 	                canvas: {},
 	                buffer: {},
+	                blitter: {},
 	                head: document.getElementsByTagName('head')[0],
 	                rendering_style: document.createElement('style'),
 	                canvasList: document.getElementsByTagName('canvas'),
@@ -9984,6 +9959,9 @@
 
 	                //Gets
 
+	                getBlitter: function getBlitter() {
+	                        return this.blitter;
+	                },
 	                getCanvas: function getCanvas() {
 	                        return this.canvas;
 	                },
@@ -9992,6 +9970,9 @@
 	                        return this.buffer;
 	                },
 
+	                setBlitter: function setBlitter(c) {
+	                        this.blitter = c;
+	                },
 	                setCanvas: function setCanvas(c) {
 	                        this.canvas = c;
 	                },
@@ -10032,6 +10013,17 @@
 	                        this.doc.body.appendChild(c);
 
 	                        return this.doc.getElementById(this.app.options.canvas.buffername);
+	                },
+
+	                createBlitter: function createBlitter() {
+
+	                        var c = this.doc.createElement("canvas");
+
+	                        c.id = 'blitter';
+
+	                        this.doc.body.appendChild(c);
+
+	                        return this.doc.getElementById('blitter');
 	                },
 
 	                //Style canvas
@@ -10080,6 +10072,7 @@
 	                                                this.setCanvas(this.createCanvas());
 	                                                if (this.app.options.canvas.buffer) this.setBuffer(this.createBuffer());
 	                                        }
+	                                        this.setBlitter(this.createBlitter());
 	                                        this.styleCanvas();
 	                                        this.rendering_style.innerHTML = this.rendering_style.innerText = '@-ms-viewport {width:100%;height:100%;} #Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
 	                                        this.head.appendChild(this.rendering_style);
@@ -11063,11 +11056,10 @@
 
 																	//}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
 																	this.asyncLoadCacheIndex = cacheIndex;
-																	console.log(this.asyncLoadCacheIndex);
 
 																	return _context.abrupt("return", this.ImageCache[cacheIndex - 1]);
 
-															case 15:
+															case 14:
 															case "end":
 																	return _context.stop();
 													}
@@ -11182,8 +11174,11 @@
 	                _this.particleLimit = 1500;
 
 	                _this.flakes = new Image();
+	                _this.flakes0 = new Image();
 
 	                _this.asyncLoadImageData('../flakes', 'flakes', Math.round(Math.random() * 16) * 32, Math.round(Math.random() * 16) * 32);
+
+	                //        this.asyncLoadImageData('../flakes','flakes0', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
 
 	                return _this;
 	        }
@@ -11286,7 +11281,7 @@
 
 	                _this2.color = marker;
 
-	                _this2.scale = 2 * Math.random() * 2 * Application.getScale();
+	                _this2.scale = 3 * Math.random() * 6 * Application.getScale();
 
 	                _this2.start = 30 + Math.random() * 180;
 
@@ -11392,7 +11387,7 @@
 	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
-	                        this.visuals.image(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	                        this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
 	                }
 	        }]);
 
