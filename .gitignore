@@ -1,5 +1,6 @@
 examples/animation/images/Thumbs.db
 .settings/
+.vscode/
 node_modules/
 logs/
 SpiceJS + Html5 Boilerplate/

@@ -23,6 +23,8 @@ export default class inputkeycontroller {
     }
 
     key_down(evt) {
+
+
            evt.input.key = true;
            evt.input.kpressed = true;
        }
@@ -63,9 +65,9 @@ export default class inputkeycontroller {
 
                     app.input.preventNext = false;
 
-                    app.input.codedown = app.input.keyController.keyCodes[evt.keyCode];
+                    app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
 
-                    app.input.codeList.push(app.input.codedown);
+                    app.input.keyController.codeList.push(app.input.codedown);
 
                     if (evt.ctrlKey)
                         app.input.control = true;

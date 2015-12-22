@@ -191,12 +191,18 @@ export default {
                             this.metaAppend(this.metaTag("touch-event-mode","native"));
                             this.metaAppend(this.metaTag("HandheldFriendly","True"));
 
-                            //if (this.devicewidth)
+                            if (this.devicewidth)
                             this.metaAppend(this.metaTag("viewport","width=device-width, user-scalable=no"));
-                            //if (this.devicedpi)
+                            if (this.devicedpi)
                             this.metaAppend(this.metaTag("viewport","target-densitydpi="+this.app.client.setWidth+",-webkit-min-device-pixel-ratio=1,min-resolution:="+this.app.client.setWidth+",-moz-device-pixel-ratio=1"));
 
                             this.metaAppend(this.metaTag("viewport","user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
+
+                            //Cache Control
+                            this.metaAppend(this.metaTag("cache-control","max-age=0"));
+                            this.metaAppend(this.metaTag("cache-control","no-cache"));
+                            this.metaAppend(this.metaTag("expires","Tue, 01 Jan 1980 1:00:00 GMT"));
+                            this.metaAppend(this.metaTag("pragma","no-cache"));
 
                             this.app.ext.metatag = this;
 

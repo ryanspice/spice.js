@@ -47,6 +47,8 @@ export default class Input extends inputcontroller {
 
         this.setup_universalMultitouch();
 
+        this.setup_documentListeners();
+
         //this.setup_msUniversalAppTouch();
 
     }
@@ -165,6 +167,56 @@ export default class Input extends inputcontroller {
         return true;
     }
 
+    setup_documentListeners(){
+
+        let doc = document;
+        let win = window;
+
+        doc.addEventListener("mousedown", function () {
+            window.focus();
+        }, true);
+        doc.addEventListener("touchstart", function () {
+            window.focus();
+        }, true);
+
+        // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
+		win.addEventListener("blur", function () {
+			self.onWindowBlur();
+		});
+
+
+
+        win.onWindowBlur = function(evt){
+
+            console.log('blur');
+            SJS.controller.list().input.pointerup(evt);
+
+        }
+
+        win.setSuspended = function(state){
+
+            if (state)
+            console.log('suspended');
+            else
+            console.log('resume');
+
+        }
+
+                // Pause and resume on page becoming visible/invisible
+        function onVisibilityChanged() {
+            if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden)
+                setSuspended(true);
+            else
+                setSuspended(false);
+        };
+
+        doc.addEventListener("visibilitychange", onVisibilityChanged, false);
+        doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+        doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+        doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+
+    }
+
     setup_universalMultitouch(){
 
         //touch-action: none;
@@ -221,6 +273,9 @@ export default class Input extends inputcontroller {
     }
 
     setup_msUniversalAppTouch(){
+
+
+        return;
 
         var i = 0;
 

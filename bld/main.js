@@ -6,11 +6,7 @@ Application.OnLoad = function (self) {
 
     self.Init("Example SpiceJS", 320, 720);
 
-    self.canvas.setBackground("#000000");
-
     window.Application = this;
-
-    self.ext.metatag.metaFavicon("favicon.png");
 
 };
 
@@ -20,44 +16,30 @@ Application.main= {
 
     init:function() {
 
+            //    this.visuals.setBleed(1);
+
     	this.particleController = new SJSParticleController(this.app);
 
+        //this.intro = new test(this.app);
         return true;
     },
 
     update:function() {
+    //        console.log(Application.input.keyController.keyboardCheck('w'));
 
 		this.particleController.update();
+    //    this.intro.update();
 
         return true;
     },
 
     draw:function() {
+    //this.intro.draw();
 
-		this.particleController.draw();
+        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
+        		this.particleController.draw();
 
-
-        this.visuals.text("Position: "+this.app.input.position.x,this.app.getWidth()/4,20,"#FFFFFF");
-        this.visuals.text("Last: "+this.app.input.last.x,this.app.getWidth()/4,40,"#FFFFFF");
-        this.visuals.text("Start: "+this.app.input.start.x,this.app.getWidth()/4,60,"#FFFFFF");
-        this.visuals.text("End: "+this.app.input.end.x,this.app.getWidth()/4,80,"#FFFFFF");
-        this.visuals.text("Distance: "+this.app.input.dist.x,this.app.getWidth()/4,100,"#FFFFFF");
-
-        var position = this.app.input.position;
-        var start = this.app.input.start;
-        var end = this.app.input.end;
-
-        this.visuals.free = true;
-
-        this.visuals.line2(position,start,"#FFFFFF",1)
-        this.visuals.line2(start,end,"#FFFFFF",0.5)
-
-        //this.visuals.circle(this.app.input.position,this.app.input.duration,"#FFFFFF",1)
-
-        this.visuals.free = false;
-
-        //if (this.app.input.released)
-        //    console.log(this.app.input.angleDelta);
+        //this.visuals.text_ext(this.app.getFps().toFixed(2),100,100,"#FFFFFF",1,1);
 
         return true;
     }

@@ -5321,9 +5321,13 @@
 	  value: true
 	});
 
-	var _controller2 = __webpack_require__(216);
+	var _controller2 = __webpack_require__(192);
 
 	var _controller3 = _interopRequireDefault(_controller2);
+
+	var _test2 = __webpack_require__(215);
+
+	var _test3 = _interopRequireDefault(_test2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5331,10 +5335,477 @@
 
 	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
 
+	window.test = _test3.default;
+
 	exports.default = SpiceJS = new _controller3.default();
 
 /***/ },
 /* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _statistics2 = __webpack_require__(193);
+
+	var _statistics3 = _interopRequireDefault(_statistics2);
+
+	var _application2 = __webpack_require__(196);
+
+	var _application3 = _interopRequireDefault(_application2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SJSController = (function () {
+	        _createClass(SJSController, [{
+	                key: 'get',
+	                value: function get() {
+
+	                        return this.proto;
+	                }
+	        }, {
+	                key: 'create',
+	                value: function create(target) {
+	                        var _this = this;
+
+	                        var tempReference = {};
+
+	                        var tempReferenceId = null;
+
+	                        var listReference = null;
+
+	                        var time = new Date().getTime();
+
+	                        this.statistics.monitor(function () {
+
+	                                _this.name = "scriptloadtime";
+
+	                                window.utils.loadExternalJS(window.scripts);
+
+	                                tempReference = _this.generatePrototype();
+
+	                                tempReferenceId = tempReference.id;
+	                        }).then(function () {
+
+	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+	                                listReference = _this.controller.list(tempReferenceId);
+
+	                                _this.statistics.monitor(function () {
+
+	                                        _this.name = "loadtime";
+
+	                                        _this.initListeners(listReference);
+	                                }).then(function () {
+
+	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+	                                        _this.statistics.log("build", time);
+	                                });
+	                        });
+
+	                        return tempReference;
+	                }
+	        }, {
+	                key: 'generatePrototype',
+	                value: function generatePrototype() {
+
+	                        this.window = window;
+
+	                        //temp stores the app during the create process, it is then returned
+	                        var temp = {};
+
+	                        temp = _application3.default;
+
+	                        temp = Object.create(temp.prototype, temp.constructor);
+
+	                        temp.window = this.window;
+
+	                        temp.document = document;
+
+	                        temp.id = this.window.appsNextId;
+
+	                        this.window.apps[temp.id] = temp;
+
+	                        this.window.appsNextId++;
+
+	                        return this.window.apps[temp.id];
+	                }
+	        }, {
+	                key: 'initListeners',
+	                value: function initListeners(temp) {
+
+	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+
+	                        return temp;
+	                }
+	        }]);
+
+	        function SJSController() {
+	                _classCallCheck(this, SJSController);
+
+	                this.window = window;
+
+	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
+
+	                this.window.SpiceJS = this;
+	                this.window.SJS = this;
+
+	                //if no apps have been defined, create a new array
+	                if (!this.window.apps) this.window.apps = new Array(1);
+
+	                //if appsNextId isnt larger or equal to 0 assign it to 0
+	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
+
+	                //Setup Statistics and Monitoring
+	                this.statistics = new this.constructor._statistics(this);
+
+	                //Reference static controller
+	                this.controller = this.constructor._controller;
+	        }
+
+	        return SJSController;
+	})();
+
+	SJSController._statistics = _statistics3.default;
+	SJSController._controller = {
+
+	        list: function list(id) {
+
+	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
+	        }
+
+	};
+	exports.default = SJSController;
+
+/***/ },
+/* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _utils = __webpack_require__(194);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _statisticstypes = __webpack_require__(195);
+
+	var StatisticTypes = _interopRequireWildcard(_statisticstypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var StatisticsController = (function () {
+	        _createClass(StatisticsController, [{
+	                key: 'count',
+	                get: function get() {
+
+	                        return this.monitor.count;
+	                },
+	                set: function set(value) {
+
+	                        this.monitor.count = value;
+	                }
+	        }, {
+	                key: 'details',
+	                get: function get() {
+
+	                        return StatisticsController._details;
+	                },
+	                set: function set(value) {
+
+	                        this._details = StatisticsController._details;
+	                }
+	        }], [{
+	                key: '_details',
+	                value: function _details(type) {
+
+	                        type = type;
+
+	                        switch (type) {
+
+	                                default:
+
+	                                        return Object.keys(this.logs);
+
+	                                case 'details':
+
+	                                        return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
+
+	                                case 'entries':
+
+	                                        return Object.entries(this.logs);
+
+	                                case 'values':
+
+	                                        return Object.values(this.logs);
+
+	                        }
+	                }
+	        }, {
+	                key: 'logs',
+	                get: function get() {
+
+	                        return this.monitor.logs;
+	                },
+	                set: function set(value) {
+
+	                        this.monitor = value;
+	                }
+	        }, {
+	                key: 'monitor',
+	                get: function get() {
+
+	                        return this._monitor;
+	                },
+	                set: function set(value) {
+
+	                        this._monitor = value;
+	                }
+	        }]);
+
+	        function StatisticsController() {
+	                _classCallCheck(this, StatisticsController);
+
+	                this.logs = this.constructor.logs;
+
+	                this.count = 0;
+	        }
+
+	        return StatisticsController;
+	})();
+
+	StatisticsController._monitor = {
+
+	        count: 0,
+
+	        logs: []
+
+	};
+
+	var Statistics = (function (_StatisticsController) {
+	        _inherits(Statistics, _StatisticsController);
+
+	        function Statistics() {
+	                _classCallCheck(this, Statistics);
+
+	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).call(this));
+	        }
+
+	        _createClass(Statistics, [{
+	                key: 'watch',
+	                value: function watch(v) {}
+	        }, {
+	                key: 'log',
+	                value: (function () {
+	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	                                var name,
+	                                    curLog,
+	                                    newLog,
+	                                    hashLog,
+	                                    time,
+	                                    time2,
+	                                    timeHash,
+	                                    _args = arguments;
+	                                return regeneratorRuntime.wrap(function _callee$(_context) {
+	                                        while (1) {
+	                                                switch (_context.prev = _context.next) {
+	                                                        case 0:
+	                                                                name = '';
+	                                                                curLog = this.logs;
+	                                                                newLog = {};
+	                                                                hashLog = {};
+	                                                                time = new Date().getTime();
+	                                                                time2 = new Date().getTime();
+	                                                                timeHash = this.count + time;
+
+	                                                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
+
+	                                                                if (typeof _args[2] != 'undefined') {
+
+	                                                                        name = _args[2];
+
+	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
+
+	                                                                        hashLog = newLog[this.count + " " + _args[0]] || new StatisticTypes.Log(name);
+
+	                                                                        hashLog = _args[1];
+
+	                                                                        newLog[_args[0]] = hashLog;
+
+	                                                                        curLog[name] = newLog;
+	                                                                } else {
+
+	                                                                        name = _args[0];
+
+	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
+
+	                                                                        hashLog = newLog[this.count + " " + _args[0]] || new StatisticTypes.Log(name);
+
+	                                                                        hashLog = _args[1];
+
+	                                                                        newLog[_args[0]] = hashLog;
+
+	                                                                        curLog[name] = newLog;
+	                                                                }
+
+	                                                                this.count++;
+
+	                                                                this.logs = curLog;
+
+	                                                        case 11:
+	                                                        case 'end':
+	                                                                return _context.stop();
+	                                                }
+	                                        }
+	                                }, _callee, this);
+	                        }));
+
+	                        return function log() {
+	                                return ref.apply(this, arguments);
+	                        };
+	                })()
+	        }, {
+	                key: 'monitor',
+	                value: (function () {
+	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(func, arg) {
+	                                var startTime, endTime;
+	                                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	                                        while (1) {
+	                                                switch (_context2.prev = _context2.next) {
+	                                                        case 0:
+	                                                                startTime = new Date().getTime();
+	                                                                _context2.next = 3;
+	                                                                return func(arg);
+
+	                                                        case 3:
+	                                                                endTime = new Date().getTime();
+
+	                                                                this.log("time", -startTime + endTime, func.name);
+
+	                                                                return _context2.abrupt('return', startTime - endTime);
+
+	                                                        case 6:
+	                                                        case 'end':
+	                                                                return _context2.stop();
+	                                                }
+	                                        }
+	                                }, _callee2, this);
+	                        }));
+
+	                        return function monitor(_x, _x2) {
+	                                return ref.apply(this, arguments);
+	                        };
+	                })()
+	        }, {
+	                key: 'convertArrayOfObjectsToCSV',
+	                value: function convertArrayOfObjectsToCSV(args) {
+
+	                        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+	                        data = args.data || null;
+
+	                        if (data == null || !data.length) {
+
+	                                return null;
+	                        }
+
+	                        columnDelimiter = args.columnDelimiter || ',';
+
+	                        lineDelimiter = args.lineDelimiter || '\n';
+
+	                        keys = Object.keys(data[0]);
+
+	                        result = '';
+
+	                        result += keys.join(columnDelimiter);
+
+	                        result += lineDelimiter;
+
+	                        data.forEach(function (item) {
+
+	                                ctr = 0;
+
+	                                keys.forEach(function (key) {
+
+	                                        if (ctr > 0) result += columnDelimiter;
+
+	                                        result += item[key];
+
+	                                        ctr++;
+	                                });
+
+	                                result += lineDelimiter;
+	                        });
+
+	                        return result;
+	                }
+	        }, {
+	                key: 'writeToCSV',
+	                value: function writeToCSV(name) {
+
+	                        var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
+
+	                        logStream.write('Initial line...');
+
+	                        logStream.end('this is the end line');
+
+	                        var dataString = "";
+
+	                        var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
+
+	                        //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
+
+	                        var csvContent = "data:text/csv;charset=utf-8,";
+
+	                        data.forEach(function (infoArray, index) {
+
+	                                dataString = infoArray.join(",");
+
+	                                csvContent += index < data.length ? dataString + "\n" : dataString;
+	                        });
+
+	                        var encodedUri = encodeURI(csvContent);
+
+	                        var link = document.createElement("a");
+
+	                        link.setAttribute("href", encodedUri);
+
+	                        link.setAttribute("download", name + ".csv");
+
+	                        link.click();
+	                }
+	        }]);
+
+	        return Statistics;
+	})(StatisticsController);
+
+	exports.default = Statistics;
+
+/***/ },
+/* 194 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5441,8 +5912,978 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 193 */,
-/* 194 */
+/* 195 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Log = (function () {
+	    function Log(id) {
+	        _classCallCheck(this, Log);
+
+	        this.id = id || 0;
+	    }
+
+	    _createClass(Log, null, [{
+	        key: "time",
+	        get: function get() {
+
+	            return this._time;
+	        },
+	        set: function set(value) {
+
+	            return this._time = value;
+	        }
+	    }, {
+	        key: "id",
+	        get: function get() {
+
+	            return this._id;
+	        },
+	        set: function set(value) {
+
+	            return this._id = value;
+	        }
+	    }]);
+
+	    return Log;
+	})();
+
+	var Loop = (function (_Log) {
+	    _inherits(Loop, _Log);
+
+	    function Loop() {
+	        _classCallCheck(this, Loop);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Loop).call(this));
+	    }
+
+	    return Loop;
+	})(Log);
+
+	var Compile = (function (_Log2) {
+	    _inherits(Compile, _Log2);
+
+	    function Compile() {
+	        _classCallCheck(this, Compile);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Compile).call(this));
+	    }
+
+	    return Compile;
+	})(Log);
+
+	var App = (function () {
+	    function App() {
+	        _classCallCheck(this, App);
+	    }
+
+	    _createClass(App, null, [{
+	        key: "fps",
+	        get: function get() {
+
+	            return this._fps;
+	        },
+	        set: function set(value) {
+
+	            return this._fps = value;
+	        }
+	    }, {
+	        key: "scale",
+	        get: function get() {
+
+	            return this._scale;
+	        },
+	        set: function set(value) {
+
+	            return this._scale = value;
+	        }
+	    }]);
+
+	    return App;
+	})();
+
+	var Build = (function () {
+	    function Build() {
+	        _classCallCheck(this, Build);
+	    }
+
+	    _createClass(Build, null, [{
+	        key: "build",
+	        get: function get() {
+
+	            return this._build;
+	        },
+	        set: function set(value) {
+
+	            return this._build = value;
+	        }
+	    }, {
+	        key: "scriptloadtime",
+	        get: function get() {
+
+	            return this._scriptloadtime;
+	        },
+	        set: function set(value) {
+
+	            return this._scriptloadtime = value;
+	        }
+	    }, {
+	        key: "uptime",
+	        get: function get() {
+
+	            return this._uptime;
+	        },
+	        set: function set(value) {
+
+	            return this._uptime = value;
+	        }
+	    }]);
+
+	    return Build;
+	})();
+
+	exports.Log = Log;
+	exports.Loop = Loop;
+	exports.Compile = Compile;
+	exports.App = App;
+	exports.Build = Build;
+
+/***/ },
+/* 196 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _options2 = __webpack_require__(197);
+
+	var _options3 = _interopRequireDefault(_options2);
+
+	var _input2 = __webpack_require__(198);
+
+	var _input3 = _interopRequireDefault(_input2);
+
+	var _client2 = __webpack_require__(205);
+
+	var _client3 = _interopRequireDefault(_client2);
+
+	var _canvas2 = __webpack_require__(207);
+
+	var _canvas3 = _interopRequireDefault(_canvas2);
+
+	var _user2 = __webpack_require__(208);
+
+	var _user3 = _interopRequireDefault(_user2);
+
+	var _ext2 = __webpack_require__(209);
+
+	var _ext3 = _interopRequireDefault(_ext2);
+
+	var _loader = __webpack_require__(213);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	var _particles = __webpack_require__(214);
+
+	var _particles2 = _interopRequireDefault(_particles);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	//To be built into application (to override current)
+
+	//To be built into application
+
+	// Temporary for snowflakes
+	window.SJSParticleController = _particles2.default;
+
+	exports.default = Object.create({
+
+	   constructor: {
+	      //Version Number
+	      VN: {
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: true,
+
+	         //VN
+	         value: '0.7.0.15.12.11'
+	      },
+
+	      //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+	      Init: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(name, w, h) {
+	            var _this = this;
+
+	            //Store self
+	            var self = this;
+
+	            //Build client from prototype
+	            this.client = this.Construct(this.client.prototype, this.client.constructor);
+
+	            //Build canvas from prototype
+	            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+
+	            setTimeout(function () {
+
+	               function AppLoop() {
+	                  self.client.loop();
+	               }
+
+	               function AppLoopData() {
+	                  self.client.loopData();
+	               }
+
+	               _this.client.initalize(AppLoop, AppLoopData, _this.scale);
+	            }, this.time);
+
+	            //Delay start the loop
+	            /*
+	                  OLD NON PROMISE BASED LOOP, build fallback
+	              setTimeout(	(function(){
+	                          function AppLoop(){
+	                            self.client.loop();
+	                        }
+	                          function AppLoopData(){
+	                            self.client.loopData();
+	                        }
+	                          self.client.initalize(AppLoop,AppLoopData,self.scale);
+	              }),this.time);
+	            */
+	            //Initalize client
+	            this.client.init(name, w, h);
+
+	            // INIT INPUT
+
+	            this.input = new this.input(this);
+	         }
+
+	      },
+
+	      //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+	      OnLoad: {
+
+	         //Config
+	         writable: true,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(self) {
+
+	            //Default to App.
+	            self.Init("", 480, 320);
+	         }
+
+	      },
+
+	      //Runs on DOMContentLoaded
+	      OnApplicationLoad: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(evt) {
+
+	            //Run .OnLoad
+	            evt.target.app.OnLoad(evt.target.app);
+	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+	         }
+
+	      },
+
+	      //AddEvent Listener
+	      Listener: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(obj, evt, listener, param) {
+
+	            //If addEventListener exist, add it, otherwise attachEvent
+	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
+
+	            obj.app = window.apps[this.id] = this;
+	         }
+
+	      },
+
+	      //Construct Objects from this.Construct(prototype,[constructor])
+	      Construct: {
+
+	         //Config
+	         writable: false,
+	         configurable: false,
+	         enumerable: false,
+
+	         //Function
+	         value: function value(prototype, constructor) {
+
+	            //Cache vars
+	            var isObj = false;
+	            var obj = prototype;
+	            var proto = prototype;
+	            var construct = constructor;
+	            var ret = {};
+
+	            //if prototype contains a prototype and constructor
+	            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+	               construct = obj.constructor;
+	               proto = obj.prototype;
+	               isObj = true;
+	            }
+
+	            //Grab type of constructor
+	            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+	            //Return & Create object based on constructor
+	            switch (c) {
+	               case 'undefined':
+
+	                  //Use only the prototype
+	                  ret = Object.create(proto);
+
+	                  break;
+	               case 'object':
+
+	                  //Use constructor as object
+	                  ret = Object.create(proto, construct);
+
+	                  break;
+	               case 'function':
+
+	                  //Use constructor as function
+	                  ret = Object.create(proto, construct(this));
+
+	                  break;
+	               default:
+
+	                  //Expected a type
+	                  console.log("Expected 'object' or 'function': Type is " + c);
+	            }
+	            if (isObj) prototype = ret;
+
+	            return ret;
+	         }
+
+	      },
+
+	      //Allows artificial clicking of elements
+	      click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
+
+	            //If .click
+	            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
+
+	               if (event.target !== anchorObj) {
+
+	                  var evt = document.createEvent("MouseEvents");
+
+	                  evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+	                  anchorObj.dispatchEvent(evt);
+	               }
+	            }
+	         }
+
+	      },
+
+	      //App.create for creating objects with app, visuals and graphics inherited
+	      create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
+	            return this.Construct(a || {}, this.client.room);
+	         } },
+
+	      //Getters for Common Data
+	      getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.step.fps;
+	         } },
+
+	      getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.state.current;
+	         } },
+
+	      getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.ext.connect.offline;
+	         } },
+
+	      getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.ext.connect.error;
+	         } },
+
+	      getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.ext.connect.connectionAttempts;
+	         } },
+
+	      getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.step.delta;
+	         } },
+
+	      getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.scale;
+	         } },
+
+	      getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.setWidth;
+	         } },
+
+	      getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.setHeight;
+	         } },
+
+	      getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.width;
+	         } },
+
+	      getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.height;
+	         } },
+
+	      setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
+	            return document.title == title ? document.title : document.title = title;
+	         } },
+
+	      setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
+	            return this.client.update.state.set(state, true);
+	         } },
+
+	      toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
+	            return this.client.update.fullscale = !this.client.update.fullscale;
+	         } },
+
+	      time: { writable: true, configurable: false, enumerable: false, value: 0 },
+
+	      main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	               return true;
+	            } } }
+	   },
+
+	   prototype: {
+
+	      options: _options3.default,
+
+	      user: _user3.default,
+
+	      ext: _ext3.default,
+
+	      input: _input3.default,
+
+	      canvas: _canvas3.default,
+
+	      client: _client3.default
+
+	   }
+
+	});
+
+/***/ },
+/* 197 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	exports.default = {
+	    overridescroll: false,
+	    drag: 0,
+	    targetfps: 60,
+	    mute: false,
+	    paths: {
+	        data: "data/",
+	        images: "images/",
+	        url: ""
+	    },
+
+	    canvas: {
+	        override: false, //Toggle the use of options.canvas
+	        name: 'canvas', //Use canvas.name
+	        buffername: 'buffer', //Use canvas.buffer
+	        buffer: true, //Toggle the use of double-buffering
+	        background: '#000000', //Assign canvas element background colour
+	        position: { //Assign canvas element position properties
+	            //position:'absolute',
+	            //top:0,
+	            //left:window.innerWidth/2,
+	            //center:true,
+	            //z:1
+	            position: 'absolute',
+	            top: "",
+	            left: window.innerWidth * 2,
+	            //left:"",
+	            center: false,
+	            z: 1
+	        },
+	        size: { //Assign canvas size properties
+	            width: window.innerWidth,
+	            height: window.innerHeight
+	        }
+	    },
+
+	    msFlags: {
+
+	        msZoom: false
+
+	    },
+
+	    flags: { //Feature Flags
+	        canvas: true,
+	        mstouch: true,
+	        seamless: true,
+	        tight: true,
+	        touchprevent: true
+	    },
+
+	    override: { //Override Functions
+	        keyboard: true,
+	        mouse: true,
+	        MSHoldVisual: false,
+	        SelectStart: false,
+	        ContextMenu: true,
+	        Drag: true
+	    },
+
+	    //Return Options Value
+	    get: function get(attr) {
+
+	        //If Attribute
+	        if (attr) {
+
+	            //Get list of apps
+	            var list = SpiceJS.controller.list();
+
+	            //list is object
+	            if ((typeof list === "undefined" ? "undefined" : _typeof(list)) == "object") {
+	                //return window.apps.option.
+	                for (var attrname in this) {
+	                    if (attrname == attr) return eval("list.options." + attrname);
+	                }
+	            } else {
+	                for (var i = window.apps.length - 1; i >= 0; i--) {
+	                    for (var attrname in this) {
+	                        if (attrname == attr) {
+	                            var l = [];
+	                            l.push(eval("list[" + i + "].options." + attrname));
+	                        }
+	                    }
+	                }return l;
+	            }
+
+	            return null;
+	        } else return this;
+	    },
+
+	    set: function set(options) {
+
+	        for (var attrname in options) {
+	            this[attrname] = options[attrname];
+	        };
+
+	        return this;
+	    }
+
+	};
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _inputcontroller2 = __webpack_require__(199);
+
+	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Input = (function (_inputcontroller) {
+	        _inherits(Input, _inputcontroller);
+
+	        function Input(app, pointerPoint) {
+	                _classCallCheck(this, Input);
+
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
+
+	                _this.delay = 0;
+
+	                _this.touch = false;
+
+	                _this.touch_dist = { x: 0, y: 0 };
+
+	                _this.key = false;
+
+	                _this.keyPower = 0;
+
+	                _this.keyup = false;
+
+	                _this.keydown = false;
+
+	                _this.codes = [];
+
+	                _this.codeList = [];
+
+	                _this.control = false;
+
+	                _this.confine = false;
+
+	                _this.preventNext = true;
+
+	                _this.init_options();
+
+	                _this.keyController.init(_this.app);
+
+	                _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
+
+	                _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
+
+	                _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
+
+	                _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
+
+	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
+
+	                _this.setup_universalMultitouch();
+
+	                _this.setup_documentListeners();
+
+	                //this.setup_msUniversalAppTouch();
+
+	                return _this;
+	        }
+
+	        _createClass(Input, [{
+	                key: "preventDefault",
+	                value: function preventDefault(e) {
+	                        e.preventDefault();return e.target.app;
+	                }
+	        }, {
+	                key: "preventNextInput",
+	                value: function preventNextInput() {
+	                        return this.preventNext = true;
+	                }
+	        }, {
+	                key: "confineMouse",
+	                value: function confineMouse() {
+
+	                        return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
+	                }
+	        }, {
+	                key: "init_options",
+	                value: function init_options() {
+
+	                        /*	Overrides the selection start event for selecting events	*/
+
+	                        if (!this.app.options.get("override").SelectStart) {
+	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
+	                        }
+
+	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
+
+	                        if (!this.app.options.get("override").MSHoldVisual) {
+	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
+	                        }
+
+	                        /* Overrides the ContextMenu event */
+
+	                        if (this.app.options.get("override").ContextMenu) {
+	                                this.app.document.oncontextmenu = this.preventDefault;
+	                                this.app.window.self.oncontextmenu = this.preventDefault;
+	                        }
+
+	                        /*	Overrides dragstart event		*/
+
+	                        if (this.app.options.get("override").Drag) {
+	                                this.app.document.ondragstart = this.preventDefault;
+	                                this.app.window.self.ondragstart = this.preventDefault;
+	                        }
+
+	                        /*	CSS based Overrides
+	                                  - mstouch
+	                                - seamless ( toggles overflow )
+	                                - tight ( zeros padding and margin )
+	                          */
+
+	                        if (this.app.options.get("flags").mstouch) {
+	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+	                        }
+
+	                        if (this.app.options.get("flags").seamless) {
+	                                this.app.document.body.style.overflow = "hidden";
+	                        }
+
+	                        if (this.app.options.get("flags").tight) {
+	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
+	                        }
+	                }
+	        }, {
+	                key: "update",
+	                value: function update() {
+
+	                        this.confineMouse();
+
+	                        //Reset variables
+	                        this.press = false;
+	                        this.touch = 0;
+	                        this.app.window.inside = 0;
+	                        this.wheelDelta = 0;
+
+	                        this.pressed ? this.duration++ : this.duration = 0;
+
+	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
+
+	                        //this.setup_msUniversalAppTouch();
+
+	                        if (this.delay > 0) {
+
+	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	                        }
+
+	                        //reset code released, unused?
+	                        this.codereleased = 0;
+
+	                        return true;
+	                }
+	        }, {
+	                key: "setup_documentListeners",
+	                value: function setup_documentListeners() {
+
+	                        var doc = document;
+	                        var win = window;
+
+	                        doc.addEventListener("mousedown", function () {
+	                                window.focus();
+	                        }, true);
+	                        doc.addEventListener("touchstart", function () {
+	                                window.focus();
+	                        }, true);
+
+	                        // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
+	                        win.addEventListener("blur", function () {
+	                                self.onWindowBlur();
+	                        });
+
+	                        win.onWindowBlur = function (evt) {
+
+	                                console.log('blur');
+	                                SJS.controller.list().input.pointerup(evt);
+	                        };
+
+	                        win.setSuspended = function (state) {
+
+	                                if (state) console.log('suspended');else console.log('resume');
+	                        };
+
+	                        // Pause and resume on page becoming visible/invisible
+	                        function onVisibilityChanged() {
+	                                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
+	                        };
+
+	                        doc.addEventListener("visibilitychange", onVisibilityChanged, false);
+	                        doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+	                        doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+	                        doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+	                }
+	        }, {
+	                key: "setup_universalMultitouch",
+	                value: function setup_universalMultitouch() {
+
+	                        //touch-action: none;
+
+	                        if (window.PointerEvent) {
+	                                // Pointer events are supported.
+
+	                                // Test for touch capable hardware
+	                                if (navigator.maxTouchPoints) {}
+
+	                                // Test for multi-touch capable hardware
+	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
+
+	                                // Check the maximum number of touch points the hardware supports
+	                                //var touchPoints = navigator.maxTouchPoints;
+	                        }
+
+	                        this.multi = {
+
+	                                list: []
+
+	                        };
+
+	                        this.touched = {
+
+	                                count: 0,
+	                                uplist: [],
+	                                downlist: [],
+	                                last: { x: 0, y: 0 },
+	                                CheckTouchUp: function CheckTouchUp() {
+
+	                                        return this.uplist[this.uplist.length - 1];
+	                                },
+	                                CheckTouchDown: function CheckTouchDown() {}
+
+	                        };
+	                }
+	        }, {
+	                key: "setup_msUniversalAppTouch",
+	                value: function setup_msUniversalAppTouch() {
+
+	                        return;
+
+	                        var i = 0;
+
+	                        var data = {
+	                                app: this.app,
+	                                x: 0,
+	                                y: 0
+	                        };
+
+	                        if (this.pressed === false && this.lastpressed === true) {
+	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
+
+	                                this.controls.up(data);
+	                        }
+
+	                        this.lastpressed = this.pressed;
+
+	                        if (!this.wininitalize) try {
+
+	                                //var w = Windows;
+	                                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+
+	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
+	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
+	                                this.wininitalize = true;
+
+	                                data = {
+	                                        app: this.app,
+	                                        x: this.winposition.x,
+	                                        y: this.winposition.y
+	                                };
+	                        } catch (e) {
+
+	                                data = {
+	                                        app: this.app,
+	                                        x: 0,
+	                                        y: 0
+	                                };
+	                        } else {
+	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
+	                                this.pressed = this.winpoint.isInContact;
+	                                this.pointerDevice = this.winpoint.pointerDevice;
+
+	                                var pt = this.pointerPoint.getCurrentPoint(1);
+	                                var ptTargetProperties = pt.properties;
+
+	                                if (this.released) {
+
+	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
+
+	                                        switch (pt.pointerDevice.pointerDeviceType) {
+	                                                case "mouse":
+	                                                case 2:
+	                                                        details += "\nPointer type: mouse";
+	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
+	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
+	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
+	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
+	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
+	                                                        break;
+	                                                case "pen":
+	                                                        details += "\nPointer type: pen";
+	                                                        if (pt.isInContact) {
+	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
+	                                                        }
+	                                                        break;
+	                                                case "touch":
+	                                                        details += "\nPointer type: touch";
+	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                        break;
+	                                                default:
+	                                                        details += "\nPointer type: " + "n/a";
+	                                                        break;
+	                                        }
+	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
+	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
+	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
+	                                        //console.log(pt.pointerDevice);
+	                                        //console.log(details);
+	                                }
+	                                i = this.winpoint;
+
+	                                data.x = this.winposition.x;
+	                                data.y = this.winposition.y;
+
+	                                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
+	                        }
+
+	                        if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
+
+	                        // console.log(i)
+	                        //  if (Windows)
+	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
+	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
+	                }
+	        }]);
+
+	        return Input;
+	})(_inputcontroller3.default);
+
+	exports.default = Input;
+
+/***/ },
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5453,23 +6894,23 @@
 	        value: true
 	});
 
-	var _vector = __webpack_require__(195);
+	var _vector = __webpack_require__(200);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _sjsclass = __webpack_require__(196);
+	var _sjsclass = __webpack_require__(201);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
-	var _inputlistener = __webpack_require__(197);
+	var _inputlistener = __webpack_require__(202);
 
 	var _inputlistener2 = _interopRequireDefault(_inputlistener);
 
-	var _inputkeycontroller = __webpack_require__(198);
+	var _inputkeycontroller = __webpack_require__(203);
 
 	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
 
-	var _inputscrollcontroller = __webpack_require__(199);
+	var _inputscrollcontroller = __webpack_require__(204);
 
 	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
 
@@ -5667,6 +7108,34 @@
 
 	                        return this.constructor._scrollController = value;
 	                }
+	        }, {
+	                key: 'horizontal',
+	                get: function get() {
+
+	                        var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
+	                        var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
+	                        var mouse = -this.pressed * this.app.input.dist.x;
+	                        var touch = -this.pressed * this.app.input.dist.x; //was touched
+
+	                        var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	                        var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+	                        return { keyboard: keyboard, touch: touched };
+	                }
+	        }, {
+	                key: 'vertical',
+	                get: function get() {
+
+	                        var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
+	                        var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
+	                        var mouse = this.pressed * this.app.input.dist.y;
+	                        var touch = this.pressed * this.app.input.dist.y; //was touched
+
+	                        var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	                        var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+	                        return { keyboard: keyboard, touch: touched };
+	                }
 	        }], [{
 	                key: '_pointerup',
 	                value: function _pointerup(evt) {
@@ -5680,6 +7149,8 @@
 	                        input.last = input.end = new _vector2.default(x, y);
 
 	                        input.pressed = false;
+
+	                        input.released = true;
 
 	                        return true;
 	                }
@@ -5751,7 +7222,7 @@
 	exports.default = inputcontroller;
 
 /***/ },
-/* 195 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5759,74 +7230,172 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+					value: true
 	});
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Vector = (function () {
-	    function Vector(x, y) {
-	        _classCallCheck(this, Vector);
+	var VectorController = (function () {
+					function VectorController() {
+									_classCallCheck(this, VectorController);
+					}
 
-	        this.x = x || this.constructor._x;
-	        this.y = y || this.constructor._y;
-	    }
+					_createClass(VectorController, [{
+									key: "multiply",
+									value: function multiply(a, b) {
 
-	    _createClass(Vector, [{
-	        key: "position",
-	        set: function set(value) {
+													this.x *= a;
+													this.y *= b;
 
-	            this._x = value.x;
-	            this._y = value.y;
-	        },
-	        get: function get() {
+													return this;
+									}
+					}, {
+									key: "offset",
+									value: function offset(a, b) {
 
-	            return new Vector(this._x, this._y);
-	        }
-	    }, {
-	        key: "x",
-	        set: function set(value) {
+													this.x += a;
+													this.y += b;
 
-	            this._x = value;
-	        },
-	        get: function get() {
+													return this;
+									}
+					}, {
+									key: "segments_intersect",
+									value: function segments_intersect(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) {
 
-	            return this._x;
-	        }
-	    }, {
-	        key: "y",
-	        get: function get() {
+													var max_ax, min_ax, max_ay, min_ay, max_bx, min_bx, max_by, min_by;
 
-	            return this._y;
-	        },
-	        set: function set(value) {
+													// Long-hand code since this is a performance hotspot and this type of
+													// code minimises the number of conditional tests necessary.
+													if (a1x < a2x) {
+																	min_ax = a1x;
+																	max_ax = a2x;
+													} else {
+																	min_ax = a2x;
+																	max_ax = a1x;
+													}
 
-	            this._y = value;
-	        }
-	    }], [{
-	        key: "_x",
-	        set: function set(value) {
+													if (b1x < b2x) {
+																	min_bx = b1x;
+																	max_bx = b2x;
+													} else {
+																	min_bx = b2x;
+																	max_bx = b1x;
+													}
 
-	            this.position[0] = value;
-	        },
-	        get: function get() {
+													if (max_ax < min_bx || min_ax > max_bx) return false;
 
-	            return this.position[0];
-	        }
-	    }, {
-	        key: "_y",
-	        set: function set(value) {
+													if (a1y < a2y) {
+																	min_ay = a1y;
+																	max_ay = a2y;
+													} else {
+																	min_ay = a2y;
+																	max_ay = a1y;
+													}
 
-	            this.position[1] = value;
-	        },
-	        get: function get() {
+													if (b1y < b2y) {
+																	min_by = b1y;
+																	max_by = b2y;
+													} else {
+																	min_by = b2y;
+																	max_by = b1y;
+													}
 
-	            return this.position[1];
-	        }
-	    }]);
+													if (max_ay < min_by || min_ay > max_by) return false;
 
-	    return Vector;
+													var dpx = b1x - a1x + b2x - a2x;
+													var dpy = b1y - a1y + b2y - a2y;
+													var qax = a2x - a1x;
+													var qay = a2y - a1y;
+													var qbx = b2x - b1x;
+													var qby = b2y - b1y;
+
+													var d = cr.abs(qay * qbx - qby * qax);
+													var la = qbx * dpy - qby * dpx;
+
+													if (cr.abs(la) > d) return false;
+
+													var lb = qax * dpy - qay * dpx;
+
+													return cr.abs(lb) <= d;
+									}
+					}]);
+
+					return VectorController;
 	})();
+
+	var Vector = (function (_VectorController) {
+					_inherits(Vector, _VectorController);
+
+					function Vector(x, y) {
+									_classCallCheck(this, Vector);
+
+									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).call(this));
+
+									_this.x = x || _this.constructor._x;
+									_this.y = y || _this.constructor._y;
+
+									return _this;
+					}
+
+					_createClass(Vector, [{
+									key: "position",
+									set: function set(value) {
+
+													this._x = value.x;
+													this._y = value.y;
+									},
+									get: function get() {
+
+													return new Vector(this._x, this._y);
+									}
+					}, {
+									key: "x",
+									set: function set(value) {
+
+													this._x = value;
+									},
+									get: function get() {
+
+													return this._x;
+									}
+					}, {
+									key: "y",
+									get: function get() {
+
+													return this._y;
+									},
+									set: function set(value) {
+
+													this._y = value;
+									}
+					}], [{
+									key: "_x",
+									set: function set(value) {
+
+													this.position[0] = value;
+									},
+									get: function get() {
+
+													return this.position[0];
+									}
+					}, {
+									key: "_y",
+									set: function set(value) {
+
+													this.position[1] = value;
+									},
+									get: function get() {
+
+													return this.position[1];
+									}
+					}]);
+
+					return Vector;
+	})(VectorController);
 
 	Vector.position = {};
 	Vector._x = 0;
@@ -5834,7 +7403,7 @@
 	exports.default = Vector;
 
 /***/ },
-/* 196 */
+/* 201 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5869,7 +7438,7 @@
 	exports.default = SJSClass;
 
 /***/ },
-/* 197 */
+/* 202 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5936,7 +7505,7 @@
 	exports.default = InputListener;
 
 /***/ },
-/* 198 */
+/* 203 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5957,6 +7526,7 @@
 	    _createClass(inputkeycontroller, [{
 	        key: "key_down",
 	        value: function key_down(evt) {
+
 	            evt.input.key = true;
 	            evt.input.kpressed = true;
 	        }
@@ -5997,9 +7567,9 @@
 
 	                app.input.preventNext = false;
 
-	                app.input.codedown = app.input.keyController.keyCodes[evt.keyCode];
+	                app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
 
-	                app.input.codeList.push(app.input.codedown);
+	                app.input.keyController.codeList.push(app.input.codedown);
 
 	                if (evt.ctrlKey) app.input.control = true;
 
@@ -6057,7 +7627,7 @@
 	exports.default = inputkeycontroller;
 
 /***/ },
-/* 199 */
+/* 204 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6186,2746 +7756,7 @@
 	exports.default = inputscrollcontroller;
 
 /***/ },
-/* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-			value: true
-	});
-
-	var _sjsclass = __webpack_require__(196);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Loader = (function (_SJSClass) {
-			_inherits(Loader, _SJSClass);
-
-			function Loader(app) {
-					_classCallCheck(this, Loader);
-
-					var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
-
-					_this.ImageCache = [];
-
-					_this.ImageBuffer = [];
-
-					_this.ImageBufferTime = 3;
-
-					return _this;
-			}
-
-			_createClass(Loader, [{
-					key: 'checkLoaded',
-					value: function checkLoaded(name) {
-							var _this2 = this;
-
-							if (!this.getImageReference(name).complete) {
-
-									setTimeout(function () {
-
-											_this2.checkLoaded(name);
-									}, this.ImageBufferTime);
-							} else {
-
-									this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
-							}
-					}
-			}, {
-					key: 'getBufferLength',
-					value: function getBufferLength() {
-
-							return this.ImageBuffer.length;
-					}
-			}, {
-					key: 'getImageReference',
-					value: function getImageReference(string) {
-
-							var elementPos = this.ImageCache.map(function (img) {
-
-									return img.string;
-							}).indexOf(string);
-
-							var objectFound = this.ImageCache[elementPos];
-
-							return objectFound;
-					}
-			}, {
-					key: 'loadImage',
-					value: function loadImage(string) {
-							var _this3 = this;
-
-							var name = string;
-
-							var img = this.graphics.load(string);
-
-							var cacheIndex = this.ImageCache.push(img);
-
-							img.string = name;
-
-							this.ImageBuffer.push(name);
-
-							setTimeout(function () {
-
-									_this3.checkLoaded(name);
-							}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-							return this.ImageCache[cacheIndex - 1];
-					}
-			}]);
-
-			return Loader;
-	})(_sjsclass2.default);
-
-	exports.default = Loader;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	var Cookies = {
-
-	    constructor: function constructor(app) {
-
-	        return {
-	            app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	            init: { value: function value() {
-
-	                    //execute polyfill
-	                    return this.polyfill();
-	                }
-	            }
-	        };
-	    },
-
-	    prototype: {
-
-	        //Cookies Polyfill by ScottHamper
-	        //	https://github.com/ScottHamper/Cookies#api-reference
-	        polyfill: function polyfill() {
-
-	            (function (global, undefined) {
-	                'use strict';
-
-	                var factory = function factory(window) {
-	                    if (_typeof(window.document) !== 'object') {
-	                        throw new Error('Cookies.js requires a `window` with a `document` object');
-	                    }
-
-	                    var Cookies = window.Cookies = function (key, value, options) {
-	                        return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
-	                    };
-
-	                    // Allows for setter injection in unit tests
-	                    Cookies._document = window.document;
-
-	                    // Used to ensure cookie keys do not collide with
-	                    // built-in `Object` properties
-	                    Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
-
-	                    Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-	                    Cookies.defaults = {
-	                        path: '/',
-	                        secure: false
-	                    };
-
-	                    Cookies.get = function (key) {
-	                        if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-	                            Cookies._renewCache();
-	                        }
-
-	                        return Cookies._cache[Cookies._cacheKeyPrefix + key];
-	                    };
-
-	                    Cookies.set = function (key, value, options) {
-	                        options = Cookies._getExtendedOptions(options);
-	                        options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
-
-	                        Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
-
-	                        return Cookies;
-	                    };
-
-	                    Cookies.expire = function (key, options) {
-	                        return Cookies.set(key, undefined, options);
-	                    };
-
-	                    Cookies._getExtendedOptions = function (options) {
-	                        return {
-	                            path: options && options.path || Cookies.defaults.path,
-	                            domain: options && options.domain || Cookies.defaults.domain,
-	                            expires: options && options.expires || Cookies.defaults.expires,
-	                            secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
-	                        };
-	                    };
-
-	                    Cookies._isValidDate = function (date) {
-	                        return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
-	                    };
-
-	                    Cookies._getExpiresDate = function (expires, now) {
-	                        now = now || new Date();
-
-	                        if (typeof expires === 'number') {
-	                            expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
-	                        } else if (typeof expires === 'string') {
-	                            expires = new Date(expires);
-	                        }
-
-	                        if (expires && !Cookies._isValidDate(expires)) {
-	                            throw new Error('`expires` parameter cannot be converted to a valid Date instance');
-	                        }
-
-	                        return expires;
-	                    };
-
-	                    Cookies._generateCookieString = function (key, value, options) {
-	                        key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-	                        key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
-	                        value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-	                        options = options || {};
-
-	                        var cookieString = key + '=' + value;
-	                        cookieString += options.path ? ';path=' + options.path : '';
-	                        cookieString += options.domain ? ';domain=' + options.domain : '';
-	                        cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-	                        cookieString += options.secure ? ';secure' : '';
-
-	                        return cookieString;
-	                    };
-
-	                    Cookies._getCacheFromString = function (documentCookie) {
-	                        var cookieCache = {};
-	                        var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
-
-	                        for (var i = 0; i < cookiesArray.length; i++) {
-	                            var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-	                            if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-	                                cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
-	                            }
-	                        }
-
-	                        return cookieCache;
-	                    };
-
-	                    Cookies._getKeyValuePairFromCookieString = function (cookieString) {
-	                        // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
-	                        var separatorIndex = cookieString.indexOf('=');
-
-	                        // IE omits the "=" when the cookie value is an empty string
-	                        separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
-
-	                        return {
-	                            key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
-	                            value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
-	                        };
-	                    };
-
-	                    Cookies._renewCache = function () {
-	                        Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
-	                        Cookies._cachedDocumentCookie = Cookies._document.cookie;
-	                    };
-
-	                    Cookies._areEnabled = function () {
-	                        var testKey = 'cookies.js';
-	                        var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-	                        Cookies.expire(testKey);
-	                        return areEnabled;
-	                    };
-
-	                    Cookies.enabled = Cookies._areEnabled();
-
-	                    return Cookies;
-	                };
-
-	                var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	                var AMD = "function" === 'function' && __webpack_require__(214);
-	                var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
-	                var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
-	                // AMD support
-	                if (AMD) {
-	                    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	                        return cookiesExport;
-	                    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	                    // CommonJS/Node.js support
-	                } else if (objectExports) {
-	                        // Support Node.js specific `module.exports` (which can be a function)
-	                        if (moduleExports) {
-	                            exports = module.exports = cookiesExport;
-	                        }
-	                        // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-	                        exports.Cookies = cookiesExport;
-	                    } else {
-	                        global.Cookies = cookiesExport;
-	                    }
-	            })(typeof window === 'undefined' ? this : window);
-	            return Cookies;
-	        }
-
-	    }
-
-	};
-
-	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(213)(module)))
-
-/***/ },
-/* 202 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _sjsclass = __webpack_require__(196);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	var _loader = __webpack_require__(200);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var xOff = 0;
-
-	var SJSParticleController = (function (_Loader) {
-	        _inherits(SJSParticleController, _Loader);
-
-	        function SJSParticleController(app) {
-	                _classCallCheck(this, SJSParticleController);
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
-
-	                _this.SJSParticleList = [];
-	                _this.particleLimit = 150;
-
-	                _this.loadImage('../flakes');
-
-	                return _this;
-	        }
-
-	        _createClass(SJSParticleController, [{
-	                key: 'clear',
-	                value: function clear() {
-
-	                        this.SJSParticleList = [];
-	                }
-	        }, {
-	                key: 'update',
-	                value: function update() {
-
-	                        var length = this.SJSParticleList.length;
-
-	                        var width = this.app.getWidth();
-	                        var height = this.app.getHeight();
-	                        var scale = this.app.getScale();
-
-	                        if (length < this.particleLimit) {
-	                                var newParticle = new SJSParticle(this.app, { x: xOff - width + Math.random() * width * 3, y: -100 }, { x: Math.random() * width, y: 2 * height / scale }, { x: Math.random() * 1 + 0.5, y: Math.random() * 0.1 + 0.1 }, "#AAFFFF", false);
-	                                this.SJSParticleList.push(newParticle);
-	                        }
-
-	                        if (length == 0) return;
-
-	                        var i = length - 1;
-
-	                        for (i; i; --i) {
-
-	                                var particle = this.SJSParticleList[i];
-
-	                                particle.update();
-	                        }
-
-	                        return;
-	                }
-	        }, {
-	                key: 'draw',
-	                value: function draw() {
-
-	                        var length = this.SJSParticleList.length;
-
-	                        if (length == 0) return;
-
-	                        var i = length - 1;
-
-	                        for (i; i; --i) {
-
-	                                var particle = this.SJSParticleList[i];
-
-	                                particle.draw();
-	                        }
-	                }
-	        }]);
-
-	        return SJSParticleController;
-	})(_loader2.default);
-
-	exports.default = SJSParticleController;
-
-	var SJSParticle = (function (_SJSClass) {
-	        _inherits(SJSParticle, _SJSClass);
-
-	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
-	                _classCallCheck(this, SJSParticle);
-
-	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
-
-	                var Loader = _this2.app.getCurrent().particleController;
-
-	                _this2.img = Loader.getImageReference('../flakes');
-
-	                _this2.t = Math.round(1 + Math.random() * 5);
-
-	                _this2.gravity = 0.5;
-
-	                _this2.alpha = 0.5 + Math.random() * 0.5;
-
-	                _this2.easing = Math.random() * 0.2;
-
-	                _this2.fade = Math.random() * 0.1;
-
-	                _this2.gridX = marker % 120;
-
-	                _this2.gridY = Math.floor(marker / 120) * 12;
-
-	                _this2.color = marker;
-
-	                _this2.scale = 2 * Math.random() * 2 * Application.getScale();
-
-	                _this2.start = 30 + Math.random() * 180;
-
-	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
-
-	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
-
-	                _this2.del = false;
-
-	                _this2.pos = {
-	                        x: pos.x || 0,
-	                        y: pos.y || 0
-	                };
-
-	                _this2.vel = {
-	                        x: vel.x || 0,
-	                        y: vel.y || 0
-	                };
-
-	                _this2.lastPos = {
-	                        x: _this2.pos.x,
-	                        y: _this2.pos.y
-	                };
-
-	                _this2.target = {
-	                        y: target.y || 0,
-	                        x: target.x || 0
-	                };
-
-	                _this2.usePhysics = usePhysics || false;
-
-	                if (!_this2.usePhysics) {
-
-	                        _this2.dir = Math.random() * 1;
-
-	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
-	                } else {
-
-	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
-	                }
-
-	                return _this2;
-	        }
-
-	        _createClass(SJSParticle, [{
-	                key: 'update',
-	                value: function update() {
-
-	                        var width = this.app.getWidth();
-
-	                        var height = this.app.getHeight();
-
-	                        var scale = this.app.getScale();
-
-	                        // Check to Delete
-
-	                        if (this.del) {
-
-	                                var start = { x: -xOff - width + Math.random() * width * 3, y: -100 };
-	                                var target = { x: Math.random() * width, y: 2 * height / scale };
-	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
-
-	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
-
-	                                return;
-	                        }
-
-	                        // Move Object
-
-	                        var distance = this.target.y - this.pos.y;
-
-	                        var val = this.target.x / 200;
-
-	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
-
-	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
-
-	                        val = this.pos.x / 200;
-
-	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
-
-	                        // Check if out of bounds
-
-	                        if (this.pos.y > 600) {
-	                                this.alpha -= 0.01;
-
-	                                if (this.alpha < 0.01) this.del = true;
-	                        }
-
-	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
-	                }
-	        }, {
-	                key: 'draw',
-	                value: function draw() {
-
-	                        if (this.app.getScale() < 0.8) this.visuals.rect_ext(this.pos.x, this.pos.y, 5, 5, 0.2 + this.scale / 10, this.alpha, 1, "#FFFFFF", +this.offx, this.offy, 32, 32, this.vel.x + this.pos.y);else this.visuals.image_part_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.alpha, 1, +this.offx, this.offy, 32, 32, this.vel.x + this.pos.y);
-	                }
-	        }]);
-
-	        return SJSParticle;
-	})(_sjsclass2.default);
-
-/***/ },
-/* 203 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _utils = __webpack_require__(192);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _statisticstypes = __webpack_require__(204);
-
-	var StatisticTypes = _interopRequireWildcard(_statisticstypes);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var StatisticsController = (function () {
-	        _createClass(StatisticsController, [{
-	                key: 'count',
-	                get: function get() {
-
-	                        return this.monitor.count;
-	                },
-	                set: function set(value) {
-
-	                        this.monitor.count = value;
-	                }
-	        }, {
-	                key: 'details',
-	                get: function get() {
-
-	                        return StatisticsController._details;
-	                },
-	                set: function set(value) {
-
-	                        this._details = StatisticsController._details;
-	                }
-	        }], [{
-	                key: '_details',
-	                value: function _details(type) {
-
-	                        type = type;
-
-	                        switch (type) {
-
-	                                default:
-
-	                                        return Object.keys(this.logs);
-
-	                                case 'details':
-
-	                                        return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                                case 'entries':
-
-	                                        return Object.entries(this.logs);
-
-	                                case 'values':
-
-	                                        return Object.values(this.logs);
-
-	                        }
-	                }
-	        }, {
-	                key: 'logs',
-	                get: function get() {
-
-	                        return this.monitor.logs;
-	                },
-	                set: function set(value) {
-
-	                        this.monitor = value;
-	                }
-	        }, {
-	                key: 'monitor',
-	                get: function get() {
-
-	                        return this._monitor;
-	                },
-	                set: function set(value) {
-
-	                        this._monitor = value;
-	                }
-	        }]);
-
-	        function StatisticsController() {
-	                _classCallCheck(this, StatisticsController);
-
-	                this.logs = this.constructor.logs;
-
-	                this.count = 0;
-	        }
-
-	        return StatisticsController;
-	})();
-
-	StatisticsController._monitor = {
-
-	        count: 0,
-
-	        logs: []
-
-	};
-
-	var Statistics = (function (_StatisticsController) {
-	        _inherits(Statistics, _StatisticsController);
-
-	        function Statistics() {
-	                _classCallCheck(this, Statistics);
-
-	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).call(this));
-	        }
-
-	        _createClass(Statistics, [{
-	                key: 'log',
-	                value: (function () {
-	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-	                                var name,
-	                                    curLog,
-	                                    newLog,
-	                                    hashLog,
-	                                    time,
-	                                    time2,
-	                                    timeHash,
-	                                    _args = arguments;
-	                                return regeneratorRuntime.wrap(function _callee$(_context) {
-	                                        while (1) {
-	                                                switch (_context.prev = _context.next) {
-	                                                        case 0:
-	                                                                name = '';
-	                                                                curLog = this.logs;
-	                                                                newLog = {};
-	                                                                hashLog = {};
-	                                                                time = new Date().getTime();
-	                                                                time2 = new Date().getTime();
-	                                                                timeHash = this.count + time;
-
-	                                                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
-
-	                                                                if (typeof _args[2] != 'undefined') {
-
-	                                                                        name = _args[2];
-
-	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
-
-	                                                                        hashLog = newLog[this.count + " " + _args[0]] || new StatisticTypes.Log(name);
-
-	                                                                        hashLog = _args[1];
-
-	                                                                        newLog[_args[0]] = hashLog;
-
-	                                                                        curLog[name] = newLog;
-	                                                                } else {
-
-	                                                                        name = _args[0];
-
-	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
-
-	                                                                        hashLog = newLog[this.count + " " + _args[0]] || new StatisticTypes.Log(name);
-
-	                                                                        hashLog = _args[1];
-
-	                                                                        newLog[_args[0]] = hashLog;
-
-	                                                                        curLog[name] = newLog;
-	                                                                }
-
-	                                                                this.count++;
-
-	                                                                this.logs = curLog;
-
-	                                                        case 11:
-	                                                        case 'end':
-	                                                                return _context.stop();
-	                                                }
-	                                        }
-	                                }, _callee, this);
-	                        }));
-
-	                        return function log() {
-	                                return ref.apply(this, arguments);
-	                        };
-	                })()
-	        }, {
-	                key: 'monitor',
-	                value: (function () {
-	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(func, arg) {
-	                                var startTime, endTime;
-	                                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	                                        while (1) {
-	                                                switch (_context2.prev = _context2.next) {
-	                                                        case 0:
-	                                                                startTime = new Date().getTime();
-	                                                                _context2.next = 3;
-	                                                                return func(arg);
-
-	                                                        case 3:
-	                                                                endTime = new Date().getTime();
-
-	                                                                this.log("time", -startTime + endTime, func.name);
-
-	                                                                return _context2.abrupt('return', startTime - endTime);
-
-	                                                        case 6:
-	                                                        case 'end':
-	                                                                return _context2.stop();
-	                                                }
-	                                        }
-	                                }, _callee2, this);
-	                        }));
-
-	                        return function monitor(_x, _x2) {
-	                                return ref.apply(this, arguments);
-	                        };
-	                })()
-	        }, {
-	                key: 'convertArrayOfObjectsToCSV',
-	                value: function convertArrayOfObjectsToCSV(args) {
-
-	                        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
-
-	                        data = args.data || null;
-
-	                        if (data == null || !data.length) {
-
-	                                return null;
-	                        }
-
-	                        columnDelimiter = args.columnDelimiter || ',';
-
-	                        lineDelimiter = args.lineDelimiter || '\n';
-
-	                        keys = Object.keys(data[0]);
-
-	                        result = '';
-
-	                        result += keys.join(columnDelimiter);
-
-	                        result += lineDelimiter;
-
-	                        data.forEach(function (item) {
-
-	                                ctr = 0;
-
-	                                keys.forEach(function (key) {
-
-	                                        if (ctr > 0) result += columnDelimiter;
-
-	                                        result += item[key];
-
-	                                        ctr++;
-	                                });
-
-	                                result += lineDelimiter;
-	                        });
-
-	                        return result;
-	                }
-	        }, {
-	                key: 'writeToCSV',
-	                value: function writeToCSV(name) {
-
-	                        var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
-
-	                        logStream.write('Initial line...');
-
-	                        logStream.end('this is the end line');
-
-	                        var dataString = "";
-
-	                        var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
-
-	                        //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
-
-	                        var csvContent = "data:text/csv;charset=utf-8,";
-
-	                        data.forEach(function (infoArray, index) {
-
-	                                dataString = infoArray.join(",");
-
-	                                csvContent += index < data.length ? dataString + "\n" : dataString;
-	                        });
-
-	                        var encodedUri = encodeURI(csvContent);
-
-	                        var link = document.createElement("a");
-
-	                        link.setAttribute("href", encodedUri);
-
-	                        link.setAttribute("download", name + ".csv");
-
-	                        link.click();
-	                }
-	        }]);
-
-	        return Statistics;
-	})(StatisticsController);
-
-	exports.default = Statistics;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Log = (function () {
-	    function Log(id) {
-	        _classCallCheck(this, Log);
-
-	        this.id = id || 0;
-	    }
-
-	    _createClass(Log, null, [{
-	        key: "time",
-	        get: function get() {
-
-	            return this._time;
-	        },
-	        set: function set(value) {
-
-	            return this._time = value;
-	        }
-	    }, {
-	        key: "id",
-	        get: function get() {
-
-	            return this._id;
-	        },
-	        set: function set(value) {
-
-	            return this._id = value;
-	        }
-	    }]);
-
-	    return Log;
-	})();
-
-	var Loop = (function (_Log) {
-	    _inherits(Loop, _Log);
-
-	    function Loop() {
-	        _classCallCheck(this, Loop);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Loop).call(this));
-	    }
-
-	    return Loop;
-	})(Log);
-
-	var Compile = (function (_Log2) {
-	    _inherits(Compile, _Log2);
-
-	    function Compile() {
-	        _classCallCheck(this, Compile);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Compile).call(this));
-	    }
-
-	    return Compile;
-	})(Log);
-
-	var App = (function () {
-	    function App() {
-	        _classCallCheck(this, App);
-	    }
-
-	    _createClass(App, null, [{
-	        key: "fps",
-	        get: function get() {
-
-	            return this._fps;
-	        },
-	        set: function set(value) {
-
-	            return this._fps = value;
-	        }
-	    }, {
-	        key: "scale",
-	        get: function get() {
-
-	            return this._scale;
-	        },
-	        set: function set(value) {
-
-	            return this._scale = value;
-	        }
-	    }]);
-
-	    return App;
-	})();
-
-	var Build = (function () {
-	    function Build() {
-	        _classCallCheck(this, Build);
-	    }
-
-	    _createClass(Build, null, [{
-	        key: "build",
-	        get: function get() {
-
-	            return this._build;
-	        },
-	        set: function set(value) {
-
-	            return this._build = value;
-	        }
-	    }, {
-	        key: "scriptloadtime",
-	        get: function get() {
-
-	            return this._scriptloadtime;
-	        },
-	        set: function set(value) {
-
-	            return this._scriptloadtime = value;
-	        }
-	    }, {
-	        key: "uptime",
-	        get: function get() {
-
-	            return this._uptime;
-	        },
-	        set: function set(value) {
-
-	            return this._uptime = value;
-	        }
-	    }]);
-
-	    return Build;
-	})();
-
-	exports.Log = Log;
-	exports.Loop = Loop;
-	exports.Compile = Compile;
-	exports.App = App;
-	exports.Build = Build;
-
-/***/ },
 /* 205 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	var visuals = visuals || {};
-	visuals = {
-
-	    //Visuals Prototype
-	    prototype: {
-
-	        //draw flags
-
-	        free: false,
-	        alpha: 0,
-	        seamless: false,
-	        tight: true,
-	        disable: false,
-
-	        //draw vars
-	        bleed: 1,
-	        point: 14,
-	        zindex: 1,
-	        buffer_target: 0,
-	        scale: 0,
-	        fillStyle: null,
-	        fontT: "",
-	        fontL: "",
-
-	        //Objects
-	        stat2: Object.create(null),
-	        grd: Object.create(null),
-
-	        canvas: Object.create(null),
-	        buffer: Object.create(null),
-	        canvas_context: Object.create(null),
-	        buffer_context: Object.create(null),
-
-	        within: false,
-
-	        //Draw Vars Buffer
-
-	        stat: {
-	            x: 0,
-	            y: 0,
-	            w: 0,
-	            h: 0,
-	            s: 0,
-	            a: 0,
-	            c: 0,
-	            colour: "",
-	            oldcol: "",
-	            init: function init(col, colold) {
-	                this.x = 0;
-	                this.y = 0;
-	                this.w = 0;
-	                this.h = 0;
-	                this.s = 0;
-	                this.a = 0;
-	                this.c = 0;
-	                this.colour = col || 0;
-	                this.oldcol = colold || 0;
-	            }
-	        },
-
-	        window: window,
-
-	        getData: function getData() {
-
-	            var width = this.buffer.width;
-	            var height = this.buffer.height;
-
-	            var imageData = this.buffer_context.getImageData(0, 0, width, height);
-
-	            var w2 = width / 2;
-	            var d = imageData.data;
-	            for (y = 0; y <= height; y++) {
-	                inpos = y * width * 4;
-	                outpos = inpos + w2 * 4;
-	                for (x = 0; x < w2; x++) {
-	                    var r = d[inpos++];
-	                    var g = d[inpos++];
-	                    var b = d[inpos++];
-	                    //var a = d[inpos++];
-	                    b = Math.min(255, b);
-	                    if (r == 0 && g == 0 && b == 0) {
-	                        inpos++;
-	                        inpos++;
-	                        inpos++;
-	                        imageData.data[inpos++] = 0;
-	                    } else {
-	                        inpos++;
-	                        inpos++;
-	                        inpos++;
-	                        inpos++;
-	                    }
-	                }
-	            }
-	            this.buffer_context.putImageData(imageData, 0, 0);
-	        },
-
-	        flip: function flip() {
-
-	            this.fillStyle = this.app.canvas.canvas.style.background == "transparent";
-
-	            //this.buffer_context.save();
-	            //Set scale to client scale
-	            this.scale = this.app.client.scale;
-
-	            if (this.fillStyle === false) this.screen_fill(this.app.client.visuals.bleed, this.app.options.canvas.background);
-
-	            //If double buffering
-	            if (this.app.options.canvas.buffer) {
-	                //Draw buffer to canvs
-	                this.canvas_context.drawImage(this.buffer, 0, 0);
-
-	                //Clear buffer
-	                if (this.fillStyle === true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
-	            } else {
-
-	                //If not double buffering, clear canvas
-	                if (this.fillStyle === true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
-
-	                //If initalized, draw state
-	                if (this.app.client.update.state.initalized) this.app.client.update.state.draw();
-	            }
-	            //this.buffer_context.restore();
-	        },
-
-	        //Get fixed X/Y positions
-
-	        getX: function getX() {
-
-	            return (this.app.input.x - (-this.app.getWidth() / 2 + this.window.innerWidth / 2) + this.app.options.canvas.position.left / 3).toFixed(2);
-	        },
-
-	        getY: function getY() {
-
-	            return (this.app.input.y - this.app.options.canvas.position.top).toFixed(2);
-	        },
-
-	        //Fix positions relative to canvas
-
-	        fixX: function fixX(x) {
-
-	            return (x * this.scale + this.app.client.width / 2 - this.app.client.setWidth / 2 * this.scale).toFixed(2);
-	        },
-
-	        fixY: function fixY(y) {
-
-	            return (y * this.scale + this.app.client.height / 2 - this.app.client.setHeight / 2 * this.scale).toFixed(2);
-	        },
-
-	        fixW: function fixW(w) {
-
-	            return (w * this.scale).toFixed(2);
-	        },
-
-	        fixH: function fixH(h) {
-
-	            return (h * this.scale).toFixed(2);
-	        },
-
-	        //Check variables
-	        chkc: {},
-	        chk: function chk(x, y, w, h, s, a, c, colour, font) {
-	            this.chkc = this.colour();
-	            this.opacity(a);
-	            this.colour(colour);
-	            if (!this.free) return {
-	                x: this.fixX(x),
-	                y: this.fixY(y),
-	                w: this.fixW(w) * s,
-	                h: this.fixH(h) * s,
-	                s: s,
-	                a: this.app.client.Math.Clamp(a, 0, 1) || 0,
-	                c: c || false,
-	                colour: colour || this.colour(),
-	                oldcol: this.chkc,
-	                font: font || this.font,
-	                init: this.stat.init
-	            };else return {
-	                x: x, y: y,
-	                w: w * s || 0,
-	                h: h * s || 0,
-	                s: s,
-	                a: this.app.client.Math.Clamp(a, 0, 1) || 1,
-	                c: c || false,
-	                colour: colour || this.colour(),
-	                oldcol: this.chkc,
-	                font: font,
-	                init: this.stat.init
-	            };
-	        },
-
-	        debug: function debug() {
-	            if (!App.ext.debug.strength == "Normal") return;
-	            if (App.ext.debug.strength == "off" || App.ext.debug.strength == "none") return;
-	            this.rect_ext(-this.app.client.setWidth, 0, this.app.client.setWidth + this.app.client.setWidth + this.app.client.setWidth, this.point, 1, 0.1, 0);
-	            this.rect_ext(0, 0, this.app.client.setWidth, this.point, 1, 0.1, 0);
-	            this.text_ext("0", 0, this.point * 0.9, this.point * 0.9);
-	            this.text_ext(this.app.client.setWidth, this.app.client.setWidth - 25, this.point * 0.9, this.point * 0.9);
-	            if (window.innerWidth > this.app.client.setWidth * 1.1 * this.scale) {
-	                this.text_free(0 - this.fixX(0), 30, 4 + this.fixY(this.point), this.point * 0.99);
-	                this.text_free(this.app.client.width, window.innerWidth - 15, 4 + this.fixY(this.point), this.point * 0.99);
-	            }
-	            //this.text_ext("Debug",	this.app.client.setWidth/2.5,this.point*0.9,this.point*0.9);
-	            //this.text_ext(this.app.client.name,5,25,"#FFFFFF",4,1,0);
-	            //this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
-	            //this.text_ext("x "+Math.round(App.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
-	            //this.text_ext("x: "+Math.round(App.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
-	            //this.text_ext("y "+Math.round(App.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
-	            //this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
-	            if (App.fps < 20) console.log("FPSLow: " + App.fps);
-
-	            var data = [[this.app.client.name], [App.code + " " + App.codefmk], [this.app.client.name], ["app.ext.input", "x " + Math.round(App.input.x * 100) / 100, "x " + Math.round(App.input.window.x * 100) / 100, "d " + App.input.pressed + "   p " + App.input.duration, "y " + Math.round(App.input.y * 100) / 100, "y " + Math.round(App.input.window.y * 100) / 100, App.ext.useragent.trident ? "Input: " + "Touch" : "Input: Mouse"], ["app.client", "discription", "", "", "width", this.app.client.setWidth, this.app.client.width, "height", this.app.client.setHeight, this.app.client.height, "fps", Math.round(this.app.client.fps) + "/" + this.app.client.targetfps + ":" + Math.round(this.app.client.fps * 1000) / 1000, "", "scale", this.app.client.scale, "", "delta", this.app.client.delta, "", "buffer", "double", ""], ["app.client.state", "", "[ " + this.app.client.update.state.name + " ] : " + this.app.client.Math.Data.Update() + "B", "", ""], ["app.client.data", "", "visuals ", App.ext.debug.strength !== "Lite" ? this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) : "?", "", "graphics ", App.ext.debug.strength !== "Lite" ? this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) : "?", "", "audio ", App.ext.debug.strength !== "Lite" ? this.app.client.Math.Data.kilobyteCount(this.app.client.audio) : "?", "", "state ", App.ext.debug.strength !== "Lite" ? this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current) : "?", "", "ext ", App.ext.debug.strength !== "Lite" ? this.app.client.Math.Data.kilobyteCount(App.ext) : "?", "", "Total ", App.ext.debug.strength !== "Lite" ? this.app.client.Math.Data.Total() : "?", ""]];
-	            for (var t = 0, tt = 0, p = 65, tr = 0, ii = 0; ii < data.length && (6 != ii || "Lite" != App.ext.debug.strength); ++ii) {
-	                for (var i = data[ii].length; 0 < i; --i) {
-	                    0 == i % 3 && (t = 0, tr = 15, tt++), this.text_ext(data[ii][data[ii].length - i], tr + 15 + p * t, 25 + 1.1 * this.point * tt, "#AAAAAA", 1, 1, 0), tr = 0, t++;
-	                }t = 0;
-	                tt++;
-	            };
-
-	            //this.text_ext("D: "+App.input.duration,210,55);
-	            //this.text_ext("P: "+App.input.pressed,160,55);
-	            //(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
-	            //this.text_ext("I: "+App.input.window.inside+" X: "+App.input.window.x+" Y: "+App.input.window.y,155,70);
-	            //this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
-	            //this.text_ext("Discription: "+this.app.client.discription,25,100,"#FFFFFF",1,1,0);
-	            //this.text_ext("Fps: "+Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
-	            //this.text_ext("Width: "+this.app.client.width,25,130,"#FFFFFF",1,1,0);
-	            //this.text_ext("Height: "+this.app.client.height,25,145,"#FFFFFF",1,1,0);
-	            //this.text_ext("setWidth: "+this.app.client.setWidth,110,130,"#FFFFFF",1,1,0);
-	            //this.text_ext("setHeight: "+this.app.client.setHeight,110,145,"#FFFFFF",1,1,0);
-	            //this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
-	            //this.text_ext("Delta: "+this.app.client.delta,25,175,"#FFFFFF",1,1,0);
-	            //this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
-	            //this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
-	            //this.text_ext("[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
-	            this.text_ext("Log: " + App.ext.debug.text, 35, this.app.client.setHeight - 25, this.point);
-	            if (App.ext.debug.strength == "Lite") return;
-
-	            try {
-	                //this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
-	            } catch (e) {}
-	            //this.text_ext("graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
-	            //this.text_ext("audio: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
-	            //this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
-	            //this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
-	            //this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
-	        },
-	        clean: function clean() {
-	            this.cleanAlpha ? this.opacity(1) : null;
-	            this.colour(this.stat.oldcol);
-	            this.stat.init(this.colour(), this.stat.oldcol);
-	        },
-
-	        colour: function colour(colour1, colour2) {
-
-	            if (colour1) {
-	                return colour1 && (this.buffer_context.fillStyle = colour1); //colour2&&(this.buffer_context.strokeStyle=colour2);
-	            } else return this.buffer_context.fillStyle;
-	        },
-	        opacity: function opacity(_opacity) {
-	            return _opacity != this.alpha && (this.alpha = _opacity, this.canvas_context.globalAlpha = this.buffer_context.globalAlpha = _opacity != this.lastopacity ? _opacity : 1);
-	        },
-	        font: function font(_font) {
-	            return this.canvas_context.font = this.buffer_context.font = this.fontT = _font;
-	            //return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
-	            //if (font)
-	            //	this.buffer_context.font = font;
-	            //return this.buffer_context.font;
-	        },
-	        shadow: function shadow(col, blur, x, y) {
-	            this.buffer_context.shadowColor = col;
-	            this.buffer_context.shadowBlur = blur;
-	            this.buffer_context.shadowOffsetX = x;
-	            this.buffer_context.shadowOffsetY = y;
-	        },
-	        shadow_clear: function shadow_clear() {
-	            this.buffer_context.shadowBlur = 0;
-	        },
-
-	        //
-	        //Visuals Text Functions
-	        //
-
-	        text_free: function text_free(string, x, y, colour) {
-	            this.colour(colour);
-	            this.font(Math.round(this.point * this.scale) + "px " + "sans-serif");
-	            this.buffer_context.fillText(string, x - this.text_width(string) / 2 - this.point, y - this.point / 2);
-	            this.clean();
-	        },
-	        text_ext: function text_ext(string, x, y, colour, s, a, c, style) {
-	            this.stat = this.chk(x, y, this.text_width(string), s, s, a, c, colour);
-	            var f = this.font();
-	            this.stat.h = this.stat.s * this.scale;
-	            this.font(this.stat.h + "em " + style);
-	            this.stat.h = this.point * this.stat.h;
-
-	            this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2));
-
-	            //(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
-	            this.font(f);
-	            this.clean();
-	        },
-	        text_button: function text_button(string, x, y, colour, s, a, c, style) {
-	            this.stat = this.chk(x, y, this.text_width(string), s, s, a, c, colour);
-	            var f = this.font();
-	            this.stat.h = this.stat.s * this.scale;
-	            this.font(this.stat.h + "em " + style);
-	            this.stat.h = this.point * this.stat.h;
-	            if (this.touch_within_stat(this.stat)) {
-	                this.opacity(this.stat.a - this.app.input.pressed * 0.2);
-	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
-	                //if (App.input.released)
-	                //	if (App.input.delay<1)
-	                //		loc(),App.input.delay = 1;
-	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
-	            } else {
-	                this.opacity(this.stat.a * 0.75);
-	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
-	            }
-	            this.font(f);
-	            this.clean();
-	        },
-	        text_button_bg: function text_button_bg(string, x, y, colour, s, a, c, loc, style) {
-	            this.stat = this.chk(x, y, this.text_width(string), s, s, a, c, colour);
-
-	            this.shadow("#AAAAAA", 1, 1, 1);
-
-	            var f = this.font();
-	            this.stat.h = this.stat.s * this.scale;
-	            this.font(this.stat.h + "em " + style);
-	            this.stat.h = this.point * this.stat.h;
-	            this.within = this.touch_within_stat(this.stat);
-	            if (this.within) {
-	                this.colour("#00A0F1");
-	                this.buffer_context.beginPath();
-	                this.stat.c ? this.buffer_context.rect(this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(this.stat.x - this.stat.w * 0.2, this.stat.y - this.stat.h * 0.2, this.stat.w * 1.1, this.stat.h * 1.1);
-	                this.buffer_context.fill();
-
-	                this.colour("#DDDDDD");
-	                //this.rect_ext(this.stat.x-this.stat.w/4,this.stat.y-this.stat.h/5,this.stat.w*1.1,this.stat.h*1.1,1,1,0,"#00A0F1");
-	                this.opacity(this.stat.a - App.input.pressed * 0.2);
-	                App.ext.cursor.set(App.ext.cursor.pointer, true);
-	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
-	                if (this.app.input.released) {
-	                    loc();
-	                    this.app.input.delay = 1;
-	                }
-
-	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
-	            } else {
-	                this.opacity(this.stat.a * 0.75);
-	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
-	            }
-	            this.font(f);
-	            this.clean();
-	        },
-	        text: function text(string, x, y, colour) {
-	            this.text_ext(string, x, y, colour, 1, 1, 0, "Calibri");
-	        },
-	        text_shadow: function text_shadow(blur, x, y, colour) {
-	            this.buffer_context.shadowColor = colour;
-	            this.buffer_context.shadowBlur = blur;
-	            this.buffer_context.shadowOffsetX = x;
-	            this.buffer_context.shadowOffsetY = y;
-	        },
-
-	        //
-	        //Visuals Rectangle Functions
-	        //
-
-	        rect: function rect(x, y, w, h, colour) {
-	            this.rect_ext(x, y, w, h, 1, 1, 0, colour);
-	        },
-	        rect_centered: function rect_centered(x, y, w, h, colour) {
-	            this.rect_ext(x, y, w, h, 1, 1, 1, colour);
-	        },
-	        rect_ext: function rect_ext(x, y, w, h, s, a, c, colour) {
-	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
-	            this.buffer_context.beginPath();
-	            this.stat.c ? this.buffer_context.rect(this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	            this.buffer_context.fill();
-
-	            this.clean();
-	        },
-	        rect_stroke: function rect_stroke(x, y, w, h, s, a, c, colour, l) {
-	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
-	            this.buffer_context.beginPath();
-	            this.stat.c ? this.buffer_context.rect(this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	            this.buffer_context.fillStyle = 'transparent';
-	            this.buffer_context.fill();
-	            this.buffer_context.lineWidth = l || 1;
-	            this.buffer_context.strokeStyle = colour;
-	            this.buffer_context.stroke();
-
-	            this.clean();
-	        },
-	        setting: true,
-	        rect_button: function rect_button(x, y, w, h, s, a, colour, loc, c) {
-	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
-	            var t = false;
-	            if (this.touch_within(this.stat.x, this.stat.y, this.stat.w, this.stat.h, this.stat.c)) {
-	                t = true;
-	                App.ext.cursor.set(App.ext.cursor.pointer, true);
-	                if (App.input.released) if (App.input.delay < 1) loc(), App.input.delay = 1;
-	            }
-	            if (this.setting) this.rect_ext(x, y, w, h, s, a, c, colour);
-	            //else
-	            var ww = 1;
-	            if (t) this.rect_ext(x - ww, y - ww, w + ww * 2, h + ww * 2, s, a, c, colour);
-	        },
-	        rect_rotate: function rect_rotate(x, y, w, h, colour, s, a, angle) {
-	            this.stat = this.chk(x, y, w, h, s, a, 1, colour);
-	            this.buffer_context.translate(this.stat.x, this.stat.y);
-	            this.buffer_context.rotate(angle * 0.0174532925);
-	            this.stat.c ? this.buffer_context.rect(0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
-	            this.buffer_context.rotate(-angle * 0.0174532925);
-	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
-	            this.clean();
-	        },
-	        rect_gradient: function rect_gradient(x, y, w, h, s, a, c, colour, colour2, angle) {
-	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
-	            this.buffer_context.translate(this.stat.x, this.stat.y);
-	            this.buffer_context.rotate(angle * 0.0174532925);
-
-	            if (!this.stat.w) return;
-	            if (!this.stat.h) return;
-	            if (!this.stat.x) return;
-	            if (!this.stat.y) return;
-	            this.stat.c ? this.grd = this.buffer_context.createLinearGradient(Math.floor(this.stat.w / 2), 0, Math.floor(this.stat.w / 2), Math.floor(this.stat.h / 2)) : this.grd = this.buffer_context.createLinearGradient(0, 0, this.stat.w, this.stat.h);
-	            this.buffer_context.beginPath();
-	            this.stat.c ? this.buffer_context.rect(0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
-	            this.grd.addColorStop(0, colour);
-	            this.grd.addColorStop(1, colour2);
-	            this.buffer_context.fillStyle = this.grd;
-	            this.buffer_context.fill();
-	            this.buffer_context.rotate(-angle * 0.0174532925);
-	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
-	            this.clean();
-	        },
-	        rect_free: function rect_free(x, y, w, h, s, a, c, colour) {
-	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
-	            this.buffer_context.beginPath();
-	            c ? this.buffer_context.rect(x - w / 2, y - h / 2, w, h) : this.buffer_context.rect(x, y, w, h);
-	            this.buffer_context.fill();
-	            this.clean();
-	        },
-	        screen_fill: function screen_fill(a, colour) {
-	            this.stat = this.chk(0, 0, 1, 1, 1, a, 1, colour);
-	            this.buffer_context.beginPath();
-	            this.buffer_context.rect(0, 0, window.innerWidth, window.innerHeight);
-	            this.buffer_context.fill();
-	            this.clean();
-	        },
-	        image_count: 0,
-	        image_element: function image_element(image) {
-	            this.elm = document.createElement("image");
-	            this.elm.draw = function (image, x, y, s, loc, xscale, yscale, a, c) {
-	                var s = this.style;
-	                this.stat = App.client.visuals.chk(x, y, image.width, image.height, s, a, c);
-	                s.position = "fixed";
-	                s.left = this.stat.x + "px";
-	                s.top = this.stat.y + "px";
-	                s.width = this.stat.w + "px";
-	                s.height = this.stat.h + "px";
-	                s.opacity = this.stat.a;
-	                s.onclick = this.loc;
-	                this.src = image;
-	            };
-	            document.body.appendChild(this.elm);
-	            this.elm.src = image.src;
-	            return this.elm;
-	            //(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-	        },
-	        image_replacecol: function image_replacecol(image, x, y, s, a, c, colour) {
-
-	            this.stat = this.chk(x, y, image.width, image.height, s, a, c);
-
-	            var is = new Image();
-	            is.src = image;
-
-	            function getBase64Image(img) {
-	                // Create an empty canvas element
-	                var canvas = document.createElement("canvas");
-	                canvas.width = img.width;
-	                canvas.height = img.height;
-
-	                // Copy the image contents to the canvas
-	                var ctx = canvas.getContext("2d");
-	                ctx.drawImage(img, 0, 0);
-
-	                // Get the data-URL formatted image
-	                // Firefox supports PNG and JPEG. You could check img.src to
-	                // guess the original format, but be aware the using "image/jpg"
-	                // will re-encode the image.
-	                //var dataURL = canvas.toDataURL("image/png");
-	                var dataURL = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-	                return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-	            }
-	            var imageData = getBase64Image(image);
-	            is.src = getBase64Image(is);
-	            image = is;
-	            var pixel = imageData.data;
-
-	            var r = 0,
-	                g = 1,
-	                b = 2,
-	                a = 3;
-	            for (var p = 0; p < pixel.length; p += 4) {
-	                if (pixel[p + r] == 0 && pixel[p + g] == 0 && pixel[p + b] == 0) // if white then change alpha to 0
-	                    {
-	                        pixel[p + a] = 255;
-	                    }
-	            }
-
-	            ctx.putImageData(imageData, 0, 0);
-	            image.src = c.toDataURL('image/png');
-
-	            this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	        },
-	        image_ext: function image_ext(image, x, y, s, a, c) {
-	            this.stat = this.chk(x, y, image.width, image.height, s, a, c);
-	            this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	        },
-	        image_ext2: function image_ext2(image, x, y, sx, sy, a, c) {
-	            this.stat = this.chk(x, y, image.width, image.height, sx, a, c);
-	            this.stat2 = this.chk(x, y, image.width, image.height, sy, a, c);
-	            this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w * this.stat.s, this.stat.h * this.stat2.s) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w * this.stat.s, this.stat.h * this.stat2.s);
-	        },
-	        image_centered: function image_centered(image, x, y, a) {
-	            this.image_ext(image, x, y, 1, a, true);
-	        },
-	        image: function image(_image, x, y) {
-	            this.image_ext(_image, x, y, 1, 1, false);
-	        },
-	        image_scaled: function image_scaled(image, x, y, s) {
-	            this.image_ext(image, x, y, s, 1, false);
-	        },
-	        image_stat: function image_stat(image, x, y, s, a, c, xx, yy, w, h) {
-	            this.stat = this.chk(x, y, w, h, s, a, c);
-	            return this.stat;
-	        },
-	        image_flip: function image_flip(x, y) {
-
-	            this.stat = this.chk(x, y, 1, 1, 1, 1, 1);
-	            this.buffer_context.save();
-	            this.buffer_context.scale(-1, 1);
-	            this.buffer_context.translate(-this.stat.x * 2, 0);
-	        },
-	        image_restore: function image_restore(x, y) {
-
-	            //this.buffer_context.restore();
-	        },
-	        image_part: function image_part(image, x, y, s, a, c, xx, yy, w, h) {
-	            this.stat = this.chk(x, y, w, h, s, a, c);
-
-	            //var scale = (1.1*this.stat.s)*this.app.getScale();
-
-	            this.stat.c ? this.buffer_context.drawImage(image, xx, yy, w, h, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, xx, yy, w, h, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	        },
-	        image_part_rotate: function image_part_rotate(image, x, y, s, a, c, xx, yy, w, h, angle) {
-	            this.stat = this.chk(x, y, w, h, s, a, c);
-
-	            //var scale = (1.1*this.stat.s)*this.app.getScale();
-	            this.buffer_context.translate(this.stat.x, this.stat.y);
-	            this.buffer_context.rotate(angle * 0.0174532925);
-	            this.stat.c ? this.buffer_context.drawImage(image, xx, yy, w, h, 0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, xx, yy, w, h, 0, 0, this.stat.w, this.stat.h);
-	            this.buffer_context.rotate(-angle * 0.0174532925);
-	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
-	        },
-	        image_rotate: function image_rotate(image, x, y, s, angle, a, xoff, yoff) {
-	            this.stat = this.chk(x, y, image.width, image.height, s, a, true);
-	            this.buffer_context.translate(this.stat.x, this.stat.y);
-	            this.buffer_context.rotate(angle * 0.0174532925);
-	            this.stat.c ? this.buffer_context.drawImage(image, 0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, 0, 0, this.stat.w, this.stat.h);
-	            this.buffer_context.rotate(-angle * 0.0174532925);
-	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
-	        },
-
-	        texture: function texture(_texture, xx, yy, w, h, yoff, xoff, xonly, xo, yo, s) {
-
-	            var yoff = yoff || 0;
-	            var yo = yo || 0;
-	            var xo = xo || 0;
-	            var y = 0;
-	            var img = _texture;
-	            var width = w;
-	            var height = h;
-
-	            var s = s;
-
-	            xo *= s;
-	            yo *= s;
-
-	            var bh = img.height;
-	            var img_width = img.width;
-	            var img_height = img.height;
-
-	            var img_width_scaled = +img_width * s;
-	            var img_height_scaled = +img_height * s;
-
-	            var offy = yy;
-	            var offx = xx;
-
-	            var by = Math.round((offy / s + height + (-yoff / s - height)) % img_height_scaled - img_height_scaled);
-	            var by_first = by;
-
-	            var bx = -width * s / 2 + (offx / s + width * s) % img_width_scaled - img_width_scaled;
-
-	            var span_width = (width + img_width) * s + img_width_scaled;
-	            var span_height = (height + bh) * s + img_height_scaled;
-
-	            if (xonly) span_width = 0;
-
-	            if (xonly) {
-	                var x = bx - width * s / 2 - s * bx / img_width;
-
-	                for (by = by_first; by < span_height; by += img_height_scaled) {
-	                    var y = -by + height * s + s * by / bh;
-
-	                    if (!xonly) this.image_ext(img, xo + x, yo + y, s, 1, true);
-	                    if (xonly) this.image_scaled(img, xo + x, yo + y, s, 1, true);
-	                }
-	            } else for (bx; bx < span_width; bx += img_width_scaled) {
-	                var x = bx - width * s / 2 - 1 * bx / img_width;
-
-	                for (by = by_first; by < span_height; by += img_height_scaled) {
-	                    var y = -by + height * s + 1 * by / bh;
-
-	                    if (!xonly) this.image_ext(img, xo + x, yo + y, s, 1, true);
-	                    if (xonly) this.image_scaled(img, xo + x, yo + y, s, 1, true);
-	                }
-	            }
-	        },
-
-	        setBleed: function setBleed(threshold) {
-	            this.bleed = threshold;
-	        },
-
-	        rotate_at: function rotate_at(angle, x, y) {
-	            if ((typeof x === "undefined" ? "undefined" : _typeof(x)) === "object") var x = x.x,
-	                y = y.y;else var x = x,
-	                y = y;
-
-	            this.stat = this.chk(x, y, 1, 1, 1, 1, 1);
-	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
-
-	            this.buffer_context.rotate(angle * 0.0174532925);
-	        },
-
-	        rotate: function rotate(angle) {
-
-	            return this.buffer_context.rotate(angle * 0.0174532925);
-	        },
-
-	        translate: function translate(x, y) {
-
-	            if ((typeof x === "undefined" ? "undefined" : _typeof(x)) === "object") var x = x.x,
-	                y = y.y;else var x = x,
-	                y = y;
-
-	            this.stat = this.chk(x, y, 1, 1, 1, 1, 1);
-	            return this.buffer_context.translate(-this.stat.x, -this.stat.y);
-	        },
-
-	        button: function button(img, x, y, f) {
-	            this.image_button(img, x, y, 1, f, true, 1, 1, 1, 1);
-	        },
-	        button_scaled: function button_scaled(img, x, y, s, f) {
-	            this.image_button(img, x, y, s, f, true, 1, 1, 1, 1);
-	        },
-	        buttonH: function buttonH(img, x, y, s, f) {
-	            this.image_buttonH(img, x, y, s, f, true, 1, 1, 1, 1);
-	        },
-	        image_button: function image_button(image, x, y, s, loc, highlight, xscale, yscale, a, centered) {
-	            this.stat = this.chk(x, y, image.width * s * xscale, image.height * s * yscale, s, a, centered);
-	            var s = this.stat2 = this.chk(x, y, image.width * s * xscale * 0.9, image.height * s * yscale * 0.9, s, a, centered);
-	            var w = false;
-	            if (this.touch_within_stat(s)) {
-	                w = true;
-	                if (this.highlight) this.opacity(this.stat.a - this.app.input.pressed * 0.2);
-	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
-	                if (this.app.input.released) {
-	                    loc();
-	                    this.app.input.delay = 1;
-	                }
-	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	            } else {
-	                if (this.highlight) this.opacity(this.stat.a * 0.75);
-	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	            }
-	            return w;
-	        },
-	        image_buttonH: function image_buttonH(image, x, y, s, loc, highlight, xscale, yscale, a, centered) {
-	            this.stat = this.chk(x, y, image.width * s * xscale, image.height * s * yscale, s, a, centered);
-	            var s = this.stat2 = this.chk(x, y, image.width * s * xscale * 0.9, image.height * s * yscale * 0.9, s, a, centered);
-	            var w = false;
-	            if (this.touch_within_stat(s, true)) {
-	                w = true;
-	                if (this.highlight) this.opacity(this.stat.a - this.app.input.pressed * 0.2);
-	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
-	                if (this.app.input.pressed) loc(), this.app.input.delay = 1;
-	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	            } else {
-	                if (this.highlight) this.opacity(this.stat.a * 0.75);
-	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
-	            }
-	            return w;
-	        },
-	        touch_within: function touch_within(x, y, w, h, c) {
-	            var doc = document.documentElement;
-	            this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	            this.top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-	            y = y - this.top;
-	            x = x - this.left;
-	            return c ? App.input.x > x - w / 2 && App.input.x < x + w / 2 && App.input.y > y - h / 2 && App.input.y < y + h / 2 ? true : false : App.input.x > x && App.input.x < x + w && App.input.y > y && App.input.y < y + h ? true : false;
-	        },
-	        touch_within2: function touch_within2(x, y, w, h, c) {
-	            var stat = this.stat = this.chk(x, y, w, h, 1, 1, c);
-	            var doc = document.documentElement;
-	            this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	            this.top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-	            stat.y = stat.y - this.top;
-	            stat.x = stat.x - this.left;
-	            return stat.c ? this.app.input.x > stat.x - stat.w / 2 && this.app.input.x < stat.x + stat.w / 2 && this.app.input.y > stat.y - stat.h / 2 && this.app.input.y < stat.y + stat.h / 2 ? true : false : this.app.input.x > stat.x && this.app.input.x < stat.x + stat.w && this.app.input.y > stat.y && this.app.input.y < stat.y + stat.h ? true : false;
-	        },
-	        touch_within_stat: function touch_within_stat(stat, r) {
-	            var doc = document.documentElement;
-	            var w = window;
-	            this.left = (w.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	            this.top = (w.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-	            stat.y = stat.y - this.top;
-	            stat.x = stat.x - this.left;
-	            var x = this.app.input.x;
-	            var y = this.app.input.y;
-
-	            if (!r) {
-	                x = this.app.input.touched.last.x;
-	                y = this.app.input.touched.last.y;
-	            }
-	            return stat.c ? x > stat.x - stat.w / 2 && x < stat.x + stat.w / 2 && y > stat.y - stat.h / 2 && y < stat.y + stat.h / 2 ? true : false : y > stat.x && x < stat.x + stat.w && y > stat.y && y < stat.y + stat.h ? true : false;
-	        },
-
-	        line2: function line2(vec, vec2, col, a, free) {
-
-	            var x = vec.x;
-	            var y = vec.y;
-	            var x2 = vec2.x;
-	            var y2 = vec2.y;
-	            this.stat = this.chk(x, y, x2, y2, 1, a, true);
-	            this.stat2 = this.chk(x2, y2, x2, y2, 1, a, true);
-	            this.buffer_context.beginPath();
-	            this.buffer_context.moveTo(this.stat.x, this.stat.y);
-	            this.buffer_context.lineTo(this.stat2.x, this.stat2.y);
-	            this.buffer_context.strokeStyle = col;
-	            this.buffer_context.stroke();
-	        },
-
-	        line: function line(x, y, x2, y2, col, a) {
-	            this.stat = this.chk(x, y, x2, y2, 1, a, true);
-	            this.stat2 = this.chk(x2, y2, x2, y2, 1, a, true);
-	            this.buffer_context.beginPath();
-	            this.buffer_context.moveTo(this.stat.x, this.stat.y);
-	            this.buffer_context.lineTo(this.stat2.x, this.stat2.y);
-	            this.buffer_context.strokeStyle = col;
-	            this.buffer_context.stroke();
-	            this.clean();
-	        },
-	        lines: function lines(x, y, x2, y2, col, a, s) {
-	            this.stat = this.chk(x, y, x2, y2, 1, a, true);
-	            this.stat2 = this.chk(x2, y2, x2, y2, 1, a, true);
-	            this.buffer_context.moveTo(this.stat.x * s, this.stat.y * s);
-	            this.opacity(a);
-	            this.buffer_context.strokeStyle = col;
-	            this.buffer_context.lineTo(this.stat2.x * s, this.stat2.y * s);
-	        },
-	        lineend: function lineend() {
-	            this.buffer_context.stroke();
-	        },
-	        linestart: function linestart() {
-	            this.buffer_context.beginPath();
-	        },
-	        triangle: function triangle(x0, y0, x1, y1, x2, y2, col, col2, width) {
-	            //this.buffer_context.fillStyle = col;
-	            //this.buffer_context.strokeStyle = col2;
-	            this.colour(col, col2);
-	            this.buffer_context.lineWidth = width;
-	            this.buffer_context.moveTo(x0, y0); // give the (x,y) coordinates
-	            this.buffer_context.lineTo(x1, y1);
-	            this.buffer_context.lineTo(x2, y2);
-	            this.buffer_context.lineTo(x0, y0);
-	            this.buffer_context.fill();
-	            this.buffer_context.stroke();
-	            this.buffer_context.closePath();
-	            this.clean();
-	        },
-	        quadraticCurve: function quadraticCurve(x, y, x2, y2, a, col) {
-	            var t = this.buffer_context.strokeStyle;
-	            var tF = this.buffer_context.fillStyle;
-	            this.stat = this.chk(x, y, 1, 1, 1, a, true, col);
-	            this.stat2 = this.chk(x2, y2, 1, 1, 1, a, true, col);
-	            this.buffer_context.beginPath();
-	            this.buffer_context.quadraticCurveTo(this.stat.x, this.stat.y, this.stat2.x, this.stat2.y);
-	            this.buffer_context.strokeStyle = col;
-	            this.buffer_context.stroke();
-	            this.buffer_context.fill();
-	            this.stat = this.chk(x, y, 1, 1, 1, a, true, t);
-	            this.stat2 = this.chk(x2, y2, 1, 1, 1, a, true, t);
-
-	            this.buffer_context.strokeStyle = t;
-	            this.buffer_context.fillStyle = tF;
-	        },
-
-	        /* visuals.paths */
-
-	        paths: {
-
-	            //list of paths
-	            _initalized: false,
-	            _count: false
-
-	            //Reinitalize the objects functions,
-	            //Required for use
-
-	            , init: function init(visuals) {
-
-	                this.list = [];
-
-	                this.visuals = visuals;
-
-	                this._initalized = true;
-
-	                this._count = 0;
-
-	                return this;
-	            },
-
-	            list: [],
-
-	            render: function render(path) {
-
-	                var list = path.list;
-	                var length = path.list.length;
-	                var i = 0;
-
-	                for (i = 0; i <= length - 1; i++) {
-	                    this.visuals.rect(list[i].x, list[i].y, 1, 1, "#FFFFFF");
-	                }return true;
-	            },
-
-	            addPath: function addPath(id, tempX, tempY) {
-	                var path = { name: id, x: tempX, y: tempY };
-	                path.addPoint = this.addPoint;
-	                path.list = [];
-	                path.p = this;
-	                //console.log(path);
-
-	                var t = this.list.push(path);
-	                t.p = this;
-	                return this.list[this._count++];
-	            },
-
-	            addPoint: function addPoint(tempX, tempY) {
-
-	                this.list.push({ x: this.x + tempX, y: this.y + tempY });
-	            }
-
-	        }
-
-	        /*
-	              circle now allows passing vectors
-	              Test: argument based functions
-	                Method1:
-	                    if based on first argument
-	                        Method2 (unused):
-	                            inherit _circle function and pass accordingly
-	          */
-
-	        , circle: function circle(XVec, YR, RC, CA, A) {
-
-	            var x = undefined,
-	                y = undefined,
-	                r = undefined,
-	                col = undefined,
-	                a = undefined;
-
-	            x = XVec;
-	            y = YR;
-	            r = RC;
-	            col = CA;
-	            a = A;
-
-	            if ((typeof x === "undefined" ? "undefined" : _typeof(x)) === 'object') {
-
-	                x = XVec.x;
-	                y = XVec.y;
-	                r = YR;
-	                col = RC;
-	                a = CA;
-	            }
-
-	            this._circle(x, y, r, col, a);
-	        },
-
-	        _circle: function _circle(x, y, r, col, a) {
-	            this.stat = this.chk(x, y, 1, 1, r, a, true, col);
-	            this.buffer_context.beginPath();
-	            this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s * this.scale, 0, 2 * Math.PI, false);
-	            this.buffer_context.fillStyle = this.stat.colour;
-	            this.buffer_context.fill();
-	            this.clean();
-	        },
-	        circle_free: function circle_free(x, y, r, col, a) {
-	            this.stat = this.chk(x, y, r, r, r, a, 1, col);
-	            this.buffer_context.beginPath();
-	            this.buffer_context.arc(x, y, r * this.scale, 0, 2 * Math.PI, false);
-	            this.buffer_context.fillStyle = this.stat.col;
-	            this.buffer_context.fill();
-	            this.clean();
-	        },
-	        text_width: function text_width(string) {
-	            return this.buffer_context.measureText(string).width; // Not WOrking
-	        }
-	    },
-	    constructor: function constructor(app) {
-	        return {
-	            app: { value: app },
-	            init: { value: function value() {
-
-	                    window.utils.requestAnimationFrame(name, 0, 0);
-
-	                    this.scale = this.app.scale;
-	                    this.canvas = this.app.canvas.getCanvas();
-	                    this.buffer = this.app.canvas.getBuffer();
-	                    this.canvas_context = this.canvas.getContext("2d");
-	                    if (this.app.options.canvas.buffer) this.buffer_context = this.buffer.getContext("2d");else this.buffer_context = this.canvas.getContext("2d");
-	                }
-	            }
-	        };
-	    }
-	};
-
-	exports.default = visuals;
-
-/***/ },
-/* 206 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	exports.default = {
-	    overridescroll: false,
-	    drag: 0,
-	    targetfps: 60,
-	    mute: false,
-	    paths: {
-	        data: "data/",
-	        images: "images/",
-	        url: ""
-	    },
-
-	    canvas: {
-	        override: false, //Toggle the use of options.canvas
-	        name: 'canvas', //Use canvas.name
-	        buffername: 'buffer', //Use canvas.buffer
-	        buffer: false, //Toggle the use of double-buffering
-	        background: '#000000', //Assign canvas element background colour
-	        position: { //Assign canvas element position properties
-	            //position:'absolute',
-	            //top:0,
-	            //left:window.innerWidth/2,
-	            //center:true,
-	            //z:1
-	            position: 'absolute',
-	            top: "",
-	            left: window.innerWidth * 2,
-	            //left:"",
-	            center: false,
-	            z: 1
-	        },
-	        size: { //Assign canvas size properties
-	            width: window.innerWidth,
-	            height: window.innerHeight
-	        }
-	    },
-
-	    msFlags: {
-
-	        msZoom: false
-
-	    },
-
-	    flags: { //Feature Flags
-	        canvas: true,
-	        mstouch: true,
-	        seamless: true,
-	        tight: true,
-	        touchprevent: true
-	    },
-
-	    override: { //Override Functions
-	        keyboard: true,
-	        mouse: true,
-	        MSHoldVisual: false,
-	        SelectStart: false,
-	        ContextMenu: true,
-	        Drag: true
-	    },
-
-	    //Return Options Value
-	    get: function get(attr) {
-
-	        //If Attribute
-	        if (attr) {
-
-	            //Get list of apps
-	            var list = SpiceJS.controller.list();
-
-	            //list is object
-	            if ((typeof list === "undefined" ? "undefined" : _typeof(list)) == "object") {
-	                //return window.apps.option.
-	                for (var attrname in this) {
-	                    if (attrname == attr) return eval("list.options." + attrname);
-	                }
-	            } else {
-	                for (var i = window.apps.length - 1; i >= 0; i--) {
-	                    for (var attrname in this) {
-	                        if (attrname == attr) {
-	                            var l = [];
-	                            l.push(eval("list[" + i + "].options." + attrname));
-	                        }
-	                    }
-	                }return l;
-	            }
-
-	            return null;
-	        } else return this;
-	    },
-
-	    set: function set(options) {
-
-	        for (var attrname in options) {
-	            this[attrname] = options[attrname];
-	        };
-
-	        return this;
-	    }
-
-	};
-
-/***/ },
-/* 207 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-	exports.default = {
-
-	        prototype: {
-
-	                //Cache canvas vars
-	                canvas: {},
-	                buffer: {},
-	                head: document.getElementsByTagName('head')[0],
-	                rendering_style: document.createElement('style'),
-	                canvasList: document.getElementsByTagName('canvas'),
-	                doc: document,
-
-	                //Gets
-
-	                getCanvas: function getCanvas() {
-	                        return this.canvas;
-	                },
-
-	                getBuffer: function getBuffer() {
-	                        return this.buffer;
-	                },
-
-	                setCanvas: function setCanvas(c) {
-	                        this.canvas = c;
-	                },
-
-	                setBuffer: function setBuffer(b) {
-	                        this.buffer = b;
-	                },
-
-	                setBackground: function setBackground(value) {
-
-	                        if (this.app.options.canvas.buffer) this.buffer.style.background = value;
-
-	                        this.app.options.canvas.background = this.canvas.style.background = value;
-	                },
-
-	                getBackground: function getBackground() {
-
-	                        return this.buffer.style.background;
-	                },
-
-	                createCanvas: function createCanvas() {
-
-	                        var c = this.doc.createElement("canvas");
-
-	                        c.id = this.app.options.canvas.name;
-
-	                        this.doc.body.appendChild(c);
-
-	                        return this.doc.getElementById(this.app.options.canvas.name);
-	                },
-
-	                createBuffer: function createBuffer() {
-
-	                        var c = this.doc.createElement("canvas");
-
-	                        c.id = this.app.options.canvas.buffername;
-
-	                        this.doc.body.appendChild(c);
-
-	                        return this.doc.getElementById(this.app.options.canvas.buffername);
-	                },
-
-	                //Style canvas
-
-	                styleCanvas: function styleCanvas() {
-
-	                        this.getCanvas().style.position = this.app.options.canvas.position.position;
-
-	                        this.getCanvas().style.zIndex = this.app.options.canvas.position.z;
-
-	                        if (this.app.options.canvas.buffer) {
-	                                this.getBuffer().style.position = this.app.options.canvas.position.position;
-
-	                                this.getBuffer().style.zIndex = this.app.options.canvas.position.z - 1;
-	                        }
-
-	                        if (this.app.options.canvas.override) {
-
-	                                this.getCanvas().style.left = this.app.options.canvas.position.left + "px";
-
-	                                this.getCanvas().style.top = this.app.options.canvas.position.top + "px";
-
-	                                if (this.app.options.canvas.buffer) {
-	                                        this.getBuffer().style.left = this.app.options.canvas.position.left + "px";
-
-	                                        this.getBuffer().style.top = this.app.options.canvas.position.top + "px";
-	                                }
-	                        }
-	                }
-
-	        },
-	        constructor: function constructor(app) {
-	                return {
-	                        app: { value: app },
-	                        init: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                                        var getcanvas = document.getElementById(this.app.options.canvas.name);
-	                                        if (getcanvas) {
-	                                                this.setCanvas(getcanvas);
-	                                                if (app.options.canvas.buffer) {
-	                                                        var getbuffer = document.getElementById(this.app.options.canvas.buffername);
-	                                                        if (getbuffer) this.setBuffer(getbuffer);else {
-	                                                                this.createBuffer();
-	                                                        }
-	                                                }
-	                                        } else {
-	                                                this.setCanvas(this.createCanvas());
-	                                                if (this.app.options.canvas.buffer) this.setBuffer(this.createBuffer());
-	                                        }
-	                                        this.styleCanvas();
-	                                        this.rendering_style.innerHTML = this.rendering_style.innerText = '@-ms-viewport {width:100%;height:100%;} #Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
-	                                        this.head.appendChild(this.rendering_style);
-	                                }
-	                        }
-	                };
-	        }
-	};
-
-/***/ },
-/* 208 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = {
-	    //	//To ensure your data is filled, use a callback return your response data.
-	    //	var facebook = function(){ return App.user.pull();};
-	    //
-	    //	//Your facebook ID, callback function(){}
-	    //	App.user.fbconnect(id, facebook)
-	    name: "",
-	    id: "",
-	    locale: "",
-	    gender: "",
-	    updated_time: "",
-	    timezone: "",
-	    quotes: "",
-	    response: {},
-
-	    //returns the response object
-	    get: function get() {
-	        return this.response;
-	    },
-
-	    //facebook connection
-	    fbconnect: function con(appid, callback) {
-	        window.fbAsyncInit = function () {
-	            FB.init({
-	                appId: appid,
-	                status: true, // check login status
-	                cookie: true, // enable cookies to allow the server to access the session
-	                xfbml: true // parse XFBML
-	            });
-	            FB.login(function () {
-	                FB.api('/me/feed', 'post', { message: 'Hello, world!' });
-	            }, { scope: 'publish_actions' });
-	        };
-
-	        // Load the SDK asynchronously
-	        (function (d) {
-	            var js,
-	                id = 'facebook-jssdk',
-	                ref = d.getElementsByTagName('script')[0];
-	            if (d.getElementById(id)) {
-	                return;
-	            }
-	            js = d.createElement('script');js.id = id;js.async = true;
-	            js.src = "//connect.facebook.net/en_US/all.js";
-	            ref.parentNode.insertBefore(js, ref);
-	        })(document);
-
-	        // Here we run a very simple Flappy of the Graph API after login is successful.
-	        // This testAPI() function is only called in those cases.
-
-	        /*
-	        function testAPI() {
-	        console.log('Welcome!  Fetching your information.... ');
-	            FB.api('/me', function(response) {
-	              App.user.facebook(response);
-	              callback(response);
-	            log('Good to see you, ' + response.name + '.');
-	          });
-	        }
-	            */
-	    },
-
-	    //facebook callback
-	    facebook: function facebook(response) {
-	        this.response = response;
-	        this.name = this.response.name;
-	        this.id = this.response.id;
-	        this.locale = this.response.locale;
-	        this.gender = this.response.gender;
-	        this.updated_time = this.response.updated_time;
-	        this.timezone = this.response.timezone;
-	        this.quotes = this.response.quotes;
-	    }
-
-	};
-
-/***/ },
-/* 209 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	                value: true
-	});
-
-	var _cookies = __webpack_require__(201);
-
-	var _cookies2 = _interopRequireDefault(_cookies);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-
-	                constructor: function constructor(app) {
-
-	                                return {
-
-	                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                                                init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
-
-	                                                                                //Set app/document title
-
-	                                                                                this.app.setTitle(document.title + "." + this.app.main.name);
-
-	                                                                                //Construct App.ext components
-
-	                                                                                this.app.Construct(this.useragent).init();
-
-	                                                                                this.app.Construct(this.metatag).init();
-
-	                                                                                this.app.Construct(this.cookies).init();
-
-	                                                                                this.app.Construct(this.cursor).init();
-
-	                                                                                this.app.Construct(this.connect).init();
-	                                                                }
-	                                                }
-	                                };
-	                },
-	                prototype: {
-
-	                                //UserAgent Information
-	                                //	Assists in detecting the platform that you are running on.
-
-	                                useragent: {
-
-	                                                //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
-
-	                                                prototype: {
-
-	                                                                //Cached Navigator.userAgent
-	                                                                agent: navigator.userAgent,
-
-	                                                                //
-	                                                                mouse: false,
-	                                                                touch: false,
-	                                                                keyboard: false,
-	                                                                windows: false,
-	                                                                chrome: false,
-	                                                                safari: false,
-	                                                                iemobile: false,
-	                                                                nokia: false,
-	                                                                ie: false,
-	                                                                ios: false,
-	                                                                blackberry: false,
-	                                                                playbook: false,
-	                                                                bb10: false,
-	                                                                mobile: false,
-
-	                                                                //Match user agent for IE
-	                                                                IE: function IE() {
-
-	                                                                                return this.agent.match(/Trident/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for iOS
-	                                                                iOS: function iOS() {
-
-	                                                                                return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for Nokia
-	                                                                Nokia: function Nokia() {
-
-	                                                                                return this.agent.match(/Nokia/i) ? true : false;
-	                                                                },
-
-	                                                                //Determine mobile or windows based on useragent
-	                                                                Mobile: function Mobile() {
-
-	                                                                                return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-	                                                                },
-
-	                                                                //Match user agent for Chrome
-	                                                                Chrome: function Chrome() {
-
-	                                                                                return this.chrome = this.agent.match(/Chrome/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for Safari
-	                                                                Safari: function Safari() {
-
-	                                                                                return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
-	                                                                },
-
-	                                                                Desktop: function Desktop() {
-
-	                                                                                return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
-	                                                                },
-
-	                                                                //Match user agent for Android
-	                                                                Android: function Android() {
-	                                                                                return this.agent.match(/Android/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for IEMobile
-	                                                                IEMobile: function IEMobile() {
-
-	                                                                                var trident = this.agent.match(/IEMobile/i);
-	                                                                                var windowsphone = this.agent.match(/Windows Phone/i);
-	                                                                                var touch = this.agent.match(/touch/i);
-
-	                                                                                return trident || windowsphone || touch ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for Blackberry
-	                                                                BlackBerry: function BlackBerry() {
-	                                                                                this.playbook = this.agent.match(/PlayBook/i) || false;
-	                                                                                this.bb10 = this.agent.match(/BB10/i) || false;
-	                                                                                return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
-	                                                                }
-
-	                                                },
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed useragent object
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                                                                                init: { writable: false, configurable: false, enumerable: false, value: function value() {
-
-	                                                                                                                //Query Browser
-	                                                                                                                this.chrome = this.Chrome();
-	                                                                                                                this.safari = this.Safari();
-	                                                                                                                this.iemobile = this.IEMobile();
-	                                                                                                                this.nokia = this.Nokia();
-	                                                                                                                this.ie = this.trident = this.IE();
-
-	                                                                                                                this.blackberry = this.BlackBerry();
-	                                                                                                                this.ios = this.iOS();
-	                                                                                                                this.android = this.Android();
-
-	                                                                                                                this.touch = this.Mobile();
-	                                                                                                                this.mouse = !this.Mobile() || this.BlackBerry();
-
-	                                                                                                                this.keyboard = this.Desktop() || this.BlackBerry();
-
-	                                                                                                                this.Mobile();
-	                                                                                                                this.Desktop();
-
-	                                                                                                                this.app.ext.useragent = this;
-	                                                                                                                //return this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                }
-
-	                                },
-
-	                                //Cookie Storage
-	                                //	Polyfill provided by ScottHamper
-	                                //	https://github.com/ScottHamper/Cookies#api-reference
-
-	                                cookies: _cookies2.default,
-
-	                                //MetaTag Handler
-	                                //	Assists in dynamically applying metatags.
-	                                //	Automatically applies Microsoft, Apple and common metatags.
-
-	                                metatag: {
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed metatag object.
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                                                                                init: { value: function value() {
-
-	                                                                                                                //execute polyfill
-	                                                                                                                this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
-	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
-	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
-	                                                                                                                this.metaAppend(this.metaTag("cursor-event-mode", "native"));
-	                                                                                                                this.metaAppend(this.metaTag("touch-event-mode", "native"));
-	                                                                                                                this.metaAppend(this.metaTag("HandheldFriendly", "True"));
-
-	                                                                                                                //if (this.devicewidth)
-	                                                                                                                this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
-	                                                                                                                //if (this.devicedpi)
-	                                                                                                                this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
-
-	                                                                                                                this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
-
-	                                                                                                                this.app.ext.metatag = this;
-
-	                                                                                                                //Return this
-	                                                                                                                return this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                },
-
-	                                                prototype: {
-
-	                                                                //Default injected tags
-	                                                                ms_taphighlight: "no",
-	                                                                apple_webapp: "yes",
-	                                                                apple_statusbar: "black",
-	                                                                devicedpi: true,
-	                                                                devicewidth: true,
-
-	                                                                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
-	                                                                metaFavicon: function metaFavicon(img) {
-
-	                                                                                this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
-	                                                                },
-
-	                                                                //Construct a standard metaLink element
-	                                                                metaLink: function metaLink(href, rel, type) {
-
-	                                                                                //Create link element
-	                                                                                this.link = document.createElement('link');
-
-	                                                                                //Assign element values
-	                                                                                this.link.href = href;
-	                                                                                this.link.rel = rel;
-	                                                                                this.link.type = type;
-
-	                                                                                //Return link
-	                                                                                return this.link;
-	                                                                },
-
-	                                                                //Construct a standard metaTag element
-	                                                                metaTag: function metaTag(name, content) {
-
-	                                                                                //Create link element
-	                                                                                this.meta = document.createElement('meta');
-
-	                                                                                //Assign element values
-	                                                                                this.meta.content = content;
-	                                                                                this.meta.name = name;
-
-	                                                                                //Return tag
-	                                                                                return this.meta;
-	                                                                },
-
-	                                                                //Append a meta object to the <head>
-	                                                                metaAppend: function metaAppend(meta) {
-
-	                                                                                //Append child to header
-	                                                                                if (this.head.appendChild(meta)) {
-	                                                                                                //Count number of headers
-	                                                                                                this.count++;
-
-	                                                                                                //Return success
-	                                                                                                return true;
-	                                                                                } else return false;
-	                                                                },
-
-	                                                                //Cached data
-	                                                                head: document.getElementsByTagName('head')[0],
-	                                                                link: null,
-	                                                                meta: null,
-	                                                                count: 0
-
-	                                                }
-
-	                                },
-
-	                                //Cursor Handler
-	                                //	Logs last cursor and allows to easily change the cursor on the fly
-
-	                                cursor: {
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed metatag object.
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-	                                                                                init: { value: function value() {
-
-	                                                                                                                this.set(this.wait);
-
-	                                                                                                                this.app.ext.cursor = this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                },
-
-	                                                prototype: {
-
-	                                                                //Cached cursor types
-	                                                                auto: "auto",
-	                                                                inherit: "inherit",
-	                                                                crosshair: "crosshair",
-	                                                                def: "default",
-	                                                                help: "help",
-	                                                                move: "move",
-	                                                                pointer: "pointer",
-	                                                                progress: "progress",
-	                                                                text: "text",
-	                                                                wait: "wait",
-	                                                                eresize: "e-resize",
-	                                                                neresize: "ne-resize",
-	                                                                nwresize: "nw-resize",
-	                                                                nresize: "n-resize",
-	                                                                seresize: "se-resize",
-	                                                                swresize: "sw-resize",
-	                                                                sresize: "s-resize",
-	                                                                wresize: "w-resize",
-
-	                                                                //Properties
-	                                                                current: "auto",
-	                                                                last: "auto",
-	                                                                changed: false,
-	                                                                count: 0,
-	                                                                lock: 0,
-	                                                                delay: 4,
-
-	                                                                set: function set(cursor, lock) {
-
-	                                                                                if (this.last == cursor || this.lock) return;
-
-	                                                                                this.last = this.current;
-
-	                                                                                this.current = cursor;
-
-	                                                                                if (this.app.options.canvas.buffer) this.app.canvas.getBuffer().style.cursor = this.current;
-	                                                                                this.app.canvas.getCanvas().style.cursor = this.current;
-
-	                                                                                document.body.style.cursor = this.current;
-
-	                                                                                this.changed = true;
-	                                                                                this.count++;
-	                                                                }
-
-	                                                }
-
-	                                },
-
-	                                //Connection Controller
-	                                //	Assists in making ajax calls and allows you to test your connection.
-	                                //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
-
-	                                connect: {
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed metatag object.
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-	                                                                                init: { value: function value() {
-
-	                                                                                                                //Execute a test on the connection
-	                                                                                                                this.test();
-
-	                                                                                                                this.app.ext.connect = this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                },
-
-	                                                prototype: {
-
-	                                                                //Properties
-	                                                                offline: false,
-	                                                                connectionAttempts: 0,
-	                                                                error: null,
-	                                                                window: window,
-
-	                                                                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
-	                                                                load: function load(address, callback, arg0, arg1) {
-
-	                                                                                var xmlhttp;
-	                                                                                if (window.XMLHttpRequest) {
-	                                                                                                // code for IE7+, Firefox, Chrome, Opera, Safari
-	                                                                                                xmlhttp = new XMLHttpRequest();
-	                                                                                } else {
-	                                                                                                // code for IE6, IE5
-	                                                                                                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	                                                                                }
-	                                                                                xmlhttp.onreadystatechange = function () {
-	                                                                                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                                                                                                                callback(xmlhttp.response, arg0, arg1);
-	                                                                                                }
-	                                                                                };
-	                                                                                xmlhttp.open("GET", address, true);
-	                                                                                xmlhttp.send();
-	                                                                },
-
-	                                                                //An aJax request to check wither or not you are connected to the internet
-	                                                                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
-	                                                                hostReachable: function hostReachable() {
-	                                                                                return;
-	                                                                                /*
-	                                                                                                    //if local host return offline
-	                                                                                                    if ((this.window.location.hostname).toString()=="127.0.0.1")
-	                                                                                                        return false;
-	                                                                                
-	                                                                                                    // Handle IE and more capable browsers
-	                                                                                                    var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
-	                                                                                                    var status;
-	                                                                                
-	                                                                                
-	                                                                                                    // Open new request as a HEAD to the root hostname with a random param to bust the cache
-	                                                                                                    xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
-	                                                                                
-	                                                                                                    // Issue request and handle response
-	                                                                                                    try {
-	                                                                                                        xhr.send();
-	                                                                                                        return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
-	                                                                                
-	                                                                                                    } catch (error) {
-	                                                                                
-	                                                                                                        if (this.connectionAttempts<1)
-	                                                                                                            this.connectionAttempts++,this.hostReachable();
-	                                                                                                        this.error = error;
-	                                                                                                        return false;
-	                                                                                                    }
-	                                                                                */
-	                                                                },
-
-	                                                                test: function test(app) {
-
-	                                                                                return this.offline = this.hostReachable();
-	                                                                }
-
-	                                                }
-
-	                                }
-
-	                }
-	};
-
-/***/ },
-/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8934,7 +7765,7 @@
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(205);
+	var _visuals2 = __webpack_require__(206);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
@@ -9022,7 +7853,7 @@
 	            setTimeout(function () {
 
 	                _this.client_data();
-	            }, 1000 / 60);
+	            }, 1000 / 59);
 
 	            this.app.ext.cursor.set(this.app.ext.cursor.def);
 
@@ -9053,11 +7884,11 @@
 	                //Return true or false if resized, update size
 	                _this2.resized = _this2.update.size(_this2);
 
-	                //Draw frame
-	                _this2.visuals.flip(_this2.scale);
-
 	                //Update scale
 	                _this2.scale = _this2.update.scale(_this2);
+
+	                //Draw frame
+	                _this2.visuals.flip(_this2.scale);
 
 	                //Update frames per second
 	                _this2.fps = _this2.update.step.tick(_this2.second, _this2.mainLoop, _this2.app);
@@ -9757,352 +8588,2251 @@
 	};
 
 /***/ },
-/* 211 */,
-/* 212 */
-/***/ function(module, exports, __webpack_require__) {
+/* 206 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	var visuals = visuals || {};
+	visuals = {
+
+	    //Visuals Prototype
+	    prototype: {
+
+	        //draw flags
+
+	        free: false,
+	        alpha: 0,
+	        seamless: false,
+	        tight: true,
+	        disable: false,
+
+	        //draw vars
+	        bleed: 1,
+	        point: 14,
+	        zindex: 1,
+	        buffer_target: 0,
+	        scale: 0,
+	        fillStyle: null,
+	        fontT: "",
+	        fontL: "",
+
+	        //Objects
+	        stat2: Object.create(null),
+	        grd: Object.create(null),
+
+	        canvas: Object.create(null),
+	        buffer: Object.create(null),
+	        canvas_context: Object.create(null),
+	        buffer_context: Object.create(null),
+
+	        within: false,
+
+	        //Draw Vars Buffer
+
+	        stat: {
+	            x: 0,
+	            y: 0,
+	            w: 0,
+	            h: 0,
+	            s: 0,
+	            a: 0,
+	            c: 0,
+	            colour: "",
+	            oldcol: "",
+	            init: function init(col, colold) {
+	                this.x = 0;
+	                this.y = 0;
+	                this.w = 0;
+	                this.h = 0;
+	                this.s = 0;
+	                this.a = 0;
+	                this.c = 0;
+	                this.colour = col || 0;
+	                this.oldcol = colold || 0;
+	            }
+	        },
+
+	        window: window,
+
+	        getData: function getData() {
+
+	            var width = this.buffer.width;
+	            var height = this.buffer.height;
+
+	            var imageData = this.buffer_context.getImageData(0, 0, width, height);
+
+	            var w2 = width / 2;
+	            var d = imageData.data;
+	            for (y = 0; y <= height; y++) {
+	                inpos = y * width * 4;
+	                outpos = inpos + w2 * 4;
+	                for (x = 0; x < w2; x++) {
+	                    var r = d[inpos++];
+	                    var g = d[inpos++];
+	                    var b = d[inpos++];
+	                    var a = d[inpos++];
+	                    b = Math.min(255, b);
+	                    if (r == 0 && g == 0 && b == 0) {
+	                        inpos++;
+	                        inpos++;
+	                        inpos++;
+	                        imageData.data[inpos++] = 0;
+	                    } else {
+	                        inpos++;
+	                        inpos++;
+	                        inpos++;
+	                        inpos++;
+	                    }
+	                }
+	            }
+	            this.buffer_context.putImageData(imageData, 0, 0);
+	        },
+
+	        flip: function flip() {
+
+	            this.fillStyle = this.app.canvas.canvas.style.background == "transparent";
+
+	            //this.buffer_context.save();
+	            //Set scale to client scale
+	            this.scale = this.app.client.scale;
+
+	            if (this.fillStyle === false) this.screen_fill(this.app.client.visuals.bleed, this.app.options.canvas.background);
+
+	            //If double buffering
+	            if (this.app.options.canvas.buffer) {
+	                //If initalized, draw state
+	                if (this.app.client.update.state.initalized) this.app.client.update.state.draw();
+
+	                //Draw buffer to canvs
+	                this.canvas_context.drawImage(this.buffer, 0, 0);
+
+	                //Clear buffer
+	                if (this.fillStyle === true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
+	            } else {
+
+	                //If not double buffering, clear canvas
+	                if (this.fillStyle === true) this.buffer_context.clearRect(0, 0, this.window.innerWidth, this.window.innerHeight);
+
+	                //If initalized, draw state
+	                if (this.app.client.update.state.initalized) this.app.client.update.state.draw();
+	            }
+	            //this.buffer_context.restore();
+	        },
+
+	        //Get fixed X/Y positions
+
+	        getX: function getX() {
+
+	            return (this.app.input.x - (-this.app.getWidth() / 2 + this.window.innerWidth / 2) + this.app.options.canvas.position.left / 3).toFixed(2);
+	        },
+
+	        getY: function getY() {
+
+	            return (this.app.input.y - this.app.options.canvas.position.top).toFixed(2);
+	        },
+
+	        //Fix positions relative to canvas
+
+	        fixX: function fixX(x) {
+
+	            return (x * this.scale + this.app.client.width / 2 - this.app.client.setWidth / 2 * this.scale).toFixed(2);
+	        },
+
+	        fixY: function fixY(y) {
+
+	            return (y * this.scale + this.app.client.height / 2 - this.app.client.setHeight / 2 * this.scale).toFixed(2);
+	        },
+
+	        fixW: function fixW(w) {
+
+	            return (w * this.scale).toFixed(2);
+	        },
+
+	        fixH: function fixH(h) {
+
+	            return (h * this.scale).toFixed(2);
+	        },
+
+	        //Check variables
+	        chkc: {},
+	        chk: function chk(x, y, w, h, s, a, c, colour, font) {
+	            this.chkc = this.colour();
+	            this.opacity(a);
+	            this.colour(colour);
+	            if (!this.free) return {
+	                x: this.fixX(x),
+	                y: this.fixY(y),
+	                w: this.fixW(w) * s,
+	                h: this.fixH(h) * s,
+	                s: s,
+	                a: this.app.client.Math.Clamp(a, 0, 1) || 0,
+	                c: c || false,
+	                colour: colour || this.colour(),
+	                oldcol: this.chkc,
+	                font: font || this.font,
+	                init: this.stat.init
+	            };else return {
+	                x: x, y: y,
+	                w: w * s || 0,
+	                h: h * s || 0,
+	                s: s,
+	                a: this.app.client.Math.Clamp(a, 0, 1) || 1,
+	                c: c || false,
+	                colour: colour || this.colour(),
+	                oldcol: this.chkc,
+	                font: font,
+	                init: this.stat.init
+	            };
+	        },
+
+	        debug: function debug() {
+
+	            /*
+	            if (!App.ext.debug.strength=="Normal")
+	                return;
+	            if ((App.ext.debug.strength=="off")||(App.ext.debug.strength=="none"))
+	                return;
+	            this.rect_ext(-this.app.client.setWidth,0,this.app.client.setWidth+this.app.client.setWidth+this.app.client.setWidth,this.point,1,0.1,0);
+	            this.rect_ext(0,0,this.app.client.setWidth,this.point,1,0.1,0);
+	            this.text_ext("0",	0,this.point*0.9,this.point*0.9);
+	            this.text_ext(this.app.client.setWidth,	this.app.client.setWidth-25,this.point*0.9,this.point*0.9);
+	            if (window.innerWidth>(this.app.client.setWidth*1.1)*this.scale)
+	                {
+	                    this.text_free(0-this.fixX(0),	30,4+this.fixY(this.point),this.point*0.99);
+	                    this.text_free(this.app.client.width,	window.innerWidth-15,4+this.fixY(this.point),this.point*0.99);
+	                }
+	            //this.text_ext("Debug",	this.app.client.setWidth/2.5,this.point*0.9,this.point*0.9);
+	            //this.text_ext(this.app.client.name,5,25,"#FFFFFF",4,1,0);
+	            //this.text_ext("app.ext.input",15,40,"#FFFFFF",1,1,0);
+	            //this.text_ext("x "+Math.round(App.input.x*100)/100		,25,55,"#FFFFFF",1,1,0);
+	            //this.text_ext("x: "+Math.round(App.input.window.x*100)/100,75,55,"#FFFFFF",1,1,0);
+	            //this.text_ext("y "+Math.round(App.input.y*100)/100		,25,70,"#FFFFFF",1,1,0);
+	            //this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
+	            if (App.fps<20)
+	            console.log("FPSLow: "+App.fps);
+	              var data = [
+	                        [this.app.client.name],
+	                        [App.code+ " " +App.codefmk],
+	                        [this.app.client.name],
+	                        [
+	                        "app.ext.input",
+	                        "x "+Math.round(App.input.x*100)/100		,
+	                        "x "+Math.round(App.input.window.x*100)/100,
+	                        "d "+App.input.pressed+"   p "+App.input.duration,
+	                            "y "+Math.round(App.input.y*100)/100		,
+	                        "y "+Math.round(App.input.window.y*100)/100,
+	                        (App.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
+	                        ],
+	                        [
+	                        "app.client",
+	                        "discription","","",
+	                        "width" ,this.app.client.setWidth,this.app.client.width,
+	                        "height",this.app.client.setHeight,this.app.client.height,
+	                        "fps",Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(this.app.client.fps*1000)/1000,"",
+	                        "scale",this.app.client.scale,"",
+	                        "delta",this.app.client.delta,"",
+	                        "buffer","double","",
+	                        ],
+	                        [
+	                        "app.client.state","",
+	                        "[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B",
+	                        "",
+	                        ""
+	                        ],
+	                        [
+	                        "app.client.data","",
+	                        "visuals ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.visuals):"?"),"",
+	                        "graphics ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.graphics):"?"),"",
+	                        "audio ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.audio):"?"),"",
+	                        "state ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?"),"",
+	                        "ext ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?"),"",
+	                        "Total ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?"),""
+	                          ]
+	                    ];
+	                    for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii)
+	                        {
+	                        for(var i=data[ii].length;0<i;--i)
+	                            0==i%3&&(t=0,tr=15,tt++),
+	                            this.text_ext(data[ii][data[ii].length-i],tr+15+p*t,25+1.1*this.point*tt,"#AAAAAA",1,1,0),
+	                            tr=0,
+	                            t++;
+	                        t=0;
+	                        tt++
+	                        };
+	              //this.text_ext("D: "+App.input.duration,210,55);
+	            //this.text_ext("P: "+App.input.pressed,160,55);
+	            //(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
+	            //this.text_ext("I: "+App.input.window.inside+" X: "+App.input.window.x+" Y: "+App.input.window.y,155,70);
+	            //this.text_ext("app.client",15,85,"#FFFFFF",1,1,0);
+	            //this.text_ext("Discription: "+this.app.client.discription,25,100,"#FFFFFF",1,1,0);
+	            //this.text_ext("Fps: "+Math.round(this.app.client.fps)+"/"+this.app.client.targetfps+":"+Math.round(App.ext.fps*1000)/1000,25,115,"#FFFFFF",1,1,0);
+	            //this.text_ext("Width: "+this.app.client.width,25,130,"#FFFFFF",1,1,0);
+	            //this.text_ext("Height: "+this.app.client.height,25,145,"#FFFFFF",1,1,0);
+	            //this.text_ext("setWidth: "+this.app.client.setWidth,110,130,"#FFFFFF",1,1,0);
+	            //this.text_ext("setHeight: "+this.app.client.setHeight,110,145,"#FFFFFF",1,1,0);
+	            //this.text_ext("Scale: "+this.scale,25,160,"#FFFFFF",1,1,0);
+	            //this.text_ext("Delta: "+this.app.client.delta,25,175,"#FFFFFF",1,1,0);
+	            //this.text_ext("Buffering: "+"Double",25,190,"#FFFFFF",1,1,0);
+	            //this.text_ext("client.data",15,205,"#FFFFFF",1,1,0);
+	            //this.text_ext("[ "+this.app.client.update.state.name+" ] : "+this.app.client.Math.Data.Update()+"B",25,220,"#FFFFFF",1,1,0);
+	            this.text_ext("Log: "+App.ext.debug.text,35,this.app.client.setHeight-25,this.point);
+	            if (App.ext.debug.strength=="Lite")
+	                return;
+	                  try {
+	            //this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
+	            }catch(e){}
+	            //this.text_ext("graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
+	            //this.text_ext("audio: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.audio) 		+"kb",25,265,"#FFFFFF",1,1,0);
+	            //this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
+	            //this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
+	            //this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
+	                */
+	        },
+
+	        blit: function blit(img, offx, offy) {
+
+	            var _img = document.createElement("img");
+
+	            // Create an empty canvas element
+	            var canvas = document.createElement("canvas");
+	            var ctx = canvas.getContext("2d");
+
+	            canvas.width = img.width / 16;
+	            canvas.height = img.height;
+	            canvas.style.background = 'transparent';
+	            canvas.background = 'transparent';
+
+	            //    ctx.beginPath();
+	            //    ctx.arc(75, 75, 70, 0, Math.PI*2, true);
+	            //    ctx.closePath();
+	            //    ctx.fill();
+
+	            canvas.width = img.width / 16;
+	            canvas.height = img.height / 16;
+	            ctx.drawImage(img, 0, 0);
+
+	            ctx.drawImage(img, offx, offy, 32, 32, 0, 0, img.width / 16, img.height / 16);
+	            //(img,sx,sy,swidth,sheight,x,y,width,height);
+
+	            SJS.statistics.monitor(function () {
+
+	                _img.src = canvas.toDataURL("image/png");
+	                window.T = _img;
+	            }, 10).then(function () {
+
+	                console.log(_img.src);
+	            }, 10);
+
+	            return _img;
+
+	            var canvas2 = this.app.canvas.canvas.getContext('2d');
+	            var canvas2_data = canvas2.getImageData(0, 0, img.width, img.height);
+
+	            //var canvas2_data = canvas2.getImageData(0,0,100,100);
+
+	            //var canvas2_img = new Image();
+	            //canvas2_img.src = canvas2_data;
+
+	            // Copy the image contents to the canvas
+	            //this.visuals.putData(canvas2_data,0,0);
+
+	            //var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+	            //ctx.putImageData(canvas2_data,0,0);
+
+	            //ctx.drawImage(canvas2_img, 0, 0);
+	            console.log(img);
+	            ctx.drawImage(img, 0, 0);
+
+	            var _img = document.createElement("img");
+
+	            _img.src = canvas.toDataURL("image/png");
+	            console.log(canvas.toDataURL("image/png"));
+	            //                        ctx.drawImage(img, 0, 0);
+	            //var newData2 = ctx.getImageData(0,0,img.width,img.height);
+
+	            return _img;
+	        },
+
+	        clean: function clean() {
+	            //    this.cleanAlpha?this.opacity(1):null;
+	            this.colour(this.stat.oldcol);
+	            this.stat.init(this.colour(), this.stat.oldcol);
+	        },
+
+	        colour: function colour(colour1, colour2) {
+
+	            if (colour1) {
+	                return colour1 && (this.buffer_context.fillStyle = colour1); //colour2&&(this.buffer_context.strokeStyle=colour2);
+	            } else return this.buffer_context.fillStyle;
+	        },
+	        opacity: function opacity(_opacity) {
+	            return _opacity != this.alpha && (this.alpha = _opacity, this.canvas_context.globalAlpha = this.buffer_context.globalAlpha = _opacity != this.lastopacity ? _opacity : 1);
+	        },
+	        font: function font(_font) {
+	            return this.canvas_context.font = this.buffer_context.font = this.fontT = _font;
+	            //return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
+	            //if (font)
+	            //	this.buffer_context.font = font;
+	            //return this.buffer_context.font;
+	        },
+	        shadow: function shadow(col, blur, x, y) {
+	            this.buffer_context.shadowColor = col;
+	            this.buffer_context.shadowBlur = blur;
+	            this.buffer_context.shadowOffsetX = x;
+	            this.buffer_context.shadowOffsetY = y;
+	        },
+	        shadow_clear: function shadow_clear() {
+	            this.buffer_context.shadowBlur = 0;
+	        },
+
+	        //
+	        //Visuals Text Functions
+	        //
+
+	        text_free: function text_free(string, x, y, colour) {
+	            this.colour(colour);
+	            this.font(Math.round(this.point * this.scale) + "px " + "sans-serif");
+	            this.buffer_context.fillText(string, x - this.text_width(string) / 2 - this.point, y - this.point / 2);
+	            this.clean();
+	        },
+	        text_ext: function text_ext(string, x, y, colour, s, a, c, style) {
+	            this.stat = this.chk(x, y, this.text_width(string), s, s, a, c, colour);
+	            var f = this.font();
+	            this.stat.h = this.stat.s * this.scale;
+	            this.font(this.stat.h + "em " + style);
+	            this.stat.h = this.point * this.stat.h;
+
+	            this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2));
+
+	            //(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
+	            this.font(f);
+	            this.clean();
+	        },
+	        text_button: function text_button(string, x, y, colour, s, a, c, style) {
+	            this.stat = this.chk(x, y, this.text_width(string), s, s, a, c, colour);
+	            var f = this.font();
+	            this.stat.h = this.stat.s * this.scale;
+	            this.font(this.stat.h + "em " + style);
+	            this.stat.h = this.point * this.stat.h;
+	            if (this.touch_within_stat(this.stat)) {
+	                this.opacity(this.stat.a - this.app.input.pressed * 0.2);
+	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
+	                //if (App.input.released)
+	                //	if (App.input.delay<1)
+	                //		loc(),App.input.delay = 1;
+	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
+	            } else {
+	                this.opacity(this.stat.a * 0.75);
+	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
+	            }
+	            this.font(f);
+	            this.clean();
+	        },
+	        text_button_bg: function text_button_bg(string, x, y, colour, s, a, c, loc, style) {
+	            this.stat = this.chk(x, y, this.text_width(string), s, s, a, c, colour);
+
+	            this.shadow("#AAAAAA", 1, 1, 1);
+
+	            var f = this.font();
+	            this.stat.h = this.stat.s * this.scale;
+	            this.font(this.stat.h + "em " + style);
+	            this.stat.h = this.point * this.stat.h;
+	            this.within = this.touch_within_stat(this.stat);
+	            if (this.within) {
+	                this.colour("#00A0F1");
+	                this.buffer_context.beginPath();
+	                this.stat.c ? this.buffer_context.rect(this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(this.stat.x - this.stat.w * 0.2, this.stat.y - this.stat.h * 0.2, this.stat.w * 1.1, this.stat.h * 1.1);
+	                this.buffer_context.fill();
+
+	                this.colour("#DDDDDD");
+	                //this.rect_ext(this.stat.x-this.stat.w/4,this.stat.y-this.stat.h/5,this.stat.w*1.1,this.stat.h*1.1,1,1,0,"#00A0F1");
+	                this.opacity(this.stat.a - App.input.pressed * 0.2);
+	                App.ext.cursor.set(App.ext.cursor.pointer, true);
+	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
+	                if (this.app.input.released) {
+	                    loc();
+	                    this.app.input.delay = 1;
+	                }
+
+	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
+	            } else {
+	                this.opacity(this.stat.a * 0.75);
+	                this.stat.c ? this.buffer_context.fillText(string, this.stat.x - Math.floor(this.stat.w / 2) - this.stat.s, this.stat.y - Math.floor(this.stat.h / 2)) : this.buffer_context.fillText(string, this.stat.x, this.stat.y + Math.floor(this.stat.h / 2));
+	            }
+	            this.font(f);
+	            this.clean();
+	        },
+	        text: function text(string, x, y, colour) {
+	            this.text_ext(string, x, y, colour, 1, 1, 0, "Calibri");
+	        },
+	        text_shadow: function text_shadow(blur, x, y, colour) {
+	            this.buffer_context.shadowColor = colour;
+	            this.buffer_context.shadowBlur = blur;
+	            this.buffer_context.shadowOffsetX = x;
+	            this.buffer_context.shadowOffsetY = y;
+	        },
+
+	        //
+	        //Visuals Rectangle Functions
+	        //
+
+	        rect: function rect(x, y, w, h, colour) {
+	            this.rect_ext(x, y, w, h, 1, 1, 0, colour);
+	        },
+	        rect_centered: function rect_centered(x, y, w, h, colour) {
+	            this.rect_ext(x, y, w, h, 1, 1, 1, colour);
+	        },
+	        rect_ext: function rect_ext(x, y, w, h, s, a, c, colour) {
+	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
+	            this.buffer_context.beginPath();
+	            this.stat.c ? this.buffer_context.rect(this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	            this.buffer_context.fill();
+
+	            this.clean();
+	        },
+	        rect_stroke: function rect_stroke(x, y, w, h, s, a, c, colour, l) {
+	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
+	            this.buffer_context.beginPath();
+	            this.stat.c ? this.buffer_context.rect(this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	            this.buffer_context.fillStyle = 'transparent';
+	            this.buffer_context.fill();
+	            this.buffer_context.lineWidth = l || 1;
+	            this.buffer_context.strokeStyle = colour;
+	            this.buffer_context.stroke();
+
+	            this.clean();
+	        },
+	        setting: true,
+
+	        rect_button: function rect_button(x, y, w, h, s, a, colour, loc, c) {
+
+	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
+	            var t = false;
+
+	            //if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.c))
+	            if (this.touch_within_stat(this.stat)) {
+	                t = true;
+	                //    this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
+
+	                //   if (this.app.input.delay<1)
+
+	                if (this.app.input.released) loc(), this.app.input.delay = 1;
+	            }
+
+	            //if (this.setting)
+	            this.rect_ext(x, y, w, h, s, a, c, colour);
+	            //else
+	            //    var ww = 1;
+	            //    if (t)
+	            //    this.rect_ext(x-ww,y-ww,w+ww*2,h+ww*2,s,a,c,colour);
+	        },
+	        rect_rotate: function rect_rotate(x, y, w, h, colour, s, a, angle) {
+	            this.stat = this.chk(x, y, w, h, s, a, 1, colour);
+	            this.buffer_context.translate(this.stat.x, this.stat.y);
+	            this.buffer_context.rotate(angle * 0.0174532925);
+	            this.stat.c ? this.buffer_context.rect(0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+	            this.buffer_context.rotate(-angle * 0.0174532925);
+	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
+	            this.clean();
+	        },
+	        rect_gradient: function rect_gradient(x, y, w, h, s, a, c, colour, colour2, angle) {
+	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
+	            this.buffer_context.translate(this.stat.x, this.stat.y);
+	            this.buffer_context.rotate(angle * 0.0174532925);
+
+	            if (!this.stat.w) return;
+	            if (!this.stat.h) return;
+	            if (!this.stat.x) return;
+	            if (!this.stat.y) return;
+	            this.stat.c ? this.grd = this.buffer_context.createLinearGradient(Math.floor(this.stat.w / 2), 0, Math.floor(this.stat.w / 2), Math.floor(this.stat.h / 2)) : this.grd = this.buffer_context.createLinearGradient(0, 0, this.stat.w, this.stat.h);
+	            this.buffer_context.beginPath();
+	            this.stat.c ? this.buffer_context.rect(0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.rect(0, 0, this.stat.w, this.stat.h);
+	            this.grd.addColorStop(0, colour);
+	            this.grd.addColorStop(1, colour2);
+	            this.buffer_context.fillStyle = this.grd;
+	            this.buffer_context.fill();
+	            this.buffer_context.rotate(-angle * 0.0174532925);
+	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
+	            this.clean();
+	        },
+	        rect_free: function rect_free(x, y, w, h, s, a, c, colour) {
+	            this.stat = this.chk(x, y, w, h, s, a, c, colour);
+	            this.buffer_context.beginPath();
+	            c ? this.buffer_context.rect(x - w / 2, y - h / 2, w, h) : this.buffer_context.rect(x, y, w, h);
+	            this.buffer_context.fill();
+	            this.clean();
+	        },
+	        screen_fill: function screen_fill(a, colour) {
+	            this.stat = this.chk(0, 0, 1, 1, 1, a, 1, colour);
+	            this.buffer_context.beginPath();
+	            this.buffer_context.rect(0, 0, window.innerWidth, window.innerHeight);
+	            this.buffer_context.fill();
+	            this.clean();
+	        },
+	        image_count: 0,
+	        image_element: function image_element(image) {
+	            this.elm = document.createElement("image");
+	            this.elm.draw = function (image, x, y, s, loc, xscale, yscale, a, c) {
+	                var s = this.style;
+	                this.stat = App.client.visuals.chk(x, y, image.width, image.height, s, a, c);
+	                s.position = "fixed";
+	                s.left = this.stat.x + "px";
+	                s.top = this.stat.y + "px";
+	                s.width = this.stat.w + "px";
+	                s.height = this.stat.h + "px";
+	                s.opacity = this.stat.a;
+	                s.onclick = this.loc;
+	                this.src = image;
+	            };
+	            document.body.appendChild(this.elm);
+	            this.elm.src = image.src;
+	            return this.elm;
+	            //(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+	        },
+	        image_replacecol: function image_replacecol(image, x, y, s, a, c, colour) {
+
+	            this.stat = this.chk(x, y, image.width, image.height, s, a, c);
+
+	            var is = new Image();
+	            is.src = image;
+
+	            function getBase64Image(img) {
+	                // Create an empty canvas element
+	                var canvas = document.createElement("canvas");
+	                canvas.width = img.width;
+	                canvas.height = img.height;
+
+	                // Copy the image contents to the canvas
+	                var ctx = canvas.getContext("2d");
+	                ctx.drawImage(img, 0, 0);
+
+	                // Get the data-URL formatted image
+	                // Firefox supports PNG and JPEG. You could check img.src to
+	                // guess the original format, but be aware the using "image/jpg"
+	                // will re-encode the image.
+	                //var dataURL = canvas.toDataURL("image/png");
+	                var dataURL = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+	                return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+	            }
+	            var imageData = getBase64Image(image);
+	            is.src = getBase64Image(is);
+	            image = is;
+	            var pixel = imageData.data;
+
+	            var r = 0,
+	                g = 1,
+	                b = 2,
+	                a = 3;
+	            for (var p = 0; p < pixel.length; p += 4) {
+	                if (pixel[p + r] == 0 && pixel[p + g] == 0 && pixel[p + b] == 0) // if white then change alpha to 0
+	                    {
+	                        pixel[p + a] = 255;
+	                    }
+	            }
+
+	            ctx.putImageData(imageData, 0, 0);
+	            image.src = c.toDataURL('image/png');
+
+	            this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	        },
+	        image_ext: function image_ext(image, x, y, s, a, c) {
+	            this.stat = this.chk(x, y, image.width, image.height, s, a, c);
+	            this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	        },
+	        image_ext2: function image_ext2(image, x, y, sx, sy, a, c) {
+	            this.stat = this.chk(x, y, image.width, image.height, sx, a, c);
+	            this.stat2 = this.chk(x, y, image.width, image.height, sy, a, c);
+	            this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w * this.stat.s, this.stat.h * this.stat2.s) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w * this.stat.s, this.stat.h * this.stat2.s);
+	        },
+	        image_centered: function image_centered(image, x, y, a) {
+	            this.image_ext(image, x, y, 1, a, true);
+	        },
+	        image: function image(_image, x, y) {
+	            this.image_ext(_image, x, y, 1, 1, false);
+	        },
+	        image_scaled: function image_scaled(image, x, y, s) {
+	            this.image_ext(image, x, y, s, 1, false);
+	        },
+	        image_stat: function image_stat(image, x, y, s, a, c, xx, yy, w, h) {
+	            this.stat = this.chk(x, y, w, h, s, a, c);
+	            return this.stat;
+	        },
+
+	        image_flip: function image_flip(x, y) {
+
+	            this.stat = this.chk(x, y, 1, 1, 1, 1, 1);
+	            this.buffer_context.save();
+	            this.buffer_context.scale(-1, 1);
+	            this.buffer_context.translate(-this.stat.x * 2, 0);
+	        },
+
+	        image_restore: function image_restore(x, y) {
+
+	            //this.buffer_context.restore();
+	        },
+
+	        putData: function putData(myImageData, dx, dy) {
+
+	            this.buffer_context.putImageData(myImageData, dx, dy);
+	            //this.clean();
+	        },
+
+	        image_part: function image_part(image, x, y, s, a, c, xx, yy, w, h) {
+	            this.stat = this.chk(x, y, w, h, s, a, c);
+
+	            //var scale = (1.1*this.stat.s)*this.app.getScale();
+	            this.stat.c ? this.buffer_context.drawImage(image, xx, yy, w, h, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, xx, yy, w, h, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	        },
+
+	        image_part_rotate: function image_part_rotate(image, x, y, s, a, c, xx, yy, w, h, angle) {
+	            this.stat = this.chk(x, y, w, h, s, a, c);
+
+	            //var scale = (1.1*this.stat.s)*this.app.getScale();
+	            this.buffer_context.save();
+	            this.buffer_context.translate(this.stat.x, this.stat.y);
+	            this.buffer_context.rotate(angle * 0.0174532925);
+	            this.stat.c ? this.buffer_context.drawImage(image, xx, yy, w, h, 0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, xx, yy, w, h, 0, 0, this.stat.w, this.stat.h);
+
+	            this.buffer_context.restore();
+	            //    this.buffer_context.rotate(-angle*0.0174532925);
+	            //    this.buffer_context.translate(-this.stat.x,-this.stat.y);
+	        },
+	        image_rotate: function image_rotate(image, x, y, s, angle, a, xoff, yoff) {
+	            this.stat = this.chk(x, y, image.width, image.height, s, a, true);
+	            this.buffer_context.translate(this.stat.x, this.stat.y);
+	            this.buffer_context.rotate(angle * 0.0174532925);
+	            this.stat.c ? this.buffer_context.drawImage(image, 0 - Math.floor(this.stat.w / 2), 0 - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, 0, 0, this.stat.w, this.stat.h);
+	            this.buffer_context.rotate(-angle * 0.0174532925);
+	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
+	        },
+
+	        texture: function texture(_texture, xx, yy, w, h, yoff, xoff, xonly, xo, yo, s) {
+
+	            var yoff = yoff || 0;
+	            var yo = yo || 0;
+	            var xo = xo || 0;
+	            var y = 0;
+	            var img = _texture;
+	            var width = w;
+	            var height = h;
+
+	            var s = s;
+
+	            xo *= s;
+	            yo *= s;
+
+	            var bh = img.height;
+	            var img_width = img.width;
+	            var img_height = img.height;
+
+	            var img_width_scaled = +img_width * s;
+	            var img_height_scaled = +img_height * s;
+
+	            var offy = yy;
+	            var offx = xx;
+
+	            var by = Math.round((offy / s + height + (-yoff / s - height)) % img_height_scaled - img_height_scaled);
+	            var by_first = by;
+
+	            var bx = -width * s / 2 + (offx / s + width * s) % img_width_scaled - img_width_scaled;
+
+	            var span_width = (width + img_width) * s + img_width_scaled;
+	            var span_height = (height + bh) * s + img_height_scaled;
+
+	            if (xonly) span_width = 0;
+
+	            if (xonly) {
+	                var x = bx - width * s / 2 - s * bx / img_width;
+
+	                for (by = by_first; by < span_height; by += img_height_scaled) {
+	                    var y = -by + height * s + s * by / bh;
+
+	                    if (!xonly) this.image_ext(img, xo + x, yo + y, s, 1, true);
+	                    if (xonly) this.image_scaled(img, xo + x, yo + y, s, 1, true);
+	                }
+	            } else for (bx; bx < span_width; bx += img_width_scaled) {
+	                var x = bx - width * s / 2 - 1 * bx / img_width;
+
+	                for (by = by_first; by < span_height; by += img_height_scaled) {
+	                    var y = -by + height * s + 1 * by / bh;
+
+	                    if (!xonly) this.image_ext(img, xo + x, yo + y, s, 1, true);
+	                    if (xonly) this.image_scaled(img, xo + x, yo + y, s, 1, true);
+	                }
+	            }
+	        },
+
+	        setBleed: function setBleed(threshold) {
+	            this.bleed = threshold;
+	        },
+
+	        rotate_at: function rotate_at(angle, x, y) {
+	            if ((typeof x === "undefined" ? "undefined" : _typeof(x)) === "object") var x = x.x,
+	                y = y.y;else var x = x,
+	                y = y;
+
+	            this.stat = this.chk(x, y, 1, 1, 1, 1, 1);
+	            this.buffer_context.translate(-this.stat.x, -this.stat.y);
+
+	            this.buffer_context.rotate(angle * 0.0174532925);
+	        },
+
+	        rotate: function rotate(angle) {
+
+	            return this.buffer_context.rotate(angle * 0.0174532925);
+	        },
+
+	        translate: function translate(x, y) {
+
+	            if ((typeof x === "undefined" ? "undefined" : _typeof(x)) === "object") var x = x.x,
+	                y = y.y;else var x = x,
+	                y = y;
+
+	            this.stat = this.chk(x, y, 1, 1, 1, 1, 1);
+	            return this.buffer_context.translate(-this.stat.x, -this.stat.y);
+	        },
+
+	        button: function button(img, x, y, f) {
+	            this.image_button(img, x, y, 1, f, true, 1, 1, 1, 1);
+	        },
+	        button_scaled: function button_scaled(img, x, y, s, f) {
+	            this.image_button(img, x, y, s, f, true, 1, 1, 1, 1);
+	        },
+	        buttonH: function buttonH(img, x, y, s, f) {
+	            this.image_buttonH(img, x, y, s, f, true, 1, 1, 1, 1);
+	        },
+
+	        /* IMAGE BUTTON LEGACY TAKE OUT */
+
+	        image_button: function image_button(image, x, y, s, loc, highlight, xscale, yscale, a, centered) {
+
+	            this.stat = this.chk(x, y, image.width * s * xscale, image.height * s * yscale, s, a, centered);
+
+	            var s = this.stat2 = this.chk(x, y, image.width * s * xscale * 0.9, image.height * s * yscale * 0.9, s, a, centered);
+
+	            var w = false;
+
+	            if (this.touch_within_stat(s)) {
+	                w = true;
+	                if (this.highlight) this.opacity(this.stat.a - this.app.input.pressed * 0.2);
+	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
+	                if (this.app.input.released) {
+	                    loc();
+	                    this.app.input.delay = 1;
+	                }
+	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	            } else {
+	                if (this.highlight) this.opacity(this.stat.a * 0.75);
+	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	            }
+	            return w;
+	        },
+	        image_buttonH: function image_buttonH(image, x, y, s, loc, highlight, xscale, yscale, a, centered) {
+	            this.stat = this.chk(x, y, image.width * s * xscale, image.height * s * yscale, s, a, centered);
+	            var s = this.stat2 = this.chk(x, y, image.width * s * xscale * 0.9, image.height * s * yscale * 0.9, s, a, centered);
+	            var w = false;
+	            if (this.touch_within_stat(s, true)) {
+	                w = true;
+	                if (this.highlight) this.opacity(this.stat.a - this.app.input.pressed * 0.2);
+	                this.app.ext.cursor.set(this.app.ext.cursor.pointer, true);
+	                if (this.app.input.pressed) loc(), this.app.input.delay = 1;
+	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	            } else {
+	                if (this.highlight) this.opacity(this.stat.a * 0.75);
+	                this.stat.c ? this.buffer_context.drawImage(image, this.stat.x - Math.floor(this.stat.w / 2), this.stat.y - Math.floor(this.stat.h / 2), this.stat.w, this.stat.h) : this.buffer_context.drawImage(image, this.stat.x, this.stat.y, this.stat.w, this.stat.h);
+	            }
+	            return w;
+	        },
+
+	        /*  ^ IMAGE BUTTON LEGACY TAKE OUT ^ */
+
+	        touch_within: function touch_within(x, y, w, h, c) {
+	            var doc = document.documentElement;
+	            this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	            this.top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+	            y = y - this.top;
+	            x = x - this.left;
+	            return c ? App.input.x > x - w / 2 && App.input.x < x + w / 2 && App.input.y > y - h / 2 && App.input.y < y + h / 2 ? true : false : App.input.x > x && App.input.x < x + w && App.input.y > y && App.input.y < y + h ? true : false;
+	        },
+	        touch_within2: function touch_within2(x, y, w, h, c) {
+	            var stat = this.stat = this.chk(x, y, w, h, 1, 1, c);
+	            var doc = document.documentElement;
+	            this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	            this.top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+	            stat.y = stat.y - this.top;
+	            stat.x = stat.x - this.left;
+	            return stat.c ? this.app.input.x > stat.x - stat.w / 2 && this.app.input.x < stat.x + stat.w / 2 && this.app.input.y > stat.y - stat.h / 2 && this.app.input.y < stat.y + stat.h / 2 ? true : false : this.app.input.x > stat.x && this.app.input.x < stat.x + stat.w && this.app.input.y > stat.y && this.app.input.y < stat.y + stat.h ? true : false;
+	        },
+
+	        touch_within_stat: function touch_within_stat(stat, r) {
+
+	            var doc = document.documentElement;
+	            var w = window;
+
+	            this.left = (w.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	            this.top = (w.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+
+	            stat.y = stat.y - this.top;
+	            stat.x = stat.x - this.left;
+
+	            var position = this.app.input.position;
+
+	            var x = position.x;
+	            var y = position.y;
+
+	            /*
+	                          if (!r){
+	                        x = this.app.input.touched.last.x;
+	                        y = this.app.input.touched.last.y;}
+	            */
+
+	            return stat.c ? x > stat.x - stat.w / 2 && x < stat.x + stat.w / 2 && y > stat.y - stat.h / 2 && y < stat.y + stat.h / 2 ? true : false : y > stat.x && x < stat.x + stat.w && y > stat.y && y < stat.y + stat.h ? true : false;
+	        },
+
+	        line2: function line2(vec, vec2, col, a, free) {
+
+	            var x = vec.x;
+	            var y = vec.y;
+	            var x2 = vec2.x;
+	            var y2 = vec2.y;
+	            this.stat = this.chk(x, y, x2, y2, 1, a, true);
+	            this.stat2 = this.chk(x2, y2, x2, y2, 1, a, true);
+	            this.buffer_context.beginPath();
+	            this.buffer_context.moveTo(this.stat.x, this.stat.y);
+	            this.buffer_context.lineTo(this.stat2.x, this.stat2.y);
+	            this.buffer_context.strokeStyle = col;
+	            this.buffer_context.stroke();
+	        },
+
+	        line: function line(x, y, x2, y2, col, a) {
+	            this.stat = this.chk(x, y, x2, y2, 1, a, true);
+	            this.stat2 = this.chk(x2, y2, x2, y2, 1, a, true);
+	            this.buffer_context.beginPath();
+	            this.buffer_context.moveTo(this.stat.x, this.stat.y);
+	            this.buffer_context.lineTo(this.stat2.x, this.stat2.y);
+	            this.buffer_context.strokeStyle = col;
+	            this.buffer_context.stroke();
+	            this.clean();
+	        },
+	        lines: function lines(x, y, x2, y2, col, a, s) {
+	            this.stat = this.chk(x, y, x2, y2, 1, a, true);
+	            this.stat2 = this.chk(x2, y2, x2, y2, 1, a, true);
+	            this.buffer_context.moveTo(this.stat.x * s, this.stat.y * s);
+	            this.opacity(a);
+	            this.buffer_context.strokeStyle = col;
+	            this.buffer_context.lineTo(this.stat2.x * s, this.stat2.y * s);
+	        },
+	        lineend: function lineend() {
+	            this.buffer_context.stroke();
+	        },
+	        linestart: function linestart() {
+	            this.buffer_context.beginPath();
+	        },
+	        triangle: function triangle(x0, y0, x1, y1, x2, y2, col, col2, width) {
+	            //this.buffer_context.fillStyle = col;
+	            //this.buffer_context.strokeStyle = col2;
+	            this.colour(col, col2);
+	            this.buffer_context.lineWidth = width;
+	            this.buffer_context.moveTo(x0, y0); // give the (x,y) coordinates
+	            this.buffer_context.lineTo(x1, y1);
+	            this.buffer_context.lineTo(x2, y2);
+	            this.buffer_context.lineTo(x0, y0);
+	            this.buffer_context.fill();
+	            this.buffer_context.stroke();
+	            this.buffer_context.closePath();
+	            this.clean();
+	        },
+	        quadraticCurve: function quadraticCurve(x, y, x2, y2, a, col) {
+	            var t = this.buffer_context.strokeStyle;
+	            var tF = this.buffer_context.fillStyle;
+	            this.stat = this.chk(x, y, 1, 1, 1, a, true, col);
+	            this.stat2 = this.chk(x2, y2, 1, 1, 1, a, true, col);
+	            this.buffer_context.beginPath();
+	            this.buffer_context.quadraticCurveTo(this.stat.x, this.stat.y, this.stat2.x, this.stat2.y);
+	            this.buffer_context.strokeStyle = col;
+	            this.buffer_context.stroke();
+	            this.buffer_context.fill();
+	            this.stat = this.chk(x, y, 1, 1, 1, a, true, t);
+	            this.stat2 = this.chk(x2, y2, 1, 1, 1, a, true, t);
+
+	            this.buffer_context.strokeStyle = t;
+	            this.buffer_context.fillStyle = tF;
+	        },
+
+	        /* visuals.paths */
+
+	        paths: {
+
+	            //list of paths
+	            _initalized: false,
+	            _count: false
+
+	            //Reinitalize the objects functions,
+	            //Required for use
+
+	            , init: function init(visuals) {
+
+	                this.list = [];
+
+	                this.visuals = visuals;
+
+	                this._initalized = true;
+
+	                this._count = 0;
+
+	                return this;
+	            },
+
+	            list: [],
+
+	            render: function render(path) {
+
+	                var list = path.list;
+	                var length = path.list.length;
+	                var i = 0;
+
+	                for (i = 0; i <= length - 1; i++) {
+	                    this.visuals.rect(list[i].x, list[i].y, 1, 1, "#FFFFFF");
+	                }return true;
+	            },
+
+	            addPath: function addPath(id, tempX, tempY) {
+	                var path = { name: id, x: tempX, y: tempY };
+	                path.addPoint = this.addPoint;
+	                path.list = [];
+	                path.p = this;
+	                //console.log(path);
+
+	                var t = this.list.push(path);
+	                t.p = this;
+	                return this.list[this._count++];
+	            },
+
+	            addPoint: function addPoint(tempX, tempY) {
+
+	                this.list.push({ x: this.x + tempX, y: this.y + tempY });
+	            }
+
+	        }
+
+	        /*
+	              circle now allows passing vectors
+	              Test: argument based functions
+	                Method1:
+	                    if based on first argument
+	                        Method2 (unused):
+	                            inherit _circle function and pass accordingly
+	          */
+
+	        , circle: function circle(XVec, YR, RC, CA, A) {
+
+	            var x = undefined,
+	                y = undefined,
+	                r = undefined,
+	                col = undefined,
+	                a = undefined;
+
+	            x = XVec;
+	            y = YR;
+	            r = RC;
+	            col = CA;
+	            a = A;
+
+	            if ((typeof x === "undefined" ? "undefined" : _typeof(x)) === 'object') {
+
+	                x = XVec.x;
+	                y = XVec.y;
+	                r = YR;
+	                col = RC;
+	                a = CA;
+	            }
+
+	            this._circle(x, y, r, col, a);
+	        },
+
+	        _circle: function _circle(x, y, r, col, a) {
+	            this.stat = this.chk(x, y, 1, 1, r, a, true, col);
+	            this.buffer_context.beginPath();
+	            this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s * this.scale, 0, 2 * Math.PI, false);
+	            this.buffer_context.fillStyle = this.stat.colour;
+	            this.buffer_context.fill();
+	            this.clean();
+	        },
+	        circle_free: function circle_free(x, y, r, col, a) {
+	            this.stat = this.chk(x, y, r, r, r, a, 1, col);
+	            this.buffer_context.beginPath();
+	            this.buffer_context.arc(x, y, r * this.scale, 0, 2 * Math.PI, false);
+	            this.buffer_context.fillStyle = this.stat.col;
+	            this.buffer_context.fill();
+	            this.clean();
+	        },
+	        text_width: function text_width(string) {
+	            return this.buffer_context.measureText(string).width; // Not WOrking
+	        },
+
+	        trytolockOrientation: function trytolockOrientation() {
+	            /*
+	            if (!this.autoLockOrientation || this.orientations === 0)
+	            return;
+	            */
+	            var orientation = "portrait";
+	            var works = false;
+
+	            //if (this.orientations === 2)
+	            orientation = "landscape";
+
+	            // Note IE/Edge can throw exceptions here if in an iframe (WrongDocumentError), which also affects the debugger.
+	            try {
+
+	                if (screen["orientation"] && screen["orientation"]["lock"]) works = screen["orientation"]["lock"](orientation);else if (screen["lockOrientation"]) works = screen["lockOrientation"](orientation);else if (screen["webkitLockOrientation"]) works = screen["webkitLockOrientation"](orientation);else if (screen["mozLockOrientation"]) works = screen["mozLockOrientation"](orientation);else if (screen["msLockOrientation"]) works = screen["msLockOrientation"](orientation);
+	            } catch (e) {
+	                if (console && console.warn) console.warn("Failed to lock orientation: ", e);
+	            }
+
+	            return works;
+	        },
+	        newscale: function newscale(w, h, force) {
+	            var offx = 0,
+	                offy = 0;
+	            var neww = 0,
+	                newh = 0,
+	                intscale = 0;
+
+	            // Hide address bar on iPhone iOS 6 only
+	            var tryHideAddressBar = this.isiPhoneiOS6 && this.isSafari && !navigator["standalone"] && !this.isDomFree && !this.isCordova;
+
+	            if (tryHideAddressBar) h += 60; // height of Safari iPhone iOS 6 address bar
+
+	            // Ignore redundant events
+	            if (this.lastWindowWidth === w && this.lastWindowHeight === h && !force) return;
+
+	            this.lastWindowWidth = w;
+	            this.lastWindowHeight = h;
+
+	            var mode = this.fullscreen_mode;
+	            var orig_aspect, cur_aspect;
+
+	            var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen) && !this.isCordova;
+
+	            if (!isfullscreen && this.fullscreen_mode === 0 && !force) return; // ignore size events when not fullscreen and not using a fullscreen-in-browser mode
+
+	            if (isfullscreen && this.fullscreen_scaling > 0) mode = this.fullscreen_scaling;
+
+	            var dpr = this.devicePixelRatio;
+
+	            // Letterbox or letterbox integer scale modes: adjust width and height and offset canvas accordingly
+	            if (mode >= 4) {
+	                orig_aspect = this.original_width / this.original_height;
+	                cur_aspect = w / h;
+
+	                // too wide: scale to fit height
+	                if (cur_aspect > orig_aspect) {
+	                    neww = h * orig_aspect;
+
+	                    if (mode === 5) // integer scaling
+	                        {
+	                            // integer scale by device pixels, not CSS pixels, since DPR may be non-integral
+	                            intscale = neww * dpr / this.original_width;
+	                            if (intscale > 1) intscale = Math.floor(intscale);else if (intscale < 1) intscale = 1 / Math.ceil(1 / intscale);
+	                            neww = this.original_width * intscale / dpr;
+	                            newh = this.original_height * intscale / dpr;
+	                            offx = (w - neww) / 2;
+	                            offy = (h - newh) / 2;
+	                            w = neww;
+	                            h = newh;
+	                        } else {
+	                        offx = (w - neww) / 2;
+	                        w = neww;
+	                    }
+	                }
+	                // otherwise scale to fit width
+	                else {
+	                        newh = w / orig_aspect;
+
+	                        if (mode === 5) // integer scaling
+	                            {
+	                                intscale = newh * dpr / this.original_height;
+	                                if (intscale > 1) intscale = Math.floor(intscale);else if (intscale < 1) intscale = 1 / Math.ceil(1 / intscale);
+	                                neww = this.original_width * intscale / dpr;
+	                                newh = this.original_height * intscale / dpr;
+	                                offx = (w - neww) / 2;
+	                                offy = (h - newh) / 2;
+	                                w = neww;
+	                                h = newh;
+	                            } else {
+	                            offy = (h - newh) / 2;
+	                            h = newh;
+	                        }
+	                    }
+
+	                if (isfullscreen && !this.isNWjs) {
+	                    offx = 0;
+	                    offy = 0;
+	                }
+	            }
+	            // Centered mode in NW.js: keep canvas size the same and just center it
+	            else if (this.isNWjs && this.isNodeFullscreen && this.fullscreen_mode_set === 0) {
+	                    offx = Math.floor((w - this.original_width) / 2);
+	                    offy = Math.floor((h - this.original_height) / 2);
+	                    w = this.original_width;
+	                    h = this.original_height;
+	                }
+
+	            if (mode < 2) this.aspect_scale = dpr;
+
+	            // iPad 3 Retina bug workaround: if in retina display and the width is 2048, for some reason
+	            // performance is massively reduced.  Workaround (found by Arima) is to set a width of 2046 instead.
+	            if (this.isRetina && this.isiPad && dpr > 1) // don't apply to iPad 1-2
+	                {
+	                    if (w >= 1024) w = 1023; // 2046 retina pixels
+	                    if (h >= 1024) h = 1023;
+	                }
+
+	            // hacks for iOS retina
+	            this.cssWidth = Math.round(w);
+	            this.cssHeight = Math.round(h);
+	            this.width = Math.round(w * dpr);
+	            this.height = Math.round(h * dpr);
+	            this.redraw = true;
+
+	            if (this.wantFullscreenScalingQuality) {
+	                this.draw_width = this.width;
+	                this.draw_height = this.height;
+	                this.fullscreenScalingQuality = true;
+	            } else {
+	                // Render directly even in low-res scale mode if the display area is smaller than the window size area,
+	                // or in crop mode (since no engine scaling happens)
+	                if (this.width < this.original_width && this.height < this.original_height || mode === 1) {
+	                    this.draw_width = this.width;
+	                    this.draw_height = this.height;
+	                    this.fullscreenScalingQuality = true;
+	                } else {
+	                    this.draw_width = this.original_width;
+	                    this.draw_height = this.original_height;
+	                    this.fullscreenScalingQuality = false;
+
+	                    /*var orig_aspect = this.original_width / this.original_height;
+	                    var cur_aspect = this.width / this.height;
+	                    		// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+	                    if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
+	                    	this.aspect_scale = this.height / this.original_height;
+	                    else
+	                    	this.aspect_scale = this.width / this.original_width;*/
+
+	                    // Scale inner or scale outer mode: adjust the draw size to be proportional
+	                    // to the window size, since the draw size is simply stretched-to-fit in the window
+	                    if (mode === 2) // scale inner
+	                        {
+	                            orig_aspect = this.original_width / this.original_height;
+	                            cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+
+	                            if (cur_aspect < orig_aspect) this.draw_width = this.draw_height * cur_aspect;else if (cur_aspect > orig_aspect) this.draw_height = this.draw_width / cur_aspect;
+	                        } else if (mode === 3) {
+	                        orig_aspect = this.original_width / this.original_height;
+	                        cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+
+	                        if (cur_aspect > orig_aspect) this.draw_width = this.draw_height * cur_aspect;else if (cur_aspect < orig_aspect) this.draw_height = this.draw_width / cur_aspect;
+	                    }
+	                }
+	            }
+
+	            if (this.canvasdiv && !this.isDomFree) {
+	                jQuery(this.canvasdiv).css({ "width": Math.round(w) + "px",
+	                    "height": Math.round(h) + "px",
+	                    "margin-left": Math.floor(offx) + "px",
+	                    "margin-top": Math.floor(offy) + "px" });
+
+	                if (typeof cr_is_preview !== "undefined") {
+	                    jQuery("#borderwrap").css({ "width": Math.round(w) + "px",
+	                        "height": Math.round(h) + "px" });
+	                }
+	            }
+
+	            if (this.canvas) {
+	                this.canvas.width = Math.round(w * dpr);
+	                this.canvas.height = Math.round(h * dpr);
+
+	                if (this.isEjecta) {
+	                    this.canvas.style.left = Math.floor(offx) + "px";
+	                    this.canvas.style.top = Math.floor(offy) + "px";
+	                    this.canvas.style.width = Math.round(w) + "px";
+	                    this.canvas.style.height = Math.round(h) + "px";
+	                } else if (this.isRetina && !this.isDomFree) {
+	                    this.canvas.style.width = Math.round(w) + "px";
+	                    this.canvas.style.height = Math.round(h) + "px";
+	                }
+	            }
+
+	            if (this.overlay_canvas) {
+	                this.overlay_canvas.width = Math.round(w * dpr);
+	                this.overlay_canvas.height = Math.round(h * dpr);
+
+	                this.overlay_canvas.style.width = this.cssWidth + "px";
+	                this.overlay_canvas.style.height = this.cssHeight + "px";
+	            }
+
+	            if (this.glwrap) {
+	                this.glwrap.setSize(Math.round(w * dpr), Math.round(h * dpr));
+	            }
+
+	            if (this.isDirectCanvas && this.ctx) {
+	                this.ctx.width = Math.round(w);
+	                this.ctx.height = Math.round(h);
+	            }
+
+	            if (this.ctx) {
+	                // Re-apply the image smoothing property, since resizing the canvas resets its state
+	                this.ctx["webkitImageSmoothingEnabled"] = this.linearSampling;
+	                this.ctx["mozImageSmoothingEnabled"] = this.linearSampling;
+	                this.ctx["msImageSmoothingEnabled"] = this.linearSampling;
+	                this.ctx["imageSmoothingEnabled"] = this.linearSampling;
+	            }
+
+	            // Try to lock orientation to the project setting
+	            this.tryLockOrientation();
+
+	            // Attempt to hide address bar on iPhone
+	            // iOS 7.1 bug: weird glitch where a big space appears at the bottom of the
+	            // screen when going in to landscape mode. This call to scrollTo seems to
+	            // fix it, so always run this on iPhone.
+	            if (!this.isDomFree && (tryHideAddressBar || this.isiPhone)) {
+	                window.setTimeout(function () {
+	                    window.scrollTo(0, 1);
+	                }, 100);
+	            }
+	        }
+
+	    },
+	    constructor: function constructor(app) {
+	        return {
+	            app: { value: app },
+	            init: { value: function value() {
+
+	                    window.utils.requestAnimationFrame(name, 0, 0);
+
+	                    this.scale = this.app.scale;
+
+	                    this.canvas = this.app.canvas.getCanvas();
+
+	                    this.buffer = this.app.canvas.getBuffer();
+
+	                    var attribs = { alpha: false };
+
+	                    this.canvas_context = this.canvas.getContext("2d", attribs);
+
+	                    if (this.app.options.canvas.buffer) this.buffer_context = this.buffer.getContext("2d", attribs);else this.buffer_context = this.canvas.getContext("2d", attribs);
+
+	                    this.linearSampling = true;
+	                    if (this.buffer_context["imageSmoothingEnabled"] != this.linearSampling) if (this.buffer_context["mozImageSmoothingEnabled"] != this.linearSampling) if (this.buffer_context["msImageSmoothingEnabled"] != this.linearSampling) if (this.buffer_context["webkitImageSmoothingEnabled"] != this.linearSampling) this.buffer_context["webkitImageSmoothingEnabled"] = this.linearSampling;
+
+	                    // make sure aspect scale is correctly set in advance of first tick
+	                    /*if (this.fullscreen_mode >= 2)
+	                    {
+	                    	var orig_aspect = this.original_width / this.original_height;
+	                    	var cur_aspect = this.width / this.height;
+	                    			// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+	                    	if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
+	                    		this.aspect_scale = this.height / this.original_height;
+	                    	else
+	                    		this.aspect_scale = this.width / this.original_width;
+	                    }
+	                            */
+	                    // Non-fullscreen games on retina displays never call setSize to enable hi-dpi display.
+	                    // Do this now if the device has hi-dpi support.
+	                    //if (this.fullscreen_mode === 0 && this.isRetina && this.devicePixelRatio > 1)
+	                    //{
+	                    //	this["setSize"](this.original_width, this.original_height, true);
+	                    //}
+	                }
+
+	            }
+	        };
+	    }
+	};
+
+	exports.default = visuals;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	   value: true
+	        value: true
+	});
+	exports.default = {
+
+	        prototype: {
+
+	                //Cache canvas vars
+	                canvas: {},
+	                buffer: {},
+	                head: document.getElementsByTagName('head')[0],
+	                rendering_style: document.createElement('style'),
+	                canvasList: document.getElementsByTagName('canvas'),
+	                doc: document,
+
+	                //Gets
+
+	                getCanvas: function getCanvas() {
+	                        return this.canvas;
+	                },
+
+	                getBuffer: function getBuffer() {
+	                        return this.buffer;
+	                },
+
+	                setCanvas: function setCanvas(c) {
+	                        this.canvas = c;
+	                },
+
+	                setBuffer: function setBuffer(b) {
+	                        this.buffer = b;
+	                },
+
+	                setBackground: function setBackground(value) {
+
+	                        if (this.app.options.canvas.buffer) this.buffer.style.background = value;
+
+	                        this.app.options.canvas.background = this.canvas.style.background = value;
+	                },
+
+	                getBackground: function getBackground() {
+
+	                        return this.buffer.style.background;
+	                },
+
+	                createCanvas: function createCanvas() {
+
+	                        var c = this.doc.createElement("canvas");
+
+	                        c.id = this.app.options.canvas.name;
+
+	                        this.doc.body.appendChild(c);
+
+	                        return this.doc.getElementById(this.app.options.canvas.name);
+	                },
+
+	                createBuffer: function createBuffer() {
+
+	                        var c = this.doc.createElement("canvas");
+
+	                        c.id = this.app.options.canvas.buffername;
+
+	                        this.doc.body.appendChild(c);
+
+	                        return this.doc.getElementById(this.app.options.canvas.buffername);
+	                },
+
+	                //Style canvas
+
+	                styleCanvas: function styleCanvas() {
+
+	                        this.getCanvas().style.position = this.app.options.canvas.position.position;
+
+	                        this.getCanvas().style.zIndex = this.app.options.canvas.position.z;
+
+	                        if (this.app.options.canvas.buffer) {
+	                                this.getBuffer().style.position = this.app.options.canvas.position.position;
+
+	                                this.getBuffer().style.zIndex = this.app.options.canvas.position.z - 1;
+	                        }
+
+	                        if (this.app.options.canvas.override) {
+
+	                                this.getCanvas().style.left = this.app.options.canvas.position.left + "px";
+
+	                                this.getCanvas().style.top = this.app.options.canvas.position.top + "px";
+
+	                                if (this.app.options.canvas.buffer) {
+	                                        this.getBuffer().style.left = this.app.options.canvas.position.left + "px";
+
+	                                        this.getBuffer().style.top = this.app.options.canvas.position.top + "px";
+	                                }
+	                        }
+	                }
+
+	        },
+	        constructor: function constructor(app) {
+	                return {
+	                        app: { value: app },
+	                        init: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                                        var getcanvas = document.getElementById(this.app.options.canvas.name);
+	                                        if (getcanvas) {
+	                                                this.setCanvas(getcanvas);
+	                                                if (app.options.canvas.buffer) {
+	                                                        var getbuffer = document.getElementById(this.app.options.canvas.buffername);
+	                                                        if (getbuffer) this.setBuffer(getbuffer);else {
+	                                                                this.createBuffer();
+	                                                        }
+	                                                }
+	                                        } else {
+	                                                this.setCanvas(this.createCanvas());
+	                                                if (this.app.options.canvas.buffer) this.setBuffer(this.createBuffer());
+	                                        }
+	                                        this.styleCanvas();
+	                                        this.rendering_style.innerHTML = this.rendering_style.innerText = '@-ms-viewport {width:100%;height:100%;} #Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+	                                        this.head.appendChild(this.rendering_style);
+	                                }
+	                        }
+	                };
+	        }
+	};
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+	    //	//To ensure your data is filled, use a callback return your response data.
+	    //	var facebook = function(){ return App.user.pull();};
+	    //
+	    //	//Your facebook ID, callback function(){}
+	    //	App.user.fbconnect(id, facebook)
+	    name: "",
+	    id: "",
+	    locale: "",
+	    gender: "",
+	    updated_time: "",
+	    timezone: "",
+	    quotes: "",
+	    response: {},
+
+	    //returns the response object
+	    get: function get() {
+	        return this.response;
+	    },
+
+	    //facebook connection
+	    fbconnect: function con(appid, callback) {
+	        window.fbAsyncInit = function () {
+	            FB.init({
+	                appId: appid,
+	                status: true, // check login status
+	                cookie: true, // enable cookies to allow the server to access the session
+	                xfbml: true // parse XFBML
+	            });
+	            FB.login(function () {
+	                FB.api('/me/feed', 'post', { message: 'Hello, world!' });
+	            }, { scope: 'publish_actions' });
+	        };
+
+	        // Load the SDK asynchronously
+	        (function (d) {
+	            var js,
+	                id = 'facebook-jssdk',
+	                ref = d.getElementsByTagName('script')[0];
+	            if (d.getElementById(id)) {
+	                return;
+	            }
+	            js = d.createElement('script');js.id = id;js.async = true;
+	            js.src = "//connect.facebook.net/en_US/all.js";
+	            ref.parentNode.insertBefore(js, ref);
+	        })(document);
+
+	        // Here we run a very simple Flappy of the Graph API after login is successful.
+	        // This testAPI() function is only called in those cases.
+
+	        /*
+	        function testAPI() {
+	        console.log('Welcome!  Fetching your information.... ');
+	            FB.api('/me', function(response) {
+	              App.user.facebook(response);
+	              callback(response);
+	            log('Good to see you, ' + response.name + '.');
+	          });
+	        }
+	            */
+	    },
+
+	    //facebook callback
+	    facebook: function facebook(response) {
+	        this.response = response;
+	        this.name = this.response.name;
+	        this.id = this.response.id;
+	        this.locale = this.response.locale;
+	        this.gender = this.response.gender;
+	        this.updated_time = this.response.updated_time;
+	        this.timezone = this.response.timezone;
+	        this.quotes = this.response.quotes;
+	    }
+
+	};
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	                value: true
 	});
 
-	var _options2 = __webpack_require__(206);
+	var _cookies = __webpack_require__(210);
 
-	var _options3 = _interopRequireDefault(_options2);
-
-	var _input2 = __webpack_require__(215);
-
-	var _input3 = _interopRequireDefault(_input2);
-
-	var _client2 = __webpack_require__(210);
-
-	var _client3 = _interopRequireDefault(_client2);
-
-	var _canvas2 = __webpack_require__(207);
-
-	var _canvas3 = _interopRequireDefault(_canvas2);
-
-	var _user2 = __webpack_require__(208);
-
-	var _user3 = _interopRequireDefault(_user2);
-
-	var _ext2 = __webpack_require__(209);
-
-	var _ext3 = _interopRequireDefault(_ext2);
-
-	var _loader = __webpack_require__(200);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	var _particles = __webpack_require__(202);
-
-	var _particles2 = _interopRequireDefault(_particles);
+	var _cookies2 = _interopRequireDefault(_cookies);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+	exports.default = {
 
-	//To be built into application (to override current)
+	                constructor: function constructor(app) {
 
-	//To be built into application
+	                                return {
 
-	// Temporary for snowflakes
-	window.SJSParticleController = _particles2.default;
+	                                                app: { writable: false, configurable: false, enumerable: false, value: app },
 
-	exports.default = Object.create({
+	                                                init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
 
-	   constructor: {
-	      //Version Number
-	      VN: {
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: true,
+	                                                                                //Set app/document title
 
-	         //VN
-	         value: '0.7.0.15.12.11'
-	      },
+	                                                                                this.app.setTitle(document.title + "." + this.app.main.name);
 
-	      //Build Client, Instantiate Loop, Build Canvas, Initalize Client
-	      Init: {
+	                                                                                //Construct App.ext components
 
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
+	                                                                                this.app.Construct(this.useragent).init();
 
-	         //Function
-	         value: function value(name, w, h) {
-	            var _this = this;
+	                                                                                this.app.Construct(this.metatag).init();
 
-	            //Store self
-	            var self = this;
+	                                                                                this.app.Construct(this.cookies).init();
 
-	            //Build client from prototype
-	            this.client = this.Construct(this.client.prototype, this.client.constructor);
+	                                                                                this.app.Construct(this.cursor).init();
 
-	            //Build canvas from prototype
-	            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+	                                                                                this.app.Construct(this.connect).init();
+	                                                                }
+	                                                }
+	                                };
+	                },
+	                prototype: {
 
-	            setTimeout(function () {
+	                                //UserAgent Information
+	                                //	Assists in detecting the platform that you are running on.
 
-	               function AppLoop() {
-	                  self.client.loop();
-	               }
+	                                useragent: {
 
-	               function AppLoopData() {
-	                  self.client.loopData();
-	               }
+	                                                //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
 
-	               _this.client.initalize(AppLoop, AppLoopData, _this.scale);
-	            }, this.time);
+	                                                prototype: {
 
-	            //Delay start the loop
-	            /*
-	                  OLD NON PROMISE BASED LOOP, build fallback
-	              setTimeout(	(function(){
-	                          function AppLoop(){
-	                            self.client.loop();
-	                        }
-	                          function AppLoopData(){
-	                            self.client.loopData();
-	                        }
-	                          self.client.initalize(AppLoop,AppLoopData,self.scale);
-	              }),this.time);
-	            */
-	            //Initalize client
-	            this.client.init(name, w, h);
+	                                                                //Cached Navigator.userAgent
+	                                                                agent: navigator.userAgent,
 
-	            // INIT INPUT
+	                                                                //
+	                                                                mouse: false,
+	                                                                touch: false,
+	                                                                keyboard: false,
+	                                                                windows: false,
+	                                                                chrome: false,
+	                                                                safari: false,
+	                                                                iemobile: false,
+	                                                                nokia: false,
+	                                                                ie: false,
+	                                                                ios: false,
+	                                                                blackberry: false,
+	                                                                playbook: false,
+	                                                                bb10: false,
+	                                                                mobile: false,
 
-	            this.input = new this.input(this);
-	         }
+	                                                                //Match user agent for IE
+	                                                                IE: function IE() {
 
-	      },
+	                                                                                return this.agent.match(/Trident/i) ? true : false;
+	                                                                },
 
-	      //Run by OnApplicationLoad, App.OnLoad to be overwritten.
-	      OnLoad: {
+	                                                                //Match user agent for iOS
+	                                                                iOS: function iOS() {
 
-	         //Config
-	         writable: true,
-	         configurable: false,
-	         enumerable: false,
+	                                                                                return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
+	                                                                },
 
-	         //Function
-	         value: function value(self) {
+	                                                                //Match user agent for Nokia
+	                                                                Nokia: function Nokia() {
 
-	            //Default to App.
-	            self.Init("", 480, 320);
-	         }
+	                                                                                return this.agent.match(/Nokia/i) ? true : false;
+	                                                                },
 
-	      },
+	                                                                //Determine mobile or windows based on useragent
+	                                                                Mobile: function Mobile() {
 
-	      //Runs on DOMContentLoaded
-	      OnApplicationLoad: {
+	                                                                                return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+	                                                                },
 
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
+	                                                                //Match user agent for Chrome
+	                                                                Chrome: function Chrome() {
 
-	         //Function
-	         value: function value(evt) {
+	                                                                                return this.chrome = this.agent.match(/Chrome/i) ? true : false;
+	                                                                },
 
-	            //Run .OnLoad
-	            evt.target.app.OnLoad(evt.target.app);
-	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-	         }
+	                                                                //Match user agent for Safari
+	                                                                Safari: function Safari() {
 
-	      },
+	                                                                                return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
+	                                                                },
 
-	      //AddEvent Listener
-	      Listener: {
+	                                                                Desktop: function Desktop() {
 
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
+	                                                                                return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
+	                                                                },
 
-	         //Function
-	         value: function value(obj, evt, listener, param) {
+	                                                                //Match user agent for Android
+	                                                                Android: function Android() {
+	                                                                                return this.agent.match(/Android/i) ? true : false;
+	                                                                },
 
-	            //If addEventListener exist, add it, otherwise attachEvent
-	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
+	                                                                //Match user agent for IEMobile
+	                                                                IEMobile: function IEMobile() {
 
-	            obj.app = window.apps[this.id] = this;
-	         }
+	                                                                                var trident = this.agent.match(/IEMobile/i);
+	                                                                                var windowsphone = this.agent.match(/Windows Phone/i);
+	                                                                                var touch = this.agent.match(/touch/i);
 
-	      },
+	                                                                                return trident || windowsphone || touch ? true : false;
+	                                                                },
 
-	      //Construct Objects from this.Construct(prototype,[constructor])
-	      Construct: {
+	                                                                //Match user agent for Blackberry
+	                                                                BlackBerry: function BlackBerry() {
+	                                                                                this.playbook = this.agent.match(/PlayBook/i) || false;
+	                                                                                this.bb10 = this.agent.match(/BB10/i) || false;
+	                                                                                return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
+	                                                                }
 
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
+	                                                },
 
-	         //Function
-	         value: function value(prototype, constructor) {
+	                                                constructor: function constructor(app) {
 
-	            //Cache vars
-	            var isObj = false;
-	            var obj = prototype;
-	            var proto = prototype;
-	            var construct = constructor;
-	            var ret = {};
+	                                                                //Return constructed useragent object
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
 
-	            //if prototype contains a prototype and constructor
-	            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-	               construct = obj.constructor;
-	               proto = obj.prototype;
-	               isObj = true;
-	            }
+	                                                                                init: { writable: false, configurable: false, enumerable: false, value: function value() {
 
-	            //Grab type of constructor
-	            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+	                                                                                                                //Query Browser
+	                                                                                                                this.chrome = this.Chrome();
+	                                                                                                                this.safari = this.Safari();
+	                                                                                                                this.iemobile = this.IEMobile();
+	                                                                                                                this.nokia = this.Nokia();
+	                                                                                                                this.ie = this.trident = this.IE();
 
-	            //Return & Create object based on constructor
-	            switch (c) {
-	               case 'undefined':
+	                                                                                                                this.blackberry = this.BlackBerry();
+	                                                                                                                this.ios = this.iOS();
+	                                                                                                                this.android = this.Android();
 
-	                  //Use only the prototype
-	                  ret = Object.create(proto);
+	                                                                                                                this.touch = this.Mobile();
+	                                                                                                                this.mouse = !this.Mobile() || this.BlackBerry();
 
-	                  break;
-	               case 'object':
+	                                                                                                                this.keyboard = this.Desktop() || this.BlackBerry();
 
-	                  //Use constructor as object
-	                  ret = Object.create(proto, construct);
+	                                                                                                                this.Mobile();
+	                                                                                                                this.Desktop();
 
-	                  break;
-	               case 'function':
+	                                                                                                                this.app.ext.useragent = this;
+	                                                                                                                //return this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                }
 
-	                  //Use constructor as function
-	                  ret = Object.create(proto, construct(this));
+	                                },
 
-	                  break;
-	               default:
+	                                //Cookie Storage
+	                                //	Polyfill provided by ScottHamper
+	                                //	https://github.com/ScottHamper/Cookies#api-reference
 
-	                  //Expected a type
-	                  console.log("Expected 'object' or 'function': Type is " + c);
-	            }
-	            if (isObj) prototype = ret;
+	                                cookies: _cookies2.default,
 
-	            return ret;
-	         }
+	                                //MetaTag Handler
+	                                //	Assists in dynamically applying metatags.
+	                                //	Automatically applies Microsoft, Apple and common metatags.
 
-	      },
+	                                metatag: {
 
-	      //Allows artificial clicking of elements
-	      click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
+	                                                constructor: function constructor(app) {
 
-	            //If .click
-	            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
+	                                                                //Return constructed metatag object.
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
 
-	               if (event.target !== anchorObj) {
+	                                                                                init: { value: function value() {
 
-	                  var evt = document.createEvent("MouseEvents");
+	                                                                                                                //execute polyfill
+	                                                                                                                this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
+	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
+	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
+	                                                                                                                this.metaAppend(this.metaTag("cursor-event-mode", "native"));
+	                                                                                                                this.metaAppend(this.metaTag("touch-event-mode", "native"));
+	                                                                                                                this.metaAppend(this.metaTag("HandheldFriendly", "True"));
 
-	                  evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	                                                                                                                if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
+	                                                                                                                if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
 
-	                  anchorObj.dispatchEvent(evt);
-	               }
-	            }
-	         }
+	                                                                                                                this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
 
-	      },
+	                                                                                                                //Cache Control
+	                                                                                                                this.metaAppend(this.metaTag("cache-control", "max-age=0"));
+	                                                                                                                this.metaAppend(this.metaTag("cache-control", "no-cache"));
+	                                                                                                                this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
+	                                                                                                                this.metaAppend(this.metaTag("pragma", "no-cache"));
 
-	      //App.create for creating objects with app, visuals and graphics inherited
-	      create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
-	            return this.Construct(a || {}, this.client.room);
-	         } },
+	                                                                                                                this.app.ext.metatag = this;
 
-	      //Getters for Common Data
-	      getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.update.step.fps;
-	         } },
+	                                                                                                                //Return this
+	                                                                                                                return this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                },
 
-	      getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.update.state.current;
-	         } },
+	                                                prototype: {
 
-	      getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.ext.connect.offline;
-	         } },
+	                                                                //Default injected tags
+	                                                                ms_taphighlight: "no",
+	                                                                apple_webapp: "yes",
+	                                                                apple_statusbar: "black",
+	                                                                devicedpi: true,
+	                                                                devicewidth: true,
 
-	      getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.ext.connect.error;
-	         } },
+	                                                                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+	                                                                metaFavicon: function metaFavicon(img) {
 
-	      getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.ext.connect.connectionAttempts;
-	         } },
+	                                                                                this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
+	                                                                },
+
+	                                                                //Construct a standard metaLink element
+	                                                                metaLink: function metaLink(href, rel, type) {
+
+	                                                                                //Create link element
+	                                                                                this.link = document.createElement('link');
 
-	      getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.update.step.delta;
-	         } },
+	                                                                                //Assign element values
+	                                                                                this.link.href = href;
+	                                                                                this.link.rel = rel;
+	                                                                                this.link.type = type;
 
-	      getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.scale;
-	         } },
+	                                                                                //Return link
+	                                                                                return this.link;
+	                                                                },
 
-	      getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.setWidth;
-	         } },
+	                                                                //Construct a standard metaTag element
+	                                                                metaTag: function metaTag(name, content) {
 
-	      getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.setHeight;
-	         } },
+	                                                                                //Create link element
+	                                                                                this.meta = document.createElement('meta');
 
-	      getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.width;
-	         } },
+	                                                                                //Assign element values
+	                                                                                this.meta.content = content;
+	                                                                                this.meta.name = name;
 
-	      getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.height;
-	         } },
+	                                                                                //Return tag
+	                                                                                return this.meta;
+	                                                                },
 
-	      setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
-	            return document.title == title ? document.title : document.title = title;
-	         } },
+	                                                                //Append a meta object to the <head>
+	                                                                metaAppend: function metaAppend(meta) {
 
-	      setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
-	            return this.client.update.state.set(state, true);
-	         } },
+	                                                                                //Append child to header
+	                                                                                if (this.head.appendChild(meta)) {
+	                                                                                                //Count number of headers
+	                                                                                                this.count++;
 
-	      toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
-	            return this.client.update.fullscale = !this.client.update.fullscale;
-	         } },
+	                                                                                                //Return success
+	                                                                                                return true;
+	                                                                                } else return false;
+	                                                                },
 
-	      time: { writable: true, configurable: false, enumerable: false, value: 0 },
+	                                                                //Cached data
+	                                                                head: document.getElementsByTagName('head')[0],
+	                                                                link: null,
+	                                                                meta: null,
+	                                                                count: 0
 
-	      main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	               return true;
-	            } } }
-	   },
+	                                                }
 
-	   prototype: {
+	                                },
 
-	      options: _options3.default,
+	                                //Cursor Handler
+	                                //	Logs last cursor and allows to easily change the cursor on the fly
 
-	      user: _user3.default,
+	                                cursor: {
 
-	      ext: _ext3.default,
+	                                                constructor: function constructor(app) {
 
-	      input: _input3.default,
+	                                                                //Return constructed metatag object.
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
+	                                                                                init: { value: function value() {
 
-	      canvas: _canvas3.default,
+	                                                                                                                this.set(this.wait);
 
-	      client: _client3.default
+	                                                                                                                this.app.ext.cursor = this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                },
 
-	   }
+	                                                prototype: {
 
-	});
+	                                                                //Cached cursor types
+	                                                                auto: "auto",
+	                                                                inherit: "inherit",
+	                                                                crosshair: "crosshair",
+	                                                                def: "default",
+	                                                                help: "help",
+	                                                                move: "move",
+	                                                                pointer: "pointer",
+	                                                                progress: "progress",
+	                                                                text: "text",
+	                                                                wait: "wait",
+	                                                                eresize: "e-resize",
+	                                                                neresize: "ne-resize",
+	                                                                nwresize: "nw-resize",
+	                                                                nresize: "n-resize",
+	                                                                seresize: "se-resize",
+	                                                                swresize: "sw-resize",
+	                                                                sresize: "s-resize",
+	                                                                wresize: "w-resize",
+
+	                                                                //Properties
+	                                                                current: "auto",
+	                                                                last: "auto",
+	                                                                changed: false,
+	                                                                count: 0,
+	                                                                lock: 0,
+	                                                                delay: 4,
+
+	                                                                set: function set(cursor, lock) {
+
+	                                                                                if (this.last == cursor || this.lock) return;
+
+	                                                                                this.last = this.current;
+
+	                                                                                this.current = cursor;
+
+	                                                                                if (this.app.options.canvas.buffer) this.app.canvas.getBuffer().style.cursor = this.current;
+	                                                                                this.app.canvas.getCanvas().style.cursor = this.current;
+
+	                                                                                document.body.style.cursor = this.current;
+
+	                                                                                this.changed = true;
+	                                                                                this.count++;
+	                                                                }
+
+	                                                }
+
+	                                },
+
+	                                //Connection Controller
+	                                //	Assists in making ajax calls and allows you to test your connection.
+	                                //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
+
+	                                connect: {
+
+	                                                constructor: function constructor(app) {
+
+	                                                                //Return constructed metatag object.
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
+	                                                                                init: { value: function value() {
+
+	                                                                                                                //Execute a test on the connection
+	                                                                                                                this.test();
+
+	                                                                                                                this.app.ext.connect = this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                },
+
+	                                                prototype: {
+
+	                                                                //Properties
+	                                                                offline: false,
+	                                                                connectionAttempts: 0,
+	                                                                error: null,
+	                                                                window: window,
+
+	                                                                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
+	                                                                load: function load(address, callback, arg0, arg1) {
+
+	                                                                                var xmlhttp;
+	                                                                                if (window.XMLHttpRequest) {
+	                                                                                                // code for IE7+, Firefox, Chrome, Opera, Safari
+	                                                                                                xmlhttp = new XMLHttpRequest();
+	                                                                                } else {
+	                                                                                                // code for IE6, IE5
+	                                                                                                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	                                                                                }
+	                                                                                xmlhttp.onreadystatechange = function () {
+	                                                                                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                                                                                                                callback(xmlhttp.response, arg0, arg1);
+	                                                                                                }
+	                                                                                };
+	                                                                                xmlhttp.open("GET", address, true);
+	                                                                                xmlhttp.send();
+	                                                                },
+
+	                                                                //An aJax request to check wither or not you are connected to the internet
+	                                                                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
+	                                                                hostReachable: function hostReachable() {
+	                                                                                return;
+	                                                                                /*
+	                                                                                                    //if local host return offline
+	                                                                                                    if ((this.window.location.hostname).toString()=="127.0.0.1")
+	                                                                                                        return false;
+	                                                                                
+	                                                                                                    // Handle IE and more capable browsers
+	                                                                                                    var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
+	                                                                                                    var status;
+	                                                                                
+	                                                                                
+	                                                                                                    // Open new request as a HEAD to the root hostname with a random param to bust the cache
+	                                                                                                    xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
+	                                                                                
+	                                                                                                    // Issue request and handle response
+	                                                                                                    try {
+	                                                                                                        xhr.send();
+	                                                                                                        return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
+	                                                                                
+	                                                                                                    } catch (error) {
+	                                                                                
+	                                                                                                        if (this.connectionAttempts<1)
+	                                                                                                            this.connectionAttempts++,this.hostReachable();
+	                                                                                                        this.error = error;
+	                                                                                                        return false;
+	                                                                                                    }
+	                                                                                */
+	                                                                },
+
+	                                                                test: function test(app) {
+
+	                                                                                return this.offline = this.hostReachable();
+	                                                                }
+
+	                                                }
+
+	                                }
+
+	                }
+	};
 
 /***/ },
-/* 213 */
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	var Cookies = {
+
+	    constructor: function constructor(app) {
+
+	        return {
+	            app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	            init: { value: function value() {
+
+	                    //execute polyfill
+	                    return this.polyfill();
+	                }
+	            }
+	        };
+	    },
+
+	    prototype: {
+
+	        //Cookies Polyfill by ScottHamper
+	        //	https://github.com/ScottHamper/Cookies#api-reference
+	        polyfill: function polyfill() {
+
+	            (function (global, undefined) {
+	                'use strict';
+
+	                var factory = function factory(window) {
+	                    if (_typeof(window.document) !== 'object') {
+	                        throw new Error('Cookies.js requires a `window` with a `document` object');
+	                    }
+
+	                    var Cookies = window.Cookies = function (key, value, options) {
+	                        return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
+	                    };
+
+	                    // Allows for setter injection in unit tests
+	                    Cookies._document = window.document;
+
+	                    // Used to ensure cookie keys do not collide with
+	                    // built-in `Object` properties
+	                    Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
+
+	                    Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+
+	                    Cookies.defaults = {
+	                        path: '/',
+	                        secure: false
+	                    };
+
+	                    Cookies.get = function (key) {
+	                        if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
+	                            Cookies._renewCache();
+	                        }
+
+	                        return Cookies._cache[Cookies._cacheKeyPrefix + key];
+	                    };
+
+	                    Cookies.set = function (key, value, options) {
+	                        options = Cookies._getExtendedOptions(options);
+	                        options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
+
+	                        Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
+
+	                        return Cookies;
+	                    };
+
+	                    Cookies.expire = function (key, options) {
+	                        return Cookies.set(key, undefined, options);
+	                    };
+
+	                    Cookies._getExtendedOptions = function (options) {
+	                        return {
+	                            path: options && options.path || Cookies.defaults.path,
+	                            domain: options && options.domain || Cookies.defaults.domain,
+	                            expires: options && options.expires || Cookies.defaults.expires,
+	                            secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
+	                        };
+	                    };
+
+	                    Cookies._isValidDate = function (date) {
+	                        return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
+	                    };
+
+	                    Cookies._getExpiresDate = function (expires, now) {
+	                        now = now || new Date();
+
+	                        if (typeof expires === 'number') {
+	                            expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
+	                        } else if (typeof expires === 'string') {
+	                            expires = new Date(expires);
+	                        }
+
+	                        if (expires && !Cookies._isValidDate(expires)) {
+	                            throw new Error('`expires` parameter cannot be converted to a valid Date instance');
+	                        }
+
+	                        return expires;
+	                    };
+
+	                    Cookies._generateCookieString = function (key, value, options) {
+	                        key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
+	                        key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
+	                        value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
+	                        options = options || {};
+
+	                        var cookieString = key + '=' + value;
+	                        cookieString += options.path ? ';path=' + options.path : '';
+	                        cookieString += options.domain ? ';domain=' + options.domain : '';
+	                        cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
+	                        cookieString += options.secure ? ';secure' : '';
+
+	                        return cookieString;
+	                    };
+
+	                    Cookies._getCacheFromString = function (documentCookie) {
+	                        var cookieCache = {};
+	                        var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
+
+	                        for (var i = 0; i < cookiesArray.length; i++) {
+	                            var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+
+	                            if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
+	                                cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+	                            }
+	                        }
+
+	                        return cookieCache;
+	                    };
+
+	                    Cookies._getKeyValuePairFromCookieString = function (cookieString) {
+	                        // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
+	                        var separatorIndex = cookieString.indexOf('=');
+
+	                        // IE omits the "=" when the cookie value is an empty string
+	                        separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
+
+	                        return {
+	                            key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
+	                            value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
+	                        };
+	                    };
+
+	                    Cookies._renewCache = function () {
+	                        Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
+	                        Cookies._cachedDocumentCookie = Cookies._document.cookie;
+	                    };
+
+	                    Cookies._areEnabled = function () {
+	                        var testKey = 'cookies.js';
+	                        var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
+	                        Cookies.expire(testKey);
+	                        return areEnabled;
+	                    };
+
+	                    Cookies.enabled = Cookies._areEnabled();
+
+	                    return Cookies;
+	                };
+
+	                var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
+	                var AMD = "function" === 'function' && __webpack_require__(212);
+	                var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
+	                var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
+	                // AMD support
+	                if (AMD) {
+	                    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	                        return cookiesExport;
+	                    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	                    // CommonJS/Node.js support
+	                } else if (objectExports) {
+	                        // Support Node.js specific `module.exports` (which can be a function)
+	                        if (moduleExports) {
+	                            exports = module.exports = cookiesExport;
+	                        }
+	                        // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+	                        exports.Cookies = cookiesExport;
+	                    } else {
+	                        global.Cookies = cookiesExport;
+	                    }
+	            })(typeof window === 'undefined' ? this : window);
+	            return Cookies;
+	        }
+
+	    }
+
+	};
+
+	exports.default = Cookies;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(211)(module)))
+
+/***/ },
+/* 211 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -10118,12 +10848,556 @@
 
 
 /***/ },
-/* 214 */
+/* 212 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	var _sjsclass = __webpack_require__(201);
+
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Loader = (function (_SJSClass) {
+			_inherits(Loader, _SJSClass);
+
+			function Loader(app) {
+					_classCallCheck(this, Loader);
+
+					var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
+
+					_this.ImageCache = [];
+
+					_this.ImageBuffer = [];
+
+					_this.ImageBufferTime = 3;
+					_this.asyncLoadCacheIndex = 0;
+
+					window.Loader = _this;
+
+					return _this;
+			}
+
+			_createClass(Loader, [{
+					key: "checkLoaded",
+					value: function checkLoaded(name) {
+							var _this2 = this;
+
+							if (!this.getImageReference(name).complete) {
+
+									setTimeout(function () {
+
+											_this2.checkLoaded(name);
+									}, this.ImageBufferTime);
+							} else {
+
+									this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
+							}
+
+							return this.getImageReference(name);
+					}
+			}, {
+					key: "getBufferLength",
+					value: function getBufferLength() {
+
+							return this.ImageBuffer.length;
+					}
+			}, {
+					key: "getImageReference",
+					value: function getImageReference(string) {
+
+							var elementPos = this.ImageCache.map(function (img) {
+
+									return img.string;
+							}).indexOf(string);
+
+							var objectFound = this.ImageCache[elementPos];
+
+							return objectFound;
+					}
+			}, {
+					key: "loadImage",
+					value: function loadImage(string) {
+							var _this3 = this;
+
+							var name = string;
+
+							var img = this.graphics.load(string);
+
+							var cacheIndex = this.ImageCache.push(img);
+
+							img.string = name;
+
+							this.ImageBuffer.push(name);
+
+							setTimeout(function () {
+
+									_this3.checkLoaded(name);
+							}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
+
+							return this.ImageCache[cacheIndex - 1];
+					}
+			}, {
+					key: "getBase64Image",
+					value: function getBase64Image(img) {
+
+							// Create an empty canvas element
+							var canvas = document.createElement("canvas");
+							canvas.width = img.width;
+							canvas.height = img.height;
+
+							// Copy the image contents to the canvas
+							var ctx = canvas.getContext("2d");
+							ctx.drawImage(img, 0, 0);
+
+							// Get the data-URL formatted image
+							// Firefox supports PNG and JPEG. You could check img.src to
+							// guess the original format, but be aware the using "image/jpg"
+							// will re-encode the image.
+							var dataURL = canvas.toDataURL("image/png");
+
+							return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+					}
+			}, {
+					key: "createImageData",
+					value: function createImageData(img) {
+
+							// Create an empty canvas element
+							var canvas = document.createElement("canvas");
+							var ctx = canvas.getContext("2d");
+
+							canvas.width = img.width;
+							canvas.height = img.height;
+							canvas.style.background = 'transparent';
+							canvas.background = 'transparent';
+
+							var canvas2 = this.app.canvas.buffer.getContext('2d');
+							//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
+							var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
+
+							//var canvas2_img = new Image();
+							//canvas2_img.src = canvas2_data;
+
+							var img = document.createElement("img");
+							img.src = this.app.canvas.canvas.toDataURL("image/png");
+
+							// Copy the image contents to the canvas
+							//this.visuals.putData(canvas2_data,0,0);
+
+							//var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+							//ctx.putImageData(canvas2_data,0,0);
+
+							ctx.drawImage(img, 0, 0);
+							//ctx.drawImage(canvas2_img, 0, 0);
+
+							var newData2 = ctx.getImageData(0, 0, img.width, img.height);
+
+							return newData2;
+					}
+			}, {
+					key: "asyncLoadImage",
+					value: (function () {
+							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
+									var name, img, cacheIndex, _img;
+
+									return regeneratorRuntime.wrap(function _callee$(_context) {
+											while (1) {
+													switch (_context.prev = _context.next) {
+															case 0:
+																	name = string;
+																	_context.next = 3;
+																	return this.graphics.load(name);
+
+															case 3:
+																	img = _context.sent;
+
+																	img.string = name;
+
+																	_context.next = 7;
+																	return this.ImageCache.push(img);
+
+															case 7:
+																	cacheIndex = _context.sent;
+																	_context.next = 10;
+																	return this.ImageBuffer.push(name + suffex);
+
+															case 10:
+
+																	//await setTimeout(()=> {
+
+																	_img = this.checkLoaded(name);
+
+																	//_img.base64 = this.getBase64Image(_img);
+																	//_img.imgdata = this.createImageData(_img);
+
+																	this.ImageCache[cacheIndex - 1] = _img;
+																	//console.log(this.getBase64Image(_img))
+																	//console.log('eh');
+																	//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+																	//console.log(this.ImageCache[cacheIndex-1])
+
+																	//}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
+																	this.asyncLoadCacheIndex = cacheIndex;
+																	console.log(this.asyncLoadCacheIndex);
+
+																	return _context.abrupt("return", this.ImageCache[cacheIndex - 1]);
+
+															case 15:
+															case "end":
+																	return _context.stop();
+													}
+											}
+									}, _callee, this);
+							}));
+
+							return function asyncLoadImage(_x, _x2) {
+									return ref.apply(this, arguments);
+							};
+					})()
+			}, {
+					key: "asyncLoadImageData",
+					value: (function () {
+							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, properties) {
+									var _this4 = this;
+
+									var _index, _image;
+
+									return regeneratorRuntime.wrap(function _callee2$(_context2) {
+											while (1) {
+													switch (_context2.prev = _context2.next) {
+															case 0:
+																	_index = this.asyncLoadCacheIndex;
+																	_context2.next = 3;
+																	return this.asyncLoadImage(string, "_blit").then(function (img) {
+
+																			//let _cacheIndex =  this.ImageCache.push(img);
+
+																			//console.log( this.ImageCache[_cacheIndex-1]=img)
+
+																			_this4[string2] = img;
+																			_this4[string2].addEventListener('load', function () {
+
+																					_this4[string2] = _this4.visuals.blit(_this4[string2], properties);
+
+																					_this4[string2].string = string2;
+
+																					_this4.ImageCache.push(_this4[string2]);
+
+																					console.log(_this4[string2]);
+																			});
+																	});
+
+															case 3:
+																	_image = _context2.sent;
+																	return _context2.abrupt("return", _image);
+
+															case 5:
+															case "end":
+																	return _context2.stop();
+													}
+											}
+									}, _callee2, this);
+							}));
+
+							return function asyncLoadImageData(_x3, _x4, _x5) {
+									return ref.apply(this, arguments);
+							};
+					})()
+			}]);
+
+			return Loader;
+	})(_sjsclass2.default);
+
+	exports.default = Loader;
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _sjsclass = __webpack_require__(201);
+
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	var _vector = __webpack_require__(200);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	var _loader = __webpack_require__(213);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var xOff = 0;
+
+	var SJSParticleController = (function (_Loader) {
+	        _inherits(SJSParticleController, _Loader);
+
+	        function SJSParticleController(app) {
+	                _classCallCheck(this, SJSParticleController);
+
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
+
+	                _this.SJSParticleList = [];
+
+	                _this.particleLimit = 1500;
+
+	                _this.flakes = new Image();
+
+	                _this.asyncLoadImageData('../flakes', 'flakes', Math.round(Math.random() * 16) * 32, Math.round(Math.random() * 16) * 32);
+
+	                return _this;
+	        }
+
+	        _createClass(SJSParticleController, [{
+	                key: 'clear',
+	                value: function clear() {
+
+	                        this.SJSParticleList = [];
+	                }
+	        }, {
+	                key: 'update',
+	                value: function update() {
+
+	                        var length = this.SJSParticleList.length;
+
+	                        var width = this.app.getWidth();
+	                        var height = this.app.getHeight();
+	                        var scale = this.app.getScale();
+
+	                        //if ((this.app.getFps()>30))
+	                        if (length < this.particleLimit) {
+
+	                                var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random - 100);
+	                                var End = new _vector2.default(Math.random() * width, 0);
+	                                End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+
+	                                var newParticle = new SJSParticle(this.app, { x: Start.x, y: Start.y }, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+	                                this.SJSParticleList.push(newParticle);
+	                        }
+
+	                        if (length == 0) return;
+
+	                        var i = length - 1;
+
+	                        for (i; i; --i) {
+
+	                                var particle = this.SJSParticleList[i];
+
+	                                particle.update();
+	                        }
+
+	                        return;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
+
+	                        var length = this.SJSParticleList.length;
+
+	                        if (length == 0) return;
+
+	                        var i = length - 1;
+
+	                        for (i; i; --i) {
+
+	                                var particle = this.SJSParticleList[i];
+
+	                                particle.draw();
+	                        }
+
+	                        //    this.visuals.putData(this.flakes.imgdata,0,0)
+	                        //console.log(this.flakes2.src);
+	                        this.visuals.image(this.flakes, 0, 0);
+	                }
+	        }]);
+
+	        return SJSParticleController;
+	})(_loader2.default);
+
+	exports.default = SJSParticleController;
+
+	var SJSParticle = (function (_SJSClass) {
+	        _inherits(SJSParticle, _SJSClass);
+
+	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
+	                _classCallCheck(this, SJSParticle);
+
+	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
+
+	                var loader = window.Loader; // this.app.getCurrent().particleController;
+
+	                //this.img = loader.getImageReference('../flakes');
+	                _this2.img = loader.getImageReference('flakes');
+	                ;
+
+	                _this2.t = Math.round(1 + Math.random() * 5);
+
+	                _this2.gravity = 0.5;
+
+	                _this2.alpha = 0.75 + Math.random() * 0.25;
+
+	                _this2.easing = Math.random() * 0.2;
+
+	                _this2.fade = Math.random() * 0.1;
+
+	                _this2.gridX = marker % 120;
+
+	                _this2.gridY = Math.floor(marker / 120) * 12;
+
+	                _this2.color = marker;
+
+	                _this2.scale = 2 * Math.random() * 2 * Application.getScale();
+
+	                _this2.start = 30 + Math.random() * 180;
+
+	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
+
+	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
+
+	                _this2.del = false;
+
+	                _this2.pos = {
+	                        x: pos.x || 0,
+	                        y: pos.y || 0
+	                };
+
+	                _this2.vel = {
+	                        x: vel.x || 0,
+	                        y: vel.y || 0
+	                };
+
+	                _this2.lastPos = {
+	                        x: _this2.pos.x,
+	                        y: _this2.pos.y
+	                };
+
+	                _this2.target = {
+	                        y: target.y || 0,
+	                        x: target.x || 0
+	                };
+
+	                _this2.usePhysics = usePhysics || false;
+
+	                if (!_this2.usePhysics) {
+
+	                        _this2.dir = Math.random() * 1;
+
+	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
+	                } else {
+
+	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                }
+
+	                return _this2;
+	        }
+
+	        _createClass(SJSParticle, [{
+	                key: 'update',
+	                value: function update() {
+
+	                        var width = this.app.getWidth();
+
+	                        var height = this.app.getHeight();
+
+	                        var scale = this.app.getScale();
+
+	                        // Check to Delete
+
+	                        if (this.del) {
+
+	                                var start = { x: -xOff - width + Math.random() * width * 3, y: Math.random() * -100 };
+	                                var target = { x: Math.random() * width, y: 2 * height / scale };
+	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
+
+	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
+
+	                                return;
+	                        }
+
+	                        // Move Object
+
+	                        var distance = this.target.y - this.pos.y;
+
+	                        var val = this.target.x / 200;
+
+	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
+
+	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
+
+	                        val = this.pos.x / 200;
+
+	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
+
+	                        var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
+	                        var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
+	                        this.pos.x += xdir;
+
+	                        // Check if out of bounds
+
+	                        if (this.pos.y > 600) {
+	                                this.alpha -= 0.01;
+
+	                                if (this.alpha < 0.01) this.del = true;
+	                        }
+
+	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
+
+	                        //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
+	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //else
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+
+	                        this.visuals.image(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	                }
+	        }]);
+
+	        return SJSParticle;
+	})(_sjsclass2.default);
 
 /***/ },
 /* 215 */
@@ -10137,9 +11411,9 @@
 	        value: true
 	});
 
-	var _inputcontroller2 = __webpack_require__(194);
+	var _sjsclass = __webpack_require__(201);
 
-	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10149,448 +11423,179 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Input = (function (_inputcontroller) {
-	        _inherits(Input, _inputcontroller);
+	var test = (function (_SJSClass) {
+	        _inherits(test, _SJSClass);
 
-	        function Input(app, pointerPoint) {
-	                _classCallCheck(this, Input);
+	        function test(app) {
+	                _classCallCheck(this, test);
 
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
+	                //this.Loader = this.app.getCurrent().Loader;
+	                /*
+	                        this.SplashScreen = [];
+	                
+	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
+	                
+	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
+	                
+	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
+	                
+	                        this.Background = this.Loader.loadImage('intro/background');
+	                
+	                        this.begin = this.Loader.loadImage('intro/begin');
+	                
+	                		this.ScoreNumber = [];
+	                
+	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
+	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
+	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
+	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
+	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
+	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
+	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
+	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
+	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
+	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
+	                
+	                        this.Loader.loadImage('interface/iconoffline');
+	                
+	                        this.Loader.loadImage('interface/iconp');
+	                
+	                        this.Loader.loadImage('interface/iconvolume');
+	                
+	                        this.Loader.loadImage('interface/iconx');
+	                */
 
-	                _this.delay = 0;
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
 
-	                _this.touch = false;
+	                _this.StartPhase = 2;
+	                _this.StartAlpha = 2;
 
-	                _this.touch_dist = { x: 0, y: 0 };
+	                _this.xxx = 0;
+	                _this.start = false;
 
-	                _this.key = false;
+	                //		(this.particles = this.app.create(SB_.prototype)).init();
 
-	                _this.keyPower = 0;
+	                //(this.loading = this.app.create(Loading.prototype)).init();
+	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
+	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
 
-	                _this.keyup = false;
+	                //    this.particles = new SB_(this.app);
 
-	                _this.keydown = false;
+	                //        this.loading = new Loading(this.app);
 
-	                _this.codes = [];
+	                //        this.statusicons = new StatusIco(this.app);
 
-	                _this.codeList = [];
+	                //        this.characterselect = new Characterselect(this.app);
 
-	                _this.control = false;
+	                _this.continue = false;
 
-	                _this.confine = false;
+	                _this.sceneX = -190;
+	                _this.scenePhase = 0;
+	                _this.sceneEndX = 1;
 
-	                _this.preventNext = true;
+	                _this.sceneStartSpeed = 3;
+	                _this.sceneEndSpeed = 4;
 
-	                _this.init_options();
-
-	                _this.keyController.init(_this.app);
-
-	                _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
-
-	                _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
-
-	                _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
-
-	                _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
-
-	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
-
-	                _this.setup_universalMultitouch();
-
-	                //this.setup_msUniversalAppTouch();
-
+	                _this.sceneSpeed = _this.sceneStartSpeed;
 	                return _this;
 	        }
 
-	        _createClass(Input, [{
-	                key: "preventDefault",
-	                value: function preventDefault(e) {
-	                        e.preventDefault();return e.target.app;
-	                }
-	        }, {
-	                key: "preventNextInput",
-	                value: function preventNextInput() {
-	                        return this.preventNext = true;
-	                }
-	        }, {
-	                key: "confineMouse",
-	                value: function confineMouse() {
+	        _createClass(test, [{
+	                key: "draw",
+	                value: function draw() {
 
-	                        return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
-	                }
-	        }, {
-	                key: "init_options",
-	                value: function init_options() {
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
 
-	                        /*	Overrides the selection start event for selecting events	*/
+	                        var sw = this.app.getScaledWidth();
+	                        var sh = this.app.getScaledHeight();
+	                        var h = this.app.getHeight();
+	                        var w = this.app.getWidth();
+	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
 
-	                        if (!this.app.options.get("override").SelectStart) {
-	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
-	                        }
+	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
 
-	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
+	                        this.Background = {};
+	                        this.Background.width = sw;
 
-	                        if (!this.app.options.get("override").MSHoldVisual) {
-	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
-	                        }
+	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
 
-	                        /* Overrides the ContextMenu event */
+	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
+	                        /*
+	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
+	                        
+	                                if (this.scenePhase==2)
+	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
+	                                else
+	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
+	                        */
+	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+	                        /*
+	                                if (this.continue == true)
+	                        			this.characterselect.draw();
+	                                else
+	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
+	                        */
 
-	                        if (this.app.options.get("override").ContextMenu) {
-	                                this.app.document.oncontextmenu = this.preventDefault;
-	                                this.app.window.self.oncontextmenu = this.preventDefault;
-	                        }
+	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
 
-	                        /*	Overrides dragstart event		*/
+	                        if (this.scenePhase == 2) {
+	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                                /*
+	                                			this.particles._draw();
+	                                
+	                                			if (this.graphics.getErrors())
+	                                				this.loading.draw();
+	                                			else	{
+	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
+	                                				if (this.continue==false)
+	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                                
+	                                				this.app.ext.cursor.set('pointer');
+	                                
+	                                			}
+	                                            */
+	                        } else {}
 
-	                        if (this.app.options.get("override").Drag) {
-	                                this.app.document.ondragstart = this.preventDefault;
-	                                this.app.window.self.ondragstart = this.preventDefault;
-	                        }
+	                                //	this.loading.draw();
 
-	                        /*	CSS based Overrides
-	                                  - mstouch
-	                                - seamless ( toggles overflow )
-	                                - tight ( zeros padding and margin )
-	                          */
-
-	                        if (this.app.options.get("flags").mstouch) {
-	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-	                        }
-
-	                        if (this.app.options.get("flags").seamless) {
-	                                this.app.document.body.style.overflow = "hidden";
-	                        }
-
-	                        if (this.app.options.get("flags").tight) {
-	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
-	                        }
+	                                //	this.statusicons.draw(0.29);
 	                }
 	        }, {
 	                key: "update",
 	                value: function update() {
 
-	                        this.confineMouse();
+	                        //    this.loading.update();
+	                        //	this.statusicons.update();
 
-	                        //Reset variables
-	                        this.press = false;
-	                        this.touch = 0;
-	                        this.app.window.inside = 0;
-	                        this.wheelDelta = 0;
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
 
-	                        this.pressed ? this.duration++ : this.duration = 0;
+	                        var tick = this.sceneSpeed;
 
-	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
+	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
+	                                //    this.particles._update();
+	                                //	this.characterselect.update();
+	                                this.sceneX += tick;
+	                        } else if (this.scenePhase < 2) {
 
-	                        //this.setup_msUniversalAppTouch();
+	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
 
-	                        if (this.delay > 0) {
+	                                if (this.app.input.released) this.sceneSpeed = 10;
 
-	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	                                this.sceneX += tick;
+
+	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+
+	                                if (this.scenePhase > 2) this.scenePhase = 2;
 	                        }
-
-	                        //reset code released, unused?
-	                        this.codereleased = 0;
-
-	                        return true;
-	                }
-	        }, {
-	                key: "setup_universalMultitouch",
-	                value: function setup_universalMultitouch() {
-
-	                        //touch-action: none;
-
-	                        if (window.PointerEvent) {
-	                                // Pointer events are supported.
-
-	                                // Test for touch capable hardware
-	                                if (navigator.maxTouchPoints) {}
-
-	                                // Test for multi-touch capable hardware
-	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
-
-	                                // Check the maximum number of touch points the hardware supports
-	                                //var touchPoints = navigator.maxTouchPoints;
-	                        }
-
-	                        this.multi = {
-
-	                                list: []
-
-	                        };
-
-	                        this.touched = {
-
-	                                count: 0,
-	                                uplist: [],
-	                                downlist: [],
-	                                last: { x: 0, y: 0 },
-	                                CheckTouchUp: function CheckTouchUp() {
-
-	                                        return this.uplist[this.uplist.length - 1];
-	                                },
-	                                CheckTouchDown: function CheckTouchDown() {}
-
-	                        };
-	                }
-	        }, {
-	                key: "setup_msUniversalAppTouch",
-	                value: function setup_msUniversalAppTouch() {
-
-	                        var i = 0;
-
-	                        var data = {
-	                                app: this.app,
-	                                x: 0,
-	                                y: 0
-	                        };
-
-	                        if (this.pressed === false && this.lastpressed === true) {
-	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
-
-	                                this.controls.up(data);
-	                        }
-
-	                        this.lastpressed = this.pressed;
-
-	                        if (!this.wininitalize) try {
-
-	                                //var w = Windows;
-	                                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-
-	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
-	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
-	                                this.wininitalize = true;
-
-	                                data = {
-	                                        app: this.app,
-	                                        x: this.winposition.x,
-	                                        y: this.winposition.y
-	                                };
-	                        } catch (e) {
-
-	                                data = {
-	                                        app: this.app,
-	                                        x: 0,
-	                                        y: 0
-	                                };
-	                        } else {
-	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
-	                                this.pressed = this.winpoint.isInContact;
-	                                this.pointerDevice = this.winpoint.pointerDevice;
-
-	                                var pt = this.pointerPoint.getCurrentPoint(1);
-	                                var ptTargetProperties = pt.properties;
-
-	                                if (this.released) {
-
-	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
-
-	                                        switch (pt.pointerDevice.pointerDeviceType) {
-	                                                case "mouse":
-	                                                case 2:
-	                                                        details += "\nPointer type: mouse";
-	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
-	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
-	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
-	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
-	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
-	                                                        break;
-	                                                case "pen":
-	                                                        details += "\nPointer type: pen";
-	                                                        if (pt.isInContact) {
-	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
-	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
-	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
-	                                                        }
-	                                                        break;
-	                                                case "touch":
-	                                                        details += "\nPointer type: touch";
-	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
-	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
-	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                                        break;
-	                                                default:
-	                                                        details += "\nPointer type: " + "n/a";
-	                                                        break;
-	                                        }
-	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
-	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
-	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
-	                                        //console.log(pt.pointerDevice);
-	                                        //console.log(details);
-	                                }
-	                                i = this.winpoint;
-
-	                                data.x = this.winposition.x;
-	                                data.y = this.winposition.y;
-
-	                                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
-	                        }
-
-	                        if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
-
-	                        // console.log(i)
-	                        //  if (Windows)
-	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
-	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
 	                }
 	        }]);
 
-	        return Input;
-	})(_inputcontroller3.default);
+	        return test;
+	})(_sjsclass2.default);
 
-	exports.default = Input;
-
-/***/ },
-/* 216 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _statistics2 = __webpack_require__(203);
-
-	var _statistics3 = _interopRequireDefault(_statistics2);
-
-	var _application2 = __webpack_require__(212);
-
-	var _application3 = _interopRequireDefault(_application2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var SJSController = (function () {
-	        _createClass(SJSController, [{
-	                key: 'get',
-	                value: function get() {
-
-	                        return this.proto;
-	                }
-	        }, {
-	                key: 'create',
-	                value: function create(target) {
-	                        var _this = this;
-
-	                        var tempReference = {};
-
-	                        var tempReferenceId = null;
-
-	                        var listReference = null;
-
-	                        var time = new Date().getTime();
-
-	                        this.statistics.monitor(function () {
-
-	                                _this.name = "scriptloadtime";
-
-	                                window.utils.loadExternalJS(window.scripts);
-
-	                                tempReference = _this.generatePrototype();
-
-	                                tempReferenceId = tempReference.id;
-	                        }).then(function () {
-
-	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-	                                listReference = _this.controller.list(tempReferenceId);
-
-	                                _this.statistics.monitor(function () {
-
-	                                        _this.name = "loadtime";
-
-	                                        _this.initListeners(listReference);
-	                                }).then(function () {
-
-	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-	                                        _this.statistics.log("build", time);
-	                                });
-	                        });
-
-	                        return tempReference;
-	                }
-	        }, {
-	                key: 'generatePrototype',
-	                value: function generatePrototype() {
-
-	                        this.window = window;
-
-	                        //temp stores the app during the create process, it is then returned
-	                        var temp = {};
-
-	                        temp = _application3.default;
-
-	                        temp = Object.create(temp.prototype, temp.constructor);
-
-	                        temp.window = this.window;
-
-	                        temp.document = document;
-
-	                        temp.id = this.window.appsNextId;
-
-	                        this.window.apps[temp.id] = temp;
-
-	                        this.window.appsNextId++;
-
-	                        return this.window.apps[temp.id];
-	                }
-	        }, {
-	                key: 'initListeners',
-	                value: function initListeners(temp) {
-
-	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-	                        return temp;
-	                }
-	        }]);
-
-	        function SJSController() {
-	                _classCallCheck(this, SJSController);
-
-	                this.window = window;
-
-	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
-
-	                this.window.SpiceJS = this;
-	                this.window.SJS = this;
-
-	                //if no apps have been defined, create a new array
-	                if (!this.window.apps) this.window.apps = new Array(1);
-
-	                //if appsNextId isnt larger or equal to 0 assign it to 0
-	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
-
-	                //Setup Statistics and Monitoring
-	                this.statistics = new this.constructor._statistics(this);
-
-	                //Reference static controller
-	                this.controller = this.constructor._controller;
-	        }
-
-	        return SJSController;
-	})();
-
-	SJSController._statistics = _statistics3.default;
-	SJSController._controller = {
-
-	        list: function list(id) {
-
-	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
-	        }
-
-	};
-	exports.default = SJSController;
+	exports.default = test;
 
 /***/ }
 /******/ ]);

@@ -11,6 +11,9 @@ export default class Loader extends SJSClass {
 		this.ImageBuffer = [];
 
 		this.ImageBufferTime = 3;
+		this.asyncLoadCacheIndex = 0;
+
+		window.Loader = this;
 
 	}
 
@@ -29,6 +32,9 @@ export default class Loader extends SJSClass {
 			this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
 
 		}
+
+		return this.getImageReference(name);
+
 	}
 
 	getBufferLength() {
@@ -60,7 +66,7 @@ export default class Loader extends SJSClass {
 		img.string = name;
 
 		this.ImageBuffer.push(name);
-		
+
 		setTimeout(()=> {
 
 			this.checkLoaded(name)
@@ -68,6 +74,128 @@ export default class Loader extends SJSClass {
 		}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
 
 		return this.ImageCache[cacheIndex - 1];
+	}
+
+    getBase64Image(img) {
+
+        // Create an empty canvas element
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Copy the image contents to the canvas
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        // Get the data-URL formatted image
+        // Firefox supports PNG and JPEG. You could check img.src to
+        // guess the original format, but be aware the using "image/jpg"
+        // will re-encode the image.
+        var dataURL = canvas.toDataURL("image/png");
+
+        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    }
+
+    createImageData(img) {
+
+        // Create an empty canvas element
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+
+		        canvas.width = img.width;
+		        canvas.height = img.height;
+								canvas.style.background = 'transparent';
+								canvas.background = 'transparent';
+
+
+        var canvas2 =this.app.canvas.buffer.getContext('2d');
+		//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
+		var canvas2_data = canvas2.getImageData(0,0,100,100);
+
+		//var canvas2_img = new Image();
+		//canvas2_img.src = canvas2_data;
+
+		var img = document.createElement("img");
+		img.src = this.app.canvas.canvas.toDataURL("image/png");
+
+        // Copy the image contents to the canvas
+		//this.visuals.putData(canvas2_data,0,0);
+
+
+		//var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+		//ctx.putImageData(canvas2_data,0,0);
+
+        ctx.drawImage(img, 0, 0);
+        //ctx.drawImage(canvas2_img, 0, 0);
+
+		var newData2 = ctx.getImageData(0,0,img.width,img.height);
+
+        return newData2;
+    }
+
+
+
+	async asyncLoadImage(string,suffex) {
+
+		let name = string;
+
+		let img = await this.graphics.load(name);
+
+		img.string = name;
+
+		let cacheIndex = await this.ImageCache.push(img);
+
+		await this.ImageBuffer.push(name+suffex);
+
+		//await setTimeout(()=> {
+
+			let _img = this.checkLoaded(name);
+
+			//_img.base64 = this.getBase64Image(_img);
+			//_img.imgdata = this.createImageData(_img);
+
+
+
+			this.ImageCache[cacheIndex - 1] = _img;
+			//console.log(this.getBase64Image(_img))
+			//console.log('eh');
+			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+			//console.log(this.ImageCache[cacheIndex-1])
+
+		//}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
+		this.asyncLoadCacheIndex = cacheIndex;
+		console.log(this.asyncLoadCacheIndex);
+
+		return this.ImageCache[cacheIndex - 1];
+	}
+	async asyncLoadImageData(string,string2,properties) {
+
+		let _index = this.asyncLoadCacheIndex;
+
+		let _image = await this.asyncLoadImage(string,"_blit").then((img)=>{
+
+				//let _cacheIndex =  this.ImageCache.push(img);
+
+				//console.log( this.ImageCache[_cacheIndex-1]=img)
+
+                this[string2] = img;
+                this[string2].addEventListener('load',()=>{
+
+                        this[string2] = this.visuals.blit(this[string2],properties)
+
+		                this[string2].string = string2;
+
+						this.ImageCache.push(this[string2]);
+
+
+						console.log(this[string2])
+                })
+
+        });
+
+		return _image;
 	}
 
 }

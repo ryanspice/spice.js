@@ -1,9 +1,11 @@
 
 import SJSClass from './sjsclass.js';
 
+import Vector from './vector';
+
 import Loader from './loader.js';
 
-let xOff = 0;
+        let xOff = 0;
 
 export default class SJSParticleController extends Loader {
 
@@ -12,9 +14,13 @@ export default class SJSParticleController extends Loader {
         super(app);
 
         this.SJSParticleList = [];
-        this.particleLimit = 150;
 
-        this.loadImage('../flakes');
+        this.particleLimit = 1500;
+
+        this.flakes = new Image();
+
+        this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
+
 
     }
 
@@ -28,13 +34,20 @@ export default class SJSParticleController extends Loader {
 
         let length = this.SJSParticleList.length;
 
+
         let width = this.app.getWidth();
         let height = this.app.getHeight();
         let scale = this.app.getScale();
 
+        //if ((this.app.getFps()>30))
         if (length<this.particleLimit)
         {
-            var newParticle = new SJSParticle(this.app,{x:xOff-width +Math.random()*width*3,y:-100}, {x:Math.random()*width,y:2*height/scale}, {x:Math.random()*1+0.5,y:Math.random()*0.1+0.1}, "#AAFFFF", false);
+
+            var Start = new Vector(xOff-width +Math.random()*width*3,Math.random-100);
+            var End = new Vector(Math.random()*width,0);
+             End = new Vector(Start.x+Math.random()*width - Math.random()*width,0);
+
+            var newParticle = new SJSParticle(this.app,{x:Start.x,y:Start.y}, {x:End.x,y:2*height/scale}, {x:Math.random()*0.1+0.5,y:Math.random()*0.15+0.1}, "#AAFFFF", false);
             this.SJSParticleList.push(newParticle);
         }
 
@@ -73,6 +86,9 @@ export default class SJSParticleController extends Loader {
 
         }
 
+                    //    this.visuals.putData(this.flakes.imgdata,0,0)
+                    //console.log(this.flakes2.src);
+                    this.visuals.image(this.flakes,0,0)
     }
 
 }
@@ -83,15 +99,17 @@ class SJSParticle extends SJSClass {
 
         super(app)
 
-        let Loader = this.app.getCurrent().particleController;
+        let loader = window.Loader;// this.app.getCurrent().particleController;
 
-        this.img = Loader.getImageReference('../flakes');
+        //this.img = loader.getImageReference('../flakes');
+        this.img = loader.getImageReference('flakes');
+;
 
         this.t = Math.round(1+Math.random()*5);
 
         this.gravity  = 0.5;
 
-        this.alpha    = 0.5+Math.random()*0.5;
+        this.alpha    = 0.75+Math.random()*0.25;
 
         this.easing   = Math.random() * 0.2;
 
@@ -170,7 +188,7 @@ class SJSParticle extends SJSClass {
 
         if (this.del){
 
-            let start = {x:-xOff-width +Math.random()*width*3,y:-100};
+            let start = {x:-xOff-width +Math.random()*width*3,y:Math.random()*-100};
             let target  = {x:Math.random()*width,y:2*height/scale};
             let velocity = {x:Math.random()*0.5,y:Math.random()*0.1};
 
@@ -198,6 +216,14 @@ class SJSParticle extends SJSClass {
         else
             this.pos.x +=this.dir* this.vel.x* this.pos.y/this.start+((val-val/2)*(1-this.usePhysics));
 
+
+
+            		var xdir =  (this.app.input.horizontal.keyboard ||  this.app.input.horizontal.touch);
+            		var ydir =  (this.app.input.vertical.keyboard ||  this.app.input.vertical.touch);
+                    this.pos.x += xdir;
+
+
+
         // Check if out of bounds
 
         if(this.pos.y>600)
@@ -220,13 +246,15 @@ class SJSParticle extends SJSClass {
 
     }
 
-    draw(){
+    draw() {
 
-        if (this.app.getScale()<0.8)
-        this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-        else
-        this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+        //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
+        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+        //else
+        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
+        this.visuals.image(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.vel.x-this.pos.y,this.alpha,1,1);
     }
 
 }

@@ -58,6 +58,7 @@ Current documentation is for an older version of SpiceJS.
 	<li>particles</li>
 	<li>graphics loader</li>
 	<li>multi-touch + mouse & keyboard input detection</li>
+	<li>double buffering</li>
 </ul>
 
 ####in-testing
@@ -65,7 +66,6 @@ Current documentation is for an older version of SpiceJS.
 	<li>advanced drawing (blending, elements, buttons)</li>
 	<li>drawing using vectors</li>
 	<li>pathing</li>
-	<li>double buffering</li>
 	<li>linear and radial collision</li>
 	<i>ability to instantiate multiple app canvases on a single page</i>
 </ul>

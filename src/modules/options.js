@@ -14,7 +14,7 @@ export default {
         override:false,			//Toggle the use of options.canvas
         name:'canvas',			//Use canvas.name
         buffername:'buffer',	//Use canvas.buffer
-        buffer:false,			//Toggle the use of double-buffering
+        buffer:true,			//Toggle the use of double-buffering
         background:'#000000',		//Assign canvas element background colour
         position:{				//Assign canvas element position properties
             //position:'absolute',

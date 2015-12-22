@@ -80,7 +80,7 @@ visuals = {
                     var r = d[inpos++];
                     var g = d[inpos++];
                     var b = d[inpos++];
-                    //var a = d[inpos++];
+                    var a = d[inpos++];
                      b = Math.min(255,b);
                     if ((r==0)&&(g==0)&&(b==0))
                     {
@@ -119,6 +119,11 @@ visuals = {
             //If double buffering
             if (this.app.options.canvas.buffer)
             {
+                //If initalized, draw state
+                if (this.app.client.update.state.initalized)
+                    this.app.client.update.state.draw();
+
+
                 //Draw buffer to canvs
                 this.canvas_context.drawImage(this.buffer,0,0);
 
@@ -208,6 +213,8 @@ visuals = {
         },
 
         debug:function(){
+
+            /*
             if (!App.ext.debug.strength=="Normal")
                 return;
             if ((App.ext.debug.strength=="off")||(App.ext.debug.strength=="none"))
@@ -312,9 +319,93 @@ visuals = {
             //this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
             //this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
             //this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
+
+
+            */
         },
+
+
+
+
+
+        blit:function(img,offx,offy) {
+
+
+            var _img = document.createElement("img");
+
+            // Create an empty canvas element
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d");
+
+            canvas.width = img.width / 16;
+            canvas.height = img.height;
+            canvas.style.background = 'transparent';
+            canvas.background = 'transparent';
+
+            //    ctx.beginPath();
+            //    ctx.arc(75, 75, 70, 0, Math.PI*2, true);
+            //    ctx.closePath();
+            //    ctx.fill();
+
+            canvas.width = img.width / 16;
+            canvas.height = img.height / 16;
+            ctx.drawImage(img, 0, 0);
+
+            ctx.drawImage(img, offx, offy, 32, 32, 0, 0, img.width / 16, img.height / 16);
+            //(img,sx,sy,swidth,sheight,x,y,width,height);
+
+            SJS.statistics.monitor(function () {
+
+                _img.src = canvas.toDataURL("image/png");
+                window.T = _img;
+            }, 10).then(function () {
+
+                console.log(_img.src);
+            }, 10);
+
+            return _img;
+
+            var canvas2 =this.app.canvas.canvas.getContext('2d');
+            var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
+
+
+            //var canvas2_data = canvas2.getImageData(0,0,100,100);
+
+            //var canvas2_img = new Image();
+            //canvas2_img.src = canvas2_data;
+
+
+            // Copy the image contents to the canvas
+            //this.visuals.putData(canvas2_data,0,0);
+
+
+            //var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+            //ctx.putImageData(canvas2_data,0,0);
+
+            //ctx.drawImage(canvas2_img, 0, 0);
+            console.log(img);
+                                                            ctx.drawImage(img, 0, 0);
+
+            var _img = document.createElement("img");
+
+            _img.src =  canvas.toDataURL("image/png");
+            console.log(canvas.toDataURL("image/png"));
+//                        ctx.drawImage(img, 0, 0);
+            //var newData2 = ctx.getImageData(0,0,img.width,img.height);
+
+            return _img;
+        },
+
+
+
+
+
+
+
+
         clean:function(){
-            this.cleanAlpha?this.opacity(1):null;
+        //    this.cleanAlpha?this.opacity(1):null;
             this.colour(this.stat.oldcol);
             this.stat.init(this.colour(),this.stat.oldcol);
         },
@@ -477,23 +568,34 @@ visuals = {
             this.clean();
         },
         setting:true,
+
         rect_button:function(x,y,w,h,s,a,colour,loc,c){
+
             this.stat = this.chk(x,y,w,h,s,a,c,colour);
             var t = false;
-            if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.c))
+
+
+
+            //if (this.touch_within(this.stat.x,this.stat.y,this.stat.w,this.stat.h,this.stat.c))
+            if (this.touch_within_stat(this.stat))
             {
                 t = true;
-                App.ext.cursor.set(App.ext.cursor.pointer,true);
-                if (App.input.released)
-                    if (App.input.delay<1)
-                        loc(),App.input.delay = 1;
+            //    this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
+
+//   if (this.app.input.delay<1)
+
+                if (this.app.input.released)
+                        loc(),this.app.input.delay = 1;
             }
-            if (this.setting)
+
+
+            //if (this.setting)
                 this.rect_ext(x,y,w,h,s,a,c,colour);
                 //else
-                var ww = 1;
-                if (t)
-                this.rect_ext(x-ww,y-ww,w+ww*2,h+ww*2,s,a,c,colour);
+            //    var ww = 1;
+            //    if (t)
+            //    this.rect_ext(x-ww,y-ww,w+ww*2,h+ww*2,s,a,c,colour);
+
         },
         rect_rotate:function(x,y,w,h,colour,s,a,angle){
             this.stat = this.chk(x,y,w,h,s,a,1,colour);
@@ -631,6 +733,7 @@ visuals = {
             this.stat = this.chk(x,y,w,h,s,a,c);
             return this.stat;
         },
+
         image_flip:function(x,y){
 
             this.stat = this.chk(x,y,1,1,1,1,1);
@@ -638,30 +741,38 @@ visuals = {
             this.buffer_context.scale(-1, 1);
             this.buffer_context.translate(-this.stat.x*2, 0);
         },
+
         image_restore:function(x,y){
 
             //this.buffer_context.restore();
         },
+
+
+        putData:function(myImageData, dx, dy){
+
+            this.buffer_context.putImageData(myImageData, dx, dy);
+            //this.clean();
+        },
+
         image_part:function(image,x,y,s,a,c,xx,yy,w,h){
             this.stat = this.chk(x,y,w,h,s,a,c);
 
             //var scale = (1.1*this.stat.s)*this.app.getScale();
-
-
-
             (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-
-
         },
+
         image_part_rotate:function(image,x,y,s,a,c,xx,yy,w,h,angle){
             this.stat = this.chk(x,y,w,h,s,a,c);
 
             //var scale = (1.1*this.stat.s)*this.app.getScale();
+            this.buffer_context.save();
             this.buffer_context.translate(this.stat.x,this.stat.y);
             this.buffer_context.rotate(angle*0.0174532925);
             (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,0,0,this.stat.w,this.stat.h);
-            this.buffer_context.rotate(-angle*0.0174532925);
-            this.buffer_context.translate(-this.stat.x,-this.stat.y);
+
+            this.buffer_context.restore();
+        //    this.buffer_context.rotate(-angle*0.0174532925);
+        //    this.buffer_context.translate(-this.stat.x,-this.stat.y);
         },
         image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
             this.stat = this.chk(x,y,image.width,image.height,s,a,true);
@@ -799,10 +910,23 @@ visuals = {
         buttonH:function(img,x,y,s,f){
             this.image_buttonH(img,x,y,s,f,true,1,1,1,1);
         },
+
+
+
+
+
+/* IMAGE BUTTON LEGACY TAKE OUT */
+
         image_button:function(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
+
             this.stat = this.chk(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
+
             var s = this.stat2 = this.chk(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
+
             var w = false;
+
+
+
             if (this.touch_within_stat(s))
             {
                 w = true;
@@ -846,6 +970,18 @@ visuals = {
             }
             return w;
         },
+
+
+
+        /*  ^ IMAGE BUTTON LEGACY TAKE OUT ^ */
+
+
+
+
+
+
+
+
         touch_within:function(x, y, w, h,c) {
             var doc = document.documentElement;
             this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
@@ -863,19 +999,30 @@ visuals = {
             stat.x = stat.x - this.left;
             return stat.c?((this.app.input.x>stat.x-stat.w/2&&this.app.input.x<stat.x+stat.w/2&&this.app.input.y>stat.y-stat.h/2&&this.app.input.y<stat.y+stat.h/2)?true:false):((this.app.input.x>stat.x&&this.app.input.x<stat.x+stat.w&&this.app.input.y>stat.y&&this.app.input.y<stat.y+stat.h)?true:false);
         },
+
         touch_within_stat:function(stat,r) {
+
             var doc = document.documentElement;
             var w = window;
+
             this.left = (w.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
             this.top = (w.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+
             stat.y = stat.y - this.top;
             stat.x = stat.x - this.left;
-            var x = this.app.input.x;
-            var y = this.app.input.y;
 
-            if (!r){
-            x = this.app.input.touched.last.x;
-            y = this.app.input.touched.last.y;}
+            let position = this.app.input.position;
+
+            let x = position.x;
+            let y = position.y;
+
+                /*
+
+                            if (!r){
+                            x = this.app.input.touched.last.x;
+                            y = this.app.input.touched.last.y;}
+                */
+
             return stat.c?((x>stat.x-stat.w/2&&x<stat.x+stat.w/2&&y>stat.y-stat.h/2&&y<stat.y+stat.h/2)?true:false):((y>stat.x&&x<stat.x+stat.w&&y>stat.y&&y<stat.y+stat.h)?true:false);
         },
 
@@ -1067,7 +1214,303 @@ visuals = {
         },
         text_width:function(string) {
             return this.buffer_context.measureText(string).width; // Not WOrking
-        }
+        },
+
+
+        trytolockOrientation:function(){
+            /*
+            if (!this.autoLockOrientation || this.orientations === 0)
+    			return;
+    		*/
+    		var orientation = "portrait";
+                            var works = false
+
+
+    		//if (this.orientations === 2)
+    			orientation = "landscape";
+
+    		// Note IE/Edge can throw exceptions here if in an iframe (WrongDocumentError), which also affects the debugger.
+    		try {
+
+    			if (screen["orientation"] && screen["orientation"]["lock"])
+    				works = screen["orientation"]["lock"](orientation);
+    			else if (screen["lockOrientation"])
+    				works = screen["lockOrientation"](orientation);
+    			else if (screen["webkitLockOrientation"])
+    				works = screen["webkitLockOrientation"](orientation);
+    			else if (screen["mozLockOrientation"])
+    				works = screen["mozLockOrientation"](orientation);
+    			else if (screen["msLockOrientation"])
+    				works = screen["msLockOrientation"](orientation);
+    		}
+    		catch (e)
+    		{
+    			if (console && console.warn)
+    				console.warn("Failed to lock orientation: ", e);
+    		}
+
+
+            return works;
+        },
+        newscale:function(w, h, force)
+	{
+		var offx = 0, offy = 0;
+		var neww = 0, newh = 0, intscale = 0;
+
+		// Hide address bar on iPhone iOS 6 only
+		var tryHideAddressBar = (this.isiPhoneiOS6 && this.isSafari && !navigator["standalone"] && !this.isDomFree && !this.isCordova);
+
+		if (tryHideAddressBar)
+			h += 60;		// height of Safari iPhone iOS 6 address bar
+
+		// Ignore redundant events
+		if (this.lastWindowWidth === w && this.lastWindowHeight === h && !force)
+			return;
+
+		this.lastWindowWidth = w;
+		this.lastWindowHeight = h;
+
+		var mode = this.fullscreen_mode;
+		var orig_aspect, cur_aspect;
+
+		var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen) && !this.isCordova;
+
+		if (!isfullscreen && this.fullscreen_mode === 0 && !force)
+			return;			// ignore size events when not fullscreen and not using a fullscreen-in-browser mode
+
+		if (isfullscreen && this.fullscreen_scaling > 0)
+			mode = this.fullscreen_scaling;
+
+		var dpr = this.devicePixelRatio;
+
+		// Letterbox or letterbox integer scale modes: adjust width and height and offset canvas accordingly
+		if (mode >= 4)
+		{
+			orig_aspect = this.original_width / this.original_height;
+			cur_aspect = w / h;
+
+			// too wide: scale to fit height
+			if (cur_aspect > orig_aspect)
+			{
+				neww = h * orig_aspect;
+
+				if (mode === 5)	// integer scaling
+				{
+					// integer scale by device pixels, not CSS pixels, since DPR may be non-integral
+					intscale = (neww * dpr) / this.original_width;
+					if (intscale > 1)
+						intscale = Math.floor(intscale);
+					else if (intscale < 1)
+						intscale = 1 / Math.ceil(1 / intscale);
+					neww = this.original_width * intscale / dpr;
+					newh = this.original_height * intscale / dpr;
+					offx = (w - neww) / 2;
+					offy = (h - newh) / 2;
+					w = neww;
+					h = newh;
+				}
+				else
+				{
+					offx = (w - neww) / 2;
+					w = neww;
+				}
+			}
+			// otherwise scale to fit width
+			else
+			{
+				newh = w / orig_aspect;
+
+				if (mode === 5)	// integer scaling
+				{
+					intscale = (newh * dpr) / this.original_height;
+					if (intscale > 1)
+						intscale = Math.floor(intscale);
+					else if (intscale < 1)
+						intscale = 1 / Math.ceil(1 / intscale);
+					neww = this.original_width * intscale / dpr;
+					newh = this.original_height * intscale / dpr;
+					offx = (w - neww) / 2;
+					offy = (h - newh) / 2;
+					w = neww;
+					h = newh;
+				}
+				else
+				{
+					offy = (h - newh) / 2;
+					h = newh;
+				}
+			}
+
+			if (isfullscreen && !this.isNWjs)
+			{
+				offx = 0;
+				offy = 0;
+			}
+		}
+		// Centered mode in NW.js: keep canvas size the same and just center it
+		else if (this.isNWjs && this.isNodeFullscreen && this.fullscreen_mode_set === 0)
+		{
+			offx = Math.floor((w - this.original_width) / 2);
+			offy = Math.floor((h - this.original_height) / 2);
+			w = this.original_width;
+			h = this.original_height;
+		}
+
+		if (mode < 2)
+			this.aspect_scale = dpr;
+
+		// iPad 3 Retina bug workaround: if in retina display and the width is 2048, for some reason
+		// performance is massively reduced.  Workaround (found by Arima) is to set a width of 2046 instead.
+		if (this.isRetina && this.isiPad && dpr > 1)	// don't apply to iPad 1-2
+		{
+			if (w >= 1024)
+				w = 1023;		// 2046 retina pixels
+			if (h >= 1024)
+				h = 1023;
+		}
+
+		// hacks for iOS retina
+		this.cssWidth = Math.round(w);
+		this.cssHeight = Math.round(h);
+		this.width = Math.round(w * dpr);
+		this.height = Math.round(h * dpr);
+		this.redraw = true;
+
+		if (this.wantFullscreenScalingQuality)
+		{
+			this.draw_width = this.width;
+			this.draw_height = this.height;
+			this.fullscreenScalingQuality = true;
+		}
+		else
+		{
+			// Render directly even in low-res scale mode if the display area is smaller than the window size area,
+			// or in crop mode (since no engine scaling happens)
+			if ((this.width < this.original_width && this.height < this.original_height) || mode === 1)
+			{
+				this.draw_width = this.width;
+				this.draw_height = this.height;
+				this.fullscreenScalingQuality = true;
+			}
+			else
+			{
+				this.draw_width = this.original_width;
+				this.draw_height = this.original_height;
+				this.fullscreenScalingQuality = false;
+
+				/*var orig_aspect = this.original_width / this.original_height;
+				var cur_aspect = this.width / this.height;
+
+				// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+				if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
+					this.aspect_scale = this.height / this.original_height;
+				else
+					this.aspect_scale = this.width / this.original_width;*/
+
+				// Scale inner or scale outer mode: adjust the draw size to be proportional
+				// to the window size, since the draw size is simply stretched-to-fit in the window
+				if (mode === 2)		// scale inner
+				{
+					orig_aspect = this.original_width / this.original_height;
+					cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+
+					if (cur_aspect < orig_aspect)
+						this.draw_width = this.draw_height * cur_aspect;
+					else if (cur_aspect > orig_aspect)
+						this.draw_height = this.draw_width / cur_aspect;
+				}
+				else if (mode === 3)
+				{
+					orig_aspect = this.original_width / this.original_height;
+					cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+
+					if (cur_aspect > orig_aspect)
+						this.draw_width = this.draw_height * cur_aspect;
+					else if (cur_aspect < orig_aspect)
+						this.draw_height = this.draw_width / cur_aspect;
+				}
+			}
+		}
+
+		if (this.canvasdiv && !this.isDomFree)
+		{
+			jQuery(this.canvasdiv).css({"width": Math.round(w) + "px",
+										"height": Math.round(h) + "px",
+										"margin-left": Math.floor(offx) + "px",
+										"margin-top": Math.floor(offy) + "px"});
+
+			if (typeof cr_is_preview !== "undefined")
+			{
+				jQuery("#borderwrap").css({"width": Math.round(w) + "px",
+											"height": Math.round(h) + "px"});
+			}
+		}
+
+		if (this.canvas)
+		{
+			this.canvas.width = Math.round(w * dpr);
+			this.canvas.height = Math.round(h * dpr);
+
+			if (this.isEjecta)
+			{
+				this.canvas.style.left = Math.floor(offx) + "px";
+				this.canvas.style.top = Math.floor(offy) + "px";
+				this.canvas.style.width = Math.round(w) + "px";
+				this.canvas.style.height = Math.round(h) + "px";
+			}
+			else if (this.isRetina && !this.isDomFree)
+			{
+				this.canvas.style.width = Math.round(w) + "px";
+				this.canvas.style.height = Math.round(h) + "px";
+			}
+		}
+
+		if (this.overlay_canvas)
+		{
+			this.overlay_canvas.width = Math.round(w * dpr);
+			this.overlay_canvas.height = Math.round(h * dpr);
+
+			this.overlay_canvas.style.width = this.cssWidth + "px";
+			this.overlay_canvas.style.height = this.cssHeight + "px";
+		}
+
+		if (this.glwrap)
+		{
+			this.glwrap.setSize(Math.round(w * dpr), Math.round(h * dpr));
+		}
+
+		if (this.isDirectCanvas && this.ctx)
+		{
+			this.ctx.width = Math.round(w);
+			this.ctx.height = Math.round(h);
+		}
+
+		if (this.ctx)
+		{
+			// Re-apply the image smoothing property, since resizing the canvas resets its state
+			this.ctx["webkitImageSmoothingEnabled"] = this.linearSampling;
+			this.ctx["mozImageSmoothingEnabled"] = this.linearSampling;
+			this.ctx["msImageSmoothingEnabled"] = this.linearSampling;
+			this.ctx["imageSmoothingEnabled"] = this.linearSampling;
+		}
+
+		// Try to lock orientation to the project setting
+		this.tryLockOrientation();
+
+		// Attempt to hide address bar on iPhone
+		// iOS 7.1 bug: weird glitch where a big space appears at the bottom of the
+		// screen when going in to landscape mode. This call to scrollTo seems to
+		// fix it, so always run this on iPhone.
+		if (!this.isDomFree && (tryHideAddressBar || this.isiPhone))
+		{
+			window.setTimeout(function () {
+				window.scrollTo(0, 1);
+			}, 100);
+		}
+	}
+
+
+
     },
     constructor:function(app){return {
         app:{value:app},
@@ -1076,14 +1519,55 @@ visuals = {
                 window.utils.requestAnimationFrame(name,0,0);
 
                 this.scale = this.app.scale;
+
                 this.canvas = this.app.canvas.getCanvas();
+
                 this.buffer = this.app.canvas.getBuffer();
-                this.canvas_context = this.canvas.getContext("2d");
+
+                let attribs = {alpha:false};
+
+                this.canvas_context = this.canvas.getContext("2d",attribs);
+
+
                 if (this.app.options.canvas.buffer)
-                    this.buffer_context = this.buffer.getContext("2d");
+                    this.buffer_context = this.buffer.getContext("2d",attribs);
                     else
-                    this.buffer_context = this.canvas.getContext("2d");
+                    this.buffer_context = this.canvas.getContext("2d",attribs);
+
+                this.linearSampling = true;
+                if (this.buffer_context["imageSmoothingEnabled"] != this.linearSampling)
+                if (this.buffer_context["mozImageSmoothingEnabled"] != this.linearSampling)
+                if (this.buffer_context["msImageSmoothingEnabled"] != this.linearSampling)
+                if (this.buffer_context["webkitImageSmoothingEnabled"] != this.linearSampling)
+                    this.buffer_context["webkitImageSmoothingEnabled"] = this.linearSampling;
+
+
+            		// make sure aspect scale is correctly set in advance of first tick
+            		/*if (this.fullscreen_mode >= 2)
+            		{
+            			var orig_aspect = this.original_width / this.original_height;
+            			var cur_aspect = this.width / this.height;
+
+            			// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+            			if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
+            				this.aspect_scale = this.height / this.original_height;
+            			else
+            				this.aspect_scale = this.width / this.original_width;
+            		}
+
+                    */
+                // Non-fullscreen games on retina displays never call setSize to enable hi-dpi display.
+        		// Do this now if the device has hi-dpi support.
+        		//if (this.fullscreen_mode === 0 && this.isRetina && this.devicePixelRatio > 1)
+        		//{
+        		//	this["setSize"](this.original_width, this.original_height, true);
+        		//}
+
+
+
+
                 }
+
             }
         }
     }

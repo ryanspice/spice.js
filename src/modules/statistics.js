@@ -111,6 +111,11 @@ class Statistics extends StatisticsController {
 
     }
 
+    watch(v){
+
+
+    }
+
     async log(){
 
         let name = '';

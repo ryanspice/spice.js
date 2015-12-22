@@ -27,7 +27,11 @@ export default class inputcontroller extends SJSClass {
 
         static _pointerup(evt){
 
+
+
             let input = evt.target.app.input;
+
+
 
             let x = evt.x || evt.clientX || evt.pageX;
 
@@ -36,6 +40,8 @@ export default class inputcontroller extends SJSClass {
             input.last = input.end = new Vector(x,y);
 
             input.pressed = false;
+
+            input.released = true;
 
             return true;
         }
@@ -300,5 +306,35 @@ export default class inputcontroller extends SJSClass {
             return this.constructor._scrollController = value;
 
         }
+
+
+
+        get horizontal() {
+
+                var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
+                var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
+                var mouse = -this.pressed * this.app.input.dist.x;
+                var touch = -this.pressed * this.app.input.dist.x; //was touched
+
+                var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+                var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+                return { keyboard: keyboard, touch: touched };
+            }
+
+        get vertical() {
+
+                var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
+                var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
+                var mouse = this.pressed * this.app.input.dist.y;
+                var touch = this.pressed * this.app.input.dist.y; //was touched
+
+                var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+                var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+                return { keyboard: keyboard, touch: touched };
+            }
+
+
 
 }

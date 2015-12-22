@@ -84,7 +84,7 @@ export default {
 
                 this.client_data();
 
-            },1000/60)
+            },1000/59)
 
 
             this.app.ext.cursor.set(this.app.ext.cursor.def);
@@ -119,11 +119,11 @@ export default {
                 //Return true or false if resized, update size
                 this.resized = this.update.size(this);
 
-                //Draw frame
-                this.visuals.flip(this.scale);
-
                 //Update scale
                 this.scale = this.update.scale(this);
+
+                //Draw frame
+                this.visuals.flip(this.scale);
 
                 //Update frames per second
                 this.fps = this.update.step.tick(this.second,this.mainLoop,this.app);
