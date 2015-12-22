@@ -20,15 +20,10 @@ export default class SJSParticleController extends Loader {
         this.flakes = new Image();
         this.flakes0 = new Image();
 
-//        this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
-
-
-
-
-
+        for(var i = 0; i<16; i++)
+            this['flakes'+i] = new Image();
         for(var i = 0; i<16; i++)
             this.asyncLoadImageData('../flakes','flakes'+i, i*32, 0*32);
-
 
     }
 
@@ -77,6 +72,14 @@ export default class SJSParticleController extends Loader {
     }
 
     draw()  {
+
+        let error = (this.getBufferLength());
+
+    //    console.log(error)
+        if (error>0)
+            {
+                this.visuals.rect(0,0,10,10,'#FF0000')
+                return;}
 
         let length = this.SJSParticleList.length;
 

@@ -148,7 +148,7 @@ export default class Loader extends SJSClass {
 
 		await this.ImageBuffer.push(name+suffex);
 
-		//await setTimeout(()=> {
+		await setTimeout(()=> {
 
 			let _img = this.checkLoaded(name);
 
@@ -164,7 +164,7 @@ export default class Loader extends SJSClass {
 
 			//console.log(this.ImageCache[cacheIndex-1])
 
-		//}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
+		}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length))
 		this.asyncLoadCacheIndex = cacheIndex;
 
 		return this.ImageCache[cacheIndex - 1];
@@ -179,6 +179,8 @@ export default class Loader extends SJSClass {
 
 				//console.log( this.ImageCache[_cacheIndex-1]=img)
 
+				let buffindex = this.ImageBuffer.push(string+"_blit");
+
                 this[string2] = img;
                 this[string2].addEventListener('load',()=>{
 
@@ -188,8 +190,7 @@ export default class Loader extends SJSClass {
 
 						this.ImageCache.push(this[string2]);
 
-
-						console.log(this[string2])
+								this.ImageBuffer.splice(this.ImageBuffer.indexOf(string+"_blit2"),1);
                 })
 
         });

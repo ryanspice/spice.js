@@ -743,6 +743,8 @@ visuals = {
         //    this.buffer_context.translate(-this.stat.x,-this.stat.y);
         },
         image_rotate:function(image,x,y,s,angle,a,xoff,yoff){
+                if (typeof image == 'undefined')
+                    image = new Image(),console.log('Image fialed to render');
             this.stat = this.chk(x,y,image.width,image.height,s,a,true);
             this.buffer_context.translate(this.stat.x,this.stat.y);
             this.buffer_context.rotate(angle*0.0174532925);

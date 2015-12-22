@@ -9275,6 +9275,7 @@
 	            //    this.buffer_context.translate(-this.stat.x,-this.stat.y);
 	        },
 	        image_rotate: function image_rotate(image, x, y, s, angle, a, xoff, yoff) {
+	            if (typeof image == 'undefined') image = new Image(), console.log('Image fialed to render');
 	            this.stat = this.chk(x, y, image.width, image.height, s, a, true);
 	            this.buffer_context.translate(this.stat.x, this.stat.y);
 	            this.buffer_context.rotate(angle * 0.0174532925);
@@ -11015,8 +11016,9 @@
 					key: "asyncLoadImage",
 					value: (function () {
 							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
-									var name, img, cacheIndex, _img;
+									var _this4 = this;
 
+									var name, img, cacheIndex;
 									return regeneratorRuntime.wrap(function _callee$(_context) {
 											while (1) {
 													switch (_context.prev = _context.next) {
@@ -11039,22 +11041,23 @@
 																	return this.ImageBuffer.push(name + suffex);
 
 															case 10:
+																	_context.next = 12;
+																	return setTimeout(function () {
 
-																	//await setTimeout(()=> {
+																			var _img = _this4.checkLoaded(name);
 
-																	_img = this.checkLoaded(name);
+																			//_img.base64 = this.getBase64Image(_img);
+																			//_img.imgdata = this.createImageData(_img);
 
-																	//_img.base64 = this.getBase64Image(_img);
-																	//_img.imgdata = this.createImageData(_img);
+																			_this4.ImageCache[cacheIndex - 1] = _img;
+																			//console.log(this.getBase64Image(_img))
+																			//console.log('eh');
+																			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
 
-																	this.ImageCache[cacheIndex - 1] = _img;
-																	//console.log(this.getBase64Image(_img))
-																	//console.log('eh');
-																	//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+																			//console.log(this.ImageCache[cacheIndex-1])
+																	}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
 
-																	//console.log(this.ImageCache[cacheIndex-1])
-
-																	//}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length));
+															case 12:
 																	this.asyncLoadCacheIndex = cacheIndex;
 
 																	return _context.abrupt("return", this.ImageCache[cacheIndex - 1]);
@@ -11075,7 +11078,7 @@
 					key: "asyncLoadImageData",
 					value: (function () {
 							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
-									var _this4 = this;
+									var _this5 = this;
 
 									var _index, _image;
 
@@ -11091,16 +11094,18 @@
 
 																			//console.log( this.ImageCache[_cacheIndex-1]=img)
 
-																			_this4[string2] = img;
-																			_this4[string2].addEventListener('load', function () {
+																			var buffindex = _this5.ImageBuffer.push(string + "_blit");
 
-																					_this4[string2] = _this4.visuals.blit(_this4[string2], x, y);
+																			_this5[string2] = img;
+																			_this5[string2].addEventListener('load', function () {
 
-																					_this4[string2].string = string2;
+																					_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
 
-																					_this4.ImageCache.push(_this4[string2]);
+																					_this5[string2].string = string2;
 
-																					console.log(_this4[string2]);
+																					_this5.ImageCache.push(_this5[string2]);
+
+																					_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
 																			});
 																	});
 
@@ -11176,9 +11181,9 @@
 	                _this.flakes = new Image();
 	                _this.flakes0 = new Image();
 
-	                //        this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
-
 	                for (var i = 0; i < 16; i++) {
+	                        _this['flakes' + i] = new Image();
+	                }for (var i = 0; i < 16; i++) {
 	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
 	                }return _this;
 	        }
@@ -11226,6 +11231,14 @@
 	        }, {
 	                key: 'draw',
 	                value: function draw() {
+
+	                        var error = this.getBufferLength();
+
+	                        //    console.log(error)
+	                        if (error > 0) {
+	                                this.visuals.rect(0, 0, 10, 10, '#FF0000');
+	                                return;
+	                        }
 
 	                        var length = this.SJSParticleList.length;
 
