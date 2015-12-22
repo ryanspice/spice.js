@@ -8901,7 +8901,7 @@
 
 	        blit: function blit(img, offx, offy) {
 
-	            var _img = this.blitter_image;
+	            var _img = this.blitter_image = new Image();
 	            var canvas = this.blitter;
 	            var ctx = this.blitter_context;
 
@@ -8917,7 +8917,7 @@
 
 	            //    ctx.drawImage(img, 0, 0);
 
-	            ctx.drawImage(img, 0, 0, 32, 32, 0, 0, img.width / 16, img.height / 16);
+	            ctx.drawImage(img, offx, offy, 32, 32, 0, 0, img.width / 16, img.height / 16);
 	            //(img,sx,sy,swidth,sheight,x,y,width,height);
 
 	            SJS.statistics.monitor(function () {
@@ -11074,7 +11074,7 @@
 			}, {
 					key: "asyncLoadImageData",
 					value: (function () {
-							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, properties) {
+							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
 									var _this4 = this;
 
 									var _index, _image;
@@ -11094,7 +11094,7 @@
 																			_this4[string2] = img;
 																			_this4[string2].addEventListener('load', function () {
 
-																					_this4[string2] = _this4.visuals.blit(_this4[string2], properties);
+																					_this4[string2] = _this4.visuals.blit(_this4[string2], x, y);
 
 																					_this4[string2].string = string2;
 
@@ -11116,7 +11116,7 @@
 									}, _callee2, this);
 							}));
 
-							return function asyncLoadImageData(_x3, _x4, _x5) {
+							return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
 									return ref.apply(this, arguments);
 							};
 					})()
@@ -11176,11 +11176,11 @@
 	                _this.flakes = new Image();
 	                _this.flakes0 = new Image();
 
-	                _this.asyncLoadImageData('../flakes', 'flakes', Math.round(Math.random() * 16) * 32, Math.round(Math.random() * 16) * 32);
+	                //        this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
 
-	                //        this.asyncLoadImageData('../flakes','flakes0', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
-
-	                return _this;
+	                for (var i = 0; i < 16; i++) {
+	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
+	                }return _this;
 	        }
 
 	        _createClass(SJSParticleController, [{
@@ -11239,10 +11239,6 @@
 
 	                                particle.draw();
 	                        }
-
-	                        //    this.visuals.putData(this.flakes.imgdata,0,0)
-	                        //console.log(this.flakes2.src);
-	                        this.visuals.image(this.flakes, 0, 0);
 	                }
 	        }]);
 
@@ -11262,7 +11258,7 @@
 	                var loader = window.Loader; // this.app.getCurrent().particleController;
 
 	                //this.img = loader.getImageReference('../flakes');
-	                _this2.img = loader.getImageReference('flakes');
+	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
 	                ;
 
 	                _this2.t = Math.round(1 + Math.random() * 5);
@@ -11281,7 +11277,7 @@
 
 	                _this2.color = marker;
 
-	                _this2.scale = 3 * Math.random() * 6 * Application.getScale();
+	                _this2.scale = 3 * Math.random() * 3 * Application.getScale();
 
 	                _this2.start = 30 + Math.random() * 180;
 
@@ -11340,7 +11336,7 @@
 
 	                        if (this.del) {
 
-	                                var start = { x: -xOff - width + Math.random() * width * 3, y: Math.random() * -100 };
+	                                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
 	                                var target = { x: Math.random() * width, y: 2 * height / scale };
 	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
 

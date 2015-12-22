@@ -33,7 +33,7 @@ visuals = {
         canvas_context:(Object.create(null)),
         buffer_context:(Object.create(null)),
         blitter_context:(Object.create(null)),
-        blitter_image:new Image,
+        blitter_image:new Image(),
 
 
         within:false,
@@ -334,7 +334,7 @@ visuals = {
         blit:function(img,offx,offy) {
 
 
-            var _img = this.blitter_image;
+            var _img = this.blitter_image = new Image();
             var canvas =this.blitter;
             var ctx = this.blitter_context;
 
@@ -350,7 +350,7 @@ visuals = {
 
         //    ctx.drawImage(img, 0, 0);
 
-            ctx.drawImage(img, 0, 0, 32, 32, 0, 0, img.width / 16, img.height / 16);
+            ctx.drawImage(img, offx,offy, 32, 32, 0, 0, img.width / 16, img.height / 16);
             //(img,sx,sy,swidth,sheight,x,y,width,height);
 
             SJS.statistics.monitor(function () {

@@ -28,18 +28,18 @@ Application.main= {
     //        console.log(Application.input.keyController.keyboardCheck('w'));
 
 		this.particleController.update();
-        this.intro.update();
+            //this.intro.update();
 
         return true;
     },
 
     draw:function() {
-    this.intro.draw();
+        //this.intro.draw();
 
 		this.particleController.draw();
 
         this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
-        this.visuals.text_ext(this.app.getFps().toFixed(2),100,100,"#FFFFFF",1,1);
+        //this.visuals.text_ext(this.app.getFps().toFixed(2),100,100,"#FFFFFF",1,1);
 
         return true;
     }

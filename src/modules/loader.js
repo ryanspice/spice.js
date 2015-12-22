@@ -169,7 +169,7 @@ export default class Loader extends SJSClass {
 
 		return this.ImageCache[cacheIndex - 1];
 	}
-	async asyncLoadImageData(string,string2,properties) {
+	async asyncLoadImageData(string,string2,x,y) {
 
 		let _index = this.asyncLoadCacheIndex;
 
@@ -182,7 +182,7 @@ export default class Loader extends SJSClass {
                 this[string2] = img;
                 this[string2].addEventListener('load',()=>{
 
-                        this[string2] = this.visuals.blit(this[string2],properties)
+                        this[string2] = this.visuals.blit(this[string2],x,y)
 
 		                this[string2].string = string2;
 

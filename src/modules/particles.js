@@ -20,9 +20,14 @@ export default class SJSParticleController extends Loader {
         this.flakes = new Image();
         this.flakes0 = new Image();
 
-        this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
+//        this.asyncLoadImageData('../flakes','flakes', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
 
-//        this.asyncLoadImageData('../flakes','flakes0', Math.round(Math.random()*16)*32, Math.round(Math.random()*16)*32);
+
+
+
+
+        for(var i = 0; i<16; i++)
+            this.asyncLoadImageData('../flakes','flakes'+i, i*32, 0*32);
 
 
     }
@@ -89,9 +94,6 @@ export default class SJSParticleController extends Loader {
 
         }
 
-                    //    this.visuals.putData(this.flakes.imgdata,0,0)
-                    //console.log(this.flakes2.src);
-                    this.visuals.image(this.flakes,0,0)
     }
 
 }
@@ -105,7 +107,7 @@ class SJSParticle extends SJSClass {
         let loader = window.Loader;// this.app.getCurrent().particleController;
 
         //this.img = loader.getImageReference('../flakes');
-        this.img = loader.getImageReference('flakes');
+        this.img = loader.getImageReference('flakes'+Math.round(Math.random()*15));
 ;
 
         this.t = Math.round(1+Math.random()*5);
@@ -124,7 +126,7 @@ class SJSParticle extends SJSClass {
 
         this.color    = marker;
 
-        this.scale = (3*Math.random()*6)*Application.getScale();
+        this.scale = (3*Math.random()*3)*Application.getScale();
 
         this.start = 30 + Math.random()*180;
 
@@ -191,7 +193,8 @@ class SJSParticle extends SJSClass {
 
         if (this.del){
 
-            let start = {x:-xOff-width +Math.random()*width*3,y:Math.random()*-100};
+
+            let start = new Vector(-xOff-width +Math.random()*width*3,Math.random()*-100)
             let target  = {x:Math.random()*width,y:2*height/scale};
             let velocity = {x:Math.random()*0.5,y:Math.random()*0.1};
 
