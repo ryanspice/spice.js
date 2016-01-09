@@ -5363,9 +5363,6 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	console.log(_application3.default[0]);
-	console.log(_application3.default[1]);
-
 	var SJSController = (function () {
 	        _createClass(SJSController, [{
 	                key: 'get',
@@ -5420,14 +5417,13 @@
 	                key: 'generatePrototype',
 	                value: function generatePrototype() {
 
-	                        var temp2 = new _application3.default[1](this.app);
-
 	                        this.window = window;
 
 	                        //temp stores the app during the create process, it is then returned
 	                        var temp = {};
 
-	                        temp = new _application3.default[1](this.app);
+	                        temp = new _application3.default(this.app);
+
 	                        temp.window = this.window;
 
 	                        temp.document = document;
@@ -6127,19 +6123,37 @@
 	var date = new Date();
 
 	var _application = (function () {
+	    _createClass(_application, [{
+	        key: 'version',
+	        get: function get() {
+
+	            return this.constructor.VN;
+	        },
+	        set: function set(val) {
+
+	            this.constructor.VN = val;
+	        }
+	    }]);
+
 	    function _application() {
 	        _classCallCheck(this, _application);
 
-	        this.options = _options3.default;
-	        this.user = _user3.default;
-	        this.ext = _ext3.default;
-	        this.input = _input3.default;
-	        this.canvas = _canvas3.default;
-	        this.client = _client3.default;
 	        this.time = 0;
 	        this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
 	                return true;
 	            } };
+
+	        this.options = _options3.default;
+
+	        this.user = _user3.default;
+
+	        this.ext = _ext3.default;
+
+	        this.input = _input3.default;
+
+	        this.canvas = _canvas3.default;
+
+	        this.client = _client3.default;
 	    }
 
 	    _createClass(_application, [{
@@ -6147,8 +6161,6 @@
 	        value: function Init(name, w, h) {
 	            var _this = this;
 
-	            //        super(app);
-	            //Store self
 	            var self = this;
 
 	            //Build client from prototype
@@ -6157,36 +6169,40 @@
 	            //Build canvas from prototype
 	            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
 
-	            setTimeout(function () {
+	            //Use arrow function if available
 
-	                function AppLoop() {
-	                    self.client.loop();
-	                }
+	            var usearrow = true;
+	            if (usearrow) {
 
-	                function AppLoopData() {
-	                    self.client.loopData();
-	                }
+	                setTimeout(function () {
 
-	                _this.client.initalize(AppLoop, AppLoopData, _this.scale);
-	            }, this.time);
+	                    function AppLoop() {
+	                        self.client.loop();
+	                    }
 
-	            //Delay start the loop
-	            /*
-	                  OLD NON PROMISE BASED LOOP, build fallback
-	              setTimeout(	(function(){
-	                          function AppLoop(){
-	                            self.client.loop();
-	                        }
-	                          function AppLoopData(){
-	                            self.client.loopData();
-	                        }
-	                          self.client.initalize(AppLoop,AppLoopData,self.scale);
-	              }),this.time);
-	            */
-	            //Initalize client
+	                    function AppLoopData() {
+	                        self.client.loopData();
+	                    }
+
+	                    _this.client.initalize(AppLoop, AppLoopData, _this.scale);
+	                }, this.time);
+	            } else {
+
+	                setTimeout(function () {
+
+	                    function AppLoop() {
+	                        self.client.loop();
+	                    }
+
+	                    function AppLoopData() {
+	                        self.client.loopData();
+	                    }
+
+	                    self.client.initalize(AppLoop, AppLoopData, self.scale);
+	                }, this.time);
+	            }
+
 	            this.client.init(name, w, h);
-
-	            // INIT INPUT
 
 	            this.input = new this.input(this);
 	        }
@@ -6371,317 +6387,13 @@
 
 	            return this.client.update.fullscale = !this.client.update.fullscale;
 	        }
-	    }, {
-	        key: 'version',
-	        get: function get() {
-
-	            return this.constructor.VN;
-	        },
-	        set: function set(val) {
-
-	            this.constructor.VN = val;
-	        }
 	    }]);
 
 	    return _application;
 	})();
 
 	_application.VN = '0.7.1';
-
-	var applicaiton = undefined;
-
-	applicaiton = Object.create({
-
-	    constructor: {
-	        //Version Number
-	        VN: {
-	            //Config
-	            writable: false,
-	            configurable: false,
-	            enumerable: true,
-
-	            //VN
-	            value: '0.7.1'
-	        },
-
-	        //Build Client, Instantiate Loop, Build Canvas, Initalize Client
-	        Init: {
-
-	            //Config
-	            writable: false,
-	            configurable: false,
-	            enumerable: false,
-
-	            //Function
-	            value: function value(name, w, h) {
-	                var _this2 = this;
-
-	                //Store self
-	                var self = this;
-
-	                //Build client from prototype
-	                this.client = this.Construct(this.client.prototype, this.client.constructor);
-
-	                //Build canvas from prototype
-	                (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
-
-	                setTimeout(function () {
-
-	                    function AppLoop() {
-	                        self.client.loop();
-	                    }
-
-	                    function AppLoopData() {
-	                        self.client.loopData();
-	                    }
-
-	                    _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-	                }, this.time);
-
-	                //Delay start the loop
-	                /*
-	                      OLD NON PROMISE BASED LOOP, build fallback
-	                  setTimeout(	(function(){
-	                              function AppLoop(){
-	                                self.client.loop();
-	                            }
-	                              function AppLoopData(){
-	                                self.client.loopData();
-	                            }
-	                              self.client.initalize(AppLoop,AppLoopData,self.scale);
-	                  }),this.time);
-	                */
-	                //Initalize client
-	                this.client.init(name, w, h);
-
-	                // INIT INPUT
-
-	                this.input = new this.input(this);
-	            }
-
-	        },
-
-	        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
-	        OnLoad: {
-
-	            //Config
-	            writable: true,
-	            configurable: false,
-	            enumerable: false,
-
-	            //Function
-	            value: function value(self) {
-
-	                //Default to App.
-	                self.Init("", 480, 320);
-	            }
-
-	        },
-
-	        //Runs on DOMContentLoaded
-	        OnApplicationLoad: {
-
-	            //Config
-	            writable: false,
-	            configurable: false,
-	            enumerable: false,
-
-	            //Function
-	            value: function value(evt) {
-
-	                //Run .OnLoad
-	                evt.target.app.OnLoad(evt.target.app);
-	                console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-	            }
-
-	        },
-
-	        //AddEvent Listener
-	        Listener: {
-
-	            //Config
-	            writable: false,
-	            configurable: false,
-	            enumerable: false,
-
-	            //Function
-	            value: function value(obj, evt, listener, param) {
-
-	                //If addEventListener exist, add it, otherwise attachEvent
-	                if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
-
-	                obj.app = window.apps[this.id] = this;
-	            }
-
-	        },
-
-	        //Construct Objects from this.Construct(prototype,[constructor])
-	        Construct: {
-
-	            //Config
-	            writable: false,
-	            configurable: false,
-	            enumerable: false,
-
-	            //Function
-	            value: function value(prototype, constructor) {
-
-	                //Cache vars
-	                var isObj = false;
-	                var obj = prototype;
-	                var proto = prototype;
-	                var construct = constructor;
-	                var ret = {};
-
-	                //if prototype contains a prototype and constructor
-	                if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-	                    construct = obj.constructor;
-	                    proto = obj.prototype;
-	                    isObj = true;
-	                }
-
-	                //Grab type of constructor
-	                var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
-
-	                //Return & Create object based on constructor
-	                switch (c) {
-	                    case 'undefined':
-
-	                        //Use only the prototype
-	                        ret = Object.create(proto);
-
-	                        break;
-	                    case 'object':
-
-	                        //Use constructor as object
-	                        ret = Object.create(proto, construct);
-
-	                        break;
-	                    case 'function':
-
-	                        //Use constructor as function
-	                        ret = Object.create(proto, construct(this));
-
-	                        break;
-	                    default:
-
-	                        //Expected a type
-	                        console.log("Expected 'object' or 'function': Type is " + c);
-	                }
-	                if (isObj) prototype = ret;
-
-	                return ret;
-	            }
-
-	        },
-
-	        //Allows artificial clicking of elements
-	        click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
-
-	                //If .click
-	                if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
-
-	                    if (event.target !== anchorObj) {
-
-	                        var evt = document.createEvent("MouseEvents");
-
-	                        evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-	                        anchorObj.dispatchEvent(evt);
-	                    }
-	                }
-	            }
-
-	        },
-
-	        //App.create for creating objects with app, visuals and graphics inherited
-	        create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
-	                return this.Construct(a || {}, this.client.room);
-	            } },
-
-	        //Getters for Common Data
-	        getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.update.step.fps;
-	            } },
-
-	        getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.update.state.current;
-	            } },
-
-	        getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.ext.connect.offline;
-	            } },
-
-	        getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.ext.connect.error;
-	            } },
-
-	        getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.ext.connect.connectionAttempts;
-	            } },
-
-	        getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.update.step.delta;
-	            } },
-
-	        getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.scale;
-	            } },
-
-	        getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.setWidth;
-	            } },
-
-	        getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.setHeight;
-	            } },
-
-	        getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.width;
-	            } },
-
-	        getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.height;
-	            } },
-
-	        setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
-	                return document.title == title ? document.title : document.title = title;
-	            } },
-
-	        setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
-	                return this.client.update.state.set(state, true);
-	            } },
-
-	        toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                return this.client.update.fullscale = !this.client.update.fullscale;
-	            } },
-
-	        time: { writable: true, configurable: false, enumerable: false, value: 0 },
-
-	        main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	                    return true;
-	                } } }
-	    },
-
-	    prototype: {
-
-	        options: _options3.default,
-
-	        user: _user3.default,
-
-	        ext: _ext3.default,
-
-	        input: _input3.default,
-
-	        canvas: _canvas3.default,
-
-	        client: _client3.default
-
-	    }
-
-	});
-
-	exports.default = [applicaiton, _application];
+	exports.default = _application;
 
 /***/ },
 /* 197 */

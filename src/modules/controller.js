@@ -1,8 +1,6 @@
 import _statistics from './statistics.js';
 
 import _application from './application.js';
-console.log(_application[0])
-console.log(_application[1])
 
 export default class SJSController {
 
@@ -78,16 +76,13 @@ export default class SJSController {
 
     generatePrototype(){
 
-
-
-                var temp2 = new _application[1](this.app);
-
         this.window = window;
 
         //temp stores the app during the create process, it is then returned
         var temp = {};
 
-        temp = new _application[1](this.app);
+        temp = new _application(this.app);
+
         temp.window = this.window;
 
         temp.document = document;
