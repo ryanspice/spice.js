@@ -5325,7 +5325,7 @@
 
 	var _controller3 = _interopRequireDefault(_controller2);
 
-	var _test2 = __webpack_require__(215);
+	var _test2 = __webpack_require__(197);
 
 	var _test3 = _interopRequireDefault(_test2);
 
@@ -5362,6 +5362,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	console.log(_application3.default[0]);
+	console.log(_application3.default[1]);
 
 	var SJSController = (function () {
 	        _createClass(SJSController, [{
@@ -5417,15 +5420,14 @@
 	                key: 'generatePrototype',
 	                value: function generatePrototype() {
 
+	                        var temp2 = new _application3.default[1](this.app);
+
 	                        this.window = window;
 
 	                        //temp stores the app during the create process, it is then returned
 	                        var temp = {};
 
-	                        temp = _application3.default;
-
-	                        temp = Object.create(temp.prototype, temp.constructor);
-
+	                        temp = new _application3.default[1](this.app);
 	                        temp.window = this.window;
 
 	                        temp.document = document;
@@ -6067,39 +6069,49 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	//To be built into application (to override current)
+
+	//To be built into application
+
 	Object.defineProperty(exports, "__esModule", {
-	   value: true
+	    value: true
 	});
 
-	var _options2 = __webpack_require__(197);
+	var _options2 = __webpack_require__(199);
 
 	var _options3 = _interopRequireDefault(_options2);
 
-	var _input2 = __webpack_require__(198);
+	var _input2 = __webpack_require__(200);
 
 	var _input3 = _interopRequireDefault(_input2);
 
-	var _client2 = __webpack_require__(205);
+	var _sjsclass = __webpack_require__(198);
+
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	var _client2 = __webpack_require__(206);
 
 	var _client3 = _interopRequireDefault(_client2);
 
-	var _canvas2 = __webpack_require__(207);
+	var _canvas2 = __webpack_require__(208);
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
 
-	var _user2 = __webpack_require__(208);
+	var _user2 = __webpack_require__(209);
 
 	var _user3 = _interopRequireDefault(_user2);
 
-	var _ext2 = __webpack_require__(209);
+	var _ext2 = __webpack_require__(210);
 
 	var _ext3 = _interopRequireDefault(_ext2);
 
-	var _loader = __webpack_require__(213);
+	var _loader = __webpack_require__(214);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _particles = __webpack_require__(214);
+	var _particles = __webpack_require__(215);
 
 	var _particles2 = _interopRequireDefault(_particles);
 
@@ -6107,39 +6119,35 @@
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-	//To be built into application (to override current)
-
-	//To be built into application
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	// Temporary for snowflakes
 	window.SJSParticleController = _particles2.default;
 
-	exports.default = Object.create({
+	var date = new Date();
 
-	   constructor: {
-	      //Version Number
-	      VN: {
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: true,
+	var _application = (function () {
+	    function _application() {
+	        _classCallCheck(this, _application);
 
-	         //VN
-	         value: '0.7.0.15.12.11'
-	      },
+	        this.options = _options3.default;
+	        this.user = _user3.default;
+	        this.ext = _ext3.default;
+	        this.input = _input3.default;
+	        this.canvas = _canvas3.default;
+	        this.client = _client3.default;
+	        this.time = 0;
+	        this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	                return true;
+	            } };
+	    }
 
-	      //Build Client, Instantiate Loop, Build Canvas, Initalize Client
-	      Init: {
-
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
-
-	         //Function
-	         value: function value(name, w, h) {
+	    _createClass(_application, [{
+	        key: 'Init',
+	        value: function Init(name, w, h) {
 	            var _this = this;
 
+	            //        super(app);
 	            //Store self
 	            var self = this;
 
@@ -6151,15 +6159,15 @@
 
 	            setTimeout(function () {
 
-	               function AppLoop() {
-	                  self.client.loop();
-	               }
+	                function AppLoop() {
+	                    self.client.loop();
+	                }
 
-	               function AppLoopData() {
-	                  self.client.loopData();
-	               }
+	                function AppLoopData() {
+	                    self.client.loopData();
+	                }
 
-	               _this.client.initalize(AppLoop, AppLoopData, _this.scale);
+	                _this.client.initalize(AppLoop, AppLoopData, _this.scale);
 	            }, this.time);
 
 	            //Delay start the loop
@@ -6181,74 +6189,34 @@
 	            // INIT INPUT
 
 	            this.input = new this.input(this);
-	         }
+	        }
+	    }, {
+	        key: 'OnLoad',
+	        value: function OnLoad(self) {
 
-	      },
-
-	      //Run by OnApplicationLoad, App.OnLoad to be overwritten.
-	      OnLoad: {
-
-	         //Config
-	         writable: true,
-	         configurable: false,
-	         enumerable: false,
-
-	         //Function
-	         value: function value(self) {
-
-	            //Default to App.
 	            self.Init("", 480, 320);
-	         }
-
-	      },
-
-	      //Runs on DOMContentLoaded
-	      OnApplicationLoad: {
-
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
-
-	         //Function
-	         value: function value(evt) {
+	        }
+	    }, {
+	        key: 'OnApplicationLoad',
+	        value: function OnApplicationLoad(evt) {
 
 	            //Run .OnLoad
 	            evt.target.app.OnLoad(evt.target.app);
+
 	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-	         }
-
-	      },
-
-	      //AddEvent Listener
-	      Listener: {
-
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
-
-	         //Function
-	         value: function value(obj, evt, listener, param) {
+	        }
+	    }, {
+	        key: 'Listener',
+	        value: function Listener(obj, evt, listener, param) {
 
 	            //If addEventListener exist, add it, otherwise attachEvent
 	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
 
 	            obj.app = window.apps[this.id] = this;
-	         }
-
-	      },
-
-	      //Construct Objects from this.Construct(prototype,[constructor])
-	      Construct: {
-
-	         //Config
-	         writable: false,
-	         configurable: false,
-	         enumerable: false,
-
-	         //Function
-	         value: function value(prototype, constructor) {
+	        }
+	    }, {
+	        key: 'Construct',
+	        value: function Construct(prototype, constructor) {
 
 	            //Cache vars
 	            var isObj = false;
@@ -6259,9 +6227,9 @@
 
 	            //if prototype contains a prototype and constructor
 	            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-	               construct = obj.constructor;
-	               proto = obj.prototype;
-	               isObj = true;
+	                construct = obj.constructor;
+	                proto = obj.prototype;
+	                isObj = true;
 	            }
 
 	            //Grab type of constructor
@@ -6269,144 +6237,687 @@
 
 	            //Return & Create object based on constructor
 	            switch (c) {
-	               case 'undefined':
+	                case 'undefined':
 
-	                  //Use only the prototype
-	                  ret = Object.create(proto);
+	                    //Use only the prototype
+	                    ret = Object.create(proto);
 
-	                  break;
-	               case 'object':
+	                    break;
+	                case 'object':
 
-	                  //Use constructor as object
-	                  ret = Object.create(proto, construct);
+	                    //Use constructor as object
+	                    ret = Object.create(proto, construct);
 
-	                  break;
-	               case 'function':
+	                    break;
+	                case 'function':
 
-	                  //Use constructor as function
-	                  ret = Object.create(proto, construct(this));
+	                    //Use constructor as function
+	                    ret = Object.create(proto, construct(this));
 
-	                  break;
-	               default:
+	                    break;
+	                default:
 
-	                  //Expected a type
-	                  console.log("Expected 'object' or 'function': Type is " + c);
+	                    //Expected a type
+	                    console.log("Expected 'object' or 'function': Type is " + c);
 	            }
 	            if (isObj) prototype = ret;
 
 	            return ret;
-	         }
-
-	      },
-
-	      //Allows artificial clicking of elements
-	      click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
+	        }
+	    }, {
+	        key: 'click',
+	        value: function click(event, anchorObj) {
 
 	            //If .click
 	            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
 
-	               if (event.target !== anchorObj) {
+	                if (event.target !== anchorObj) {
 
-	                  var evt = document.createEvent("MouseEvents");
+	                    var evt = document.createEvent("MouseEvents");
 
-	                  evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 
-	                  anchorObj.dispatchEvent(evt);
-	               }
+	                    anchorObj.dispatchEvent(evt);
+	                }
 	            }
-	         }
+	        }
+	    }, {
+	        key: 'create',
+	        value: function create(a) {
 
-	      },
-
-	      //App.create for creating objects with app, visuals and graphics inherited
-	      create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
 	            return this.Construct(a || {}, this.client.room);
-	         } },
+	        }
+	    }, {
+	        key: 'getFps',
+	        value: function getFps() {
 
-	      //Getters for Common Data
-	      getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.update.step.fps;
-	         } },
+	        }
+	    }, {
+	        key: 'getCurrent',
+	        value: function getCurrent() {
 
-	      getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.update.state.current;
-	         } },
+	        }
+	    }, {
+	        key: 'getConnection',
+	        value: function getConnection() {
 
-	      getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.ext.connect.offline;
-	         } },
+	        }
+	    }, {
+	        key: 'getConnectionError',
+	        value: function getConnectionError() {
 
-	      getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.ext.connect.error;
-	         } },
+	        }
+	    }, {
+	        key: 'getConnectionAttempts',
+	        value: function getConnectionAttempts() {
 
-	      getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.ext.connect.connectionAttempts;
-	         } },
+	        }
+	    }, {
+	        key: 'getDelta',
+	        value: function getDelta() {
 
-	      getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.update.step.delta;
-	         } },
+	        }
+	    }, {
+	        key: 'getScale',
+	        value: function getScale() {
 
-	      getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.scale;
-	         } },
+	        }
+	    }, {
+	        key: 'getWidth',
+	        value: function getWidth() {
 
-	      getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.setWidth;
-	         } },
+	        }
+	    }, {
+	        key: 'getHeight',
+	        value: function getHeight() {
 
-	      getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.setHeight;
-	         } },
+	        }
+	    }, {
+	        key: 'getScaledWidth',
+	        value: function getScaledWidth() {
 
-	      getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.width;
-	         } },
+	        }
+	    }, {
+	        key: 'getScaledHeight',
+	        value: function getScaledHeight() {
 
-	      getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.height;
-	         } },
+	        }
+	    }, {
+	        key: 'setTitle',
+	        value: function setTitle(title) {
 
-	      setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
 	            return document.title == title ? document.title : document.title = title;
-	         } },
+	        }
+	    }, {
+	        key: 'setState',
+	        value: function setState(state) {
 
-	      setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
 	            return this.client.update.state.set(state, true);
-	         } },
+	        }
+	    }, {
+	        key: 'toggleWidescreen',
+	        value: function toggleWidescreen() {
 
-	      toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
 	            return this.client.update.fullscale = !this.client.update.fullscale;
-	         } },
+	        }
+	    }, {
+	        key: 'version',
+	        get: function get() {
 
-	      time: { writable: true, configurable: false, enumerable: false, value: 0 },
+	            return this.constructor.VN;
+	        },
+	        set: function set(val) {
 
-	      main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	               return true;
-	            } } }
-	   },
+	            this.constructor.VN = val;
+	        }
+	    }]);
 
-	   prototype: {
+	    return _application;
+	})();
 
-	      options: _options3.default,
+	_application.VN = '0.7.1';
 
-	      user: _user3.default,
+	var applicaiton = undefined;
 
-	      ext: _ext3.default,
+	applicaiton = Object.create({
 
-	      input: _input3.default,
+	    constructor: {
+	        //Version Number
+	        VN: {
+	            //Config
+	            writable: false,
+	            configurable: false,
+	            enumerable: true,
 
-	      canvas: _canvas3.default,
+	            //VN
+	            value: '0.7.1'
+	        },
 
-	      client: _client3.default
+	        //Build Client, Instantiate Loop, Build Canvas, Initalize Client
+	        Init: {
 
-	   }
+	            //Config
+	            writable: false,
+	            configurable: false,
+	            enumerable: false,
+
+	            //Function
+	            value: function value(name, w, h) {
+	                var _this2 = this;
+
+	                //Store self
+	                var self = this;
+
+	                //Build client from prototype
+	                this.client = this.Construct(this.client.prototype, this.client.constructor);
+
+	                //Build canvas from prototype
+	                (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+
+	                setTimeout(function () {
+
+	                    function AppLoop() {
+	                        self.client.loop();
+	                    }
+
+	                    function AppLoopData() {
+	                        self.client.loopData();
+	                    }
+
+	                    _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+	                }, this.time);
+
+	                //Delay start the loop
+	                /*
+	                      OLD NON PROMISE BASED LOOP, build fallback
+	                  setTimeout(	(function(){
+	                              function AppLoop(){
+	                                self.client.loop();
+	                            }
+	                              function AppLoopData(){
+	                                self.client.loopData();
+	                            }
+	                              self.client.initalize(AppLoop,AppLoopData,self.scale);
+	                  }),this.time);
+	                */
+	                //Initalize client
+	                this.client.init(name, w, h);
+
+	                // INIT INPUT
+
+	                this.input = new this.input(this);
+	            }
+
+	        },
+
+	        //Run by OnApplicationLoad, App.OnLoad to be overwritten.
+	        OnLoad: {
+
+	            //Config
+	            writable: true,
+	            configurable: false,
+	            enumerable: false,
+
+	            //Function
+	            value: function value(self) {
+
+	                //Default to App.
+	                self.Init("", 480, 320);
+	            }
+
+	        },
+
+	        //Runs on DOMContentLoaded
+	        OnApplicationLoad: {
+
+	            //Config
+	            writable: false,
+	            configurable: false,
+	            enumerable: false,
+
+	            //Function
+	            value: function value(evt) {
+
+	                //Run .OnLoad
+	                evt.target.app.OnLoad(evt.target.app);
+	                console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+	            }
+
+	        },
+
+	        //AddEvent Listener
+	        Listener: {
+
+	            //Config
+	            writable: false,
+	            configurable: false,
+	            enumerable: false,
+
+	            //Function
+	            value: function value(obj, evt, listener, param) {
+
+	                //If addEventListener exist, add it, otherwise attachEvent
+	                if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
+
+	                obj.app = window.apps[this.id] = this;
+	            }
+
+	        },
+
+	        //Construct Objects from this.Construct(prototype,[constructor])
+	        Construct: {
+
+	            //Config
+	            writable: false,
+	            configurable: false,
+	            enumerable: false,
+
+	            //Function
+	            value: function value(prototype, constructor) {
+
+	                //Cache vars
+	                var isObj = false;
+	                var obj = prototype;
+	                var proto = prototype;
+	                var construct = constructor;
+	                var ret = {};
+
+	                //if prototype contains a prototype and constructor
+	                if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+	                    construct = obj.constructor;
+	                    proto = obj.prototype;
+	                    isObj = true;
+	                }
+
+	                //Grab type of constructor
+	                var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+	                //Return & Create object based on constructor
+	                switch (c) {
+	                    case 'undefined':
+
+	                        //Use only the prototype
+	                        ret = Object.create(proto);
+
+	                        break;
+	                    case 'object':
+
+	                        //Use constructor as object
+	                        ret = Object.create(proto, construct);
+
+	                        break;
+	                    case 'function':
+
+	                        //Use constructor as function
+	                        ret = Object.create(proto, construct(this));
+
+	                        break;
+	                    default:
+
+	                        //Expected a type
+	                        console.log("Expected 'object' or 'function': Type is " + c);
+	                }
+	                if (isObj) prototype = ret;
+
+	                return ret;
+	            }
+
+	        },
+
+	        //Allows artificial clicking of elements
+	        click: { writable: false, configurable: false, enumerable: false, value: function value(event, anchorObj) {
+
+	                //If .click
+	                if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
+
+	                    if (event.target !== anchorObj) {
+
+	                        var evt = document.createEvent("MouseEvents");
+
+	                        evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+	                        anchorObj.dispatchEvent(evt);
+	                    }
+	                }
+	            }
+
+	        },
+
+	        //App.create for creating objects with app, visuals and graphics inherited
+	        create: { writable: true, configurable: false, enumerable: false, value: function value(a) {
+	                return this.Construct(a || {}, this.client.room);
+	            } },
+
+	        //Getters for Common Data
+	        getFps: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.update.step.fps;
+	            } },
+
+	        getCurrent: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.update.state.current;
+	            } },
+
+	        getConnection: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.ext.connect.offline;
+	            } },
+
+	        getConnectionError: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.ext.connect.error;
+	            } },
+
+	        getConnectionAttempts: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.ext.connect.connectionAttempts;
+	            } },
+
+	        getDelta: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.update.step.delta;
+	            } },
+
+	        getScale: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.scale;
+	            } },
+
+	        getWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.setWidth;
+	            } },
+
+	        getHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.setHeight;
+	            } },
+
+	        getScaledWidth: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.width;
+	            } },
+
+	        getScaledHeight: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.height;
+	            } },
+
+	        setTitle: { writable: false, configurable: false, enumerable: false, value: function value(title) {
+	                return document.title == title ? document.title : document.title = title;
+	            } },
+
+	        setState: { writable: false, configurable: false, enumerable: false, value: function value(state) {
+	                return this.client.update.state.set(state, true);
+	            } },
+
+	        toggleWidescreen: { writable: false, configurable: false, enumerable: false, value: function value() {
+	                return this.client.update.fullscale = !this.client.update.fullscale;
+	            } },
+
+	        time: { writable: true, configurable: false, enumerable: false, value: 0 },
+
+	        main: { writable: true, configurable: false, enumerable: false, value: { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	                    return true;
+	                } } }
+	    },
+
+	    prototype: {
+
+	        options: _options3.default,
+
+	        user: _user3.default,
+
+	        ext: _ext3.default,
+
+	        input: _input3.default,
+
+	        canvas: _canvas3.default,
+
+	        client: _client3.default
+
+	    }
 
 	});
 
+	exports.default = [applicaiton, _application];
+
 /***/ },
 /* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _sjsclass = __webpack_require__(198);
+
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var test = (function (_SJSClass) {
+	        _inherits(test, _SJSClass);
+
+	        function test(app) {
+	                _classCallCheck(this, test);
+
+	                //this.Loader = this.app.getCurrent().Loader;
+	                /*
+	                        this.SplashScreen = [];
+	                
+	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
+	                
+	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
+	                
+	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
+	                
+	                        this.Background = this.Loader.loadImage('intro/background');
+	                
+	                        this.begin = this.Loader.loadImage('intro/begin');
+	                
+	                		this.ScoreNumber = [];
+	                
+	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
+	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
+	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
+	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
+	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
+	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
+	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
+	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
+	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
+	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
+	                
+	                        this.Loader.loadImage('interface/iconoffline');
+	                
+	                        this.Loader.loadImage('interface/iconp');
+	                
+	                        this.Loader.loadImage('interface/iconvolume');
+	                
+	                        this.Loader.loadImage('interface/iconx');
+	                */
+
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
+
+	                _this.StartPhase = 2;
+	                _this.StartAlpha = 2;
+
+	                _this.xxx = 0;
+	                _this.start = false;
+
+	                //		(this.particles = this.app.create(SB_.prototype)).init();
+
+	                //(this.loading = this.app.create(Loading.prototype)).init();
+	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
+	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
+
+	                //    this.particles = new SB_(this.app);
+
+	                //        this.loading = new Loading(this.app);
+
+	                //        this.statusicons = new StatusIco(this.app);
+
+	                //        this.characterselect = new Characterselect(this.app);
+
+	                _this.continue = false;
+
+	                _this.sceneX = -190;
+	                _this.scenePhase = 0;
+	                _this.sceneEndX = 1;
+
+	                _this.sceneStartSpeed = 3;
+	                _this.sceneEndSpeed = 4;
+
+	                _this.sceneSpeed = _this.sceneStartSpeed;
+	                return _this;
+	        }
+
+	        _createClass(test, [{
+	                key: "draw",
+	                value: function draw() {
+
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
+
+	                        var sw = this.app.getScaledWidth();
+	                        var sh = this.app.getScaledHeight();
+	                        var h = this.app.getHeight();
+	                        var w = this.app.getWidth();
+	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
+
+	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
+
+	                        this.Background = {};
+	                        this.Background.width = sw;
+
+	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
+
+	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
+	                        /*
+	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
+	                        
+	                                if (this.scenePhase==2)
+	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
+	                                else
+	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
+	                        */
+	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+	                        /*
+	                                if (this.continue == true)
+	                        			this.characterselect.draw();
+	                                else
+	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
+	                        */
+
+	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+
+	                        if (this.scenePhase == 2) {
+	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                                /*
+	                                			this.particles._draw();
+	                                
+	                                			if (this.graphics.getErrors())
+	                                				this.loading.draw();
+	                                			else	{
+	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
+	                                				if (this.continue==false)
+	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                                
+	                                				this.app.ext.cursor.set('pointer');
+	                                
+	                                			}
+	                                            */
+	                        } else {}
+
+	                                //	this.loading.draw();
+
+	                                //	this.statusicons.draw(0.29);
+	                }
+	        }, {
+	                key: "update",
+	                value: function update() {
+
+	                        //    this.loading.update();
+	                        //	this.statusicons.update();
+
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
+
+	                        var tick = this.sceneSpeed;
+
+	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
+	                                //    this.particles._update();
+	                                //	this.characterselect.update();
+	                                this.sceneX += tick;
+	                        } else if (this.scenePhase < 2) {
+
+	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
+
+	                                if (this.app.input.released) this.sceneSpeed = 10;
+
+	                                this.sceneX += tick;
+
+	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+
+	                                if (this.scenePhase > 2) this.scenePhase = 2;
+	                        }
+	                }
+	        }]);
+
+	        return test;
+	})(_sjsclass2.default);
+
+	exports.default = test;
+
+/***/ },
+/* 198 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SJS = window.SpiceJS;
+
+	var SJSClass = function SJSClass(app) {
+			_classCallCheck(this, SJSClass);
+
+			var appReference = app;
+
+			if (typeof appReference == 'undefined') {
+
+					appReference = SJS.controller.list();
+
+					console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
+			}
+
+			this.app = appReference;
+
+			this.visuals = appReference.client.visuals;
+
+			this.graphics = appReference.client.graphics;
+	};
+
+	exports.default = SJSClass;
+
+/***/ },
+/* 199 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6518,7 +7029,7 @@
 	};
 
 /***/ },
-/* 198 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6529,7 +7040,7 @@
 	        value: true
 	});
 
-	var _inputcontroller2 = __webpack_require__(199);
+	var _inputcontroller2 = __webpack_require__(201);
 
 	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
 
@@ -6883,7 +7394,7 @@
 	exports.default = Input;
 
 /***/ },
-/* 199 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6894,23 +7405,23 @@
 	        value: true
 	});
 
-	var _vector = __webpack_require__(200);
+	var _vector = __webpack_require__(202);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _sjsclass = __webpack_require__(201);
+	var _sjsclass = __webpack_require__(198);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
-	var _inputlistener = __webpack_require__(202);
+	var _inputlistener = __webpack_require__(203);
 
 	var _inputlistener2 = _interopRequireDefault(_inputlistener);
 
-	var _inputkeycontroller = __webpack_require__(203);
+	var _inputkeycontroller = __webpack_require__(204);
 
 	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
 
-	var _inputscrollcontroller = __webpack_require__(204);
+	var _inputscrollcontroller = __webpack_require__(205);
 
 	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
 
@@ -7222,7 +7733,7 @@
 	exports.default = inputcontroller;
 
 /***/ },
-/* 200 */
+/* 202 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7403,42 +7914,7 @@
 	exports.default = Vector;
 
 /***/ },
-/* 201 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-			value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var SJS = window.SpiceJS;
-
-	var SJSClass = function SJSClass(app) {
-			_classCallCheck(this, SJSClass);
-
-			var appReference = app;
-
-			if (typeof appReference == 'undefined') {
-
-					appReference = SJS.controller.list();
-
-					console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
-			}
-
-			this.app = appReference;
-
-			this.visuals = appReference.client.visuals;
-
-			this.graphics = appReference.client.graphics;
-	};
-
-	exports.default = SJSClass;
-
-/***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7505,7 +7981,7 @@
 	exports.default = InputListener;
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7627,7 +8103,7 @@
 	exports.default = inputkeycontroller;
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7756,7 +8232,7 @@
 	exports.default = inputscrollcontroller;
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7765,7 +8241,7 @@
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(206);
+	var _visuals2 = __webpack_require__(207);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
@@ -8588,7 +9064,7 @@
 	};
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9937,7 +10413,7 @@
 	exports.default = visuals;
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10084,7 +10560,7 @@
 	};
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10169,7 +10645,7 @@
 	};
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10178,7 +10654,7 @@
 	                value: true
 	});
 
-	var _cookies = __webpack_require__(210);
+	var _cookies = __webpack_require__(211);
 
 	var _cookies2 = _interopRequireDefault(_cookies);
 
@@ -10625,7 +11101,7 @@
 	};
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
@@ -10795,7 +11271,7 @@
 	                };
 
 	                var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	                var AMD = "function" === 'function' && __webpack_require__(212);
+	                var AMD = "function" === 'function' && __webpack_require__(213);
 	                var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
 	                var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
 	                // AMD support
@@ -10823,10 +11299,10 @@
 	};
 
 	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(211)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(212)(module)))
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -10842,7 +11318,7 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -10850,7 +11326,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10861,7 +11337,7 @@
 			value: true
 	});
 
-	var _sjsclass = __webpack_require__(201);
+	var _sjsclass = __webpack_require__(198);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
@@ -11133,7 +11609,7 @@
 	exports.default = Loader;
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11144,15 +11620,15 @@
 	        value: true
 	});
 
-	var _sjsclass = __webpack_require__(201);
+	var _sjsclass = __webpack_require__(198);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
-	var _vector = __webpack_require__(200);
+	var _vector = __webpack_require__(202);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _loader = __webpack_require__(213);
+	var _loader = __webpack_require__(214);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
@@ -11402,204 +11878,6 @@
 
 	        return SJSParticle;
 	})(_sjsclass2.default);
-
-/***/ },
-/* 215 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _sjsclass = __webpack_require__(201);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var test = (function (_SJSClass) {
-	        _inherits(test, _SJSClass);
-
-	        function test(app) {
-	                _classCallCheck(this, test);
-
-	                //this.Loader = this.app.getCurrent().Loader;
-	                /*
-	                        this.SplashScreen = [];
-	                
-	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
-	                
-	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
-	                
-	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
-	                
-	                        this.Background = this.Loader.loadImage('intro/background');
-	                
-	                        this.begin = this.Loader.loadImage('intro/begin');
-	                
-	                		this.ScoreNumber = [];
-	                
-	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
-	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
-	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
-	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
-	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
-	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
-	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
-	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
-	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
-	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
-	                
-	                        this.Loader.loadImage('interface/iconoffline');
-	                
-	                        this.Loader.loadImage('interface/iconp');
-	                
-	                        this.Loader.loadImage('interface/iconvolume');
-	                
-	                        this.Loader.loadImage('interface/iconx');
-	                */
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
-
-	                _this.StartPhase = 2;
-	                _this.StartAlpha = 2;
-
-	                _this.xxx = 0;
-	                _this.start = false;
-
-	                //		(this.particles = this.app.create(SB_.prototype)).init();
-
-	                //(this.loading = this.app.create(Loading.prototype)).init();
-	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
-	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
-
-	                //    this.particles = new SB_(this.app);
-
-	                //        this.loading = new Loading(this.app);
-
-	                //        this.statusicons = new StatusIco(this.app);
-
-	                //        this.characterselect = new Characterselect(this.app);
-
-	                _this.continue = false;
-
-	                _this.sceneX = -190;
-	                _this.scenePhase = 0;
-	                _this.sceneEndX = 1;
-
-	                _this.sceneStartSpeed = 3;
-	                _this.sceneEndSpeed = 4;
-
-	                _this.sceneSpeed = _this.sceneStartSpeed;
-	                return _this;
-	        }
-
-	        _createClass(test, [{
-	                key: "draw",
-	                value: function draw() {
-
-	                        //    if (this.Loader.getBufferLength()>0)
-	                        //        return;
-
-	                        var sw = this.app.getScaledWidth();
-	                        var sh = this.app.getScaledHeight();
-	                        var h = this.app.getHeight();
-	                        var w = this.app.getWidth();
-	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
-
-	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
-
-	                        this.Background = {};
-	                        this.Background.width = sw;
-
-	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
-
-	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
-	                        /*
-	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
-	                        
-	                                if (this.scenePhase==2)
-	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
-	                                else
-	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
-	                        */
-	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-	                        /*
-	                                if (this.continue == true)
-	                        			this.characterselect.draw();
-	                                else
-	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
-	                        */
-
-	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-
-	                        if (this.scenePhase == 2) {
-	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
-	                                /*
-	                                			this.particles._draw();
-	                                
-	                                			if (this.graphics.getErrors())
-	                                				this.loading.draw();
-	                                			else	{
-	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
-	                                				if (this.continue==false)
-	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
-	                                
-	                                				this.app.ext.cursor.set('pointer');
-	                                
-	                                			}
-	                                            */
-	                        } else {}
-
-	                                //	this.loading.draw();
-
-	                                //	this.statusicons.draw(0.29);
-	                }
-	        }, {
-	                key: "update",
-	                value: function update() {
-
-	                        //    this.loading.update();
-	                        //	this.statusicons.update();
-
-	                        //    if (this.Loader.getBufferLength()>0)
-	                        //        return;
-
-	                        var tick = this.sceneSpeed;
-
-	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
-	                                //    this.particles._update();
-	                                //	this.characterselect.update();
-	                                this.sceneX += tick;
-	                        } else if (this.scenePhase < 2) {
-
-	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
-
-	                                if (this.app.input.released) this.sceneSpeed = 10;
-
-	                                this.sceneX += tick;
-
-	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
-
-	                                if (this.scenePhase > 2) this.scenePhase = 2;
-	                        }
-	                }
-	        }]);
-
-	        return test;
-	})(_sjsclass2.default);
-
-	exports.default = test;
 
 /***/ }
 /******/ ]);

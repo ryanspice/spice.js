@@ -1,0 +1,15 @@
+got my local host running in an chrome window
+and thats some ui thing i made
+for some reason
+last night
+side bar moves out, and the top buttons show a ribbon like boxarea
+originally i was just going to compile some tools that i kee pgoogleing
+like a gradient generator
+generating that css
+and rgb 2 hex
+idea was to list icons of the functions on the left
+and then the boxes would have the same module
+or you could click and it would just be that module
+that would store the last generated in a list or something
+
+as a UAP the tiles expand, and it closes with escape, designed to function sorta like cortana
