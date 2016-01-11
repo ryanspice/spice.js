@@ -1,32 +1,45 @@
+/** @module core */
+
+/** Name. */
+export const name = 'core';
+
 
 import _options from './options.js';
 
 import _input from './input/input.js';
 
-import SJSClass from './sjsclass.js';
-
 import _client from './client.js';
 
 import _canvas from './canvas.js';
 
+
 import _user from './user.js';
+
+
 
 import _ext from './ext.js';
 
-//To be built into application (to override current)
-import Loader from './loader.js';
+import Loader from './loader.js'; // (unfinished) To be built into application (to override current)
 
-//To be built into application
-import Particles from './particles.js';
+import Particles from './particles.js'; // (unfinished) To be built into application
 
-// Temporary for snowflakes
-window.SJSParticleController = Particles;
+window.SJSParticleController = Particles; // Temporary for snowflakes
 
 const date = new Date();
 
-class _application {
 
-    static VN = '0.7.1'
+/** Class representing a point. */
+
+
+ /**
+  * Blend two colors together.
+  * @param {string} color1 - The first color, in hexidecimal format.
+  * @param {string} color2 - The second color, in hexidecimal format.
+  * @return {string} The blended color.
+  */
+
+/** Class representing a point. */
+ class _core {
 
 
     get version(){
@@ -41,8 +54,16 @@ class _application {
 
     }
 
+    /**
+     * Create a point.
+     * @param {number} x - The x value.
+     * @param {number} y - The y value.
+     */
     constructor(){
 
+        this.time = 0;
+
+        this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
 
         this.options = _options;
 
@@ -56,11 +77,8 @@ class _application {
 
         this.client = _client;
 
-
     }
 
-    time = 0;
-    main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
 
     Init(name, w, h){
 
@@ -72,10 +90,9 @@ class _application {
        //Build canvas from prototype
        (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
 
-
        //Use arrow function if available
-
        var usearrow = true;
+
        if (usearrow)
        {
 
@@ -227,6 +244,8 @@ class _application {
     }
 
 
+    //Legacy
+
     create(a){
 
         return this.Construct(a||{},this.client.room);
@@ -304,8 +323,6 @@ class _application {
     }
 
 
-
-
 }
 
-export default _application;
+export default _core;

@@ -5321,23 +5321,83 @@
 	  value: true
 	});
 
-	var _controller2 = __webpack_require__(192);
+	var _controller3 = __webpack_require__(192);
 
-	var _controller3 = _interopRequireDefault(_controller2);
-
-	var _test2 = __webpack_require__(197);
-
-	var _test3 = _interopRequireDefault(_test2);
+	var _controller4 = _interopRequireDefault(_controller3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/*	SpiceJS by Ryan Spice	*/
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
+	 * @access public
+	 * @extends {_controller}
+	 * @example var Application = SpiceJS.create();
+	 *
+	 *        Application.OnLoad = function (self) {
+	 *
+	 *            self.Init("Example SpiceJS", 320, 720);
+	 *
+	 *            window.Application = this;
+	 *
+	 *        };
+	 *
+	 *    Application.main= {
+	 *
+	 *        name:"Example",
+	 *
+	 *        init:function() {
+	 *
+	 *            return true;
+	 *        },
+	 *
+	 *        update:function() {
+	 *
+	 *            return true;
+	 *        },
+	 *
+	 *        draw:function() {
+	 *
+	 *            return true;
+	 *        }
+	 *
+	 *    };
+	 *
+	 */
+
+	var SpiceJS = (function (_controller2) {
+	  _inherits(SpiceJS, _controller2);
+
+	  function SpiceJS() {
+	    _classCallCheck(this, SpiceJS);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SpiceJS).apply(this, arguments));
+	  }
+
+	  return SpiceJS;
+	})(_controller4.default);
+
+	;
+
+	/**
+	 * Catch the Windows variable from microsoft devices.
+	 * @access public
+	 * @const {pbject}
+	 */
 
 	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
 
-	window.test = _test3.default;
+	/**
+	 * Export SpiceJS
+	 * @emits {SpiceJS} Emit the application controller.
+	 */
 
-	exports.default = SpiceJS = new _controller3.default();
+	exports.default = new SpiceJS();
 
 /***/ },
 /* 192 */
@@ -5355,21 +5415,38 @@
 
 	var _statistics3 = _interopRequireDefault(_statistics2);
 
-	var _application2 = __webpack_require__(196);
+	var _core2 = __webpack_require__(196);
 
-	var _application3 = _interopRequireDefault(_application2);
+	var _core3 = _interopRequireDefault(_core2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var SJSController = (function () {
-	        _createClass(SJSController, [{
+	/**
+	* Main game controller. Handles instanciating instances and tracking information.
+	* @access private
+	* @module
+	*
+	*/
+
+	var _controller = (function () {
+	        _createClass(_controller, [{
 	                key: 'get',
+
+	                /** @type {Object} */
+
+	                /** @type {Object} */
+
 	                value: function get() {
 
 	                        return this.proto;
 	                }
+
+	                /** @type {Object} */
+
+	                /** @type {Object} */
+
 	        }, {
 	                key: 'create',
 	                value: function create(target) {
@@ -5413,6 +5490,9 @@
 
 	                        return tempReference;
 	                }
+
+	                /** @type {Object} */
+
 	        }, {
 	                key: 'generatePrototype',
 	                value: function generatePrototype() {
@@ -5422,7 +5502,7 @@
 	                        //temp stores the app during the create process, it is then returned
 	                        var temp = {};
 
-	                        temp = new _application3.default(this.app);
+	                        temp = new _core3.default(this.app);
 
 	                        temp.window = this.window;
 
@@ -5436,6 +5516,12 @@
 
 	                        return this.window.apps[temp.id];
 	                }
+
+	                /**
+	                *   @param {temp} temp - pass a reference to attach listeners
+	                *   @return {Method} returns self
+	                */
+
 	        }, {
 	                key: 'initListeners',
 	                value: function initListeners(temp) {
@@ -5444,16 +5530,20 @@
 
 	                        return temp;
 	                }
+
+	                /** @type {Method} */
+
 	        }]);
 
-	        function SJSController() {
-	                _classCallCheck(this, SJSController);
+	        function _controller() {
+	                _classCallCheck(this, _controller);
 
 	                this.window = window;
 
 	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
 
 	                this.window.SpiceJS = this;
+
 	                this.window.SJS = this;
 
 	                //if no apps have been defined, create a new array
@@ -5469,11 +5559,17 @@
 	                this.controller = this.constructor._controller;
 	        }
 
-	        return SJSController;
+	        return _controller;
 	})();
 
-	SJSController._statistics = _statistics3.default;
-	SJSController._controller = {
+	_controller._statistics = _statistics3.default;
+	_controller._controller = {
+
+	        /**
+	        * List all of the instances of SpiceJS or
+	        * @type {method}
+	        * @param {number} id - Specify a specific instance to return.
+	        */
 
 	        list: function list(id) {
 
@@ -5481,7 +5577,7 @@
 	        }
 
 	};
-	exports.default = SJSController;
+	exports.default = _controller;
 
 /***/ },
 /* 193 */
@@ -6067,43 +6163,36 @@
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	//To be built into application (to override current)
-
-	//To be built into application
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.name = undefined;
 
-	var _options2 = __webpack_require__(199);
+	var _options2 = __webpack_require__(197);
 
 	var _options3 = _interopRequireDefault(_options2);
 
-	var _input2 = __webpack_require__(200);
+	var _input2 = __webpack_require__(198);
 
 	var _input3 = _interopRequireDefault(_input2);
 
-	var _sjsclass = __webpack_require__(198);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	var _client2 = __webpack_require__(206);
+	var _client2 = __webpack_require__(205);
 
 	var _client3 = _interopRequireDefault(_client2);
 
-	var _canvas2 = __webpack_require__(208);
+	var _canvas2 = __webpack_require__(207);
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
 
-	var _user2 = __webpack_require__(209);
+	var _user2 = __webpack_require__(208);
 
 	var _user3 = _interopRequireDefault(_user2);
 
-	var _ext2 = __webpack_require__(210);
+	var _ext2 = __webpack_require__(209);
 
 	var _ext3 = _interopRequireDefault(_ext2);
 
-	var _loader = __webpack_require__(214);
+	var _loader = __webpack_require__(213);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
@@ -6117,13 +6206,30 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// Temporary for snowflakes
-	window.SJSParticleController = _particles2.default;
+	/** @module core */
+
+	/** Name. */
+	var name = exports.name = 'core'; // (unfinished) To be built into application (to override current)
+
+	// (unfinished) To be built into application
+
+	window.SJSParticleController = _particles2.default; // Temporary for snowflakes
 
 	var date = new Date();
 
-	var _application = (function () {
-	    _createClass(_application, [{
+	/** Class representing a point. */
+
+	/**
+	 * Blend two colors together.
+	 * @param {string} color1 - The first color, in hexidecimal format.
+	 * @param {string} color2 - The second color, in hexidecimal format.
+	 * @return {string} The blended color.
+	 */
+
+	/** Class representing a point. */
+
+	var _core = (function () {
+	    _createClass(_core, [{
 	        key: 'version',
 	        get: function get() {
 
@@ -6133,12 +6239,20 @@
 
 	            this.constructor.VN = val;
 	        }
+
+	        /**
+	         * Create a point.
+	         * @param {number} x - The x value.
+	         * @param {number} y - The y value.
+	         */
+
 	    }]);
 
-	    function _application() {
-	        _classCallCheck(this, _application);
+	    function _core() {
+	        _classCallCheck(this, _core);
 
 	        this.time = 0;
+
 	        this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
 	                return true;
 	            } };
@@ -6156,7 +6270,7 @@
 	        this.client = _client3.default;
 	    }
 
-	    _createClass(_application, [{
+	    _createClass(_core, [{
 	        key: 'Init',
 	        value: function Init(name, w, h) {
 	            var _this = this;
@@ -6170,8 +6284,8 @@
 	            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
 
 	            //Use arrow function if available
-
 	            var usearrow = true;
+
 	            if (usearrow) {
 
 	                setTimeout(function () {
@@ -6297,6 +6411,9 @@
 	                }
 	            }
 	        }
+
+	        //Legacy
+
 	    }, {
 	        key: 'create',
 	        value: function create(a) {
@@ -6389,247 +6506,13 @@
 	        }
 	    }]);
 
-	    return _application;
+	    return _core;
 	})();
 
-	_application.VN = '0.7.1';
-	exports.default = _application;
+	exports.default = _core;
 
 /***/ },
 /* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _sjsclass = __webpack_require__(198);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var test = (function (_SJSClass) {
-	        _inherits(test, _SJSClass);
-
-	        function test(app) {
-	                _classCallCheck(this, test);
-
-	                //this.Loader = this.app.getCurrent().Loader;
-	                /*
-	                        this.SplashScreen = [];
-	                
-	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
-	                
-	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
-	                
-	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
-	                
-	                        this.Background = this.Loader.loadImage('intro/background');
-	                
-	                        this.begin = this.Loader.loadImage('intro/begin');
-	                
-	                		this.ScoreNumber = [];
-	                
-	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
-	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
-	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
-	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
-	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
-	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
-	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
-	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
-	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
-	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
-	                
-	                        this.Loader.loadImage('interface/iconoffline');
-	                
-	                        this.Loader.loadImage('interface/iconp');
-	                
-	                        this.Loader.loadImage('interface/iconvolume');
-	                
-	                        this.Loader.loadImage('interface/iconx');
-	                */
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
-
-	                _this.StartPhase = 2;
-	                _this.StartAlpha = 2;
-
-	                _this.xxx = 0;
-	                _this.start = false;
-
-	                //		(this.particles = this.app.create(SB_.prototype)).init();
-
-	                //(this.loading = this.app.create(Loading.prototype)).init();
-	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
-	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
-
-	                //    this.particles = new SB_(this.app);
-
-	                //        this.loading = new Loading(this.app);
-
-	                //        this.statusicons = new StatusIco(this.app);
-
-	                //        this.characterselect = new Characterselect(this.app);
-
-	                _this.continue = false;
-
-	                _this.sceneX = -190;
-	                _this.scenePhase = 0;
-	                _this.sceneEndX = 1;
-
-	                _this.sceneStartSpeed = 3;
-	                _this.sceneEndSpeed = 4;
-
-	                _this.sceneSpeed = _this.sceneStartSpeed;
-	                return _this;
-	        }
-
-	        _createClass(test, [{
-	                key: "draw",
-	                value: function draw() {
-
-	                        //    if (this.Loader.getBufferLength()>0)
-	                        //        return;
-
-	                        var sw = this.app.getScaledWidth();
-	                        var sh = this.app.getScaledHeight();
-	                        var h = this.app.getHeight();
-	                        var w = this.app.getWidth();
-	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
-
-	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
-
-	                        this.Background = {};
-	                        this.Background.width = sw;
-
-	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
-
-	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
-	                        /*
-	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
-	                        
-	                                if (this.scenePhase==2)
-	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
-	                                else
-	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
-	                        */
-	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-	                        /*
-	                                if (this.continue == true)
-	                        			this.characterselect.draw();
-	                                else
-	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
-	                        */
-
-	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-
-	                        if (this.scenePhase == 2) {
-	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
-	                                /*
-	                                			this.particles._draw();
-	                                
-	                                			if (this.graphics.getErrors())
-	                                				this.loading.draw();
-	                                			else	{
-	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
-	                                				if (this.continue==false)
-	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
-	                                
-	                                				this.app.ext.cursor.set('pointer');
-	                                
-	                                			}
-	                                            */
-	                        } else {}
-
-	                                //	this.loading.draw();
-
-	                                //	this.statusicons.draw(0.29);
-	                }
-	        }, {
-	                key: "update",
-	                value: function update() {
-
-	                        //    this.loading.update();
-	                        //	this.statusicons.update();
-
-	                        //    if (this.Loader.getBufferLength()>0)
-	                        //        return;
-
-	                        var tick = this.sceneSpeed;
-
-	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
-	                                //    this.particles._update();
-	                                //	this.characterselect.update();
-	                                this.sceneX += tick;
-	                        } else if (this.scenePhase < 2) {
-
-	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
-
-	                                if (this.app.input.released) this.sceneSpeed = 10;
-
-	                                this.sceneX += tick;
-
-	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
-
-	                                if (this.scenePhase > 2) this.scenePhase = 2;
-	                        }
-	                }
-	        }]);
-
-	        return test;
-	})(_sjsclass2.default);
-
-	exports.default = test;
-
-/***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-			value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var SJS = window.SpiceJS;
-
-	var SJSClass = function SJSClass(app) {
-			_classCallCheck(this, SJSClass);
-
-			var appReference = app;
-
-			if (typeof appReference == 'undefined') {
-
-					appReference = SJS.controller.list();
-
-					console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
-			}
-
-			this.app = appReference;
-
-			this.visuals = appReference.client.visuals;
-
-			this.graphics = appReference.client.graphics;
-	};
-
-	exports.default = SJSClass;
-
-/***/ },
-/* 199 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6741,7 +6624,7 @@
 	};
 
 /***/ },
-/* 200 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6752,7 +6635,7 @@
 	        value: true
 	});
 
-	var _inputcontroller2 = __webpack_require__(201);
+	var _inputcontroller2 = __webpack_require__(199);
 
 	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
 
@@ -7106,7 +6989,7 @@
 	exports.default = Input;
 
 /***/ },
-/* 201 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7117,23 +7000,23 @@
 	        value: true
 	});
 
-	var _vector = __webpack_require__(202);
+	var _vector = __webpack_require__(200);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _sjsclass = __webpack_require__(198);
+	var _sjsclass = __webpack_require__(201);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
-	var _inputlistener = __webpack_require__(203);
+	var _inputlistener = __webpack_require__(202);
 
 	var _inputlistener2 = _interopRequireDefault(_inputlistener);
 
-	var _inputkeycontroller = __webpack_require__(204);
+	var _inputkeycontroller = __webpack_require__(203);
 
 	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
 
-	var _inputscrollcontroller = __webpack_require__(205);
+	var _inputscrollcontroller = __webpack_require__(204);
 
 	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
 
@@ -7445,188 +7328,176 @@
 	exports.default = inputcontroller;
 
 /***/ },
-/* 202 */
-/***/ function(module, exports) {
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-					value: true
+	        value: true
 	});
+
+	var _interfaces = __webpack_require__(216);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	/**
+	* @module
+	* @access public
+	* @extends {_VectorInterface}
+	* @example
+	* let vector = new Vector(x,y);
+	* let vector = new Vector(1,1);
+	* vector.position = new Vector(2,2);
+	* // Vector { x: 1, y:1}
+	*/
 
-	var VectorController = (function () {
-					function VectorController() {
-									_classCallCheck(this, VectorController);
-					}
+	var Vector = (function (_VectorInterface2) {
+	        _inherits(Vector, _VectorInterface2);
 
-					_createClass(VectorController, [{
-									key: "multiply",
-									value: function multiply(a, b) {
+	        function Vector() {
+	                _classCallCheck(this, Vector);
 
-													this.x *= a;
-													this.y *= b;
+	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
+	        }
 
-													return this;
-									}
-					}, {
-									key: "offset",
-									value: function offset(a, b) {
+	        _createClass(Vector, [{
+	                key: 'position',
 
-													this.x += a;
-													this.y += b;
+	                /**
+	                * Set vector position
+	                * @type {Object}
+	                * @param {Vector} value - this is value's description.
+	                */
 
-													return this;
-									}
-					}, {
-									key: "segments_intersect",
-									value: function segments_intersect(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) {
+	                set: function set(value) {
 
-													var max_ax, min_ax, max_ay, min_ay, max_bx, min_bx, max_by, min_by;
+	                        this.x = value.x;
+	                        this.y = value.y;
+	                }
 
-													// Long-hand code since this is a performance hotspot and this type of
-													// code minimises the number of conditional tests necessary.
-													if (a1x < a2x) {
-																	min_ax = a1x;
-																	max_ax = a2x;
-													} else {
-																	min_ax = a2x;
-																	max_ax = a1x;
-													}
+	                /**
+	                * Get vector position
+	                * @type {Vector}
+	                * @return {object} Returns position as a Vector.
+	                */
 
-													if (b1x < b2x) {
-																	min_bx = b1x;
-																	max_bx = b2x;
-													} else {
-																	min_bx = b2x;
-																	max_bx = b1x;
-													}
+	                ,
+	                get: function get() {
 
-													if (max_ax < min_bx || min_ax > max_bx) return false;
+	                        return this;
+	                }
 
-													if (a1y < a2y) {
-																	min_ay = a1y;
-																	max_ay = a2y;
-													} else {
-																	min_ay = a2y;
-																	max_ay = a1y;
-													}
+	                /**
+	                * Set x position
+	                * @type {Number}
+	                * @param {Number} Set position x
+	                */
 
-													if (b1y < b2y) {
-																	min_by = b1y;
-																	max_by = b2y;
-													} else {
-																	min_by = b2y;
-																	max_by = b1y;
-													}
+	        }, {
+	                key: 'x',
+	                set: function set(value) {
 
-													if (max_ay < min_by || min_ay > max_by) return false;
+	                        this._x = value;
+	                }
 
-													var dpx = b1x - a1x + b2x - a2x;
-													var dpy = b1y - a1y + b2y - a2y;
-													var qax = a2x - a1x;
-													var qay = a2y - a1y;
-													var qbx = b2x - b1x;
-													var qby = b2y - b1y;
+	                /**
+	                * Get x position
+	                * @type {Number}
+	                * @return {Number} position - Returns position as a Vector.
+	                */
 
-													var d = cr.abs(qay * qbx - qby * qax);
-													var la = qbx * dpy - qby * dpx;
+	                ,
+	                get: function get() {
 
-													if (cr.abs(la) > d) return false;
+	                        return this._x;
+	                }
 
-													var lb = qax * dpy - qay * dpx;
+	                /**
+	                * Set y position
+	                * @type {Number}
+	                * @param {Number} y - Returns position as a Vector.
+	                */
 
-													return cr.abs(lb) <= d;
-									}
-					}]);
+	        }, {
+	                key: 'y',
+	                set: function set(value) {
 
-					return VectorController;
-	})();
+	                        this._y = value;
+	                }
 
-	var Vector = (function (_VectorController) {
-					_inherits(Vector, _VectorController);
+	                /**
+	                * Get y position
+	                * @type {Number}
+	                * @return {Number} Returns position as a Vector.
+	                */
 
-					function Vector(x, y) {
-									_classCallCheck(this, Vector);
+	                ,
+	                get: function get() {
 
-									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).call(this));
+	                        return this._y;
+	                }
+	        }]);
 
-									_this.x = x || _this.constructor._x;
-									_this.y = y || _this.constructor._y;
+	        return Vector;
+	})(_interfaces._Vector);
 
-									return _this;
-					}
-
-					_createClass(Vector, [{
-									key: "position",
-									set: function set(value) {
-
-													this._x = value.x;
-													this._y = value.y;
-									},
-									get: function get() {
-
-													return new Vector(this._x, this._y);
-									}
-					}, {
-									key: "x",
-									set: function set(value) {
-
-													this._x = value;
-									},
-									get: function get() {
-
-													return this._x;
-									}
-					}, {
-									key: "y",
-									get: function get() {
-
-													return this._y;
-									},
-									set: function set(value) {
-
-													this._y = value;
-									}
-					}], [{
-									key: "_x",
-									set: function set(value) {
-
-													this.position[0] = value;
-									},
-									get: function get() {
-
-													return this.position[0];
-									}
-					}, {
-									key: "_y",
-									set: function set(value) {
-
-													this.position[1] = value;
-									},
-									get: function get() {
-
-													return this.position[1];
-									}
-					}]);
-
-					return Vector;
-	})(VectorController);
-
-	Vector.position = {};
-	Vector._x = 0;
-	Vector._y = 0;
 	exports.default = Vector;
 
+	console.log(Vector);
+	console.log(window.v = new Vector(1, 1));
+
 /***/ },
-/* 203 */
+/* 201 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+			value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SJS = window.SpiceJS;
+
+	/**
+	* General class which most modules inherit.
+	* @module
+	* @access protected
+	* @example class A extends SJSClass {};
+	*
+	*/
+
+	var SJSClass = function SJSClass(app) {
+			_classCallCheck(this, SJSClass);
+
+			var appReference = app;
+
+			if (typeof appReference == 'undefined') {
+
+					appReference = SJS.controller.list();
+
+					console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
+			}
+
+			this.app = appReference;
+
+			this.visuals = appReference.client.visuals;
+
+			this.graphics = appReference.client.graphics;
+	};
+
+	exports.default = SJSClass;
+
+/***/ },
+/* 202 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7693,7 +7564,7 @@
 	exports.default = InputListener;
 
 /***/ },
-/* 204 */
+/* 203 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7815,7 +7686,7 @@
 	exports.default = inputkeycontroller;
 
 /***/ },
-/* 205 */
+/* 204 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7944,7 +7815,7 @@
 	exports.default = inputscrollcontroller;
 
 /***/ },
-/* 206 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7953,7 +7824,7 @@
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(207);
+	var _visuals2 = __webpack_require__(206);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
@@ -8776,7 +8647,7 @@
 	};
 
 /***/ },
-/* 207 */
+/* 206 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10125,7 +9996,7 @@
 	exports.default = visuals;
 
 /***/ },
-/* 208 */
+/* 207 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10272,7 +10143,7 @@
 	};
 
 /***/ },
-/* 209 */
+/* 208 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10357,7 +10228,7 @@
 	};
 
 /***/ },
-/* 210 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10366,7 +10237,7 @@
 	                value: true
 	});
 
-	var _cookies = __webpack_require__(211);
+	var _cookies = __webpack_require__(210);
 
 	var _cookies2 = _interopRequireDefault(_cookies);
 
@@ -10813,7 +10684,7 @@
 	};
 
 /***/ },
-/* 211 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
@@ -10983,7 +10854,7 @@
 	                };
 
 	                var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	                var AMD = "function" === 'function' && __webpack_require__(213);
+	                var AMD = "function" === 'function' && __webpack_require__(212);
 	                var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
 	                var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
 	                // AMD support
@@ -11011,10 +10882,10 @@
 	};
 
 	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(212)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(211)(module)))
 
 /***/ },
-/* 212 */
+/* 211 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -11030,7 +10901,7 @@
 
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -11038,10 +10909,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -11049,9 +10920,13 @@
 			value: true
 	});
 
-	var _sjsclass = __webpack_require__(198);
+	var _sjsclass = __webpack_require__(201);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	var _test2 = __webpack_require__(214);
+
+	var _test3 = _interopRequireDefault(_test2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11062,6 +10937,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	window.test = _test3.default;
 
 	var Loader = (function (_SJSClass) {
 			_inherits(Loader, _SJSClass);
@@ -11084,7 +10961,7 @@
 			}
 
 			_createClass(Loader, [{
-					key: "checkLoaded",
+					key: 'checkLoaded',
 					value: function checkLoaded(name) {
 							var _this2 = this;
 
@@ -11102,13 +10979,13 @@
 							return this.getImageReference(name);
 					}
 			}, {
-					key: "getBufferLength",
+					key: 'getBufferLength',
 					value: function getBufferLength() {
 
 							return this.ImageBuffer.length;
 					}
 			}, {
-					key: "getImageReference",
+					key: 'getImageReference',
 					value: function getImageReference(string) {
 
 							var elementPos = this.ImageCache.map(function (img) {
@@ -11121,7 +10998,7 @@
 							return objectFound;
 					}
 			}, {
-					key: "loadImage",
+					key: 'loadImage',
 					value: function loadImage(string) {
 							var _this3 = this;
 
@@ -11143,7 +11020,7 @@
 							return this.ImageCache[cacheIndex - 1];
 					}
 			}, {
-					key: "getBase64Image",
+					key: 'getBase64Image',
 					value: function getBase64Image(img) {
 
 							// Create an empty canvas element
@@ -11164,7 +11041,7 @@
 							return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 					}
 			}, {
-					key: "createImageData",
+					key: 'createImageData',
 					value: function createImageData(img) {
 
 							// Create an empty canvas element
@@ -11201,7 +11078,7 @@
 							return newData2;
 					}
 			}, {
-					key: "asyncLoadImage",
+					key: 'asyncLoadImage',
 					value: (function () {
 							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
 									var _this4 = this;
@@ -11248,10 +11125,10 @@
 															case 12:
 																	this.asyncLoadCacheIndex = cacheIndex;
 
-																	return _context.abrupt("return", this.ImageCache[cacheIndex - 1]);
+																	return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
 
 															case 14:
-															case "end":
+															case 'end':
 																	return _context.stop();
 													}
 											}
@@ -11263,7 +11140,7 @@
 							};
 					})()
 			}, {
-					key: "asyncLoadImageData",
+					key: 'asyncLoadImageData',
 					value: (function () {
 							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
 									var _this5 = this;
@@ -11299,10 +11176,10 @@
 
 															case 3:
 																	_image = _context2.sent;
-																	return _context2.abrupt("return", _image);
+																	return _context2.abrupt('return', _image);
 
 															case 5:
-															case "end":
+															case 'end':
 																	return _context2.stop();
 													}
 											}
@@ -11321,6 +11198,204 @@
 	exports.default = Loader;
 
 /***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	        value: true
+	});
+
+	var _sjsclass = __webpack_require__(201);
+
+	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var test = (function (_SJSClass) {
+	        _inherits(test, _SJSClass);
+
+	        function test(app) {
+	                _classCallCheck(this, test);
+
+	                //this.Loader = this.app.getCurrent().Loader;
+	                /*
+	                        this.SplashScreen = [];
+	                
+	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
+	                
+	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
+	                
+	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
+	                
+	                        this.Background = this.Loader.loadImage('intro/background');
+	                
+	                        this.begin = this.Loader.loadImage('intro/begin');
+	                
+	                		this.ScoreNumber = [];
+	                
+	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
+	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
+	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
+	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
+	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
+	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
+	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
+	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
+	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
+	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
+	                
+	                        this.Loader.loadImage('interface/iconoffline');
+	                
+	                        this.Loader.loadImage('interface/iconp');
+	                
+	                        this.Loader.loadImage('interface/iconvolume');
+	                
+	                        this.Loader.loadImage('interface/iconx');
+	                */
+
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
+
+	                _this.StartPhase = 2;
+	                _this.StartAlpha = 2;
+
+	                _this.xxx = 0;
+	                _this.start = false;
+
+	                //		(this.particles = this.app.create(SB_.prototype)).init();
+
+	                //(this.loading = this.app.create(Loading.prototype)).init();
+	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
+	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
+
+	                //    this.particles = new SB_(this.app);
+
+	                //        this.loading = new Loading(this.app);
+
+	                //        this.statusicons = new StatusIco(this.app);
+
+	                //        this.characterselect = new Characterselect(this.app);
+
+	                _this.continue = false;
+
+	                _this.sceneX = -190;
+	                _this.scenePhase = 0;
+	                _this.sceneEndX = 1;
+
+	                _this.sceneStartSpeed = 3;
+	                _this.sceneEndSpeed = 4;
+
+	                _this.sceneSpeed = _this.sceneStartSpeed;
+	                return _this;
+	        }
+
+	        _createClass(test, [{
+	                key: "draw",
+	                value: function draw() {
+
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
+
+	                        var sw = this.app.getScaledWidth();
+	                        var sh = this.app.getScaledHeight();
+	                        var h = this.app.getHeight();
+	                        var w = this.app.getWidth();
+	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
+
+	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
+
+	                        this.Background = {};
+	                        this.Background.width = sw;
+
+	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
+
+	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
+	                        /*
+	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
+	                        
+	                                if (this.scenePhase==2)
+	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
+	                                else
+	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
+	                        */
+	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+	                        /*
+	                                if (this.continue == true)
+	                        			this.characterselect.draw();
+	                                else
+	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
+	                        */
+
+	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+
+	                        if (this.scenePhase == 2) {
+	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                                /*
+	                                			this.particles._draw();
+	                                
+	                                			if (this.graphics.getErrors())
+	                                				this.loading.draw();
+	                                			else	{
+	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
+	                                				if (this.continue==false)
+	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                                
+	                                				this.app.ext.cursor.set('pointer');
+	                                
+	                                			}
+	                                            */
+	                        } else {}
+
+	                                //	this.loading.draw();
+
+	                                //	this.statusicons.draw(0.29);
+	                }
+	        }, {
+	                key: "update",
+	                value: function update() {
+
+	                        //    this.loading.update();
+	                        //	this.statusicons.update();
+
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
+
+	                        var tick = this.sceneSpeed;
+
+	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
+	                                //    this.particles._update();
+	                                //	this.characterselect.update();
+	                                this.sceneX += tick;
+	                        } else if (this.scenePhase < 2) {
+
+	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
+
+	                                if (this.app.input.released) this.sceneSpeed = 10;
+
+	                                this.sceneX += tick;
+
+	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+
+	                                if (this.scenePhase > 2) this.scenePhase = 2;
+	                        }
+	                }
+	        }]);
+
+	        return test;
+	})(_sjsclass2.default);
+
+	exports.default = test;
+
+/***/ },
 /* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -11332,15 +11407,15 @@
 	        value: true
 	});
 
-	var _sjsclass = __webpack_require__(198);
+	var _sjsclass = __webpack_require__(201);
 
 	var _sjsclass2 = _interopRequireDefault(_sjsclass);
 
-	var _vector = __webpack_require__(202);
+	var _vector = __webpack_require__(200);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _loader = __webpack_require__(214);
+	var _loader = __webpack_require__(213);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
@@ -11590,6 +11665,90 @@
 
 	        return SJSParticle;
 	})(_sjsclass2.default);
+
+/***/ },
+/* 216 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/** @type {number} @private */
+
+	var _number = function _number() {};
+
+	/** @type {object} @private */
+
+	var _method = function _method() {};
+
+	/** @type {Array<>} @private */
+
+	var _array = [];
+
+	/**
+	Interface
+	* @interface
+	* @private
+	*/
+
+	var _Interface =
+
+	/**  @type {Method} */
+
+	function _Interface() {
+	    _classCallCheck(this, _Interface);
+	};
+
+	/**
+	* Vector
+	* @interface
+	* @private
+	*/
+
+	var _Vector = (function (_Interface2) {
+	    _inherits(_Vector, _Interface2);
+
+	    /**
+	    * This is the constructor for the vector
+	    * @param {number} x - position.x
+	    * @param {number} y - position.y
+	    */
+
+	    /**  @type {Number} */
+
+	    function _Vector() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        _classCallCheck(this, _Vector);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+
+	        _this.position = { x: x, y: y };
+
+	        return _this;
+	    }
+
+	    /**  @type {Method} */
+
+	    /**  @type {Number} */
+
+	    return _Vector;
+	})(_Interface);
+
+	_Vector._x = _number;
+	_Vector._y = _number;
+	_Vector.position = _method;
+	exports._Vector = _Vector;
 
 /***/ }
 /******/ ]);

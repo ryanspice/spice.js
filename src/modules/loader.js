@@ -1,5 +1,9 @@
 import SJSClass from './sjsclass.js';
 
+ import _test from './test.js'
+
+window.test = _test;
+
 export default class Loader extends SJSClass {
 
 	constructor(app) {

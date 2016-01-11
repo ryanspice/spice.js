@@ -1,6 +1,14 @@
 
 const SJS = window.SpiceJS;
 
+/**
+* General class which most modules inherit.
+* @module
+* @access protected
+* @example class A extends SJSClass {};
+*
+*/
+
 export default class SJSClass {
 
 	constructor(app) {

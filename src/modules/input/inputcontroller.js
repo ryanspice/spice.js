@@ -1,5 +1,5 @@
 
-import Vector from '../vector';
+import Vector from '../math/vector';
 
 import SJSClass from '../sjsclass.js';
 

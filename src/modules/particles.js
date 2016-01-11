@@ -1,7 +1,7 @@
 
 import SJSClass from './sjsclass.js';
 
-import Vector from './vector';
+import Vector from './math/vector';
 
 import Loader from './loader.js';
 

@@ -1,12 +1,29 @@
 import _statistics from './statistics.js';
 
-import _application from './application.js';
+import _core from './core.js';
 
-export default class SJSController {
+/**
+* Main game controller. Handles instanciating instances and tracking information.
+* @access private
+* @module
+*
+*/
+
+export default class _controller {
+
+    /** @type {Object} */
 
     static _statistics = _statistics;
 
+    /** @type {Object} */
+
     static _controller =  {
+
+        /**
+        * List all of the instances of SpiceJS or
+        * @type {method}
+        * @param {number} id - Specify a specific instance to return.
+        */
 
 		list:function(id){
 
@@ -22,11 +39,15 @@ export default class SJSController {
 
 	};
 
+    /** @type {Object} */
+
     get() {
 
         return this.proto;
 
     }
+
+    /** @type {Object} */
 
     create(target){
 
@@ -74,6 +95,8 @@ export default class SJSController {
 
     }
 
+    /** @type {Object} */
+
     generatePrototype(){
 
         this.window = window;
@@ -81,7 +104,7 @@ export default class SJSController {
         //temp stores the app during the create process, it is then returned
         var temp = {};
 
-        temp = new _application(this.app);
+        temp = new _core(this.app);
 
         temp.window = this.window;
 
@@ -97,12 +120,19 @@ export default class SJSController {
 
     }
 
+    /**
+    *   @param {temp} temp - pass a reference to attach listeners
+    *   @return {Method} returns self
+    */
+
     initListeners(temp){
 
         temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
         return temp;
     }
+
+        /** @type {Method} */
 
     constructor(){
 
@@ -112,6 +142,7 @@ export default class SJSController {
             this.window.scripts = [];
 
         this.window.SpiceJS = this;
+
         this.window.SJS = this;
 
         //if no apps have been defined, create a new array
