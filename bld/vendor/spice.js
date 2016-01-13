@@ -7336,7 +7336,7 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	        value: true
+	    value: true
 	});
 
 	var _interfaces = __webpack_require__(216);
@@ -7352,106 +7352,107 @@
 	* @access public
 	* @extends {_VectorInterface}
 	* @example
-	* let vector = new Vector(x,y);
 	* let vector = new Vector(1,1);
 	* vector.position = new Vector(2,2);
+	* vector.x = 1;
+	* vector.y = 1;
 	* // Vector { x: 1, y:1}
 	*/
 
-	var Vector = (function (_VectorInterface2) {
-	        _inherits(Vector, _VectorInterface2);
+	var Vector = (function (_Vector2) {
+	    _inherits(Vector, _Vector2);
 
-	        function Vector() {
-	                _classCallCheck(this, Vector);
+	    function Vector() {
+	        _classCallCheck(this, Vector);
 
-	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
+	    }
+
+	    _createClass(Vector, [{
+	        key: 'position',
+
+	        /**
+	        * Set vector position
+	        * @type {Object}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.position = new Vector(5,5);
+	        */
+
+	        set: function set(value) {
+
+	            this.x = value.x;
+	            this.y = value.y;
 	        }
 
-	        _createClass(Vector, [{
-	                key: 'position',
+	        /**
+	        * Get vector position
+	        * @type {Object}
+	        */
 
-	                /**
-	                * Set vector position
-	                * @type {Object}
-	                * @param {Vector} value - this is value's description.
-	                */
+	        ,
+	        get: function get() {
 
-	                set: function set(value) {
+	            return this;
+	        }
 
-	                        this.x = value.x;
-	                        this.y = value.y;
-	                }
+	        /**
+	        * Set x position
+	        * @type {Number}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.x = 2;
+	        */
 
-	                /**
-	                * Get vector position
-	                * @type {Vector}
-	                * @return {object} Returns position as a Vector.
-	                */
+	    }, {
+	        key: 'x',
+	        set: function set(value) {
 
-	                ,
-	                get: function get() {
+	            this._x = value;
+	        }
 
-	                        return this;
-	                }
+	        /**
+	        * Get x position
+	        * @type {Number} 
+	        */
 
-	                /**
-	                * Set x position
-	                * @type {Number}
-	                * @param {Number} Set position x
-	                */
+	        ,
+	        get: function get() {
 
-	        }, {
-	                key: 'x',
-	                set: function set(value) {
+	            return this._x;
+	        }
 
-	                        this._x = value;
-	                }
+	        /**
+	        * Set y position
+	        * @type {Number}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.y = 2;
+	        */
 
-	                /**
-	                * Get x position
-	                * @type {Number}
-	                * @return {Number} position - Returns position as a Vector.
-	                */
+	    }, {
+	        key: 'y',
+	        set: function set(value) {
 
-	                ,
-	                get: function get() {
+	            this._y = value;
+	        }
 
-	                        return this._x;
-	                }
+	        /**
+	        * Get y position
+	        * @type {Number}
+	        */
 
-	                /**
-	                * Set y position
-	                * @type {Number}
-	                * @param {Number} y - Returns position as a Vector.
-	                */
+	        ,
+	        get: function get() {
 
-	        }, {
-	                key: 'y',
-	                set: function set(value) {
+	            return this._y;
+	        }
+	    }]);
 
-	                        this._y = value;
-	                }
-
-	                /**
-	                * Get y position
-	                * @type {Number}
-	                * @return {Number} Returns position as a Vector.
-	                */
-
-	                ,
-	                get: function get() {
-
-	                        return this._y;
-	                }
-	        }]);
-
-	        return Vector;
+	    return Vector;
 	})(_interfaces._Vector);
 
 	exports.default = Vector;
-
-	console.log(Vector);
-	console.log(window.v = new Vector(1, 1));
 
 /***/ },
 /* 201 */
@@ -11684,7 +11685,7 @@
 
 	/** @type {number} @private */
 
-	var _number = function _number() {};
+	var _number = 0;
 
 	/** @type {object} @private */
 
@@ -11738,7 +11739,7 @@
 	        return _this;
 	    }
 
-	    /**  @type {Method} */
+	    /**  @type {Vector} */
 
 	    /**  @type {Number} */
 

@@ -1,7 +1,7 @@
 
 /** @type {number} @private */
 
-const _number = function(){};
+const _number = 0;
 
 /** @type {object} @private */
 
@@ -35,15 +35,16 @@ Interface
  class _Vector extends _Interface {
 
     /**  @type {Number} */
+
     static _x = _number;
 
     /**  @type {Number} */
+
     static _y = _number;
 
-    /**  @type {Method} */
+    /**  @type {Vector} */
 
     static position = _method;
-
 
 
     /**
