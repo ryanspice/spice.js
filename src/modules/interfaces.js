@@ -1,9 +1,13 @@
 
-/** @type {number} @private */
+/** @type {Number} @private */
 
 const _number = 0;
 
-/** @type {object} @private */
+/** @type {Object} @private */
+
+const _object = {};
+
+/** @type {Method} @private */
 
 const _method = function(){};
 
@@ -25,9 +29,9 @@ Interface
 
 }
 
-
 /**
 * Vector
+* @module
 * @interface
 * @private
 */
@@ -46,6 +50,14 @@ Interface
 
     static position = _method;
 
+    /**  @type {Method} */
+
+    static multiply = _method;
+
+    /**  @type {Method} */
+
+    static offset = _method;
+
 
     /**
     * This is the constructor for the vector
@@ -63,5 +75,54 @@ Interface
 
 }
 
+/**
+* SJSClass
+* @module
+* @interface
+* @private
+*/
 
-export {_Vector};
+ class _SJSClass extends _Interface {
+
+     /**  @type {Number} */
+
+     static app = _object;
+
+     /**  @type {Number} */
+
+     static visuals = _object;
+
+     /**  @type {Vector} */
+
+     static graphics = _object;
+
+    /**
+    * This is the constructor for the vector
+    * @param {Object} app[ - instance of spicejs]
+    */
+
+    constructor(app) {
+
+        super();
+
+        let appReference = app;
+
+        if (typeof appReference == 'undefined') {
+
+            appReference = SJS.controller.list();
+
+            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
+
+        }
+
+        this.app = appReference;
+
+        this.visuals = appReference.client.visuals;
+
+        this.graphics = appReference.client.graphics;
+
+    };
+
+}
+
+export {_Vector,_SJSClass};

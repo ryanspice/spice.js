@@ -1,5 +1,5 @@
-import SJSClass from './sjsclass';
 
+import {_SJSClass as SJSClass} from './interfaces.js';
 
 export default class test extends SJSClass {
 

@@ -3,29 +3,44 @@ import {_Vector} from '../interfaces.js';
 /**
 * @module
 * @access public
-* @extends {_VectorInterface}
 * @example
 * let vector = new Vector(1,1);
-* vector.position = new Vector(2,2);
-* vector.x = 1;
-* vector.y = 1;
-* // Vector { x: 1, y:1}
 */
 
 export default class Vector extends _Vector {
 
     /**
-    * Set vector position
-    * @type {Object}
-    * @example
-    * var PointA = new Vector(2,1);
-    * PointA.position = new Vector(5,5);
+    * Multiply vector position
+    * @method
+    * @param {Number} a - multiply X
+    * @param {Number} b - multiply Y
+    * @return {Vector}
     */
 
-    set position(value) {
+    multiply(a, b) {
 
-        this.x = value.x;
-        this.y = value.y;
+        this._x *= a;
+        this._y *= b;
+
+        return this;
+
+
+    }
+
+    /**
+    * Offset vector position
+    * @method
+    * @param {Number} a - multiply X
+    * @param {Number} b - multiply Y
+    * @return {Vector}
+    */
+
+    offset(a, b) {
+
+        this._x += a;
+        this._y += b;
+
+        return this;
 
     }
 
@@ -41,10 +56,38 @@ export default class Vector extends _Vector {
     }
 
     /**
+    * Set vector position
+    * @type {Object}
+    * @example
+    * var PointA = new Vector(2,1);
+    * PointA.position = new Vector(5,5);
+    * PointA.position = {x:0,y:0};
+    */
+
+    set position(value) {
+
+        this.x = value.x;
+        this.y = value.y;
+
+    }
+
+    /**
+    * Get x position
+    * @type {Number}
+    */
+
+    get x() {
+
+        return this._x;
+
+    }
+
+    /**
     * Set x position
     * @type {Number}
     * @example
     * var PointA = new Vector(2,1);
+    * PointA.position.x = {x:0,y:0};
     * PointA.x = 2;
     */
 
@@ -55,13 +98,13 @@ export default class Vector extends _Vector {
     }
 
     /**
-    * Get x position
-    * @type {Number} 
+    * Get y position
+    * @type {Number}
     */
 
-    get x() {
+    get y() {
 
-        return this._x;
+        return this._y;
 
     }
 
@@ -76,17 +119,6 @@ export default class Vector extends _Vector {
     set y(value) {
 
         this._y = value;
-
-    }
-
-    /**
-    * Get y position
-    * @type {Number}
-    */
-
-    get y() {
-
-        return this._y;
 
     }
 

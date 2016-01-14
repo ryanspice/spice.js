@@ -4,7 +4,6 @@ import _controller from './modules/controller.js'
  /**
   * SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
   * @access public
-  * @extends {_controller}
   * @example var Application = SpiceJS.create();
   *
   *        Application.OnLoad = function (self) {

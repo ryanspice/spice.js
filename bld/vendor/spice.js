@@ -5336,7 +5336,6 @@
 	/**
 	 * SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
 	 * @access public
-	 * @extends {_controller}
 	 * @example var Application = SpiceJS.create();
 	 *
 	 *        Application.OnLoad = function (self) {
@@ -5605,116 +5604,95 @@
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	/** This module is designed to monitor functions.
+	* @module
+	* @public
+	* @example
+	*   Statistics.monitor(function () {
+	*
+	*       _this.name = "scriptloadtime";
+	*
+	*   }).then(function () {
+	*
+	*           _this.name = "scriptloadtime";
+	*           _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
 
-	var StatisticsController = (function () {
-	        _createClass(StatisticsController, [{
-	                key: 'count',
-	                get: function get() {
+	*           _this.statistics.monitor(function () {
+	*
+	*                   _this.name = "scriptloadtime2";
+	*
+	*               }).then(function () {
+	*
+	*                       _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+	*
+	*                   });
+	*       });
+	*/
 
-	                        return this.monitor.count;
-	                },
-	                set: function set(value) {
-
-	                        this.monitor.count = value;
-	                }
-	        }, {
-	                key: 'details',
-	                get: function get() {
-
-	                        return StatisticsController._details;
-	                },
-	                set: function set(value) {
-
-	                        this._details = StatisticsController._details;
-	                }
-	        }], [{
-	                key: '_details',
-	                value: function _details(type) {
-
-	                        type = type;
-
-	                        switch (type) {
-
-	                                default:
-
-	                                        return Object.keys(this.logs);
-
-	                                case 'details':
-
-	                                        return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                                case 'entries':
-
-	                                        return Object.entries(this.logs);
-
-	                                case 'values':
-
-	                                        return Object.values(this.logs);
-
-	                        }
-	                }
-	        }, {
-	                key: 'logs',
-	                get: function get() {
-
-	                        return this.monitor.logs;
-	                },
-	                set: function set(value) {
-
-	                        this.monitor = value;
-	                }
-	        }, {
-	                key: 'monitor',
-	                get: function get() {
-
-	                        return this._monitor;
-	                },
-	                set: function set(value) {
-
-	                        this._monitor = value;
-	                }
-	        }]);
-
-	        function StatisticsController() {
-	                _classCallCheck(this, StatisticsController);
-
-	                this.logs = this.constructor.logs;
-
-	                this.count = 0;
-	        }
-
-	        return StatisticsController;
-	})();
-
-	StatisticsController._monitor = {
-
-	        count: 0,
-
-	        logs: []
-
-	};
-
-	var Statistics = (function (_StatisticsController) {
-	        _inherits(Statistics, _StatisticsController);
+	var Statistics = (function (_StatisticTypes$Stati) {
+	        _inherits(Statistics, _StatisticTypes$Stati);
 
 	        function Statistics() {
 	                _classCallCheck(this, Statistics);
 
-	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).call(this));
+	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).apply(this, arguments));
 	        }
 
 	        _createClass(Statistics, [{
-	                key: 'watch',
-	                value: function watch(v) {}
+	                key: 'monitor',
+
+	                /** Async Monitor of a function, returns duration.
+	                 * @type {Promise}
+	                 * @param {Function} func - Function to monitor
+	                 * @param {Arguments} arg - Arguments to pass
+	                 * @return {Number} as duration.
+	                 */
+
+	                value: (function () {
+	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
+	                                var startTime, endTime;
+	                                return regeneratorRuntime.wrap(function _callee$(_context) {
+	                                        while (1) {
+	                                                switch (_context.prev = _context.next) {
+	                                                        case 0:
+	                                                                startTime = new Date().getTime();
+	                                                                _context.next = 3;
+	                                                                return func(arg);
+
+	                                                        case 3:
+	                                                                endTime = new Date().getTime();
+
+	                                                                this.log("time", -startTime + endTime, func.name);
+
+	                                                                return _context.abrupt('return', startTime - endTime);
+
+	                                                        case 6:
+	                                                        case 'end':
+	                                                                return _context.stop();
+	                                                }
+	                                        }
+	                                }, _callee, this);
+	                        }));
+
+	                        return function monitor(_x, _x2) {
+	                                return ref.apply(this, arguments);
+	                        };
+	                })()
+
+	                /** Async
+	                 * @private
+	                 */
+
 	        }, {
 	                key: 'log',
 	                value: (function () {
-	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
 	                                var name,
 	                                    curLog,
 	                                    newLog,
@@ -5722,10 +5700,10 @@
 	                                    time,
 	                                    time2,
 	                                    timeHash,
-	                                    _args = arguments;
-	                                return regeneratorRuntime.wrap(function _callee$(_context) {
+	                                    _args2 = arguments;
+	                                return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	                                        while (1) {
-	                                                switch (_context.prev = _context.next) {
+	                                                switch (_context2.prev = _context2.next) {
 	                                                        case 0:
 	                                                                name = '';
 	                                                                curLog = this.logs;
@@ -5737,30 +5715,30 @@
 
 	                                                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
 
-	                                                                if (typeof _args[2] != 'undefined') {
+	                                                                if (typeof _args2[2] != 'undefined') {
 
-	                                                                        name = _args[2];
+	                                                                        name = _args2[2];
 
 	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
 
-	                                                                        hashLog = newLog[this.count + " " + _args[0]] || new StatisticTypes.Log(name);
+	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new StatisticTypes.Log(name);
 
-	                                                                        hashLog = _args[1];
+	                                                                        hashLog = _args2[1];
 
-	                                                                        newLog[_args[0]] = hashLog;
+	                                                                        newLog[_args2[0]] = hashLog;
 
 	                                                                        curLog[name] = newLog;
 	                                                                } else {
 
-	                                                                        name = _args[0];
+	                                                                        name = _args2[0];
 
 	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
 
-	                                                                        hashLog = newLog[this.count + " " + _args[0]] || new StatisticTypes.Log(name);
+	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new StatisticTypes.Log(name);
 
-	                                                                        hashLog = _args[1];
+	                                                                        hashLog = _args2[1];
 
-	                                                                        newLog[_args[0]] = hashLog;
+	                                                                        newLog[_args2[0]] = hashLog;
 
 	                                                                        curLog[name] = newLog;
 	                                                                }
@@ -5771,48 +5749,34 @@
 
 	                                                        case 11:
 	                                                        case 'end':
-	                                                                return _context.stop();
-	                                                }
-	                                        }
-	                                }, _callee, this);
-	                        }));
-
-	                        return function log() {
-	                                return ref.apply(this, arguments);
-	                        };
-	                })()
-	        }, {
-	                key: 'monitor',
-	                value: (function () {
-	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(func, arg) {
-	                                var startTime, endTime;
-	                                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	                                        while (1) {
-	                                                switch (_context2.prev = _context2.next) {
-	                                                        case 0:
-	                                                                startTime = new Date().getTime();
-	                                                                _context2.next = 3;
-	                                                                return func(arg);
-
-	                                                        case 3:
-	                                                                endTime = new Date().getTime();
-
-	                                                                this.log("time", -startTime + endTime, func.name);
-
-	                                                                return _context2.abrupt('return', startTime - endTime);
-
-	                                                        case 6:
-	                                                        case 'end':
 	                                                                return _context2.stop();
 	                                                }
 	                                        }
 	                                }, _callee2, this);
 	                        }));
 
-	                        return function monitor(_x, _x2) {
+	                        return function log() {
 	                                return ref.apply(this, arguments);
 	                        };
 	                })()
+
+	                /** watch //to come
+	                 * @private
+	                 */
+
+	        }], [{
+	                key: 'watch',
+	                value: function watch(v) {
+
+	                        var w = v;
+	                }
+
+	                /**
+	                * Converts and array of objects to CSV.
+	                * @module
+	                * @access private
+	                */
+
 	        }, {
 	                key: 'convertArrayOfObjectsToCSV',
 	                value: function convertArrayOfObjectsToCSV(args) {
@@ -5856,6 +5820,13 @@
 
 	                        return result;
 	                }
+
+	                /**
+	                * Converts and array of objects to CSV.
+	                * @module
+	                * @access private
+	                */
+
 	        }, {
 	                key: 'writeToCSV',
 	                value: function writeToCSV(name) {
@@ -5894,7 +5865,7 @@
 	        }]);
 
 	        return Statistics;
-	})(StatisticsController);
+	})(StatisticTypes.StatisticsController);
 
 	exports.default = Statistics;
 
@@ -6009,7 +5980,7 @@
 /* 195 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -6023,6 +5994,118 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	/**
+	* @module
+	* @private
+	*/
+
+	var StatisticsController = (function () {
+	    _createClass(StatisticsController, [{
+	        key: 'count',
+	        get: function get() {
+
+	            return this.monitor.count;
+	        },
+	        set: function set(value) {
+
+	            this.monitor.count = value;
+	        }
+	    }, {
+	        key: 'details',
+	        get: function get() {
+
+	            return StatisticsController._details;
+	        },
+	        set: function set(value) {
+
+	            this._details = StatisticsController._details;
+	        }
+	    }], [{
+	        key: '_details',
+	        value: function _details(type) {
+
+	            type = type;
+
+	            switch (type) {
+
+	                default:
+
+	                    return Object.keys(this.logs);
+
+	                case 'details':
+
+	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
+
+	                case 'entries':
+
+	                    return Object.entries(this.logs);
+
+	                case 'values':
+
+	                    return Object.values(this.logs);
+
+	            }
+	        }
+	    }, {
+	        key: 'logs',
+
+	        /**
+	        * @type {Object}
+	        * @private
+	        */
+
+	        get: function get() {
+
+	            return this.monitor.logs;
+	        }
+
+	        /**
+	        * @type {Function}
+	        * @private
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this.monitor = value;
+	        }
+	    }, {
+	        key: 'monitor',
+	        get: function get() {
+
+	            return this._monitor;
+	        },
+	        set: function set(value) {
+
+	            this._monitor = value;
+	        }
+	    }]);
+
+	    function StatisticsController() {
+	        _classCallCheck(this, StatisticsController);
+
+	        /** dfsdsf
+	        * @type {Array<>} sdf sdf
+	        * @private
+	        */
+
+	        this.logs = this.constructor.logs;
+	        this.logs.type = 'Array';
+
+	        this.count = 0;
+	    }
+
+	    return StatisticsController;
+	})();
+
+	StatisticsController._monitor = {
+
+	    count: 0,
+
+	    logs: []
+
+	};
+
 	var Log = (function () {
 	    function Log(id) {
 	        _classCallCheck(this, Log);
@@ -6031,7 +6114,7 @@
 	    }
 
 	    _createClass(Log, null, [{
-	        key: "time",
+	        key: 'time',
 	        get: function get() {
 
 	            return this._time;
@@ -6041,7 +6124,7 @@
 	            return this._time = value;
 	        }
 	    }, {
-	        key: "id",
+	        key: 'id',
 	        get: function get() {
 
 	            return this._id;
@@ -6085,7 +6168,7 @@
 	    }
 
 	    _createClass(App, null, [{
-	        key: "fps",
+	        key: 'fps',
 	        get: function get() {
 
 	            return this._fps;
@@ -6095,7 +6178,7 @@
 	            return this._fps = value;
 	        }
 	    }, {
-	        key: "scale",
+	        key: 'scale',
 	        get: function get() {
 
 	            return this._scale;
@@ -6115,7 +6198,7 @@
 	    }
 
 	    _createClass(Build, null, [{
-	        key: "build",
+	        key: 'build',
 	        get: function get() {
 
 	            return this._build;
@@ -6125,7 +6208,7 @@
 	            return this._build = value;
 	        }
 	    }, {
-	        key: "scriptloadtime",
+	        key: 'scriptloadtime',
 	        get: function get() {
 
 	            return this._scriptloadtime;
@@ -6135,7 +6218,7 @@
 	            return this._scriptloadtime = value;
 	        }
 	    }, {
-	        key: "uptime",
+	        key: 'uptime',
 	        get: function get() {
 
 	            return this._uptime;
@@ -6154,6 +6237,7 @@
 	exports.Compile = Compile;
 	exports.App = App;
 	exports.Build = Build;
+	exports.StatisticsController = StatisticsController;
 
 /***/ },
 /* 196 */
@@ -7004,9 +7088,7 @@
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _sjsclass = __webpack_require__(201);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+	var _interfaces = __webpack_require__(216);
 
 	var _inputlistener = __webpack_require__(202);
 
@@ -7310,7 +7392,7 @@
 	        }]);
 
 	        return inputcontroller;
-	})(_sjsclass2.default);
+	})(_interfaces._SJSClass);
 
 	inputcontroller._x = 0;
 	inputcontroller._y = 0;
@@ -7350,13 +7432,8 @@
 	/**
 	* @module
 	* @access public
-	* @extends {_VectorInterface}
 	* @example
 	* let vector = new Vector(1,1);
-	* vector.position = new Vector(2,2);
-	* vector.x = 1;
-	* vector.y = 1;
-	* // Vector { x: 1, y:1}
 	*/
 
 	var Vector = (function (_Vector2) {
@@ -7369,20 +7446,40 @@
 	    }
 
 	    _createClass(Vector, [{
-	        key: 'position',
+	        key: 'multiply',
 
 	        /**
-	        * Set vector position
-	        * @type {Object}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.position = new Vector(5,5);
+	        * Multiply vector position
+	        * @method
+	        * @param {Number} a - multiply X
+	        * @param {Number} b - multiply Y
+	        * @return {Vector}
 	        */
 
-	        set: function set(value) {
+	        value: function multiply(a, b) {
 
-	            this.x = value.x;
-	            this.y = value.y;
+	            this._x *= a;
+	            this._y *= b;
+
+	            return this;
+	        }
+
+	        /**
+	        * Offset vector position
+	        * @method
+	        * @param {Number} a - multiply X
+	        * @param {Number} b - multiply Y
+	        * @return {Vector}
+	        */
+
+	    }, {
+	        key: 'offset',
+	        value: function offset(a, b) {
+
+	            this._x += a;
+	            this._y += b;
+
+	            return this;
 	        }
 
 	        /**
@@ -7390,10 +7487,39 @@
 	        * @type {Object}
 	        */
 
-	        ,
+	    }, {
+	        key: 'position',
 	        get: function get() {
 
 	            return this;
+	        }
+
+	        /**
+	        * Set vector position
+	        * @type {Object}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.position = new Vector(5,5);
+	        * PointA.position = {x:0,y:0};
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this.x = value.x;
+	            this.y = value.y;
+	        }
+
+	        /**
+	        * Get x position
+	        * @type {Number}
+	        */
+
+	    }, {
+	        key: 'x',
+	        get: function get() {
+
+	            return this._x;
 	        }
 
 	        /**
@@ -7401,25 +7527,26 @@
 	        * @type {Number}
 	        * @example
 	        * var PointA = new Vector(2,1);
+	        * PointA.position.x = {x:0,y:0};
 	        * PointA.x = 2;
 	        */
 
-	    }, {
-	        key: 'x',
+	        ,
 	        set: function set(value) {
 
 	            this._x = value;
 	        }
 
 	        /**
-	        * Get x position
-	        * @type {Number} 
+	        * Get y position
+	        * @type {Number}
 	        */
 
-	        ,
+	    }, {
+	        key: 'y',
 	        get: function get() {
 
-	            return this._x;
+	            return this._y;
 	        }
 
 	        /**
@@ -7430,22 +7557,10 @@
 	        * PointA.y = 2;
 	        */
 
-	    }, {
-	        key: 'y',
+	        ,
 	        set: function set(value) {
 
 	            this._y = value;
-	        }
-
-	        /**
-	        * Get y position
-	        * @type {Number}
-	        */
-
-	        ,
-	        get: function get() {
-
-	            return this._y;
 	        }
 	    }]);
 
@@ -7455,49 +7570,7 @@
 	exports.default = Vector;
 
 /***/ },
-/* 201 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-			value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var SJS = window.SpiceJS;
-
-	/**
-	* General class which most modules inherit.
-	* @module
-	* @access protected
-	* @example class A extends SJSClass {};
-	*
-	*/
-
-	var SJSClass = function SJSClass(app) {
-			_classCallCheck(this, SJSClass);
-
-			var appReference = app;
-
-			if (typeof appReference == 'undefined') {
-
-					appReference = SJS.controller.list();
-
-					console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
-			}
-
-			this.app = appReference;
-
-			this.visuals = appReference.client.visuals;
-
-			this.graphics = appReference.client.graphics;
-	};
-
-	exports.default = SJSClass;
-
-/***/ },
+/* 201 */,
 /* 202 */
 /***/ function(module, exports) {
 
@@ -10921,9 +10994,7 @@
 			value: true
 	});
 
-	var _sjsclass = __webpack_require__(201);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+	var _interfaces = __webpack_require__(216);
 
 	var _test2 = __webpack_require__(214);
 
@@ -11194,7 +11265,7 @@
 			}]);
 
 			return Loader;
-	})(_sjsclass2.default);
+	})(_interfaces._SJSClass);
 
 	exports.default = Loader;
 
@@ -11210,11 +11281,7 @@
 	        value: true
 	});
 
-	var _sjsclass = __webpack_require__(201);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _interfaces = __webpack_require__(216);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11392,7 +11459,7 @@
 	        }]);
 
 	        return test;
-	})(_sjsclass2.default);
+	})(_interfaces._SJSClass);
 
 	exports.default = test;
 
@@ -11408,9 +11475,7 @@
 	        value: true
 	});
 
-	var _sjsclass = __webpack_require__(201);
-
-	var _sjsclass2 = _interopRequireDefault(_sjsclass);
+	var _interfaces = __webpack_require__(216);
 
 	var _vector = __webpack_require__(200);
 
@@ -11665,13 +11730,13 @@
 	        }]);
 
 	        return SJSParticle;
-	})(_sjsclass2.default);
+	})(_interfaces._SJSClass);
 
 /***/ },
 /* 216 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -11683,11 +11748,15 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	/** @type {number} @private */
+	/** @type {Number} @private */
 
 	var _number = 0;
 
-	/** @type {object} @private */
+	/** @type {Object} @private */
+
+	var _object = {};
+
+	/** @type {Method} @private */
 
 	var _method = function _method() {};
 
@@ -11711,6 +11780,7 @@
 
 	/**
 	* Vector
+	* @module
 	* @interface
 	* @private
 	*/
@@ -11723,6 +11793,8 @@
 	    * @param {number} x - position.x
 	    * @param {number} y - position.y
 	    */
+
+	    /**  @type {Method} */
 
 	    /**  @type {Number} */
 
@@ -11739,6 +11811,8 @@
 	        return _this;
 	    }
 
+	    /**  @type {Method} */
+
 	    /**  @type {Vector} */
 
 	    /**  @type {Number} */
@@ -11746,10 +11820,64 @@
 	    return _Vector;
 	})(_Interface);
 
+	/**
+	* SJSClass
+	* @module
+	* @interface
+	* @private
+	*/
+
 	_Vector._x = _number;
 	_Vector._y = _number;
 	_Vector.position = _method;
+	_Vector.multiply = _method;
+	_Vector.offset = _method;
+
+	var _SJSClass = (function (_Interface3) {
+	    _inherits(_SJSClass, _Interface3);
+
+	    /**
+	    * This is the constructor for the vector
+	    * @param {Object} app[ - instance of spicejs]
+	    */
+
+	    /**  @type {Number} */
+
+	    function _SJSClass(app) {
+	        _classCallCheck(this, _SJSClass);
+
+	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
+
+	        var appReference = app;
+
+	        if (typeof appReference == 'undefined') {
+
+	            appReference = SJS.controller.list();
+
+	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this2);
+	        }
+
+	        _this2.app = appReference;
+
+	        _this2.visuals = appReference.client.visuals;
+
+	        _this2.graphics = appReference.client.graphics;
+
+	        return _this2;
+	    }
+
+	    /**  @type {Vector} */
+
+	    /**  @type {Number} */
+
+	    return _SJSClass;
+	})(_Interface);
+
+	_SJSClass.app = _object;
+	_SJSClass.visuals = _object;
+	_SJSClass.graphics = _object;
 	exports._Vector = _Vector;
+	exports._SJSClass = _SJSClass;
 
 /***/ }
 /******/ ]);

@@ -1,4 +1,5 @@
-import SJSClass from './sjsclass.js';
+
+import {_SJSClass as SJSClass} from './interfaces.js';
 
  import _test from './test.js'
 

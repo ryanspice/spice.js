@@ -2,119 +2,57 @@ import utils from './utils.js';
 
 import * as StatisticTypes from './statisticstypes.js';
 
-class StatisticsController {
 
-    static get logs() {
+/** This module is designed to monitor functions.
+* @module
+* @public
+* @example
+*   Statistics.monitor(function () {
+*
+*       _this.name = "scriptloadtime";
+*
+*   }).then(function () {
+*
+*           _this.name = "scriptloadtime";
+*           _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
 
-        return this.monitor.logs;
+*           _this.statistics.monitor(function () {
+*
+*                   _this.name = "scriptloadtime2";
+*
+*               }).then(function () {
+*
+*                       _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+*
+*                   });
+*       });
+*/
 
+class Statistics extends StatisticTypes.    StatisticsController {
+
+  /** Async Monitor of a function, returns duration.
+   * @type {Promise}
+   * @param {Function} func - Function to monitor
+   * @param {Arguments} arg - Arguments to pass
+   * @return {Number} as duration.
+   */
+
+    async monitor(func,arg){
+
+        let startTime = new Date().getTime();
+
+        await func(arg);
+
+        let endTime = new Date().getTime();
+
+        this.log("time",(-startTime+endTime),func.name);
+
+        return startTime - endTime;
     }
 
-    static set logs(value) {
-
-        this.monitor = value;
-
-    }
-
-    static get monitor() {
-
-        return this._monitor;
-
-    }
-
-    static set monitor(value) {
-
-        this._monitor = value;
-
-    }
-
-    get count() {
-
-        return this.monitor.count;
-
-    }
-
-    set count(value) {
-
-        this.monitor.count = value;
-
-    }
-
-    get details() {
-
-        return StatisticsController._details;
-
-    }
-
-    set details(value) {
-
-        this._details = StatisticsController._details;
-
-    }
-
-    static _monitor = {
-
-        count:0,
-
-        logs:[]
-
-    }
-
-    static _details(type){
-
-        type = type;
-
-        switch (type)
-        {
-
-            default:
-
-            return Object.keys(this.logs);
-
-            case 'details':
-
-            return Object.create(
-
-              Object.getPrototypeOf(this.logs),
-
-              Object.getOwnPropertyDescriptors(this.logs)
-
-            );
-
-            case 'entries':
-
-            return Object.entries(this.logs);
-
-            case 'values':
-
-            return Object.values(this.logs);
-
-        }
-
-    }
-
-    constructor(){
-
-        this.logs = this.constructor.logs;
-
-        this.count = 0;
-
-    }
-
-}
-
-class Statistics extends StatisticsController {
-
-    constructor(){
-
-        super();
-
-    }
-
-    watch(v){
-
-
-    }
+    /** Async
+     * @private
+     */
 
     async log(){
 
@@ -196,20 +134,23 @@ class Statistics extends StatisticsController {
 
     }
 
-    async monitor(func,arg){
+    /** watch //to come
+     * @private
+     */
 
-        let startTime = new Date().getTime();
+     static watch(v){
 
-        await func(arg);
+         let w = v;
 
-        let endTime = new Date().getTime();
+     }
 
-        this.log("time",(-startTime+endTime),func.name);
+    /**
+    * Converts and array of objects to CSV.
+    * @module
+    * @access private
+    */
 
-        return startTime - endTime;
-    }
-
-    convertArrayOfObjectsToCSV(args) {
+    static convertArrayOfObjectsToCSV(args) {
 
         var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
@@ -254,7 +195,13 @@ class Statistics extends StatisticsController {
         return result;
     }
 
-    writeToCSV(name){
+    /**
+    * Converts and array of objects to CSV.
+    * @module
+    * @access private
+    */
+
+    static writeToCSV(name){
 
         var logStream = fs.createWriteStream('log.txt', {'flags': 'a'});
 

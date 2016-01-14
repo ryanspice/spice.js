@@ -1,4 +1,5 @@
-
+/** @ignore
+*/
 export default class Rect {
 
     static _top = 0;
