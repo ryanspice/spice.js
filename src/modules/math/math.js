@@ -1,3 +1,11 @@
+import Vector from './vector.js';
+
+/**
+* @module
+* @access public
+* @example
+* Application.client.math
+*/
 
 export default class Math {
 
@@ -761,5 +769,19 @@ export default class Math {
 
 		return cr.abs(lb) <= d;
 	};
+
+
+    /**
+    * Builds new math into global math and Application.math
+    * @param {number} x - position.x
+    * @param {number} y - position.y
+    */
+
+    constructor(){
+
+        this.vector = Vector;
+        window.Math.vector = this.vector;
+
+    }
 
 }

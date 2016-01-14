@@ -21,7 +21,9 @@ export default {
 
                 this.app.Construct(this.metatag).init();
 
-                this.app.Construct(this.cookies).init();
+                //this.app.Construct(this.cookies).init();
+
+                this.cookies = new Cookies(this.app);
 
                 this.app.Construct(this.cursor).init();
 

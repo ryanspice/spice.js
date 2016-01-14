@@ -1,3 +1,9 @@
+/**
+* Stores key input data
+* @access private
+* @module
+*
+*/
 
 export default class inputkeycontroller {
 

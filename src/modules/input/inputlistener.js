@@ -1,13 +1,15 @@
-
-/*
-
-    SJSInputListener
-        [listener0,listener1,listener2,element,function]
-
-        let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
-        let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
-        let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
-
+/**
+*  Sets up input listeners.
+* @access private
+* @module
+* @example
+* SJSInputListener
+*    [listener0,listener1,listener2,element,function]
+*
+*    let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
+*    let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
+*    let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
+*
 */
 
 export default class InputListener {
@@ -29,24 +31,40 @@ export default class InputListener {
 
     }
 
+    /**
+    * @method Microsoft Pointers
+    */
+    
     msPointer(e,evt){
 
         window.addEventListener(e,evt,false);
 
     }
 
+    /**
+    * @method Universal Pointers
+    */
+    
     Pointer(e,evt){
 
         window.addEventListener(e,evt,false);
 
     }
 
+    /**
+    * @method Touch Pointers
+    */
+    
     touchPointer(e,evt){
 
         window.addEventListener(e,evt,false);
 
     }
 
+    /**
+    * @method Mouse Pointers
+    */
+    
     mousePointer(e,evt){
 
         window.addEventListener(e,evt,false);

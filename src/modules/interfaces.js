@@ -29,6 +29,26 @@ Interface
 
 }
 
+ class _Core extends _Interface {
+
+    /**  @type {Method} */
+
+    constructor() {
+
+        super();
+
+    };
+
+}
+
+/*
+
+
+
+
+
+*/
+
 /**
 * Vector
 * @module
@@ -57,7 +77,6 @@ Interface
     /**  @type {Method} */
 
     static offset = _method;
-
 
     /**
     * This is the constructor for the vector
@@ -125,4 +144,185 @@ Interface
 
 }
 
-export {_Vector,_SJSClass};
+/*
+
+
+
+
+
+*/
+
+/**
+*
+* @module
+* @interface
+* @protected
+*/
+
+class _Log {
+
+     /** @type {Number} */
+
+    static get time() {
+
+        return (this._time);
+
+    }
+
+
+     /** @type {Number} */
+
+    static set time(value) {
+
+        return (this._time = value);
+
+    }
+
+
+     /** @type {Number} */
+
+    static get id() {
+
+        return (this._id);
+
+    }
+
+
+     /** @type {Number} */
+
+    static set id(value) {
+
+        return (this._id = value);
+
+    }
+
+    /**
+    * Assigns an id or 0
+    * @param {Number} [id] - instance of log
+    */
+
+    constructor(id){
+
+        this.id = id || 0;
+
+    }
+
+}
+
+/**
+*
+* @module
+* @interface
+* @private
+*/
+
+class _Loop extends _Log  {
+
+    constructor(){
+
+        super();
+
+    }
+
+}
+
+/**
+*
+* @module
+* @interface
+* @private
+*/
+
+class _Compile extends _Log  {
+
+    constructor(){
+
+        super();
+
+    }
+
+}
+
+/**
+*
+* @module
+* @interface
+* @private
+*/
+
+class _App {
+
+    static get fps() {
+
+        return (this._fps);
+
+    }
+
+    static set fps(value) {
+
+        return (this._fps = value);
+
+    }
+
+    static get scale() {
+
+        return (this._scale);
+
+    }
+
+    static set scale(value) {
+
+        return (this._scale = value);
+
+    }
+
+}
+
+/**
+*
+* @module
+* @interface
+* @private
+*/
+
+class _Build {
+
+    static get build() {
+
+        return (this._build);
+
+    }
+
+    static set build(value) {
+
+         return (this._build = value);
+
+     }
+
+    static get scriptloadtime() {
+
+        return (this._scriptloadtime);
+
+    }
+
+    static set scriptloadtime(value) {
+
+        return (this._scriptloadtime = value);
+
+    }
+
+    static get uptime() {
+
+        return (this._uptime);
+
+    }
+
+    static set uptime(value) {
+
+        return (this._uptime = value);
+
+    }
+
+}
+
+export {_Vector,_SJSClass, _Log, _Loop, _Compile, _App, _Build};

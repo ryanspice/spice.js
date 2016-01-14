@@ -1,6 +1,9 @@
 import utils from './utils.js';
 
-import * as StatisticTypes from './statisticstypes.js';
+
+import StatisticsController from './StatisticsController.js';
+
+import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
 
 
 /** This module is designed to monitor functions.
@@ -28,7 +31,7 @@ import * as StatisticTypes from './statisticstypes.js';
 *       });
 */
 
-class Statistics extends StatisticTypes.    StatisticsController {
+class Statistics extends StatisticsController {
 
   /** Async Monitor of a function, returns duration.
    * @type {Promise}
@@ -78,20 +81,20 @@ class Statistics extends StatisticTypes.    StatisticsController {
             name = arguments[2];
 
             if (name=='compile')
-                newLog = curLog[name] || new StatisticTypes.Compile(name);
+                newLog = curLog[name] || new _Compile(name);
             else
             if (name=='build')
-                newLog = curLog[name] || new StatisticTypes.Build(name);
+                newLog = curLog[name] || new _Build(name);
             else
             if (name=='loop')
-                newLog = curLog[name] || new StatisticTypes.Loop(name);
+                newLog = curLog[name] || new _Loop(name);
             else
             if (name=='state')
-                newLog = curLog[name] || new StatisticTypes.App(name);
+                newLog = curLog[name] || new _App(name);
             else
-                newLog = curLog[name] || new StatisticTypes.Log(name);
+                newLog = curLog[name] || new _Log(name);
 
-            hashLog = newLog[ this.count + " " +arguments[0]] || new StatisticTypes.Log(name);
+            hashLog = newLog[ this.count + " " +arguments[0]] || new _Log(name);
 
             hashLog = arguments[1];
 
@@ -105,20 +108,20 @@ class Statistics extends StatisticTypes.    StatisticsController {
             name = arguments[0];
 
             if (name=='compile')
-                newLog = curLog[name] || new StatisticTypes.Compile(name);
+                newLog = curLog[name] || new _Compile(name);
             else
             if (name=='build')
-                newLog = curLog[name] || new StatisticTypes.Build(name);
+                newLog = curLog[name] || new _Build(name);
             else
             if (name=='loop')
-                newLog = curLog[name] || new StatisticTypes.Loop(name);
+                newLog = curLog[name] || new _Loop(name);
             else
             if (name=='state')
-                newLog = curLog[name] || new StatisticTypes.App(name);
+                newLog = curLog[name] || new _App(name);
             else
-                newLog = curLog[name] || new StatisticTypes.Log(name);
+                newLog = curLog[name] || new _Log(name);
 
-            hashLog = newLog[ this.count + " " +arguments[0]] || new StatisticTypes.Log(name);
+            hashLog = newLog[ this.count + " " +arguments[0]] || new _Log(name);
 
             hashLog = arguments[1];
 

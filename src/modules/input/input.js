@@ -1,6 +1,13 @@
 
 import inputcontroller from './inputcontroller.js';
 
+/**
+* Main game controller. Handles instanciating instances and tracking information.
+* @access private
+* @module
+*
+*/
+
 export default class Input extends inputcontroller {
 
     constructor(app,pointerPoint){

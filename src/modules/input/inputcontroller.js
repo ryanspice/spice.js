@@ -9,6 +9,13 @@ import inputkeycontroller from './inputkeycontroller.js';
 
 import inputscrollcontroller from './inputscrollcontroller.js';
 
+/**
+* Stores input data
+* @access private
+* @module
+*
+*/
+
 export default class inputcontroller extends SJSClass {
 
         static _x = 0;
@@ -306,8 +313,6 @@ export default class inputcontroller extends SJSClass {
             return this.constructor._scrollController = value;
 
         }
-
-
 
         get horizontal() {
 

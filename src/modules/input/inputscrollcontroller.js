@@ -1,4 +1,10 @@
 
+/**
+* Sets up smooth scrolling
+* @access private
+* @module
+*
+*/
 
 var inputscrollcontroller =  {
 

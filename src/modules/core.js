@@ -3,19 +3,17 @@
 /** Name. */
 export const name = 'core';
 
-
 import _options from './options.js';
 
 import _input from './input/input.js';
+
+import _math from './math/math.js';
 
 import _client from './client.js';
 
 import _canvas from './canvas.js';
 
-
 import _user from './user.js';
-
-
 
 import _ext from './ext.js';
 
@@ -27,18 +25,13 @@ window.SJSParticleController = Particles; // Temporary for snowflakes
 
 const date = new Date();
 
+/**
+* Core of the framework, initalizes client, input and listeners.
+* @protected
+* @module
+*
+*/
 
-/** Class representing a point. */
-
-
- /**
-  * Blend two colors together.
-  * @param {string} color1 - The first color, in hexidecimal format.
-  * @param {string} color2 - The second color, in hexidecimal format.
-  * @return {string} The blended color.
-  */
-
-/** Class representing a point. */
  class _core {
 
 
@@ -54,11 +47,9 @@ const date = new Date();
 
     }
 
-    /**
-     * Create a point.
-     * @param {number} x - The x value.
-     * @param {number} y - The y value.
-     */
+  /** Builds the core modules of the Application.
+   */
+
     constructor(){
 
         this.time = 0;
@@ -76,6 +67,8 @@ const date = new Date();
         this.canvas = _canvas;
 
         this.client = _client;
+
+        this.math = new _math();
 
     }
 

@@ -5414,9 +5414,9 @@
 
 	var _statistics3 = _interopRequireDefault(_statistics2);
 
-	var _core2 = __webpack_require__(196);
+	var _core = __webpack_require__(196);
 
-	var _core3 = _interopRequireDefault(_core2);
+	var _core2 = _interopRequireDefault(_core);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5501,7 +5501,7 @@
 	                        //temp stores the app during the create process, it is then returned
 	                        var temp = {};
 
-	                        temp = new _core3.default(this.app);
+	                        temp = new _core2.default(this.app);
 
 	                        temp.window = this.window;
 
@@ -5536,6 +5536,8 @@
 
 	        function _controller() {
 	                _classCallCheck(this, _controller);
+
+	                this.temp = {};
 
 	                this.window = window;
 
@@ -5594,11 +5596,11 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _statisticstypes = __webpack_require__(195);
+	var _StatisticsController2 = __webpack_require__(216);
 
-	var StatisticTypes = _interopRequireWildcard(_statisticstypes);
+	var _StatisticsController3 = _interopRequireDefault(_StatisticsController2);
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	var _interfaces = __webpack_require__(201);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5635,8 +5637,8 @@
 	*       });
 	*/
 
-	var Statistics = (function (_StatisticTypes$Stati) {
-	        _inherits(Statistics, _StatisticTypes$Stati);
+	var Statistics = (function (_StatisticsController) {
+	        _inherits(Statistics, _StatisticsController);
 
 	        function Statistics() {
 	                _classCallCheck(this, Statistics);
@@ -5719,9 +5721,9 @@
 
 	                                                                        name = _args2[2];
 
-	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
+	                                                                        if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
 
-	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new StatisticTypes.Log(name);
+	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
 
 	                                                                        hashLog = _args2[1];
 
@@ -5732,9 +5734,9 @@
 
 	                                                                        name = _args2[0];
 
-	                                                                        if (name == 'compile') newLog = curLog[name] || new StatisticTypes.Compile(name);else if (name == 'build') newLog = curLog[name] || new StatisticTypes.Build(name);else if (name == 'loop') newLog = curLog[name] || new StatisticTypes.Loop(name);else if (name == 'state') newLog = curLog[name] || new StatisticTypes.App(name);else newLog = curLog[name] || new StatisticTypes.Log(name);
+	                                                                        if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
 
-	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new StatisticTypes.Log(name);
+	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
 
 	                                                                        hashLog = _args2[1];
 
@@ -5865,7 +5867,7 @@
 	        }]);
 
 	        return Statistics;
-	})(StatisticTypes.StatisticsController);
+	})(_StatisticsController3.default);
 
 	exports.default = Statistics;
 
@@ -5977,269 +5979,7 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 195 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* @module
-	* @private
-	*/
-
-	var StatisticsController = (function () {
-	    _createClass(StatisticsController, [{
-	        key: 'count',
-	        get: function get() {
-
-	            return this.monitor.count;
-	        },
-	        set: function set(value) {
-
-	            this.monitor.count = value;
-	        }
-	    }, {
-	        key: 'details',
-	        get: function get() {
-
-	            return StatisticsController._details;
-	        },
-	        set: function set(value) {
-
-	            this._details = StatisticsController._details;
-	        }
-	    }], [{
-	        key: '_details',
-	        value: function _details(type) {
-
-	            type = type;
-
-	            switch (type) {
-
-	                default:
-
-	                    return Object.keys(this.logs);
-
-	                case 'details':
-
-	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                case 'entries':
-
-	                    return Object.entries(this.logs);
-
-	                case 'values':
-
-	                    return Object.values(this.logs);
-
-	            }
-	        }
-	    }, {
-	        key: 'logs',
-
-	        /**
-	        * @type {Object}
-	        * @private
-	        */
-
-	        get: function get() {
-
-	            return this.monitor.logs;
-	        }
-
-	        /**
-	        * @type {Function}
-	        * @private
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this.monitor = value;
-	        }
-	    }, {
-	        key: 'monitor',
-	        get: function get() {
-
-	            return this._monitor;
-	        },
-	        set: function set(value) {
-
-	            this._monitor = value;
-	        }
-	    }]);
-
-	    function StatisticsController() {
-	        _classCallCheck(this, StatisticsController);
-
-	        /** dfsdsf
-	        * @type {Array<>} sdf sdf
-	        * @private
-	        */
-
-	        this.logs = this.constructor.logs;
-	        this.logs.type = 'Array';
-
-	        this.count = 0;
-	    }
-
-	    return StatisticsController;
-	})();
-
-	StatisticsController._monitor = {
-
-	    count: 0,
-
-	    logs: []
-
-	};
-
-	var Log = (function () {
-	    function Log(id) {
-	        _classCallCheck(this, Log);
-
-	        this.id = id || 0;
-	    }
-
-	    _createClass(Log, null, [{
-	        key: 'time',
-	        get: function get() {
-
-	            return this._time;
-	        },
-	        set: function set(value) {
-
-	            return this._time = value;
-	        }
-	    }, {
-	        key: 'id',
-	        get: function get() {
-
-	            return this._id;
-	        },
-	        set: function set(value) {
-
-	            return this._id = value;
-	        }
-	    }]);
-
-	    return Log;
-	})();
-
-	var Loop = (function (_Log) {
-	    _inherits(Loop, _Log);
-
-	    function Loop() {
-	        _classCallCheck(this, Loop);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Loop).call(this));
-	    }
-
-	    return Loop;
-	})(Log);
-
-	var Compile = (function (_Log2) {
-	    _inherits(Compile, _Log2);
-
-	    function Compile() {
-	        _classCallCheck(this, Compile);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Compile).call(this));
-	    }
-
-	    return Compile;
-	})(Log);
-
-	var App = (function () {
-	    function App() {
-	        _classCallCheck(this, App);
-	    }
-
-	    _createClass(App, null, [{
-	        key: 'fps',
-	        get: function get() {
-
-	            return this._fps;
-	        },
-	        set: function set(value) {
-
-	            return this._fps = value;
-	        }
-	    }, {
-	        key: 'scale',
-	        get: function get() {
-
-	            return this._scale;
-	        },
-	        set: function set(value) {
-
-	            return this._scale = value;
-	        }
-	    }]);
-
-	    return App;
-	})();
-
-	var Build = (function () {
-	    function Build() {
-	        _classCallCheck(this, Build);
-	    }
-
-	    _createClass(Build, null, [{
-	        key: 'build',
-	        get: function get() {
-
-	            return this._build;
-	        },
-	        set: function set(value) {
-
-	            return this._build = value;
-	        }
-	    }, {
-	        key: 'scriptloadtime',
-	        get: function get() {
-
-	            return this._scriptloadtime;
-	        },
-	        set: function set(value) {
-
-	            return this._scriptloadtime = value;
-	        }
-	    }, {
-	        key: 'uptime',
-	        get: function get() {
-
-	            return this._uptime;
-	        },
-	        set: function set(value) {
-
-	            return this._uptime = value;
-	        }
-	    }]);
-
-	    return Build;
-	})();
-
-	exports.Log = Log;
-	exports.Loop = Loop;
-	exports.Compile = Compile;
-	exports.App = App;
-	exports.Build = Build;
-	exports.StatisticsController = StatisticsController;
-
-/***/ },
+/* 195 */,
 /* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6259,6 +5999,10 @@
 	var _input2 = __webpack_require__(198);
 
 	var _input3 = _interopRequireDefault(_input2);
+
+	var _math2 = __webpack_require__(217);
+
+	var _math3 = _interopRequireDefault(_math2);
 
 	var _client2 = __webpack_require__(205);
 
@@ -6301,16 +6045,12 @@
 
 	var date = new Date();
 
-	/** Class representing a point. */
-
 	/**
-	 * Blend two colors together.
-	 * @param {string} color1 - The first color, in hexidecimal format.
-	 * @param {string} color2 - The second color, in hexidecimal format.
-	 * @return {string} The blended color.
-	 */
-
-	/** Class representing a point. */
+	* Core of the framework, initalizes client, input and listeners.
+	* @protected
+	* @module
+	*
+	*/
 
 	var _core = (function () {
 	    _createClass(_core, [{
@@ -6324,10 +6064,7 @@
 	            this.constructor.VN = val;
 	        }
 
-	        /**
-	         * Create a point.
-	         * @param {number} x - The x value.
-	         * @param {number} y - The y value.
+	        /** Builds the core modules of the Application.
 	         */
 
 	    }]);
@@ -6352,6 +6089,8 @@
 	        this.canvas = _canvas3.default;
 
 	        this.client = _client3.default;
+
+	        this.math = new _math3.default();
 	    }
 
 	    _createClass(_core, [{
@@ -6731,6 +6470,13 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	* Main game controller. Handles instanciating instances and tracking information.
+	* @access private
+	* @module
+	*
+	*/
+
 	var Input = (function (_inputcontroller) {
 	        _inherits(Input, _inputcontroller);
 
@@ -7088,7 +6834,7 @@
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _interfaces = __webpack_require__(216);
+	var _interfaces = __webpack_require__(201);
 
 	var _inputlistener = __webpack_require__(202);
 
@@ -7109,6 +6855,13 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Stores input data
+	* @access private
+	* @module
+	*
+	*/
 
 	var inputcontroller = (function (_SJSClass) {
 	        _inherits(inputcontroller, _SJSClass);
@@ -7421,7 +7174,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(216);
+	var _interfaces = __webpack_require__(201);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7570,7 +7323,372 @@
 	exports.default = Vector;
 
 /***/ },
-/* 201 */,
+/* 201 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/** @type {Number} @private */
+
+	var _number = 0;
+
+	/** @type {Object} @private */
+
+	var _object = {};
+
+	/** @type {Method} @private */
+
+	var _method = function _method() {};
+
+	/** @type {Array<>} @private */
+
+	var _array = [];
+
+	/**
+	Interface
+	* @interface
+	* @private
+	*/
+
+	var _Interface =
+
+	/**  @type {Method} */
+
+	function _Interface() {
+	    _classCallCheck(this, _Interface);
+	};
+
+	var _Core = (function (_Interface2) {
+	    _inherits(_Core, _Interface2);
+
+	    /**  @type {Method} */
+
+	    function _Core() {
+	        _classCallCheck(this, _Core);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+	    }
+
+	    return _Core;
+	})(_Interface);
+
+	/*
+
+
+
+
+
+	*/
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Vector = (function (_Interface3) {
+	    _inherits(_Vector, _Interface3);
+
+	    /**
+	    * This is the constructor for the vector
+	    * @param {number} x - position.x
+	    * @param {number} y - position.y
+	    */
+
+	    /**  @type {Method} */
+
+	    /**  @type {Number} */
+
+	    function _Vector() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        _classCallCheck(this, _Vector);
+
+	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+
+	        _this2.position = { x: x, y: y };
+
+	        return _this2;
+	    }
+
+	    /**  @type {Method} */
+
+	    /**  @type {Vector} */
+
+	    /**  @type {Number} */
+
+	    return _Vector;
+	})(_Interface);
+
+	/**
+	* SJSClass
+	* @module
+	* @interface
+	* @private
+	*/
+
+	_Vector._x = _number;
+	_Vector._y = _number;
+	_Vector.position = _method;
+	_Vector.multiply = _method;
+	_Vector.offset = _method;
+
+	var _SJSClass = (function (_Interface4) {
+	    _inherits(_SJSClass, _Interface4);
+
+	    /**
+	    * This is the constructor for the vector
+	    * @param {Object} app[ - instance of spicejs]
+	    */
+
+	    /**  @type {Number} */
+
+	    function _SJSClass(app) {
+	        _classCallCheck(this, _SJSClass);
+
+	        var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
+
+	        var appReference = app;
+
+	        if (typeof appReference == 'undefined') {
+
+	            appReference = SJS.controller.list();
+
+	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this3);
+	        }
+
+	        _this3.app = appReference;
+
+	        _this3.visuals = appReference.client.visuals;
+
+	        _this3.graphics = appReference.client.graphics;
+
+	        return _this3;
+	    }
+
+	    /**  @type {Vector} */
+
+	    /**  @type {Number} */
+
+	    return _SJSClass;
+	})(_Interface);
+
+	/*
+
+
+
+
+
+	*/
+
+	/**
+	*
+	* @module
+	* @interface
+	* @protected
+	*/
+
+	_SJSClass.app = _object;
+	_SJSClass.visuals = _object;
+	_SJSClass.graphics = _object;
+
+	var _Log = (function () {
+	    _createClass(_Log, null, [{
+	        key: 'time',
+
+	        /** @type {Number} */
+
+	        get: function get() {
+
+	            return this._time;
+	        }
+
+	        /** @type {Number} */
+
+	        ,
+	        set: function set(value) {
+
+	            return this._time = value;
+	        }
+
+	        /** @type {Number} */
+
+	    }, {
+	        key: 'id',
+	        get: function get() {
+
+	            return this._id;
+	        }
+
+	        /** @type {Number} */
+
+	        ,
+	        set: function set(value) {
+
+	            return this._id = value;
+	        }
+
+	        /**
+	        * Assigns an id or 0
+	        * @param {Number} [id] - instance of log
+	        */
+
+	    }]);
+
+	    function _Log(id) {
+	        _classCallCheck(this, _Log);
+
+	        this.id = id || 0;
+	    }
+
+	    return _Log;
+	})();
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Loop = (function (_Log2) {
+	    _inherits(_Loop, _Log2);
+
+	    function _Loop() {
+	        _classCallCheck(this, _Loop);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Loop).call(this));
+	    }
+
+	    return _Loop;
+	})(_Log);
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Compile = (function (_Log3) {
+	    _inherits(_Compile, _Log3);
+
+	    function _Compile() {
+	        _classCallCheck(this, _Compile);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Compile).call(this));
+	    }
+
+	    return _Compile;
+	})(_Log);
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _App = (function () {
+	    function _App() {
+	        _classCallCheck(this, _App);
+	    }
+
+	    _createClass(_App, null, [{
+	        key: 'fps',
+	        get: function get() {
+
+	            return this._fps;
+	        },
+	        set: function set(value) {
+
+	            return this._fps = value;
+	        }
+	    }, {
+	        key: 'scale',
+	        get: function get() {
+
+	            return this._scale;
+	        },
+	        set: function set(value) {
+
+	            return this._scale = value;
+	        }
+	    }]);
+
+	    return _App;
+	})();
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Build = (function () {
+	    function _Build() {
+	        _classCallCheck(this, _Build);
+	    }
+
+	    _createClass(_Build, null, [{
+	        key: 'build',
+	        get: function get() {
+
+	            return this._build;
+	        },
+	        set: function set(value) {
+
+	            return this._build = value;
+	        }
+	    }, {
+	        key: 'scriptloadtime',
+	        get: function get() {
+
+	            return this._scriptloadtime;
+	        },
+	        set: function set(value) {
+
+	            return this._scriptloadtime = value;
+	        }
+	    }, {
+	        key: 'uptime',
+	        get: function get() {
+
+	            return this._uptime;
+	        },
+	        set: function set(value) {
+
+	            return this._uptime = value;
+	        }
+	    }]);
+
+	    return _Build;
+	})();
+
+	exports._Vector = _Vector;
+	exports._SJSClass = _SJSClass;
+	exports._Log = _Log;
+	exports._Loop = _Loop;
+	exports._Compile = _Compile;
+	exports._App = _App;
+	exports._Build = _Build;
+
+/***/ },
 /* 202 */
 /***/ function(module, exports) {
 
@@ -7584,15 +7702,18 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	/*
-
-	    SJSInputListener
-	        [listener0,listener1,listener2,element,function]
-
-	        let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
-	        let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
-	        let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
-
+	/**
+	*  Sets up input listeners.
+	* @access private
+	* @module
+	* @example
+	* SJSInputListener
+	*    [listener0,listener1,listener2,element,function]
+	*
+	*    let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
+	*    let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
+	*    let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
+	*
 	*/
 
 	var InputListener = (function () {
@@ -7606,24 +7727,43 @@
 	        if ('ontouchstart' in window || navigator.maxTouchPoints) this.touchPointer(d, evt);
 	    }
 
+	    /**
+	    * @method Microsoft Pointers
+	    */
+
 	    _createClass(InputListener, [{
 	        key: 'msPointer',
 	        value: function msPointer(e, evt) {
 
 	            window.addEventListener(e, evt, false);
 	        }
+
+	        /**
+	        * @method Universal Pointers
+	        */
+
 	    }, {
 	        key: 'Pointer',
 	        value: function Pointer(e, evt) {
 
 	            window.addEventListener(e, evt, false);
 	        }
+
+	        /**
+	        * @method Touch Pointers
+	        */
+
 	    }, {
 	        key: 'touchPointer',
 	        value: function touchPointer(e, evt) {
 
 	            window.addEventListener(e, evt, false);
 	        }
+
+	        /**
+	        * @method Mouse Pointers
+	        */
+
 	    }, {
 	        key: 'mousePointer',
 	        value: function mousePointer(e, evt) {
@@ -7650,6 +7790,13 @@
 	});
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* Stores key input data
+	* @access private
+	* @module
+	*
+	*/
 
 	var inputkeycontroller = (function () {
 	    function inputkeycontroller() {
@@ -7768,6 +7915,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	        value: true
 	});
+
+	/**
+	* Sets up smooth scrolling
+	* @access private
+	* @module
+	*
+	*/
 
 	var inputscrollcontroller = {
 
@@ -10337,7 +10491,9 @@
 
 	                                                                                this.app.Construct(this.metatag).init();
 
-	                                                                                this.app.Construct(this.cookies).init();
+	                                                                                //this.app.Construct(this.cookies).init();
+
+	                                                                                this.cookies = new _cookies2.default(this.app);
 
 	                                                                                this.app.Construct(this.cursor).init();
 
@@ -10761,7 +10917,7 @@
 /* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {'use strict';
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -10769,194 +10925,183 @@
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-	var Cookies = {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	    constructor: function constructor(app) {
+	/**
+	* <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
+	* @module
+	* @public
+	*/
 
-	        return {
-	            app: { writable: false, configurable: false, enumerable: false, value: app },
+	var Cookies =
 
-	            init: { value: function value() {
+	/**
+	* The constructor will fill window.Cookies with a new instance.
+	* @param {Object} app - reference to the app.
+	*/
 
-	                    //execute polyfill
-	                    return this.polyfill();
-	                }
-	            }
-	        };
-	    },
+	function Cookies() {
+	    _classCallCheck(this, Cookies);
 
-	    prototype: {
-
-	        //Cookies Polyfill by ScottHamper
-	        //	https://github.com/ScottHamper/Cookies#api-reference
-	        polyfill: function polyfill() {
-
-	            (function (global, undefined) {
-	                'use strict';
-
-	                var factory = function factory(window) {
-	                    if (_typeof(window.document) !== 'object') {
-	                        throw new Error('Cookies.js requires a `window` with a `document` object');
-	                    }
-
-	                    var Cookies = window.Cookies = function (key, value, options) {
-	                        return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
-	                    };
-
-	                    // Allows for setter injection in unit tests
-	                    Cookies._document = window.document;
-
-	                    // Used to ensure cookie keys do not collide with
-	                    // built-in `Object` properties
-	                    Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
-
-	                    Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-	                    Cookies.defaults = {
-	                        path: '/',
-	                        secure: false
-	                    };
-
-	                    Cookies.get = function (key) {
-	                        if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-	                            Cookies._renewCache();
-	                        }
-
-	                        return Cookies._cache[Cookies._cacheKeyPrefix + key];
-	                    };
-
-	                    Cookies.set = function (key, value, options) {
-	                        options = Cookies._getExtendedOptions(options);
-	                        options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
-
-	                        Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
-
-	                        return Cookies;
-	                    };
-
-	                    Cookies.expire = function (key, options) {
-	                        return Cookies.set(key, undefined, options);
-	                    };
-
-	                    Cookies._getExtendedOptions = function (options) {
-	                        return {
-	                            path: options && options.path || Cookies.defaults.path,
-	                            domain: options && options.domain || Cookies.defaults.domain,
-	                            expires: options && options.expires || Cookies.defaults.expires,
-	                            secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
-	                        };
-	                    };
-
-	                    Cookies._isValidDate = function (date) {
-	                        return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
-	                    };
-
-	                    Cookies._getExpiresDate = function (expires, now) {
-	                        now = now || new Date();
-
-	                        if (typeof expires === 'number') {
-	                            expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
-	                        } else if (typeof expires === 'string') {
-	                            expires = new Date(expires);
-	                        }
-
-	                        if (expires && !Cookies._isValidDate(expires)) {
-	                            throw new Error('`expires` parameter cannot be converted to a valid Date instance');
-	                        }
-
-	                        return expires;
-	                    };
-
-	                    Cookies._generateCookieString = function (key, value, options) {
-	                        key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-	                        key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
-	                        value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-	                        options = options || {};
-
-	                        var cookieString = key + '=' + value;
-	                        cookieString += options.path ? ';path=' + options.path : '';
-	                        cookieString += options.domain ? ';domain=' + options.domain : '';
-	                        cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-	                        cookieString += options.secure ? ';secure' : '';
-
-	                        return cookieString;
-	                    };
-
-	                    Cookies._getCacheFromString = function (documentCookie) {
-	                        var cookieCache = {};
-	                        var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
-
-	                        for (var i = 0; i < cookiesArray.length; i++) {
-	                            var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-	                            if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-	                                cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
-	                            }
-	                        }
-
-	                        return cookieCache;
-	                    };
-
-	                    Cookies._getKeyValuePairFromCookieString = function (cookieString) {
-	                        // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
-	                        var separatorIndex = cookieString.indexOf('=');
-
-	                        // IE omits the "=" when the cookie value is an empty string
-	                        separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
-
-	                        return {
-	                            key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
-	                            value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
-	                        };
-	                    };
-
-	                    Cookies._renewCache = function () {
-	                        Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
-	                        Cookies._cachedDocumentCookie = Cookies._document.cookie;
-	                    };
-
-	                    Cookies._areEnabled = function () {
-	                        var testKey = 'cookies.js';
-	                        var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-	                        Cookies.expire(testKey);
-	                        return areEnabled;
-	                    };
-
-	                    Cookies.enabled = Cookies._areEnabled();
-
-	                    return Cookies;
-	                };
-
-	                var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	                var AMD = "function" === 'function' && __webpack_require__(212);
-	                var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
-	                var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
-	                // AMD support
-	                if (AMD) {
-	                    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	                        return cookiesExport;
-	                    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	                    // CommonJS/Node.js support
-	                } else if (objectExports) {
-	                        // Support Node.js specific `module.exports` (which can be a function)
-	                        if (moduleExports) {
-	                            exports = module.exports = cookiesExport;
-	                        }
-	                        // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-	                        exports.Cookies = cookiesExport;
-	                    } else {
-	                        global.Cookies = cookiesExport;
-	                    }
-	            })(typeof window === 'undefined' ? this : window);
-	            return Cookies;
+	    var factory = function factory(window) {
+	        if (_typeof(window.document) !== 'object') {
+	            throw new Error('Cookies.js requires a `window` with a `document` object');
 	        }
 
-	    }
+	        var Cookies = window.Cookies = function (key, value, options) {
+	            return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
+	        };
 
+	        // Allows for setter injection in unit tests
+	        Cookies._document = window.document;
+
+	        // Used to ensure cookie keys do not collide with
+	        // built-in `Object` properties
+	        Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
+
+	        Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+
+	        Cookies.defaults = {
+	            path: '/',
+	            secure: false
+	        };
+
+	        Cookies.get = function (key) {
+	            if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
+	                Cookies._renewCache();
+	            }
+
+	            return Cookies._cache[Cookies._cacheKeyPrefix + key];
+	        };
+
+	        Cookies.set = function (key, value, options) {
+	            options = Cookies._getExtendedOptions(options);
+	            options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
+
+	            Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
+
+	            return Cookies;
+	        };
+
+	        Cookies.expire = function (key, options) {
+	            return Cookies.set(key, undefined, options);
+	        };
+
+	        Cookies._getExtendedOptions = function (options) {
+	            return {
+	                path: options && options.path || Cookies.defaults.path,
+	                domain: options && options.domain || Cookies.defaults.domain,
+	                expires: options && options.expires || Cookies.defaults.expires,
+	                secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
+	            };
+	        };
+
+	        Cookies._isValidDate = function (date) {
+	            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
+	        };
+
+	        Cookies._getExpiresDate = function (expires, now) {
+	            now = now || new Date();
+
+	            if (typeof expires === 'number') {
+	                expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
+	            } else if (typeof expires === 'string') {
+	                expires = new Date(expires);
+	            }
+
+	            if (expires && !Cookies._isValidDate(expires)) {
+	                throw new Error('`expires` parameter cannot be converted to a valid Date instance');
+	            }
+
+	            return expires;
+	        };
+
+	        Cookies._generateCookieString = function (key, value, options) {
+	            key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
+	            key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
+	            value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
+	            options = options || {};
+
+	            var cookieString = key + '=' + value;
+	            cookieString += options.path ? ';path=' + options.path : '';
+	            cookieString += options.domain ? ';domain=' + options.domain : '';
+	            cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
+	            cookieString += options.secure ? ';secure' : '';
+
+	            return cookieString;
+	        };
+
+	        Cookies._getCacheFromString = function (documentCookie) {
+	            var cookieCache = {};
+	            var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
+
+	            for (var i = 0; i < cookiesArray.length; i++) {
+	                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+
+	                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
+	                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+	                }
+	            }
+
+	            return cookieCache;
+	        };
+
+	        Cookies._getKeyValuePairFromCookieString = function (cookieString) {
+	            // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
+	            var separatorIndex = cookieString.indexOf('=');
+
+	            // IE omits the "=" when the cookie value is an empty string
+	            separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
+
+	            return {
+	                key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
+	                value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
+	            };
+	        };
+
+	        Cookies._renewCache = function () {
+	            Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
+	            Cookies._cachedDocumentCookie = Cookies._document.cookie;
+	        };
+
+	        Cookies._areEnabled = function () {
+	            var testKey = 'cookies.js';
+	            var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
+	            Cookies.expire(testKey);
+	            return areEnabled;
+	        };
+
+	        Cookies.enabled = Cookies._areEnabled();
+
+	        return Cookies;
+	    };
+
+	    var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
+	    var AMD = "function" === 'function' && __webpack_require__(212);
+	    var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
+	    var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
+	    // AMD support
+	    if (AMD) {
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	            return cookiesExport;
+	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        // CommonJS/Node.js support
+	    } else if (objectExports) {
+	            // Support Node.js specific `module.exports` (which can be a function)
+	            if (moduleExports) {
+	                exports = module.exports = cookiesExport;
+	            }
+	            // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+	            exports.Cookies = cookiesExport;
+	        } else {
+	            global.Cookies = cookiesExport;
+	        }
+
+	    return Cookies;
 	};
 
 	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(211)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(211)(module)))
 
 /***/ },
 /* 211 */
@@ -10994,7 +11139,7 @@
 			value: true
 	});
 
-	var _interfaces = __webpack_require__(216);
+	var _interfaces = __webpack_require__(201);
 
 	var _test2 = __webpack_require__(214);
 
@@ -11281,13 +11426,19 @@
 	        value: true
 	});
 
-	var _interfaces = __webpack_require__(216);
+	var _interfaces = __webpack_require__(201);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Test Module for running tyhe game
+	* @module
+	* @private
+	*/
 
 	var test = (function (_SJSClass) {
 	        _inherits(test, _SJSClass);
@@ -11475,7 +11626,7 @@
 	        value: true
 	});
 
-	var _interfaces = __webpack_require__(216);
+	var _interfaces = __webpack_require__(201);
 
 	var _vector = __webpack_require__(200);
 
@@ -11738,146 +11889,827 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	/**
+	* @module
+	* @private
+	*/
+
+	var StatisticsController = (function () {
+	    _createClass(StatisticsController, [{
+	        key: 'count',
+	        get: function get() {
+
+	            return this.monitor.count;
+	        },
+	        set: function set(value) {
+
+	            this.monitor.count = value;
+	        }
+	    }, {
+	        key: 'details',
+	        get: function get() {
+
+	            return StatisticsController._details;
+	        },
+	        set: function set(value) {
+
+	            this._details = StatisticsController._details;
+	        }
+	    }], [{
+	        key: '_details',
+	        value: function _details(type) {
+
+	            type = type;
+
+	            switch (type) {
+
+	                default:
+
+	                    return Object.keys(this.logs);
+
+	                case 'details':
+
+	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
+
+	                case 'entries':
+
+	                    return Object.entries(this.logs);
+
+	                case 'values':
+
+	                    return Object.values(this.logs);
+
+	            }
+	        }
+	    }, {
+	        key: 'logs',
+	        get: function get() {
+
+	            return this.monitor.logs;
+	        },
+	        set: function set(value) {
+
+	            this.monitor = value;
+	        }
+	    }, {
+	        key: 'monitor',
+	        get: function get() {
+
+	            return this._monitor;
+	        },
+	        set: function set(value) {
+
+	            this._monitor = value;
+	        }
+	    }]);
+
+	    function StatisticsController() {
+	        _classCallCheck(this, StatisticsController);
+
+	        /** dfsdsf
+	        * @type {Array<>} sdf sdf
+	        * @private
+	        */
+
+	        this.logs = this.constructor.logs;
+	        this.logs.type = 'Array';
+
+	        this.count = 0;
+	    }
+
+	    return StatisticsController;
+	})();
+
+	StatisticsController._monitor = {
+
+	    count: 0,
+
+	    logs: []
+
+	};
+	exports.default = StatisticsController;
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _vector = __webpack_require__(200);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	/** @type {Number} @private */
-
-	var _number = 0;
-
-	/** @type {Object} @private */
-
-	var _object = {};
-
-	/** @type {Method} @private */
-
-	var _method = function _method() {};
-
-	/** @type {Array<>} @private */
-
-	var _array = [];
-
 	/**
-	Interface
-	* @interface
-	* @private
-	*/
-
-	var _Interface =
-
-	/**  @type {Method} */
-
-	function _Interface() {
-	    _classCallCheck(this, _Interface);
-	};
-
-	/**
-	* Vector
 	* @module
-	* @interface
-	* @private
+	* @access public
+	* @example
+	* Application.client.math
 	*/
 
-	var _Vector = (function (_Interface2) {
-	    _inherits(_Vector, _Interface2);
+	var Math = (function () {
+		_createClass(Math, [{
+			key: "minmax4",
 
-	    /**
-	    * This is the constructor for the vector
-	    * @param {number} x - position.x
-	    * @param {number} y - position.y
-	    */
+			/**
+	  * Return the min max of 4 values
+	  * @method
+	  * @param {Number} a - value
+	  * @param {Number} b - value
+	  * @param {Number} c - value
+	  * @param {Number} d - value
+	  * @return {Object}
+	  * @private
+	  */
 
-	    /**  @type {Method} */
+			value: function minmax4(a, b, c, d) {
 
-	    /**  @type {Number} */
+				if (a < b) {
+					if (c < d) {
+						// sort order: (a, c) (b, d)
+						if (a < c) minresult = a;else minresult = c;
 
-	    function _Vector() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+						if (b > d) maxresult = b;else maxresult = d;
+					} else {
+						// sort order: (a, d) (b, c)
+						if (a < d) minresult = a;else minresult = d;
 
-	        _classCallCheck(this, _Vector);
+						if (b > c) maxresult = b;else maxresult = c;
+					}
+				} else {
+					if (c < d) {
+						// sort order: (b, c) (a, d)
+						if (b < c) minresult = b;else minresult = c;
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+						if (a > d) maxresult = a;else maxresult = d;
+					} else {
+						// sort order: (b, d) (a, c)
+						if (b < d) minresult = b;else minresult = d;
 
-	        _this.position = { x: x, y: y };
+						if (a > c) maxresult = a;else maxresult = c;
+					}
+				}
 
-	        return _this;
-	    }
+				return { min: minresult, max: maxresult };
+			}
 
-	    /**  @type {Method} */
+			/**
+	  * Testing rectangle overlap
+	  * @ignore
+	  * @method
+	  * @param {Rect} r - rectangle collision
+	  * @param {Rect} b - collision boundry
+	  * @return {Object}
+	  * @private
+	  */
 
-	    /**  @type {Vector} */
+		}, {
+			key: "testRectOverlap",
+			value: function testRectOverlap(r, b) {
+				// Instances don't overlap themselves.  Also return false early if either object has collisions disabled.
+				if (!b || !b.collisionsEnabled) return false;
 
-	    /**  @type {Number} */
+				/**PREVIEWONLY**/this.collisioncheck_count++;
 
-	    return _Vector;
-	})(_Interface);
+				b.update_bbox();
 
-	/**
-	* SJSClass
-	* @module
-	* @interface
-	* @private
-	*/
+				var layerb = b.layer;
+				var haspolyb, polyb;
 
-	_Vector._x = _number;
-	_Vector._y = _number;
-	_Vector.position = _method;
-	_Vector.multiply = _method;
-	_Vector.offset = _method;
+				// Reject via bounding boxes first (fastest)
+				if (!b.bbox.intersects_rect(r)) return false;
 
-	var _SJSClass = (function (_Interface3) {
-	    _inherits(_SJSClass, _Interface3);
+				// Test rect against tilemap
+				if (b.tilemap_exists) {
+					b.getCollisionRectCandidates(r, collrect_candidates);
 
-	    /**
-	    * This is the constructor for the vector
-	    * @param {Object} app[ - instance of spicejs]
-	    */
+					var collrects = collrect_candidates;
+					var i, len, c, tilerc;
+					var tmx = b.x;
+					var tmy = b.y;
 
-	    /**  @type {Number} */
+					for (i = 0, len = collrects.length; i < len; ++i) {
+						c = collrects[i];
+						tilerc = c.rc;
+						/**PREVIEWONLY**/this.collisioncheck_count++;
 
-	    function _SJSClass(app) {
-	        _classCallCheck(this, _SJSClass);
+						if (r.intersects_rect_off(tilerc, tmx, tmy)) {
+							// Check against tile poly if present
+							if (c.poly) {
+								/**PREVIEWONLY**/this.polycheck_count++;
 
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
+								this.temp_poly.set_from_rect(r, 0, 0);
 
-	        var appReference = app;
+								if (c.poly.intersects_poly(this.temp_poly, -(tmx + tilerc.left), -(tmy + tilerc.top))) {
+									cr.clearArray(collrect_candidates);
+									return true;
+								}
+							}
+							// No poly: bounding boxes overlap so register a collision
+							else {
+									cr.clearArray(collrect_candidates);
+									return true;
+								}
+						}
+					}
 
-	        if (typeof appReference == 'undefined') {
+					cr.clearArray(collrect_candidates);
+					return false;
+				}
+				// Test rect against object
+				else {
+						/**PREVIEWONLY**/this.polycheck_count++;
 
-	            appReference = SJS.controller.list();
+						tmpQuad.set_from_rect(r);
 
-	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this2);
-	        }
+						// Reject via bounding quads second (presumably next fastest)
+						if (!b.bquad.intersects_quad(tmpQuad)) return false;
 
-	        _this2.app = appReference;
+						haspolyb = b.collision_poly && !b.collision_poly.is_empty();
 
-	        _this2.visuals = appReference.client.visuals;
+						// Does not have collision poly: must be in bounding quad overlap
+						if (!haspolyb) return true;
 
-	        _this2.graphics = appReference.client.graphics;
+						b.collision_poly.cache_poly(b.width, b.height, b.angle);
+						tmpQuad.offset(-r.left, -r.top);
+						this.temp_poly.set_from_quad(tmpQuad, 0, 0, 1, 1);
 
-	        return _this2;
-	    }
+						return b.collision_poly.intersects_poly(this.temp_poly, r.left - b.x, r.top - b.y);
+					}
+			}
 
-	    /**  @type {Vector} */
+			/** @private */
 
-	    /**  @type {Number} */
+		}, {
+			key: "testSegmentOverlap",
+			value: function testSegmentOverlap(x1, y1, x2, y2, b) {
+				if (!b || !b.collisionsEnabled) return false;
 
-	    return _SJSClass;
-	})(_Interface);
+				/**PREVIEWONLY**/this.collisioncheck_count++;
+				b.update_bbox();
 
-	_SJSClass.app = _object;
-	_SJSClass.visuals = _object;
-	_SJSClass.graphics = _object;
-	exports._Vector = _Vector;
-	exports._SJSClass = _SJSClass;
+				var layerb = b.layer;
+				var haspolyb, polyb;
+
+				// Reject via bounding boxes first (fastest). Create temporary bounding box around the segment.
+				tmpRect.set(cr.min(x1, x2), cr.min(y1, y2), cr.max(x1, x2), cr.max(y1, y2));
+
+				if (!b.bbox.intersects_rect(tmpRect)) return false;
+
+				// Test segment against tilemap
+				if (b.tilemap_exists) {
+					b.getCollisionRectCandidates(tmpRect, collrect_candidates);
+					var collrects = collrect_candidates;
+					var i, len, c, tilerc;
+					var tmx = b.x;
+					var tmy = b.y;
+
+					for (i = 0, len = collrects.length; i < len; ++i) {
+						c = collrects[i];
+						tilerc = c.rc;
+						/**PREVIEWONLY**/this.collisioncheck_count++;
+
+						// Segment bounding box intersects this tile collision rectangle
+						if (tmpRect.intersects_rect_off(tilerc, tmx, tmy)) {
+							/**PREVIEWONLY**/this.polycheck_count++;
+
+							// Test real segment intersection
+							tmpQuad.set_from_rect(tilerc);
+							tmpQuad.offset(tmx, tmy);
+
+							if (tmpQuad.intersects_segment(x1, y1, x2, y2)) {
+								// Check against tile collision poly if any
+								if (c.poly) {
+									if (c.poly.intersects_segment(tmx + tilerc.left, tmy + tilerc.top, x1, y1, x2, y2)) {
+										cr.clearArray(collrect_candidates);
+										return true;
+									}
+								}
+								// Otherwise is intersecting tile box
+								else {
+										cr.clearArray(collrect_candidates);
+										return true;
+									}
+							}
+						}
+					}
+
+					cr.clearArray(collrect_candidates);
+					return false;
+				} else {
+					/**PREVIEWONLY**/this.polycheck_count++;
+
+					// Reject via bounding quads second (presumably next fastest)
+					if (!b.bquad.intersects_segment(x1, y1, x2, y2)) return false;
+
+					haspolyb = b.collision_poly && !b.collision_poly.is_empty();
+
+					// Does not have collision poly: must be in bounding quad intersection
+					if (!haspolyb) return true;
+
+					b.collision_poly.cache_poly(b.width, b.height, b.angle);
+
+					return b.collision_poly.intersects_segment(b.x, b.y, x1, y1, x2, y2);
+				}
+			}
+
+			/** @private
+	  * Push to try and move out of solid.  Pass -1, 0 or 1 for xdir and ydir to specify a push direction.
+	  */
+
+		}, {
+			key: "pushOutSolid",
+			value: function pushOutSolid(inst, xdir, ydir, dist, include_jumpthrus, specific_jumpthru) {
+				var push_dist = dist || 50;
+
+				var oldx = inst.x;
+				var oldy = inst.y;
+
+				var i;
+				var last_overlapped = null,
+				    secondlast_overlapped = null;
+
+				for (i = 0; i < push_dist; i++) {
+					inst.x = oldx + xdir * i;
+					inst.y = oldy + ydir * i;
+					inst.set_bbox_changed();
+
+					// Test if we've cleared the last instance we were overlapping
+					if (!this.testOverlap(inst, last_overlapped)) {
+						// See if we're still overlapping a different solid
+						last_overlapped = this.testOverlapSolid(inst);
+
+						if (last_overlapped) secondlast_overlapped = last_overlapped;
+
+						// We're clear of all solids - check jumpthrus
+						if (!last_overlapped) {
+							if (include_jumpthrus) {
+								if (specific_jumpthru) last_overlapped = this.testOverlap(inst, specific_jumpthru) ? specific_jumpthru : null;else last_overlapped = this.testOverlapJumpThru(inst);
+
+								if (last_overlapped) secondlast_overlapped = last_overlapped;
+							}
+
+							// Clear of both - completed push out.  Adjust fractionally to 1/16th of a pixel.
+							if (!last_overlapped) {
+								if (secondlast_overlapped) this.pushInFractional(inst, xdir, ydir, secondlast_overlapped, 16);
+
+								return true;
+							}
+						}
+					}
+				}
+
+				// Didn't get out a solid: oops, we're stuck.
+				// Restore old position.
+				inst.x = oldx;
+				inst.y = oldy;
+				inst.set_bbox_changed();
+				return false;
+			}
+
+			/** @private */
+
+		}, {
+			key: "pushOut",
+			value: function pushOut(inst, xdir, ydir, dist, otherinst) {
+				var push_dist = dist || 50;
+
+				var oldx = inst.x;
+				var oldy = inst.y;
+
+				var i;
+
+				for (i = 0; i < push_dist; i++) {
+					inst.x = oldx + xdir * i;
+					inst.y = oldy + ydir * i;
+					inst.set_bbox_changed();
+
+					// Test if we've cleared the last instance we were overlapping
+					if (!this.testOverlap(inst, otherinst)) return true;
+				}
+
+				// Didn't get out a solid: oops, we're stuck.
+				// Restore old position.
+				inst.x = oldx;
+				inst.y = oldy;
+				inst.set_bbox_changed();
+				return false;
+			}
+
+			/** @private */
+
+		}, {
+			key: "pushInFractional",
+			value: function pushInFractional(inst, xdir, ydir, obj, limit) {
+				var divisor = 2;
+				var frac;
+				var forward = false;
+				var overlapping = false;
+				var bestx = inst.x;
+				var besty = inst.y;
+
+				while (divisor <= limit) {
+					frac = 1 / divisor;
+					divisor *= 2;
+
+					inst.x += xdir * frac * (forward ? 1 : -1);
+					inst.y += ydir * frac * (forward ? 1 : -1);
+					inst.set_bbox_changed();
+
+					if (this.testOverlap(inst, obj)) {
+						// Overlapped something: try going forward again
+						forward = true;
+						overlapping = true;
+					} else {
+						// Didn't overlap anything: keep going back
+						forward = false;
+						overlapping = false;
+						bestx = inst.x;
+						besty = inst.y;
+					}
+				}
+
+				// If left overlapping, move back to last place not overlapping
+				if (overlapping) {
+					inst.x = bestx;
+					inst.y = besty;
+					inst.set_bbox_changed();
+				}
+			}
+		}, {
+			key: "pushOutSolidNearest",
+
+			/** @private */
+
+			value: function pushOutSolidNearest(inst, max_dist_) {
+				var max_dist = cr.is_undefined(max_dist_) ? 100 : max_dist_;
+				var dist = 0;
+				var oldx = inst.x;
+				var oldy = inst.y;
+
+				var dir = 0;
+				var dx = 0,
+				    dy = 0;
+				var last_overlapped = this.testOverlapSolid(inst);
+
+				if (!last_overlapped) return true; // already clear of solids
+
+				// 8-direction spiral scan
+				while (dist <= max_dist) {
+					switch (dir) {
+						case 0:
+							dx = 0;dy = -1;dist++;break;
+						case 1:
+							dx = 1;dy = -1;break;
+						case 2:
+							dx = 1;dy = 0;break;
+						case 3:
+							dx = 1;dy = 1;break;
+						case 4:
+							dx = 0;dy = 1;break;
+						case 5:
+							dx = -1;dy = 1;break;
+						case 6:
+							dx = -1;dy = 0;break;
+						case 7:
+							dx = -1;dy = -1;break;
+					}
+
+					dir = (dir + 1) % 8;
+
+					inst.x = cr.floor(oldx + dx * dist);
+					inst.y = cr.floor(oldy + dy * dist);
+					inst.set_bbox_changed();
+
+					// Test if we've cleared the last instance we were overlapping
+					if (!this.testOverlap(inst, last_overlapped)) {
+						// See if we're still overlapping a different solid
+						last_overlapped = this.testOverlapSolid(inst);
+
+						// We're clear of all solids
+						if (!last_overlapped) return true;
+					}
+				}
+
+				// Didn't get pushed out: restore old position and return false
+				inst.x = oldx;
+				inst.y = oldy;
+				inst.set_bbox_changed();
+				return false;
+			}
+		}, {
+			key: "registerCollision",
+
+			/** @private */
+
+			value: function registerCollision(a, b) {
+				// Ignore if either instance has disabled collisions
+				if (!a.collisionsEnabled || !b.collisionsEnabled) return;
+
+				this.registered_collisions.push([a, b]);
+			}
+
+			/** @private */
+
+		}, {
+			key: "checkRegisteredCollision",
+			value: function checkRegisteredCollision(a, b) {
+				var i, len, x;
+				for (i = 0, len = this.registered_collisions.length; i < len; i++) {
+					x = this.registered_collisions[i];
+
+					if (x[0] == a && x[1] == b || x[0] == b && x[1] == a) return true;
+				}
+
+				return false;
+			}
+
+			/** @private */
+
+		}, {
+			key: "calculateSolidBounceAngle",
+			value: function calculateSolidBounceAngle(inst, startx, starty, obj) {
+				var objx = inst.x;
+				var objy = inst.y;
+				var radius = cr.max(10, cr.distanceTo(startx, starty, objx, objy));
+				var startangle = cr.angleTo(startx, starty, objx, objy);
+				var firstsolid = obj || this.testOverlapSolid(inst);
+
+				// Not overlapping a solid: function used wrong, return inverse of object angle (so it bounces back in reverse direction)
+				if (!firstsolid) return cr.clamp_angle(startangle + cr.PI);
+
+				var cursolid = firstsolid;
+
+				// Rotate anticlockwise in 5 degree increments until no longer overlapping
+				// Don't search more than 175 degrees around (36 * 5 = 180)
+				var i, curangle, anticlockwise_free_angle, clockwise_free_angle;
+				var increment = cr.to_radians(5); // 5 degree increments
+
+				for (i = 1; i < 36; i++) {
+					curangle = startangle - i * increment;
+					inst.x = startx + Math.cos(curangle) * radius;
+					inst.y = starty + Math.sin(curangle) * radius;
+					inst.set_bbox_changed();
+
+					// No longer overlapping current solid
+					if (!this.testOverlap(inst, cursolid)) {
+						// Search for any other solid
+						cursolid = obj ? null : this.testOverlapSolid(inst);
+
+						// Not overlapping any other solid: we've now reached the anticlockwise free angle
+						if (!cursolid) {
+							anticlockwise_free_angle = curangle;
+							break;
+						}
+					}
+				}
+
+				// Did not manage to free up in anticlockwise direction: use reverse angle
+				if (i === 36) anticlockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
+
+				var cursolid = firstsolid;
+
+				// Now search in clockwise direction
+				for (i = 1; i < 36; i++) {
+					curangle = startangle + i * increment;
+					inst.x = startx + Math.cos(curangle) * radius;
+					inst.y = starty + Math.sin(curangle) * radius;
+					inst.set_bbox_changed();
+
+					// No longer overlapping current solid
+					if (!this.testOverlap(inst, cursolid)) {
+						// Search for any other solid
+						cursolid = obj ? null : this.testOverlapSolid(inst);
+
+						// Not overlapping any other solid: we've now reached the clockwise free angle
+						if (!cursolid) {
+							clockwise_free_angle = curangle;
+							break;
+						}
+					}
+				}
+
+				// Did not manage to free up in clockwise direction: use reverse angle
+				if (i === 36) clockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
+
+				// Put the object back to its original position
+				inst.x = objx;
+				inst.y = objy;
+				inst.set_bbox_changed();
+
+				// Both angles match: can only be if object completely contained by solid and both searches went all
+				// the way round to backwards.  Just return the back angle.
+				if (clockwise_free_angle === anticlockwise_free_angle) return clockwise_free_angle;
+
+				// We now have the first anticlockwise and first clockwise angles that are free.
+				// Calculate the normal.
+				var half_diff = cr.angleDiff(clockwise_free_angle, anticlockwise_free_angle) / 2;
+				var normal;
+
+				// Acute angle
+				if (cr.angleClockwise(clockwise_free_angle, anticlockwise_free_angle)) {
+					normal = cr.clamp_angle(anticlockwise_free_angle + half_diff + cr.PI);
+				}
+				// Obtuse angle
+				else {
+						normal = cr.clamp_angle(clockwise_free_angle + half_diff);
+					}
+
+				assert2(!isNaN(normal), "Bounce normal computed as NaN");
+
+				// Reflect startangle about normal (r = v - 2 (v . n) n)
+				var vx = Math.cos(startangle);
+				var vy = Math.sin(startangle);
+				var nx = Math.cos(normal);
+				var ny = Math.sin(normal);
+				var v_dot_n = vx * nx + vy * ny;
+				var rx = vx - 2 * v_dot_n * nx;
+				var ry = vy - 2 * v_dot_n * ny;
+				return cr.angleTo(0, 0, rx, ry);
+			}
+
+			/** @private */
+
+		}, {
+			key: "saveInstanceToJSON",
+			value: function saveInstanceToJSON(inst, state_only) {
+
+				var i, len, world, behinst, et;
+				var type = inst.type;
+				var plugin = type.plugin;
+
+				var o = {};
+
+				if (state_only) o["c2"] = true; // mark as known json data from Construct 2
+				else o["uid"] = inst.uid;
+
+				if (cr.hasAnyOwnProperty(inst.extra)) o["ex"] = CopyExtraObject(inst.extra);
+
+				// Save instance variables
+				if (inst.instance_vars && inst.instance_vars.length) {
+					o["ivs"] = {};
+
+					for (i = 0, len = inst.instance_vars.length; i < len; i++) {
+						o["ivs"][inst.type.instvar_sids[i].toString()] = inst.instance_vars[i];
+					}
+				}
+
+				// Save world data
+				if (plugin.is_world) {
+					world = {
+						"x": inst.x,
+						"y": inst.y,
+						"w": inst.width,
+						"h": inst.height,
+						"l": inst.layer.sid,
+						"zi": inst.get_zindex()
+					};
+
+					if (inst.angle !== 0) world["a"] = inst.angle;
+
+					if (inst.opacity !== 1) world["o"] = inst.opacity;
+
+					if (inst.hotspotX !== 0.5) world["hX"] = inst.hotspotX;
+
+					if (inst.hotspotY !== 0.5) world["hY"] = inst.hotspotY;
+
+					if (inst.blend_mode !== 0) world["bm"] = inst.blend_mode;
+
+					if (!inst.visible) world["v"] = inst.visible;
+
+					if (!inst.collisionsEnabled) world["ce"] = inst.collisionsEnabled;
+
+					if (inst.my_timescale !== -1) world["mts"] = inst.my_timescale;
+
+					if (type.effect_types.length) {
+						world["fx"] = [];
+
+						for (i = 0, len = type.effect_types.length; i < len; i++) {
+							et = type.effect_types[i];
+							world["fx"].push({ "name": et.name,
+								"active": inst.active_effect_flags[et.index],
+								"params": inst.effect_params[et.index] });
+						}
+					}
+
+					o["w"] = world;
+				}
+
+				// Save behaviors
+				if (inst.behavior_insts && inst.behavior_insts.length) {
+					o["behs"] = {};
+
+					for (i = 0, len = inst.behavior_insts.length; i < len; i++) {
+						behinst = inst.behavior_insts[i];
+
+						if (behinst.saveToJSON) o["behs"][behinst.type.sid.toString()] = behinst.saveToJSON();
+					}
+				}
+
+				// Save plugin own data
+				if (inst.saveToJSON) o["data"] = inst.saveToJSON();
+
+				return o;
+			}
+
+			/** @private */
+
+		}], [{
+			key: "segments_intersect",
+			value: function segments_intersect(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) {
+
+				var max_ax, min_ax, max_ay, min_ay, max_bx, min_bx, max_by, min_by;
+
+				// Long-hand code since this is a performance hotspot and this type of
+				// code minimises the number of conditional tests necessary.
+				if (a1x < a2x) {
+					min_ax = a1x;
+					max_ax = a2x;
+				} else {
+					min_ax = a2x;
+					max_ax = a1x;
+				}
+
+				if (b1x < b2x) {
+					min_bx = b1x;
+					max_bx = b2x;
+				} else {
+					min_bx = b2x;
+					max_bx = b1x;
+				}
+
+				if (max_ax < min_bx || min_ax > max_bx) return false;
+
+				if (a1y < a2y) {
+					min_ay = a1y;
+					max_ay = a2y;
+				} else {
+					min_ay = a2y;
+					max_ay = a1y;
+				}
+
+				if (b1y < b2y) {
+					min_by = b1y;
+					max_by = b2y;
+				} else {
+					min_by = b2y;
+					max_by = b1y;
+				}
+
+				if (max_ay < min_by || min_ay > max_by) return false;
+
+				var dpx = b1x - a1x + b2x - a2x;
+				var dpy = b1y - a1y + b2y - a2y;
+				var qax = a2x - a1x;
+				var qay = a2y - a1y;
+				var qbx = b2x - b1x;
+				var qby = b2y - b1y;
+
+				var d = cr.abs(qay * qbx - qby * qax);
+				var la = qbx * dpy - qby * dpx;
+
+				if (cr.abs(la) > d) return false;
+
+				var lb = qax * dpy - qay * dpx;
+
+				return cr.abs(lb) <= d;
+			}
+		}]);
+
+		/**
+	 * Builds new math into global math and Application.math
+	 * @param {number} x - position.x
+	 * @param {number} y - position.y
+	 */
+
+		function Math() {
+			_classCallCheck(this, Math);
+
+			this.vector = _vector2.default;
+			window.Math.vector = this.vector;
+		}
+
+		return Math;
+	})();
+
+	exports.default = Math;
 
 /***/ }
 /******/ ]);

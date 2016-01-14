@@ -1,6 +1,12 @@
 
 import {_SJSClass as SJSClass} from './interfaces.js';
 
+/**
+* Test Module for running tyhe game
+* @module
+* @private
+*/
+
 export default class test extends SJSClass {
 
     constructor(app) {
