@@ -5414,7 +5414,7 @@
 
 	var _statistics3 = _interopRequireDefault(_statistics2);
 
-	var _core = __webpack_require__(196);
+	var _core = __webpack_require__(197);
 
 	var _core2 = _interopRequireDefault(_core);
 
@@ -5596,11 +5596,11 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _StatisticsController2 = __webpack_require__(216);
+	var _StatisticsController2 = __webpack_require__(195);
 
 	var _StatisticsController3 = _interopRequireDefault(_StatisticsController2);
 
-	var _interfaces = __webpack_require__(201);
+	var _interfaces = __webpack_require__(196);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5979,8 +5979,484 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 195 */,
+/* 195 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* @module
+	* @private
+	*/
+
+	var StatisticsController = (function () {
+	    _createClass(StatisticsController, [{
+	        key: 'count',
+	        get: function get() {
+
+	            return this.monitor.count;
+	        },
+	        set: function set(value) {
+
+	            this.monitor.count = value;
+	        }
+	    }, {
+	        key: 'details',
+	        get: function get() {
+
+	            return StatisticsController._details;
+	        },
+	        set: function set(value) {
+
+	            this._details = StatisticsController._details;
+	        }
+	    }], [{
+	        key: '_details',
+	        value: function _details(type) {
+
+	            type = type;
+
+	            switch (type) {
+
+	                default:
+
+	                    return Object.keys(this.logs);
+
+	                case 'details':
+
+	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
+
+	                case 'entries':
+
+	                    return Object.entries(this.logs);
+
+	                case 'values':
+
+	                    return Object.values(this.logs);
+
+	            }
+	        }
+	    }, {
+	        key: 'logs',
+	        get: function get() {
+
+	            return this.monitor.logs;
+	        },
+	        set: function set(value) {
+
+	            this.monitor = value;
+	        }
+	    }, {
+	        key: 'monitor',
+	        get: function get() {
+
+	            return this._monitor;
+	        },
+	        set: function set(value) {
+
+	            this._monitor = value;
+	        }
+	    }]);
+
+	    function StatisticsController() {
+	        _classCallCheck(this, StatisticsController);
+
+	        /** dfsdsf
+	        * @type {Array<>} sdf sdf
+	        * @private
+	        */
+
+	        this.logs = this.constructor.logs;
+	        this.logs.type = 'Array';
+
+	        this.count = 0;
+	    }
+
+	    return StatisticsController;
+	})();
+
+	StatisticsController._monitor = {
+
+	    count: 0,
+
+	    logs: []
+
+	};
+	exports.default = StatisticsController;
+
+/***/ },
 /* 196 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/** @type {Number} @private */
+
+	var _number = 0;
+
+	/** @type {Object} @private */
+
+	var _object = {};
+
+	/** @type {Method} @private */
+
+	var _method = function _method() {};
+
+	/** @type {Array<>} @private */
+
+	var _array = [];
+
+	/**
+	Interface
+	* @interface
+	* @private
+	*/
+
+	var _Interface =
+
+	/**  @type {Method} */
+
+	function _Interface() {
+	    _classCallCheck(this, _Interface);
+	};
+
+	var _Core = (function (_Interface2) {
+	    _inherits(_Core, _Interface2);
+
+	    /**  @type {Method} */
+
+	    function _Core() {
+	        _classCallCheck(this, _Core);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+	    }
+
+	    return _Core;
+	})(_Interface);
+
+	/*
+
+
+
+
+
+	*/
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Vector = (function (_Interface3) {
+	    _inherits(_Vector, _Interface3);
+
+	    /**
+	    * This is the constructor for the vector
+	    * @param {number} x - position.x
+	    * @param {number} y - position.y
+	    */
+
+	    /**  @type {Method} */
+
+	    /**  @type {Number} */
+
+	    function _Vector(x, y) {
+	        _classCallCheck(this, _Vector);
+
+	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+
+	        _this2.position = { x: x, y: y };
+
+	        return _this2;
+	    }
+
+	    /**  @type {Method} */
+
+	    /**  @type {Vector} */
+
+	    /**  @type {Number} */
+
+	    return _Vector;
+	})(_Interface);
+
+	/**
+	* SJSClass
+	* @module
+	* @interface
+	* @private
+	*/
+
+	_Vector._x = _number;
+	_Vector._y = _number;
+	_Vector.position = _method;
+	_Vector.multiply = _method;
+	_Vector.offset = _method;
+
+	var _SJSClass = (function (_Interface4) {
+	    _inherits(_SJSClass, _Interface4);
+
+	    /**
+	    * This is the constructor for the vector
+	    * @param {Object} app[ - instance of spicejs]
+	    */
+
+	    /**  @type {Number} */
+
+	    function _SJSClass(app) {
+	        _classCallCheck(this, _SJSClass);
+
+	        var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
+
+	        var appReference = app;
+
+	        if (typeof appReference == 'undefined') {
+
+	            appReference = SJS.controller.list();
+
+	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this3);
+	        }
+
+	        _this3.app = appReference;
+
+	        _this3.visuals = appReference.client.visuals;
+
+	        _this3.graphics = appReference.client.graphics;
+
+	        return _this3;
+	    }
+
+	    /**  @type {Vector} */
+
+	    /**  @type {Number} */
+
+	    return _SJSClass;
+	})(_Interface);
+
+	/*
+
+
+
+
+
+	*/
+
+	/**
+	*
+	* @module
+	* @interface
+	* @protected
+	*/
+
+	_SJSClass.app = _object;
+	_SJSClass.visuals = _object;
+	_SJSClass.graphics = _object;
+
+	var _Log = (function () {
+	    _createClass(_Log, null, [{
+	        key: 'time',
+
+	        /** @type {Number} */
+
+	        get: function get() {
+
+	            return this._time;
+	        }
+
+	        /** @type {Number} */
+
+	        ,
+	        set: function set(value) {
+
+	            return this._time = value;
+	        }
+
+	        /** @type {Number} */
+
+	    }, {
+	        key: 'id',
+	        get: function get() {
+
+	            return this._id;
+	        }
+
+	        /** @type {Number} */
+
+	        ,
+	        set: function set(value) {
+
+	            return this._id = value;
+	        }
+
+	        /**
+	        * Assigns an id or 0
+	        * @param {Number} [id] - instance of log
+	        */
+
+	    }]);
+
+	    function _Log(id) {
+	        _classCallCheck(this, _Log);
+
+	        this.id = id || 0;
+	    }
+
+	    return _Log;
+	})();
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Loop = (function (_Log2) {
+	    _inherits(_Loop, _Log2);
+
+	    function _Loop() {
+	        _classCallCheck(this, _Loop);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Loop).call(this));
+	    }
+
+	    return _Loop;
+	})(_Log);
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Compile = (function (_Log3) {
+	    _inherits(_Compile, _Log3);
+
+	    function _Compile() {
+	        _classCallCheck(this, _Compile);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Compile).call(this));
+	    }
+
+	    return _Compile;
+	})(_Log);
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _App = (function () {
+	    function _App() {
+	        _classCallCheck(this, _App);
+	    }
+
+	    _createClass(_App, null, [{
+	        key: 'fps',
+	        get: function get() {
+
+	            return this._fps;
+	        },
+	        set: function set(value) {
+
+	            return this._fps = value;
+	        }
+	    }, {
+	        key: 'scale',
+	        get: function get() {
+
+	            return this._scale;
+	        },
+	        set: function set(value) {
+
+	            return this._scale = value;
+	        }
+	    }]);
+
+	    return _App;
+	})();
+
+	/**
+	*
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Build = (function () {
+	    function _Build() {
+	        _classCallCheck(this, _Build);
+	    }
+
+	    _createClass(_Build, null, [{
+	        key: 'build',
+	        get: function get() {
+
+	            return this._build;
+	        },
+	        set: function set(value) {
+
+	            return this._build = value;
+	        }
+	    }, {
+	        key: 'scriptloadtime',
+	        get: function get() {
+
+	            return this._scriptloadtime;
+	        },
+	        set: function set(value) {
+
+	            return this._scriptloadtime = value;
+	        }
+	    }, {
+	        key: 'uptime',
+	        get: function get() {
+
+	            return this._uptime;
+	        },
+	        set: function set(value) {
+
+	            return this._uptime = value;
+	        }
+	    }]);
+
+	    return _Build;
+	})();
+
+	exports._Vector = _Vector;
+	exports._SJSClass = _SJSClass;
+	exports._Log = _Log;
+	exports._Loop = _Loop;
+	exports._Compile = _Compile;
+	exports._App = _App;
+	exports._Build = _Build;
+
+/***/ },
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5992,39 +6468,39 @@
 	});
 	exports.name = undefined;
 
-	var _options2 = __webpack_require__(197);
+	var _options2 = __webpack_require__(198);
 
 	var _options3 = _interopRequireDefault(_options2);
 
-	var _input2 = __webpack_require__(198);
+	var _input2 = __webpack_require__(199);
 
 	var _input3 = _interopRequireDefault(_input2);
 
-	var _math2 = __webpack_require__(217);
+	var _math2 = __webpack_require__(205);
 
 	var _math3 = _interopRequireDefault(_math2);
 
-	var _client2 = __webpack_require__(205);
+	var _client2 = __webpack_require__(206);
 
 	var _client3 = _interopRequireDefault(_client2);
 
-	var _canvas2 = __webpack_require__(207);
+	var _canvas2 = __webpack_require__(208);
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
 
-	var _user2 = __webpack_require__(208);
+	var _user2 = __webpack_require__(209);
 
 	var _user3 = _interopRequireDefault(_user2);
 
-	var _ext2 = __webpack_require__(209);
+	var _ext2 = __webpack_require__(210);
 
 	var _ext3 = _interopRequireDefault(_ext2);
 
-	var _loader = __webpack_require__(213);
+	var _loader = __webpack_require__(214);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _particles = __webpack_require__(215);
+	var _particles = __webpack_require__(216);
 
 	var _particles2 = _interopRequireDefault(_particles);
 
@@ -6335,7 +6811,7 @@
 	exports.default = _core;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6447,7 +6923,7 @@
 	};
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6458,7 +6934,7 @@
 	        value: true
 	});
 
-	var _inputcontroller2 = __webpack_require__(199);
+	var _inputcontroller2 = __webpack_require__(200);
 
 	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
 
@@ -6819,7 +7295,7 @@
 	exports.default = Input;
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6830,11 +7306,11 @@
 	        value: true
 	});
 
-	var _vector = __webpack_require__(200);
+	var _vector = __webpack_require__(201);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _interfaces = __webpack_require__(201);
+	var _interfaces = __webpack_require__(196);
 
 	var _inputlistener = __webpack_require__(202);
 
@@ -7163,7 +7639,7 @@
 	exports.default = inputcontroller;
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7174,7 +7650,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(201);
+	var _interfaces = __webpack_require__(196);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7321,372 +7797,6 @@
 	})(_interfaces._Vector);
 
 	exports.default = Vector;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/** @type {Number} @private */
-
-	var _number = 0;
-
-	/** @type {Object} @private */
-
-	var _object = {};
-
-	/** @type {Method} @private */
-
-	var _method = function _method() {};
-
-	/** @type {Array<>} @private */
-
-	var _array = [];
-
-	/**
-	Interface
-	* @interface
-	* @private
-	*/
-
-	var _Interface =
-
-	/**  @type {Method} */
-
-	function _Interface() {
-	    _classCallCheck(this, _Interface);
-	};
-
-	var _Core = (function (_Interface2) {
-	    _inherits(_Core, _Interface2);
-
-	    /**  @type {Method} */
-
-	    function _Core() {
-	        _classCallCheck(this, _Core);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
-	    }
-
-	    return _Core;
-	})(_Interface);
-
-	/*
-
-
-
-
-
-	*/
-
-	/**
-	* Vector
-	* @module
-	* @interface
-	* @private
-	*/
-
-	var _Vector = (function (_Interface3) {
-	    _inherits(_Vector, _Interface3);
-
-	    /**
-	    * This is the constructor for the vector
-	    * @param {number} x - position.x
-	    * @param {number} y - position.y
-	    */
-
-	    /**  @type {Method} */
-
-	    /**  @type {Number} */
-
-	    function _Vector() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	        _classCallCheck(this, _Vector);
-
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
-
-	        _this2.position = { x: x, y: y };
-
-	        return _this2;
-	    }
-
-	    /**  @type {Method} */
-
-	    /**  @type {Vector} */
-
-	    /**  @type {Number} */
-
-	    return _Vector;
-	})(_Interface);
-
-	/**
-	* SJSClass
-	* @module
-	* @interface
-	* @private
-	*/
-
-	_Vector._x = _number;
-	_Vector._y = _number;
-	_Vector.position = _method;
-	_Vector.multiply = _method;
-	_Vector.offset = _method;
-
-	var _SJSClass = (function (_Interface4) {
-	    _inherits(_SJSClass, _Interface4);
-
-	    /**
-	    * This is the constructor for the vector
-	    * @param {Object} app[ - instance of spicejs]
-	    */
-
-	    /**  @type {Number} */
-
-	    function _SJSClass(app) {
-	        _classCallCheck(this, _SJSClass);
-
-	        var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
-
-	        var appReference = app;
-
-	        if (typeof appReference == 'undefined') {
-
-	            appReference = SJS.controller.list();
-
-	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this3);
-	        }
-
-	        _this3.app = appReference;
-
-	        _this3.visuals = appReference.client.visuals;
-
-	        _this3.graphics = appReference.client.graphics;
-
-	        return _this3;
-	    }
-
-	    /**  @type {Vector} */
-
-	    /**  @type {Number} */
-
-	    return _SJSClass;
-	})(_Interface);
-
-	/*
-
-
-
-
-
-	*/
-
-	/**
-	*
-	* @module
-	* @interface
-	* @protected
-	*/
-
-	_SJSClass.app = _object;
-	_SJSClass.visuals = _object;
-	_SJSClass.graphics = _object;
-
-	var _Log = (function () {
-	    _createClass(_Log, null, [{
-	        key: 'time',
-
-	        /** @type {Number} */
-
-	        get: function get() {
-
-	            return this._time;
-	        }
-
-	        /** @type {Number} */
-
-	        ,
-	        set: function set(value) {
-
-	            return this._time = value;
-	        }
-
-	        /** @type {Number} */
-
-	    }, {
-	        key: 'id',
-	        get: function get() {
-
-	            return this._id;
-	        }
-
-	        /** @type {Number} */
-
-	        ,
-	        set: function set(value) {
-
-	            return this._id = value;
-	        }
-
-	        /**
-	        * Assigns an id or 0
-	        * @param {Number} [id] - instance of log
-	        */
-
-	    }]);
-
-	    function _Log(id) {
-	        _classCallCheck(this, _Log);
-
-	        this.id = id || 0;
-	    }
-
-	    return _Log;
-	})();
-
-	/**
-	*
-	* @module
-	* @interface
-	* @private
-	*/
-
-	var _Loop = (function (_Log2) {
-	    _inherits(_Loop, _Log2);
-
-	    function _Loop() {
-	        _classCallCheck(this, _Loop);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Loop).call(this));
-	    }
-
-	    return _Loop;
-	})(_Log);
-
-	/**
-	*
-	* @module
-	* @interface
-	* @private
-	*/
-
-	var _Compile = (function (_Log3) {
-	    _inherits(_Compile, _Log3);
-
-	    function _Compile() {
-	        _classCallCheck(this, _Compile);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Compile).call(this));
-	    }
-
-	    return _Compile;
-	})(_Log);
-
-	/**
-	*
-	* @module
-	* @interface
-	* @private
-	*/
-
-	var _App = (function () {
-	    function _App() {
-	        _classCallCheck(this, _App);
-	    }
-
-	    _createClass(_App, null, [{
-	        key: 'fps',
-	        get: function get() {
-
-	            return this._fps;
-	        },
-	        set: function set(value) {
-
-	            return this._fps = value;
-	        }
-	    }, {
-	        key: 'scale',
-	        get: function get() {
-
-	            return this._scale;
-	        },
-	        set: function set(value) {
-
-	            return this._scale = value;
-	        }
-	    }]);
-
-	    return _App;
-	})();
-
-	/**
-	*
-	* @module
-	* @interface
-	* @private
-	*/
-
-	var _Build = (function () {
-	    function _Build() {
-	        _classCallCheck(this, _Build);
-	    }
-
-	    _createClass(_Build, null, [{
-	        key: 'build',
-	        get: function get() {
-
-	            return this._build;
-	        },
-	        set: function set(value) {
-
-	            return this._build = value;
-	        }
-	    }, {
-	        key: 'scriptloadtime',
-	        get: function get() {
-
-	            return this._scriptloadtime;
-	        },
-	        set: function set(value) {
-
-	            return this._scriptloadtime = value;
-	        }
-	    }, {
-	        key: 'uptime',
-	        get: function get() {
-
-	            return this._uptime;
-	        },
-	        set: function set(value) {
-
-	            return this._uptime = value;
-	        }
-	    }]);
-
-	    return _Build;
-	})();
-
-	exports._Vector = _Vector;
-	exports._SJSClass = _SJSClass;
-	exports._Log = _Log;
-	exports._Loop = _Loop;
-	exports._Compile = _Compile;
-	exports._App = _App;
-	exports._Build = _Build;
 
 /***/ },
 /* 202 */
@@ -8046,13 +8156,727 @@
 /* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _vector = __webpack_require__(201);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* @module
+	* @access public
+	* @example
+	* Application.client.math
+	*/
+
+	var Math = (function () {
+		_createClass(Math, [{
+			key: "minmax4",
+
+			/**
+	  * Return the min max of 4 values
+	  * @method
+	  * @param {Number} a - value
+	  * @param {Number} b - value
+	  * @param {Number} c - value
+	  * @param {Number} d - value
+	  * @return {Object}
+	  * @private
+	  */
+
+			value: function minmax4(a, b, c, d) {
+
+				if (a < b) {
+					if (c < d) {
+						// sort order: (a, c) (b, d)
+						if (a < c) minresult = a;else minresult = c;
+
+						if (b > d) maxresult = b;else maxresult = d;
+					} else {
+						// sort order: (a, d) (b, c)
+						if (a < d) minresult = a;else minresult = d;
+
+						if (b > c) maxresult = b;else maxresult = c;
+					}
+				} else {
+					if (c < d) {
+						// sort order: (b, c) (a, d)
+						if (b < c) minresult = b;else minresult = c;
+
+						if (a > d) maxresult = a;else maxresult = d;
+					} else {
+						// sort order: (b, d) (a, c)
+						if (b < d) minresult = b;else minresult = d;
+
+						if (a > c) maxresult = a;else maxresult = c;
+					}
+				}
+
+				return { min: minresult, max: maxresult };
+			}
+
+			/**
+	  * Testing rectangle overlap
+	  * @ignore
+	  * @method
+	  * @param {Rect} r - rectangle collision
+	  * @param {Rect} b - collision boundry
+	  * @return {Object}
+	  * @private
+	  */
+
+		}, {
+			key: "testRectOverlap",
+			value: function testRectOverlap(r, b) {
+				// Instances don't overlap themselves.  Also return false early if either object has collisions disabled.
+				if (!b || !b.collisionsEnabled) return false;
+
+				/**PREVIEWONLY**/this.collisioncheck_count++;
+
+				b.update_bbox();
+
+				var layerb = b.layer;
+				var haspolyb, polyb;
+
+				// Reject via bounding boxes first (fastest)
+				if (!b.bbox.intersects_rect(r)) return false;
+
+				// Test rect against tilemap
+				if (b.tilemap_exists) {
+					b.getCollisionRectCandidates(r, collrect_candidates);
+
+					var collrects = collrect_candidates;
+					var i, len, c, tilerc;
+					var tmx = b.x;
+					var tmy = b.y;
+
+					for (i = 0, len = collrects.length; i < len; ++i) {
+						c = collrects[i];
+						tilerc = c.rc;
+						/**PREVIEWONLY**/this.collisioncheck_count++;
+
+						if (r.intersects_rect_off(tilerc, tmx, tmy)) {
+							// Check against tile poly if present
+							if (c.poly) {
+								/**PREVIEWONLY**/this.polycheck_count++;
+
+								this.temp_poly.set_from_rect(r, 0, 0);
+
+								if (c.poly.intersects_poly(this.temp_poly, -(tmx + tilerc.left), -(tmy + tilerc.top))) {
+									cr.clearArray(collrect_candidates);
+									return true;
+								}
+							}
+							// No poly: bounding boxes overlap so register a collision
+							else {
+									cr.clearArray(collrect_candidates);
+									return true;
+								}
+						}
+					}
+
+					cr.clearArray(collrect_candidates);
+					return false;
+				}
+				// Test rect against object
+				else {
+						/**PREVIEWONLY**/this.polycheck_count++;
+
+						tmpQuad.set_from_rect(r);
+
+						// Reject via bounding quads second (presumably next fastest)
+						if (!b.bquad.intersects_quad(tmpQuad)) return false;
+
+						haspolyb = b.collision_poly && !b.collision_poly.is_empty();
+
+						// Does not have collision poly: must be in bounding quad overlap
+						if (!haspolyb) return true;
+
+						b.collision_poly.cache_poly(b.width, b.height, b.angle);
+						tmpQuad.offset(-r.left, -r.top);
+						this.temp_poly.set_from_quad(tmpQuad, 0, 0, 1, 1);
+
+						return b.collision_poly.intersects_poly(this.temp_poly, r.left - b.x, r.top - b.y);
+					}
+			}
+
+			/** @private */
+
+		}, {
+			key: "testSegmentOverlap",
+			value: function testSegmentOverlap(x1, y1, x2, y2, b) {
+				if (!b || !b.collisionsEnabled) return false;
+
+				/**PREVIEWONLY**/this.collisioncheck_count++;
+				b.update_bbox();
+
+				var layerb = b.layer;
+				var haspolyb, polyb;
+
+				// Reject via bounding boxes first (fastest). Create temporary bounding box around the segment.
+				tmpRect.set(cr.min(x1, x2), cr.min(y1, y2), cr.max(x1, x2), cr.max(y1, y2));
+
+				if (!b.bbox.intersects_rect(tmpRect)) return false;
+
+				// Test segment against tilemap
+				if (b.tilemap_exists) {
+					b.getCollisionRectCandidates(tmpRect, collrect_candidates);
+					var collrects = collrect_candidates;
+					var i, len, c, tilerc;
+					var tmx = b.x;
+					var tmy = b.y;
+
+					for (i = 0, len = collrects.length; i < len; ++i) {
+						c = collrects[i];
+						tilerc = c.rc;
+						/**PREVIEWONLY**/this.collisioncheck_count++;
+
+						// Segment bounding box intersects this tile collision rectangle
+						if (tmpRect.intersects_rect_off(tilerc, tmx, tmy)) {
+							/**PREVIEWONLY**/this.polycheck_count++;
+
+							// Test real segment intersection
+							tmpQuad.set_from_rect(tilerc);
+							tmpQuad.offset(tmx, tmy);
+
+							if (tmpQuad.intersects_segment(x1, y1, x2, y2)) {
+								// Check against tile collision poly if any
+								if (c.poly) {
+									if (c.poly.intersects_segment(tmx + tilerc.left, tmy + tilerc.top, x1, y1, x2, y2)) {
+										cr.clearArray(collrect_candidates);
+										return true;
+									}
+								}
+								// Otherwise is intersecting tile box
+								else {
+										cr.clearArray(collrect_candidates);
+										return true;
+									}
+							}
+						}
+					}
+
+					cr.clearArray(collrect_candidates);
+					return false;
+				} else {
+					/**PREVIEWONLY**/this.polycheck_count++;
+
+					// Reject via bounding quads second (presumably next fastest)
+					if (!b.bquad.intersects_segment(x1, y1, x2, y2)) return false;
+
+					haspolyb = b.collision_poly && !b.collision_poly.is_empty();
+
+					// Does not have collision poly: must be in bounding quad intersection
+					if (!haspolyb) return true;
+
+					b.collision_poly.cache_poly(b.width, b.height, b.angle);
+
+					return b.collision_poly.intersects_segment(b.x, b.y, x1, y1, x2, y2);
+				}
+			}
+
+			/** @private
+	  * Push to try and move out of solid.  Pass -1, 0 or 1 for xdir and ydir to specify a push direction.
+	  */
+
+		}, {
+			key: "pushOutSolid",
+			value: function pushOutSolid(inst, xdir, ydir, dist, include_jumpthrus, specific_jumpthru) {
+				var push_dist = dist || 50;
+
+				var oldx = inst.x;
+				var oldy = inst.y;
+
+				var i;
+				var last_overlapped = null,
+				    secondlast_overlapped = null;
+
+				for (i = 0; i < push_dist; i++) {
+					inst.x = oldx + xdir * i;
+					inst.y = oldy + ydir * i;
+					inst.set_bbox_changed();
+
+					// Test if we've cleared the last instance we were overlapping
+					if (!this.testOverlap(inst, last_overlapped)) {
+						// See if we're still overlapping a different solid
+						last_overlapped = this.testOverlapSolid(inst);
+
+						if (last_overlapped) secondlast_overlapped = last_overlapped;
+
+						// We're clear of all solids - check jumpthrus
+						if (!last_overlapped) {
+							if (include_jumpthrus) {
+								if (specific_jumpthru) last_overlapped = this.testOverlap(inst, specific_jumpthru) ? specific_jumpthru : null;else last_overlapped = this.testOverlapJumpThru(inst);
+
+								if (last_overlapped) secondlast_overlapped = last_overlapped;
+							}
+
+							// Clear of both - completed push out.  Adjust fractionally to 1/16th of a pixel.
+							if (!last_overlapped) {
+								if (secondlast_overlapped) this.pushInFractional(inst, xdir, ydir, secondlast_overlapped, 16);
+
+								return true;
+							}
+						}
+					}
+				}
+
+				// Didn't get out a solid: oops, we're stuck.
+				// Restore old position.
+				inst.x = oldx;
+				inst.y = oldy;
+				inst.set_bbox_changed();
+				return false;
+			}
+
+			/** @private */
+
+		}, {
+			key: "pushOut",
+			value: function pushOut(inst, xdir, ydir, dist, otherinst) {
+				var push_dist = dist || 50;
+
+				var oldx = inst.x;
+				var oldy = inst.y;
+
+				var i;
+
+				for (i = 0; i < push_dist; i++) {
+					inst.x = oldx + xdir * i;
+					inst.y = oldy + ydir * i;
+					inst.set_bbox_changed();
+
+					// Test if we've cleared the last instance we were overlapping
+					if (!this.testOverlap(inst, otherinst)) return true;
+				}
+
+				// Didn't get out a solid: oops, we're stuck.
+				// Restore old position.
+				inst.x = oldx;
+				inst.y = oldy;
+				inst.set_bbox_changed();
+				return false;
+			}
+
+			/** @private */
+
+		}, {
+			key: "pushInFractional",
+			value: function pushInFractional(inst, xdir, ydir, obj, limit) {
+				var divisor = 2;
+				var frac;
+				var forward = false;
+				var overlapping = false;
+				var bestx = inst.x;
+				var besty = inst.y;
+
+				while (divisor <= limit) {
+					frac = 1 / divisor;
+					divisor *= 2;
+
+					inst.x += xdir * frac * (forward ? 1 : -1);
+					inst.y += ydir * frac * (forward ? 1 : -1);
+					inst.set_bbox_changed();
+
+					if (this.testOverlap(inst, obj)) {
+						// Overlapped something: try going forward again
+						forward = true;
+						overlapping = true;
+					} else {
+						// Didn't overlap anything: keep going back
+						forward = false;
+						overlapping = false;
+						bestx = inst.x;
+						besty = inst.y;
+					}
+				}
+
+				// If left overlapping, move back to last place not overlapping
+				if (overlapping) {
+					inst.x = bestx;
+					inst.y = besty;
+					inst.set_bbox_changed();
+				}
+			}
+		}, {
+			key: "pushOutSolidNearest",
+
+			/** @private */
+
+			value: function pushOutSolidNearest(inst, max_dist_) {
+				var max_dist = cr.is_undefined(max_dist_) ? 100 : max_dist_;
+				var dist = 0;
+				var oldx = inst.x;
+				var oldy = inst.y;
+
+				var dir = 0;
+				var dx = 0,
+				    dy = 0;
+				var last_overlapped = this.testOverlapSolid(inst);
+
+				if (!last_overlapped) return true; // already clear of solids
+
+				// 8-direction spiral scan
+				while (dist <= max_dist) {
+					switch (dir) {
+						case 0:
+							dx = 0;dy = -1;dist++;break;
+						case 1:
+							dx = 1;dy = -1;break;
+						case 2:
+							dx = 1;dy = 0;break;
+						case 3:
+							dx = 1;dy = 1;break;
+						case 4:
+							dx = 0;dy = 1;break;
+						case 5:
+							dx = -1;dy = 1;break;
+						case 6:
+							dx = -1;dy = 0;break;
+						case 7:
+							dx = -1;dy = -1;break;
+					}
+
+					dir = (dir + 1) % 8;
+
+					inst.x = cr.floor(oldx + dx * dist);
+					inst.y = cr.floor(oldy + dy * dist);
+					inst.set_bbox_changed();
+
+					// Test if we've cleared the last instance we were overlapping
+					if (!this.testOverlap(inst, last_overlapped)) {
+						// See if we're still overlapping a different solid
+						last_overlapped = this.testOverlapSolid(inst);
+
+						// We're clear of all solids
+						if (!last_overlapped) return true;
+					}
+				}
+
+				// Didn't get pushed out: restore old position and return false
+				inst.x = oldx;
+				inst.y = oldy;
+				inst.set_bbox_changed();
+				return false;
+			}
+		}, {
+			key: "registerCollision",
+
+			/** @private */
+
+			value: function registerCollision(a, b) {
+				// Ignore if either instance has disabled collisions
+				if (!a.collisionsEnabled || !b.collisionsEnabled) return;
+
+				this.registered_collisions.push([a, b]);
+			}
+
+			/** @private */
+
+		}, {
+			key: "checkRegisteredCollision",
+			value: function checkRegisteredCollision(a, b) {
+				var i, len, x;
+				for (i = 0, len = this.registered_collisions.length; i < len; i++) {
+					x = this.registered_collisions[i];
+
+					if (x[0] == a && x[1] == b || x[0] == b && x[1] == a) return true;
+				}
+
+				return false;
+			}
+
+			/** @private */
+
+		}, {
+			key: "calculateSolidBounceAngle",
+			value: function calculateSolidBounceAngle(inst, startx, starty, obj) {
+				var objx = inst.x;
+				var objy = inst.y;
+				var radius = cr.max(10, cr.distanceTo(startx, starty, objx, objy));
+				var startangle = cr.angleTo(startx, starty, objx, objy);
+				var firstsolid = obj || this.testOverlapSolid(inst);
+
+				// Not overlapping a solid: function used wrong, return inverse of object angle (so it bounces back in reverse direction)
+				if (!firstsolid) return cr.clamp_angle(startangle + cr.PI);
+
+				var cursolid = firstsolid;
+
+				// Rotate anticlockwise in 5 degree increments until no longer overlapping
+				// Don't search more than 175 degrees around (36 * 5 = 180)
+				var i, curangle, anticlockwise_free_angle, clockwise_free_angle;
+				var increment = cr.to_radians(5); // 5 degree increments
+
+				for (i = 1; i < 36; i++) {
+					curangle = startangle - i * increment;
+					inst.x = startx + Math.cos(curangle) * radius;
+					inst.y = starty + Math.sin(curangle) * radius;
+					inst.set_bbox_changed();
+
+					// No longer overlapping current solid
+					if (!this.testOverlap(inst, cursolid)) {
+						// Search for any other solid
+						cursolid = obj ? null : this.testOverlapSolid(inst);
+
+						// Not overlapping any other solid: we've now reached the anticlockwise free angle
+						if (!cursolid) {
+							anticlockwise_free_angle = curangle;
+							break;
+						}
+					}
+				}
+
+				// Did not manage to free up in anticlockwise direction: use reverse angle
+				if (i === 36) anticlockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
+
+				var cursolid = firstsolid;
+
+				// Now search in clockwise direction
+				for (i = 1; i < 36; i++) {
+					curangle = startangle + i * increment;
+					inst.x = startx + Math.cos(curangle) * radius;
+					inst.y = starty + Math.sin(curangle) * radius;
+					inst.set_bbox_changed();
+
+					// No longer overlapping current solid
+					if (!this.testOverlap(inst, cursolid)) {
+						// Search for any other solid
+						cursolid = obj ? null : this.testOverlapSolid(inst);
+
+						// Not overlapping any other solid: we've now reached the clockwise free angle
+						if (!cursolid) {
+							clockwise_free_angle = curangle;
+							break;
+						}
+					}
+				}
+
+				// Did not manage to free up in clockwise direction: use reverse angle
+				if (i === 36) clockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
+
+				// Put the object back to its original position
+				inst.x = objx;
+				inst.y = objy;
+				inst.set_bbox_changed();
+
+				// Both angles match: can only be if object completely contained by solid and both searches went all
+				// the way round to backwards.  Just return the back angle.
+				if (clockwise_free_angle === anticlockwise_free_angle) return clockwise_free_angle;
+
+				// We now have the first anticlockwise and first clockwise angles that are free.
+				// Calculate the normal.
+				var half_diff = cr.angleDiff(clockwise_free_angle, anticlockwise_free_angle) / 2;
+				var normal;
+
+				// Acute angle
+				if (cr.angleClockwise(clockwise_free_angle, anticlockwise_free_angle)) {
+					normal = cr.clamp_angle(anticlockwise_free_angle + half_diff + cr.PI);
+				}
+				// Obtuse angle
+				else {
+						normal = cr.clamp_angle(clockwise_free_angle + half_diff);
+					}
+
+				assert2(!isNaN(normal), "Bounce normal computed as NaN");
+
+				// Reflect startangle about normal (r = v - 2 (v . n) n)
+				var vx = Math.cos(startangle);
+				var vy = Math.sin(startangle);
+				var nx = Math.cos(normal);
+				var ny = Math.sin(normal);
+				var v_dot_n = vx * nx + vy * ny;
+				var rx = vx - 2 * v_dot_n * nx;
+				var ry = vy - 2 * v_dot_n * ny;
+				return cr.angleTo(0, 0, rx, ry);
+			}
+
+			/** @private */
+
+		}, {
+			key: "saveInstanceToJSON",
+			value: function saveInstanceToJSON(inst, state_only) {
+
+				var i, len, world, behinst, et;
+				var type = inst.type;
+				var plugin = type.plugin;
+
+				var o = {};
+
+				if (state_only) o["c2"] = true; // mark as known json data from Construct 2
+				else o["uid"] = inst.uid;
+
+				if (cr.hasAnyOwnProperty(inst.extra)) o["ex"] = CopyExtraObject(inst.extra);
+
+				// Save instance variables
+				if (inst.instance_vars && inst.instance_vars.length) {
+					o["ivs"] = {};
+
+					for (i = 0, len = inst.instance_vars.length; i < len; i++) {
+						o["ivs"][inst.type.instvar_sids[i].toString()] = inst.instance_vars[i];
+					}
+				}
+
+				// Save world data
+				if (plugin.is_world) {
+					world = {
+						"x": inst.x,
+						"y": inst.y,
+						"w": inst.width,
+						"h": inst.height,
+						"l": inst.layer.sid,
+						"zi": inst.get_zindex()
+					};
+
+					if (inst.angle !== 0) world["a"] = inst.angle;
+
+					if (inst.opacity !== 1) world["o"] = inst.opacity;
+
+					if (inst.hotspotX !== 0.5) world["hX"] = inst.hotspotX;
+
+					if (inst.hotspotY !== 0.5) world["hY"] = inst.hotspotY;
+
+					if (inst.blend_mode !== 0) world["bm"] = inst.blend_mode;
+
+					if (!inst.visible) world["v"] = inst.visible;
+
+					if (!inst.collisionsEnabled) world["ce"] = inst.collisionsEnabled;
+
+					if (inst.my_timescale !== -1) world["mts"] = inst.my_timescale;
+
+					if (type.effect_types.length) {
+						world["fx"] = [];
+
+						for (i = 0, len = type.effect_types.length; i < len; i++) {
+							et = type.effect_types[i];
+							world["fx"].push({ "name": et.name,
+								"active": inst.active_effect_flags[et.index],
+								"params": inst.effect_params[et.index] });
+						}
+					}
+
+					o["w"] = world;
+				}
+
+				// Save behaviors
+				if (inst.behavior_insts && inst.behavior_insts.length) {
+					o["behs"] = {};
+
+					for (i = 0, len = inst.behavior_insts.length; i < len; i++) {
+						behinst = inst.behavior_insts[i];
+
+						if (behinst.saveToJSON) o["behs"][behinst.type.sid.toString()] = behinst.saveToJSON();
+					}
+				}
+
+				// Save plugin own data
+				if (inst.saveToJSON) o["data"] = inst.saveToJSON();
+
+				return o;
+			}
+
+			/** @private */
+
+		}], [{
+			key: "segments_intersect",
+			value: function segments_intersect(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) {
+
+				var max_ax, min_ax, max_ay, min_ay, max_bx, min_bx, max_by, min_by;
+
+				// Long-hand code since this is a performance hotspot and this type of
+				// code minimises the number of conditional tests necessary.
+				if (a1x < a2x) {
+					min_ax = a1x;
+					max_ax = a2x;
+				} else {
+					min_ax = a2x;
+					max_ax = a1x;
+				}
+
+				if (b1x < b2x) {
+					min_bx = b1x;
+					max_bx = b2x;
+				} else {
+					min_bx = b2x;
+					max_bx = b1x;
+				}
+
+				if (max_ax < min_bx || min_ax > max_bx) return false;
+
+				if (a1y < a2y) {
+					min_ay = a1y;
+					max_ay = a2y;
+				} else {
+					min_ay = a2y;
+					max_ay = a1y;
+				}
+
+				if (b1y < b2y) {
+					min_by = b1y;
+					max_by = b2y;
+				} else {
+					min_by = b2y;
+					max_by = b1y;
+				}
+
+				if (max_ay < min_by || min_ay > max_by) return false;
+
+				var dpx = b1x - a1x + b2x - a2x;
+				var dpy = b1y - a1y + b2y - a2y;
+				var qax = a2x - a1x;
+				var qay = a2y - a1y;
+				var qbx = b2x - b1x;
+				var qby = b2y - b1y;
+
+				var d = cr.abs(qay * qbx - qby * qax);
+				var la = qbx * dpy - qby * dpx;
+
+				if (cr.abs(la) > d) return false;
+
+				var lb = qax * dpy - qay * dpx;
+
+				return cr.abs(lb) <= d;
+			}
+		}]);
+
+		/**
+	 * Builds new math into global math and Application.math
+	 * @param {number} x - position.x
+	 * @param {number} y - position.y
+	 */
+
+		function Math() {
+			_classCallCheck(this, Math);
+
+			this.vector = _vector2.default;
+			window.Math.vector = this.vector;
+		}
+
+		return Math;
+	})();
+
+	exports.default = Math;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(206);
+	var _visuals2 = __webpack_require__(207);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
@@ -8875,16 +9699,51 @@
 	};
 
 /***/ },
-/* 206 */
-/***/ function(module, exports) {
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
+	var _interfaces = __webpack_require__(196);
+
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _Visuals = (function (_SJSClass) {
+	    _inherits(_Visuals, _SJSClass);
+
+	    function _Visuals(app) {
+	        _classCallCheck(this, _Visuals);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Visuals).call(this, app));
+	    }
+
+	    return _Visuals;
+	})(_interfaces._SJSClass);
+
+	var _Pipe = (function () {
+	    function _Pipe() {
+	        _classCallCheck(this, _Pipe);
+	    }
+
+	    _createClass(_Pipe, [{
+	        key: "executeNext",
+	        value: function executeNext() {}
+	    }]);
+
+	    return _Pipe;
+	})();
 
 	var visuals = visuals || {};
 	visuals = {
@@ -10224,7 +11083,7 @@
 	exports.default = visuals;
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10371,7 +11230,7 @@
 	};
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10456,7 +11315,7 @@
 	};
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10465,7 +11324,7 @@
 	                value: true
 	});
 
-	var _cookies = __webpack_require__(210);
+	var _cookies = __webpack_require__(211);
 
 	var _cookies2 = _interopRequireDefault(_cookies);
 
@@ -10914,7 +11773,7 @@
 	};
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
@@ -11077,7 +11936,7 @@
 	    };
 
 	    var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	    var AMD = "function" === 'function' && __webpack_require__(212);
+	    var AMD = "function" === 'function' && __webpack_require__(213);
 	    var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
 	    var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
 	    // AMD support
@@ -11101,10 +11960,10 @@
 	};
 
 	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(211)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(212)(module)))
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -11120,7 +11979,7 @@
 
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -11128,7 +11987,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11139,9 +11998,9 @@
 			value: true
 	});
 
-	var _interfaces = __webpack_require__(201);
+	var _interfaces = __webpack_require__(196);
 
-	var _test2 = __webpack_require__(214);
+	var _test2 = __webpack_require__(215);
 
 	var _test3 = _interopRequireDefault(_test2);
 
@@ -11415,7 +12274,7 @@
 	exports.default = Loader;
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11426,7 +12285,7 @@
 	        value: true
 	});
 
-	var _interfaces = __webpack_require__(201);
+	var _interfaces = __webpack_require__(196);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11615,7 +12474,7 @@
 	exports.default = test;
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11626,13 +12485,13 @@
 	        value: true
 	});
 
-	var _interfaces = __webpack_require__(201);
+	var _interfaces = __webpack_require__(196);
 
-	var _vector = __webpack_require__(200);
+	var _vector = __webpack_require__(201);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _loader = __webpack_require__(213);
+	var _loader = __webpack_require__(214);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
@@ -11659,6 +12518,7 @@
 	                _this.particleLimit = 1500;
 
 	                _this.flakes = new Image();
+
 	                _this.flakes0 = new Image();
 
 	                for (var i = 0; i < 16; i++) {
@@ -11675,25 +12535,38 @@
 	                        this.SJSParticleList = [];
 	                }
 	        }, {
+	                key: 'appendParticle',
+	                value: function appendParticle() {
+
+	                        var length = this.SJSParticleList.length;
+
+	                        if (length > this.particleLimit) return;
+
+	                        var width = this.app.getWidth();
+
+	                        var height = this.app.getHeight();
+
+	                        var scale = this.app.getScale();
+
+	                        var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
+
+	                        var End = new _vector2.default(Math.random() * width, 0);
+
+	                        End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+
+	                        var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+
+	                        this.SJSParticleList.push(newParticle);
+
+	                        return;
+	                }
+	        }, {
 	                key: 'update',
 	                value: function update() {
 
 	                        var length = this.SJSParticleList.length;
 
-	                        var width = this.app.getWidth();
-	                        var height = this.app.getHeight();
-	                        var scale = this.app.getScale();
-
-	                        //if ((this.app.getFps()>30))
-	                        if (length < this.particleLimit) {
-
-	                                var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random - 100);
-	                                var End = new _vector2.default(Math.random() * width, 0);
-	                                End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
-
-	                                var newParticle = new SJSParticle(this.app, { x: Start.x, y: Start.y }, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
-	                                this.SJSParticleList.push(newParticle);
-	                        }
+	                        this.appendParticle();
 
 	                        if (length == 0) return;
 
@@ -11752,7 +12625,6 @@
 
 	                //this.img = loader.getImageReference('../flakes');
 	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
-	                ;
 
 	                _this2.t = Math.round(1 + Math.random() * 5);
 
@@ -11799,6 +12671,11 @@
 	                        y: target.y || 0,
 	                        x: target.x || 0
 	                };
+
+	                _this2.pos = new _vector2.default(pos.x, pos.y);
+	                _this2.vel = new _vector2.default(vel.x, vel.y);
+	                _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
+	                _this2.target = new _vector2.default(target.x, target.y);
 
 	                _this2.usePhysics = usePhysics || false;
 
@@ -11882,834 +12759,6 @@
 
 	        return SJSParticle;
 	})(_interfaces._SJSClass);
-
-/***/ },
-/* 216 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* @module
-	* @private
-	*/
-
-	var StatisticsController = (function () {
-	    _createClass(StatisticsController, [{
-	        key: 'count',
-	        get: function get() {
-
-	            return this.monitor.count;
-	        },
-	        set: function set(value) {
-
-	            this.monitor.count = value;
-	        }
-	    }, {
-	        key: 'details',
-	        get: function get() {
-
-	            return StatisticsController._details;
-	        },
-	        set: function set(value) {
-
-	            this._details = StatisticsController._details;
-	        }
-	    }], [{
-	        key: '_details',
-	        value: function _details(type) {
-
-	            type = type;
-
-	            switch (type) {
-
-	                default:
-
-	                    return Object.keys(this.logs);
-
-	                case 'details':
-
-	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                case 'entries':
-
-	                    return Object.entries(this.logs);
-
-	                case 'values':
-
-	                    return Object.values(this.logs);
-
-	            }
-	        }
-	    }, {
-	        key: 'logs',
-	        get: function get() {
-
-	            return this.monitor.logs;
-	        },
-	        set: function set(value) {
-
-	            this.monitor = value;
-	        }
-	    }, {
-	        key: 'monitor',
-	        get: function get() {
-
-	            return this._monitor;
-	        },
-	        set: function set(value) {
-
-	            this._monitor = value;
-	        }
-	    }]);
-
-	    function StatisticsController() {
-	        _classCallCheck(this, StatisticsController);
-
-	        /** dfsdsf
-	        * @type {Array<>} sdf sdf
-	        * @private
-	        */
-
-	        this.logs = this.constructor.logs;
-	        this.logs.type = 'Array';
-
-	        this.count = 0;
-	    }
-
-	    return StatisticsController;
-	})();
-
-	StatisticsController._monitor = {
-
-	    count: 0,
-
-	    logs: []
-
-	};
-	exports.default = StatisticsController;
-
-/***/ },
-/* 217 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _vector = __webpack_require__(200);
-
-	var _vector2 = _interopRequireDefault(_vector);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* @module
-	* @access public
-	* @example
-	* Application.client.math
-	*/
-
-	var Math = (function () {
-		_createClass(Math, [{
-			key: "minmax4",
-
-			/**
-	  * Return the min max of 4 values
-	  * @method
-	  * @param {Number} a - value
-	  * @param {Number} b - value
-	  * @param {Number} c - value
-	  * @param {Number} d - value
-	  * @return {Object}
-	  * @private
-	  */
-
-			value: function minmax4(a, b, c, d) {
-
-				if (a < b) {
-					if (c < d) {
-						// sort order: (a, c) (b, d)
-						if (a < c) minresult = a;else minresult = c;
-
-						if (b > d) maxresult = b;else maxresult = d;
-					} else {
-						// sort order: (a, d) (b, c)
-						if (a < d) minresult = a;else minresult = d;
-
-						if (b > c) maxresult = b;else maxresult = c;
-					}
-				} else {
-					if (c < d) {
-						// sort order: (b, c) (a, d)
-						if (b < c) minresult = b;else minresult = c;
-
-						if (a > d) maxresult = a;else maxresult = d;
-					} else {
-						// sort order: (b, d) (a, c)
-						if (b < d) minresult = b;else minresult = d;
-
-						if (a > c) maxresult = a;else maxresult = c;
-					}
-				}
-
-				return { min: minresult, max: maxresult };
-			}
-
-			/**
-	  * Testing rectangle overlap
-	  * @ignore
-	  * @method
-	  * @param {Rect} r - rectangle collision
-	  * @param {Rect} b - collision boundry
-	  * @return {Object}
-	  * @private
-	  */
-
-		}, {
-			key: "testRectOverlap",
-			value: function testRectOverlap(r, b) {
-				// Instances don't overlap themselves.  Also return false early if either object has collisions disabled.
-				if (!b || !b.collisionsEnabled) return false;
-
-				/**PREVIEWONLY**/this.collisioncheck_count++;
-
-				b.update_bbox();
-
-				var layerb = b.layer;
-				var haspolyb, polyb;
-
-				// Reject via bounding boxes first (fastest)
-				if (!b.bbox.intersects_rect(r)) return false;
-
-				// Test rect against tilemap
-				if (b.tilemap_exists) {
-					b.getCollisionRectCandidates(r, collrect_candidates);
-
-					var collrects = collrect_candidates;
-					var i, len, c, tilerc;
-					var tmx = b.x;
-					var tmy = b.y;
-
-					for (i = 0, len = collrects.length; i < len; ++i) {
-						c = collrects[i];
-						tilerc = c.rc;
-						/**PREVIEWONLY**/this.collisioncheck_count++;
-
-						if (r.intersects_rect_off(tilerc, tmx, tmy)) {
-							// Check against tile poly if present
-							if (c.poly) {
-								/**PREVIEWONLY**/this.polycheck_count++;
-
-								this.temp_poly.set_from_rect(r, 0, 0);
-
-								if (c.poly.intersects_poly(this.temp_poly, -(tmx + tilerc.left), -(tmy + tilerc.top))) {
-									cr.clearArray(collrect_candidates);
-									return true;
-								}
-							}
-							// No poly: bounding boxes overlap so register a collision
-							else {
-									cr.clearArray(collrect_candidates);
-									return true;
-								}
-						}
-					}
-
-					cr.clearArray(collrect_candidates);
-					return false;
-				}
-				// Test rect against object
-				else {
-						/**PREVIEWONLY**/this.polycheck_count++;
-
-						tmpQuad.set_from_rect(r);
-
-						// Reject via bounding quads second (presumably next fastest)
-						if (!b.bquad.intersects_quad(tmpQuad)) return false;
-
-						haspolyb = b.collision_poly && !b.collision_poly.is_empty();
-
-						// Does not have collision poly: must be in bounding quad overlap
-						if (!haspolyb) return true;
-
-						b.collision_poly.cache_poly(b.width, b.height, b.angle);
-						tmpQuad.offset(-r.left, -r.top);
-						this.temp_poly.set_from_quad(tmpQuad, 0, 0, 1, 1);
-
-						return b.collision_poly.intersects_poly(this.temp_poly, r.left - b.x, r.top - b.y);
-					}
-			}
-
-			/** @private */
-
-		}, {
-			key: "testSegmentOverlap",
-			value: function testSegmentOverlap(x1, y1, x2, y2, b) {
-				if (!b || !b.collisionsEnabled) return false;
-
-				/**PREVIEWONLY**/this.collisioncheck_count++;
-				b.update_bbox();
-
-				var layerb = b.layer;
-				var haspolyb, polyb;
-
-				// Reject via bounding boxes first (fastest). Create temporary bounding box around the segment.
-				tmpRect.set(cr.min(x1, x2), cr.min(y1, y2), cr.max(x1, x2), cr.max(y1, y2));
-
-				if (!b.bbox.intersects_rect(tmpRect)) return false;
-
-				// Test segment against tilemap
-				if (b.tilemap_exists) {
-					b.getCollisionRectCandidates(tmpRect, collrect_candidates);
-					var collrects = collrect_candidates;
-					var i, len, c, tilerc;
-					var tmx = b.x;
-					var tmy = b.y;
-
-					for (i = 0, len = collrects.length; i < len; ++i) {
-						c = collrects[i];
-						tilerc = c.rc;
-						/**PREVIEWONLY**/this.collisioncheck_count++;
-
-						// Segment bounding box intersects this tile collision rectangle
-						if (tmpRect.intersects_rect_off(tilerc, tmx, tmy)) {
-							/**PREVIEWONLY**/this.polycheck_count++;
-
-							// Test real segment intersection
-							tmpQuad.set_from_rect(tilerc);
-							tmpQuad.offset(tmx, tmy);
-
-							if (tmpQuad.intersects_segment(x1, y1, x2, y2)) {
-								// Check against tile collision poly if any
-								if (c.poly) {
-									if (c.poly.intersects_segment(tmx + tilerc.left, tmy + tilerc.top, x1, y1, x2, y2)) {
-										cr.clearArray(collrect_candidates);
-										return true;
-									}
-								}
-								// Otherwise is intersecting tile box
-								else {
-										cr.clearArray(collrect_candidates);
-										return true;
-									}
-							}
-						}
-					}
-
-					cr.clearArray(collrect_candidates);
-					return false;
-				} else {
-					/**PREVIEWONLY**/this.polycheck_count++;
-
-					// Reject via bounding quads second (presumably next fastest)
-					if (!b.bquad.intersects_segment(x1, y1, x2, y2)) return false;
-
-					haspolyb = b.collision_poly && !b.collision_poly.is_empty();
-
-					// Does not have collision poly: must be in bounding quad intersection
-					if (!haspolyb) return true;
-
-					b.collision_poly.cache_poly(b.width, b.height, b.angle);
-
-					return b.collision_poly.intersects_segment(b.x, b.y, x1, y1, x2, y2);
-				}
-			}
-
-			/** @private
-	  * Push to try and move out of solid.  Pass -1, 0 or 1 for xdir and ydir to specify a push direction.
-	  */
-
-		}, {
-			key: "pushOutSolid",
-			value: function pushOutSolid(inst, xdir, ydir, dist, include_jumpthrus, specific_jumpthru) {
-				var push_dist = dist || 50;
-
-				var oldx = inst.x;
-				var oldy = inst.y;
-
-				var i;
-				var last_overlapped = null,
-				    secondlast_overlapped = null;
-
-				for (i = 0; i < push_dist; i++) {
-					inst.x = oldx + xdir * i;
-					inst.y = oldy + ydir * i;
-					inst.set_bbox_changed();
-
-					// Test if we've cleared the last instance we were overlapping
-					if (!this.testOverlap(inst, last_overlapped)) {
-						// See if we're still overlapping a different solid
-						last_overlapped = this.testOverlapSolid(inst);
-
-						if (last_overlapped) secondlast_overlapped = last_overlapped;
-
-						// We're clear of all solids - check jumpthrus
-						if (!last_overlapped) {
-							if (include_jumpthrus) {
-								if (specific_jumpthru) last_overlapped = this.testOverlap(inst, specific_jumpthru) ? specific_jumpthru : null;else last_overlapped = this.testOverlapJumpThru(inst);
-
-								if (last_overlapped) secondlast_overlapped = last_overlapped;
-							}
-
-							// Clear of both - completed push out.  Adjust fractionally to 1/16th of a pixel.
-							if (!last_overlapped) {
-								if (secondlast_overlapped) this.pushInFractional(inst, xdir, ydir, secondlast_overlapped, 16);
-
-								return true;
-							}
-						}
-					}
-				}
-
-				// Didn't get out a solid: oops, we're stuck.
-				// Restore old position.
-				inst.x = oldx;
-				inst.y = oldy;
-				inst.set_bbox_changed();
-				return false;
-			}
-
-			/** @private */
-
-		}, {
-			key: "pushOut",
-			value: function pushOut(inst, xdir, ydir, dist, otherinst) {
-				var push_dist = dist || 50;
-
-				var oldx = inst.x;
-				var oldy = inst.y;
-
-				var i;
-
-				for (i = 0; i < push_dist; i++) {
-					inst.x = oldx + xdir * i;
-					inst.y = oldy + ydir * i;
-					inst.set_bbox_changed();
-
-					// Test if we've cleared the last instance we were overlapping
-					if (!this.testOverlap(inst, otherinst)) return true;
-				}
-
-				// Didn't get out a solid: oops, we're stuck.
-				// Restore old position.
-				inst.x = oldx;
-				inst.y = oldy;
-				inst.set_bbox_changed();
-				return false;
-			}
-
-			/** @private */
-
-		}, {
-			key: "pushInFractional",
-			value: function pushInFractional(inst, xdir, ydir, obj, limit) {
-				var divisor = 2;
-				var frac;
-				var forward = false;
-				var overlapping = false;
-				var bestx = inst.x;
-				var besty = inst.y;
-
-				while (divisor <= limit) {
-					frac = 1 / divisor;
-					divisor *= 2;
-
-					inst.x += xdir * frac * (forward ? 1 : -1);
-					inst.y += ydir * frac * (forward ? 1 : -1);
-					inst.set_bbox_changed();
-
-					if (this.testOverlap(inst, obj)) {
-						// Overlapped something: try going forward again
-						forward = true;
-						overlapping = true;
-					} else {
-						// Didn't overlap anything: keep going back
-						forward = false;
-						overlapping = false;
-						bestx = inst.x;
-						besty = inst.y;
-					}
-				}
-
-				// If left overlapping, move back to last place not overlapping
-				if (overlapping) {
-					inst.x = bestx;
-					inst.y = besty;
-					inst.set_bbox_changed();
-				}
-			}
-		}, {
-			key: "pushOutSolidNearest",
-
-			/** @private */
-
-			value: function pushOutSolidNearest(inst, max_dist_) {
-				var max_dist = cr.is_undefined(max_dist_) ? 100 : max_dist_;
-				var dist = 0;
-				var oldx = inst.x;
-				var oldy = inst.y;
-
-				var dir = 0;
-				var dx = 0,
-				    dy = 0;
-				var last_overlapped = this.testOverlapSolid(inst);
-
-				if (!last_overlapped) return true; // already clear of solids
-
-				// 8-direction spiral scan
-				while (dist <= max_dist) {
-					switch (dir) {
-						case 0:
-							dx = 0;dy = -1;dist++;break;
-						case 1:
-							dx = 1;dy = -1;break;
-						case 2:
-							dx = 1;dy = 0;break;
-						case 3:
-							dx = 1;dy = 1;break;
-						case 4:
-							dx = 0;dy = 1;break;
-						case 5:
-							dx = -1;dy = 1;break;
-						case 6:
-							dx = -1;dy = 0;break;
-						case 7:
-							dx = -1;dy = -1;break;
-					}
-
-					dir = (dir + 1) % 8;
-
-					inst.x = cr.floor(oldx + dx * dist);
-					inst.y = cr.floor(oldy + dy * dist);
-					inst.set_bbox_changed();
-
-					// Test if we've cleared the last instance we were overlapping
-					if (!this.testOverlap(inst, last_overlapped)) {
-						// See if we're still overlapping a different solid
-						last_overlapped = this.testOverlapSolid(inst);
-
-						// We're clear of all solids
-						if (!last_overlapped) return true;
-					}
-				}
-
-				// Didn't get pushed out: restore old position and return false
-				inst.x = oldx;
-				inst.y = oldy;
-				inst.set_bbox_changed();
-				return false;
-			}
-		}, {
-			key: "registerCollision",
-
-			/** @private */
-
-			value: function registerCollision(a, b) {
-				// Ignore if either instance has disabled collisions
-				if (!a.collisionsEnabled || !b.collisionsEnabled) return;
-
-				this.registered_collisions.push([a, b]);
-			}
-
-			/** @private */
-
-		}, {
-			key: "checkRegisteredCollision",
-			value: function checkRegisteredCollision(a, b) {
-				var i, len, x;
-				for (i = 0, len = this.registered_collisions.length; i < len; i++) {
-					x = this.registered_collisions[i];
-
-					if (x[0] == a && x[1] == b || x[0] == b && x[1] == a) return true;
-				}
-
-				return false;
-			}
-
-			/** @private */
-
-		}, {
-			key: "calculateSolidBounceAngle",
-			value: function calculateSolidBounceAngle(inst, startx, starty, obj) {
-				var objx = inst.x;
-				var objy = inst.y;
-				var radius = cr.max(10, cr.distanceTo(startx, starty, objx, objy));
-				var startangle = cr.angleTo(startx, starty, objx, objy);
-				var firstsolid = obj || this.testOverlapSolid(inst);
-
-				// Not overlapping a solid: function used wrong, return inverse of object angle (so it bounces back in reverse direction)
-				if (!firstsolid) return cr.clamp_angle(startangle + cr.PI);
-
-				var cursolid = firstsolid;
-
-				// Rotate anticlockwise in 5 degree increments until no longer overlapping
-				// Don't search more than 175 degrees around (36 * 5 = 180)
-				var i, curangle, anticlockwise_free_angle, clockwise_free_angle;
-				var increment = cr.to_radians(5); // 5 degree increments
-
-				for (i = 1; i < 36; i++) {
-					curangle = startangle - i * increment;
-					inst.x = startx + Math.cos(curangle) * radius;
-					inst.y = starty + Math.sin(curangle) * radius;
-					inst.set_bbox_changed();
-
-					// No longer overlapping current solid
-					if (!this.testOverlap(inst, cursolid)) {
-						// Search for any other solid
-						cursolid = obj ? null : this.testOverlapSolid(inst);
-
-						// Not overlapping any other solid: we've now reached the anticlockwise free angle
-						if (!cursolid) {
-							anticlockwise_free_angle = curangle;
-							break;
-						}
-					}
-				}
-
-				// Did not manage to free up in anticlockwise direction: use reverse angle
-				if (i === 36) anticlockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
-
-				var cursolid = firstsolid;
-
-				// Now search in clockwise direction
-				for (i = 1; i < 36; i++) {
-					curangle = startangle + i * increment;
-					inst.x = startx + Math.cos(curangle) * radius;
-					inst.y = starty + Math.sin(curangle) * radius;
-					inst.set_bbox_changed();
-
-					// No longer overlapping current solid
-					if (!this.testOverlap(inst, cursolid)) {
-						// Search for any other solid
-						cursolid = obj ? null : this.testOverlapSolid(inst);
-
-						// Not overlapping any other solid: we've now reached the clockwise free angle
-						if (!cursolid) {
-							clockwise_free_angle = curangle;
-							break;
-						}
-					}
-				}
-
-				// Did not manage to free up in clockwise direction: use reverse angle
-				if (i === 36) clockwise_free_angle = cr.clamp_angle(startangle + cr.PI);
-
-				// Put the object back to its original position
-				inst.x = objx;
-				inst.y = objy;
-				inst.set_bbox_changed();
-
-				// Both angles match: can only be if object completely contained by solid and both searches went all
-				// the way round to backwards.  Just return the back angle.
-				if (clockwise_free_angle === anticlockwise_free_angle) return clockwise_free_angle;
-
-				// We now have the first anticlockwise and first clockwise angles that are free.
-				// Calculate the normal.
-				var half_diff = cr.angleDiff(clockwise_free_angle, anticlockwise_free_angle) / 2;
-				var normal;
-
-				// Acute angle
-				if (cr.angleClockwise(clockwise_free_angle, anticlockwise_free_angle)) {
-					normal = cr.clamp_angle(anticlockwise_free_angle + half_diff + cr.PI);
-				}
-				// Obtuse angle
-				else {
-						normal = cr.clamp_angle(clockwise_free_angle + half_diff);
-					}
-
-				assert2(!isNaN(normal), "Bounce normal computed as NaN");
-
-				// Reflect startangle about normal (r = v - 2 (v . n) n)
-				var vx = Math.cos(startangle);
-				var vy = Math.sin(startangle);
-				var nx = Math.cos(normal);
-				var ny = Math.sin(normal);
-				var v_dot_n = vx * nx + vy * ny;
-				var rx = vx - 2 * v_dot_n * nx;
-				var ry = vy - 2 * v_dot_n * ny;
-				return cr.angleTo(0, 0, rx, ry);
-			}
-
-			/** @private */
-
-		}, {
-			key: "saveInstanceToJSON",
-			value: function saveInstanceToJSON(inst, state_only) {
-
-				var i, len, world, behinst, et;
-				var type = inst.type;
-				var plugin = type.plugin;
-
-				var o = {};
-
-				if (state_only) o["c2"] = true; // mark as known json data from Construct 2
-				else o["uid"] = inst.uid;
-
-				if (cr.hasAnyOwnProperty(inst.extra)) o["ex"] = CopyExtraObject(inst.extra);
-
-				// Save instance variables
-				if (inst.instance_vars && inst.instance_vars.length) {
-					o["ivs"] = {};
-
-					for (i = 0, len = inst.instance_vars.length; i < len; i++) {
-						o["ivs"][inst.type.instvar_sids[i].toString()] = inst.instance_vars[i];
-					}
-				}
-
-				// Save world data
-				if (plugin.is_world) {
-					world = {
-						"x": inst.x,
-						"y": inst.y,
-						"w": inst.width,
-						"h": inst.height,
-						"l": inst.layer.sid,
-						"zi": inst.get_zindex()
-					};
-
-					if (inst.angle !== 0) world["a"] = inst.angle;
-
-					if (inst.opacity !== 1) world["o"] = inst.opacity;
-
-					if (inst.hotspotX !== 0.5) world["hX"] = inst.hotspotX;
-
-					if (inst.hotspotY !== 0.5) world["hY"] = inst.hotspotY;
-
-					if (inst.blend_mode !== 0) world["bm"] = inst.blend_mode;
-
-					if (!inst.visible) world["v"] = inst.visible;
-
-					if (!inst.collisionsEnabled) world["ce"] = inst.collisionsEnabled;
-
-					if (inst.my_timescale !== -1) world["mts"] = inst.my_timescale;
-
-					if (type.effect_types.length) {
-						world["fx"] = [];
-
-						for (i = 0, len = type.effect_types.length; i < len; i++) {
-							et = type.effect_types[i];
-							world["fx"].push({ "name": et.name,
-								"active": inst.active_effect_flags[et.index],
-								"params": inst.effect_params[et.index] });
-						}
-					}
-
-					o["w"] = world;
-				}
-
-				// Save behaviors
-				if (inst.behavior_insts && inst.behavior_insts.length) {
-					o["behs"] = {};
-
-					for (i = 0, len = inst.behavior_insts.length; i < len; i++) {
-						behinst = inst.behavior_insts[i];
-
-						if (behinst.saveToJSON) o["behs"][behinst.type.sid.toString()] = behinst.saveToJSON();
-					}
-				}
-
-				// Save plugin own data
-				if (inst.saveToJSON) o["data"] = inst.saveToJSON();
-
-				return o;
-			}
-
-			/** @private */
-
-		}], [{
-			key: "segments_intersect",
-			value: function segments_intersect(a1x, a1y, a2x, a2y, b1x, b1y, b2x, b2y) {
-
-				var max_ax, min_ax, max_ay, min_ay, max_bx, min_bx, max_by, min_by;
-
-				// Long-hand code since this is a performance hotspot and this type of
-				// code minimises the number of conditional tests necessary.
-				if (a1x < a2x) {
-					min_ax = a1x;
-					max_ax = a2x;
-				} else {
-					min_ax = a2x;
-					max_ax = a1x;
-				}
-
-				if (b1x < b2x) {
-					min_bx = b1x;
-					max_bx = b2x;
-				} else {
-					min_bx = b2x;
-					max_bx = b1x;
-				}
-
-				if (max_ax < min_bx || min_ax > max_bx) return false;
-
-				if (a1y < a2y) {
-					min_ay = a1y;
-					max_ay = a2y;
-				} else {
-					min_ay = a2y;
-					max_ay = a1y;
-				}
-
-				if (b1y < b2y) {
-					min_by = b1y;
-					max_by = b2y;
-				} else {
-					min_by = b2y;
-					max_by = b1y;
-				}
-
-				if (max_ay < min_by || min_ay > max_by) return false;
-
-				var dpx = b1x - a1x + b2x - a2x;
-				var dpy = b1y - a1y + b2y - a2y;
-				var qax = a2x - a1x;
-				var qay = a2y - a1y;
-				var qbx = b2x - b1x;
-				var qby = b2y - b1y;
-
-				var d = cr.abs(qay * qbx - qby * qax);
-				var la = qbx * dpy - qby * dpx;
-
-				if (cr.abs(la) > d) return false;
-
-				var lb = qax * dpy - qay * dpx;
-
-				return cr.abs(lb) <= d;
-			}
-		}]);
-
-		/**
-	 * Builds new math into global math and Application.math
-	 * @param {number} x - position.x
-	 * @param {number} y - position.y
-	 */
-
-		function Math() {
-			_classCallCheck(this, Math);
-
-			this.vector = _vector2.default;
-			window.Math.vector = this.vector;
-		}
-
-		return Math;
-	})();
-
-	exports.default = Math;
 
 /***/ }
 /******/ ]);

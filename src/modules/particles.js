@@ -18,10 +18,12 @@ export default class SJSParticleController extends Loader {
         this.particleLimit = 1500;
 
         this.flakes = new Image();
+
         this.flakes0 = new Image();
 
         for(var i = 0; i<16; i++)
             this['flakes'+i] = new Image();
+
         for(var i = 0; i<16; i++)
             this.asyncLoadImageData('../flakes','flakes'+i, i*32, 0*32);
 
@@ -33,26 +35,37 @@ export default class SJSParticleController extends Loader {
 
     }
 
+    appendParticle(){
+
+        let length = this.SJSParticleList.length;
+
+        if (length>this.particleLimit)
+            return;
+
+        let width = this.app.getWidth();
+
+        let height = this.app.getHeight();
+
+        let scale = this.app.getScale();
+
+        var Start = new Vector(xOff-width +Math.random()*width*3,Math.random()*-25);
+
+        var End = new Vector(Math.random()*width,0);
+
+        End = new Vector(Start.x+Math.random()*width - Math.random()*width,0);
+
+        var newParticle = new SJSParticle(this.app,Start, {x:End.x,y:2*height/scale}, {x:Math.random()*0.1+0.5,y:Math.random()*0.15+0.1}, "#AAFFFF", false);
+
+        this.SJSParticleList.push(newParticle);
+
+        return;
+    }
+
     update() {
 
         let length = this.SJSParticleList.length;
 
-
-        let width = this.app.getWidth();
-        let height = this.app.getHeight();
-        let scale = this.app.getScale();
-
-        //if ((this.app.getFps()>30))
-        if (length<this.particleLimit)
-        {
-
-            var Start = new Vector(xOff-width +Math.random()*width*3,Math.random-100);
-            var End = new Vector(Math.random()*width,0);
-             End = new Vector(Start.x+Math.random()*width - Math.random()*width,0);
-
-            var newParticle = new SJSParticle(this.app,{x:Start.x,y:Start.y}, {x:End.x,y:2*height/scale}, {x:Math.random()*0.1+0.5,y:Math.random()*0.15+0.1}, "#AAFFFF", false);
-            this.SJSParticleList.push(newParticle);
-        }
+        this.appendParticle();
 
         if (length==0)
             return;
@@ -111,7 +124,6 @@ class SJSParticle extends SJSClass {
 
         //this.img = loader.getImageReference('../flakes');
         this.img = loader.getImageReference('flakes'+Math.round(Math.random()*15));
-;
 
         this.t = Math.round(1+Math.random()*5);
 
@@ -139,25 +151,37 @@ class SJSParticle extends SJSClass {
 
         this.del = false;
 
-        this.pos = {
-            x: pos.x || 0,
-            y: pos.y || 0
-        };
 
-        this.vel = {
-            x: vel.x || 0,
-            y: vel.y || 0
-        };
 
-        this.lastPos = {
-            x: this.pos.x,
-            y: this.pos.y
-        };
 
-        this.target = {
-            y: target.y || 0,
-            x: target.x || 0
-        };
+
+
+                this.pos = {
+                    x: pos.x || 0,
+                    y: pos.y || 0
+                };
+
+                this.vel = {
+                    x: vel.x || 0,
+                    y: vel.y || 0
+                };
+
+                this.lastPos = {
+                    x: this.pos.x,
+                    y: this.pos.y
+                };
+
+                this.target = {
+                    y: target.y || 0,
+                    x: target.x || 0
+                };
+
+
+                        this.pos = new Vector(pos.x,pos.y);
+                        this.vel = new Vector(vel.x,vel.y);
+                        this.lastPos = new Vector(this.pos.x,this.pos.y);
+                this.target = new Vector(target.x,target.y);
+
 
         this.usePhysics = usePhysics || false;
 

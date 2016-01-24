@@ -84,11 +84,11 @@ Interface
     * @param {number} y - position.y
     */
 
-    constructor(x = 0,y = 0) {
+    constructor(x,y) {
 
         super();
 
-        this.position = {x,y};
+        this.position = {x ,y};
 
     };
 

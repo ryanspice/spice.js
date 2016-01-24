@@ -1,4 +1,30 @@
 
+import {_SJSClass as SJSClass} from './interfaces.js';
+
+class _Visuals extends SJSClass {
+
+    constructor(app){
+
+        super(app);
+
+    }
+
+
+
+}
+
+class _Pipe {
+
+    executeNext(){
+
+
+
+    }
+
+
+}
+
+
 var visuals = visuals || {};
 visuals = {
 
