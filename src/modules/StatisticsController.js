@@ -61,7 +61,7 @@ export default class StatisticsController {
 
         logs:[]
 
-    }
+    };
 
     static _details(type){
 
@@ -94,7 +94,7 @@ export default class StatisticsController {
 
         }
 
-    }
+    };
 
     constructor(){
 
@@ -108,6 +108,6 @@ export default class StatisticsController {
 
         this.count = 0;
 
-    }
+    };
 
 }

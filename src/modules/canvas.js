@@ -1,3 +1,6 @@
+
+import {_SJSClass as SJSClass} from './interfaces.js';
+
 export default {
 
     prototype:{
@@ -136,4 +139,59 @@ export default {
             }
         }
     }
+};
+
+
+export class _Canvas extends SJSClass {
+
+    static _doc = document;
+    static head = document.getElementsByTagName('head')[0];
+    static rendering_style = document.createElement('style');
+    static canvasList = document.getElementsByTagName('canvas');
+
+    get doc(){
+
+        return this._doc;
+
+    }
+
+    get canvas(){
+
+        return this._canvas;
+
+    }
+
+    get buffer(){
+
+        return this._buffer;
+
+    }
+
+    get blitter(){
+
+        return this._blitter;
+
+    }
+
+    constructor(app) {
+
+        super(app);
+
+        this.tim = '';
+/*
+        this.canvas;
+        this.buffer;
+        this.blitter;
+        this.doc = document;
+
+        this.head = this.doc.getElementsByTagName('head');
+        this.rendering_style = this.doc.createElement('style');
+        this.canvasList  = this.doc.getElementsByTagName('canvas');
+
+
+        */
+    }
+
+
+
 };

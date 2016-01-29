@@ -13,6 +13,8 @@ import _client from './client.js';
 
 import _canvas from './canvas.js';
 
+import {_Canvas} from './canvas.js';
+
 import _user from './user.js';
 
 import _ext from './ext.js';
@@ -83,6 +85,9 @@ const date = new Date();
        //Build canvas from prototype
        (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
 
+       console.log(this.canvas)
+
+       console.log(window.t = new _Canvas(this))
        //Use arrow function if available
        var usearrow = true;
 
