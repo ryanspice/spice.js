@@ -69,6 +69,14 @@ export default class _controller {
 
             tempReferenceId = (tempReference.id);
 
+            ///Temporary Fix for Safari and IE
+
+            listReference = this.controller.list(tempReferenceId);
+
+            this.initListeners(listReference);
+
+            // ^ F
+
         }).then(() => {
 
                 this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
@@ -77,9 +85,9 @@ export default class _controller {
 
                 this.statistics.monitor(() => {
 
-                this.name = "loadtime";
+                    this.name = "loadtime";
 
-                this.initListeners(listReference);
+                    //this.initListeners(listReference);
 
                 }).then(() => {
 

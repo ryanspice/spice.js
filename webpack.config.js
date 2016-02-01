@@ -5,6 +5,7 @@ require("babel-polyfill");
 
 var env = process.argv.indexOf('--env') === -1 ? false : true;
 
+/*
 var spawn = require('child_process').spawn;
 
 function run_cmd(cmd, args, callBack ) {
@@ -19,8 +20,8 @@ function run_cmd(cmd, args, callBack ) {
 
 } // ()
 
-//run_cmd( "C:/Git/spice.js/logs/loggins.bat", ["a","b","c","d"], function(text) { console.log (text) });
-
+run_cmd( "C:/Git/spice.js/logs/loggins.bat", ["a","b","c","d"], function(text) { console.log (text) });
+*/
 var source = {
     input:{
 

@@ -5468,6 +5468,14 @@
 	                tempReference = _this.generatePrototype();
 
 	                tempReferenceId = tempReference.id;
+
+	                ///Temporary Fix for Safari and IE
+
+	                listReference = _this.controller.list(tempReferenceId);
+
+	                _this.initListeners(listReference);
+
+	                // ^ F
 	            }).then(function () {
 
 	                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
@@ -5478,7 +5486,7 @@
 
 	                    _this.name = "loadtime";
 
-	                    _this.initListeners(listReference);
+	                    //this.initListeners(listReference);
 	                }).then(function () {
 
 	                    _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
@@ -11221,6 +11229,7 @@
 	            app: { value: app },
 	            init: { writable: false, configurable: false, enumerable: false, value: function value() {
 	                    var getcanvas = document.getElementById(this.app.options.canvas.name);
+
 	                    if (getcanvas) {
 	                        this.setCanvas(getcanvas);
 	                        if (app.options.canvas.buffer) {

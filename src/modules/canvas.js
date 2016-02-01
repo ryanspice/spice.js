@@ -111,6 +111,7 @@ export default {
         app:{value:app},
         init:{writable: false,  configurable:false, enumerable:false, value:function(){
                 var getcanvas = document.getElementById(this.app.options.canvas.name);
+
                 if (getcanvas)
                     {
                     this.setCanvas(getcanvas);
