@@ -1,4 +1,6 @@
+"strict mode"
 /** @module core */
+
 
 /** Name. */
 export const name = 'core';
@@ -13,6 +15,8 @@ import _client from './client.js';
 
 import _canvas from './canvas.js';
 
+import {_Core} from './interfaces.js';
+
 import {_Canvas} from './canvas.js';
 
 import _user from './user.js';
@@ -25,6 +29,7 @@ import Particles from './particles.js'; // (unfinished) To be built into applica
 
 window.SJSParticleController = Particles; // Temporary for snowflakes
 
+
 const date = new Date();
 
 /**
@@ -34,8 +39,7 @@ const date = new Date();
 *
 */
 
- class _core {
-
+ class _core extends _Core {
 
     get version(){
 
@@ -49,10 +53,21 @@ const date = new Date();
 
     }
 
-  /** Builds the core modules of the Application.
-   */
+    get fps() {
+
+    //    return this._fps;
+        return Application.getFps();
+
+    }
+
+
+    /** Builds the core modules of the Application. */
 
     constructor(){
+
+        super();
+
+        setInterval(()=>{console.log(this.getFps())},200);
 
         this.time = 0;
 
@@ -77,6 +92,7 @@ const date = new Date();
 
     Init(name, w, h){
 
+        console.log(this)
        var self = this;
 
        //Build client from prototype
@@ -136,15 +152,18 @@ const date = new Date();
 
     OnLoad(self){
 
+        //console.log(this)
         self.Init("",480,320);
 
     }
 
     OnApplicationLoad(evt){
 
+        //console.log(evt)
        //Run .OnLoad
        evt.target.app.OnLoad(evt.target.app);
 
+                               //console.log(this)
        console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
 
     }

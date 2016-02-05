@@ -70,6 +70,7 @@ export default class _controller {
             tempReferenceId = (tempReference.id);
 
             ///Temporary Fix for Safari and IE
+            //      document
 
             listReference = this.controller.list(tempReferenceId);
 
@@ -83,6 +84,7 @@ export default class _controller {
 
                 listReference = this.controller.list(tempReferenceId);
 
+                /// New for After Loaded
                 this.statistics.monitor(() => {
 
                     this.name = "loadtime";
@@ -137,7 +139,13 @@ export default class _controller {
 
     initListeners(temp){
 
-        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+        if (document.readyState == "complete" || document.readyState == "loaded") {
+             // document is already ready to go
+
+             console.log('ready')
+        }
+
+            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
         return temp;
     }

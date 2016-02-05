@@ -29,18 +29,6 @@ Interface
 
 }
 
- class _Core extends _Interface {
-
-    /**  @type {Method} */
-
-    constructor() {
-
-        super();
-
-    };
-
-}
-
 /*
 
 
@@ -139,6 +127,21 @@ Interface
         this.visuals = appReference.client.visuals;
 
         this.graphics = appReference.client.graphics;
+
+    };
+
+}
+
+
+class _Core extends _Interface {
+
+    /**  @type {Number} */
+
+    static _fps = _number;
+
+    constructor() {
+
+        super();
 
     };
 
@@ -325,4 +328,4 @@ class _Build {
 
 }
 
-export {_Vector,_SJSClass, _Log, _Loop, _Compile, _App, _Build};
+export {_Vector,_SJSClass, _Log, _Loop, _Compile, _App, _Build, _Core};

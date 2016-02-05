@@ -5470,6 +5470,7 @@
 	                tempReferenceId = tempReference.id;
 
 	                ///Temporary Fix for Safari and IE
+	                //      document
 
 	                listReference = _this.controller.list(tempReferenceId);
 
@@ -5482,6 +5483,7 @@
 
 	                listReference = _this.controller.list(tempReferenceId);
 
+	                /// New for After Loaded
 	                _this.statistics.monitor(function () {
 
 	                    _this.name = "loadtime";
@@ -5532,6 +5534,12 @@
 	    }, {
 	        key: 'initListeners',
 	        value: function initListeners(temp) {
+
+	            if (document.readyState == "complete" || document.readyState == "loaded") {
+	                // document is already ready to go
+
+	                console.log('ready');
+	            }
 
 	            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
@@ -6148,20 +6156,6 @@
 	    _classCallCheck(this, _Interface);
 	};
 
-	var _Core = function (_Interface2) {
-	    _inherits(_Core, _Interface2);
-
-	    /**  @type {Method} */
-
-	    function _Core() {
-	        _classCallCheck(this, _Core);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
-	    }
-
-	    return _Core;
-	}(_Interface);
-
 	/*
 
 
@@ -6177,8 +6171,8 @@
 	* @private
 	*/
 
-	var _Vector = function (_Interface3) {
-	    _inherits(_Vector, _Interface3);
+	var _Vector = function (_Interface2) {
+	    _inherits(_Vector, _Interface2);
 
 	    /**
 	    * This is the constructor for the vector
@@ -6193,11 +6187,11 @@
 	    function _Vector(x, y) {
 	        _classCallCheck(this, _Vector);
 
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
 
-	        _this2.position = { x: x, y: y };
+	        _this.position = { x: x, y: y };
 
-	        return _this2;
+	        return _this;
 	    }
 
 	    /**  @type {Method} */
@@ -6222,8 +6216,8 @@
 	_Vector.multiply = _method;
 	_Vector.offset = _method;
 
-	var _SJSClass = function (_Interface4) {
-	    _inherits(_SJSClass, _Interface4);
+	var _SJSClass = function (_Interface3) {
+	    _inherits(_SJSClass, _Interface3);
 
 	    /**
 	    * This is the constructor for the vector
@@ -6235,7 +6229,7 @@
 	    function _SJSClass(app) {
 	        _classCallCheck(this, _SJSClass);
 
-	        var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
+	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(_SJSClass).call(this));
 
 	        var appReference = app;
 
@@ -6243,16 +6237,16 @@
 
 	            appReference = SJS.controller.list();
 
-	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this3);
+	            console.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this2);
 	        }
 
-	        _this3.app = appReference;
+	        _this2.app = appReference;
 
-	        _this3.visuals = appReference.client.visuals;
+	        _this2.visuals = appReference.client.visuals;
 
-	        _this3.graphics = appReference.client.graphics;
+	        _this2.graphics = appReference.client.graphics;
 
-	        return _this3;
+	        return _this2;
 	    }
 
 	    /**  @type {Vector} */
@@ -6260,6 +6254,24 @@
 	    /**  @type {Number} */
 
 	    return _SJSClass;
+	}(_Interface);
+
+	_SJSClass.app = _object;
+	_SJSClass.visuals = _object;
+	_SJSClass.graphics = _object;
+
+	var _Core = function (_Interface4) {
+	    _inherits(_Core, _Interface4);
+
+	    function _Core() {
+	        _classCallCheck(this, _Core);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+	    }
+
+	    /**  @type {Number} */
+
+	    return _Core;
 	}(_Interface);
 
 	/*
@@ -6277,9 +6289,7 @@
 	* @protected
 	*/
 
-	_SJSClass.app = _object;
-	_SJSClass.visuals = _object;
-	_SJSClass.graphics = _object;
+	_Core._fps = _number;
 
 	var _Log = function () {
 	    _createClass(_Log, null, [{
@@ -6462,12 +6472,17 @@
 	exports._Compile = _Compile;
 	exports._App = _App;
 	exports._Build = _Build;
+	exports._Core = _Core;
 
 /***/ },
 /* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	"strict mode";
+	/** @module core */
+
+	/** Name. */
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
@@ -6498,6 +6513,8 @@
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
 
+	var _interfaces = __webpack_require__(196);
+
 	var _user2 = __webpack_require__(209);
 
 	var _user3 = _interopRequireDefault(_user2);
@@ -6518,9 +6535,10 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	/** @module core */
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	/** Name. */
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var name = exports.name = 'core'; // (unfinished) To be built into application (to override current)
 
 	// (unfinished) To be built into application
@@ -6536,7 +6554,9 @@
 	*
 	*/
 
-	var _core = function () {
+	var _core = function (_Core2) {
+	    _inherits(_core, _Core2);
+
 	    _createClass(_core, [{
 	        key: 'version',
 	        get: function get() {
@@ -6547,41 +6567,56 @@
 
 	            this.constructor.VN = val;
 	        }
+	    }, {
+	        key: 'fps',
+	        get: function get() {
 
-	        /** Builds the core modules of the Application.
-	         */
+	            //    return this._fps;
+	            return Application.getFps();
+	        }
+
+	        /** Builds the core modules of the Application. */
 
 	    }]);
 
 	    function _core() {
 	        _classCallCheck(this, _core);
 
-	        this.time = 0;
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
 
-	        this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	        setInterval(function () {
+	            console.log(_this.getFps());
+	        }, 200);
+
+	        _this.time = 0;
+
+	        _this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
 	                return true;
 	            } };
 
-	        this.options = _options3.default;
+	        _this.options = _options3.default;
 
-	        this.user = _user3.default;
+	        _this.user = _user3.default;
 
-	        this.ext = _ext3.default;
+	        _this.ext = _ext3.default;
 
-	        this.input = _input3.default;
+	        _this.input = _input3.default;
 
-	        this.canvas = _canvas3.default;
+	        _this.canvas = _canvas3.default;
 
-	        this.client = _client3.default;
+	        _this.client = _client3.default;
 
-	        this.math = new _math3.default();
+	        _this.math = new _math3.default();
+
+	        return _this;
 	    }
 
 	    _createClass(_core, [{
 	        key: 'Init',
 	        value: function Init(name, w, h) {
-	            var _this = this;
+	            var _this2 = this;
 
+	            console.log(this);
 	            var self = this;
 
 	            //Build client from prototype
@@ -6608,7 +6643,7 @@
 	                        self.client.loopData();
 	                    }
 
-	                    _this.client.initalize(AppLoop, AppLoopData, _this.scale);
+	                    _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
 	                }, this.time);
 	            } else {
 
@@ -6634,15 +6669,18 @@
 	        key: 'OnLoad',
 	        value: function OnLoad(self) {
 
+	            //console.log(this)
 	            self.Init("", 480, 320);
 	        }
 	    }, {
 	        key: 'OnApplicationLoad',
 	        value: function OnApplicationLoad(evt) {
 
+	            //console.log(evt)
 	            //Run .OnLoad
 	            evt.target.app.OnLoad(evt.target.app);
 
+	            //console.log(this)
 	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
 	        }
 	    }, {
@@ -6817,7 +6855,7 @@
 	    }]);
 
 	    return _core;
-	}();
+	}(_interfaces._Core);
 
 	exports.default = _core;
 
