@@ -6143,18 +6143,51 @@
 	var _array = [];
 
 	/**
+	_private
+	* @private
+	*/
+
+	var _Interface_private = new WeakMap();
+
+	/**
 	Interface
 	* @interface
 	* @private
 	*/
 
-	var _Interface =
+	var _Interface = function () {
 
-	/**  @type {Method} */
+	    /**  @type {Constructor} */
 
-	function _Interface() {
-	    _classCallCheck(this, _Interface);
-	};
+	    function _Interface() {
+	        _classCallCheck(this, _Interface);
+
+	        _Interface_private.set(this, this.constructor.properties);
+	    }
+
+	    /**  @type {Multi} */
+
+	    /**  @type {Object} */
+
+	    _createClass(_Interface, [{
+	        key: 'get',
+	        value: function get(value) {
+
+	            return _Interface_private.get(this)[value];
+	        }
+
+	        /**  @type {String} */
+
+	    }, {
+	        key: 'name',
+	        get: function get() {
+
+	            return _Interface_private.get(this).name;
+	        }
+	    }]);
+
+	    return _Interface;
+	}();
 
 	/*
 
@@ -6170,6 +6203,8 @@
 	* @interface
 	* @private
 	*/
+
+	_Interface.properties = { name: 'interface' };
 
 	var _Vector = function (_Interface2) {
 	    _inherits(_Vector, _Interface2);
@@ -6202,6 +6237,14 @@
 
 	    return _Vector;
 	}(_Interface);
+
+	/*
+
+
+
+
+
+	*/
 
 	/**
 	* SJSClass
@@ -6274,6 +6317,71 @@
 	    return _Core;
 	}(_Interface);
 
+	/*  Extends SJSClass
+
+
+
+
+
+	*/
+
+	/**
+	* Document
+	* @constant
+	* @private
+	*/
+
+	_Core._fps = _number;
+	var doc = function doc() {
+
+	    return document;
+	};
+
+	/**
+	* Canvas Controller
+	* @module
+	* @interface
+	* @private
+	*/
+
+	var _Canvas = function (_SJSClass2) {
+	    _inherits(_Canvas, _SJSClass2);
+
+	    /**  @type {Object}
+	    /*     @private */
+
+	    // static _doc = this::doc();
+	    ////    static  _doc = this::doc();
+
+	    /**  @type {Element}
+	    /*     @private */
+
+	    //     static _head = document.getElementsByTagName('head')[0];
+
+	    /**  @type {Element}
+	    /*     @private */
+
+	    //     static _rendering_style = document.createElement('style');
+
+	    /**  @type {Element}
+	    /*     @private */
+
+	    //     static canvasList = document.getElementsByTagName('canvas');
+
+	    /**
+	    * This is the constructor for the canvas controller
+	    * @param {Object} app[ - instance of spicejs]
+	    */
+
+	    function _Canvas(app) {
+	        _classCallCheck(this, _Canvas);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Canvas).call(this, app));
+	    }
+
+	    return _Canvas;
+	}(_SJSClass);
+
 	/*
 
 
@@ -6288,8 +6396,6 @@
 	* @interface
 	* @protected
 	*/
-
-	_Core._fps = _number;
 
 	var _Log = function () {
 	    _createClass(_Log, null, [{
@@ -6470,6 +6576,7 @@
 	exports._Log = _Log;
 	exports._Loop = _Loop;
 	exports._Compile = _Compile;
+	exports._Canvas = _Canvas;
 	exports._App = _App;
 	exports._Build = _Build;
 	exports._Core = _Core;
@@ -6509,11 +6616,11 @@
 
 	var _client3 = _interopRequireDefault(_client2);
 
+	var _interfaces = __webpack_require__(196);
+
 	var _canvas2 = __webpack_require__(208);
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
-
-	var _interfaces = __webpack_require__(196);
 
 	var _user2 = __webpack_require__(209);
 
@@ -6582,11 +6689,9 @@
 	    function _core() {
 	        _classCallCheck(this, _core);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
+	        //setInterval(()=>{console.log(this.getFps())},200);
 
-	        setInterval(function () {
-	            console.log(_this.getFps());
-	        }, 200);
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
 
 	        _this.time = 0;
 
@@ -6616,18 +6721,17 @@
 	        value: function Init(name, w, h) {
 	            var _this2 = this;
 
-	            console.log(this);
+	            //console.log(this);
 	            var self = this;
 
 	            //Build client from prototype
 	            this.client = this.Construct(this.client.prototype, this.client.constructor);
 
 	            //Build canvas from prototype
-	            (this.canvas = this.Construct(this.canvas.prototype, this.canvas.constructor)).init();
+	            this.canvas = new _canvas3.default(this);
 
 	            console.log(this.canvas);
 
-	            console.log(window.t = new _canvas2._Canvas(this));
 	            //Use arrow function if available
 	            var usearrow = true;
 
@@ -6880,6 +6984,14 @@
 	        images: "images/",
 	        url: ""
 	    },
+
+	    target: {
+
+	        canvas: null, // String - Id of the main canvas
+	        buffer: null, // String - Id of the buffer canvas
+	        blitter: null },
+
+	    // String - Id of the blitting canvas
 
 	    canvas: {
 	        override: false, //Toggle the use of options.canvas
@@ -7725,6 +7837,9 @@
 	    _createClass(Vector, [{
 	        key: 'multiply',
 
+	        //equals(p) { return this.#x === p.#x && this.#y === p.#y }
+
+	        //toString() { return `Point<${ this.#x },${ this.#y }>` }
 	        /**
 	        * Multiply vector position
 	        * @method
@@ -9091,10 +9206,10 @@
 	                if (this.difference.x + this.difference.y == 0) return false;
 
 	                //Reassign width and height
-	                app.app.canvas.getCanvas().width = this.last.w = app.width;
-	                app.app.canvas.getCanvas().height = this.last.h = app.height;
-	                app.app.canvas.getBuffer().width = this.last.w = app.width;
-	                app.app.canvas.getBuffer().height = this.last.h = app.height;
+	                app.app.canvas.canvas.width = this.last.w = app.width;
+	                app.app.canvas.canvas.height = this.last.h = app.height;
+	                app.app.canvas.buffer.width = this.last.w = app.width;
+	                app.app.canvas.buffer.height = this.last.h = app.height;
 
 	                return true;
 	            },
@@ -11084,11 +11199,11 @@
 
 	                    this.scale = this.app.scale;
 
-	                    this.canvas = this.app.canvas.getCanvas();
+	                    this.canvas = this.app.canvas.canvas;
 
-	                    this.buffer = this.app.canvas.getBuffer();
+	                    this.buffer = this.app.canvas.buffer;
 
-	                    this.blitter = this.app.canvas.getBlitter();
+	                    this.blitter = this.app.canvas.blitter;
 
 	                    var attribs = { alpha: true };
 
@@ -11141,7 +11256,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports._Canvas = undefined;
 
 	var _interfaces = __webpack_require__(196);
 
@@ -11151,202 +11265,204 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	exports.default = {
+	var _private = new WeakMap();
 
-	    prototype: {
+	/**
+	* Initalizes canvas elements or attaches to existing elements at options.target.canvas
+	* @protected
+	* @module
+	*
+	*/
 
-	        //Cache canvas vars
-	        canvas: {},
-	        buffer: {},
-	        blitter: {},
-	        head: document.getElementsByTagName('head')[0],
-	        rendering_style: document.createElement('style'),
-	        canvasList: document.getElementsByTagName('canvas'),
-	        doc: document,
+	var Canvas = function (_Canvas2) {
+	    _inherits(Canvas, _Canvas2);
 
-	        //Gets
+	    _createClass(Canvas, [{
+	        key: 'style',
+	        value: function style() {
 
-	        getBlitter: function getBlitter() {
-	            return this.blitter;
-	        },
-	        getCanvas: function getCanvas() {
-	            return this.canvas;
-	        },
+	            this.canvas.style.position = this.app.options.canvas.position.position;
 
-	        getBuffer: function getBuffer() {
-	            return this.buffer;
-	        },
-
-	        setBlitter: function setBlitter(c) {
-	            this.blitter = c;
-	        },
-	        setCanvas: function setCanvas(c) {
-	            this.canvas = c;
-	        },
-
-	        setBuffer: function setBuffer(b) {
-	            this.buffer = b;
-	        },
-
-	        setBackground: function setBackground(value) {
-
-	            if (this.app.options.canvas.buffer) this.buffer.style.background = value;
-
-	            this.app.options.canvas.background = this.canvas.style.background = value;
-	        },
-
-	        getBackground: function getBackground() {
-
-	            return this.buffer.style.background;
-	        },
-
-	        createCanvas: function createCanvas() {
-
-	            var c = this.doc.createElement("canvas");
-
-	            c.id = this.app.options.canvas.name;
-
-	            this.doc.body.appendChild(c);
-
-	            return this.doc.getElementById(this.app.options.canvas.name);
-	        },
-
-	        createBuffer: function createBuffer() {
-
-	            var c = this.doc.createElement("canvas");
-
-	            c.id = this.app.options.canvas.buffername;
-
-	            this.doc.body.appendChild(c);
-
-	            return this.doc.getElementById(this.app.options.canvas.buffername);
-	        },
-
-	        createBlitter: function createBlitter() {
-
-	            var c = this.doc.createElement("canvas");
-
-	            c.id = 'blitter';
-
-	            this.doc.body.appendChild(c);
-
-	            return this.doc.getElementById('blitter');
-	        },
-
-	        //Style canvas
-
-	        styleCanvas: function styleCanvas() {
-
-	            this.getCanvas().style.position = this.app.options.canvas.position.position;
-
-	            this.getCanvas().style.zIndex = this.app.options.canvas.position.z;
+	            this.canvas.style.zIndex = this.app.options.canvas.position.z;
 
 	            if (this.app.options.canvas.buffer) {
-	                this.getBuffer().style.position = this.app.options.canvas.position.position;
+	                this.buffer.style.position = this.app.options.canvas.position.position;
 
-	                this.getBuffer().style.zIndex = this.app.options.canvas.position.z - 1;
+	                this.buffer.style.zIndex = this.app.options.canvas.position.z - 1;
 	            }
 
 	            if (this.app.options.canvas.override) {
 
-	                this.getCanvas().style.left = this.app.options.canvas.position.left + "px";
+	                this.canvas.style.left = this.app.options.canvas.position.left + "px";
 
-	                this.getCanvas().style.top = this.app.options.canvas.position.top + "px";
+	                this.canvas.style.top = this.app.options.canvas.position.top + "px";
 
 	                if (this.app.options.canvas.buffer) {
-	                    this.getBuffer().style.left = this.app.options.canvas.position.left + "px";
+	                    this.buffer.style.left = this.app.options.canvas.position.left + "px";
 
-	                    this.getBuffer().style.top = this.app.options.canvas.position.top + "px";
+	                    this.buffer.style.top = this.app.options.canvas.position.top + "px";
 	                }
 	            }
 	        }
+	    }, {
+	        key: 'construct_canvas',
+	        value: function construct_canvas(id) {
 
-	    },
-	    constructor: function constructor(app) {
-	        return {
-	            app: { value: app },
-	            init: { writable: false, configurable: false, enumerable: false, value: function value() {
-	                    var getcanvas = document.getElementById(this.app.options.canvas.name);
+	            var c = this.doc.createElement("canvas");
 
-	                    if (getcanvas) {
-	                        this.setCanvas(getcanvas);
-	                        if (app.options.canvas.buffer) {
-	                            var getbuffer = document.getElementById(this.app.options.canvas.buffername);
-	                            if (getbuffer) this.setBuffer(getbuffer);else {
-	                                this.createBuffer();
-	                            }
-	                        }
-	                    } else {
-	                        this.setCanvas(this.createCanvas());
-	                        if (this.app.options.canvas.buffer) this.setBuffer(this.createBuffer());
-	                    }
-	                    this.setBlitter(this.createBlitter());
-	                    this.styleCanvas();
-	                    this.rendering_style.innerHTML = this.rendering_style.innerText = '@-ms-viewport {width:100%;height:100%;} #Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
-	                    this.head.appendChild(this.rendering_style);
-	                }
-	            }
-	        };
-	    }
-	};
+	            var c_id = id + "_" + this.app.id;
 
-	var _Canvas = exports._Canvas = function (_SJSClass) {
-	    _inherits(_Canvas, _SJSClass);
+	            c.id = c_id;
 
-	    _createClass(_Canvas, [{
+	            this.doc.body.appendChild(c);
+
+	            return this.doc.getElementById(c_id);
+	        }
+	    }, {
 	        key: 'doc',
+
+	        /**
+	        * Get document element
+	        * @type {Element}
+	        * @protected
+	        */
+
 	        get: function get() {
 
-	            return this._doc;
+	            return this.get('docs');
+	        }
+
+	        /**
+	        * Get header element
+	        * @type {Element}
+	        * @protected
+	        */
+
+	        /**
+	        * Set documents private variables
+	        * @type {Object}
+	        * @private
+	        */
+
+	    }, {
+	        key: 'head',
+	        get: function get() {
+
+	            return this.get('head');
+	        }
+
+	        /**
+	        * Get gendering element
+	        * @type {Element}
+	        * @protected
+	        */
+
+	    }, {
+	        key: 'rendering_style',
+	        get: function get() {
+
+	            return this.get('_rendering_style');
+	        }
+
+	        /**
+	        * Set rendering element styles
+	        * @type {Element}
+	        * @param {CSS}
+	        * @protected
+	        */
+
+	        ,
+	        set: function set(style) {
+
+	            var customstyle = style;
+	            var viewport = '@-ms-viewport {width:100%;height:100%;}';
+	            var img_rendering = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+
+	            var rendering = this.get('_rendering_style');
+	            rendering.innerHTML = rendering.innerText = viewport + img_rendering + customstyle;
 	        }
 	    }, {
 	        key: 'canvas',
 	        get: function get() {
 
 	            return this._canvas;
+	        },
+	        set: function set(canvas) {
+
+	            this._canvas = canvas;
 	        }
 	    }, {
 	        key: 'buffer',
 	        get: function get() {
 
 	            return this._buffer;
+	        },
+	        set: function set(canvas) {
+
+	            this._buffer = canvas;
 	        }
 	    }, {
 	        key: 'blitter',
 	        get: function get() {
 
 	            return this._blitter;
+	        },
+	        set: function set(canvas) {
+
+	            this._blitter = canvas;
 	        }
 	    }]);
 
-	    function _Canvas(app) {
-	        _classCallCheck(this, _Canvas);
+	    function Canvas(app) {
+	        _classCallCheck(this, Canvas);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Canvas).call(this, app));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
 
-	        _this.tim = '';
-	        /*
-	                this.canvas;
-	                this.buffer;
-	                this.blitter;
-	                this.doc = document;
-	        
-	                this.head = this.doc.getElementsByTagName('head');
-	                this.rendering_style = this.doc.createElement('style');
-	                this.canvasList  = this.doc.getElementsByTagName('canvas');
-	        
-	        
-	                */
+	        _private.set(_this, _this.constructor.properties);
+
+	        //Change property assignment
+	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
+
+	        //Change property assignment
+	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
+
+	        if (temp_canvas) {
+
+	            _this.canvas = temp_canvas;
+
+	            if (temp_buffer) {
+
+	                _this.buffer = temp_buffer;
+	            }
+	        } else {
+
+	            _this.canvas = _this.construct_canvas(_this.app.options.canvas.name);
+
+	            if (_this.app.options.canvas.buffer) _this.buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
+	        }
+
+	        _this.blitter = _this.construct_canvas('blitter');
+
+	        _this.style();
+
+	        _this.rendering_style = _this.app.options.canvas.style;
+
+	        _this.head.appendChild(_this.rendering_style);
+
 	        return _this;
 	    }
 
-	    return _Canvas;
-	}(_interfaces._SJSClass);
+	    return Canvas;
+	}(_interfaces._Canvas);
 
-	_Canvas._doc = document;
-	_Canvas.head = document.getElementsByTagName('head')[0];
-	_Canvas.rendering_style = document.createElement('style');
-	_Canvas.canvasList = document.getElementsByTagName('canvas');
+	Canvas.properties = {
+	    name: 'canvas',
+	    canvas: null,
+	    docs: document,
+	    head: document.getElementsByTagName('head')[0],
+	    _rendering_style: document.createElement('style')
+	};
+	exports.default = Canvas;
 	;
 
 /***/ },
@@ -11785,11 +11901,12 @@
 
 	                    this.current = cursor;
 
-	                    if (this.app.options.canvas.buffer) this.app.canvas.getBuffer().style.cursor = this.current;
-	                    this.app.canvas.getCanvas().style.cursor = this.current;
-
-	                    document.body.style.cursor = this.current;
-
+	                    /*
+	                    if (this.app.options.target.buffer)
+	                        this.app.canvas.buffer.style.cursor=this.current;
+	                        this.app.canvas.canvas.style.cursor=this.current;
+	                     document.body.style.cursor=this.current;
+	                    */
 	                    this.changed = true;
 	                    this.count++;
 	                }

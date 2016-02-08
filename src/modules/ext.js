@@ -345,12 +345,13 @@ export default {
 
                     this.current = cursor;
 
-                    if (this.app.options.canvas.buffer)
-                        this.app.canvas.getBuffer().style.cursor=this.current;
-                        this.app.canvas.getCanvas().style.cursor=this.current;
+                    /*
+                    if (this.app.options.target.buffer)
+                        this.app.canvas.buffer.style.cursor=this.current;
+                        this.app.canvas.canvas.style.cursor=this.current;
 
                     document.body.style.cursor=this.current;
-
+                    */
                     this.changed = true;
                     this.count++;
                 },

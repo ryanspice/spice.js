@@ -16,16 +16,47 @@ const _method = function(){};
 const _array = [];
 
 /**
+_private
+* @private
+*/
+
+let _Interface_private = new WeakMap();
+
+/**
 Interface
 * @interface
 * @private
 */
 
- class _Interface {
+class _Interface {
 
-    /**  @type {Method} */
+    /**  @type {Object} */
 
-    constructor() {};
+    static properties = { name:'interface'  };
+
+    /**  @type {Constructor} */
+
+    constructor() {
+
+        _Interface_private.set(this,this.constructor.properties);
+
+    }
+
+    /**  @type {Multi} */
+
+    get(value) {
+
+        return _Interface_private.get(this)[value];
+
+    }
+
+    /**  @type {String} */
+
+    get name() {
+
+        return _Interface_private.get(this).name;
+
+    }
 
 }
 
@@ -81,6 +112,14 @@ Interface
     };
 
 }
+
+/*
+
+
+
+
+
+*/
 
 /**
 * SJSClass
@@ -142,6 +181,69 @@ class _Core extends _Interface {
     constructor() {
 
         super();
+
+    };
+
+}
+
+/*  Extends SJSClass
+
+
+
+
+
+*/
+
+/**
+* Document
+* @constant
+* @private
+*/
+
+const doc = function doc(){
+
+    return document;
+
+}
+
+/**
+* Canvas Controller
+* @module
+* @interface
+* @private
+*/
+
+ class _Canvas extends _SJSClass {
+
+     /**  @type {Object}
+     /*     @private */
+
+    // static _doc = this::doc();
+////    static  _doc = this::doc();
+
+     /**  @type {Element}
+     /*     @private */
+
+//     static _head = document.getElementsByTagName('head')[0];
+
+     /**  @type {Element}
+     /*     @private */
+
+//     static _rendering_style = document.createElement('style');
+
+     /**  @type {Element}
+     /*     @private */
+
+//     static canvasList = document.getElementsByTagName('canvas');
+
+    /**
+    * This is the constructor for the canvas controller
+    * @param {Object} app[ - instance of spicejs]
+    */
+
+    constructor(app) {
+        super(app);
+
 
     };
 
@@ -328,4 +430,4 @@ class _Build {
 
 }
 
-export {_Vector,_SJSClass, _Log, _Loop, _Compile, _App, _Build, _Core};
+export {_Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas, _App, _Build, _Core};

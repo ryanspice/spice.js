@@ -1516,11 +1516,11 @@ visuals = {
 
                 this.scale = this.app.scale;
 
-                this.canvas = this.app.canvas.getCanvas();
+                this.canvas = this.app.canvas.canvas;
 
-                this.buffer = this.app.canvas.getBuffer();
+                this.buffer = this.app.canvas.buffer;
 
-                this.blitter = this.app.canvas.getBlitter();
+                this.blitter = this.app.canvas.blitter;
 
                 let attribs = {alpha:true};
 

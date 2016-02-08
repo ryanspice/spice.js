@@ -10,6 +10,14 @@ export default {
         url:""
     },
 
+    target:{
+
+        canvas:null,    // String - Id of the main canvas
+        buffer:null,     // String - Id of the buffer canvas
+        blitter:null,     // String - Id of the blitting canvas
+
+    },
+
     canvas:{
         override:false,			//Toggle the use of options.canvas
         name:'canvas',			//Use canvas.name

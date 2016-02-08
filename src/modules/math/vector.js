@@ -9,6 +9,9 @@ import {_Vector} from '../interfaces.js';
 
 export default class Vector extends _Vector {
 
+    //equals(p) { return this.#x === p.#x && this.#y === p.#y }
+
+    //toString() { return `Point<${ this.#x },${ this.#y }>` }
     /**
     * Multiply vector position
     * @method

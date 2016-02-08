@@ -172,10 +172,10 @@ export default {
                     return false;
 
                 //Reassign width and height
-                app.app.canvas.getCanvas().width  = this.last.w = app.width;
-                app.app.canvas.getCanvas().height = this.last.h = app.height;
-                app.app.canvas.getBuffer().width  = this.last.w = app.width;
-                app.app.canvas.getBuffer().height = this.last.h = app.height;
+                app.app.canvas.canvas.width  = this.last.w = app.width;
+                app.app.canvas.canvas.height = this.last.h = app.height;
+                app.app.canvas.buffer.width  = this.last.w = app.width;
+                app.app.canvas.buffer.height = this.last.h = app.height;
 
                 return true;
             },

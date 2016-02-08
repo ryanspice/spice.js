@@ -13,11 +13,9 @@ import _math from './math/math.js';
 
 import _client from './client.js';
 
-import _canvas from './canvas.js';
-
 import {_Core} from './interfaces.js';
 
-import {_Canvas} from './canvas.js';
+import _canvas from './canvas.js';
 
 import _user from './user.js';
 
@@ -67,7 +65,7 @@ const date = new Date();
 
         super();
 
-        setInterval(()=>{console.log(this.getFps())},200);
+        //setInterval(()=>{console.log(this.getFps())},200);
 
         this.time = 0;
 
@@ -92,18 +90,17 @@ const date = new Date();
 
     Init(name, w, h){
 
-        console.log(this)
+        //console.log(this);
        var self = this;
 
        //Build client from prototype
        this.client = this.Construct(this.client.prototype,this.client.constructor);
 
        //Build canvas from prototype
-       (this.canvas = this.Construct(this.canvas.prototype,this.canvas.constructor)).init();
+       this.canvas =  new _canvas(this);
 
-       console.log(this.canvas)
+       console.log(this.canvas);
 
-       console.log(window.t = new _Canvas(this))
        //Use arrow function if available
        var usearrow = true;
 
