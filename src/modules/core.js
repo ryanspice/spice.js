@@ -99,8 +99,6 @@ const date = new Date();
        //Build canvas from prototype
        this.canvas =  new _canvas(this);
 
-       console.log(this.canvas);
-
        //Use arrow function if available
        var usearrow = true;
 
@@ -160,13 +158,16 @@ const date = new Date();
        //Run .OnLoad
        evt.target.app.OnLoad(evt.target.app);
 
-                               //console.log(this)
        console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
 
     }
 
     Listener(obj, evt, listener, param){
 
+        if (typeof obj[0] === "object")
+            obj = obj[0] || window;
+
+//                    console.log(obj);
         //If addEventListener exist, add it, otherwise attachEvent
         if (obj.addEventListener)
             obj.addEventListener(evt, listener, false);

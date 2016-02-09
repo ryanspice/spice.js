@@ -1512,15 +1512,17 @@ visuals = {
         app:{value:app},
         init:{value:function(){
 
+                let canvas = this.app.canvas;
+
                 window.utils.requestAnimationFrame(name,0,0);
 
                 this.scale = this.app.scale;
 
-                this.canvas = this.app.canvas.canvas;
+                this.canvas = canvas.canvas;
 
-                this.buffer = this.app.canvas.buffer;
+                this.buffer = canvas.buffer;
 
-                this.blitter = this.app.canvas.blitter;
+                this.blitter = canvas.blitter;
 
                 let attribs = {alpha:true};
 

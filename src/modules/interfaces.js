@@ -32,7 +32,7 @@ class _Interface {
 
     /**  @type {Object} */
 
-    static properties = { name:'interface'  };
+    static properties = { name:'interface'};
 
     /**  @type {Constructor} */
 
@@ -207,39 +207,144 @@ const doc = function doc(){
 }
 
 /**
-* Canvas Controller
+* Canvas Interface
 * @module
 * @interface
-* @private
+* @protected
 */
 
- class _Canvas extends _SJSClass {
-
-     /**  @type {Object}
-     /*     @private */
-
-    // static _doc = this::doc();
-////    static  _doc = this::doc();
-
-     /**  @type {Element}
-     /*     @private */
-
-//     static _head = document.getElementsByTagName('head')[0];
-
-     /**  @type {Element}
-     /*     @private */
-
-//     static _rendering_style = document.createElement('style');
-
-     /**  @type {Element}
-     /*     @private */
-
-//     static canvasList = document.getElementsByTagName('canvas');
+ class _Canvas_Core extends _SJSClass {
 
     /**
-    * This is the constructor for the canvas controller
-    * @param {Object} app[ - instance of spicejs]
+    * Get document element
+    * @type {Element}
+    * @protected
     */
+
+    get doc(){
+
+        return this.get('docs');
+
+    }
+
+    /**
+    * Get header element
+    * @type {Element}
+    * @protected
+    */
+
+    get head(){
+
+        return this.get('head');
+
+    }
+
+    /**
+    * Get gendering element
+    * @type {Element}
+    * @protected
+    */
+
+    get rendering_style(){
+
+        return this.get('_rendering_style');
+
+    }
+
+    /**
+    * Set rendering element styles
+    * @type {CSS}
+    * @protected
+    * @example
+    * var Style = "canvas { position:fixed; z-index:25; }"
+    * Application.canvas.rendering_style(Style)
+    */
+
+    set rendering_style(style){
+
+        let customstyle = style || "";
+        let viewport = '@-ms-viewport {width:100%;height:100%;}';
+        let img_rendering = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+
+        let rendering = this.get('_rendering_style');
+        rendering.innerHTML = rendering.innerText =  viewport + img_rendering + customstyle;
+
+    }
+
+    /**
+    * Get rendering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    get canvas() {
+
+        return this.get('canvas')[0];
+
+    }
+
+    /**
+    * Set rendering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    set canvas(canvas) {
+
+        this.get('canvas')[0] = canvas;
+
+    }
+
+    /**
+    * Get buffering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    get buffer(){
+
+        return this.get('canvas')[1];
+
+    }
+
+    /**
+    * Set buffering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    set buffer(canvas){
+
+        this.get('canvas')[1] = canvas;
+
+    }
+
+    /**
+    * Get blitting canvas
+    * @type {Element}
+    * @protected
+    */
+
+    get blitter(){
+
+        return this.get('canvas')[2];
+
+    }
+
+    /**
+    * Set blitting canvas
+    * @type {Element}
+    * @protected
+    */
+
+    set blitter(canvas){
+
+        this.get('canvas')[2] = canvas;
+     //this._blitter = canvas;
+
+    }
+
+
 
     constructor(app) {
         super(app);
@@ -430,4 +535,4 @@ class _Build {
 
 }
 
-export {_Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas, _App, _Build, _Core};
+export {_Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas_Core, _App, _Build, _Core};

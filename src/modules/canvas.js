@@ -1,151 +1,125 @@
 
-import {_Canvas} from './interfaces.js';
+import { _Canvas_Core } from './interfaces.js';
+
+/**
+* _private
+* @protected
+*/
 
 const _private = new WeakMap();
 
 /**
-* Initalizes canvas elements or attaches to existing elements at options.target.canvas
+* Initalizes canvas elements or attaches to existing elements at options.target.canvas. Handles creation of header and style elements.
 * @protected
 * @module
 *
 */
 
-export default class Canvas extends _Canvas {
+export default class Canvas extends _Canvas_Core {
 
     /**
     * Set documents private variables
     * @type {Object}
-    * @private
+    * @protected
     */
 
     static properties = {
         name:'canvas' ,
-        canvas:null,
+        canvas:[],
         docs:document,
         head:document.getElementsByTagName('head')[0],
         _rendering_style:document.createElement('style')
     };
 
     /**
-    * Get document element
-    * @type {Element}
-    * @protected
+    * This is the constructor for the canvas module.
+    * @param {number} x - position.x
+    * @param {number} y - position.y
     */
 
-    get doc(){
+    constructor(app) {
 
-        return this.get('docs');
+        super(app);
+
+        //Assign private properties
+        _private.set(this,this.constructor.properties);
+
+        //Cache canvases
+        let temp_canvas = document.getElementById(this.app.options.target.canvas);
+        let temp_buffer = document.getElementById(this.app.options.target.buffer);
+        let temp_blitter = document.getElementById(this.app.options.target.blitter);
+
+        //Check canvas variables
+        if (temp_canvas)    {
+
+            //    if (temp_buffer)
+            //        temp_buffer;
+
+        } else  {
+
+            temp_canvas = this.construct_canvas(this.app.options.canvas.name);
+
+            if (this.app.options.canvas.buffer)
+                temp_buffer = this.construct_canvas(this.app.options.canvas.buffername);
+
+        }
+
+        //Assign canvas elements
+        [this.canvas,this.buffer,this.blitter,this.rendering_style] = this.style(temp_canvas,temp_buffer,this.construct_canvas('blitter'),this.app.options.canvas.style);
+
+        this.head.appendChild(this.rendering_style);
+
+        return true;
 
     }
+
 
     /**
-    * Get header element
-    * @type {Element}
+    * Style provided canvases
+    * @type {null}
+    * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
     * @protected
     */
 
-    get head(){
+    style(temp_canvas,temp_buffer,temp_blitter) {
 
-        return this.get('head');
+        temp_canvas.style.position = this.app.options.canvas.position.position;
 
-    }
-
-    /**
-    * Get gendering element
-    * @type {Element}
-    * @protected
-    */
-
-    get rendering_style(){
-
-        return this.get('_rendering_style');
-
-    }
-
-    /**
-    * Set rendering element styles
-    * @type {Element}
-    * @param {CSS}
-    * @protected
-    */
-
-    set rendering_style(style){
-
-        let customstyle = style;
-        let viewport = '@-ms-viewport {width:100%;height:100%;}';
-        let img_rendering = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
-
-        let rendering = this.get('_rendering_style');
-        rendering.innerHTML = rendering.innerText =  viewport + img_rendering + customstyle;
-
-    }
-
-    get canvas() {
-
-        return this._canvas;
-
-    }
-
-    set canvas(canvas) {
-
-        this._canvas = canvas;
-
-    }
-
-    get buffer(){
-
-        return this._buffer;
-
-    }
-
-    set buffer(canvas){
-
-        this._buffer = canvas;
-
-    }
-
-    get blitter(){
-
-        return this._blitter;
-
-    }
-
-    set blitter(canvas){
-
-        this._blitter = canvas;
-
-    }
-
-    style() {
-
-        this.canvas.style.position = this.app.options.canvas.position.position;
-
-        this.canvas.style.zIndex = this.app.options.canvas.position.z;
+        temp_canvas.style.zIndex = this.app.options.canvas.position.z;
 
         if (this.app.options.canvas.buffer)
         {
-            this.buffer.style.position = this.app.options.canvas.position.position;
+            temp_buffer.style.position = this.app.options.canvas.position.position;
 
-            this.buffer.style.zIndex = this.app.options.canvas.position.z-1;
+            temp_buffer.style.zIndex = this.app.options.canvas.position.z-1;
         }
 
         if (this.app.options.canvas.override)
         {
 
-            this.canvas.style.left = this.app.options.canvas.position.left+"px";
+            temp_canvas.style.left = this.app.options.canvas.position.left+"px";
 
-            this.canvas.style.top = this.app.options.canvas.position.top+"px";
+            temp_canvas.style.top = this.app.options.canvas.position.top+"px";
 
             if (this.app.options.canvas.buffer)
             {
-                this.buffer.style.left = this.app.options.canvas.position.left+"px";
+                temp_buffer.style.left = this.app.options.canvas.position.left+"px";
 
-                this.buffer.style.top = this.app.options.canvas.position.top+"px";
+                temp_buffer.style.top = this.app.options.canvas.position.top+"px";
             }
 
         }
 
+        return [temp_canvas,temp_buffer,temp_blitter];
+
     }
+
+    /**
+    * Construct a canvas element.
+    * @type {Id}
+    * @param {Element} a - Creates a canvas element and attaches it to the body.
+    * @protected
+    */
 
     construct_canvas(id){
 
@@ -158,47 +132,6 @@ export default class Canvas extends _Canvas {
         this.doc.body.appendChild(c);
 
         return this.doc.getElementById(c_id);
-
-    }
-
-    constructor(app) {
-
-        super(app);
-
-        _private.set(this,this.constructor.properties);
-
-        //Change property assignment
-        let temp_canvas = document.getElementById(this.app.options.target.canvas);
-
-        //Change property assignment
-        let temp_buffer = document.getElementById(this.app.options.target.buffer);
-
-        if (temp_canvas)    {
-
-            this.canvas = temp_canvas;
-
-            if (temp_buffer) {
-
-                this.buffer  = temp_buffer;
-
-            }
-
-        } else  {
-
-            this.canvas = this.construct_canvas(this.app.options.canvas.name);
-
-            if (this.app.options.canvas.buffer)
-                this.buffer = this.construct_canvas(this.app.options.canvas.buffername);
-
-        }
-
-        this.blitter = this.construct_canvas('blitter');
-
-        this.style();
-
-        this.rendering_style = this.app.options.canvas.style;
-
-        this.head.appendChild(this.rendering_style);
 
     }
 

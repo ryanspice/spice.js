@@ -6338,48 +6338,159 @@
 	};
 
 	/**
-	* Canvas Controller
+	* Canvas Interface
 	* @module
 	* @interface
-	* @private
+	* @protected
 	*/
 
-	var _Canvas = function (_SJSClass2) {
-	    _inherits(_Canvas, _SJSClass2);
+	var _Canvas_Core = function (_SJSClass2) {
+	    _inherits(_Canvas_Core, _SJSClass2);
 
-	    /**  @type {Object}
-	    /*     @private */
+	    _createClass(_Canvas_Core, [{
+	        key: 'doc',
 
-	    // static _doc = this::doc();
-	    ////    static  _doc = this::doc();
+	        /**
+	        * Get document element
+	        * @type {Element}
+	        * @protected
+	        */
 
-	    /**  @type {Element}
-	    /*     @private */
+	        get: function get() {
 
-	    //     static _head = document.getElementsByTagName('head')[0];
+	            return this.get('docs');
+	        }
 
-	    /**  @type {Element}
-	    /*     @private */
+	        /**
+	        * Get header element
+	        * @type {Element}
+	        * @protected
+	        */
 
-	    //     static _rendering_style = document.createElement('style');
+	    }, {
+	        key: 'head',
+	        get: function get() {
 
-	    /**  @type {Element}
-	    /*     @private */
+	            return this.get('head');
+	        }
 
-	    //     static canvasList = document.getElementsByTagName('canvas');
+	        /**
+	        * Get gendering element
+	        * @type {Element}
+	        * @protected
+	        */
 
-	    /**
-	    * This is the constructor for the canvas controller
-	    * @param {Object} app[ - instance of spicejs]
-	    */
+	    }, {
+	        key: 'rendering_style',
+	        get: function get() {
 
-	    function _Canvas(app) {
-	        _classCallCheck(this, _Canvas);
+	            return this.get('_rendering_style');
+	        }
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Canvas).call(this, app));
+	        /**
+	        * Set rendering element styles
+	        * @type {CSS}
+	        * @protected
+	        * @example
+	        * var Style = "canvas { position:fixed; z-index:25; }"
+	        * Application.canvas.rendering_style(Style)
+	        */
+
+	        ,
+	        set: function set(style) {
+
+	            var customstyle = style || "";
+	            var viewport = '@-ms-viewport {width:100%;height:100%;}';
+	            var img_rendering = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+
+	            var rendering = this.get('_rendering_style');
+	            rendering.innerHTML = rendering.innerText = viewport + img_rendering + customstyle;
+	        }
+
+	        /**
+	        * Get rendering canvas
+	        * @type {Element}
+	        * @protected
+	        */
+
+	    }, {
+	        key: 'canvas',
+	        get: function get() {
+
+	            return this.get('canvas')[0];
+	        }
+
+	        /**
+	        * Set rendering canvas
+	        * @type {Element}
+	        * @protected
+	        */
+
+	        ,
+	        set: function set(canvas) {
+
+	            this.get('canvas')[0] = canvas;
+	        }
+
+	        /**
+	        * Get buffering canvas
+	        * @type {Element}
+	        * @protected
+	        */
+
+	    }, {
+	        key: 'buffer',
+	        get: function get() {
+
+	            return this.get('canvas')[1];
+	        }
+
+	        /**
+	        * Set buffering canvas
+	        * @type {Element}
+	        * @protected
+	        */
+
+	        ,
+	        set: function set(canvas) {
+
+	            this.get('canvas')[1] = canvas;
+	        }
+
+	        /**
+	        * Get blitting canvas
+	        * @type {Element}
+	        * @protected
+	        */
+
+	    }, {
+	        key: 'blitter',
+	        get: function get() {
+
+	            return this.get('canvas')[2];
+	        }
+
+	        /**
+	        * Set blitting canvas
+	        * @type {Element}
+	        * @protected
+	        */
+
+	        ,
+	        set: function set(canvas) {
+
+	            this.get('canvas')[2] = canvas;
+	            //this._blitter = canvas;
+	        }
+	    }]);
+
+	    function _Canvas_Core(app) {
+	        _classCallCheck(this, _Canvas_Core);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Canvas_Core).call(this, app));
 	    }
 
-	    return _Canvas;
+	    return _Canvas_Core;
 	}(_SJSClass);
 
 	/*
@@ -6576,7 +6687,7 @@
 	exports._Log = _Log;
 	exports._Loop = _Loop;
 	exports._Compile = _Compile;
-	exports._Canvas = _Canvas;
+	exports._Canvas_Core = _Canvas_Core;
 	exports._App = _App;
 	exports._Build = _Build;
 	exports._Core = _Core;
@@ -6730,8 +6841,6 @@
 	            //Build canvas from prototype
 	            this.canvas = new _canvas3.default(this);
 
-	            console.log(this.canvas);
-
 	            //Use arrow function if available
 	            var usearrow = true;
 
@@ -6784,13 +6893,15 @@
 	            //Run .OnLoad
 	            evt.target.app.OnLoad(evt.target.app);
 
-	            //console.log(this)
 	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
 	        }
 	    }, {
 	        key: 'Listener',
 	        value: function Listener(obj, evt, listener, param) {
 
+	            if (_typeof(obj[0]) === "object") obj = obj[0] || window;
+
+	            //                    console.log(obj);
 	            //If addEventListener exist, add it, otherwise attachEvent
 	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
 
@@ -11195,15 +11306,17 @@
 	            app: { value: app },
 	            init: { value: function value() {
 
+	                    var canvas = this.app.canvas;
+
 	                    window.utils.requestAnimationFrame(name, 0, 0);
 
 	                    this.scale = this.app.scale;
 
-	                    this.canvas = this.app.canvas.canvas;
+	                    this.canvas = canvas.canvas;
 
-	                    this.buffer = this.app.canvas.buffer;
+	                    this.buffer = canvas.buffer;
 
-	                    this.blitter = this.app.canvas.blitter;
+	                    this.blitter = canvas.blitter;
 
 	                    var attribs = { alpha: true };
 
@@ -11251,6 +11364,8 @@
 
 	'use strict';
 
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
@@ -11265,45 +11380,124 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	* _private
+	* @protected
+	*/
+
 	var _private = new WeakMap();
 
 	/**
-	* Initalizes canvas elements or attaches to existing elements at options.target.canvas
+	* Initalizes canvas elements or attaches to existing elements at options.target.canvas. Handles creation of header and style elements.
 	* @protected
 	* @module
 	*
 	*/
 
-	var Canvas = function (_Canvas2) {
-	    _inherits(Canvas, _Canvas2);
+	var Canvas = function (_Canvas_Core2) {
+	    _inherits(Canvas, _Canvas_Core2);
+
+	    /**
+	    * This is the constructor for the canvas module.
+	    * @param {number} x - position.x
+	    * @param {number} y - position.y
+	    */
+
+	    function Canvas(app) {
+	        var _ret;
+
+	        _classCallCheck(this, Canvas);
+
+	        //Assign private properties
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
+
+	        _private.set(_this, _this.constructor.properties);
+
+	        //Cache canvases
+	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
+	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
+	        var temp_blitter = document.getElementById(_this.app.options.target.blitter);
+
+	        //Check canvas variables
+	        if (temp_canvas) {
+
+	            //    if (temp_buffer)
+	            //        temp_buffer;
+
+	        } else {
+
+	                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
+
+	                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
+	            }
+
+	        //Assign canvas elements
+
+	        var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
+
+	        var _this$style2 = _slicedToArray(_this$style, 4);
+
+	        _this.canvas = _this$style2[0];
+	        _this.buffer = _this$style2[1];
+	        _this.blitter = _this$style2[2];
+	        _this.rendering_style = _this$style2[3];
+
+	        _this.head.appendChild(_this.rendering_style);
+
+	        return _ret = true, _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    /**
+	    * Style provided canvases
+	    * @type {null}
+	    * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
+	    * @protected
+	    */
+
+	    /**
+	    * Set documents private variables
+	    * @type {Object}
+	    * @protected
+	    */
 
 	    _createClass(Canvas, [{
 	        key: 'style',
-	        value: function style() {
+	        value: function style(temp_canvas, temp_buffer, temp_blitter) {
 
-	            this.canvas.style.position = this.app.options.canvas.position.position;
+	            temp_canvas.style.position = this.app.options.canvas.position.position;
 
-	            this.canvas.style.zIndex = this.app.options.canvas.position.z;
+	            temp_canvas.style.zIndex = this.app.options.canvas.position.z;
 
 	            if (this.app.options.canvas.buffer) {
-	                this.buffer.style.position = this.app.options.canvas.position.position;
+	                temp_buffer.style.position = this.app.options.canvas.position.position;
 
-	                this.buffer.style.zIndex = this.app.options.canvas.position.z - 1;
+	                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
 	            }
 
 	            if (this.app.options.canvas.override) {
 
-	                this.canvas.style.left = this.app.options.canvas.position.left + "px";
+	                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
 
-	                this.canvas.style.top = this.app.options.canvas.position.top + "px";
+	                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
 
 	                if (this.app.options.canvas.buffer) {
-	                    this.buffer.style.left = this.app.options.canvas.position.left + "px";
+	                    temp_buffer.style.left = this.app.options.canvas.position.left + "px";
 
-	                    this.buffer.style.top = this.app.options.canvas.position.top + "px";
+	                    temp_buffer.style.top = this.app.options.canvas.position.top + "px";
 	                }
 	            }
+
+	            return [temp_canvas, temp_buffer, temp_blitter];
 	        }
+
+	        /**
+	        * Construct a canvas element.
+	        * @type {Id}
+	        * @param {Element} a - Creates a canvas element and attaches it to the body.
+	        * @protected
+	        */
+
 	    }, {
 	        key: 'construct_canvas',
 	        value: function construct_canvas(id) {
@@ -11318,146 +11512,14 @@
 
 	            return this.doc.getElementById(c_id);
 	        }
-	    }, {
-	        key: 'doc',
-
-	        /**
-	        * Get document element
-	        * @type {Element}
-	        * @protected
-	        */
-
-	        get: function get() {
-
-	            return this.get('docs');
-	        }
-
-	        /**
-	        * Get header element
-	        * @type {Element}
-	        * @protected
-	        */
-
-	        /**
-	        * Set documents private variables
-	        * @type {Object}
-	        * @private
-	        */
-
-	    }, {
-	        key: 'head',
-	        get: function get() {
-
-	            return this.get('head');
-	        }
-
-	        /**
-	        * Get gendering element
-	        * @type {Element}
-	        * @protected
-	        */
-
-	    }, {
-	        key: 'rendering_style',
-	        get: function get() {
-
-	            return this.get('_rendering_style');
-	        }
-
-	        /**
-	        * Set rendering element styles
-	        * @type {Element}
-	        * @param {CSS}
-	        * @protected
-	        */
-
-	        ,
-	        set: function set(style) {
-
-	            var customstyle = style;
-	            var viewport = '@-ms-viewport {width:100%;height:100%;}';
-	            var img_rendering = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
-
-	            var rendering = this.get('_rendering_style');
-	            rendering.innerHTML = rendering.innerText = viewport + img_rendering + customstyle;
-	        }
-	    }, {
-	        key: 'canvas',
-	        get: function get() {
-
-	            return this._canvas;
-	        },
-	        set: function set(canvas) {
-
-	            this._canvas = canvas;
-	        }
-	    }, {
-	        key: 'buffer',
-	        get: function get() {
-
-	            return this._buffer;
-	        },
-	        set: function set(canvas) {
-
-	            this._buffer = canvas;
-	        }
-	    }, {
-	        key: 'blitter',
-	        get: function get() {
-
-	            return this._blitter;
-	        },
-	        set: function set(canvas) {
-
-	            this._blitter = canvas;
-	        }
 	    }]);
 
-	    function Canvas(app) {
-	        _classCallCheck(this, Canvas);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
-
-	        _private.set(_this, _this.constructor.properties);
-
-	        //Change property assignment
-	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
-
-	        //Change property assignment
-	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
-
-	        if (temp_canvas) {
-
-	            _this.canvas = temp_canvas;
-
-	            if (temp_buffer) {
-
-	                _this.buffer = temp_buffer;
-	            }
-	        } else {
-
-	            _this.canvas = _this.construct_canvas(_this.app.options.canvas.name);
-
-	            if (_this.app.options.canvas.buffer) _this.buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
-	        }
-
-	        _this.blitter = _this.construct_canvas('blitter');
-
-	        _this.style();
-
-	        _this.rendering_style = _this.app.options.canvas.style;
-
-	        _this.head.appendChild(_this.rendering_style);
-
-	        return _this;
-	    }
-
 	    return Canvas;
-	}(_interfaces._Canvas);
+	}(_interfaces._Canvas_Core);
 
 	Canvas.properties = {
 	    name: 'canvas',
-	    canvas: null,
+	    canvas: [],
 	    docs: document,
 	    head: document.getElementsByTagName('head')[0],
 	    _rendering_style: document.createElement('style')
