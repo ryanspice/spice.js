@@ -7086,31 +7086,53 @@
 	    value: true
 	});
 	exports.default = {
+
 	    overridescroll: false,
 	    drag: 0,
 	    targetfps: 60,
 	    mute: false,
+
 	    paths: {
+
 	        data: "data/",
 	        images: "images/",
 	        url: ""
+
 	    },
 
 	    target: {
-
 	        canvas: null, // String - Id of the main canvas
 	        buffer: null, // String - Id of the buffer canvas
 	        blitter: null },
 
 	    // String - Id of the blitting canvas
+	    global: {
+
+	        globalCompositeOperation: "destination-in" },
+
+	    //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
+
+	    flags: {
+
+	        canvas: true,
+	        mstouch: true,
+	        seamless: true,
+	        tight: true,
+	        touchprevent: true,
+	        opaque: true
+
+	    },
 
 	    canvas: {
+
 	        override: false, //Toggle the use of options.canvas
 	        name: 'canvas', //Use canvas.name
 	        buffername: 'buffer', //Use canvas.buffer
 	        buffer: true, //Toggle the use of double-buffering
 	        background: '#000000', //Assign canvas element background colour
-	        position: { //Assign canvas element position properties
+
+	        //Assign canvas element position properties
+	        position: {
 	            //position:'absolute',
 	            //top:0,
 	            //left:window.innerWidth/2,
@@ -7123,10 +7145,15 @@
 	            center: false,
 	            z: 1
 	        },
-	        size: { //Assign canvas size properties
+
+	        //Assign canvas size properties
+	        size: {
+
 	            width: window.innerWidth,
 	            height: window.innerHeight
+
 	        }
+
 	    },
 
 	    msFlags: {
@@ -7135,21 +7162,16 @@
 
 	    },
 
-	    flags: { //Feature Flags
-	        canvas: true,
-	        mstouch: true,
-	        seamless: true,
-	        tight: true,
-	        touchprevent: true
-	    },
+	    //Override Functions
+	    override: {
 
-	    override: { //Override Functions
 	        keyboard: true,
 	        mouse: true,
 	        MSHoldVisual: false,
 	        SelectStart: false,
 	        ContextMenu: true,
 	        Drag: true
+
 	    },
 
 	    //Return Options Value
@@ -11326,6 +11348,14 @@
 
 	                    this.canvas_context = this.canvas.getContext("2d", attribs);
 
+	                    this.canvas_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
+
+	                    this.blitter_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
+
+	                    this.buffer_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
+
+	                    console.log(this.canvas_context);
+
 	                    if (this.app.options.canvas.buffer) this.buffer_context = this.buffer.getContext("2d", attribs);else this.buffer_context = this.canvas.getContext("2d", attribs);
 
 	                    this.linearSampling = true;
@@ -11418,6 +11448,7 @@
 	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
 	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
 	        var temp_blitter = document.getElementById(_this.app.options.target.blitter);
+	        var options = _this.app.options;
 
 	        //Check canvas variables
 	        if (temp_canvas) {
@@ -11431,7 +11462,7 @@
 
 	                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
 	            }
-
+	        temp_canvas.mozOpaque = options.flags.opaque;
 	        //Assign canvas elements
 
 	        var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);

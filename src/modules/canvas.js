@@ -48,6 +48,7 @@ export default class Canvas extends _Canvas_Core {
         let temp_canvas = document.getElementById(this.app.options.target.canvas);
         let temp_buffer = document.getElementById(this.app.options.target.buffer);
         let temp_blitter = document.getElementById(this.app.options.target.blitter);
+        let options = this.app.options;
 
         //Check canvas variables
         if (temp_canvas)    {
@@ -63,7 +64,7 @@ export default class Canvas extends _Canvas_Core {
                 temp_buffer = this.construct_canvas(this.app.options.canvas.buffername);
 
         }
-
+        temp_canvas.mozOpaque = options.flags.opaque;
         //Assign canvas elements
         [this.canvas,this.buffer,this.blitter,this.rendering_style] = this.style(temp_canvas,temp_buffer,this.construct_canvas('blitter'),this.app.options.canvas.style);
 

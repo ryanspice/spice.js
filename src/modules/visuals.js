@@ -1532,6 +1532,14 @@ visuals = {
 
                 this.canvas_context = this.canvas.getContext("2d",attribs);
 
+                this.canvas_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
+
+                this.blitter_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
+
+                this.buffer_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
+
+                console.log(this.canvas_context)
+
                 if (this.app.options.canvas.buffer)
                     this.buffer_context = this.buffer.getContext("2d",attribs);
                     else
