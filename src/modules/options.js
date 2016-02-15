@@ -6,6 +6,12 @@ export default {
     targetfps:60,
     mute:false,
 
+    watch:{
+
+        fps:false
+
+    },
+
     paths:{
 
         data:"data/",

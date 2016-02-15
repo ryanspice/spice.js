@@ -103,7 +103,7 @@ class _Interface {
     * @param {number} y - position.y
     */
 
-    constructor(x,y) {
+    constructor(x = 0,y = 0) {
 
         super();
 

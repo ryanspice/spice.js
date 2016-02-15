@@ -11,49 +11,49 @@ export default {
 
             init:{writable: false,configurable:false,enumerable:false,value:function(name,w,h){
 
-                //Set App.client.discription to the name
-                this.discription = name;
+                    //Set App.client.discription to the name
+                    this.discription = name;
 
-                //Depreciated setWidth-height: use w + h
-                //Set App.client.w
-                //Set App.client.h
-                //Set App.client.width
-                //Set App.client.height
-                //Set App.client.setWidth
-                //Set App.client.setHeight
+                    //Depreciated setWidth-height: use w + h
+                    //Set App.client.w
+                    //Set App.client.h
+                    //Set App.client.width
+                    //Set App.client.height
+                    //Set App.client.setWidth
+                    //Set App.client.setHeight
 
-                this.w = this.width = this.setWidth = w;
-                this.h = this.height = this.setHeight = h;
+                    this.w = this.width = this.setWidth = w;
+                    this.h = this.height = this.setHeight = h;
 
-                //Build Extensions
-                (this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
+                    //Build Extensions
+                    (this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
 
-                //Build Visuals
-                (this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
+                    //Build Visuals
+                    (this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
 
-                //Build
-                (this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
+                    //Build
+                    (this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
 
-                //Build
-                this.room = Object.create(this.room.prototype,this.room.constructor(this.app)).init();
+                    //Build
+                    this.room = Object.create(this.room.prototype,this.room.constructor(this.app)).init();
 
-                //Build
-                (this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
+                    //Build
+                    (this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
 
-                //Build
-                (this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(app.options.targetfps,app.options.targetfps);
+                    //Build
+                    (this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(app.options.targetfps,app.options.targetfps);
 
-                //Build
-                (this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
+                    //Build
+                    (this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
 
-                //Build
-                this.main = Object.create(this.app.main);
+                    //Build
+                    this.main = Object.create(this.app.main);
 
-                //Build
-                (this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
-
+                    //Build
+                    (this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
 
                 }
+
             }
 
         }
@@ -94,22 +94,26 @@ export default {
         },
 
         //Client features loop
+
         loopData:function(){
 
             if (this.app)
-            if (this.app.input)
-            if (this.app.input.update)
-            {
-            //Return true or false, update audio
-            //this.mute = this.audio.update();
+                if (this.app.input)
+                    if (this.app.input.update)
+                    {
 
-                    this.update.size_difference(this);
+                        //Return true or false, update audio
+                        //this.mute = this.audio.update();
 
-                    //Update Input
-                    this.app.input.update();
-            }
+                        this.update.size_difference(this);
+
+                        //Update Input
+                        this.app.input.update();
+
+                    }
 
             setTimeout(this.client_data,1000 / 60);
+
         },
 
         loop:function(a){
@@ -135,7 +139,7 @@ export default {
 
             SpiceJS.statistics.monitor(loop).then(function(){
 
-                SpiceJS.statistics.log("fps",SpiceJS.controller.list().getFps(),'state');
+                SpiceJS.statistics.log("fps",SpiceJS.controller.list().fps,'state');
                 SpiceJS.statistics.log("scale",SpiceJS.controller.list().getScale(),'state');
 
             });

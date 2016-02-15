@@ -39,11 +39,15 @@ const date = new Date();
 
  class _core extends _Core {
 
+     /**  @type {Number} */
+
     get version(){
 
         return this.constructor.VN;
 
     }
+
+    /**  @type {Number} */
 
     set version(val){
 
@@ -51,56 +55,37 @@ const date = new Date();
 
     }
 
+    /**  @type {Number} */
+
     get fps() {
 
-    //    return this._fps;
-        return Application.getFps();
+        return Number(this.client.fps);
 
     }
 
+    /**
+    * Method invoked to start the application
+    * @method
+    * @param {x} Width of the canvas
+    * @param {y} Height of the canvas
+    */
 
-    /** Builds the core modules of the Application. */
+    start( w, h){
 
-    constructor(){
+        let name = "";
 
-        super();
+        let self = this;
 
-        //setInterval(()=>{console.log(this.getFps())},200);
-
-        this.time = 0;
-
-        this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
-
-        this.options = _options;
-
-        this.user = _user;
-
-        this.ext = _ext;
-
-        this.input = _input;
-
-        this.canvas = _canvas;
-
-        this.client = _client;
-
-        this.math = new _math();
-
-    }
-
-
-    Init(name, w, h){
-
-        //console.log(this);
-       var self = this;
-
-       //Build client from prototype
        this.client = this.Construct(this.client.prototype,this.client.constructor);
 
-       //Build canvas from prototype
        this.canvas =  new _canvas(this);
 
-       //Use arrow function if available
        var usearrow = true;
+
+       /**
+       /* If use arrow functions is set to true
+       /*   unknown and keeping for debugging
+       */
 
        if (usearrow)
        {
@@ -121,23 +106,23 @@ const date = new Date();
 
        }
        else
-           {
+       {
 
-               setTimeout(	(function(){
+           setTimeout(	(function(){
 
-                           function AppLoop(){
-                               self.client.loop();
-                           }
+                       function AppLoop(){
+                           self.client.loop();
+                       }
 
-                           function AppLoopData(){
-                               self.client.loopData();
-                           }
+                       function AppLoopData(){
+                           self.client.loopData();
+                       }
 
-                           self.client.initalize(AppLoop,AppLoopData,self.scale);
+                       self.client.initalize(AppLoop,AppLoopData,self.scale);
 
-               }),this.time);
+           }),this.time);
 
-           }
+       }
 
        this.client.init(name,w,h);
 
@@ -145,29 +130,48 @@ const date = new Date();
 
     }
 
+    /**
+    * OnLoad event
+    * @method
+    * @param {self} Pass a reference to the canvas.
+    */
+
     OnLoad(self){
 
-        //console.log(this)
-        self.Init("",480,320);
+        self.start(480,320);
 
     }
+
+    /**
+    * OnApplicationLoad event (when the first cycle happens)
+    * @method
+    * @param {self} Pass a reference to the event.
+    */
 
     OnApplicationLoad(evt){
 
         //console.log(evt)
-       //Run .OnLoad
-       evt.target.app.OnLoad(evt.target.app);
+        //Run .OnLoad
+        evt.target.app.OnLoad(evt.target.app);
 
-       console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
+        console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
 
     }
+
+    /**
+    * Listener event polyfill
+    * @method
+    * @param {obj} object that it is firing on
+    * @param {evt} passing the event
+    * @param {listener} listener type
+    * @param {param} any paramaters
+    */
 
     Listener(obj, evt, listener, param){
 
         if (typeof obj[0] === "object")
             obj = obj[0] || window;
 
-//                    console.log(obj);
         //If addEventListener exist, add it, otherwise attachEvent
         if (obj.addEventListener)
             obj.addEventListener(evt, listener, false);
@@ -177,6 +181,12 @@ const date = new Date();
         obj.app = window.apps[this.id] = this;
 
     }
+
+    /**
+    * Constructs prototype/constructor
+    * @param {number} x - position.x
+    * @param {number} y - position.y
+    */
 
     Construct(prototype,constructor){
 
@@ -189,8 +199,7 @@ const date = new Date();
 
        //if prototype contains a prototype and constructor
        if (typeof obj.prototype !== 'undefined')
-       if (typeof obj.constructor !== 'undefined')
-           {
+           if (typeof obj.constructor !== 'undefined') {
                construct = obj.constructor;
                proto = obj.prototype;
                isObj = true;
@@ -200,46 +209,54 @@ const date = new Date();
        var c = typeof construct;
 
        //Return & Create object based on constructor
-       switch(c)
-       {
-       case 'undefined':
+       switch(c) {
 
-           //Use only the prototype
-           ret = Object.create(proto);
+           case 'undefined':
 
-       break;
-       case 'object':
+               //Use only the prototype
+               ret = Object.create(proto);
 
-           //Use constructor as object
-           ret = Object.create(proto,construct);
+           break;
+           case 'object':
 
-       break;
-       case 'function':
+               //Use constructor as object
+               ret = Object.create(proto,construct);
 
-           //Use constructor as function
-           ret = Object.create(proto,construct(this));
+           break;
+           case 'function':
 
-       break;
-       default:
+               //Use constructor as function
+               ret = Object.create(proto,construct(this));
+
+           break;
+           default:
 
            //Expected a type
-       console.log("Expected 'object' or 'function': Type is "+c);
+           console.log("Expected 'object' or 'function': Type is "+c);
        }
-       if (isObj)
-           prototype = ret;
 
+       if (isObj)   {
+           prototype = ret;
+       }
 
        return ret;
 
-    }
+    };
 
+    /**
+    * on click(triggerclick?)
+    * @param {number} x - position.x
+    * @param {number} y - position.y
+    */
 
     click(event, anchorObj){
 
        //If .click
-       if (anchorObj.click)
+       if (anchorObj.click) {
+
            anchorObj.click();
-           else
+
+       }    else
        if(document.createEvent)
        {
 
@@ -256,19 +273,60 @@ const date = new Date();
 
        }
 
-    }
+    };
+
+    /**
+    * Builds the core modules of the Application.
+    */
+
+    constructor(){
+
+        super();
+
+        this.time = 0;
+
+        this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
+
+        this.user = _user;
+
+        this.ext = _ext;
+
+        this.input = _input;
+
+        this.canvas = _canvas;
+
+        this.client = _client;
+
+        this.math = new _math();
+
+        let watch = (this.options = _options).watch;
+
+        if (watch.fps==true)    {
+
+            setInterval(()=>{console.log(this.fps)},200);
+
+        }
+
+    };
 
 
-    //Legacy
+    /**
+    * Legacy Functions
+    *
+    *
+    *
+    *
+    *
+    *
+    *
+    *
+    *
+    *
+    */
 
     create(a){
 
         return this.Construct(a||{},this.client.room);
-    }
-
-    getFps(){
-
-         return this.client.update.step.fps;
     }
 
     getCurrent(){

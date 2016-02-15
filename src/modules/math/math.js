@@ -781,7 +781,8 @@ export default class Math {
 
         this.vector = Vector;
         window.Math.vector = this.vector;
+        window.Math.Vector = window.Math.vector;
 
-    }
+    };
 
 }

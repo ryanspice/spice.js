@@ -5369,7 +5369,7 @@
 	 *
 	 */
 
-	var SpiceJS = function (_controller2) {
+	var SpiceJS = (function (_controller2) {
 	  _inherits(SpiceJS, _controller2);
 
 	  function SpiceJS() {
@@ -5379,7 +5379,7 @@
 	  }
 
 	  return SpiceJS;
-	}(_controller4.default);
+	})(_controller4.default);
 
 	;
 
@@ -5404,10 +5404,10 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _statistics2 = __webpack_require__(193);
@@ -5429,169 +5429,169 @@
 	*
 	*/
 
-	var _controller = function () {
-	    _createClass(_controller, [{
-	        key: 'get',
+	var _controller = (function () {
+	        _createClass(_controller, [{
+	                key: 'get',
 
-	        /** @type {Object} */
+	                /** @type {Object} */
 
-	        /** @type {Object} */
+	                /** @type {Object} */
 
-	        value: function get() {
+	                value: function get() {
 
-	            return this.proto;
+	                        return this.proto;
+	                }
+
+	                /** @type {Object} */
+
+	                /** @type {Object} */
+
+	        }, {
+	                key: 'create',
+	                value: function create(target) {
+	                        var _this = this;
+
+	                        var tempReference = {};
+
+	                        var tempReferenceId = null;
+
+	                        var listReference = null;
+
+	                        var time = new Date().getTime();
+
+	                        this.statistics.monitor(function () {
+
+	                                _this.name = "scriptloadtime";
+
+	                                window.utils.loadExternalJS(window.scripts);
+
+	                                tempReference = _this.generatePrototype();
+
+	                                tempReferenceId = tempReference.id;
+
+	                                ///Temporary Fix for Safari and IE
+	                                //      document
+
+	                                listReference = _this.controller.list(tempReferenceId);
+
+	                                _this.initListeners(listReference);
+
+	                                // ^ F
+	                        }).then(function () {
+
+	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+	                                listReference = _this.controller.list(tempReferenceId);
+
+	                                /// New for After Loaded
+	                                _this.statistics.monitor(function () {
+
+	                                        _this.name = "loadtime";
+
+	                                        //this.initListeners(listReference);
+	                                }).then(function () {
+
+	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+	                                        _this.statistics.log("build", time);
+	                                });
+	                        });
+
+	                        return tempReference;
+	                }
+
+	                /** @type {Object} */
+
+	        }, {
+	                key: 'generatePrototype',
+	                value: function generatePrototype() {
+
+	                        this.window = window;
+
+	                        //temp stores the app during the create process, it is then returned
+	                        var temp = {};
+
+	                        temp = new _core2.default(this.app);
+
+	                        temp.window = this.window;
+
+	                        temp.document = document;
+
+	                        temp.id = this.window.appsNextId;
+
+	                        this.window.apps[temp.id] = temp;
+
+	                        this.window.appsNextId++;
+
+	                        return this.window.apps[temp.id];
+	                }
+
+	                /**
+	                *   @param {temp} temp - pass a reference to attach listeners
+	                *   @return {Method} returns self
+	                */
+
+	        }, {
+	                key: 'initListeners',
+	                value: function initListeners(temp) {
+
+	                        if (document.readyState == "complete" || document.readyState == "loaded") {
+	                                // document is already ready to go
+
+	                                console.log('ready');
+	                        }
+
+	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+
+	                        return temp;
+	                }
+
+	                /** @type {Method} */
+
+	        }]);
+
+	        function _controller() {
+	                _classCallCheck(this, _controller);
+
+	                this.temp = {};
+
+	                this.window = window;
+
+	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
+
+	                this.window.SpiceJS = this;
+
+	                this.window.SJS = this;
+
+	                //if no apps have been defined, create a new array
+	                if (!this.window.apps) this.window.apps = new Array(1);
+
+	                //if appsNextId isnt larger or equal to 0 assign it to 0
+	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
+
+	                //Setup Statistics and Monitoring
+	                this.statistics = new this.constructor._statistics(this);
+
+	                //Reference static controller
+	                this.controller = this.constructor._controller;
 	        }
 
-	        /** @type {Object} */
-
-	        /** @type {Object} */
-
-	    }, {
-	        key: 'create',
-	        value: function create(target) {
-	            var _this = this;
-
-	            var tempReference = {};
-
-	            var tempReferenceId = null;
-
-	            var listReference = null;
-
-	            var time = new Date().getTime();
-
-	            this.statistics.monitor(function () {
-
-	                _this.name = "scriptloadtime";
-
-	                window.utils.loadExternalJS(window.scripts);
-
-	                tempReference = _this.generatePrototype();
-
-	                tempReferenceId = tempReference.id;
-
-	                ///Temporary Fix for Safari and IE
-	                //      document
-
-	                listReference = _this.controller.list(tempReferenceId);
-
-	                _this.initListeners(listReference);
-
-	                // ^ F
-	            }).then(function () {
-
-	                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-	                listReference = _this.controller.list(tempReferenceId);
-
-	                /// New for After Loaded
-	                _this.statistics.monitor(function () {
-
-	                    _this.name = "loadtime";
-
-	                    //this.initListeners(listReference);
-	                }).then(function () {
-
-	                    _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-	                    _this.statistics.log("build", time);
-	                });
-	            });
-
-	            return tempReference;
-	        }
-
-	        /** @type {Object} */
-
-	    }, {
-	        key: 'generatePrototype',
-	        value: function generatePrototype() {
-
-	            this.window = window;
-
-	            //temp stores the app during the create process, it is then returned
-	            var temp = {};
-
-	            temp = new _core2.default(this.app);
-
-	            temp.window = this.window;
-
-	            temp.document = document;
-
-	            temp.id = this.window.appsNextId;
-
-	            this.window.apps[temp.id] = temp;
-
-	            this.window.appsNextId++;
-
-	            return this.window.apps[temp.id];
-	        }
-
-	        /**
-	        *   @param {temp} temp - pass a reference to attach listeners
-	        *   @return {Method} returns self
-	        */
-
-	    }, {
-	        key: 'initListeners',
-	        value: function initListeners(temp) {
-
-	            if (document.readyState == "complete" || document.readyState == "loaded") {
-	                // document is already ready to go
-
-	                console.log('ready');
-	            }
-
-	            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-	            return temp;
-	        }
-
-	        /** @type {Method} */
-
-	    }]);
-
-	    function _controller() {
-	        _classCallCheck(this, _controller);
-
-	        this.temp = {};
-
-	        this.window = window;
-
-	        if (typeof this.window.scripts != 'array') this.window.scripts = [];
-
-	        this.window.SpiceJS = this;
-
-	        this.window.SJS = this;
-
-	        //if no apps have been defined, create a new array
-	        if (!this.window.apps) this.window.apps = new Array(1);
-
-	        //if appsNextId isnt larger or equal to 0 assign it to 0
-	        if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
-
-	        //Setup Statistics and Monitoring
-	        this.statistics = new this.constructor._statistics(this);
-
-	        //Reference static controller
-	        this.controller = this.constructor._controller;
-	    }
-
-	    return _controller;
-	}();
+	        return _controller;
+	})();
 
 	_controller._statistics = _statistics3.default;
 	_controller._controller = {
 
-	    /**
-	    * List all of the instances of SpiceJS or
-	    * @type {method}
-	    * @param {number} id - Specify a specific instance to return.
-	    */
+	        /**
+	        * List all of the instances of SpiceJS or
+	        * @type {method}
+	        * @param {number} id - Specify a specific instance to return.
+	        */
 
-	    list: function list(id) {
+	        list: function list(id) {
 
-	        if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
-	    }
+	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
+	        }
 
 	};
 	exports.default = _controller;
@@ -5602,10 +5602,10 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _utils = __webpack_require__(194);
@@ -5620,7 +5620,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5653,237 +5653,237 @@
 	*       });
 	*/
 
-	var Statistics = function (_StatisticsController) {
-	    _inherits(Statistics, _StatisticsController);
+	var Statistics = (function (_StatisticsController) {
+	        _inherits(Statistics, _StatisticsController);
 
-	    function Statistics() {
-	        _classCallCheck(this, Statistics);
+	        function Statistics() {
+	                _classCallCheck(this, Statistics);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).apply(this, arguments));
-	    }
+	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).apply(this, arguments));
+	        }
 
-	    _createClass(Statistics, [{
-	        key: 'monitor',
+	        _createClass(Statistics, [{
+	                key: 'monitor',
 
-	        /** Async Monitor of a function, returns duration.
-	         * @type {Promise}
-	         * @param {Function} func - Function to monitor
-	         * @param {Arguments} arg - Arguments to pass
-	         * @return {Number} as duration.
-	         */
+	                /** Async Monitor of a function, returns duration.
+	                 * @type {Promise}
+	                 * @param {Function} func - Function to monitor
+	                 * @param {Arguments} arg - Arguments to pass
+	                 * @return {Number} as duration.
+	                 */
 
-	        value: function () {
-	            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
-	                var startTime, endTime;
-	                return regeneratorRuntime.wrap(function _callee$(_context) {
-	                    while (1) {
-	                        switch (_context.prev = _context.next) {
-	                            case 0:
-	                                startTime = new Date().getTime();
-	                                _context.next = 3;
-	                                return func(arg);
+	                value: (function () {
+	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
+	                                var startTime, endTime;
+	                                return regeneratorRuntime.wrap(function _callee$(_context) {
+	                                        while (1) {
+	                                                switch (_context.prev = _context.next) {
+	                                                        case 0:
+	                                                                startTime = new Date().getTime();
+	                                                                _context.next = 3;
+	                                                                return func(arg);
 
-	                            case 3:
-	                                endTime = new Date().getTime();
+	                                                        case 3:
+	                                                                endTime = new Date().getTime();
 
-	                                this.log("time", -startTime + endTime, func.name);
+	                                                                this.log("time", -startTime + endTime, func.name);
 
-	                                return _context.abrupt('return', startTime - endTime);
+	                                                                return _context.abrupt('return', startTime - endTime);
 
-	                            case 6:
-	                            case 'end':
-	                                return _context.stop();
+	                                                        case 6:
+	                                                        case 'end':
+	                                                                return _context.stop();
+	                                                }
+	                                        }
+	                                }, _callee, this);
+	                        }));
+
+	                        return function monitor(_x, _x2) {
+	                                return ref.apply(this, arguments);
+	                        };
+	                })()
+
+	                /** Async
+	                 * @private
+	                 */
+
+	        }, {
+	                key: 'log',
+	                value: (function () {
+	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+	                                var name,
+	                                    curLog,
+	                                    newLog,
+	                                    hashLog,
+	                                    time,
+	                                    time2,
+	                                    timeHash,
+	                                    _args2 = arguments;
+	                                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+	                                        while (1) {
+	                                                switch (_context2.prev = _context2.next) {
+	                                                        case 0:
+	                                                                name = '';
+	                                                                curLog = this.logs;
+	                                                                newLog = {};
+	                                                                hashLog = {};
+	                                                                time = new Date().getTime();
+	                                                                time2 = new Date().getTime();
+	                                                                timeHash = this.count + time;
+
+	                                                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
+
+	                                                                if (typeof _args2[2] != 'undefined') {
+
+	                                                                        name = _args2[2];
+
+	                                                                        if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+
+	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+
+	                                                                        hashLog = _args2[1];
+
+	                                                                        newLog[_args2[0]] = hashLog;
+
+	                                                                        curLog[name] = newLog;
+	                                                                } else {
+
+	                                                                        name = _args2[0];
+
+	                                                                        if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+
+	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+
+	                                                                        hashLog = _args2[1];
+
+	                                                                        newLog[_args2[0]] = hashLog;
+
+	                                                                        curLog[name] = newLog;
+	                                                                }
+
+	                                                                this.count++;
+
+	                                                                this.logs = curLog;
+
+	                                                        case 11:
+	                                                        case 'end':
+	                                                                return _context2.stop();
+	                                                }
+	                                        }
+	                                }, _callee2, this);
+	                        }));
+
+	                        return function log() {
+	                                return ref.apply(this, arguments);
+	                        };
+	                })()
+
+	                /** watch //to come
+	                 * @private
+	                 */
+
+	        }], [{
+	                key: 'watch',
+	                value: function watch(v) {
+
+	                        var w = v;
+	                }
+
+	                /**
+	                * Converts and array of objects to CSV.
+	                * @module
+	                * @access private
+	                */
+
+	        }, {
+	                key: 'convertArrayOfObjectsToCSV',
+	                value: function convertArrayOfObjectsToCSV(args) {
+
+	                        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+	                        data = args.data || null;
+
+	                        if (data == null || !data.length) {
+
+	                                return null;
 	                        }
-	                    }
-	                }, _callee, this);
-	            }));
 
-	            return function monitor(_x, _x2) {
-	                return ref.apply(this, arguments);
-	            };
-	        }()
+	                        columnDelimiter = args.columnDelimiter || ',';
 
-	        /** Async
-	         * @private
-	         */
+	                        lineDelimiter = args.lineDelimiter || '\n';
 
-	    }, {
-	        key: 'log',
-	        value: function () {
-	            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	                var name,
-	                    curLog,
-	                    newLog,
-	                    hashLog,
-	                    time,
-	                    time2,
-	                    timeHash,
-	                    _args2 = arguments;
-	                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	                    while (1) {
-	                        switch (_context2.prev = _context2.next) {
-	                            case 0:
-	                                name = '';
-	                                curLog = this.logs;
-	                                newLog = {};
-	                                hashLog = {};
-	                                time = new Date().getTime();
-	                                time2 = new Date().getTime();
-	                                timeHash = this.count + time;
+	                        keys = Object.keys(data[0]);
 
-	                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
+	                        result = '';
 
-	                                if (typeof _args2[2] != 'undefined') {
+	                        result += keys.join(columnDelimiter);
 
-	                                    name = _args2[2];
+	                        result += lineDelimiter;
 
-	                                    if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+	                        data.forEach(function (item) {
 
-	                                    hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+	                                ctr = 0;
 
-	                                    hashLog = _args2[1];
+	                                keys.forEach(function (key) {
 
-	                                    newLog[_args2[0]] = hashLog;
+	                                        if (ctr > 0) result += columnDelimiter;
 
-	                                    curLog[name] = newLog;
-	                                } else {
+	                                        result += item[key];
 
-	                                    name = _args2[0];
+	                                        ctr++;
+	                                });
 
-	                                    if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+	                                result += lineDelimiter;
+	                        });
 
-	                                    hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+	                        return result;
+	                }
 
-	                                    hashLog = _args2[1];
+	                /**
+	                * Converts and array of objects to CSV.
+	                * @module
+	                * @access private
+	                */
 
-	                                    newLog[_args2[0]] = hashLog;
+	        }, {
+	                key: 'writeToCSV',
+	                value: function writeToCSV(name) {
 
-	                                    curLog[name] = newLog;
-	                                }
+	                        var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
 
-	                                this.count++;
+	                        logStream.write('Initial line...');
 
-	                                this.logs = curLog;
+	                        logStream.end('this is the end line');
 
-	                            case 11:
-	                            case 'end':
-	                                return _context2.stop();
-	                        }
-	                    }
-	                }, _callee2, this);
-	            }));
+	                        var dataString = "";
 
-	            return function log() {
-	                return ref.apply(this, arguments);
-	            };
-	        }()
+	                        var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
 
-	        /** watch //to come
-	         * @private
-	         */
+	                        //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
 
-	    }], [{
-	        key: 'watch',
-	        value: function watch(v) {
+	                        var csvContent = "data:text/csv;charset=utf-8,";
 
-	            var w = v;
-	        }
+	                        data.forEach(function (infoArray, index) {
 
-	        /**
-	        * Converts and array of objects to CSV.
-	        * @module
-	        * @access private
-	        */
+	                                dataString = infoArray.join(",");
 
-	    }, {
-	        key: 'convertArrayOfObjectsToCSV',
-	        value: function convertArrayOfObjectsToCSV(args) {
+	                                csvContent += index < data.length ? dataString + "\n" : dataString;
+	                        });
 
-	            var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+	                        var encodedUri = encodeURI(csvContent);
 
-	            data = args.data || null;
+	                        var link = document.createElement("a");
 
-	            if (data == null || !data.length) {
+	                        link.setAttribute("href", encodedUri);
 
-	                return null;
-	            }
+	                        link.setAttribute("download", name + ".csv");
 
-	            columnDelimiter = args.columnDelimiter || ',';
+	                        link.click();
+	                }
+	        }]);
 
-	            lineDelimiter = args.lineDelimiter || '\n';
-
-	            keys = Object.keys(data[0]);
-
-	            result = '';
-
-	            result += keys.join(columnDelimiter);
-
-	            result += lineDelimiter;
-
-	            data.forEach(function (item) {
-
-	                ctr = 0;
-
-	                keys.forEach(function (key) {
-
-	                    if (ctr > 0) result += columnDelimiter;
-
-	                    result += item[key];
-
-	                    ctr++;
-	                });
-
-	                result += lineDelimiter;
-	            });
-
-	            return result;
-	        }
-
-	        /**
-	        * Converts and array of objects to CSV.
-	        * @module
-	        * @access private
-	        */
-
-	    }, {
-	        key: 'writeToCSV',
-	        value: function writeToCSV(name) {
-
-	            var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
-
-	            logStream.write('Initial line...');
-
-	            logStream.end('this is the end line');
-
-	            var dataString = "";
-
-	            var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
-
-	            //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
-
-	            var csvContent = "data:text/csv;charset=utf-8,";
-
-	            data.forEach(function (infoArray, index) {
-
-	                dataString = infoArray.join(",");
-
-	                csvContent += index < data.length ? dataString + "\n" : dataString;
-	            });
-
-	            var encodedUri = encodeURI(csvContent);
-
-	            var link = document.createElement("a");
-
-	            link.setAttribute("href", encodedUri);
-
-	            link.setAttribute("download", name + ".csv");
-
-	            link.click();
-	        }
-	    }]);
-
-	    return Statistics;
-	}(_StatisticsController3.default);
+	        return Statistics;
+	})(_StatisticsController3.default);
 
 	exports.default = Statistics;
 
@@ -5973,7 +5973,7 @@
 
 	utils.loadExternalJS = function (scripts) {
 
-	    !function (e, t, r) {
+	    !(function (e, t, r) {
 
 	        function n() {
 
@@ -5985,7 +5985,7 @@
 	        for (var s, a, c, d = [], i = e.scripts[0], o = "onreadystatechange", f = "readyState"; s = r.shift();) {
 	            a = e.createElement(t), "" in i ? (a.async = !1, e.head.appendChild(a)) : i[f] ? (d.push(a), a[o] = n) : e.write("<" + t + ' src="' + s + '" defer></' + t + ">"), a.src = s;
 	        }
-	    }(document, "script", scripts);
+	    })(document, "script", scripts);
 	};
 
 	window.wait = wait;
@@ -6000,7 +6000,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -6013,7 +6013,7 @@
 	* @private
 	*/
 
-	var StatisticsController = function () {
+	var StatisticsController = (function () {
 	    _createClass(StatisticsController, [{
 	        key: 'count',
 	        get: function get() {
@@ -6097,7 +6097,7 @@
 	    }
 
 	    return StatisticsController;
-	}();
+	})();
 
 	StatisticsController._monitor = {
 
@@ -6114,7 +6114,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -6155,7 +6155,7 @@
 	* @private
 	*/
 
-	var _Interface = function () {
+	var _Interface = (function () {
 
 	    /**  @type {Constructor} */
 
@@ -6187,7 +6187,7 @@
 	    }]);
 
 	    return _Interface;
-	}();
+	})();
 
 	/*
 
@@ -6206,7 +6206,7 @@
 
 	_Interface.properties = { name: 'interface' };
 
-	var _Vector = function (_Interface2) {
+	var _Vector = (function (_Interface2) {
 	    _inherits(_Vector, _Interface2);
 
 	    /**
@@ -6219,7 +6219,10 @@
 
 	    /**  @type {Number} */
 
-	    function _Vector(x, y) {
+	    function _Vector() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
 	        _classCallCheck(this, _Vector);
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
@@ -6236,7 +6239,7 @@
 	    /**  @type {Number} */
 
 	    return _Vector;
-	}(_Interface);
+	})(_Interface);
 
 	/*
 
@@ -6259,7 +6262,7 @@
 	_Vector.multiply = _method;
 	_Vector.offset = _method;
 
-	var _SJSClass = function (_Interface3) {
+	var _SJSClass = (function (_Interface3) {
 	    _inherits(_SJSClass, _Interface3);
 
 	    /**
@@ -6297,13 +6300,13 @@
 	    /**  @type {Number} */
 
 	    return _SJSClass;
-	}(_Interface);
+	})(_Interface);
 
 	_SJSClass.app = _object;
 	_SJSClass.visuals = _object;
 	_SJSClass.graphics = _object;
 
-	var _Core = function (_Interface4) {
+	var _Core = (function (_Interface4) {
 	    _inherits(_Core, _Interface4);
 
 	    function _Core() {
@@ -6315,7 +6318,7 @@
 	    /**  @type {Number} */
 
 	    return _Core;
-	}(_Interface);
+	})(_Interface);
 
 	/*  Extends SJSClass
 
@@ -6344,7 +6347,7 @@
 	* @protected
 	*/
 
-	var _Canvas_Core = function (_SJSClass2) {
+	var _Canvas_Core = (function (_SJSClass2) {
 	    _inherits(_Canvas_Core, _SJSClass2);
 
 	    _createClass(_Canvas_Core, [{
@@ -6491,7 +6494,7 @@
 	    }
 
 	    return _Canvas_Core;
-	}(_SJSClass);
+	})(_SJSClass);
 
 	/*
 
@@ -6508,7 +6511,7 @@
 	* @protected
 	*/
 
-	var _Log = function () {
+	var _Log = (function () {
 	    _createClass(_Log, null, [{
 	        key: 'time',
 
@@ -6558,7 +6561,7 @@
 	    }
 
 	    return _Log;
-	}();
+	})();
 
 	/**
 	*
@@ -6567,7 +6570,7 @@
 	* @private
 	*/
 
-	var _Loop = function (_Log2) {
+	var _Loop = (function (_Log2) {
 	    _inherits(_Loop, _Log2);
 
 	    function _Loop() {
@@ -6577,7 +6580,7 @@
 	    }
 
 	    return _Loop;
-	}(_Log);
+	})(_Log);
 
 	/**
 	*
@@ -6586,7 +6589,7 @@
 	* @private
 	*/
 
-	var _Compile = function (_Log3) {
+	var _Compile = (function (_Log3) {
 	    _inherits(_Compile, _Log3);
 
 	    function _Compile() {
@@ -6596,7 +6599,7 @@
 	    }
 
 	    return _Compile;
-	}(_Log);
+	})(_Log);
 
 	/**
 	*
@@ -6605,7 +6608,7 @@
 	* @private
 	*/
 
-	var _App = function () {
+	var _App = (function () {
 	    function _App() {
 	        _classCallCheck(this, _App);
 	    }
@@ -6633,7 +6636,7 @@
 	    }]);
 
 	    return _App;
-	}();
+	})();
 
 	/**
 	*
@@ -6642,7 +6645,7 @@
 	* @private
 	*/
 
-	var _Build = function () {
+	var _Build = (function () {
 	    function _Build() {
 	        _classCallCheck(this, _Build);
 	    }
@@ -6680,7 +6683,7 @@
 	    }]);
 
 	    return _Build;
-	}();
+	})();
 
 	exports._Vector = _Vector;
 	exports._SJSClass = _SJSClass;
@@ -6702,9 +6705,7 @@
 
 	/** Name. */
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -6751,6 +6752,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -6772,77 +6775,36 @@
 	*
 	*/
 
-	var _core = function (_Core2) {
+	var _core = (function (_Core2) {
 	    _inherits(_core, _Core2);
 
 	    _createClass(_core, [{
-	        key: 'version',
-	        get: function get() {
+	        key: 'start',
 
-	            return this.constructor.VN;
-	        },
-	        set: function set(val) {
+	        /**
+	        * Method invoked to start the application
+	        * @method
+	        * @param {x} Width of the canvas
+	        * @param {y} Height of the canvas
+	        */
 
-	            this.constructor.VN = val;
-	        }
-	    }, {
-	        key: 'fps',
-	        get: function get() {
-
-	            //    return this._fps;
-	            return Application.getFps();
-	        }
-
-	        /** Builds the core modules of the Application. */
-
-	    }]);
-
-	    function _core() {
-	        _classCallCheck(this, _core);
-
-	        //setInterval(()=>{console.log(this.getFps())},200);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
-
-	        _this.time = 0;
-
-	        _this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	                return true;
-	            } };
-
-	        _this.options = _options3.default;
-
-	        _this.user = _user3.default;
-
-	        _this.ext = _ext3.default;
-
-	        _this.input = _input3.default;
-
-	        _this.canvas = _canvas3.default;
-
-	        _this.client = _client3.default;
-
-	        _this.math = new _math3.default();
-
-	        return _this;
-	    }
-
-	    _createClass(_core, [{
-	        key: 'Init',
-	        value: function Init(name, w, h) {
+	        value: function start(w, h) {
 	            var _this2 = this;
 
-	            //console.log(this);
+	            var name = "";
+
 	            var self = this;
 
-	            //Build client from prototype
 	            this.client = this.Construct(this.client.prototype, this.client.constructor);
 
-	            //Build canvas from prototype
 	            this.canvas = new _canvas3.default(this);
 
-	            //Use arrow function if available
 	            var usearrow = true;
+
+	            /**
+	            /* If use arrow functions is set to true
+	            /*   unknown and keeping for debugging
+	            */
 
 	            if (usearrow) {
 
@@ -6878,13 +6840,26 @@
 
 	            this.input = new this.input(this);
 	        }
+
+	        /**
+	        * OnLoad event
+	        * @method
+	        * @param {self} Pass a reference to the canvas.
+	        */
+
 	    }, {
 	        key: 'OnLoad',
 	        value: function OnLoad(self) {
 
-	            //console.log(this)
-	            self.Init("", 480, 320);
+	            self.start(480, 320);
 	        }
+
+	        /**
+	        * OnApplicationLoad event (when the first cycle happens)
+	        * @method
+	        * @param {self} Pass a reference to the event.
+	        */
+
 	    }, {
 	        key: 'OnApplicationLoad',
 	        value: function OnApplicationLoad(evt) {
@@ -6895,18 +6870,34 @@
 
 	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
 	        }
+
+	        /**
+	        * Listener event polyfill
+	        * @method
+	        * @param {obj} object that it is firing on
+	        * @param {evt} passing the event
+	        * @param {listener} listener type
+	        * @param {param} any paramaters
+	        */
+
 	    }, {
 	        key: 'Listener',
 	        value: function Listener(obj, evt, listener, param) {
 
 	            if (_typeof(obj[0]) === "object") obj = obj[0] || window;
 
-	            //                    console.log(obj);
 	            //If addEventListener exist, add it, otherwise attachEvent
 	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
 
 	            obj.app = window.apps[this.id] = this;
 	        }
+
+	        /**
+	        * Constructs prototype/constructor
+	        * @param {number} x - position.x
+	        * @param {number} y - position.y
+	        */
+
 	    }, {
 	        key: 'Construct',
 	        value: function Construct(prototype, constructor) {
@@ -6930,6 +6921,7 @@
 
 	            //Return & Create object based on constructor
 	            switch (c) {
+
 	                case 'undefined':
 
 	                    //Use only the prototype
@@ -6953,16 +6945,29 @@
 	                    //Expected a type
 	                    console.log("Expected 'object' or 'function': Type is " + c);
 	            }
-	            if (isObj) prototype = ret;
+
+	            if (isObj) {
+	                prototype = ret;
+	            }
 
 	            return ret;
 	        }
 	    }, {
 	        key: 'click',
+
+	        /**
+	        * on click(triggerclick?)
+	        * @param {number} x - position.x
+	        * @param {number} y - position.y
+	        */
+
 	        value: function click(event, anchorObj) {
 
 	            //If .click
-	            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
+	            if (anchorObj.click) {
+
+	                anchorObj.click();
+	            } else if (document.createEvent) {
 
 	                if (event.target !== anchorObj) {
 
@@ -6974,20 +6979,93 @@
 	                }
 	            }
 	        }
+	    }, {
+	        key: 'version',
 
-	        //Legacy
+	        /**  @type {Number} */
+
+	        get: function get() {
+
+	            return this.constructor.VN;
+	        }
+
+	        /**  @type {Number} */
+
+	        ,
+	        set: function set(val) {
+
+	            this.constructor.VN = val;
+	        }
+
+	        /**  @type {Number} */
 
 	    }, {
+	        key: 'fps',
+	        get: function get() {
+
+	            return Number(this.client.fps);
+	        }
+	    }]);
+
+	    /**
+	    * Builds the core modules of the Application.
+	    */
+
+	    function _core() {
+	        _classCallCheck(this, _core);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
+
+	        _this.time = 0;
+
+	        _this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
+	                return true;
+	            } };
+
+	        _this.user = _user3.default;
+
+	        _this.ext = _ext3.default;
+
+	        _this.input = _input3.default;
+
+	        _this.canvas = _canvas3.default;
+
+	        _this.client = _client3.default;
+
+	        _this.math = new _math3.default();
+
+	        var watch = (_this.options = _options3.default).watch;
+
+	        if (watch.fps == true) {
+
+	            setInterval(function () {
+	                console.log(_this.fps);
+	            }, 200);
+	        }
+
+	        return _this;
+	    }
+
+	    _createClass(_core, [{
 	        key: 'create',
+
+	        /**
+	        * Legacy Functions
+	        *
+	        *
+	        *
+	        *
+	        *
+	        *
+	        *
+	        *
+	        *
+	        *
+	        */
+
 	        value: function create(a) {
 
 	            return this.Construct(a || {}, this.client.room);
-	        }
-	    }, {
-	        key: 'getFps',
-	        value: function getFps() {
-
-	            return this.client.update.step.fps;
 	        }
 	    }, {
 	        key: 'getCurrent',
@@ -7070,7 +7148,7 @@
 	    }]);
 
 	    return _core;
-	}(_interfaces._Core);
+	})(_interfaces._Core);
 
 	exports.default = _core;
 
@@ -7080,17 +7158,24 @@
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	exports.default = {
 
 	    overridescroll: false,
 	    drag: 0,
 	    targetfps: 60,
 	    mute: false,
+
+	    watch: {
+
+	        fps: false
+
+	    },
 
 	    paths: {
 
@@ -7221,10 +7306,10 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _inputcontroller2 = __webpack_require__(200);
@@ -7246,344 +7331,344 @@
 	*
 	*/
 
-	var Input = function (_inputcontroller) {
-	    _inherits(Input, _inputcontroller);
+	var Input = (function (_inputcontroller) {
+	        _inherits(Input, _inputcontroller);
 
-	    function Input(app, pointerPoint) {
-	        _classCallCheck(this, Input);
+	        function Input(app, pointerPoint) {
+	                _classCallCheck(this, Input);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
 
-	        _this.delay = 0;
+	                _this.delay = 0;
 
-	        _this.touch = false;
+	                _this.touch = false;
 
-	        _this.touch_dist = { x: 0, y: 0 };
+	                _this.touch_dist = { x: 0, y: 0 };
 
-	        _this.key = false;
+	                _this.key = false;
 
-	        _this.keyPower = 0;
+	                _this.keyPower = 0;
 
-	        _this.keyup = false;
+	                _this.keyup = false;
 
-	        _this.keydown = false;
+	                _this.keydown = false;
 
-	        _this.codes = [];
+	                _this.codes = [];
 
-	        _this.codeList = [];
+	                _this.codeList = [];
 
-	        _this.control = false;
+	                _this.control = false;
 
-	        _this.confine = false;
+	                _this.confine = false;
 
-	        _this.preventNext = true;
+	                _this.preventNext = true;
 
-	        _this.init_options();
+	                _this.init_options();
 
-	        _this.keyController.init(_this.app);
+	                _this.keyController.init(_this.app);
 
-	        _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
+	                _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
 
-	        _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
+	                _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
 
-	        _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
+	                _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
 
-	        _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
+	                _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
 
-	        _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
+	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
 
-	        _this.setup_universalMultitouch();
+	                _this.setup_universalMultitouch();
 
-	        _this.setup_documentListeners();
+	                _this.setup_documentListeners();
 
-	        //this.setup_msUniversalAppTouch();
+	                //this.setup_msUniversalAppTouch();
 
-	        return _this;
-	    }
-
-	    _createClass(Input, [{
-	        key: "preventDefault",
-	        value: function preventDefault(e) {
-	            e.preventDefault();return e.target.app;
+	                return _this;
 	        }
-	    }, {
-	        key: "preventNextInput",
-	        value: function preventNextInput() {
-	            return this.preventNext = true;
-	        }
-	    }, {
-	        key: "confineMouse",
-	        value: function confineMouse() {
 
-	            return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
-	        }
-	    }, {
-	        key: "init_options",
-	        value: function init_options() {
-
-	            /*	Overrides the selection start event for selecting events	*/
-
-	            if (!this.app.options.get("override").SelectStart) {
-	                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
-	            }
-
-	            /*	Overrides the 'holdtouch, MSHoldVisual' event */
-
-	            if (!this.app.options.get("override").MSHoldVisual) {
-	                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
-	            }
-
-	            /* Overrides the ContextMenu event */
-
-	            if (this.app.options.get("override").ContextMenu) {
-	                this.app.document.oncontextmenu = this.preventDefault;
-	                this.app.window.self.oncontextmenu = this.preventDefault;
-	            }
-
-	            /*	Overrides dragstart event		*/
-
-	            if (this.app.options.get("override").Drag) {
-	                this.app.document.ondragstart = this.preventDefault;
-	                this.app.window.self.ondragstart = this.preventDefault;
-	            }
-
-	            /*	CSS based Overrides
-	                     - mstouch
-	                    - seamless ( toggles overflow )
-	                    - tight ( zeros padding and margin )
-	             */
-
-	            if (this.app.options.get("flags").mstouch) {
-	                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-	            }
-
-	            if (this.app.options.get("flags").seamless) {
-	                this.app.document.body.style.overflow = "hidden";
-	            }
-
-	            if (this.app.options.get("flags").tight) {
-	                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
-	            }
-	        }
-	    }, {
-	        key: "update",
-	        value: function update() {
-
-	            this.confineMouse();
-
-	            //Reset variables
-	            this.press = false;
-	            this.touch = 0;
-	            this.app.window.inside = 0;
-	            this.wheelDelta = 0;
-
-	            this.pressed ? this.duration++ : this.duration = 0;
-
-	            this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
-
-	            //this.setup_msUniversalAppTouch();
-
-	            if (this.delay > 0) {
-
-	                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
-	            }
-
-	            //reset code released, unused?
-	            this.codereleased = 0;
-
-	            return true;
-	        }
-	    }, {
-	        key: "setup_documentListeners",
-	        value: function setup_documentListeners() {
-
-	            var doc = document;
-	            var win = window;
-
-	            doc.addEventListener("mousedown", function () {
-	                window.focus();
-	            }, true);
-	            doc.addEventListener("touchstart", function () {
-	                window.focus();
-	            }, true);
-
-	            // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
-	            win.addEventListener("blur", function () {
-	                self.onWindowBlur();
-	            });
-
-	            win.onWindowBlur = function (evt) {
-
-	                console.log('blur');
-	                SJS.controller.list().input.pointerup(evt);
-	            };
-
-	            win.setSuspended = function (state) {
-
-	                if (state) console.log('suspended');else console.log('resume');
-	            };
-
-	            // Pause and resume on page becoming visible/invisible
-	            function onVisibilityChanged() {
-	                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
-	            };
-
-	            doc.addEventListener("visibilitychange", onVisibilityChanged, false);
-	            doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
-	            doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
-	            doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
-	        }
-	    }, {
-	        key: "setup_universalMultitouch",
-	        value: function setup_universalMultitouch() {
-
-	            //touch-action: none;
-
-	            if (window.PointerEvent) {
-	                // Pointer events are supported.
-
-	                // Test for touch capable hardware
-	                if (navigator.maxTouchPoints) {}
-
-	                // Test for multi-touch capable hardware
-	                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
-
-	                // Check the maximum number of touch points the hardware supports
-	                //var touchPoints = navigator.maxTouchPoints;
-	            }
-
-	            this.multi = {
-
-	                list: []
-
-	            };
-
-	            this.touched = {
-
-	                count: 0,
-	                uplist: [],
-	                downlist: [],
-	                last: { x: 0, y: 0 },
-	                CheckTouchUp: function CheckTouchUp() {
-
-	                    return this.uplist[this.uplist.length - 1];
-	                },
-	                CheckTouchDown: function CheckTouchDown() {}
-
-	            };
-	        }
-	    }, {
-	        key: "setup_msUniversalAppTouch",
-	        value: function setup_msUniversalAppTouch() {
-
-	            return;
-
-	            var i = 0;
-
-	            var data = {
-	                app: this.app,
-	                x: 0,
-	                y: 0
-	            };
-
-	            if (this.pressed === false && this.lastpressed === true) {
-	                this.released = true, this.dist.x = 0, this.dist.y = 0;
-
-	                this.controls.up(data);
-	            }
-
-	            this.lastpressed = this.pressed;
-
-	            if (!this.wininitalize) try {
-
-	                //var w = Windows;
-	                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-
-	                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
-	                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
-	                this.wininitalize = true;
-
-	                data = {
-	                    app: this.app,
-	                    x: this.winposition.x,
-	                    y: this.winposition.y
-	                };
-	            } catch (e) {
-
-	                data = {
-	                    app: this.app,
-	                    x: 0,
-	                    y: 0
-	                };
-	            } else {
-	                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-	                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
-	                this.pressed = this.winpoint.isInContact;
-	                this.pointerDevice = this.winpoint.pointerDevice;
-
-	                var pt = this.pointerPoint.getCurrentPoint(1);
-	                var ptTargetProperties = pt.properties;
-
-	                if (this.released) {
-
-	                    var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
-
-	                    switch (pt.pointerDevice.pointerDeviceType) {
-	                        case "mouse":
-	                        case 2:
-	                            details += "\nPointer type: mouse";
-	                            details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
-	                            details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
-	                            details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
-	                            details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
-	                            details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
-	                            break;
-	                        case "pen":
-	                            details += "\nPointer type: pen";
-	                            if (pt.isInContact) {
-	                                details += "\nPressure: " + ptTargetProperties.pressure;
-	                                details += "\nrotation: " + ptTargetProperties.rotation;
-	                                details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
-	                            }
-	                            break;
-	                        case "touch":
-	                            details += "\nPointer type: touch";
-	                            details += "\nPressure: " + ptTargetProperties.pressure;
-	                            details += "\nrotation: " + ptTargetProperties.rotation;
-	                            details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                            details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                            break;
-	                        default:
-	                            details += "\nPointer type: " + "n/a";
-	                            break;
-	                    }
-	                    details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
-	                    //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
-	                    //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
-	                    //console.log(pt.pointerDevice);
-	                    //console.log(details);
+	        _createClass(Input, [{
+	                key: "preventDefault",
+	                value: function preventDefault(e) {
+	                        e.preventDefault();return e.target.app;
 	                }
-	                i = this.winpoint;
+	        }, {
+	                key: "preventNextInput",
+	                value: function preventNextInput() {
+	                        return this.preventNext = true;
+	                }
+	        }, {
+	                key: "confineMouse",
+	                value: function confineMouse() {
 
-	                data.x = this.winposition.x;
-	                data.y = this.winposition.y;
+	                        return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
+	                }
+	        }, {
+	                key: "init_options",
+	                value: function init_options() {
 
-	                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
-	            }
+	                        /*	Overrides the selection start event for selecting events	*/
 
-	            if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
+	                        if (!this.app.options.get("override").SelectStart) {
+	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
+	                        }
 
-	            // console.log(i)
-	            //  if (Windows)
-	            //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
-	            //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
-	        }
-	    }]);
+	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
 
-	    return Input;
-	}(_inputcontroller3.default);
+	                        if (!this.app.options.get("override").MSHoldVisual) {
+	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
+	                        }
+
+	                        /* Overrides the ContextMenu event */
+
+	                        if (this.app.options.get("override").ContextMenu) {
+	                                this.app.document.oncontextmenu = this.preventDefault;
+	                                this.app.window.self.oncontextmenu = this.preventDefault;
+	                        }
+
+	                        /*	Overrides dragstart event		*/
+
+	                        if (this.app.options.get("override").Drag) {
+	                                this.app.document.ondragstart = this.preventDefault;
+	                                this.app.window.self.ondragstart = this.preventDefault;
+	                        }
+
+	                        /*	CSS based Overrides
+	                                  - mstouch
+	                                - seamless ( toggles overflow )
+	                                - tight ( zeros padding and margin )
+	                          */
+
+	                        if (this.app.options.get("flags").mstouch) {
+	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+	                        }
+
+	                        if (this.app.options.get("flags").seamless) {
+	                                this.app.document.body.style.overflow = "hidden";
+	                        }
+
+	                        if (this.app.options.get("flags").tight) {
+	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
+	                        }
+	                }
+	        }, {
+	                key: "update",
+	                value: function update() {
+
+	                        this.confineMouse();
+
+	                        //Reset variables
+	                        this.press = false;
+	                        this.touch = 0;
+	                        this.app.window.inside = 0;
+	                        this.wheelDelta = 0;
+
+	                        this.pressed ? this.duration++ : this.duration = 0;
+
+	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
+
+	                        //this.setup_msUniversalAppTouch();
+
+	                        if (this.delay > 0) {
+
+	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	                        }
+
+	                        //reset code released, unused?
+	                        this.codereleased = 0;
+
+	                        return true;
+	                }
+	        }, {
+	                key: "setup_documentListeners",
+	                value: function setup_documentListeners() {
+
+	                        var doc = document;
+	                        var win = window;
+
+	                        doc.addEventListener("mousedown", function () {
+	                                window.focus();
+	                        }, true);
+	                        doc.addEventListener("touchstart", function () {
+	                                window.focus();
+	                        }, true);
+
+	                        // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
+	                        win.addEventListener("blur", function () {
+	                                self.onWindowBlur();
+	                        });
+
+	                        win.onWindowBlur = function (evt) {
+
+	                                console.log('blur');
+	                                SJS.controller.list().input.pointerup(evt);
+	                        };
+
+	                        win.setSuspended = function (state) {
+
+	                                if (state) console.log('suspended');else console.log('resume');
+	                        };
+
+	                        // Pause and resume on page becoming visible/invisible
+	                        function onVisibilityChanged() {
+	                                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
+	                        };
+
+	                        doc.addEventListener("visibilitychange", onVisibilityChanged, false);
+	                        doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+	                        doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+	                        doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+	                }
+	        }, {
+	                key: "setup_universalMultitouch",
+	                value: function setup_universalMultitouch() {
+
+	                        //touch-action: none;
+
+	                        if (window.PointerEvent) {
+	                                // Pointer events are supported.
+
+	                                // Test for touch capable hardware
+	                                if (navigator.maxTouchPoints) {}
+
+	                                // Test for multi-touch capable hardware
+	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
+
+	                                // Check the maximum number of touch points the hardware supports
+	                                //var touchPoints = navigator.maxTouchPoints;
+	                        }
+
+	                        this.multi = {
+
+	                                list: []
+
+	                        };
+
+	                        this.touched = {
+
+	                                count: 0,
+	                                uplist: [],
+	                                downlist: [],
+	                                last: { x: 0, y: 0 },
+	                                CheckTouchUp: function CheckTouchUp() {
+
+	                                        return this.uplist[this.uplist.length - 1];
+	                                },
+	                                CheckTouchDown: function CheckTouchDown() {}
+
+	                        };
+	                }
+	        }, {
+	                key: "setup_msUniversalAppTouch",
+	                value: function setup_msUniversalAppTouch() {
+
+	                        return;
+
+	                        var i = 0;
+
+	                        var data = {
+	                                app: this.app,
+	                                x: 0,
+	                                y: 0
+	                        };
+
+	                        if (this.pressed === false && this.lastpressed === true) {
+	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
+
+	                                this.controls.up(data);
+	                        }
+
+	                        this.lastpressed = this.pressed;
+
+	                        if (!this.wininitalize) try {
+
+	                                //var w = Windows;
+	                                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+
+	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
+	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
+	                                this.wininitalize = true;
+
+	                                data = {
+	                                        app: this.app,
+	                                        x: this.winposition.x,
+	                                        y: this.winposition.y
+	                                };
+	                        } catch (e) {
+
+	                                data = {
+	                                        app: this.app,
+	                                        x: 0,
+	                                        y: 0
+	                                };
+	                        } else {
+	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
+	                                this.pressed = this.winpoint.isInContact;
+	                                this.pointerDevice = this.winpoint.pointerDevice;
+
+	                                var pt = this.pointerPoint.getCurrentPoint(1);
+	                                var ptTargetProperties = pt.properties;
+
+	                                if (this.released) {
+
+	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
+
+	                                        switch (pt.pointerDevice.pointerDeviceType) {
+	                                                case "mouse":
+	                                                case 2:
+	                                                        details += "\nPointer type: mouse";
+	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
+	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
+	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
+	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
+	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
+	                                                        break;
+	                                                case "pen":
+	                                                        details += "\nPointer type: pen";
+	                                                        if (pt.isInContact) {
+	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
+	                                                        }
+	                                                        break;
+	                                                case "touch":
+	                                                        details += "\nPointer type: touch";
+	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
+	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
+	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                                        break;
+	                                                default:
+	                                                        details += "\nPointer type: " + "n/a";
+	                                                        break;
+	                                        }
+	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
+	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
+	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
+	                                        //console.log(pt.pointerDevice);
+	                                        //console.log(details);
+	                                }
+	                                i = this.winpoint;
+
+	                                data.x = this.winposition.x;
+	                                data.y = this.winposition.y;
+
+	                                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
+	                        }
+
+	                        if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
+
+	                        // console.log(i)
+	                        //  if (Windows)
+	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
+	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
+	                }
+	        }]);
+
+	        return Input;
+	})(_inputcontroller3.default);
 
 	exports.default = Input;
 
@@ -7593,10 +7678,10 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _vector = __webpack_require__(201);
@@ -7632,289 +7717,289 @@
 	*
 	*/
 
-	var inputcontroller = function (_SJSClass) {
-	    _inherits(inputcontroller, _SJSClass);
+	var inputcontroller = (function (_SJSClass) {
+	        _inherits(inputcontroller, _SJSClass);
 
-	    function inputcontroller() {
-	        _classCallCheck(this, inputcontroller);
+	        function inputcontroller() {
+	                _classCallCheck(this, inputcontroller);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
-	    }
-
-	    _createClass(inputcontroller, [{
-	        key: 'pointerup',
-	        value: function pointerup(evt) {
-
-	            if (typeof evt === 'undefined') return;
-	            if (typeof evt.target.app === 'undefined') return;
-
-	            var target = evt.target.app.input.constructor;
-
-	            target._pointerup(evt);
+	                return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
 	        }
-	    }, {
-	        key: 'pointermove',
-	        value: function pointermove(evt) {
-
-	            if (typeof evt === 'undefined') return;
-	            if (typeof evt.target.app === 'undefined') return;
-
-	            var target = evt.target.app.input.constructor;
-
-	            target._pointermove(evt);
-	        }
-	    }, {
-	        key: 'pointerdown',
-	        value: function pointerdown(evt) {
-
-	            if (typeof evt === 'undefined') return;
-	            if (typeof evt.target.app === 'undefined') return;
-
-	            var target = evt.target.app.input.constructor;
-
-	            target._pointerdown(evt);
-	        }
-	    }, {
-	        key: 'x',
-	        get: function get() {
-
-	            return this.constructor._x;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._x = value;
-	        }
-	    }, {
-	        key: 'y',
-	        get: function get() {
-
-	            return this.constructor._y;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._y = value;
-	        }
-	    }, {
-	        key: 'last',
-	        get: function get() {
-
-	            return this.constructor._last;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._last = value;
-	        }
-	    }, {
-	        key: 'pos',
-	        get: function get() {
-
-	            return this.constructor._pos;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._pos = value;
-	        }
-	    }, {
-	        key: 'dist',
-	        get: function get() {
-
-	            return this.constructor._dist;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._dist = value;
-	        }
-	    }, {
-	        key: 'end',
-	        get: function get() {
-
-	            return this.constructor._end;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._end = value;
-	        }
-	    }, {
-	        key: 'start',
-	        get: function get() {
-
-	            return this.constructor._start;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._start = value;
-	        }
-	    }, {
-	        key: 'duration',
-	        get: function get() {
-
-	            return this.constructor._duration;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._duration = value;
-	        }
-	    }, {
-	        key: 'angle',
-	        get: function get() {
-
-	            return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
-	        }
-	    }, {
-	        key: 'angleDelta',
-	        get: function get() {
-
-	            var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
-	            return delta;
-	        }
-	    }, {
-	        key: 'position',
-	        get: function get() {
-
-	            return new _vector2.default(this.x, this.y);
-	        },
-	        set: function set(value) {
-
-	            this.x = value.x;
-	            this.y = value.y;
-	        }
-	    }, {
-	        key: 'released',
-	        get: function get() {
-
-	            return this.constructor._released;
-	        },
-	        set: function set(value) {
-
-	            return this.constructor._released = value;
-	        }
-	    }, {
-	        key: 'pressed',
-	        get: function get() {
-
-	            return this.constructor._pressed;
-	        },
-	        set: function set(value) {
-
-	            return this.constructor._pressed = value;
-	        }
-	    }, {
-	        key: 'keyController',
-	        get: function get() {
 
-	            return this.constructor._keyController;
-	        },
-	        set: function set(value) {
+	        _createClass(inputcontroller, [{
+	                key: 'pointerup',
+	                value: function pointerup(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
+
+	                        var target = evt.target.app.input.constructor;
+
+	                        target._pointerup(evt);
+	                }
+	        }, {
+	                key: 'pointermove',
+	                value: function pointermove(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
+
+	                        var target = evt.target.app.input.constructor;
+
+	                        target._pointermove(evt);
+	                }
+	        }, {
+	                key: 'pointerdown',
+	                value: function pointerdown(evt) {
+
+	                        if (typeof evt === 'undefined') return;
+	                        if (typeof evt.target.app === 'undefined') return;
+
+	                        var target = evt.target.app.input.constructor;
+
+	                        target._pointerdown(evt);
+	                }
+	        }, {
+	                key: 'x',
+	                get: function get() {
+
+	                        return this.constructor._x;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._x = value;
+	                }
+	        }, {
+	                key: 'y',
+	                get: function get() {
+
+	                        return this.constructor._y;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._y = value;
+	                }
+	        }, {
+	                key: 'last',
+	                get: function get() {
+
+	                        return this.constructor._last;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._last = value;
+	                }
+	        }, {
+	                key: 'pos',
+	                get: function get() {
+
+	                        return this.constructor._pos;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._pos = value;
+	                }
+	        }, {
+	                key: 'dist',
+	                get: function get() {
+
+	                        return this.constructor._dist;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._dist = value;
+	                }
+	        }, {
+	                key: 'end',
+	                get: function get() {
+
+	                        return this.constructor._end;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._end = value;
+	                }
+	        }, {
+	                key: 'start',
+	                get: function get() {
+
+	                        return this.constructor._start;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._start = value;
+	                }
+	        }, {
+	                key: 'duration',
+	                get: function get() {
+
+	                        return this.constructor._duration;
+	                },
+	                set: function set(value) {
+
+	                        this.constructor._duration = value;
+	                }
+	        }, {
+	                key: 'angle',
+	                get: function get() {
+
+	                        return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
+	                }
+	        }, {
+	                key: 'angleDelta',
+	                get: function get() {
+
+	                        var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
+	                        return delta;
+	                }
+	        }, {
+	                key: 'position',
+	                get: function get() {
+
+	                        return new _vector2.default(this.x, this.y);
+	                },
+	                set: function set(value) {
+
+	                        this.x = value.x;
+	                        this.y = value.y;
+	                }
+	        }, {
+	                key: 'released',
+	                get: function get() {
+
+	                        return this.constructor._released;
+	                },
+	                set: function set(value) {
+
+	                        return this.constructor._released = value;
+	                }
+	        }, {
+	                key: 'pressed',
+	                get: function get() {
+
+	                        return this.constructor._pressed;
+	                },
+	                set: function set(value) {
+
+	                        return this.constructor._pressed = value;
+	                }
+	        }, {
+	                key: 'keyController',
+	                get: function get() {
 
-	            return this.constructor._keyController = value;
-	        }
-	    }, {
-	        key: 'scrollController',
-	        get: function get() {
+	                        return this.constructor._keyController;
+	                },
+	                set: function set(value) {
 
-	            return this.constructor._scrollController;
-	        },
-	        set: function set(value) {
+	                        return this.constructor._keyController = value;
+	                }
+	        }, {
+	                key: 'scrollController',
+	                get: function get() {
 
-	            return this.constructor._scrollController = value;
-	        }
-	    }, {
-	        key: 'horizontal',
-	        get: function get() {
+	                        return this.constructor._scrollController;
+	                },
+	                set: function set(value) {
 
-	            var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
-	            var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
-	            var mouse = -this.pressed * this.app.input.dist.x;
-	            var touch = -this.pressed * this.app.input.dist.x; //was touched
+	                        return this.constructor._scrollController = value;
+	                }
+	        }, {
+	                key: 'horizontal',
+	                get: function get() {
 
-	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+	                        var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
+	                        var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
+	                        var mouse = -this.pressed * this.app.input.dist.x;
+	                        var touch = -this.pressed * this.app.input.dist.x; //was touched
 
-	            return { keyboard: keyboard, touch: touched };
-	        }
-	    }, {
-	        key: 'vertical',
-	        get: function get() {
+	                        var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	                        var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
 
-	            var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
-	            var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
-	            var mouse = this.pressed * this.app.input.dist.y;
-	            var touch = this.pressed * this.app.input.dist.y; //was touched
+	                        return { keyboard: keyboard, touch: touched };
+	                }
+	        }, {
+	                key: 'vertical',
+	                get: function get() {
 
-	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+	                        var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
+	                        var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
+	                        var mouse = this.pressed * this.app.input.dist.y;
+	                        var touch = this.pressed * this.app.input.dist.y; //was touched
 
-	            return { keyboard: keyboard, touch: touched };
-	        }
-	    }], [{
-	        key: '_pointerup',
-	        value: function _pointerup(evt) {
+	                        var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	                        var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
 
-	            var input = evt.target.app.input;
+	                        return { keyboard: keyboard, touch: touched };
+	                }
+	        }], [{
+	                key: '_pointerup',
+	                value: function _pointerup(evt) {
 
-	            var x = evt.x || evt.clientX || evt.pageX;
+	                        var input = evt.target.app.input;
 
-	            var y = evt.y || evt.clientY || evt.pageY;
+	                        var x = evt.x || evt.clientX || evt.pageX;
 
-	            input.last = input.end = new _vector2.default(x, y);
+	                        var y = evt.y || evt.clientY || evt.pageY;
 
-	            input.pressed = false;
+	                        input.last = input.end = new _vector2.default(x, y);
 
-	            input.released = true;
+	                        input.pressed = false;
 
-	            return true;
-	        }
-	    }, {
-	        key: '_pointermove',
-	        value: function _pointermove(evt) {
+	                        input.released = true;
 
-	            var input = evt.target.app.input;
-	            var x = evt.x || evt.clientX || evt.pageX;
-	            var y = evt.y || evt.clientY || evt.pageY;
+	                        return true;
+	                }
+	        }, {
+	                key: '_pointermove',
+	                value: function _pointermove(evt) {
 
-	            //var mouse_last = this.mouse_last;
+	                        var input = evt.target.app.input;
+	                        var x = evt.x || evt.clientX || evt.pageX;
+	                        var y = evt.y || evt.clientY || evt.pageY;
 
-	            input.last = input.position = new _vector2.default(x, y);
+	                        //var mouse_last = this.mouse_last;
 
-	            if (input.pressed) {
+	                        input.last = input.position = new _vector2.default(x, y);
 
-	                var dx = (input.x - input.start.x) * evt.target.app.getScale();
-	                var dy = (input.y - input.start.y) * evt.target.app.getScale();
-	                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
-	            }
+	                        if (input.pressed) {
 
-	            if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
+	                                var dx = (input.x - input.start.x) * evt.target.app.getScale();
+	                                var dy = (input.y - input.start.y) * evt.target.app.getScale();
+	                                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
+	                        }
 
-	            if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
+	                        if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
 
-	            this.mouse_last = input.dist.x;
-	        }
-	    }, {
-	        key: '_pointerdown',
-	        value: function _pointerdown(evt) {
+	                        if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
 
-	            var input = evt.target.app.input;
+	                        this.mouse_last = input.dist.x;
+	                }
+	        }, {
+	                key: '_pointerdown',
+	                value: function _pointerdown(evt) {
 
-	            var x = evt.x || evt.clientX || evt.pageX;
+	                        var input = evt.target.app.input;
 
-	            var y = evt.y || evt.clientY || evt.pageY;
+	                        var x = evt.x || evt.clientX || evt.pageX;
 
-	            input.start = new _vector2.default(x, y);
+	                        var y = evt.y || evt.clientY || evt.pageY;
 
-	            input.pressed = true;
+	                        input.start = new _vector2.default(x, y);
 
-	            input.touch = true;
+	                        input.pressed = true;
 
-	            input.touched.count++;
+	                        input.touch = true;
 
-	            input.touched.downlist.push(input.position);
+	                        input.touched.count++;
 
-	            input.dist = new _vector2.default(0, 0);
-	        }
-	    }]);
+	                        input.touched.downlist.push(input.position);
 
-	    return inputcontroller;
-	}(_interfaces._SJSClass);
+	                        input.dist = new _vector2.default(0, 0);
+	                }
+	        }]);
+
+	        return inputcontroller;
+	})(_interfaces._SJSClass);
 
 	inputcontroller._x = 0;
 	inputcontroller._y = 0;
@@ -7937,7 +8022,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -7958,7 +8043,7 @@
 	* let vector = new Vector(1,1);
 	*/
 
-	var Vector = function (_Vector2) {
+	var Vector = (function (_Vector2) {
 	    _inherits(Vector, _Vector2);
 
 	    function Vector() {
@@ -8090,7 +8175,7 @@
 	    }]);
 
 	    return Vector;
-	}(_interfaces._Vector);
+	})(_interfaces._Vector);
 
 	exports.default = Vector;
 
@@ -8100,7 +8185,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8122,7 +8207,7 @@
 	*
 	*/
 
-	var InputListener = function () {
+	var InputListener = (function () {
 	    function InputListener(a, b, c, d, elm, evt) {
 	        _classCallCheck(this, InputListener);
 
@@ -8179,7 +8264,7 @@
 	    }]);
 
 	    return InputListener;
-	}();
+	})();
 
 	exports.default = InputListener;
 
@@ -8189,7 +8274,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8204,7 +8289,7 @@
 	*
 	*/
 
-	var inputkeycontroller = function () {
+	var inputkeycontroller = (function () {
 	    function inputkeycontroller() {
 	        _classCallCheck(this, inputkeycontroller);
 	    }
@@ -8307,7 +8392,7 @@
 	    }]);
 
 	    return inputkeycontroller;
-	}();
+	})();
 
 	inputkeycontroller._codeList = [];
 	exports.default = inputkeycontroller;
@@ -8319,7 +8404,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	/**
@@ -8331,118 +8416,118 @@
 
 	var inputscrollcontroller = {
 
-	    prototype: {
+	        prototype: {
 
-	        /* Cache */
+	                /* Cache */
 
-	        x: 0,
-	        y: 1,
-	        target: { x: 0, y: 0 },
+	                x: 0,
+	                y: 1,
+	                target: { x: 0, y: 0 },
 
-	        accel: 1,
+	                accel: 1,
 
-	        active: null,
-	        reverse: false,
-	        a: false,
+	                active: null,
+	                reverse: false,
+	                a: false,
 
-	        window: window,
-	        doc: document.documentElement,
+	                window: window,
+	                doc: document.documentElement,
 
-	        //ScrollWheel Event
-	        event: function event(evt, delta) {
+	                //ScrollWheel Event
+	                event: function event(evt, delta) {
 
-	            if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
+	                        if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
 
-	            if (this.app.options.get("seamless")) evt.preventDefault();
+	                        if (this.app.options.get("seamless")) evt.preventDefault();
 
-	            //if (this.app.options.get("overridescroll")==false)
-	            return;
+	                        //if (this.app.options.get("overridescroll")==false)
+	                        return;
 
-	            /*
-	            this.app.input.wheelDelta = evt.wheelDelta;
-	             var doc = document.documentElement;
-	            var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	            var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-	                 //Flip for horizontal scrolling
-	               if (this.reverse)
-	               {
-	                   this.app.input.scroll.target.x = left;
-	                   this.app.input.scroll.target.y = top-evt.wheelDelta;
-	                   this.app.input.scroll.x = left;
-	                   this.app.input.scroll.y = top-evt.wheelDelta;
-	               }
-	               else{
-	                   this.app.input.scroll.target.y = 0;
-	                   this.app.input.scroll.target.x = left-evt.wheelDelta;
-	                   this.app.input.scroll.y = 0;
-	                   this.app.input.scroll.x = left-evt.wheelDelta;
-	               }
-	              */
-	            //App.ext.scroll.active = false;$
-	        },
+	                        /*
+	                        this.app.input.wheelDelta = evt.wheelDelta;
+	                          var doc = document.documentElement;
+	                        var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	                        var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+	                               //Flip for horizontal scrolling
+	                           if (this.reverse)
+	                           {
+	                               this.app.input.scroll.target.x = left;
+	                               this.app.input.scroll.target.y = top-evt.wheelDelta;
+	                               this.app.input.scroll.x = left;
+	                               this.app.input.scroll.y = top-evt.wheelDelta;
+	                           }
+	                           else{
+	                               this.app.input.scroll.target.y = 0;
+	                               this.app.input.scroll.target.x = left-evt.wheelDelta;
+	                               this.app.input.scroll.y = 0;
+	                               this.app.input.scroll.x = left-evt.wheelDelta;
+	                           }
+	                          */
+	                        //App.ext.scroll.active = false;$
+	                },
 
-	        up: function up() {
+	                up: function up() {
 
-	            var transitionSpeed = 1;
+	                        var transitionSpeed = 1;
 
-	            if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
+	                        if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
 
-	            if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
+	                        if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
 
-	            this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
-	            this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
+	                        this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
+	                        this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
 
-	            //if (this.a)
-	            //this.app.window.scrollTo(this.x,this.y),this.a = false;
+	                        //if (this.a)
+	                        //this.app.window.scrollTo(this.x,this.y),this.a = false;
 
-	            log(this.x, this.y);
-	        },
+	                        log(this.x, this.y);
+	                },
 
-	        //Update the position for smooth scrolling
+	                //Update the position for smooth scrolling
 
-	        update: function update(x, y) {
+	                update: function update(x, y) {
 
-	            var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
-	            var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
+	                        var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
+	                        var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
 
-	            /* DEACTIVATE IF CONFUSED */
-	            if (!this.active) return;
+	                        /* DEACTIVATE IF CONFUSED */
+	                        if (!this.active) return;
 
-	            var LD = Math.round(-this.x + this.target.x) / 10;
-	            var YD = Math.round(-this.y + this.target.y) / 10;
+	                        var LD = Math.round(-this.x + this.target.x) / 10;
+	                        var YD = Math.round(-this.y + this.target.y) / 10;
 
-	            if (left < this.target.x) this.x += this.accel * LD;
-	            if (left > this.target.x) this.x += this.accel * LD;
-	            if (top < this.target.y) this.y += this.accel * YD;
-	            if (top > this.target.y) this.y += this.accel * YD;
+	                        if (left < this.target.x) this.x += this.accel * LD;
+	                        if (left > this.target.x) this.x += this.accel * LD;
+	                        if (top < this.target.y) this.y += this.accel * YD;
+	                        if (top > this.target.y) this.y += this.accel * YD;
 
-	            //	this.app.window.scrollTo(this.x,this.y);
+	                        //	this.app.window.scrollTo(this.x,this.y);
 
-	            if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
+	                        if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
 
-	            return true;
-	        },
+	                        return true;
+	                },
 
-	        //Set position,
+	                //Set position,
 
-	        to: function to(x, y) {
+	                to: function to(x, y) {
 
-	            this.target.x = x;
-	            this.target.y = y;
-	        }
-
-	    },
-
-	    constructor: function constructor(a) {
-	        return {
-	            app: { value: a },
-	            init: { value: function value() {
-	                    this.to(0, 0);
-	                    return this;
+	                        this.target.x = x;
+	                        this.target.y = y;
 	                }
-	            }
-	        };
-	    }
+
+	        },
+
+	        constructor: function constructor(a) {
+	                return {
+	                        app: { value: a },
+	                        init: { value: function value() {
+	                                        this.to(0, 0);
+	                                        return this;
+	                                }
+	                        }
+	                };
+	        }
 
 	};
 
@@ -8454,7 +8539,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -8475,7 +8560,7 @@
 	* Application.client.math
 	*/
 
-	var Math = function () {
+	var Math = (function () {
 		_createClass(Math, [{
 			key: "minmax4",
 
@@ -9155,10 +9240,11 @@
 
 			this.vector = _vector2.default;
 			window.Math.vector = this.vector;
+			window.Math.Vector = window.Math.vector;
 		}
 
 		return Math;
-	}();
+	})();
 
 	exports.default = Math;
 
@@ -9167,8 +9253,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -9179,6 +9263,8 @@
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	exports.default = {
 
@@ -9231,6 +9317,7 @@
 	                    //Build
 	                    (this.update.state = Object.create(this.update.state.prototype, this.update.state.constructor(this))).init(this.main);
 	                }
+
 	            }
 
 	        };
@@ -9268,9 +9355,11 @@
 	        },
 
 	        //Client features loop
+
 	        loopData: function loopData() {
 
 	            if (this.app) if (this.app.input) if (this.app.input.update) {
+
 	                //Return true or false, update audio
 	                //this.mute = this.audio.update();
 
@@ -9306,7 +9395,7 @@
 
 	            SpiceJS.statistics.monitor(loop).then(function () {
 
-	                SpiceJS.statistics.log("fps", SpiceJS.controller.list().getFps(), 'state');
+	                SpiceJS.statistics.log("fps", SpiceJS.controller.list().fps, 'state');
 	                SpiceJS.statistics.log("scale", SpiceJS.controller.list().getScale(), 'state');
 	            });
 	        },
@@ -9777,7 +9866,7 @@
 	                    return;
 
 	                    /*
-	                     this.mute;
+	                      this.mute;
 	                    if (this.sound[this.current]==="undefined")
 	                        return;
 	                    if (this.sound[this.current].currentTime >= this.length)
@@ -9786,10 +9875,10 @@
 	                        {
 	                            this.current = 0;
 	                        }
-	                         this.sound[this.current].currentTime = 0;
+	                          this.sound[this.current].currentTime = 0;
 	                        this.sound[this.current].play();
 	                    }
-	                      */
+	                        */
 	                }
 	            },
 	            constructor: function constructor() {
@@ -10000,9 +10089,7 @@
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -10010,13 +10097,15 @@
 
 	var _interfaces = __webpack_require__(196);
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _Visuals = function (_SJSClass) {
+	var _Visuals = (function (_SJSClass) {
 	    _inherits(_Visuals, _SJSClass);
 
 	    function _Visuals(app) {
@@ -10026,9 +10115,9 @@
 	    }
 
 	    return _Visuals;
-	}(_interfaces._SJSClass);
+	})(_interfaces._SJSClass);
 
-	var _Pipe = function () {
+	var _Pipe = (function () {
 	    function _Pipe() {
 	        _classCallCheck(this, _Pipe);
 	    }
@@ -10039,7 +10128,7 @@
 	    }]);
 
 	    return _Pipe;
-	}();
+	})();
 
 	var visuals = visuals || {};
 	visuals = {
@@ -10262,7 +10351,7 @@
 	            //this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
 	            if (App.fps<20)
 	            console.log("FPSLow: "+App.fps);
-	             var data = [
+	              var data = [
 	                        [this.app.client.name],
 	                        [App.code+ " " +App.codefmk],
 	                        [this.app.client.name],
@@ -10271,7 +10360,7 @@
 	                        "x "+Math.round(App.input.x*100)/100		,
 	                        "x "+Math.round(App.input.window.x*100)/100,
 	                        "d "+App.input.pressed+"   p "+App.input.duration,
-	                          "y "+Math.round(App.input.y*100)/100		,
+	                            "y "+Math.round(App.input.y*100)/100		,
 	                        "y "+Math.round(App.input.window.y*100)/100,
 	                        (App.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
 	                        ],
@@ -10299,7 +10388,7 @@
 	                        "state ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?"),"",
 	                        "ext ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?"),"",
 	                        "Total ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?"),""
-	                         ]
+	                          ]
 	                    ];
 	                    for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii)
 	                        {
@@ -10311,7 +10400,7 @@
 	                        t=0;
 	                        tt++
 	                        };
-	             //this.text_ext("D: "+App.input.duration,210,55);
+	              //this.text_ext("D: "+App.input.duration,210,55);
 	            //this.text_ext("P: "+App.input.pressed,160,55);
 	            //(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
 	            //this.text_ext("I: "+App.input.window.inside+" X: "+App.input.window.x+" Y: "+App.input.window.y,155,70);
@@ -10330,7 +10419,7 @@
 	            this.text_ext("Log: "+App.ext.debug.text,35,this.app.client.setHeight-25,this.point);
 	            if (App.ext.debug.strength=="Lite")
 	                return;
-	                 try {
+	                  try {
 	            //this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
 	            }catch(e){}
 	            //this.text_ext("graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
@@ -10338,7 +10427,7 @@
 	            //this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
 	            //this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
 	            //this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
-	              */
+	                */
 	        },
 
 	        blit: function blit(img, offx, offy) {
@@ -10901,7 +10990,7 @@
 	            var y = position.y;
 
 	            /*
-	                         if (!r){
+	                          if (!r){
 	                        x = this.app.input.touched.last.x;
 	                        y = this.app.input.touched.last.y;}
 	            */
@@ -11036,13 +11125,13 @@
 	        }
 
 	        /*
-	             circle now allows passing vectors
-	             Test: argument based functions
+	              circle now allows passing vectors
+	              Test: argument based functions
 	                Method1:
 	                    if based on first argument
 	                        Method2 (unused):
 	                            inherit _circle function and pass accordingly
-	         */
+	          */
 
 	        , circle: function circle(XVec, YR, RC, CA, A) {
 
@@ -11233,7 +11322,7 @@
 
 	                    /*var orig_aspect = this.original_width / this.original_height;
 	                    var cur_aspect = this.width / this.height;
-	                    	// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+	                    		// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
 	                    if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
 	                    	this.aspect_scale = this.height / this.original_height;
 	                    else
@@ -11366,13 +11455,13 @@
 	                    {
 	                    	var orig_aspect = this.original_width / this.original_height;
 	                    	var cur_aspect = this.width / this.height;
-	                    		// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+	                    			// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
 	                    	if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
 	                    		this.aspect_scale = this.height / this.original_height;
 	                    	else
 	                    		this.aspect_scale = this.width / this.original_width;
 	                    }
-	                           */
+	                            */
 	                    // Non-fullscreen games on retina displays never call setSize to enable hi-dpi display.
 	                    // Do this now if the device has hi-dpi support.
 	                    //if (this.fullscreen_mode === 0 && this.isRetina && this.devicePixelRatio > 1)
@@ -11394,12 +11483,12 @@
 
 	'use strict';
 
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _interfaces = __webpack_require__(196);
@@ -11424,136 +11513,134 @@
 	*
 	*/
 
-	var Canvas = function (_Canvas_Core2) {
-	    _inherits(Canvas, _Canvas_Core2);
+	var Canvas = (function (_Canvas_Core2) {
+	        _inherits(Canvas, _Canvas_Core2);
 
-	    /**
-	    * This is the constructor for the canvas module.
-	    * @param {number} x - position.x
-	    * @param {number} y - position.y
-	    */
+	        /**
+	        * This is the constructor for the canvas module.
+	        * @param {number} x - position.x
+	        * @param {number} y - position.y
+	        */
 
-	    function Canvas(app) {
-	        var _ret;
+	        function Canvas(app) {
+	                _classCallCheck(this, Canvas);
 
-	        _classCallCheck(this, Canvas);
+	                //Assign private properties
 
-	        //Assign private properties
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
+	                _private.set(_this, _this.constructor.properties);
 
-	        _private.set(_this, _this.constructor.properties);
+	                //Cache canvases
+	                var temp_canvas = document.getElementById(_this.app.options.target.canvas);
+	                var temp_buffer = document.getElementById(_this.app.options.target.buffer);
+	                var temp_blitter = document.getElementById(_this.app.options.target.blitter);
+	                var options = _this.app.options;
 
-	        //Cache canvases
-	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
-	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
-	        var temp_blitter = document.getElementById(_this.app.options.target.blitter);
-	        var options = _this.app.options;
+	                //Check canvas variables
+	                if (temp_canvas) {
 
-	        //Check canvas variables
-	        if (temp_canvas) {
+	                        //    if (temp_buffer)
+	                        //        temp_buffer;
 
-	            //    if (temp_buffer)
-	            //        temp_buffer;
+	                } else {
 
-	        } else {
+	                                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
 
-	                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
+	                                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
+	                        }
+	                temp_canvas.mozOpaque = options.flags.opaque;
+	                //Assign canvas elements
 
-	                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
-	            }
-	        temp_canvas.mozOpaque = options.flags.opaque;
-	        //Assign canvas elements
+	                var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
 
-	        var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
+	                var _this$style2 = _slicedToArray(_this$style, 4);
 
-	        var _this$style2 = _slicedToArray(_this$style, 4);
+	                _this.canvas = _this$style2[0];
+	                _this.buffer = _this$style2[1];
+	                _this.blitter = _this$style2[2];
+	                _this.rendering_style = _this$style2[3];
 
-	        _this.canvas = _this$style2[0];
-	        _this.buffer = _this$style2[1];
-	        _this.blitter = _this$style2[2];
-	        _this.rendering_style = _this$style2[3];
+	                _this.head.appendChild(_this.rendering_style);
 
-	        _this.head.appendChild(_this.rendering_style);
-
-	        return _ret = true, _possibleConstructorReturn(_this, _ret);
-	    }
-
-	    /**
-	    * Style provided canvases
-	    * @type {null}
-	    * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
-	    * @protected
-	    */
-
-	    /**
-	    * Set documents private variables
-	    * @type {Object}
-	    * @protected
-	    */
-
-	    _createClass(Canvas, [{
-	        key: 'style',
-	        value: function style(temp_canvas, temp_buffer, temp_blitter) {
-
-	            temp_canvas.style.position = this.app.options.canvas.position.position;
-
-	            temp_canvas.style.zIndex = this.app.options.canvas.position.z;
-
-	            if (this.app.options.canvas.buffer) {
-	                temp_buffer.style.position = this.app.options.canvas.position.position;
-
-	                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
-	            }
-
-	            if (this.app.options.canvas.override) {
-
-	                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
-
-	                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
-
-	                if (this.app.options.canvas.buffer) {
-	                    temp_buffer.style.left = this.app.options.canvas.position.left + "px";
-
-	                    temp_buffer.style.top = this.app.options.canvas.position.top + "px";
-	                }
-	            }
-
-	            return [temp_canvas, temp_buffer, temp_blitter];
+	                return _possibleConstructorReturn(_this, true);
 	        }
 
 	        /**
-	        * Construct a canvas element.
-	        * @type {Id}
-	        * @param {Element} a - Creates a canvas element and attaches it to the body.
+	        * Style provided canvases
+	        * @type {null}
+	        * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
 	        * @protected
 	        */
 
-	    }, {
-	        key: 'construct_canvas',
-	        value: function construct_canvas(id) {
+	        /**
+	        * Set documents private variables
+	        * @type {Object}
+	        * @protected
+	        */
 
-	            var c = this.doc.createElement("canvas");
+	        _createClass(Canvas, [{
+	                key: 'style',
+	                value: function style(temp_canvas, temp_buffer, temp_blitter) {
 
-	            var c_id = id + "_" + this.app.id;
+	                        temp_canvas.style.position = this.app.options.canvas.position.position;
 
-	            c.id = c_id;
+	                        temp_canvas.style.zIndex = this.app.options.canvas.position.z;
 
-	            this.doc.body.appendChild(c);
+	                        if (this.app.options.canvas.buffer) {
+	                                temp_buffer.style.position = this.app.options.canvas.position.position;
 
-	            return this.doc.getElementById(c_id);
-	        }
-	    }]);
+	                                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
+	                        }
 
-	    return Canvas;
-	}(_interfaces._Canvas_Core);
+	                        if (this.app.options.canvas.override) {
+
+	                                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
+
+	                                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
+
+	                                if (this.app.options.canvas.buffer) {
+	                                        temp_buffer.style.left = this.app.options.canvas.position.left + "px";
+
+	                                        temp_buffer.style.top = this.app.options.canvas.position.top + "px";
+	                                }
+	                        }
+
+	                        return [temp_canvas, temp_buffer, temp_blitter];
+	                }
+
+	                /**
+	                * Construct a canvas element.
+	                * @type {Id}
+	                * @param {Element} a - Creates a canvas element and attaches it to the body.
+	                * @protected
+	                */
+
+	        }, {
+	                key: 'construct_canvas',
+	                value: function construct_canvas(id) {
+
+	                        var c = this.doc.createElement("canvas");
+
+	                        var c_id = id + "_" + this.app.id;
+
+	                        c.id = c_id;
+
+	                        this.doc.body.appendChild(c);
+
+	                        return this.doc.getElementById(c_id);
+	                }
+	        }]);
+
+	        return Canvas;
+	})(_interfaces._Canvas_Core);
 
 	Canvas.properties = {
-	    name: 'canvas',
-	    canvas: [],
-	    docs: document,
-	    head: document.getElementsByTagName('head')[0],
-	    _rendering_style: document.createElement('style')
+	        name: 'canvas',
+	        canvas: [],
+	        docs: document,
+	        head: document.getElementsByTagName('head')[0],
+	        _rendering_style: document.createElement('style')
 	};
 	exports.default = Canvas;
 	;
@@ -11620,13 +11707,13 @@
 	        /*
 	        function testAPI() {
 	        console.log('Welcome!  Fetching your information.... ');
-	           FB.api('/me', function(response) {
+	            FB.api('/me', function(response) {
 	              App.user.facebook(response);
 	              callback(response);
 	            log('Good to see you, ' + response.name + '.');
 	          });
 	        }
-	          */
+	            */
 	    },
 
 	    //facebook callback
@@ -11650,7 +11737,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	                value: true
 	});
 
 	var _cookies = __webpack_require__(211);
@@ -11661,445 +11748,445 @@
 
 	exports.default = {
 
-	    constructor: function constructor(app) {
+	                constructor: function constructor(app) {
 
-	        return {
+	                                return {
 
-	            app: { writable: false, configurable: false, enumerable: false, value: app },
+	                                                app: { writable: false, configurable: false, enumerable: false, value: app },
 
-	            init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
+	                                                init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
 
-	                    //Set app/document title
+	                                                                                //Set app/document title
 
-	                    this.app.setTitle(document.title + "." + this.app.main.name);
+	                                                                                this.app.setTitle(document.title + "." + this.app.main.name);
 
-	                    //Construct App.ext components
+	                                                                                //Construct App.ext components
 
-	                    this.app.Construct(this.useragent).init();
+	                                                                                this.app.Construct(this.useragent).init();
 
-	                    this.app.Construct(this.metatag).init();
+	                                                                                this.app.Construct(this.metatag).init();
 
-	                    //this.app.Construct(this.cookies).init();
+	                                                                                //this.app.Construct(this.cookies).init();
 
-	                    this.cookies = new _cookies2.default(this.app);
+	                                                                                this.cookies = new _cookies2.default(this.app);
 
-	                    this.app.Construct(this.cursor).init();
+	                                                                                this.app.Construct(this.cursor).init();
 
-	                    this.app.Construct(this.connect).init();
+	                                                                                this.app.Construct(this.connect).init();
+	                                                                }
+	                                                }
+	                                };
+	                },
+	                prototype: {
+
+	                                //UserAgent Information
+	                                //	Assists in detecting the platform that you are running on.
+
+	                                useragent: {
+
+	                                                //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
+
+	                                                prototype: {
+
+	                                                                //Cached Navigator.userAgent
+	                                                                agent: navigator.userAgent,
+
+	                                                                //
+	                                                                mouse: false,
+	                                                                touch: false,
+	                                                                keyboard: false,
+	                                                                windows: false,
+	                                                                chrome: false,
+	                                                                safari: false,
+	                                                                iemobile: false,
+	                                                                nokia: false,
+	                                                                ie: false,
+	                                                                ios: false,
+	                                                                blackberry: false,
+	                                                                playbook: false,
+	                                                                bb10: false,
+	                                                                mobile: false,
+
+	                                                                //Match user agent for IE
+	                                                                IE: function IE() {
+
+	                                                                                return this.agent.match(/Trident/i) ? true : false;
+	                                                                },
+
+	                                                                //Match user agent for iOS
+	                                                                iOS: function iOS() {
+
+	                                                                                return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
+	                                                                },
+
+	                                                                //Match user agent for Nokia
+	                                                                Nokia: function Nokia() {
+
+	                                                                                return this.agent.match(/Nokia/i) ? true : false;
+	                                                                },
+
+	                                                                //Determine mobile or windows based on useragent
+	                                                                Mobile: function Mobile() {
+
+	                                                                                return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+	                                                                },
+
+	                                                                //Match user agent for Chrome
+	                                                                Chrome: function Chrome() {
+
+	                                                                                return this.chrome = this.agent.match(/Chrome/i) ? true : false;
+	                                                                },
+
+	                                                                //Match user agent for Safari
+	                                                                Safari: function Safari() {
+
+	                                                                                return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
+	                                                                },
+
+	                                                                Desktop: function Desktop() {
+
+	                                                                                return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
+	                                                                },
+
+	                                                                //Match user agent for Android
+	                                                                Android: function Android() {
+	                                                                                return this.agent.match(/Android/i) ? true : false;
+	                                                                },
+
+	                                                                //Match user agent for IEMobile
+	                                                                IEMobile: function IEMobile() {
+
+	                                                                                var trident = this.agent.match(/IEMobile/i);
+	                                                                                var windowsphone = this.agent.match(/Windows Phone/i);
+	                                                                                var touch = this.agent.match(/touch/i);
+
+	                                                                                return trident || windowsphone || touch ? true : false;
+	                                                                },
+
+	                                                                //Match user agent for Blackberry
+	                                                                BlackBerry: function BlackBerry() {
+	                                                                                this.playbook = this.agent.match(/PlayBook/i) || false;
+	                                                                                this.bb10 = this.agent.match(/BB10/i) || false;
+	                                                                                return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
+	                                                                }
+
+	                                                },
+
+	                                                constructor: function constructor(app) {
+
+	                                                                //Return constructed useragent object
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	                                                                                init: { writable: false, configurable: false, enumerable: false, value: function value() {
+
+	                                                                                                                //Query Browser
+	                                                                                                                this.chrome = this.Chrome();
+	                                                                                                                this.safari = this.Safari();
+	                                                                                                                this.iemobile = this.IEMobile();
+	                                                                                                                this.nokia = this.Nokia();
+	                                                                                                                this.ie = this.trident = this.IE();
+
+	                                                                                                                this.blackberry = this.BlackBerry();
+	                                                                                                                this.ios = this.iOS();
+	                                                                                                                this.android = this.Android();
+
+	                                                                                                                this.touch = this.Mobile();
+	                                                                                                                this.mouse = !this.Mobile() || this.BlackBerry();
+
+	                                                                                                                this.keyboard = this.Desktop() || this.BlackBerry();
+
+	                                                                                                                this.Mobile();
+	                                                                                                                this.Desktop();
+
+	                                                                                                                this.app.ext.useragent = this;
+	                                                                                                                //return this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                }
+
+	                                },
+
+	                                //Cookie Storage
+	                                //	Polyfill provided by ScottHamper
+	                                //	https://github.com/ScottHamper/Cookies#api-reference
+
+	                                cookies: _cookies2.default,
+
+	                                //MetaTag Handler
+	                                //	Assists in dynamically applying metatags.
+	                                //	Automatically applies Microsoft, Apple and common metatags.
+
+	                                metatag: {
+
+	                                                constructor: function constructor(app) {
+
+	                                                                //Return constructed metatag object.
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	                                                                                init: { value: function value() {
+
+	                                                                                                                //execute polyfill
+	                                                                                                                this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
+	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
+	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
+	                                                                                                                this.metaAppend(this.metaTag("cursor-event-mode", "native"));
+	                                                                                                                this.metaAppend(this.metaTag("touch-event-mode", "native"));
+	                                                                                                                this.metaAppend(this.metaTag("HandheldFriendly", "True"));
+
+	                                                                                                                if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
+	                                                                                                                if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
+
+	                                                                                                                this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
+
+	                                                                                                                //Cache Control
+	                                                                                                                this.metaAppend(this.metaTag("cache-control", "max-age=0"));
+	                                                                                                                this.metaAppend(this.metaTag("cache-control", "no-cache"));
+	                                                                                                                this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
+	                                                                                                                this.metaAppend(this.metaTag("pragma", "no-cache"));
+
+	                                                                                                                this.app.ext.metatag = this;
+
+	                                                                                                                //Return this
+	                                                                                                                return this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                },
+
+	                                                prototype: {
+
+	                                                                //Default injected tags
+	                                                                ms_taphighlight: "no",
+	                                                                apple_webapp: "yes",
+	                                                                apple_statusbar: "black",
+	                                                                devicedpi: true,
+	                                                                devicewidth: true,
+
+	                                                                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+	                                                                metaFavicon: function metaFavicon(img) {
+
+	                                                                                this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
+	                                                                },
+
+	                                                                //Construct a standard metaLink element
+	                                                                metaLink: function metaLink(href, rel, type) {
+
+	                                                                                //Create link element
+	                                                                                this.link = document.createElement('link');
+
+	                                                                                //Assign element values
+	                                                                                this.link.href = href;
+	                                                                                this.link.rel = rel;
+	                                                                                this.link.type = type;
+
+	                                                                                //Return link
+	                                                                                return this.link;
+	                                                                },
+
+	                                                                //Construct a standard metaTag element
+	                                                                metaTag: function metaTag(name, content) {
+
+	                                                                                //Create link element
+	                                                                                this.meta = document.createElement('meta');
+
+	                                                                                //Assign element values
+	                                                                                this.meta.content = content;
+	                                                                                this.meta.name = name;
+
+	                                                                                //Return tag
+	                                                                                return this.meta;
+	                                                                },
+
+	                                                                //Append a meta object to the <head>
+	                                                                metaAppend: function metaAppend(meta) {
+
+	                                                                                //Append child to header
+	                                                                                if (this.head.appendChild(meta)) {
+	                                                                                                //Count number of headers
+	                                                                                                this.count++;
+
+	                                                                                                //Return success
+	                                                                                                return true;
+	                                                                                } else return false;
+	                                                                },
+
+	                                                                //Cached data
+	                                                                head: document.getElementsByTagName('head')[0],
+	                                                                link: null,
+	                                                                meta: null,
+	                                                                count: 0
+
+	                                                }
+
+	                                },
+
+	                                //Cursor Handler
+	                                //	Logs last cursor and allows to easily change the cursor on the fly
+
+	                                cursor: {
+
+	                                                constructor: function constructor(app) {
+
+	                                                                //Return constructed metatag object.
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
+	                                                                                init: { value: function value() {
+
+	                                                                                                                this.set(this.wait);
+
+	                                                                                                                this.app.ext.cursor = this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                },
+
+	                                                prototype: {
+
+	                                                                //Cached cursor types
+	                                                                auto: "auto",
+	                                                                inherit: "inherit",
+	                                                                crosshair: "crosshair",
+	                                                                def: "default",
+	                                                                help: "help",
+	                                                                move: "move",
+	                                                                pointer: "pointer",
+	                                                                progress: "progress",
+	                                                                text: "text",
+	                                                                wait: "wait",
+	                                                                eresize: "e-resize",
+	                                                                neresize: "ne-resize",
+	                                                                nwresize: "nw-resize",
+	                                                                nresize: "n-resize",
+	                                                                seresize: "se-resize",
+	                                                                swresize: "sw-resize",
+	                                                                sresize: "s-resize",
+	                                                                wresize: "w-resize",
+
+	                                                                //Properties
+	                                                                current: "auto",
+	                                                                last: "auto",
+	                                                                changed: false,
+	                                                                count: 0,
+	                                                                lock: 0,
+	                                                                delay: 4,
+
+	                                                                set: function set(cursor, lock) {
+
+	                                                                                if (this.last == cursor || this.lock) return;
+
+	                                                                                this.last = this.current;
+
+	                                                                                this.current = cursor;
+
+	                                                                                /*
+	                                                                                if (this.app.options.target.buffer)
+	                                                                                    this.app.canvas.buffer.style.cursor=this.current;
+	                                                                                    this.app.canvas.canvas.style.cursor=this.current;
+	                                                                                  document.body.style.cursor=this.current;
+	                                                                                */
+	                                                                                this.changed = true;
+	                                                                                this.count++;
+	                                                                }
+
+	                                                }
+
+	                                },
+
+	                                //Connection Controller
+	                                //	Assists in making ajax calls and allows you to test your connection.
+	                                //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
+
+	                                connect: {
+
+	                                                constructor: function constructor(app) {
+
+	                                                                //Return constructed metatag object.
+	                                                                return {
+	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
+	                                                                                init: { value: function value() {
+
+	                                                                                                                //Execute a test on the connection
+	                                                                                                                this.test();
+
+	                                                                                                                this.app.ext.connect = this;
+	                                                                                                }
+	                                                                                }
+	                                                                };
+	                                                },
+
+	                                                prototype: {
+
+	                                                                //Properties
+	                                                                offline: false,
+	                                                                connectionAttempts: 0,
+	                                                                error: null,
+	                                                                window: window,
+
+	                                                                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
+	                                                                load: function load(address, callback, arg0, arg1) {
+
+	                                                                                var xmlhttp;
+	                                                                                if (window.XMLHttpRequest) {
+	                                                                                                // code for IE7+, Firefox, Chrome, Opera, Safari
+	                                                                                                xmlhttp = new XMLHttpRequest();
+	                                                                                } else {
+	                                                                                                // code for IE6, IE5
+	                                                                                                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	                                                                                }
+	                                                                                xmlhttp.onreadystatechange = function () {
+	                                                                                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                                                                                                                callback(xmlhttp.response, arg0, arg1);
+	                                                                                                }
+	                                                                                };
+	                                                                                xmlhttp.open("GET", address, true);
+	                                                                                xmlhttp.send();
+	                                                                },
+
+	                                                                //An aJax request to check wither or not you are connected to the internet
+	                                                                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
+	                                                                hostReachable: function hostReachable() {
+	                                                                                return;
+	                                                                                /*
+	                                                                                                    //if local host return offline
+	                                                                                                    if ((this.window.location.hostname).toString()=="127.0.0.1")
+	                                                                                                        return false;
+	                                                                                
+	                                                                                                    // Handle IE and more capable browsers
+	                                                                                                    var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
+	                                                                                                    var status;
+	                                                                                
+	                                                                                
+	                                                                                                    // Open new request as a HEAD to the root hostname with a random param to bust the cache
+	                                                                                                    xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
+	                                                                                
+	                                                                                                    // Issue request and handle response
+	                                                                                                    try {
+	                                                                                                        xhr.send();
+	                                                                                                        return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
+	                                                                                
+	                                                                                                    } catch (error) {
+	                                                                                
+	                                                                                                        if (this.connectionAttempts<1)
+	                                                                                                            this.connectionAttempts++,this.hostReachable();
+	                                                                                                        this.error = error;
+	                                                                                                        return false;
+	                                                                                                    }
+	                                                                                */
+	                                                                },
+
+	                                                                test: function test(app) {
+
+	                                                                                return this.offline = this.hostReachable();
+	                                                                }
+
+	                                                }
+
+	                                }
+
 	                }
-	            }
-	        };
-	    },
-	    prototype: {
-
-	        //UserAgent Information
-	        //	Assists in detecting the platform that you are running on.
-
-	        useragent: {
-
-	            //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
-
-	            prototype: {
-
-	                //Cached Navigator.userAgent
-	                agent: navigator.userAgent,
-
-	                //
-	                mouse: false,
-	                touch: false,
-	                keyboard: false,
-	                windows: false,
-	                chrome: false,
-	                safari: false,
-	                iemobile: false,
-	                nokia: false,
-	                ie: false,
-	                ios: false,
-	                blackberry: false,
-	                playbook: false,
-	                bb10: false,
-	                mobile: false,
-
-	                //Match user agent for IE
-	                IE: function IE() {
-
-	                    return this.agent.match(/Trident/i) ? true : false;
-	                },
-
-	                //Match user agent for iOS
-	                iOS: function iOS() {
-
-	                    return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
-	                },
-
-	                //Match user agent for Nokia
-	                Nokia: function Nokia() {
-
-	                    return this.agent.match(/Nokia/i) ? true : false;
-	                },
-
-	                //Determine mobile or windows based on useragent
-	                Mobile: function Mobile() {
-
-	                    return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-	                },
-
-	                //Match user agent for Chrome
-	                Chrome: function Chrome() {
-
-	                    return this.chrome = this.agent.match(/Chrome/i) ? true : false;
-	                },
-
-	                //Match user agent for Safari
-	                Safari: function Safari() {
-
-	                    return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
-	                },
-
-	                Desktop: function Desktop() {
-
-	                    return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
-	                },
-
-	                //Match user agent for Android
-	                Android: function Android() {
-	                    return this.agent.match(/Android/i) ? true : false;
-	                },
-
-	                //Match user agent for IEMobile
-	                IEMobile: function IEMobile() {
-
-	                    var trident = this.agent.match(/IEMobile/i);
-	                    var windowsphone = this.agent.match(/Windows Phone/i);
-	                    var touch = this.agent.match(/touch/i);
-
-	                    return trident || windowsphone || touch ? true : false;
-	                },
-
-	                //Match user agent for Blackberry
-	                BlackBerry: function BlackBerry() {
-	                    this.playbook = this.agent.match(/PlayBook/i) || false;
-	                    this.bb10 = this.agent.match(/BB10/i) || false;
-	                    return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
-	                }
-
-	            },
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed useragent object
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                    init: { writable: false, configurable: false, enumerable: false, value: function value() {
-
-	                            //Query Browser
-	                            this.chrome = this.Chrome();
-	                            this.safari = this.Safari();
-	                            this.iemobile = this.IEMobile();
-	                            this.nokia = this.Nokia();
-	                            this.ie = this.trident = this.IE();
-
-	                            this.blackberry = this.BlackBerry();
-	                            this.ios = this.iOS();
-	                            this.android = this.Android();
-
-	                            this.touch = this.Mobile();
-	                            this.mouse = !this.Mobile() || this.BlackBerry();
-
-	                            this.keyboard = this.Desktop() || this.BlackBerry();
-
-	                            this.Mobile();
-	                            this.Desktop();
-
-	                            this.app.ext.useragent = this;
-	                            //return this;
-	                        }
-	                    }
-	                };
-	            }
-
-	        },
-
-	        //Cookie Storage
-	        //	Polyfill provided by ScottHamper
-	        //	https://github.com/ScottHamper/Cookies#api-reference
-
-	        cookies: _cookies2.default,
-
-	        //MetaTag Handler
-	        //	Assists in dynamically applying metatags.
-	        //	Automatically applies Microsoft, Apple and common metatags.
-
-	        metatag: {
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed metatag object.
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                    init: { value: function value() {
-
-	                            //execute polyfill
-	                            this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
-	                            this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
-	                            this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
-	                            this.metaAppend(this.metaTag("cursor-event-mode", "native"));
-	                            this.metaAppend(this.metaTag("touch-event-mode", "native"));
-	                            this.metaAppend(this.metaTag("HandheldFriendly", "True"));
-
-	                            if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
-	                            if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
-
-	                            this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
-
-	                            //Cache Control
-	                            this.metaAppend(this.metaTag("cache-control", "max-age=0"));
-	                            this.metaAppend(this.metaTag("cache-control", "no-cache"));
-	                            this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
-	                            this.metaAppend(this.metaTag("pragma", "no-cache"));
-
-	                            this.app.ext.metatag = this;
-
-	                            //Return this
-	                            return this;
-	                        }
-	                    }
-	                };
-	            },
-
-	            prototype: {
-
-	                //Default injected tags
-	                ms_taphighlight: "no",
-	                apple_webapp: "yes",
-	                apple_statusbar: "black",
-	                devicedpi: true,
-	                devicewidth: true,
-
-	                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
-	                metaFavicon: function metaFavicon(img) {
-
-	                    this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
-	                },
-
-	                //Construct a standard metaLink element
-	                metaLink: function metaLink(href, rel, type) {
-
-	                    //Create link element
-	                    this.link = document.createElement('link');
-
-	                    //Assign element values
-	                    this.link.href = href;
-	                    this.link.rel = rel;
-	                    this.link.type = type;
-
-	                    //Return link
-	                    return this.link;
-	                },
-
-	                //Construct a standard metaTag element
-	                metaTag: function metaTag(name, content) {
-
-	                    //Create link element
-	                    this.meta = document.createElement('meta');
-
-	                    //Assign element values
-	                    this.meta.content = content;
-	                    this.meta.name = name;
-
-	                    //Return tag
-	                    return this.meta;
-	                },
-
-	                //Append a meta object to the <head>
-	                metaAppend: function metaAppend(meta) {
-
-	                    //Append child to header
-	                    if (this.head.appendChild(meta)) {
-	                        //Count number of headers
-	                        this.count++;
-
-	                        //Return success
-	                        return true;
-	                    } else return false;
-	                },
-
-	                //Cached data
-	                head: document.getElementsByTagName('head')[0],
-	                link: null,
-	                meta: null,
-	                count: 0
-
-	            }
-
-	        },
-
-	        //Cursor Handler
-	        //	Logs last cursor and allows to easily change the cursor on the fly
-
-	        cursor: {
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed metatag object.
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-	                    init: { value: function value() {
-
-	                            this.set(this.wait);
-
-	                            this.app.ext.cursor = this;
-	                        }
-	                    }
-	                };
-	            },
-
-	            prototype: {
-
-	                //Cached cursor types
-	                auto: "auto",
-	                inherit: "inherit",
-	                crosshair: "crosshair",
-	                def: "default",
-	                help: "help",
-	                move: "move",
-	                pointer: "pointer",
-	                progress: "progress",
-	                text: "text",
-	                wait: "wait",
-	                eresize: "e-resize",
-	                neresize: "ne-resize",
-	                nwresize: "nw-resize",
-	                nresize: "n-resize",
-	                seresize: "se-resize",
-	                swresize: "sw-resize",
-	                sresize: "s-resize",
-	                wresize: "w-resize",
-
-	                //Properties
-	                current: "auto",
-	                last: "auto",
-	                changed: false,
-	                count: 0,
-	                lock: 0,
-	                delay: 4,
-
-	                set: function set(cursor, lock) {
-
-	                    if (this.last == cursor || this.lock) return;
-
-	                    this.last = this.current;
-
-	                    this.current = cursor;
-
-	                    /*
-	                    if (this.app.options.target.buffer)
-	                        this.app.canvas.buffer.style.cursor=this.current;
-	                        this.app.canvas.canvas.style.cursor=this.current;
-	                     document.body.style.cursor=this.current;
-	                    */
-	                    this.changed = true;
-	                    this.count++;
-	                }
-
-	            }
-
-	        },
-
-	        //Connection Controller
-	        //	Assists in making ajax calls and allows you to test your connection.
-	        //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
-
-	        connect: {
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed metatag object.
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-	                    init: { value: function value() {
-
-	                            //Execute a test on the connection
-	                            this.test();
-
-	                            this.app.ext.connect = this;
-	                        }
-	                    }
-	                };
-	            },
-
-	            prototype: {
-
-	                //Properties
-	                offline: false,
-	                connectionAttempts: 0,
-	                error: null,
-	                window: window,
-
-	                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
-	                load: function load(address, callback, arg0, arg1) {
-
-	                    var xmlhttp;
-	                    if (window.XMLHttpRequest) {
-	                        // code for IE7+, Firefox, Chrome, Opera, Safari
-	                        xmlhttp = new XMLHttpRequest();
-	                    } else {
-	                        // code for IE6, IE5
-	                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	                    }
-	                    xmlhttp.onreadystatechange = function () {
-	                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                            callback(xmlhttp.response, arg0, arg1);
-	                        }
-	                    };
-	                    xmlhttp.open("GET", address, true);
-	                    xmlhttp.send();
-	                },
-
-	                //An aJax request to check wither or not you are connected to the internet
-	                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
-	                hostReachable: function hostReachable() {
-	                    return;
-	                    /*
-	                                        //if local host return offline
-	                                        if ((this.window.location.hostname).toString()=="127.0.0.1")
-	                                            return false;
-	                    
-	                                        // Handle IE and more capable browsers
-	                                        var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
-	                                        var status;
-	                    
-	                    
-	                                        // Open new request as a HEAD to the root hostname with a random param to bust the cache
-	                                        xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
-	                    
-	                                        // Issue request and handle response
-	                                        try {
-	                                            xhr.send();
-	                                            return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
-	                    
-	                                        } catch (error) {
-	                    
-	                                            if (this.connectionAttempts<1)
-	                                                this.connectionAttempts++,this.hostReachable();
-	                                            this.error = error;
-	                                            return false;
-	                                        }
-	                    */
-	                },
-
-	                test: function test(app) {
-
-	                    return this.offline = this.hostReachable();
-	                }
-
-	            }
-
-	        }
-
-	    }
 	};
 
 /***/ },
@@ -12108,11 +12195,11 @@
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12322,10 +12409,10 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+			value: true
 	});
 
 	var _interfaces = __webpack_require__(196);
@@ -12336,7 +12423,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12346,260 +12433,260 @@
 
 	window.test = _test3.default;
 
-	var Loader = function (_SJSClass) {
-		_inherits(Loader, _SJSClass);
+	var Loader = (function (_SJSClass) {
+			_inherits(Loader, _SJSClass);
 
-		function Loader(app) {
-			_classCallCheck(this, Loader);
+			function Loader(app) {
+					_classCallCheck(this, Loader);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
+					var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
 
-			_this.ImageCache = [];
+					_this.ImageCache = [];
 
-			_this.ImageBuffer = [];
+					_this.ImageBuffer = [];
 
-			_this.ImageBufferTime = 3;
-			_this.asyncLoadCacheIndex = 0;
+					_this.ImageBufferTime = 3;
+					_this.asyncLoadCacheIndex = 0;
 
-			window.Loader = _this;
+					window.Loader = _this;
 
-			return _this;
-		}
-
-		_createClass(Loader, [{
-			key: 'checkLoaded',
-			value: function checkLoaded(name) {
-				var _this2 = this;
-
-				if (!this.getImageReference(name).complete) {
-
-					setTimeout(function () {
-
-						_this2.checkLoaded(name);
-					}, this.ImageBufferTime);
-				} else {
-
-					this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
-				}
-
-				return this.getImageReference(name);
+					return _this;
 			}
-		}, {
-			key: 'getBufferLength',
-			value: function getBufferLength() {
 
-				return this.ImageBuffer.length;
-			}
-		}, {
-			key: 'getImageReference',
-			value: function getImageReference(string) {
+			_createClass(Loader, [{
+					key: 'checkLoaded',
+					value: function checkLoaded(name) {
+							var _this2 = this;
 
-				var elementPos = this.ImageCache.map(function (img) {
+							if (!this.getImageReference(name).complete) {
 
-					return img.string;
-				}).indexOf(string);
+									setTimeout(function () {
 
-				var objectFound = this.ImageCache[elementPos];
+											_this2.checkLoaded(name);
+									}, this.ImageBufferTime);
+							} else {
 
-				return objectFound;
-			}
-		}, {
-			key: 'loadImage',
-			value: function loadImage(string) {
-				var _this3 = this;
-
-				var name = string;
-
-				var img = this.graphics.load(string);
-
-				var cacheIndex = this.ImageCache.push(img);
-
-				img.string = name;
-
-				this.ImageBuffer.push(name);
-
-				setTimeout(function () {
-
-					_this3.checkLoaded(name);
-				}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-				return this.ImageCache[cacheIndex - 1];
-			}
-		}, {
-			key: 'getBase64Image',
-			value: function getBase64Image(img) {
-
-				// Create an empty canvas element
-				var canvas = document.createElement("canvas");
-				canvas.width = img.width;
-				canvas.height = img.height;
-
-				// Copy the image contents to the canvas
-				var ctx = canvas.getContext("2d");
-				ctx.drawImage(img, 0, 0);
-
-				// Get the data-URL formatted image
-				// Firefox supports PNG and JPEG. You could check img.src to
-				// guess the original format, but be aware the using "image/jpg"
-				// will re-encode the image.
-				var dataURL = canvas.toDataURL("image/png");
-
-				return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-			}
-		}, {
-			key: 'createImageData',
-			value: function createImageData(img) {
-
-				// Create an empty canvas element
-				var canvas = document.createElement("canvas");
-				var ctx = canvas.getContext("2d");
-
-				canvas.width = img.width;
-				canvas.height = img.height;
-				canvas.style.background = 'transparent';
-				canvas.background = 'transparent';
-
-				var canvas2 = this.app.canvas.buffer.getContext('2d');
-				//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
-				var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
-
-				//var canvas2_img = new Image();
-				//canvas2_img.src = canvas2_data;
-
-				var img = document.createElement("img");
-				img.src = this.app.canvas.canvas.toDataURL("image/png");
-
-				// Copy the image contents to the canvas
-				//this.visuals.putData(canvas2_data,0,0);
-
-				//var newData = canvas2.getImageData(0,0,img.width,img.height);
-
-				//ctx.putImageData(canvas2_data,0,0);
-
-				ctx.drawImage(img, 0, 0);
-				//ctx.drawImage(canvas2_img, 0, 0);
-
-				var newData2 = ctx.getImageData(0, 0, img.width, img.height);
-
-				return newData2;
-			}
-		}, {
-			key: 'asyncLoadImage',
-			value: function () {
-				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
-					var _this4 = this;
-
-					var name, img, cacheIndex;
-					return regeneratorRuntime.wrap(function _callee$(_context) {
-						while (1) {
-							switch (_context.prev = _context.next) {
-								case 0:
-									name = string;
-									_context.next = 3;
-									return this.graphics.load(name);
-
-								case 3:
-									img = _context.sent;
-
-									img.string = name;
-
-									_context.next = 7;
-									return this.ImageCache.push(img);
-
-								case 7:
-									cacheIndex = _context.sent;
-									_context.next = 10;
-									return this.ImageBuffer.push(name + suffex);
-
-								case 10:
-									_context.next = 12;
-									return setTimeout(function () {
-
-										var _img = _this4.checkLoaded(name);
-
-										//_img.base64 = this.getBase64Image(_img);
-										//_img.imgdata = this.createImageData(_img);
-
-										_this4.ImageCache[cacheIndex - 1] = _img;
-										//console.log(this.getBase64Image(_img))
-										//console.log('eh');
-										//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
-
-										//console.log(this.ImageCache[cacheIndex-1])
-									}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-								case 12:
-									this.asyncLoadCacheIndex = cacheIndex;
-
-									return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
-
-								case 14:
-								case 'end':
-									return _context.stop();
+									this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
 							}
-						}
-					}, _callee, this);
-				}));
 
-				return function asyncLoadImage(_x, _x2) {
-					return ref.apply(this, arguments);
-				};
-			}()
-		}, {
-			key: 'asyncLoadImageData',
-			value: function () {
-				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
-					var _this5 = this;
+							return this.getImageReference(name);
+					}
+			}, {
+					key: 'getBufferLength',
+					value: function getBufferLength() {
 
-					var _index, _image;
+							return this.ImageBuffer.length;
+					}
+			}, {
+					key: 'getImageReference',
+					value: function getImageReference(string) {
 
-					return regeneratorRuntime.wrap(function _callee2$(_context2) {
-						while (1) {
-							switch (_context2.prev = _context2.next) {
-								case 0:
-									_index = this.asyncLoadCacheIndex;
-									_context2.next = 3;
-									return this.asyncLoadImage(string, "_blit").then(function (img) {
+							var elementPos = this.ImageCache.map(function (img) {
 
-										//let _cacheIndex =  this.ImageCache.push(img);
+									return img.string;
+							}).indexOf(string);
 
-										//console.log( this.ImageCache[_cacheIndex-1]=img)
+							var objectFound = this.ImageCache[elementPos];
 
-										var buffindex = _this5.ImageBuffer.push(string + "_blit");
+							return objectFound;
+					}
+			}, {
+					key: 'loadImage',
+					value: function loadImage(string) {
+							var _this3 = this;
 
-										_this5[string2] = img;
-										_this5[string2].addEventListener('load', function () {
+							var name = string;
 
-											_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
+							var img = this.graphics.load(string);
 
-											_this5[string2].string = string2;
+							var cacheIndex = this.ImageCache.push(img);
 
-											_this5.ImageCache.push(_this5[string2]);
+							img.string = name;
 
-											_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
-										});
-									});
+							this.ImageBuffer.push(name);
 
-								case 3:
-									_image = _context2.sent;
-									return _context2.abrupt('return', _image);
+							setTimeout(function () {
 
-								case 5:
-								case 'end':
-									return _context2.stop();
-							}
-						}
-					}, _callee2, this);
-				}));
+									_this3.checkLoaded(name);
+							}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
 
-				return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
-					return ref.apply(this, arguments);
-				};
-			}()
-		}]);
+							return this.ImageCache[cacheIndex - 1];
+					}
+			}, {
+					key: 'getBase64Image',
+					value: function getBase64Image(img) {
 
-		return Loader;
-	}(_interfaces._SJSClass);
+							// Create an empty canvas element
+							var canvas = document.createElement("canvas");
+							canvas.width = img.width;
+							canvas.height = img.height;
+
+							// Copy the image contents to the canvas
+							var ctx = canvas.getContext("2d");
+							ctx.drawImage(img, 0, 0);
+
+							// Get the data-URL formatted image
+							// Firefox supports PNG and JPEG. You could check img.src to
+							// guess the original format, but be aware the using "image/jpg"
+							// will re-encode the image.
+							var dataURL = canvas.toDataURL("image/png");
+
+							return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+					}
+			}, {
+					key: 'createImageData',
+					value: function createImageData(img) {
+
+							// Create an empty canvas element
+							var canvas = document.createElement("canvas");
+							var ctx = canvas.getContext("2d");
+
+							canvas.width = img.width;
+							canvas.height = img.height;
+							canvas.style.background = 'transparent';
+							canvas.background = 'transparent';
+
+							var canvas2 = this.app.canvas.buffer.getContext('2d');
+							//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
+							var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
+
+							//var canvas2_img = new Image();
+							//canvas2_img.src = canvas2_data;
+
+							var img = document.createElement("img");
+							img.src = this.app.canvas.canvas.toDataURL("image/png");
+
+							// Copy the image contents to the canvas
+							//this.visuals.putData(canvas2_data,0,0);
+
+							//var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+							//ctx.putImageData(canvas2_data,0,0);
+
+							ctx.drawImage(img, 0, 0);
+							//ctx.drawImage(canvas2_img, 0, 0);
+
+							var newData2 = ctx.getImageData(0, 0, img.width, img.height);
+
+							return newData2;
+					}
+			}, {
+					key: 'asyncLoadImage',
+					value: (function () {
+							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
+									var _this4 = this;
+
+									var name, img, cacheIndex;
+									return regeneratorRuntime.wrap(function _callee$(_context) {
+											while (1) {
+													switch (_context.prev = _context.next) {
+															case 0:
+																	name = string;
+																	_context.next = 3;
+																	return this.graphics.load(name);
+
+															case 3:
+																	img = _context.sent;
+
+																	img.string = name;
+
+																	_context.next = 7;
+																	return this.ImageCache.push(img);
+
+															case 7:
+																	cacheIndex = _context.sent;
+																	_context.next = 10;
+																	return this.ImageBuffer.push(name + suffex);
+
+															case 10:
+																	_context.next = 12;
+																	return setTimeout(function () {
+
+																			var _img = _this4.checkLoaded(name);
+
+																			//_img.base64 = this.getBase64Image(_img);
+																			//_img.imgdata = this.createImageData(_img);
+
+																			_this4.ImageCache[cacheIndex - 1] = _img;
+																			//console.log(this.getBase64Image(_img))
+																			//console.log('eh');
+																			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+																			//console.log(this.ImageCache[cacheIndex-1])
+																	}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
+
+															case 12:
+																	this.asyncLoadCacheIndex = cacheIndex;
+
+																	return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
+
+															case 14:
+															case 'end':
+																	return _context.stop();
+													}
+											}
+									}, _callee, this);
+							}));
+
+							return function asyncLoadImage(_x, _x2) {
+									return ref.apply(this, arguments);
+							};
+					})()
+			}, {
+					key: 'asyncLoadImageData',
+					value: (function () {
+							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
+									var _this5 = this;
+
+									var _index, _image;
+
+									return regeneratorRuntime.wrap(function _callee2$(_context2) {
+											while (1) {
+													switch (_context2.prev = _context2.next) {
+															case 0:
+																	_index = this.asyncLoadCacheIndex;
+																	_context2.next = 3;
+																	return this.asyncLoadImage(string, "_blit").then(function (img) {
+
+																			//let _cacheIndex =  this.ImageCache.push(img);
+
+																			//console.log( this.ImageCache[_cacheIndex-1]=img)
+
+																			var buffindex = _this5.ImageBuffer.push(string + "_blit");
+
+																			_this5[string2] = img;
+																			_this5[string2].addEventListener('load', function () {
+
+																					_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
+
+																					_this5[string2].string = string2;
+
+																					_this5.ImageCache.push(_this5[string2]);
+
+																					_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
+																			});
+																	});
+
+															case 3:
+																	_image = _context2.sent;
+																	return _context2.abrupt('return', _image);
+
+															case 5:
+															case 'end':
+																	return _context2.stop();
+													}
+											}
+									}, _callee2, this);
+							}));
+
+							return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
+									return ref.apply(this, arguments);
+							};
+					})()
+			}]);
+
+			return Loader;
+	})(_interfaces._SJSClass);
 
 	exports.default = Loader;
 
@@ -12609,10 +12696,10 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _interfaces = __webpack_require__(196);
@@ -12629,177 +12716,177 @@
 	* @private
 	*/
 
-	var test = function (_SJSClass) {
-	    _inherits(test, _SJSClass);
+	var test = (function (_SJSClass) {
+	        _inherits(test, _SJSClass);
 
-	    function test(app) {
-	        _classCallCheck(this, test);
+	        function test(app) {
+	                _classCallCheck(this, test);
 
-	        //this.Loader = this.app.getCurrent().Loader;
-	        /*
-	                this.SplashScreen = [];
-	        
-	        		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
-	        
-	        		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
-	        
-	        		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
-	        
-	                this.Background = this.Loader.loadImage('intro/background');
-	        
-	                this.begin = this.Loader.loadImage('intro/begin');
-	        
-	        		this.ScoreNumber = [];
-	        
-	        		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
-	        		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
-	        		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
-	        		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
-	        		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
-	        		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
-	        		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
-	        		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
-	        		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
-	        		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
-	        
-	                this.Loader.loadImage('interface/iconoffline');
-	        
-	                this.Loader.loadImage('interface/iconp');
-	        
-	                this.Loader.loadImage('interface/iconvolume');
-	        
-	                this.Loader.loadImage('interface/iconx');
-	        */
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
-
-	        _this.StartPhase = 2;
-	        _this.StartAlpha = 2;
-
-	        _this.xxx = 0;
-	        _this.start = false;
-
-	        //		(this.particles = this.app.create(SB_.prototype)).init();
-
-	        //(this.loading = this.app.create(Loading.prototype)).init();
-	        //(this.statusicons = this.app.create(StatusIco.prototype)).init();
-	        //(this.characterselect = this.app.create(Characterselect.prototype)).init();
-
-	        //    this.particles = new SB_(this.app);
-
-	        //        this.loading = new Loading(this.app);
-
-	        //        this.statusicons = new StatusIco(this.app);
-
-	        //        this.characterselect = new Characterselect(this.app);
-
-	        _this.continue = false;
-
-	        _this.sceneX = -190;
-	        _this.scenePhase = 0;
-	        _this.sceneEndX = 1;
-
-	        _this.sceneStartSpeed = 3;
-	        _this.sceneEndSpeed = 4;
-
-	        _this.sceneSpeed = _this.sceneStartSpeed;
-	        return _this;
-	    }
-
-	    _createClass(test, [{
-	        key: "draw",
-	        value: function draw() {
-
-	            //    if (this.Loader.getBufferLength()>0)
-	            //        return;
-
-	            var sw = this.app.getScaledWidth();
-	            var sh = this.app.getScaledHeight();
-	            var h = this.app.getHeight();
-	            var w = this.app.getWidth();
-	            var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
-
-	            if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
-
-	            this.Background = {};
-	            this.Background.width = sw;
-
-	            var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
-
-	            if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
-	            /*
-	                    this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
-	            
-	                    if (this.scenePhase==2)
-	                        this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
-	                    else
-	                        this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
-	            */
-	            this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-	            /*
-	                    if (this.continue == true)
-	            			this.characterselect.draw();
-	                    else
-	                        this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
-	            */
-
-	            this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-
-	            if (this.scenePhase == 2) {
-	                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                //this.Loader = this.app.getCurrent().Loader;
 	                /*
-	                			this.particles._draw();
+	                        this.SplashScreen = [];
 	                
-	                			if (this.graphics.getErrors())
-	                				this.loading.draw();
-	                			else	{
-	                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
-	                				if (this.continue==false)
-	                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
 	                
-	                				this.app.ext.cursor.set('pointer');
+	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
 	                
-	                			}
-	                            */
-	            } else {}
+	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
+	                
+	                        this.Background = this.Loader.loadImage('intro/background');
+	                
+	                        this.begin = this.Loader.loadImage('intro/begin');
+	                
+	                		this.ScoreNumber = [];
+	                
+	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
+	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
+	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
+	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
+	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
+	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
+	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
+	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
+	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
+	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
+	                
+	                        this.Loader.loadImage('interface/iconoffline');
+	                
+	                        this.Loader.loadImage('interface/iconp');
+	                
+	                        this.Loader.loadImage('interface/iconvolume');
+	                
+	                        this.Loader.loadImage('interface/iconx');
+	                */
 
-	                //	this.loading.draw();
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
 
-	                //	this.statusicons.draw(0.29);
+	                _this.StartPhase = 2;
+	                _this.StartAlpha = 2;
+
+	                _this.xxx = 0;
+	                _this.start = false;
+
+	                //		(this.particles = this.app.create(SB_.prototype)).init();
+
+	                //(this.loading = this.app.create(Loading.prototype)).init();
+	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
+	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
+
+	                //    this.particles = new SB_(this.app);
+
+	                //        this.loading = new Loading(this.app);
+
+	                //        this.statusicons = new StatusIco(this.app);
+
+	                //        this.characterselect = new Characterselect(this.app);
+
+	                _this.continue = false;
+
+	                _this.sceneX = -190;
+	                _this.scenePhase = 0;
+	                _this.sceneEndX = 1;
+
+	                _this.sceneStartSpeed = 3;
+	                _this.sceneEndSpeed = 4;
+
+	                _this.sceneSpeed = _this.sceneStartSpeed;
+	                return _this;
 	        }
-	    }, {
-	        key: "update",
-	        value: function update() {
 
-	            //    this.loading.update();
-	            //	this.statusicons.update();
+	        _createClass(test, [{
+	                key: "draw",
+	                value: function draw() {
 
-	            //    if (this.Loader.getBufferLength()>0)
-	            //        return;
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
 
-	            var tick = this.sceneSpeed;
+	                        var sw = this.app.getScaledWidth();
+	                        var sh = this.app.getScaledHeight();
+	                        var h = this.app.getHeight();
+	                        var w = this.app.getWidth();
+	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
 
-	            if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
-	                //    this.particles._update();
-	                //	this.characterselect.update();
-	                this.sceneX += tick;
-	            } else if (this.scenePhase < 2) {
+	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
 
-	                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
+	                        this.Background = {};
+	                        this.Background.width = sw;
 
-	                if (this.app.input.released) this.sceneSpeed = 10;
+	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
 
-	                this.sceneX += tick;
+	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
+	                        /*
+	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
+	                        
+	                                if (this.scenePhase==2)
+	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
+	                                else
+	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
+	                        */
+	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+	                        /*
+	                                if (this.continue == true)
+	                        			this.characterselect.draw();
+	                                else
+	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
+	                        */
 
-	                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
 
-	                if (this.scenePhase > 2) this.scenePhase = 2;
-	            }
-	        }
-	    }]);
+	                        if (this.scenePhase == 2) {
+	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                                /*
+	                                			this.particles._draw();
+	                                
+	                                			if (this.graphics.getErrors())
+	                                				this.loading.draw();
+	                                			else	{
+	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
+	                                				if (this.continue==false)
+	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                                
+	                                				this.app.ext.cursor.set('pointer');
+	                                
+	                                			}
+	                                            */
+	                        } else {}
 
-	    return test;
-	}(_interfaces._SJSClass);
+	                                //	this.loading.draw();
+
+	                                //	this.statusicons.draw(0.29);
+	                }
+	        }, {
+	                key: "update",
+	                value: function update() {
+
+	                        //    this.loading.update();
+	                        //	this.statusicons.update();
+
+	                        //    if (this.Loader.getBufferLength()>0)
+	                        //        return;
+
+	                        var tick = this.sceneSpeed;
+
+	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
+	                                //    this.particles._update();
+	                                //	this.characterselect.update();
+	                                this.sceneX += tick;
+	                        } else if (this.scenePhase < 2) {
+
+	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
+
+	                                if (this.app.input.released) this.sceneSpeed = 10;
+
+	                                this.sceneX += tick;
+
+	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+
+	                                if (this.scenePhase > 2) this.scenePhase = 2;
+	                        }
+	                }
+	        }]);
+
+	        return test;
+	})(_interfaces._SJSClass);
 
 	exports.default = test;
 
@@ -12809,10 +12896,10 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _interfaces = __webpack_require__(196);
@@ -12835,260 +12922,260 @@
 
 	var xOff = 0;
 
-	var SJSParticleController = function (_Loader) {
-	    _inherits(SJSParticleController, _Loader);
+	var SJSParticleController = (function (_Loader) {
+	        _inherits(SJSParticleController, _Loader);
 
-	    function SJSParticleController(app) {
-	        _classCallCheck(this, SJSParticleController);
+	        function SJSParticleController(app) {
+	                _classCallCheck(this, SJSParticleController);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
 
-	        _this.SJSParticleList = [];
+	                _this.SJSParticleList = [];
 
-	        _this.particleLimit = 1500;
+	                _this.particleLimit = 1500;
 
-	        _this.flakes = new Image();
+	                _this.flakes = new Image();
 
-	        _this.flakes0 = new Image();
+	                _this.flakes0 = new Image();
 
-	        for (var i = 0; i < 16; i++) {
-	            _this['flakes' + i] = new Image();
-	        }for (var i = 0; i < 16; i++) {
-	            _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
-	        }return _this;
-	    }
-
-	    _createClass(SJSParticleController, [{
-	        key: 'clear',
-	        value: function clear() {
-
-	            this.SJSParticleList = [];
+	                for (var i = 0; i < 16; i++) {
+	                        _this['flakes' + i] = new Image();
+	                }for (var i = 0; i < 16; i++) {
+	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
+	                }return _this;
 	        }
-	    }, {
-	        key: 'appendParticle',
-	        value: function appendParticle() {
 
-	            var length = this.SJSParticleList.length;
+	        _createClass(SJSParticleController, [{
+	                key: 'clear',
+	                value: function clear() {
 
-	            if (length > this.particleLimit) return;
+	                        this.SJSParticleList = [];
+	                }
+	        }, {
+	                key: 'appendParticle',
+	                value: function appendParticle() {
 
-	            var width = this.app.getWidth();
+	                        var length = this.SJSParticleList.length;
 
-	            var height = this.app.getHeight();
+	                        if (length > this.particleLimit) return;
 
-	            var scale = this.app.getScale();
+	                        var width = this.app.getWidth();
 
-	            var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
+	                        var height = this.app.getHeight();
 
-	            var End = new _vector2.default(Math.random() * width, 0);
+	                        var scale = this.app.getScale();
 
-	            End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+	                        var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
 
-	            var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+	                        var End = new _vector2.default(Math.random() * width, 0);
 
-	            this.SJSParticleList.push(newParticle);
+	                        End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
 
-	            return;
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
+	                        var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
 
-	            var length = this.SJSParticleList.length;
+	                        this.SJSParticleList.push(newParticle);
 
-	            this.appendParticle();
+	                        return;
+	                }
+	        }, {
+	                key: 'update',
+	                value: function update() {
 
-	            if (length == 0) return;
+	                        var length = this.SJSParticleList.length;
 
-	            var i = length - 1;
+	                        this.appendParticle();
 
-	            for (i; i; --i) {
+	                        if (length == 0) return;
 
-	                var particle = this.SJSParticleList[i];
+	                        var i = length - 1;
 
-	                particle.update();
-	            }
+	                        for (i; i; --i) {
 
-	            return;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
+	                                var particle = this.SJSParticleList[i];
 
-	            var error = this.getBufferLength();
+	                                particle.update();
+	                        }
 
-	            //    console.log(error)
-	            if (error > 0) {
-	                this.visuals.rect(0, 0, 10, 10, '#FF0000');
-	                return;
-	            }
+	                        return;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
 
-	            var length = this.SJSParticleList.length;
+	                        var error = this.getBufferLength();
 
-	            if (length == 0) return;
+	                        //    console.log(error)
+	                        if (error > 0) {
+	                                this.visuals.rect(0, 0, 10, 10, '#FF0000');
+	                                return;
+	                        }
 
-	            var i = length - 1;
+	                        var length = this.SJSParticleList.length;
 
-	            for (i; i; --i) {
+	                        if (length == 0) return;
 
-	                var particle = this.SJSParticleList[i];
+	                        var i = length - 1;
 
-	                particle.draw();
-	            }
-	        }
-	    }]);
+	                        for (i; i; --i) {
 
-	    return SJSParticleController;
-	}(_loader2.default);
+	                                var particle = this.SJSParticleList[i];
+
+	                                particle.draw();
+	                        }
+	                }
+	        }]);
+
+	        return SJSParticleController;
+	})(_loader2.default);
 
 	exports.default = SJSParticleController;
 
-	var SJSParticle = function (_SJSClass) {
-	    _inherits(SJSParticle, _SJSClass);
+	var SJSParticle = (function (_SJSClass) {
+	        _inherits(SJSParticle, _SJSClass);
 
-	    function SJSParticle(app, pos, target, vel, marker, usePhysics) {
-	        _classCallCheck(this, SJSParticle);
+	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
+	                _classCallCheck(this, SJSParticle);
 
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
+	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
 
-	        var loader = window.Loader; // this.app.getCurrent().particleController;
+	                var loader = window.Loader; // this.app.getCurrent().particleController;
 
-	        //this.img = loader.getImageReference('../flakes');
-	        _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
+	                //this.img = loader.getImageReference('../flakes');
+	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
 
-	        _this2.t = Math.round(1 + Math.random() * 5);
+	                _this2.t = Math.round(1 + Math.random() * 5);
 
-	        _this2.gravity = 0.5;
+	                _this2.gravity = 0.5;
 
-	        _this2.alpha = 0.75 + Math.random() * 0.25;
+	                _this2.alpha = 0.75 + Math.random() * 0.25;
 
-	        _this2.easing = Math.random() * 0.2;
+	                _this2.easing = Math.random() * 0.2;
 
-	        _this2.fade = Math.random() * 0.1;
+	                _this2.fade = Math.random() * 0.1;
 
-	        _this2.gridX = marker % 120;
+	                _this2.gridX = marker % 120;
 
-	        _this2.gridY = Math.floor(marker / 120) * 12;
+	                _this2.gridY = Math.floor(marker / 120) * 12;
 
-	        _this2.color = marker;
+	                _this2.color = marker;
 
-	        _this2.scale = 3 * Math.random() * 3 * Application.getScale();
+	                _this2.scale = 3 * Math.random() * 3 * Application.getScale();
 
-	        _this2.start = 30 + Math.random() * 180;
+	                _this2.start = 30 + Math.random() * 180;
 
-	        _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
+	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
 
-	        _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
+	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
 
-	        _this2.del = false;
+	                _this2.del = false;
 
-	        _this2.pos = {
-	            x: pos.x || 0,
-	            y: pos.y || 0
-	        };
+	                _this2.pos = {
+	                        x: pos.x || 0,
+	                        y: pos.y || 0
+	                };
 
-	        _this2.vel = {
-	            x: vel.x || 0,
-	            y: vel.y || 0
-	        };
+	                _this2.vel = {
+	                        x: vel.x || 0,
+	                        y: vel.y || 0
+	                };
 
-	        _this2.lastPos = {
-	            x: _this2.pos.x,
-	            y: _this2.pos.y
-	        };
+	                _this2.lastPos = {
+	                        x: _this2.pos.x,
+	                        y: _this2.pos.y
+	                };
 
-	        _this2.target = {
-	            y: target.y || 0,
-	            x: target.x || 0
-	        };
+	                _this2.target = {
+	                        y: target.y || 0,
+	                        x: target.x || 0
+	                };
 
-	        _this2.pos = new _vector2.default(pos.x, pos.y);
-	        _this2.vel = new _vector2.default(vel.x, vel.y);
-	        _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
-	        _this2.target = new _vector2.default(target.x, target.y);
+	                _this2.pos = new _vector2.default(pos.x, pos.y);
+	                _this2.vel = new _vector2.default(vel.x, vel.y);
+	                _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
+	                _this2.target = new _vector2.default(target.x, target.y);
 
-	        _this2.usePhysics = usePhysics || false;
+	                _this2.usePhysics = usePhysics || false;
 
-	        if (!_this2.usePhysics) {
+	                if (!_this2.usePhysics) {
 
-	            _this2.dir = Math.random() * 1;
+	                        _this2.dir = Math.random() * 1;
 
-	            if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
-	        } else {
+	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
+	                } else {
 
-	            if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                }
+
+	                return _this2;
 	        }
 
-	        return _this2;
-	    }
+	        _createClass(SJSParticle, [{
+	                key: 'update',
+	                value: function update() {
 
-	    _createClass(SJSParticle, [{
-	        key: 'update',
-	        value: function update() {
+	                        var width = this.app.getWidth();
 
-	            var width = this.app.getWidth();
+	                        var height = this.app.getHeight();
 
-	            var height = this.app.getHeight();
+	                        var scale = this.app.getScale();
 
-	            var scale = this.app.getScale();
+	                        // Check to Delete
 
-	            // Check to Delete
+	                        if (this.del) {
 
-	            if (this.del) {
+	                                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
+	                                var target = { x: Math.random() * width, y: 2 * height / scale };
+	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
 
-	                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
-	                var target = { x: Math.random() * width, y: 2 * height / scale };
-	                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
+	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
 
-	                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
+	                                return;
+	                        }
 
-	                return;
-	            }
+	                        // Move Object
 
-	            // Move Object
+	                        var distance = this.target.y - this.pos.y;
 
-	            var distance = this.target.y - this.pos.y;
+	                        var val = this.target.x / 200;
 
-	            var val = this.target.x / 200;
+	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
 
-	            this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
+	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
 
-	            if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
+	                        val = this.pos.x / 200;
 
-	            val = this.pos.x / 200;
+	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
 
-	            if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
+	                        var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
+	                        var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
+	                        this.pos.x += xdir;
 
-	            var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
-	            var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
-	            this.pos.x += xdir;
+	                        // Check if out of bounds
 
-	            // Check if out of bounds
+	                        if (this.pos.y > 600) {
+	                                this.alpha -= 0.01;
 
-	            if (this.pos.y > 600) {
-	                this.alpha -= 0.01;
+	                                if (this.alpha < 0.01) this.del = true;
+	                        }
 
-	                if (this.alpha < 0.01) this.del = true;
-	            }
+	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
 
-	            if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
+	                        //if ((this.app.fps<25)||(this.app.getScale()<0.8))
+	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //else
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
-	            //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
-	            //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	            //else
-	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	                }
+	        }]);
 
-	            this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
-	        }
-	    }]);
-
-	    return SJSParticle;
-	}(_interfaces._SJSClass);
+	        return SJSParticle;
+	})(_interfaces._SJSClass);
 
 /***/ }
 /******/ ]);
