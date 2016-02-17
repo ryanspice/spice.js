@@ -6198,13 +6198,20 @@
 	*/
 
 	/**
+	* Vector_private
+	* @property
+	* @private
+	*/
+
+	_Interface.properties = { name: 'interface' };
+	var _Vector_private = new WeakMap();
+
+	/**
 	* Vector
 	* @module
 	* @interface
 	* @private
 	*/
-
-	_Interface.properties = { name: 'interface' };
 
 	var _Vector = function (_Interface2) {
 	    _inherits(_Vector, _Interface2);
@@ -6219,10 +6226,21 @@
 
 	    /**  @type {Number} */
 
-	    function _Vector(x, y) {
+	    /**
+	       * Set Vector private variables
+	       * @type {Object}
+	       * @protected
+	       */
+
+	    function _Vector() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
 	        _classCallCheck(this, _Vector);
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+
+	        _Vector_private.set(_this, _this.constructor.properties);
 
 	        _this.position = { x: x, y: y };
 
@@ -6253,6 +6271,10 @@
 	* @private
 	*/
 
+	_Vector.properties = {
+	    x: 0,
+	    y: 0
+	};
 	_Vector._x = _number;
 	_Vector._y = _number;
 	_Vector.position = _method;
@@ -6711,6 +6733,10 @@
 	});
 	exports.name = undefined;
 
+	var _math2 = __webpack_require__(205);
+
+	var _math3 = _interopRequireDefault(_math2);
+
 	var _options2 = __webpack_require__(198);
 
 	var _options3 = _interopRequireDefault(_options2);
@@ -6718,10 +6744,6 @@
 	var _input2 = __webpack_require__(199);
 
 	var _input3 = _interopRequireDefault(_input2);
-
-	var _math2 = __webpack_require__(205);
-
-	var _math3 = _interopRequireDefault(_math2);
 
 	var _client2 = __webpack_require__(206);
 
@@ -6828,18 +6850,25 @@
 	    }
 
 	    _createClass(_core, [{
-	        key: 'Init',
-	        value: function Init(name, w, h) {
-	            var _this2 = this;
+	        key: 'start',
+	        value: function start(w, h) {
 
-	            //console.log(this);
-	            var self = this;
+	            var name = '';
 
-	            //Build client from prototype
 	            this.client = this.Construct(this.client.prototype, this.client.constructor);
 
-	            //Build canvas from prototype
 	            this.canvas = new _canvas3.default(this);
+
+	            this.loop(this);
+
+	            this.client.init(w, h);
+
+	            this.input = new this.input(this);
+	        }
+	    }, {
+	        key: 'loop',
+	        value: function loop(self) {
+	            var _this2 = this;
 
 	            //Use arrow function if available
 	            var usearrow = true;
@@ -6873,10 +6902,6 @@
 	                    self.client.initalize(AppLoop, AppLoopData, self.scale);
 	                }, this.time);
 	            }
-
-	            this.client.init(name, w, h);
-
-	            this.input = new this.input(this);
 	        }
 	    }, {
 	        key: 'OnLoad',
@@ -9152,15 +9177,14 @@
 
 		function Math() {
 			_classCallCheck(this, Math);
-
-			this.vector = _vector2.default;
-			window.Math.vector = this.vector;
 		}
 
 		return Math;
 	}();
 
 	exports.default = Math;
+
+	window.Math.vector = window.Math.Vector = _vector2.default;
 
 /***/ },
 /* 206 */
@@ -9188,10 +9212,12 @@
 
 	            app: { value: app },
 
-	            init: { writable: false, configurable: false, enumerable: false, value: function value(name, w, h) {
+	            init: { writable: false, configurable: false, enumerable: false, value: function value(w, h) {
+
+	                    var name = '';
 
 	                    //Set App.client.discription to the name
-	                    this.discription = name;
+	                    this.discription = "description";
 
 	                    //Depreciated setWidth-height: use w + h
 	                    //Set App.client.w
@@ -9270,15 +9296,19 @@
 	        //Client features loop
 	        loopData: function loopData() {
 
-	            if (this.app) if (this.app.input) if (this.app.input.update) {
-	                //Return true or false, update audio
-	                //this.mute = this.audio.update();
+	            //if (this.app)
+	            //if (this.app.input)
+	            //if (this.app.input.update)
+	            //{
 
-	                this.update.size_difference(this);
+	            //Return true or false, update audio
+	            //this.mute = this.audio.update();
 
-	                //Update Input
-	                this.app.input.update();
-	            }
+	            this.update.size_difference(this);
+
+	            //Update Input
+	            this.app.input.update();
+	            //}
 
 	            setTimeout(this.client_data, 1000 / 60);
 	        },
@@ -9311,12 +9341,17 @@
 	            });
 	        },
 
-	        //Client update loop
+	        /**
+	        * Client Update Loop
+	        * @class
+	        * @protected
+	        */
+
 	        update: {
 
 	            //Cache Vars
-	            last: { w: 0, h: 0 },
-	            difference: { x: 0, y: 0 },
+	            last: new Math.Vector(),
+	            difference: new Math.Vector(),
 	            scaler: { s: 1, x: 1, y: 1 },
 	            scaling: true,
 	            scalediff: 0,
@@ -9326,12 +9361,43 @@
 	            set: 0,
 	            frames: 0,
 
-	            //Calculate client size
+	            /**
+	            * Calculate differences between the canvas size last frame and this frame
+	            * @method
+	            * @private
+	            */
+
 	            size_difference: function size_difference(app) {
 
-	                //Calculate difference of with and height in this frame vs last frame
-	                this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w.toFixed(4), this.last.h.toFixed(4)), new app.Math.Vec(app.width.toFixed(4), app.height.toFixed(4)));
+	                var x = this.last.x;
+
+	                var y = this.last.y;
+
+	                var w = app.width;
+
+	                var h = app.height;
+
+	                var vector_size0 = new Math.Vector(x, y);
+
+	                var vector_size1 = new Math.Vector(w, h);
+
+	                if (x == w) if (y == h) {
+
+	                    this.difference = new Math.Vector(0, 0);
+
+	                    return;
+	                }
+
+	                this.difference = app.Math.Vector.Difference(vector_size0, vector_size1);
+
+	                return;
 	            },
+
+	            /**
+	            * Resize the canvas
+	            * @method
+	            * @private
+	            */
 
 	            size: function size(app) {
 
@@ -9339,10 +9405,10 @@
 	                if (this.difference.x + this.difference.y == 0) return false;
 
 	                //Reassign width and height
-	                app.app.canvas.canvas.width = this.last.w = app.width;
-	                app.app.canvas.canvas.height = this.last.h = app.height;
-	                app.app.canvas.buffer.width = this.last.w = app.width;
-	                app.app.canvas.buffer.height = this.last.h = app.height;
+	                app.app.canvas.canvas.width = this.last.x = app.width;
+	                app.app.canvas.canvas.height = this.last.y = app.height;
+	                app.app.canvas.buffer.width = this.last.x = app.width;
+	                app.app.canvas.buffer.height = this.last.y = app.height;
 
 	                return true;
 	            },

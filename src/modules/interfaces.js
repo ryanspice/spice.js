@@ -69,6 +69,14 @@ class _Interface {
 */
 
 /**
+* Vector_private
+* @property
+* @private
+*/
+
+let _Vector_private = new WeakMap();
+
+/**
 * Vector
 * @module
 * @interface
@@ -76,6 +84,17 @@ class _Interface {
 */
 
  class _Vector extends _Interface {
+
+	 /**
+     * Set Vector private variables
+     * @type {Object}
+     * @protected
+     */
+
+     static properties = {
+         x:0,
+		 y:0
+     };
 
     /**  @type {Number} */
 
@@ -103,11 +122,14 @@ class _Interface {
     * @param {number} y - position.y
     */
 
-    constructor(x,y) {
+    constructor(x = 0,y = 0) {
 
         super();
 
+		_Vector_private.set(this,this.constructor.properties);
+
         this.position = {x ,y};
+
 
     };
 

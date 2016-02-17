@@ -779,9 +779,9 @@ export default class Math {
 
     constructor(){
 
-        this.vector = Vector;
-        window.Math.vector = this.vector;
 
     }
 
 }
+
+window.Math.vector = window.Math.Vector = Vector;

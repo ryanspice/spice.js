@@ -9,10 +9,12 @@ export default {
 
             app:{value:app},
 
-            init:{writable: false,configurable:false,enumerable:false,value:function(name,w,h){
+            init:{writable: false,configurable:false,enumerable:false,value:function(w,h){
+
+				var name  = '';
 
                 //Set App.client.discription to the name
-                this.discription = name;
+                this.discription = "description";
 
                 //Depreciated setWidth-height: use w + h
                 //Set App.client.w
@@ -96,10 +98,11 @@ export default {
         //Client features loop
         loopData:function(){
 
-            if (this.app)
-            if (this.app.input)
-            if (this.app.input.update)
-            {
+            //if (this.app)
+            //if (this.app.input)
+            //if (this.app.input.update)
+            //{
+
             //Return true or false, update audio
             //this.mute = this.audio.update();
 
@@ -107,7 +110,7 @@ export default {
 
                     //Update Input
                     this.app.input.update();
-            }
+            //}
 
             setTimeout(this.client_data,1000 / 60);
         },
@@ -142,12 +145,17 @@ export default {
 
         },
 
-        //Client update loop
+		/**
+		* Client Update Loop
+		* @class
+		* @protected
+		*/
+
         update:{
 
             //Cache Vars
-            last:{w:0,h:0},
-            difference:{x:0,y:0},
+            last:new Math.Vector(),
+            difference:new Math.Vector(),
             scaler:{s:1,x:1,y:1},
             scaling:true,
             scalediff:0,
@@ -157,13 +165,47 @@ export default {
             set:0,
             frames:0,
 
-            //Calculate client size
+			/**
+			* Calculate differences between the canvas size last frame and this frame
+			* @method
+			* @private
+			*/
+
             size_difference:function(app){
 
-                //Calculate difference of with and height in this frame vs last frame
-                this.difference = (app.Math.Vector.Difference(new app.Math.Vec(this.last.w.toFixed(4),this.last.h.toFixed(4)),new app.Math.Vec(app.width.toFixed(4),app.height.toFixed(4))));
+				let x = this.last.x;
+
+				let y = this.last.y;
+
+				let w = app.width;
+
+				let h = app.height;
+
+				let vector_size0 = new Math.Vector(x,y);
+
+				let vector_size1 = new Math.Vector(w,h);
+
+				if (x==w)
+					if (y==h)
+					{
+
+						this.difference = new Math.Vector(0,0);
+
+						return;
+
+					}
+
+				this.difference = app.Math.Vector.Difference(vector_size0,vector_size1);
+
+				return;
 
             },
+
+			/**
+			* Resize the canvas
+			* @method
+			* @private
+			*/
 
             size:function(app){
 
@@ -172,10 +214,10 @@ export default {
                     return false;
 
                 //Reassign width and height
-                app.app.canvas.canvas.width  = this.last.w = app.width;
-                app.app.canvas.canvas.height = this.last.h = app.height;
-                app.app.canvas.buffer.width  = this.last.w = app.width;
-                app.app.canvas.buffer.height = this.last.h = app.height;
+                app.app.canvas.canvas.width  = this.last.x = app.width;
+                app.app.canvas.canvas.height = this.last.y = app.height;
+                app.app.canvas.buffer.width  = this.last.x = app.width;
+                app.app.canvas.buffer.height = this.last.y = app.height;
 
                 return true;
             },

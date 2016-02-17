@@ -5,11 +5,11 @@
 /** Name. */
 export const name = 'core';
 
+import _math from './math/math.js';
+
 import _options from './options.js';
 
 import _input from './input/input.js';
-
-import _math from './math/math.js';
 
 import _client from './client.js';
 
@@ -88,62 +88,65 @@ const date = new Date();
     }
 
 
-    Init(name, w, h){
+    start(w, h){
 
-        //console.log(this);
-       var self = this;
+		var name = '';
 
-       //Build client from prototype
        this.client = this.Construct(this.client.prototype,this.client.constructor);
 
-       //Build canvas from prototype
        this.canvas =  new _canvas(this);
 
-       //Use arrow function if available
-       var usearrow = true;
+       this.loop(this);
 
-       if (usearrow)
-       {
-
-           setTimeout(() => {
-
-               function AppLoop(){
-                   self.client.loop();
-               }
-
-               function AppLoopData(){
-                   self.client.loopData();
-               }
-
-               this.client.initalize(AppLoop,AppLoopData,this.scale);
-
-           }, this.time);
-
-       }
-       else
-           {
-
-               setTimeout(	(function(){
-
-                           function AppLoop(){
-                               self.client.loop();
-                           }
-
-                           function AppLoopData(){
-                               self.client.loopData();
-                           }
-
-                           self.client.initalize(AppLoop,AppLoopData,self.scale);
-
-               }),this.time);
-
-           }
-
-       this.client.init(name,w,h);
+       this.client.init(w,h);
 
        this.input = new this.input(this);
 
     }
+
+	loop(self){
+
+		//Use arrow function if available
+		var usearrow = true;
+
+		if (usearrow)
+		{
+
+			setTimeout(() => {
+
+				function AppLoop(){
+					self.client.loop();
+				}
+
+				function AppLoopData(){
+					self.client.loopData();
+				}
+
+				this.client.initalize(AppLoop,AppLoopData,this.scale);
+
+			}, this.time);
+
+		}
+		else
+			{
+
+				setTimeout(	(function(){
+
+							function AppLoop(){
+								self.client.loop();
+							}
+
+							function AppLoopData(){
+								self.client.loopData();
+							}
+
+							self.client.initalize(AppLoop,AppLoopData,self.scale);
+
+				}),this.time);
+
+			}
+
+	};
 
     OnLoad(self){
 
