@@ -14,6 +14,9 @@
 [completed]:$completed;
 [in-testing]:$in-testing;
 
+
+SpiceJS is an Html5 canvas framework designed for rapid prototyping of games, ads and all sorts of animations.
+
 Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
 To get started, check out [the documentation](http://js.ryanspice.com)!
