@@ -6321,20 +6321,60 @@
 	    return _SJSClass;
 	}(_Interface);
 
+	/**
+	* _Core_private
+	* @property
+	* @private
+	*/
+
 	_SJSClass.app = _object;
 	_SJSClass.visuals = _object;
 	_SJSClass.graphics = _object;
+	var _Core_private = new WeakMap();
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @protected
+	*/
 
 	var _Core = function (_Interface4) {
 	    _inherits(_Core, _Interface4);
 
+	    _createClass(_Core, [{
+	        key: 'version',
+	        get: function get() {
+
+	            return this.get('version');
+	        }
+
+	        /**
+	        * Set Vector private variables
+	        * @type {Object}
+	        * @protected
+	        */
+
+	    }], [{
+	        key: 'version',
+	        get: function get() {
+
+	            return this.v;
+	        }
+
+	        /**  @type {Number} */
+
+	    }]);
+
 	    function _Core() {
 	        _classCallCheck(this, _Core);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
-	    }
+	        var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
 
-	    /**  @type {Number} */
+	        _Core_private.set(_this3, _this3.constructor.properties);
+
+	        return _this3;
+	    }
 
 	    return _Core;
 	}(_Interface);
@@ -6353,6 +6393,9 @@
 	* @private
 	*/
 
+	_Core.properties = {
+	    version: 1
+	};
 	_Core._fps = _number;
 	var doc = function doc() {
 
@@ -6799,13 +6842,13 @@
 
 	    _createClass(_core, [{
 	        key: 'version',
+
+	        /**  @type {Number} */
+
 	        get: function get() {
 
-	            return this.constructor.VN;
-	        },
-	        set: function set(val) {
-
-	            this.constructor.VN = val;
+	            return this.constructor.version;
+	            return this.get('version');
 	        }
 	    }, {
 	        key: 'fps',

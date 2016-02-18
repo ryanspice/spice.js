@@ -27,7 +27,6 @@ import Particles from './particles.js'; // (unfinished) To be built into applica
 
 window.SJSParticleController = Particles; // Temporary for snowflakes
 
-
 const date = new Date();
 
 /**
@@ -39,17 +38,16 @@ const date = new Date();
 
  class _core extends _Core {
 
-    get version(){
 
-        return this.constructor.VN;
+ 	/**  @type {Number} */
 
-    }
+     get version(){
 
-    set version(val){
+		 return this.constructor.version;
+         return this.get('version');
 
-        this.constructor.VN = val;
+     }
 
-    }
 
     get fps() {
 

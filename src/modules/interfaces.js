@@ -194,7 +194,45 @@ let _Vector_private = new WeakMap();
 }
 
 
+/**
+* _Core_private
+* @property
+* @private
+*/
+
+let _Core_private = new WeakMap();
+
+/**
+* Vector
+* @module
+* @interface
+* @protected
+*/
+
 class _Core extends _Interface {
+
+	/**
+	* Set Vector private variables
+	* @type {Object}
+	* @protected
+	*/
+
+	static properties = {
+		version:1
+	};
+
+	get version() {
+
+		return this.get('version');
+
+	};
+
+	static get version() {
+
+		return this.v;
+
+	}
+
 
     /**  @type {Number} */
 
@@ -203,6 +241,8 @@ class _Core extends _Interface {
     constructor() {
 
         super();
+
+		_Core_private.set(this,this.constructor.properties);
 
     };
 
