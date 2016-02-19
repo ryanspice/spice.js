@@ -1,61 +1,7 @@
 
 import {_Legacy} from './interfaces.js';
 
-/**
-* _private
-* @protected
-*/
-
-const s_private = new WeakMap();
-
-/**
-* Vector
-* @module
-* @interface
-* @protected
-*/
-class State {
-
-	static properties = {
-
-		update:function(){}
-
-	};
-
-	name(){
-
-	}
-
-	init(){
-
-	}
-
-	get update(){
-
-		return this._update;
-
-	}
-
-	set update(func){
-
-		this._update = func;
-
-	}
-
-	draw(){
-
-	}
-
-	constructor(){
-
-		s_private.set(this,this.constructor.properties);
-
-		[this.update] = [function(){console.log('eh')}];
-
-	}
-
-
-}
+//import {_State} from './state.js';
 
 /**
 * _private
@@ -81,7 +27,7 @@ export default class _Core extends _Legacy {
 
 	static properties = {
 
-		main:new State(),
+		main:{},
 		version:'0.8.1'
 
 	};

@@ -6826,72 +6826,19 @@
 
 	var _interfaces = __webpack_require__(196);
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	//import {_State} from './state.js';
 
 	/**
 	* _private
 	* @protected
 	*/
 
-	var s_private = new WeakMap();
-
-	/**
-	* Vector
-	* @module
-	* @interface
-	* @protected
-	*/
-
-	var State = function () {
-		_createClass(State, [{
-			key: 'name',
-			value: function name() {}
-		}, {
-			key: 'init',
-			value: function init() {}
-		}, {
-			key: 'draw',
-			value: function draw() {}
-		}, {
-			key: 'update',
-			get: function get() {
-
-				return this._update;
-			},
-			set: function set(func) {
-
-				this._update = func;
-			}
-		}]);
-
-		function State() {
-			_classCallCheck(this, State);
-
-			s_private.set(this, this.constructor.properties);
-
-			var _ref = [function () {
-				console.log('eh');
-			}];
-			this.update = _ref[0];
-		}
-
-		return State;
-	}();
-
-	/**
-	* _private
-	* @protected
-	*/
-
-	State.properties = {
-
-		update: function update() {}
-
-	};
 	var _private = new WeakMap();
 
 	/**
@@ -6974,7 +6921,7 @@
 
 	_Core.properties = {
 
-		main: new State(),
+		main: {},
 		version: '0.8.1'
 
 	};
