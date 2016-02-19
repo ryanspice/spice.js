@@ -31,7 +31,8 @@
 
 	        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
 
-	        this.visuals.text_ext(this.app.fps.toFixed(2),100,100,"#FFFFFF",1,1);
+	        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
+	        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
 
 	        return true;
 	    }

@@ -1,344 +1,140 @@
-"strict mode"
-/** @module core */
 
-
-/** Name. */
-export const name = 'core';
-
-import _math from './math/math.js';
-
-import _options from './options.js';
-
-import _input from './input/input.js';
-
-import _client from './client.js';
-
-import {_Core} from './interfaces.js';
-
-import _canvas from './canvas.js';
-
-import _user from './user.js';
-
-import _ext from './ext.js';
-
-import Loader from './loader.js'; // (unfinished) To be built into application (to override current)
-
-import Particles from './particles.js'; // (unfinished) To be built into application
-
-window.SJSParticleController = Particles; // Temporary for snowflakes
-
-const date = new Date();
+import {_Legacy} from './interfaces.js';
 
 /**
-* Core of the framework, initalizes client, input and listeners.
+* _private
 * @protected
-* @module
-*
 */
 
- class _core extends _Core {
+const s_private = new WeakMap();
 
+/**
+* Vector
+* @module
+* @interface
+* @protected
+*/
+class State {
 
- 	/**  @type {Number} */
+	static properties = {
 
-     get version(){
-
-		 return this.constructor.version;
-         return this.get('version');
-
-     }
-
-
-    get fps() {
-
-    //    return this._fps;
-        return Application.getFps();
-
-    }
-
-
-    /** Builds the core modules of the Application. */
-
-    constructor(){
-
-        super();
-
-        //setInterval(()=>{console.log(this.getFps())},200);
-
-        this.time = 0;
-
-        this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
-
-        this.options = _options;
-
-        this.user = _user;
-
-        this.ext = _ext;
-
-        this.input = _input;
-
-        this.canvas = _canvas;
-
-        this.client = _client;
-
-        this.math = new _math();
-
-    }
-
-
-    start(w, h){
-
-		var name = '';
-
-       this.client = this.Construct(this.client.prototype,this.client.constructor);
-
-       this.canvas =  new _canvas(this);
-
-       this.loop(this);
-
-       this.client.init(w,h);
-
-       this.input = new this.input(this);
-
-    }
-
-	loop(self){
-
-		//Use arrow function if available
-		var usearrow = true;
-
-		if (usearrow)
-		{
-
-			setTimeout(() => {
-
-				function AppLoop(){
-					self.client.loop();
-				}
-
-				function AppLoopData(){
-					self.client.loopData();
-				}
-
-				this.client.initalize(AppLoop,AppLoopData,this.scale);
-
-			}, this.time);
-
-		}
-		else
-			{
-
-				setTimeout(	(function(){
-
-							function AppLoop(){
-								self.client.loop();
-							}
-
-							function AppLoopData(){
-								self.client.loopData();
-							}
-
-							self.client.initalize(AppLoop,AppLoopData,self.scale);
-
-				}),this.time);
-
-			}
+		update:function(){}
 
 	};
 
-    OnLoad(self){
+	name(){
 
-        //console.log(this)
-        self.Init("",480,320);
+	}
 
-    }
+	init(){
 
-    OnApplicationLoad(evt){
+	}
 
-        //console.log(evt)
-       //Run .OnLoad
-       evt.target.app.OnLoad(evt.target.app);
+	get update(){
 
-       console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
+		return this._update;
 
-    }
+	}
 
-    Listener(obj, evt, listener, param){
+	set update(func){
 
-        if (typeof obj[0] === "object")
-            obj = obj[0] || window;
+		this._update = func;
 
-//                    console.log(obj);
-        //If addEventListener exist, add it, otherwise attachEvent
-        if (obj.addEventListener)
-            obj.addEventListener(evt, listener, false);
-        else
-            obj.attachEvent("on" + evt, listener);
+	}
 
-        obj.app = window.apps[this.id] = this;
+	draw(){
 
-    }
+	}
 
-    Construct(prototype,constructor){
+	constructor(){
 
-       //Cache vars
-       var isObj = false;
-       var obj = prototype;
-       var proto = prototype;
-       var construct = constructor;
-       var ret = {};
+		s_private.set(this,this.constructor.properties);
 
-       //if prototype contains a prototype and constructor
-       if (typeof obj.prototype !== 'undefined')
-       if (typeof obj.constructor !== 'undefined')
-           {
-               construct = obj.constructor;
-               proto = obj.prototype;
-               isObj = true;
-           }
+		[this.update] = [function(){console.log('eh')}];
 
-       //Grab type of constructor
-       var c = typeof construct;
-
-       //Return & Create object based on constructor
-       switch(c)
-       {
-       case 'undefined':
-
-           //Use only the prototype
-           ret = Object.create(proto);
-
-       break;
-       case 'object':
-
-           //Use constructor as object
-           ret = Object.create(proto,construct);
-
-       break;
-       case 'function':
-
-           //Use constructor as function
-           ret = Object.create(proto,construct(this));
-
-       break;
-       default:
-
-           //Expected a type
-       console.log("Expected 'object' or 'function': Type is "+c);
-       }
-       if (isObj)
-           prototype = ret;
-
-
-       return ret;
-
-    }
-
-
-    click(event, anchorObj){
-
-       //If .click
-       if (anchorObj.click)
-           anchorObj.click();
-           else
-       if(document.createEvent)
-       {
-
-           if(event.target !== anchorObj)
-           {
-
-               var evt = document.createEvent("MouseEvents");
-
-               evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-               anchorObj.dispatchEvent(evt);
-
-           }
-
-       }
-
-    }
-
-
-    //Legacy
-
-    create(a){
-
-        return this.Construct(a||{},this.client.room);
-    }
-
-    getFps(){
-
-         return this.client.update.step.fps;
-    }
-
-    getCurrent(){
-
-        return this.client.update.state.current;
-    }
-
-    getConnection(){
-
-        return this.ext.connect.offline;
-    }
-
-    getConnectionError(){
-
-        return this.ext.connect.error;
-    }
-
-    getConnectionAttempts(){
-
-        return this.ext.connect.connectionAttempts;
-    }
-
-    getDelta(){
-
-        return this.client.update.step.delta;
-    }
-
-    getScale(){
-
-        return this.client.scale;
-    }
-
-    getWidth(){
-
-        return this.client.setWidth;
-    }
-
-    getHeight(){
-
-        return this.client.setHeight;
-    }
-
-    getScaledWidth(){
-
-        return this.client.width;
-    }
-
-    getScaledHeight(){
-
-        return this.client.height;
-    }
-
-    setTitle(title){
-
-        return (document.title==title?(document.title):(document.title=title));
-
-    }
-
-    setState(state){
-
-        return this.client.update.state.set(state,true);
-    }
-
-    toggleWidescreen(){
-
-         return this.client.update.fullscale = !this.client.update.fullscale;
-    }
+	}
 
 
 }
 
-export default _core;
+/**
+* _private
+* @protected
+*/
+
+const _private = new WeakMap();
+
+/**
+* Vector
+* @module
+* @interface
+* @protected
+*/
+
+export default class _Core extends _Legacy {
+
+	/**
+	* private variables
+	* @type {Object}
+	* @protected
+	*/
+
+	static properties = {
+
+		main:new State(),
+		version:'0.8.1'
+
+	};
+
+    /**  @type {Number} */
+
+	get main() {
+
+		return this.get('main');
+
+	}
+
+    /**  @type {Number} */
+
+	set main(newmain) {
+
+		let state = this.get('main');
+		let newstate = newmain;
+		state.name = newstate.name;
+		state.init = newstate.init;
+		state.update = newstate.update;
+		state.draw = newstate.draw;
+
+		return state;
+
+	}
+
+    /**  @type {Number} */
+
+	get version() {
+
+		return this.get('version');
+
+	}
+
+    /**  @type {Number} */
+
+	get fps() {
+
+		return this.client.update.step.fps.toFixed(2);
+
+	}
+
+    /**  @type {Constructor} */
+
+    constructor() {
+
+        super();
+
+		_private.set(this,this.constructor.properties);
+
+		console.log(this.head);
+
+    }
+
+}

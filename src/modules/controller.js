@@ -1,6 +1,6 @@
 import _statistics from './statistics.js';
 
-import A_Core from './core.js';
+import _App from './app.js';
 
 /**
 * Main game controller. Handles instanciating instances and tracking information.
@@ -116,7 +116,7 @@ export default class _controller {
         //temp stores the app during the create process, it is then returned
         var temp = {};
 
-        temp = new A_Core(this.app);
+        temp = new _App(this.app);
 
         temp.window = this.window;
 

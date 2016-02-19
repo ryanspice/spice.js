@@ -138,7 +138,7 @@ export default {
 
             SpiceJS.statistics.monitor(loop).then(function(){
 
-                SpiceJS.statistics.log("fps",SpiceJS.controller.list().getFps(),'state');
+                SpiceJS.statistics.log("fps",SpiceJS.controller.list().fps,'state');
                 SpiceJS.statistics.log("scale",SpiceJS.controller.list().getScale(),'state');
 
             });

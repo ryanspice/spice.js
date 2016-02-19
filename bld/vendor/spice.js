@@ -5414,9 +5414,9 @@
 
 	var _statistics3 = _interopRequireDefault(_statistics2);
 
-	var _core = __webpack_require__(197);
+	var _app = __webpack_require__(217);
 
-	var _core2 = _interopRequireDefault(_core);
+	var _app2 = _interopRequireDefault(_app);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5511,7 +5511,7 @@
 	            //temp stores the app during the create process, it is then returned
 	            var temp = {};
 
-	            temp = new _core2.default(this.app);
+	            temp = new _app2.default(this.app);
 
 	            temp.window = this.window;
 
@@ -6321,62 +6321,121 @@
 	    return _SJSClass;
 	}(_Interface);
 
-	/**
-	* _Core_private
-	* @property
-	* @private
-	*/
-
 	_SJSClass.app = _object;
 	_SJSClass.visuals = _object;
 	_SJSClass.graphics = _object;
-	var _Core_private = new WeakMap();
 
-	/**
-	* Vector
-	* @module
-	* @interface
-	* @protected
-	*/
+	var _Legacy = function (_Interface4) {
+	    _inherits(_Legacy, _Interface4);
 
-	var _Core = function (_Interface4) {
-	    _inherits(_Core, _Interface4);
+	    function _Legacy() {
+	        _classCallCheck(this, _Legacy);
 
-	    _createClass(_Core, [{
-	        key: 'version',
-	        get: function get() {
-
-	            return this.get('version');
-	        }
-
-	        /**
-	        * Set Vector private variables
-	        * @type {Object}
-	        * @protected
-	        */
-
-	    }], [{
-	        key: 'version',
-	        get: function get() {
-
-	            return this.v;
-	        }
-
-	        /**  @type {Number} */
-
-	    }]);
-
-	    function _Core() {
-	        _classCallCheck(this, _Core);
-
-	        var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
-
-	        _Core_private.set(_this3, _this3.constructor.properties);
-
-	        return _this3;
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Legacy).apply(this, arguments));
 	    }
 
-	    return _Core;
+	    _createClass(_Legacy, [{
+	        key: 'create',
+
+	        /**
+	        * Legacy functions.
+	        * @method
+	           * @param {Event} [event] - Passing of the event.
+	           * @param {Element} [anchorObj] - Element to click.
+	        */
+
+	        value: function create(a) {
+	            //console.warn('	    create(a)');
+	            return this.Construct(a || {}, this.client.room);
+	        }
+
+	        /*
+	            getFps(){
+	                 return this.client.update.step.fps;
+	           }
+	        	*/
+
+	    }, {
+	        key: 'getCurrent',
+	        value: function getCurrent() {
+	            //console.warn('	    getCurrent()');
+	            return this.client.update.state.current;
+	        }
+	    }, {
+	        key: 'getConnection',
+	        value: function getConnection() {
+	            //console.warn('	    getConnection()');
+	            return this.ext.connect.offline;
+	        }
+	    }, {
+	        key: 'getConnectionError',
+	        value: function getConnectionError() {
+	            //console.warn('	    getConnectionError()');
+	            return this.ext.connect.error;
+	        }
+	    }, {
+	        key: 'getConnectionAttempts',
+	        value: function getConnectionAttempts() {
+	            //console.warn('	    getConnectionAttempts()');
+	            return this.ext.connect.connectionAttempts;
+	        }
+	    }, {
+	        key: 'getDelta',
+	        value: function getDelta() {
+	            //console.warn('	    getDelta()');
+	            return this.client.update.step.delta;
+	        }
+	    }, {
+	        key: 'getScale',
+	        value: function getScale() {
+	            //console.warn('	    getScale()');
+	            return this.client.scale;
+	        }
+	    }, {
+	        key: 'getWidth',
+	        value: function getWidth() {
+	            //console.warn('	    getWidth()');
+	            return this.client.setWidth;
+	        }
+	    }, {
+	        key: 'getHeight',
+	        value: function getHeight() {
+	            //console.warn('	    getHeight()');
+	            return this.client.setHeight;
+	        }
+	    }, {
+	        key: 'getScaledWidth',
+	        value: function getScaledWidth() {
+	            //console.warn('	    getScaledWidth()');
+	            return this.client.width;
+	        }
+	    }, {
+	        key: 'getScaledHeight',
+	        value: function getScaledHeight() {
+	            //console.warn('	    getScaledHeight()');
+	            return this.client.height;
+	        }
+	    }, {
+	        key: 'setTitle',
+	        value: function setTitle(title) {
+	            //console.warn('	    ');
+	            return document.title == title ? document.title : document.title = title;
+	        }
+	    }, {
+	        key: 'setState',
+	        value: function setState(state) {
+	            //console.warn('	    ');
+	            return this.client.update.state.set(state, true);
+	        }
+	    }, {
+	        key: 'toggleWidescreen',
+	        value: function toggleWidescreen() {
+	            //console.warn('	    toggleWidescreen()');
+	            return this.client.update.fullscale = !this.client.update.fullscale;
+	        }
+	    }]);
+
+	    return _Legacy;
 	}(_Interface);
 
 	/*  Extends SJSClass
@@ -6393,10 +6452,6 @@
 	* @private
 	*/
 
-	_Core.properties = {
-	    version: 1
-	};
-	_Core._fps = _number;
 	var doc = function doc() {
 
 	    return document;
@@ -6755,392 +6810,175 @@
 	exports._Canvas_Core = _Canvas_Core;
 	exports._App = _App;
 	exports._Build = _Build;
-	exports._Core = _Core;
+	exports._Legacy = _Legacy;
 
 /***/ },
 /* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	"strict mode";
-	/** @module core */
-
-	/** Name. */
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
-	exports.name = undefined;
-
-	var _math2 = __webpack_require__(205);
-
-	var _math3 = _interopRequireDefault(_math2);
-
-	var _options2 = __webpack_require__(198);
-
-	var _options3 = _interopRequireDefault(_options2);
-
-	var _input2 = __webpack_require__(199);
-
-	var _input3 = _interopRequireDefault(_input2);
-
-	var _client2 = __webpack_require__(206);
-
-	var _client3 = _interopRequireDefault(_client2);
 
 	var _interfaces = __webpack_require__(196);
-
-	var _canvas2 = __webpack_require__(208);
-
-	var _canvas3 = _interopRequireDefault(_canvas2);
-
-	var _user2 = __webpack_require__(209);
-
-	var _user3 = _interopRequireDefault(_user2);
-
-	var _ext2 = __webpack_require__(210);
-
-	var _ext3 = _interopRequireDefault(_ext2);
-
-	var _loader = __webpack_require__(214);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	var _particles = __webpack_require__(216);
-
-	var _particles2 = _interopRequireDefault(_particles);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var name = exports.name = 'core'; // (unfinished) To be built into application (to override current)
-
-	// (unfinished) To be built into application
-
-	window.SJSParticleController = _particles2.default; // Temporary for snowflakes
-
-	var date = new Date();
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
-	* Core of the framework, initalizes client, input and listeners.
+	* _private
 	* @protected
-	* @module
-	*
 	*/
 
-	var _core = function (_Core2) {
-	    _inherits(_core, _Core2);
+	var s_private = new WeakMap();
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @protected
+	*/
 
-	    _createClass(_core, [{
-	        key: 'version',
+	var State = function () {
+		_createClass(State, [{
+			key: 'name',
+			value: function name() {}
+		}, {
+			key: 'init',
+			value: function init() {}
+		}, {
+			key: 'draw',
+			value: function draw() {}
+		}, {
+			key: 'update',
+			get: function get() {
 
-	        /**  @type {Number} */
+				return this._update;
+			},
+			set: function set(func) {
 
-	        get: function get() {
+				this._update = func;
+			}
+		}]);
 
-	            return this.constructor.version;
-	            return this.get('version');
-	        }
-	    }, {
-	        key: 'fps',
-	        get: function get() {
+		function State() {
+			_classCallCheck(this, State);
 
-	            //    return this._fps;
-	            return Application.getFps();
-	        }
+			s_private.set(this, this.constructor.properties);
 
-	        /** Builds the core modules of the Application. */
+			var _ref = [function () {
+				console.log('eh');
+			}];
+			this.update = _ref[0];
+		}
 
-	    }]);
+		return State;
+	}();
 
-	    function _core() {
-	        _classCallCheck(this, _core);
+	/**
+	* _private
+	* @protected
+	*/
 
-	        //setInterval(()=>{console.log(this.getFps())},200);
+	State.properties = {
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
+		update: function update() {}
 
-	        _this.time = 0;
+	};
+	var _private = new WeakMap();
 
-	        _this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	                return true;
-	            } };
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @protected
+	*/
 
-	        _this.options = _options3.default;
+	var _Core = function (_Legacy2) {
+		_inherits(_Core, _Legacy2);
 
-	        _this.user = _user3.default;
+		_createClass(_Core, [{
+			key: 'main',
 
-	        _this.ext = _ext3.default;
+			/**  @type {Number} */
 
-	        _this.input = _input3.default;
+			get: function get() {
 
-	        _this.canvas = _canvas3.default;
+				return this.get('main');
+			}
 
-	        _this.client = _client3.default;
+			/**  @type {Number} */
 
-	        _this.math = new _math3.default();
+			/**
+	  * private variables
+	  * @type {Object}
+	  * @protected
+	  */
 
-	        return _this;
-	    }
+			,
+			set: function set(newmain) {
 
-	    _createClass(_core, [{
-	        key: 'start',
-	        value: function start(w, h) {
+				var state = this.get('main');
+				var newstate = newmain;
+				state.name = newstate.name;
+				state.init = newstate.init;
+				state.update = newstate.update;
+				state.draw = newstate.draw;
 
-	            var name = '';
+				return state;
+			}
 
-	            this.client = this.Construct(this.client.prototype, this.client.constructor);
+			/**  @type {Number} */
 
-	            this.canvas = new _canvas3.default(this);
+		}, {
+			key: 'version',
+			get: function get() {
 
-	            this.loop(this);
+				return this.get('version');
+			}
 
-	            this.client.init(w, h);
+			/**  @type {Number} */
 
-	            this.input = new this.input(this);
-	        }
-	    }, {
-	        key: 'loop',
-	        value: function loop(self) {
-	            var _this2 = this;
+		}, {
+			key: 'fps',
+			get: function get() {
 
-	            //Use arrow function if available
-	            var usearrow = true;
+				return this.client.update.step.fps.toFixed(2);
+			}
 
-	            if (usearrow) {
+			/**  @type {Constructor} */
 
-	                setTimeout(function () {
+		}]);
 
-	                    function AppLoop() {
-	                        self.client.loop();
-	                    }
+		function _Core() {
+			_classCallCheck(this, _Core);
 
-	                    function AppLoopData() {
-	                        self.client.loopData();
-	                    }
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
 
-	                    _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-	                }, this.time);
-	            } else {
+			_private.set(_this, _this.constructor.properties);
 
-	                setTimeout(function () {
+			console.log(_this.head);
 
-	                    function AppLoop() {
-	                        self.client.loop();
-	                    }
+			return _this;
+		}
 
-	                    function AppLoopData() {
-	                        self.client.loopData();
-	                    }
-
-	                    self.client.initalize(AppLoop, AppLoopData, self.scale);
-	                }, this.time);
-	            }
-	        }
-	    }, {
-	        key: 'OnLoad',
-	        value: function OnLoad(self) {
+		return _Core;
+	}(_interfaces._Legacy);
 
-	            //console.log(this)
-	            self.Init("", 480, 320);
-	        }
-	    }, {
-	        key: 'OnApplicationLoad',
-	        value: function OnApplicationLoad(evt) {
-
-	            //console.log(evt)
-	            //Run .OnLoad
-	            evt.target.app.OnLoad(evt.target.app);
-
-	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-	        }
-	    }, {
-	        key: 'Listener',
-	        value: function Listener(obj, evt, listener, param) {
-
-	            if (_typeof(obj[0]) === "object") obj = obj[0] || window;
-
-	            //                    console.log(obj);
-	            //If addEventListener exist, add it, otherwise attachEvent
-	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
-
-	            obj.app = window.apps[this.id] = this;
-	        }
-	    }, {
-	        key: 'Construct',
-	        value: function Construct(prototype, constructor) {
-
-	            //Cache vars
-	            var isObj = false;
-	            var obj = prototype;
-	            var proto = prototype;
-	            var construct = constructor;
-	            var ret = {};
-
-	            //if prototype contains a prototype and constructor
-	            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-	                construct = obj.constructor;
-	                proto = obj.prototype;
-	                isObj = true;
-	            }
-
-	            //Grab type of constructor
-	            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
-
-	            //Return & Create object based on constructor
-	            switch (c) {
-	                case 'undefined':
-
-	                    //Use only the prototype
-	                    ret = Object.create(proto);
-
-	                    break;
-	                case 'object':
-
-	                    //Use constructor as object
-	                    ret = Object.create(proto, construct);
-
-	                    break;
-	                case 'function':
-
-	                    //Use constructor as function
-	                    ret = Object.create(proto, construct(this));
-
-	                    break;
-	                default:
-
-	                    //Expected a type
-	                    console.log("Expected 'object' or 'function': Type is " + c);
-	            }
-	            if (isObj) prototype = ret;
-
-	            return ret;
-	        }
-	    }, {
-	        key: 'click',
-	        value: function click(event, anchorObj) {
-
-	            //If .click
-	            if (anchorObj.click) anchorObj.click();else if (document.createEvent) {
-
-	                if (event.target !== anchorObj) {
-
-	                    var evt = document.createEvent("MouseEvents");
-
-	                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-	                    anchorObj.dispatchEvent(evt);
-	                }
-	            }
-	        }
-
-	        //Legacy
-
-	    }, {
-	        key: 'create',
-	        value: function create(a) {
-
-	            return this.Construct(a || {}, this.client.room);
-	        }
-	    }, {
-	        key: 'getFps',
-	        value: function getFps() {
-
-	            return this.client.update.step.fps;
-	        }
-	    }, {
-	        key: 'getCurrent',
-	        value: function getCurrent() {
-
-	            return this.client.update.state.current;
-	        }
-	    }, {
-	        key: 'getConnection',
-	        value: function getConnection() {
-
-	            return this.ext.connect.offline;
-	        }
-	    }, {
-	        key: 'getConnectionError',
-	        value: function getConnectionError() {
-
-	            return this.ext.connect.error;
-	        }
-	    }, {
-	        key: 'getConnectionAttempts',
-	        value: function getConnectionAttempts() {
-
-	            return this.ext.connect.connectionAttempts;
-	        }
-	    }, {
-	        key: 'getDelta',
-	        value: function getDelta() {
-
-	            return this.client.update.step.delta;
-	        }
-	    }, {
-	        key: 'getScale',
-	        value: function getScale() {
-
-	            return this.client.scale;
-	        }
-	    }, {
-	        key: 'getWidth',
-	        value: function getWidth() {
-
-	            return this.client.setWidth;
-	        }
-	    }, {
-	        key: 'getHeight',
-	        value: function getHeight() {
-
-	            return this.client.setHeight;
-	        }
-	    }, {
-	        key: 'getScaledWidth',
-	        value: function getScaledWidth() {
-
-	            return this.client.width;
-	        }
-	    }, {
-	        key: 'getScaledHeight',
-	        value: function getScaledHeight() {
-
-	            return this.client.height;
-	        }
-	    }, {
-	        key: 'setTitle',
-	        value: function setTitle(title) {
-
-	            return document.title == title ? document.title : document.title = title;
-	        }
-	    }, {
-	        key: 'setState',
-	        value: function setState(state) {
-
-	            return this.client.update.state.set(state, true);
-	        }
-	    }, {
-	        key: 'toggleWidescreen',
-	        value: function toggleWidescreen() {
-
-	            return this.client.update.fullscale = !this.client.update.fullscale;
-	        }
-	    }]);
-
-	    return _core;
-	}(_interfaces._Core);
-
-	exports.default = _core;
+	_Core.properties = {
+
+		main: new State(),
+		version: '0.8.1'
+
+	};
+	exports.default = _Core;
 
 /***/ },
 /* 198 */
@@ -9379,7 +9217,7 @@
 
 	            SpiceJS.statistics.monitor(loop).then(function () {
 
-	                SpiceJS.statistics.log("fps", SpiceJS.controller.list().getFps(), 'state');
+	                SpiceJS.statistics.log("fps", SpiceJS.controller.list().fps, 'state');
 	                SpiceJS.statistics.log("scale", SpiceJS.controller.list().getScale(), 'state');
 	            });
 	        },
@@ -13198,6 +13036,355 @@
 
 	    return SJSParticle;
 	}(_interfaces._SJSClass);
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	"strict mode";
+	/** @module app */
+
+	/** Name. */
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.name = undefined;
+
+	var _math2 = __webpack_require__(205);
+
+	var _math3 = _interopRequireDefault(_math2);
+
+	var _options2 = __webpack_require__(198);
+
+	var _options3 = _interopRequireDefault(_options2);
+
+	var _input2 = __webpack_require__(199);
+
+	var _input3 = _interopRequireDefault(_input2);
+
+	var _client2 = __webpack_require__(206);
+
+	var _client3 = _interopRequireDefault(_client2);
+
+	var _core = __webpack_require__(197);
+
+	var _core2 = _interopRequireDefault(_core);
+
+	var _canvas2 = __webpack_require__(208);
+
+	var _canvas3 = _interopRequireDefault(_canvas2);
+
+	var _user2 = __webpack_require__(209);
+
+	var _user3 = _interopRequireDefault(_user2);
+
+	var _ext2 = __webpack_require__(210);
+
+	var _ext3 = _interopRequireDefault(_ext2);
+
+	var _loader = __webpack_require__(214);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	var _particles = __webpack_require__(216);
+
+	var _particles2 = _interopRequireDefault(_particles);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var name = exports.name = 'core'; // (unfinished) To be built into application (to override current)
+
+	// (unfinished) To be built into application
+
+	window.SJSParticleController = _particles2.default; // Temporary for snowflakes
+
+	var date = new Date();
+
+	/**
+	* _Core_private
+	* @property
+	* @private
+	*/
+
+	//let _private = new WeakMap();
+
+	/**
+	* Core of the framework, initalizes client, input and listeners.
+	* @protected
+	* @module
+	*
+	*/
+
+	var _App = function (_Core2) {
+		_inherits(_App, _Core2);
+
+		/** Builds the core modules of the Application. */
+
+		function _App() {
+			_classCallCheck(this, _App);
+
+			//_private.set(this,this.constructor.properties);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_App).call(this));
+
+			_this.time = 0;
+
+			//this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
+
+			_this.options = _options3.default;
+
+			_this.user = _user3.default;
+
+			_this.ext = _ext3.default;
+
+			_this.input = _input3.default;
+
+			_this.canvas = _canvas3.default;
+
+			_this.client = _client3.default;
+
+			_this.math = new _math3.default();
+
+			return _this;
+		}
+
+		/**
+	 * This function starts the application.
+	 * @method
+	 * @protected
+	 */
+
+		_createClass(_App, [{
+			key: 'start',
+			value: function start(w, h) {
+
+				var name = '';
+
+				this.client = this.Construct(this.client.prototype, this.client.constructor);
+
+				this.canvas = new _canvas3.default(this);
+
+				this.loop(this);
+
+				this.client.init(w || this.app.options.width, h || this.app.options.height);
+
+				this.input = new this.input(this);
+			}
+
+			/**
+	  * The main loop for the application
+	  * @method
+	  * @private
+	  */
+
+		}, {
+			key: 'loop',
+			value: function loop(self) {
+				var _this2 = this;
+
+				//Use arrow function if available
+				var usearrow = true;
+
+				if (usearrow) {
+
+					setTimeout(function () {
+
+						function AppLoop() {
+							self.client.loop();
+						}
+
+						function AppLoopData() {
+							self.client.loopData();
+						}
+
+						_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+					}, this.time);
+				} else {
+
+					setTimeout(function () {
+
+						function AppLoop() {
+							self.client.loop();
+						}
+
+						function AppLoopData() {
+							self.client.loopData();
+						}
+
+						self.client.initalize(AppLoop, AppLoopData, self.scale);
+					}, this.time);
+				}
+			}
+		}, {
+			key: 'OnLoad',
+
+			/**
+	  * Triggers when the application first loops.
+	  * @method
+	     * @param {Object} [self] - Reference to the app.
+	  * @override
+	  */
+
+			value: function OnLoad(self) {
+
+				self.start();
+			}
+
+			/**
+	  * Triggers on dom content load.
+	  * @method
+	     * @param {Event} [evt] - The passing event.
+	  * @override
+	  */
+
+		}, {
+			key: 'OnApplicationLoad',
+			value: function OnApplicationLoad(evt) {
+
+				//Run .OnLoad
+				evt.target.app.OnLoad(evt.target.app);
+
+				console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+			}
+
+			/**
+	  * Event listener polyfill.
+	  * @method
+	     * @param {Element} [obj] - Element to trigger event on, fallback on window.
+	     * @param {Event} [evt] - The passing event.
+	     * @param {String} [listener] - The listener to build.
+	     * @param {Object} [param] - Paramater to pass.
+	  */
+
+		}, {
+			key: 'Listener',
+			value: function Listener(obj, evt, listener, param) {
+
+				/* Check obj param */
+
+				if (_typeof(obj[0]) === "object") {
+
+					obj = obj[0] || window;
+				}
+
+				/* If addEventListener exist, add it, otherwise attachEvent. */
+
+				if (obj.addEventListener) {
+
+					obj.addEventListener(evt, listener, false);
+				} else {
+
+					obj.attachEvent("on" + evt, listener);
+				}
+
+				/* Assign App Reference */
+
+				obj.app = window.apps[this.id] = this;
+			}
+		}, {
+			key: 'Construct',
+
+			/**
+	  * Object constructor/factory polyfill.
+	  * @method
+	     * @param {Object} [prototype] - An object prototype.
+	     * @param {Object} [constructor] - An object constructor.
+	  */
+
+			value: function Construct(prototype, constructor) {
+
+				var isObj = false;
+				var obj = prototype;
+				var proto = prototype;
+				var construct = constructor;
+				var ret = {};
+				var type = undefined;
+
+				/* if prototype contains a prototype and constructor. */
+
+				if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+					construct = obj.constructor;
+					proto = obj.prototype;
+					isObj = true;
+				}
+
+				/* Grab type of constructor */
+
+				type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+				/* Return & Create object based on constructor */
+				switch (type) {
+
+					/* Use only the prototype */
+					case 'undefined':
+						ret = Object.create(proto);
+						break;
+
+					/* Use constructor as object */
+					case 'object':
+						ret = Object.create(proto, construct);
+						break;
+
+					/* Use constructor as function */
+					case 'function':
+						ret = Object.create(proto, construct(this));
+						break;
+
+					/* Expected a type */
+					default:
+						console.log("Expected 'object' or 'function': Type is " + c);
+
+				}
+
+				if (isObj) prototype = ret;
+
+				return ret;
+			}
+
+			/**
+	  * Artificial click
+	  * @method
+	     * @param {Event} [event] - Passing of the event.
+	     * @param {Element} [anchorObj] - Element to click.
+	  */
+
+		}, {
+			key: 'click',
+			value: function click(event, anchorObj) {
+
+				if (anchorObj.click) {
+
+					anchorObj.click();
+				} else if (document.createEvent) {
+
+					if (event.target !== anchorObj) {
+
+						var evt = document.createEvent("MouseEvents");
+
+						evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+						anchorObj.dispatchEvent(evt);
+					}
+				}
+			}
+		}]);
+
+		return _App;
+	}(_core2.default);
+
+	exports.default = _App;
 
 /***/ }
 /******/ ]);
