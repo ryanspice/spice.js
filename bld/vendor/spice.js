@@ -5352,7 +5352,7 @@
 	var Windows = window.Windows = typeof Windows == 'undefined' ? Window : Windows;
 
 	/**
-	* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the framework. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
+	* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
 	* @access public
 	* @emits {SpiceJS} Emit the application controller.
 	* @example
@@ -5363,35 +5363,16 @@
 	*
 	*		    init:function() {
 	*
-	*		        this.intro = new test(this.app);
-	*
-	*		    	this.particleController = new SJSParticleController(this.app);
-	*
-	*		        return true;
 	*		    },
 	*
 	*		    update:function() {
 	*
-	*				//this.intro.update();
-	*
-	*				this.particleController.update();
-	*
-	*		        return true;
 	*		    },
 	*
 	*		    draw:function() {
 	*
-	*		        //this.intro.draw();
-	*
-	*				this.particleController.draw();
-	*
-	*		        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
-	*
 	*		        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
 	*
-	*		        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
-	*
-	*		        return true;
 	*		    }
 	*
 	*		};
@@ -5409,6 +5390,7 @@
 
 		/**
 	    *  Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
+	 * @private
 	    */
 
 		function SpiceJS() {
@@ -5422,105 +5404,17 @@
 		}
 
 		/**
-	 * Return the controller object
-	 * @type {Element}
-	 * @protected
-	 */
-
-		/**
-	 * Private variables.
+	 * Reference to the canvas/app global controller.
 	 * @type {Object}
 	 * @protected
 	 */
 
+		/**
+	 * Private variables. Statistics and Controller are only accessable through reference.
+	 * @type {Object}
+	 */
+
 		_createClass(SpiceJS, [{
-			key: 'proto',
-
-			/**
-	  *	Returns app prototype.
-	  *	@type {Object}
-	  */
-
-			value: function proto() {
-
-				console.warn('Warning this function is depreciated: SpiceJS.proto');
-
-				return this.proto;
-			}
-
-			/**
-	  *	Begins the app build promise.
-	  *	@type {Object}
-	  */
-
-		}, {
-			key: 'create',
-			value: function create() {
-				var _this2 = this;
-
-				var tempReference = {};
-
-				var tempReferenceId = null;
-
-				var listReference = null;
-
-				var time = new Date().getTime();
-
-				this.statistics.monitor(function () {
-
-					//this.name = "scriptloadtime";
-
-					window.utils.loadExternalJS(window.scripts);
-
-					tempReference = _this2.buildPrototype();
-
-					tempReferenceId = tempReference.id;
-
-					///Temporary Fix for Safari and IE
-					//      document
-
-					listReference = _this2.controller.list(tempReferenceId);
-
-					_this2.buildListeners(listReference);
-
-					// ^ F
-				}).then(function () {
-
-					_this2.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-					listReference = _this2.controller.list(tempReferenceId);
-
-					/// New for After Loaded
-					_this2.statistics.monitor(function () {
-
-						//this.name = "loadtime";
-
-						//this.initListeners(listReference);
-
-					}).then(function () {
-
-						_this2.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-						_this2.statistics.log("build", time);
-					});
-				});
-
-				return tempReference;
-			}
-		}, {
-			key: 'window',
-			get: function get() {
-
-				return Window;
-			}
-
-			/**
-	  * Return the controller object
-	  * @type {Element}
-	  * @protected
-	  */
-
-		}, {
 			key: 'controller',
 			get: function get() {
 
@@ -5528,8 +5422,8 @@
 			}
 
 			/**
-	  * Return the statistics object
-	  * @type {Element}
+	  * Reference to the statistics object.
+	  * @type {Object}
 	  * @protected
 	  */
 
@@ -5538,6 +5432,19 @@
 			get: function get() {
 
 				return _private.get(this)['statistics'];
+			}
+
+			/**
+	  * Reference to the Window object.
+	  * @type {Element}
+	  * @protected
+	  */
+
+		}, {
+			key: 'window',
+			get: function get() {
+
+				return Window;
 			}
 		}]);
 
@@ -13433,6 +13340,75 @@
 
 				this.constructor.properties.statistics = statsReference;
 			}
+
+			/**
+	  *	Begins the app build promise.
+	  *	@return {Object} a - b
+	  */
+
+		}, {
+			key: "create",
+			value: function create() {
+				var _this = this;
+
+				var tempReference = {};
+
+				var tempReferenceId = null;
+
+				var listReference = null;
+
+				var time = new Date().getTime();
+
+				this.statistics.monitor(function () {
+
+					//this.name = "scriptloadtime";
+
+					window.utils.loadExternalJS(window.scripts);
+
+					tempReference = _this.buildPrototype();
+
+					tempReferenceId = tempReference.id;
+
+					///Temporary Fix for Safari and IE
+					//      document
+
+					listReference = _this.controller.list(tempReferenceId);
+
+					_this.buildListeners(listReference);
+
+					// ^ F
+				}).then(function () {
+
+					_this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+					listReference = _this.controller.list(tempReferenceId);
+
+					/// New for After Loaded
+					_this.statistics.monitor(function () {
+
+						//this.name = "loadtime";
+
+						//this.initListeners(listReference);
+
+					}).then(function () {
+
+						_this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+						_this.statistics.log("build", time);
+					});
+				});
+
+				return tempReference;
+			}
+
+			/**
+	  *	Returns app prototype.
+	  *	@type {Object} null - b
+	      proto() {
+	  		console.warn('Warning this function is depreciated: SpiceJS.proto');
+	          return this.proto;
+	      }
+	  	*/
 
 			/**
 	  *	Attaches a reference to the Statistics module.

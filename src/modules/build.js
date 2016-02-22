@@ -94,6 +94,85 @@ export default class _Build {
 		}
 
 		/**
+		*	Begins the app build promise.
+		*	@return {Object} a - b
+		*/
+
+		create(){
+
+		    let tempReference = {};
+
+		    let tempReferenceId = null;
+
+		    let listReference = null;
+
+		    let time = new Date().getTime();
+
+		    this.statistics.monitor(()=> {
+
+		        //this.name = "scriptloadtime";
+
+		        window.utils.loadExternalJS(window.scripts);
+
+		        tempReference = this.buildPrototype();
+
+		        tempReferenceId = (tempReference.id);
+
+		        ///Temporary Fix for Safari and IE
+		        //      document
+
+		        listReference = this.controller.list(tempReferenceId);
+
+		        this.buildListeners(listReference);
+
+		        // ^ F
+
+		    }).then(() => {
+
+		            this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+		            listReference = this.controller.list(tempReferenceId);
+
+		            /// New for After Loaded
+		            this.statistics.monitor(() => {
+
+		                //this.name = "loadtime";
+
+		                //this.initListeners(listReference);
+
+		            }).then(() => {
+
+		                this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+		                this.statistics.log("build",time);
+
+		            });
+
+		    })
+
+		    return tempReference;
+
+		}
+
+
+		/**
+		*	Returns app prototype.
+		*	@type {Object} null - b
+
+	    proto() {
+
+			console.warn('Warning this function is depreciated: SpiceJS.proto');
+
+	        return this.proto;
+
+	    }
+
+		*/
+
+
+
+
+		/**
 		*	Attaches a reference to the Statistics module.
 		*	@type {Object}
 		*/

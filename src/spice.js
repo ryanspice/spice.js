@@ -16,7 +16,7 @@ const Window = window;
 const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
 
 /**
-* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the framework. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
+* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
 * @access public
 * @emits {SpiceJS} Emit the application controller.
 * @example
@@ -27,35 +27,16 @@ const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
 *
 *		    init:function() {
 *
-*		        this.intro = new test(this.app);
-*
-*		    	this.particleController = new SJSParticleController(this.app);
-*
-*		        return true;
 *		    },
 *
 *		    update:function() {
 *
-*				//this.intro.update();
-*
-*				this.particleController.update();
-*
-*		        return true;
 *		    },
 *
 *		    draw:function() {
 *
-*		        //this.intro.draw();
-*
-*				this.particleController.draw();
-*
-*		        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
-*
 *		        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
 *
-*		        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
-*
-*		        return true;
 *		    }
 *
 *		};
@@ -71,9 +52,8 @@ const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
 export default class SpiceJS extends _Build  {
 
 	/**
-	* Private variables.
+	* Private variables. Statistics and Controller are only accessable through reference.
 	* @type {Object}
-	* @protected
 	*/
 
 	static properties = {
@@ -108,6 +88,7 @@ export default class SpiceJS extends _Build  {
 
 	/**
     *  Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
+	* @private
     */
 
     constructor(){
@@ -119,20 +100,8 @@ export default class SpiceJS extends _Build  {
     }
 
 	/**
-	* Return the controller object
-	* @type {Element}
-	* @protected
-	*/
-
-	get window(){
-
-		return Window;
-
-	}
-
-	/**
-	* Return the controller object
-	* @type {Element}
+	* Reference to the canvas/app global controller.
+	* @type {Object}
 	* @protected
 	*/
 
@@ -143,8 +112,8 @@ export default class SpiceJS extends _Build  {
 	}
 
 	/**
-	* Return the statistics object
-	* @type {Element}
+	* Reference to the statistics object.
+	* @type {Object}
 	* @protected
 	*/
 
@@ -155,76 +124,14 @@ export default class SpiceJS extends _Build  {
 	}
 
 	/**
-	*	Returns app prototype.
-	*	@type {Object}
+	* Reference to the Window object.
+	* @type {Element}
+	* @protected
 	*/
 
-    proto() {
+	get window(){
 
-		console.warn('Warning this function is depreciated: SpiceJS.proto');
-
-        return this.proto;
-
-    }
-
-	/**
-	*	Begins the app build promise.
-	*	@type {Object}
-	*/
-
-	create(){
-
-	    let tempReference = {};
-
-	    let tempReferenceId = null;
-
-	    let listReference = null;
-
-	    let time = new Date().getTime();
-
-	    this.statistics.monitor(()=> {
-
-	        //this.name = "scriptloadtime";
-
-	        window.utils.loadExternalJS(window.scripts);
-
-	        tempReference = this.buildPrototype();
-
-	        tempReferenceId = (tempReference.id);
-
-	        ///Temporary Fix for Safari and IE
-	        //      document
-
-	        listReference = this.controller.list(tempReferenceId);
-
-	        this.buildListeners(listReference);
-
-	        // ^ F
-
-	    }).then(() => {
-
-	            this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-	            listReference = this.controller.list(tempReferenceId);
-
-	            /// New for After Loaded
-	            this.statistics.monitor(() => {
-
-	                //this.name = "loadtime";
-
-	                //this.initListeners(listReference);
-
-	            }).then(() => {
-
-	                this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-	                this.statistics.log("build",time);
-
-	            });
-
-	    })
-
-	    return tempReference;
+		return Window;
 
 	}
 
