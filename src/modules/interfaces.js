@@ -634,4 +634,4 @@ class _Build {
 
 }
 
-export {_Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas_Core, _App, _Build, _Legacy};
+export {_Interface, _Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas_Core, _App, _Build, _Legacy};

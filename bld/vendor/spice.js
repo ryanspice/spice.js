@@ -5317,219 +5317,49 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     *	@import
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
-
-	//import _controller from './modules/controller.js';
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
 
-	var _statistics2 = __webpack_require__(193);
+	var _statistics = __webpack_require__(192);
 
-	var _statistics3 = _interopRequireDefault(_statistics2);
+	var _statistics2 = _interopRequireDefault(_statistics);
 
-	var _app = __webpack_require__(217);
+	var _build = __webpack_require__(217);
 
-	var _app2 = _interopRequireDefault(_app);
+	var _build2 = _interopRequireDefault(_build);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @import
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @private
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
+
 	/**
-	* _private
-	* @protected
+	* Constants
+	* @private
 	*/
 
 	var _private = new WeakMap();
+	var Window = window;
+	var Windows = window.Windows = typeof Windows == 'undefined' ? Window : Windows;
 
 	/**
-	* Main game controller. Handles instanciating instances and tracking information.
-	* @access private
-	* @module
-	*
-	*/
-
-	var SpiceJS = function () {
-	    _createClass(SpiceJS, [{
-	        key: 'get',
-
-	        /** @type {Object} */
-
-	        /** @type {Object} */
-
-	        value: function get() {
-
-	            return this.proto;
-	        }
-
-	        /** @type {Object} */
-
-	        /** @type {Object} */
-
-	        /** @type {Object} */
-
-	    }, {
-	        key: 'create',
-	        value: function create(target) {
-	            var _this = this;
-
-	            var tempReference = {};
-
-	            var tempReferenceId = null;
-
-	            var listReference = null;
-
-	            var time = new Date().getTime();
-
-	            this.statistics.monitor(function () {
-
-	                _this.name = "scriptloadtime";
-
-	                window.utils.loadExternalJS(window.scripts);
-
-	                tempReference = _this.generatePrototype();
-
-	                tempReferenceId = tempReference.id;
-
-	                ///Temporary Fix for Safari and IE
-	                //      document
-
-	                listReference = _this.controller.list(tempReferenceId);
-
-	                _this.initListeners(listReference);
-
-	                // ^ F
-	            }).then(function () {
-
-	                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-	                listReference = _this.controller.list(tempReferenceId);
-
-	                /// New for After Loaded
-	                _this.statistics.monitor(function () {
-
-	                    _this.name = "loadtime";
-
-	                    //this.initListeners(listReference);
-	                }).then(function () {
-
-	                    _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-	                    _this.statistics.log("build", time);
-	                });
-	            });
-
-	            return tempReference;
-	        }
-
-	        /** @type {Object} */
-
-	    }, {
-	        key: 'generatePrototype',
-	        value: function generatePrototype() {
-
-	            this.window = window;
-
-	            //temp stores the app during the create process, it is then returned
-	            var temp = {};
-
-	            temp = new _app2.default(this.app);
-
-	            temp.window = this.window;
-
-	            temp.document = document;
-
-	            temp.id = this.window.appsNextId;
-
-	            this.window.apps[temp.id] = temp;
-
-	            this.window.appsNextId++;
-
-	            return this.window.apps[temp.id];
-	        }
-
-	        /**
-	        *   @param {temp} temp - pass a reference to attach listeners
-	        *   @return {Method} returns self
-	        */
-
-	    }, {
-	        key: 'initListeners',
-	        value: function initListeners(temp) {
-
-	            if (document.readyState == "complete" || document.readyState == "loaded") {
-	                // document is already ready to go
-
-	                console.log('ready');
-	            }
-
-	            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-	            return temp;
-	        }
-
-	        /** @type {Method} */
-
-	    }]);
-
-	    function SpiceJS() {
-	        _classCallCheck(this, SpiceJS);
-
-	        this.temp = {};
-
-	        this.window = window;
-
-	        if (typeof this.window.scripts != 'array') this.window.scripts = [];
-
-	        this.window.SpiceJS = this;
-
-	        this.window.SJS = this;
-
-	        //if no apps have been defined, create a new array
-	        if (!this.window.apps) this.window.apps = new Array(1);
-
-	        //if appsNextId isnt larger or equal to 0 assign it to 0
-	        if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
-
-	        //Setup Statistics and Monitoring
-	        this.statistics = new this.constructor._statistics(this);
-
-	        //Reference static controller
-	        this.controller = this.constructor._controller;
-	    }
-
-	    return SpiceJS;
-	}();
-
-	/*
-	*
-	*
-	*
-	*
-	*
-	*
-	*
-	*
-	*
-	*
-	*
-	*
-	*/
-
-	/**
-	* SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
+	* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the framework. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
 	* @access public
+	* @emits {SpiceJS} Emit the application controller.
 	* @example
 	*
 	*	((SpiceJS.create()).OnLoad = function (self) {
 	*
 	*		self.main = {
-	*
-	*		    name:"Example",
 	*
 	*		    init:function() {
 	*
@@ -5574,46 +5404,179 @@
 	*
 	*/
 
-	/**
-	 * Catch the Windows variable from microsoft devices.
-	 * @access public
-	 * @const {pbject}
+	var SpiceJS = function (_Build2) {
+		_inherits(SpiceJS, _Build2);
+
+		/**
+	    *  Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
+	    */
+
+		function SpiceJS() {
+			_classCallCheck(this, SpiceJS);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SpiceJS).call(this));
+
+			_private.set(_this, _this.constructor.properties);
+
+			return _this;
+		}
+
+		/**
+	 * Return the controller object
+	 * @type {Element}
+	 * @protected
 	 */
+
+		/**
+	 * Private variables.
+	 * @type {Object}
+	 * @protected
+	 */
+
+		_createClass(SpiceJS, [{
+			key: 'proto',
+
+			/**
+	  *	Returns app prototype.
+	  *	@type {Object}
+	  */
+
+			value: function proto() {
+
+				console.warn('Warning this function is depreciated: SpiceJS.proto');
+
+				return this.proto;
+			}
+
+			/**
+	  *	Begins the app build promise.
+	  *	@type {Object}
+	  */
+
+		}, {
+			key: 'create',
+			value: function create() {
+				var _this2 = this;
+
+				var tempReference = {};
+
+				var tempReferenceId = null;
+
+				var listReference = null;
+
+				var time = new Date().getTime();
+
+				this.statistics.monitor(function () {
+
+					//this.name = "scriptloadtime";
+
+					window.utils.loadExternalJS(window.scripts);
+
+					tempReference = _this2.buildPrototype();
+
+					tempReferenceId = tempReference.id;
+
+					///Temporary Fix for Safari and IE
+					//      document
+
+					listReference = _this2.controller.list(tempReferenceId);
+
+					_this2.buildListeners(listReference);
+
+					// ^ F
+				}).then(function () {
+
+					_this2.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+					listReference = _this2.controller.list(tempReferenceId);
+
+					/// New for After Loaded
+					_this2.statistics.monitor(function () {
+
+						//this.name = "loadtime";
+
+						//this.initListeners(listReference);
+
+					}).then(function () {
+
+						_this2.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+						_this2.statistics.log("build", time);
+					});
+				});
+
+				return tempReference;
+			}
+		}, {
+			key: 'window',
+			get: function get() {
+
+				return Window;
+			}
+
+			/**
+	  * Return the controller object
+	  * @type {Element}
+	  * @protected
+	  */
+
+		}, {
+			key: 'controller',
+			get: function get() {
+
+				return _private.get(this)['controller'];
+			}
+
+			/**
+	  * Return the statistics object
+	  * @type {Element}
+	  * @protected
+	  */
+
+		}, {
+			key: 'statistics',
+			get: function get() {
+
+				return _private.get(this)['statistics'];
+			}
+		}]);
+
+		return SpiceJS;
+	}(_build2.default);
 
 	SpiceJS.properties = {
 
-	    window: window,
-	    temp: {}
+		temp: {},
 
-	};
-	SpiceJS._statistics = _statistics3.default;
-	SpiceJS._controller = {
+		controller: {
 
-	    /**
-	    * List all of the instances of SpiceJS or
-	    * @type {method}
-	    * @param {number} id - Specify a specific instance to return.
-	    */
+			/**
+	  * List all of the instances of SpiceJS or
+	  * @type {method}
+	  * @param {number} id - Specify a specific instance to return.
+	  */
 
-	    list: function list(id) {
+			list: function list(id) {
 
-	        if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
-	    }
+				if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
+			}
+
+		},
+
+		statistics: _statistics2.default
 
 	};
 	exports.default = SpiceJS;
-	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
+	;
 
 	/**
 	 * Export SpiceJS
-	 * @emits {SpiceJS} Emit the application controller.
 	 */
 
 	exports.default = new SpiceJS();
 
 /***/ },
-/* 192 */,
-/* 193 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5624,15 +5587,15 @@
 	    value: true
 	});
 
-	var _utils = __webpack_require__(194);
+	var _utils = __webpack_require__(193);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _statistics_core = __webpack_require__(219);
+	var _statistics_core = __webpack_require__(194);
 
 	var _statistics_core2 = _interopRequireDefault(_statistics_core);
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(195);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5904,7 +5867,7 @@
 	exports.default = Statistics;
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6011,8 +5974,128 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 195 */,
-/* 196 */
+/* 194 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* @module
+	* @private
+	*/
+
+	var _Statistics_Core = function () {
+	    _createClass(_Statistics_Core, [{
+	        key: 'count',
+	        get: function get() {
+
+	            return this.monitor.count;
+	        },
+	        set: function set(value) {
+
+	            this.monitor.count = value;
+	        }
+	    }, {
+	        key: 'details',
+	        get: function get() {
+
+	            return _Statistics_Core._details;
+	        },
+	        set: function set(value) {
+
+	            this._details = _Statistics_Core._details;
+	        }
+	    }], [{
+	        key: '_details',
+	        value: function _details(type) {
+
+	            type = type;
+
+	            switch (type) {
+
+	                default:
+
+	                    return Object.keys(this.logs);
+
+	                case 'details':
+
+	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
+
+	                case 'entries':
+
+	                    return Object.entries(this.logs);
+
+	                case 'values':
+
+	                    return Object.values(this.logs);
+
+	            }
+	        }
+	    }, {
+	        key: 'logs',
+	        get: function get() {
+
+	            return this.monitor.logs;
+	        },
+	        set: function set(value) {
+
+	            this.monitor = value;
+	        }
+	    }, {
+	        key: 'monitor',
+	        get: function get() {
+
+	            return this._monitor;
+	        },
+	        set: function set(value) {
+
+	            this._monitor = value;
+	        }
+	    }]);
+
+	    function _Statistics_Core() {
+	        _classCallCheck(this, _Statistics_Core);
+
+	        /** dfsdsf
+	        * @type {Array<>} sdf sdf
+	        * @private
+	        */
+
+	        this.logs = this.constructor.logs;
+	        this.logs.type = 'Array';
+
+	        this.count = 0;
+	    }
+
+	    return _Statistics_Core;
+	}();
+
+	_Statistics_Core._monitor = {
+
+	    count: 0,
+
+	    logs: []
+
+	};
+	exports.default = _Statistics_Core;
+
+/***/ },
+/* 195 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6705,6 +6788,7 @@
 	    return _Build;
 	}();
 
+	exports._Interface = _Interface;
 	exports._Vector = _Vector;
 	exports._SJSClass = _SJSClass;
 	exports._Log = _Log;
@@ -6716,18 +6800,65 @@
 	exports._Legacy = _Legacy;
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	"strict mode";
+	/** @module app */
+
+	/** Name. */
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.name = undefined;
 
-	var _interfaces = __webpack_require__(196);
+	var _math2 = __webpack_require__(197);
+
+	var _math3 = _interopRequireDefault(_math2);
+
+	var _options2 = __webpack_require__(199);
+
+	var _options3 = _interopRequireDefault(_options2);
+
+	var _input2 = __webpack_require__(200);
+
+	var _input3 = _interopRequireDefault(_input2);
+
+	var _client2 = __webpack_require__(205);
+
+	var _client3 = _interopRequireDefault(_client2);
+
+	var _core = __webpack_require__(207);
+
+	var _core2 = _interopRequireDefault(_core);
+
+	var _canvas2 = __webpack_require__(208);
+
+	var _canvas3 = _interopRequireDefault(_canvas2);
+
+	var _user2 = __webpack_require__(209);
+
+	var _user3 = _interopRequireDefault(_user2);
+
+	var _ext2 = __webpack_require__(210);
+
+	var _ext3 = _interopRequireDefault(_ext2);
+
+	var _loader = __webpack_require__(214);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	var _particles = __webpack_require__(216);
+
+	var _particles2 = _interopRequireDefault(_particles);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6735,1477 +6866,290 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	//import {_State} from './state.js';
+	var name = exports.name = 'core'; // (unfinished) To be built into application (to override current)
+
+	// (unfinished) To be built into application
+
+	window.SJSParticleController = _particles2.default; // Temporary for snowflakes
+
+	var date = new Date();
 
 	/**
-	* _private
-	* @protected
+	* _Core_private
+	* @property
+	* @private
 	*/
 
-	var _private = new WeakMap();
+	//let _private = new WeakMap();
 
 	/**
-	* Vector
+	* Core of the framework, initalizes client, input and listeners.
+	* @protected
 	* @module
-	* @interface
-	* @protected
+	*
 	*/
 
-	var _Core = function (_Legacy2) {
-		_inherits(_Core, _Legacy2);
+	var _App = function (_Core2) {
+		_inherits(_App, _Core2);
 
-		_createClass(_Core, [{
-			key: 'main',
+		/** Builds the core modules of the Application. */
 
-			/**  @type {Number} */
+		function _App() {
+			_classCallCheck(this, _App);
 
-			get: function get() {
+			//_private.set(this,this.constructor.properties);
 
-				return this.get('main');
-			}
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_App).call(this));
 
-			/**  @type {Number} */
+			_this.time = 0;
 
-			/**
-	  * private variables
-	  * @type {Object}
-	  * @protected
-	  */
+			//this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
 
-			,
-			set: function set(newmain) {
+			_this.options = _options3.default;
 
-				var state = this.get('main');
-				var newstate = newmain;
-				state.name = newstate.name;
-				state.init = newstate.init;
-				state.update = newstate.update;
-				state.draw = newstate.draw;
+			_this.user = _user3.default;
 
-				return state;
-			}
+			_this.ext = _ext3.default;
 
-			/**  @type {Number} */
+			_this.input = _input3.default;
 
-		}, {
-			key: 'version',
-			get: function get() {
+			_this.canvas = _canvas3.default;
 
-				return this.get('version');
-			}
+			_this.client = _client3.default;
 
-			/**  @type {Number} */
-
-		}, {
-			key: 'fps',
-			get: function get() {
-
-				return this.client.update.step.fps.toFixed(2);
-			}
-
-			/**  @type {Constructor} */
-
-		}]);
-
-		function _Core() {
-			_classCallCheck(this, _Core);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
-
-			_private.set(_this, _this.constructor.properties);
-
-			console.log(_this.head);
+			_this.math = new _math3.default();
 
 			return _this;
 		}
 
-		return _Core;
-	}(_interfaces._Legacy);
+		/**
+	 * This function starts the application.
+	 * @method
+	 * @protected
+	 */
 
-	_Core.properties = {
+		_createClass(_App, [{
+			key: 'start',
+			value: function start(w, h) {
 
-		main: {},
-		version: '0.8.1'
+				var name = '';
 
-	};
-	exports.default = _Core;
+				this.client = this.Construct(this.client.prototype, this.client.constructor);
+
+				this.canvas = new _canvas3.default(this);
+
+				this.loop(this);
+
+				this.client.init(w || this.app.options.width, h || this.app.options.height);
+
+				this.input = new this.input(this);
+			}
+
+			/**
+	  * The main loop for the application
+	  * @method
+	  * @private
+	  */
+
+		}, {
+			key: 'loop',
+			value: function loop(self) {
+				var _this2 = this;
+
+				//Use arrow function if available
+				var usearrow = true;
+
+				if (usearrow) {
+
+					setTimeout(function () {
+
+						function AppLoop() {
+							self.client.loop();
+						}
+
+						function AppLoopData() {
+							self.client.loopData();
+						}
+
+						_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+					}, this.time);
+				} else {
+
+					setTimeout(function () {
+
+						function AppLoop() {
+							self.client.loop();
+						}
+
+						function AppLoopData() {
+							self.client.loopData();
+						}
+
+						self.client.initalize(AppLoop, AppLoopData, self.scale);
+					}, this.time);
+				}
+			}
+		}, {
+			key: 'OnLoad',
+
+			/**
+	  * Triggers when the application first loops.
+	  * @method
+	     * @param {Object} [self] - Reference to the app.
+	  * @override
+	  */
+
+			value: function OnLoad(self) {
+
+				self.start();
+			}
+
+			/**
+	  * Triggers on dom content load.
+	  * @method
+	     * @param {Event} [evt] - The passing event.
+	  * @override
+	  */
+
+		}, {
+			key: 'OnApplicationLoad',
+			value: function OnApplicationLoad(evt) {
+
+				//Run .OnLoad
+				evt.target.app.OnLoad(evt.target.app);
+
+				console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+			}
+
+			/**
+	  * Event listener polyfill.
+	  * @method
+	     * @param {Element} [obj] - Element to trigger event on, fallback on window.
+	     * @param {Event} [evt] - The passing event.
+	     * @param {String} [listener] - The listener to build.
+	     * @param {Object} [param] - Paramater to pass.
+	  */
+
+		}, {
+			key: 'Listener',
+			value: function Listener(obj, evt, listener, param) {
+
+				/* Check obj param */
+
+				if (_typeof(obj[0]) === "object") {
+
+					obj = obj[0] || window;
+				}
+
+				/* If addEventListener exist, add it, otherwise attachEvent. */
+
+				if (obj.addEventListener) {
+
+					obj.addEventListener(evt, listener, false);
+				} else {
+
+					obj.attachEvent("on" + evt, listener);
+				}
+
+				/* Assign App Reference */
+
+				obj.app = window.apps[this.id] = this;
+			}
+		}, {
+			key: 'Construct',
+
+			/**
+	  * Object constructor/factory polyfill.
+	  * @method
+	     * @param {Object} [prototype] - An object prototype.
+	     * @param {Object} [constructor] - An object constructor.
+	  */
+
+			value: function Construct(prototype, constructor) {
+
+				var isObj = false;
+				var obj = prototype;
+				var proto = prototype;
+				var construct = constructor;
+				var ret = {};
+				var type = undefined;
+
+				/* if prototype contains a prototype and constructor. */
+
+				if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+					construct = obj.constructor;
+					proto = obj.prototype;
+					isObj = true;
+				}
+
+				/* Grab type of constructor */
+
+				type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+				/* Return & Create object based on constructor */
+				switch (type) {
+
+					/* Use only the prototype */
+					case 'undefined':
+						ret = Object.create(proto);
+						break;
+
+					/* Use constructor as object */
+					case 'object':
+						ret = Object.create(proto, construct);
+						break;
+
+					/* Use constructor as function */
+					case 'function':
+						ret = Object.create(proto, construct(this));
+						break;
+
+					/* Expected a type */
+					default:
+						console.log("Expected 'object' or 'function': Type is " + c);
+
+				}
+
+				if (isObj) prototype = ret;
+
+				return ret;
+			}
+
+			/**
+	  * Artificial click
+	  * @method
+	     * @param {Event} [event] - Passing of the event.
+	     * @param {Element} [anchorObj] - Element to click.
+	  */
+
+		}, {
+			key: 'click',
+			value: function click(event, anchorObj) {
+
+				if (anchorObj.click) {
+
+					anchorObj.click();
+				} else if (document.createEvent) {
+
+					if (event.target !== anchorObj) {
+
+						var evt = document.createEvent("MouseEvents");
+
+						evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+						anchorObj.dispatchEvent(evt);
+					}
+				}
+			}
+		}]);
+
+		return _App;
+	}(_core2.default);
+
+	exports.default = _App;
 
 /***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = {
-
-	    overridescroll: false,
-	    drag: 0,
-	    targetfps: 60,
-	    mute: false,
-
-	    paths: {
-
-	        data: "data/",
-	        images: "images/",
-	        url: ""
-
-	    },
-
-	    target: {
-	        canvas: null, // String - Id of the main canvas
-	        buffer: null, // String - Id of the buffer canvas
-	        blitter: null },
-
-	    // String - Id of the blitting canvas
-	    global: {
-
-	        globalCompositeOperation: "destination-in" },
-
-	    //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
-
-	    flags: {
-
-	        canvas: true,
-	        mstouch: true,
-	        seamless: true,
-	        tight: true,
-	        touchprevent: true,
-	        opaque: true
-
-	    },
-
-	    canvas: {
-
-	        override: false, //Toggle the use of options.canvas
-	        name: 'canvas', //Use canvas.name
-	        buffername: 'buffer', //Use canvas.buffer
-	        buffer: true, //Toggle the use of double-buffering
-	        background: '#000000', //Assign canvas element background colour
-
-	        //Assign canvas element position properties
-	        position: {
-	            //position:'absolute',
-	            //top:0,
-	            //left:window.innerWidth/2,
-	            //center:true,
-	            //z:1
-	            position: 'absolute',
-	            top: "",
-	            left: window.innerWidth * 2,
-	            //left:"",
-	            center: false,
-	            z: 1
-	        },
-
-	        //Assign canvas size properties
-	        size: {
-
-	            width: window.innerWidth,
-	            height: window.innerHeight
-
-	        }
-
-	    },
-
-	    msFlags: {
-
-	        msZoom: false
-
-	    },
-
-	    //Override Functions
-	    override: {
-
-	        keyboard: true,
-	        mouse: true,
-	        MSHoldVisual: false,
-	        SelectStart: false,
-	        ContextMenu: true,
-	        Drag: true
-
-	    },
-
-	    //Return Options Value
-	    get: function get(attr) {
-
-	        //If Attribute
-	        if (attr) {
-
-	            //Get list of apps
-	            var list = SpiceJS.controller.list();
-
-	            //list is object
-	            if ((typeof list === "undefined" ? "undefined" : _typeof(list)) == "object") {
-	                //return window.apps.option.
-	                for (var attrname in this) {
-	                    if (attrname == attr) return eval("list.options." + attrname);
-	                }
-	            } else {
-	                for (var i = window.apps.length - 1; i >= 0; i--) {
-	                    for (var attrname in this) {
-	                        if (attrname == attr) {
-	                            var l = [];
-	                            l.push(eval("list[" + i + "].options." + attrname));
-	                        }
-	                    }
-	                }return l;
-	            }
-
-	            return null;
-	        } else return this;
-	    },
-
-	    set: function set(options) {
-
-	        for (var attrname in options) {
-	            this[attrname] = options[attrname];
-	        };
-
-	        return this;
-	    }
-
-	};
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _inputcontroller2 = __webpack_require__(200);
-
-	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* Main game controller. Handles instanciating instances and tracking information.
-	* @access private
-	* @module
-	*
-	*/
-
-	var Input = function (_inputcontroller) {
-	    _inherits(Input, _inputcontroller);
-
-	    function Input(app, pointerPoint) {
-	        _classCallCheck(this, Input);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
-
-	        _this.delay = 0;
-
-	        _this.touch = false;
-
-	        _this.touch_dist = { x: 0, y: 0 };
-
-	        _this.key = false;
-
-	        _this.keyPower = 0;
-
-	        _this.keyup = false;
-
-	        _this.keydown = false;
-
-	        _this.codes = [];
-
-	        _this.codeList = [];
-
-	        _this.control = false;
-
-	        _this.confine = false;
-
-	        _this.preventNext = true;
-
-	        _this.init_options();
-
-	        _this.keyController.init(_this.app);
-
-	        _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
-
-	        _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
-
-	        _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
-
-	        _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
-
-	        _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
-
-	        _this.setup_universalMultitouch();
-
-	        _this.setup_documentListeners();
-
-	        //this.setup_msUniversalAppTouch();
-
-	        return _this;
-	    }
-
-	    _createClass(Input, [{
-	        key: "preventDefault",
-	        value: function preventDefault(e) {
-	            e.preventDefault();return e.target.app;
-	        }
-	    }, {
-	        key: "preventNextInput",
-	        value: function preventNextInput() {
-	            return this.preventNext = true;
-	        }
-	    }, {
-	        key: "confineMouse",
-	        value: function confineMouse() {
-
-	            return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
-	        }
-	    }, {
-	        key: "init_options",
-	        value: function init_options() {
-
-	            /*	Overrides the selection start event for selecting events	*/
-
-	            if (!this.app.options.get("override").SelectStart) {
-	                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
-	            }
-
-	            /*	Overrides the 'holdtouch, MSHoldVisual' event */
-
-	            if (!this.app.options.get("override").MSHoldVisual) {
-	                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
-	            }
-
-	            /* Overrides the ContextMenu event */
-
-	            if (this.app.options.get("override").ContextMenu) {
-	                this.app.document.oncontextmenu = this.preventDefault;
-	                this.app.window.self.oncontextmenu = this.preventDefault;
-	            }
-
-	            /*	Overrides dragstart event		*/
-
-	            if (this.app.options.get("override").Drag) {
-	                this.app.document.ondragstart = this.preventDefault;
-	                this.app.window.self.ondragstart = this.preventDefault;
-	            }
-
-	            /*	CSS based Overrides
-	                     - mstouch
-	                    - seamless ( toggles overflow )
-	                    - tight ( zeros padding and margin )
-	             */
-
-	            if (this.app.options.get("flags").mstouch) {
-	                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-	            }
-
-	            if (this.app.options.get("flags").seamless) {
-	                this.app.document.body.style.overflow = "hidden";
-	            }
-
-	            if (this.app.options.get("flags").tight) {
-	                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
-	            }
-	        }
-	    }, {
-	        key: "update",
-	        value: function update() {
-
-	            this.confineMouse();
-
-	            //Reset variables
-	            this.press = false;
-	            this.touch = 0;
-	            this.app.window.inside = 0;
-	            this.wheelDelta = 0;
-
-	            this.pressed ? this.duration++ : this.duration = 0;
-
-	            this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
-
-	            //this.setup_msUniversalAppTouch();
-
-	            if (this.delay > 0) {
-
-	                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
-	            }
-
-	            //reset code released, unused?
-	            this.codereleased = 0;
-
-	            return true;
-	        }
-	    }, {
-	        key: "setup_documentListeners",
-	        value: function setup_documentListeners() {
-
-	            var doc = document;
-	            var win = window;
-
-	            doc.addEventListener("mousedown", function () {
-	                window.focus();
-	            }, true);
-	            doc.addEventListener("touchstart", function () {
-	                window.focus();
-	            }, true);
-
-	            // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
-	            win.addEventListener("blur", function () {
-	                self.onWindowBlur();
-	            });
-
-	            win.onWindowBlur = function (evt) {
-
-	                console.log('blur');
-	                SJS.controller.list().input.pointerup(evt);
-	            };
-
-	            win.setSuspended = function (state) {
-
-	                if (state) console.log('suspended');else console.log('resume');
-	            };
-
-	            // Pause and resume on page becoming visible/invisible
-	            function onVisibilityChanged() {
-	                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
-	            };
-
-	            doc.addEventListener("visibilitychange", onVisibilityChanged, false);
-	            doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
-	            doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
-	            doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
-	        }
-	    }, {
-	        key: "setup_universalMultitouch",
-	        value: function setup_universalMultitouch() {
-
-	            //touch-action: none;
-
-	            if (window.PointerEvent) {
-	                // Pointer events are supported.
-
-	                // Test for touch capable hardware
-	                if (navigator.maxTouchPoints) {}
-
-	                // Test for multi-touch capable hardware
-	                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
-
-	                // Check the maximum number of touch points the hardware supports
-	                //var touchPoints = navigator.maxTouchPoints;
-	            }
-
-	            this.multi = {
-
-	                list: []
-
-	            };
-
-	            this.touched = {
-
-	                count: 0,
-	                uplist: [],
-	                downlist: [],
-	                last: { x: 0, y: 0 },
-	                CheckTouchUp: function CheckTouchUp() {
-
-	                    return this.uplist[this.uplist.length - 1];
-	                },
-	                CheckTouchDown: function CheckTouchDown() {}
-
-	            };
-	        }
-	    }, {
-	        key: "setup_msUniversalAppTouch",
-	        value: function setup_msUniversalAppTouch() {
-
-	            return;
-
-	            var i = 0;
-
-	            var data = {
-	                app: this.app,
-	                x: 0,
-	                y: 0
-	            };
-
-	            if (this.pressed === false && this.lastpressed === true) {
-	                this.released = true, this.dist.x = 0, this.dist.y = 0;
-
-	                this.controls.up(data);
-	            }
-
-	            this.lastpressed = this.pressed;
-
-	            if (!this.wininitalize) try {
-
-	                //var w = Windows;
-	                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-
-	                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
-	                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
-	                this.wininitalize = true;
-
-	                data = {
-	                    app: this.app,
-	                    x: this.winposition.x,
-	                    y: this.winposition.y
-	                };
-	            } catch (e) {
-
-	                data = {
-	                    app: this.app,
-	                    x: 0,
-	                    y: 0
-	                };
-	            } else {
-	                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-	                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
-	                this.pressed = this.winpoint.isInContact;
-	                this.pointerDevice = this.winpoint.pointerDevice;
-
-	                var pt = this.pointerPoint.getCurrentPoint(1);
-	                var ptTargetProperties = pt.properties;
-
-	                if (this.released) {
-
-	                    var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
-
-	                    switch (pt.pointerDevice.pointerDeviceType) {
-	                        case "mouse":
-	                        case 2:
-	                            details += "\nPointer type: mouse";
-	                            details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
-	                            details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
-	                            details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
-	                            details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
-	                            details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
-	                            break;
-	                        case "pen":
-	                            details += "\nPointer type: pen";
-	                            if (pt.isInContact) {
-	                                details += "\nPressure: " + ptTargetProperties.pressure;
-	                                details += "\nrotation: " + ptTargetProperties.rotation;
-	                                details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
-	                            }
-	                            break;
-	                        case "touch":
-	                            details += "\nPointer type: touch";
-	                            details += "\nPressure: " + ptTargetProperties.pressure;
-	                            details += "\nrotation: " + ptTargetProperties.rotation;
-	                            details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                            details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                            break;
-	                        default:
-	                            details += "\nPointer type: " + "n/a";
-	                            break;
-	                    }
-	                    details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
-	                    //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
-	                    //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
-	                    //console.log(pt.pointerDevice);
-	                    //console.log(details);
-	                }
-	                i = this.winpoint;
-
-	                data.x = this.winposition.x;
-	                data.y = this.winposition.y;
-
-	                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
-	            }
-
-	            if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
-
-	            // console.log(i)
-	            //  if (Windows)
-	            //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
-	            //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
-	        }
-	    }]);
-
-	    return Input;
-	}(_inputcontroller3.default);
-
-	exports.default = Input;
-
-/***/ },
-/* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _vector = __webpack_require__(201);
-
-	var _vector2 = _interopRequireDefault(_vector);
-
-	var _interfaces = __webpack_require__(196);
-
-	var _inputlistener = __webpack_require__(202);
-
-	var _inputlistener2 = _interopRequireDefault(_inputlistener);
-
-	var _inputkeycontroller = __webpack_require__(203);
-
-	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
-
-	var _inputscrollcontroller = __webpack_require__(204);
-
-	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* Stores input data
-	* @access private
-	* @module
-	*
-	*/
-
-	var inputcontroller = function (_SJSClass) {
-	    _inherits(inputcontroller, _SJSClass);
-
-	    function inputcontroller() {
-	        _classCallCheck(this, inputcontroller);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
-	    }
-
-	    _createClass(inputcontroller, [{
-	        key: 'pointerup',
-	        value: function pointerup(evt) {
-
-	            if (typeof evt === 'undefined') return;
-	            if (typeof evt.target.app === 'undefined') return;
-
-	            var target = evt.target.app.input.constructor;
-
-	            target._pointerup(evt);
-	        }
-	    }, {
-	        key: 'pointermove',
-	        value: function pointermove(evt) {
-
-	            if (typeof evt === 'undefined') return;
-	            if (typeof evt.target.app === 'undefined') return;
-
-	            var target = evt.target.app.input.constructor;
-
-	            target._pointermove(evt);
-	        }
-	    }, {
-	        key: 'pointerdown',
-	        value: function pointerdown(evt) {
-
-	            if (typeof evt === 'undefined') return;
-	            if (typeof evt.target.app === 'undefined') return;
-
-	            var target = evt.target.app.input.constructor;
-
-	            target._pointerdown(evt);
-	        }
-	    }, {
-	        key: 'x',
-	        get: function get() {
-
-	            return this.constructor._x;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._x = value;
-	        }
-	    }, {
-	        key: 'y',
-	        get: function get() {
-
-	            return this.constructor._y;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._y = value;
-	        }
-	    }, {
-	        key: 'last',
-	        get: function get() {
-
-	            return this.constructor._last;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._last = value;
-	        }
-	    }, {
-	        key: 'pos',
-	        get: function get() {
-
-	            return this.constructor._pos;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._pos = value;
-	        }
-	    }, {
-	        key: 'dist',
-	        get: function get() {
-
-	            return this.constructor._dist;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._dist = value;
-	        }
-	    }, {
-	        key: 'end',
-	        get: function get() {
-
-	            return this.constructor._end;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._end = value;
-	        }
-	    }, {
-	        key: 'start',
-	        get: function get() {
-
-	            return this.constructor._start;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._start = value;
-	        }
-	    }, {
-	        key: 'duration',
-	        get: function get() {
-
-	            return this.constructor._duration;
-	        },
-	        set: function set(value) {
-
-	            this.constructor._duration = value;
-	        }
-	    }, {
-	        key: 'angle',
-	        get: function get() {
-
-	            return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
-	        }
-	    }, {
-	        key: 'angleDelta',
-	        get: function get() {
-
-	            var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
-	            return delta;
-	        }
-	    }, {
-	        key: 'position',
-	        get: function get() {
-
-	            return new _vector2.default(this.x, this.y);
-	        },
-	        set: function set(value) {
-
-	            this.x = value.x;
-	            this.y = value.y;
-	        }
-	    }, {
-	        key: 'released',
-	        get: function get() {
-
-	            return this.constructor._released;
-	        },
-	        set: function set(value) {
-
-	            return this.constructor._released = value;
-	        }
-	    }, {
-	        key: 'pressed',
-	        get: function get() {
-
-	            return this.constructor._pressed;
-	        },
-	        set: function set(value) {
-
-	            return this.constructor._pressed = value;
-	        }
-	    }, {
-	        key: 'keyController',
-	        get: function get() {
-
-	            return this.constructor._keyController;
-	        },
-	        set: function set(value) {
-
-	            return this.constructor._keyController = value;
-	        }
-	    }, {
-	        key: 'scrollController',
-	        get: function get() {
-
-	            return this.constructor._scrollController;
-	        },
-	        set: function set(value) {
-
-	            return this.constructor._scrollController = value;
-	        }
-	    }, {
-	        key: 'horizontal',
-	        get: function get() {
-
-	            var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
-	            var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
-	            var mouse = -this.pressed * this.app.input.dist.x;
-	            var touch = -this.pressed * this.app.input.dist.x; //was touched
-
-	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
-
-	            return { keyboard: keyboard, touch: touched };
-	        }
-	    }, {
-	        key: 'vertical',
-	        get: function get() {
-
-	            var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
-	            var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
-	            var mouse = this.pressed * this.app.input.dist.y;
-	            var touch = this.pressed * this.app.input.dist.y; //was touched
-
-	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
-
-	            return { keyboard: keyboard, touch: touched };
-	        }
-	    }], [{
-	        key: '_pointerup',
-	        value: function _pointerup(evt) {
-
-	            var input = evt.target.app.input;
-
-	            var x = evt.x || evt.clientX || evt.pageX;
-
-	            var y = evt.y || evt.clientY || evt.pageY;
-
-	            input.last = input.end = new _vector2.default(x, y);
-
-	            input.pressed = false;
-
-	            input.released = true;
-
-	            return true;
-	        }
-	    }, {
-	        key: '_pointermove',
-	        value: function _pointermove(evt) {
-
-	            var input = evt.target.app.input;
-	            var x = evt.x || evt.clientX || evt.pageX;
-	            var y = evt.y || evt.clientY || evt.pageY;
-
-	            //var mouse_last = this.mouse_last;
-
-	            input.last = input.position = new _vector2.default(x, y);
-
-	            if (input.pressed) {
-
-	                var dx = (input.x - input.start.x) * evt.target.app.getScale();
-	                var dy = (input.y - input.start.y) * evt.target.app.getScale();
-	                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
-	            }
-
-	            if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
-
-	            if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
-
-	            this.mouse_last = input.dist.x;
-	        }
-	    }, {
-	        key: '_pointerdown',
-	        value: function _pointerdown(evt) {
-
-	            var input = evt.target.app.input;
-
-	            var x = evt.x || evt.clientX || evt.pageX;
-
-	            var y = evt.y || evt.clientY || evt.pageY;
-
-	            input.start = new _vector2.default(x, y);
-
-	            input.pressed = true;
-
-	            input.touch = true;
-
-	            input.touched.count++;
-
-	            input.touched.downlist.push(input.position);
-
-	            input.dist = new _vector2.default(0, 0);
-	        }
-	    }]);
-
-	    return inputcontroller;
-	}(_interfaces._SJSClass);
-
-	inputcontroller._x = 0;
-	inputcontroller._y = 0;
-	inputcontroller._last = new _vector2.default(0, 0);
-	inputcontroller._pos = new _vector2.default(0, 0);
-	inputcontroller._dist = new _vector2.default(0, 0);
-	inputcontroller._end = new _vector2.default(0, 0);
-	inputcontroller._start = new _vector2.default(0, 0);
-	inputcontroller._duration = 0;
-	inputcontroller._pressed = false;
-	inputcontroller._released = false;
-	inputcontroller._Listener = _inputlistener2.default;
-	inputcontroller._keyController = new _inputkeycontroller2.default();
-	inputcontroller._scrollController = _inputscrollcontroller2.default;
-	exports.default = inputcontroller;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _interfaces = __webpack_require__(196);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* @module
-	* @access public
-	* @example
-	* let vector = new Vector(1,1);
-	*/
-
-	var Vector = function (_Vector2) {
-	    _inherits(Vector, _Vector2);
-
-	    function Vector() {
-	        _classCallCheck(this, Vector);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
-	    }
-
-	    _createClass(Vector, [{
-	        key: 'multiply',
-
-	        //equals(p) { return this.#x === p.#x && this.#y === p.#y }
-
-	        //toString() { return `Point<${ this.#x },${ this.#y }>` }
-	        /**
-	        * Multiply vector position
-	        * @method
-	        * @param {Number} a - multiply X
-	        * @param {Number} b - multiply Y
-	        * @return {Vector}
-	        */
-
-	        value: function multiply(a, b) {
-
-	            this._x *= a;
-	            this._y *= b;
-
-	            return this;
-	        }
-
-	        /**
-	        * Offset vector position
-	        * @method
-	        * @param {Number} a - multiply X
-	        * @param {Number} b - multiply Y
-	        * @return {Vector}
-	        */
-
-	    }, {
-	        key: 'offset',
-	        value: function offset(a, b) {
-
-	            this._x += a;
-	            this._y += b;
-
-	            return this;
-	        }
-
-	        /**
-	        * Get vector position
-	        * @type {Object}
-	        */
-
-	    }, {
-	        key: 'position',
-	        get: function get() {
-
-	            return this;
-	        }
-
-	        /**
-	        * Set vector position
-	        * @type {Object}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.position = new Vector(5,5);
-	        * PointA.position = {x:0,y:0};
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this.x = value.x;
-	            this.y = value.y;
-	        }
-
-	        /**
-	        * Get x position
-	        * @type {Number}
-	        */
-
-	    }, {
-	        key: 'x',
-	        get: function get() {
-
-	            return this._x;
-	        }
-
-	        /**
-	        * Set x position
-	        * @type {Number}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.position.x = {x:0,y:0};
-	        * PointA.x = 2;
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this._x = value;
-	        }
-
-	        /**
-	        * Get y position
-	        * @type {Number}
-	        */
-
-	    }, {
-	        key: 'y',
-	        get: function get() {
-
-	            return this._y;
-	        }
-
-	        /**
-	        * Set y position
-	        * @type {Number}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.y = 2;
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this._y = value;
-	        }
-	    }]);
-
-	    return Vector;
-	}(_interfaces._Vector);
-
-	exports.default = Vector;
-
-/***/ },
-/* 202 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	*  Sets up input listeners.
-	* @access private
-	* @module
-	* @example
-	* SJSInputListener
-	*    [listener0,listener1,listener2,element,function]
-	*
-	*    let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
-	*    let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
-	*    let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
-	*
-	*/
-
-	var InputListener = function () {
-	    function InputListener(a, b, c, d, elm, evt) {
-	        _classCallCheck(this, InputListener);
-
-	        this.elm = elm;
-
-	        if (window.PointerEvent) this.msPointer(a, evt);else if (window.MSPointerEvent) this.Pointer(b, evt);else this.mousePointer(c, evt);
-
-	        if ('ontouchstart' in window || navigator.maxTouchPoints) this.touchPointer(d, evt);
-	    }
-
-	    /**
-	    * @method Microsoft Pointers
-	    */
-
-	    _createClass(InputListener, [{
-	        key: 'msPointer',
-	        value: function msPointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-
-	        /**
-	        * @method Universal Pointers
-	        */
-
-	    }, {
-	        key: 'Pointer',
-	        value: function Pointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-
-	        /**
-	        * @method Touch Pointers
-	        */
-
-	    }, {
-	        key: 'touchPointer',
-	        value: function touchPointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-
-	        /**
-	        * @method Mouse Pointers
-	        */
-
-	    }, {
-	        key: 'mousePointer',
-	        value: function mousePointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-	    }]);
-
-	    return InputListener;
-	}();
-
-	exports.default = InputListener;
-
-/***/ },
-/* 203 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* Stores key input data
-	* @access private
-	* @module
-	*
-	*/
-
-	var inputkeycontroller = function () {
-	    function inputkeycontroller() {
-	        _classCallCheck(this, inputkeycontroller);
-	    }
-
-	    _createClass(inputkeycontroller, [{
-	        key: "key_down",
-	        value: function key_down(evt) {
-
-	            evt.input.key = true;
-	            evt.input.kpressed = true;
-	        }
-	    }, {
-	        key: "key_up",
-	        value: function key_up(evt) {
-	            evt.input.key = false;
-	            evt.input.kpressed = false;
-	            evt.input.kreleased = true;
-	            evt.input.kpressed = false;
-	        }
-	    }, {
-	        key: "keyboardCheck",
-	        value: function keyboardCheck(code) {
-
-	            var e = this.codeList.length - 1;
-
-	            for (var i = e; i >= 0; --i) {
-	                if (this.codeList[i] == code) return true;
-	            }return false;
-	        }
-	    }, {
-	        key: "keyboardPop",
-	        value: function keyboardPop(code) {
-
-	            var e = this.codeList.length - 1;
-	            for (var i = e; i >= 0; --i) {
-	                if (this.codeList[i] == code) this.codeList[i] = null;
-	            }
-	        }
-	    }, {
-	        key: "init",
-	        value: function init(app) {
-
-	            app.Listener(app.window.self, 'keydown', function (evt) {
-
-	                if (app.input.preventNext === true) evt.preventDefault();
-
-	                app.input.preventNext = false;
-
-	                app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
-
-	                app.input.keyController.codeList.push(app.input.codedown);
-
-	                if (evt.ctrlKey) app.input.control = true;
-
-	                app.input.pressed = true;
-	                app.input.released = false;
-
-	                app.input.keyController.key_down(app);
-	            });
-
-	            app.Listener(app.window.self, 'keyup', function (evt) {
-
-	                if (app.input.preventNext) evt.preventDefault();
-
-	                app.input.preventNext = false;
-	                app.input.codeup = app.input.keyController.keyCodes[evt.keyCode];
-
-	                app.input.keyController.keyboardPop(app.input.codeup);
-
-	                app.input.control = false;
-	                app.input.pressed = false;
-	                app.input.released = true;
-	                app.input.true = true;
-
-	                app.input.keyController.key_up(app);
-	            });
-
-	            return this.codes;
-	        }
-	    }, {
-	        key: "codeList",
-	        get: function get() {
-
-	            return this.constructor._codeList;
-	        }
-	    }, {
-	        key: "keyCodes",
-	        get: function get() {
-
-	            return this.constructor._keyCodes;
-	        }
-	    }], [{
-	        key: "_keyCodes",
-	        get: function get() {
-
-	            this.codes = [], this.codes[0] = "", this.codes[1] = "", this.codes[2] = "", this.codes[3] = "", this.codes[4] = "", this.codes[5] = "", this.codes[6] = "", this.codes[7] = "", this.codes[8] = "backspace", this.codes[9] = "tab", this.codes[13] = "enter", this.codes[16] = "shift", this.codes[17] = "ctrl", this.codes[18] = "alt", this.codes[19] = "pause/break", this.codes[20] = "capslock", this.codes[27] = "escape", this.codes[32] = "space", this.codes[33] = "pageup", this.codes[34] = "pagedown", this.codes[35] = "end", this.codes[36] = "home", this.codes[37] = "leftarrow", this.codes[38] = "uparrow", this.codes[39] = "rightarrow", this.codes[40] = "downarrow", this.codes[45] = "insert", this.codes[46] = "delete", this.codes[48] = "0", this.codes[49] = "1", this.codes[50] = "2", this.codes[51] = "3", this.codes[52] = "4", this.codes[53] = "5", this.codes[54] = "6", this.codes[55] = "7", this.codes[56] = "8", this.codes[57] = "9", this.codes[65] = "a", this.codes[66] = "b", this.codes[67] = "c", this.codes[68] = "d", this.codes[69] = "e", this.codes[70] = "f", this.codes[71] = "g", this.codes[72] = "h", this.codes[73] = "i", this.codes[74] = "j", this.codes[75] = "k", this.codes[76] = "l", this.codes[77] = "m", this.codes[78] = "n", this.codes[79] = "o", this.codes[80] = "p", this.codes[81] = "q", this.codes[82] = "r", this.codes[83] = "s", this.codes[84] = "t", this.codes[85] = "u", this.codes[86] = "v", this.codes[87] = "w", this.codes[88] = "x", this.codes[89] = "y", this.codes[90] = "z", this.codes[91] = "leftwindowkey", this.codes[92] = "rightwindowkey", this.codes[93] = "selectkey", this.codes[96] = "numpad0", this.codes[97] = "numpad1", this.codes[98] = "numpad2", this.codes[99] = "numpad3", this.codes[100] = "numpad4", this.codes[101] = "numpad5", this.codes[102] = "numpad6", this.codes[103] = "numpad7", this.codes[104] = "numpad8", this.codes[105] = "numpad9", this.codes[106] = "multiply", this.codes[107] = "add", this.codes[109] = "subtract", this.codes[110] = "decimalpoint", this.codes[111] = "divide", this.codes[112] = "f1", this.codes[113] = "f2", this.codes[114] = "f3", this.codes[115] = "f4", this.codes[116] = "f5", this.codes[117] = "f6", this.codes[118] = "f7", this.codes[119] = "f8", this.codes[120] = "f9", this.codes[121] = "f10", this.codes[122] = "f11", this.codes[123] = "f12", this.codes[144] = "numlock", this.codes[145] = "scrolllock", this.codes[175] = "Up (Wii?)", this.codes[176] = "Down (Wii?)", this.codes[177] = "Left (Wii?)", this.codes[178] = "Right (Wii?)", this.codes[170] = "- (Wii?)", this.codes[174] = "+ (Wii?)", this.codes[172] = "1 (Wii?)", this.codes[173] = "2 (Wii?)", this.codes[186] = "semi-colon", this.codes[187] = "equalsign", this.codes[188] = "comma", this.codes[189] = "dash", this.codes[190] = "period", this.codes[191] = "forwardslash", this.codes[192] = "graveaccent", this.codes[219] = "openbracket", this.codes[220] = "backslash", this.codes[221] = "closebraket", this.codes[222] = "singlequote";
-
-	            return this.codes;
-	        }
-	    }]);
-
-	    return inputkeycontroller;
-	}();
-
-	inputkeycontroller._codeList = [];
-	exports.default = inputkeycontroller;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	/**
-	* Sets up smooth scrolling
-	* @access private
-	* @module
-	*
-	*/
-
-	var inputscrollcontroller = {
-
-	    prototype: {
-
-	        /* Cache */
-
-	        x: 0,
-	        y: 1,
-	        target: { x: 0, y: 0 },
-
-	        accel: 1,
-
-	        active: null,
-	        reverse: false,
-	        a: false,
-
-	        window: window,
-	        doc: document.documentElement,
-
-	        //ScrollWheel Event
-	        event: function event(evt, delta) {
-
-	            if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
-
-	            if (this.app.options.get("seamless")) evt.preventDefault();
-
-	            //if (this.app.options.get("overridescroll")==false)
-	            return;
-
-	            /*
-	            this.app.input.wheelDelta = evt.wheelDelta;
-	             var doc = document.documentElement;
-	            var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	            var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-	                 //Flip for horizontal scrolling
-	               if (this.reverse)
-	               {
-	                   this.app.input.scroll.target.x = left;
-	                   this.app.input.scroll.target.y = top-evt.wheelDelta;
-	                   this.app.input.scroll.x = left;
-	                   this.app.input.scroll.y = top-evt.wheelDelta;
-	               }
-	               else{
-	                   this.app.input.scroll.target.y = 0;
-	                   this.app.input.scroll.target.x = left-evt.wheelDelta;
-	                   this.app.input.scroll.y = 0;
-	                   this.app.input.scroll.x = left-evt.wheelDelta;
-	               }
-	              */
-	            //App.ext.scroll.active = false;$
-	        },
-
-	        up: function up() {
-
-	            var transitionSpeed = 1;
-
-	            if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
-
-	            if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
-
-	            this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
-	            this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
-
-	            //if (this.a)
-	            //this.app.window.scrollTo(this.x,this.y),this.a = false;
-
-	            log(this.x, this.y);
-	        },
-
-	        //Update the position for smooth scrolling
-
-	        update: function update(x, y) {
-
-	            var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
-	            var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
-
-	            /* DEACTIVATE IF CONFUSED */
-	            if (!this.active) return;
-
-	            var LD = Math.round(-this.x + this.target.x) / 10;
-	            var YD = Math.round(-this.y + this.target.y) / 10;
-
-	            if (left < this.target.x) this.x += this.accel * LD;
-	            if (left > this.target.x) this.x += this.accel * LD;
-	            if (top < this.target.y) this.y += this.accel * YD;
-	            if (top > this.target.y) this.y += this.accel * YD;
-
-	            //	this.app.window.scrollTo(this.x,this.y);
-
-	            if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
-
-	            return true;
-	        },
-
-	        //Set position,
-
-	        to: function to(x, y) {
-
-	            this.target.x = x;
-	            this.target.y = y;
-	        }
-
-	    },
-
-	    constructor: function constructor(a) {
-	        return {
-	            app: { value: a },
-	            init: { value: function value() {
-	                    this.to(0, 0);
-	                    return this;
-	                }
-	            }
-	        };
-	    }
-
-	};
-
-	exports.default = inputscrollcontroller;
-
-/***/ },
-/* 205 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8216,7 +7160,7 @@
 		value: true
 	});
 
-	var _vector = __webpack_require__(201);
+	var _vector = __webpack_require__(198);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
@@ -8918,7 +7862,1381 @@
 	window.Math.vector = window.Math.Vector = _vector2.default;
 
 /***/ },
-/* 206 */
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(195);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* @module
+	* @access public
+	* @example
+	* let vector = new Vector(1,1);
+	*/
+
+	var Vector = function (_Vector2) {
+	    _inherits(Vector, _Vector2);
+
+	    function Vector() {
+	        _classCallCheck(this, Vector);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
+	    }
+
+	    _createClass(Vector, [{
+	        key: 'multiply',
+
+	        //equals(p) { return this.#x === p.#x && this.#y === p.#y }
+
+	        //toString() { return `Point<${ this.#x },${ this.#y }>` }
+	        /**
+	        * Multiply vector position
+	        * @method
+	        * @param {Number} a - multiply X
+	        * @param {Number} b - multiply Y
+	        * @return {Vector}
+	        */
+
+	        value: function multiply(a, b) {
+
+	            this._x *= a;
+	            this._y *= b;
+
+	            return this;
+	        }
+
+	        /**
+	        * Offset vector position
+	        * @method
+	        * @param {Number} a - multiply X
+	        * @param {Number} b - multiply Y
+	        * @return {Vector}
+	        */
+
+	    }, {
+	        key: 'offset',
+	        value: function offset(a, b) {
+
+	            this._x += a;
+	            this._y += b;
+
+	            return this;
+	        }
+
+	        /**
+	        * Get vector position
+	        * @type {Object}
+	        */
+
+	    }, {
+	        key: 'position',
+	        get: function get() {
+
+	            return this;
+	        }
+
+	        /**
+	        * Set vector position
+	        * @type {Object}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.position = new Vector(5,5);
+	        * PointA.position = {x:0,y:0};
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this.x = value.x;
+	            this.y = value.y;
+	        }
+
+	        /**
+	        * Get x position
+	        * @type {Number}
+	        */
+
+	    }, {
+	        key: 'x',
+	        get: function get() {
+
+	            return this._x;
+	        }
+
+	        /**
+	        * Set x position
+	        * @type {Number}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.position.x = {x:0,y:0};
+	        * PointA.x = 2;
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this._x = value;
+	        }
+
+	        /**
+	        * Get y position
+	        * @type {Number}
+	        */
+
+	    }, {
+	        key: 'y',
+	        get: function get() {
+
+	            return this._y;
+	        }
+
+	        /**
+	        * Set y position
+	        * @type {Number}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.y = 2;
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this._y = value;
+	        }
+	    }]);
+
+	    return Vector;
+	}(_interfaces._Vector);
+
+	exports.default = Vector;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+
+	    overridescroll: false,
+	    drag: 0,
+	    targetfps: 60,
+	    mute: false,
+
+	    paths: {
+
+	        data: "data/",
+	        images: "images/",
+	        url: ""
+
+	    },
+
+	    target: {
+	        canvas: null, // String - Id of the main canvas
+	        buffer: null, // String - Id of the buffer canvas
+	        blitter: null },
+
+	    // String - Id of the blitting canvas
+	    global: {
+
+	        globalCompositeOperation: "destination-in" },
+
+	    //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
+
+	    flags: {
+
+	        canvas: true,
+	        mstouch: true,
+	        seamless: true,
+	        tight: true,
+	        touchprevent: true,
+	        opaque: true
+
+	    },
+
+	    canvas: {
+
+	        override: false, //Toggle the use of options.canvas
+	        name: 'canvas', //Use canvas.name
+	        buffername: 'buffer', //Use canvas.buffer
+	        buffer: true, //Toggle the use of double-buffering
+	        background: '#000000', //Assign canvas element background colour
+
+	        //Assign canvas element position properties
+	        position: {
+	            //position:'absolute',
+	            //top:0,
+	            //left:window.innerWidth/2,
+	            //center:true,
+	            //z:1
+	            position: 'absolute',
+	            top: "",
+	            left: window.innerWidth * 2,
+	            //left:"",
+	            center: false,
+	            z: 1
+	        },
+
+	        //Assign canvas size properties
+	        size: {
+
+	            width: window.innerWidth,
+	            height: window.innerHeight
+
+	        }
+
+	    },
+
+	    msFlags: {
+
+	        msZoom: false
+
+	    },
+
+	    //Override Functions
+	    override: {
+
+	        keyboard: true,
+	        mouse: true,
+	        MSHoldVisual: false,
+	        SelectStart: false,
+	        ContextMenu: true,
+	        Drag: true
+
+	    },
+
+	    //Return Options Value
+	    get: function get(attr) {
+
+	        //If Attribute
+	        if (attr) {
+
+	            //Get list of apps
+	            var list = SpiceJS.controller.list();
+
+	            //list is object
+	            if ((typeof list === "undefined" ? "undefined" : _typeof(list)) == "object") {
+	                //return window.apps.option.
+	                for (var attrname in this) {
+	                    if (attrname == attr) return eval("list.options." + attrname);
+	                }
+	            } else {
+	                for (var i = window.apps.length - 1; i >= 0; i--) {
+	                    for (var attrname in this) {
+	                        if (attrname == attr) {
+	                            var l = [];
+	                            l.push(eval("list[" + i + "].options." + attrname));
+	                        }
+	                    }
+	                }return l;
+	            }
+
+	            return null;
+	        } else return this;
+	    },
+
+	    set: function set(options) {
+
+	        for (var attrname in options) {
+	            this[attrname] = options[attrname];
+	        };
+
+	        return this;
+	    }
+
+	};
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _inputcontroller2 = __webpack_require__(201);
+
+	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Main game controller. Handles instanciating instances and tracking information.
+	* @access private
+	* @module
+	*
+	*/
+
+	var Input = function (_inputcontroller) {
+	    _inherits(Input, _inputcontroller);
+
+	    function Input(app, pointerPoint) {
+	        _classCallCheck(this, Input);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
+
+	        _this.delay = 0;
+
+	        _this.touch = false;
+
+	        _this.touch_dist = { x: 0, y: 0 };
+
+	        _this.key = false;
+
+	        _this.keyPower = 0;
+
+	        _this.keyup = false;
+
+	        _this.keydown = false;
+
+	        _this.codes = [];
+
+	        _this.codeList = [];
+
+	        _this.control = false;
+
+	        _this.confine = false;
+
+	        _this.preventNext = true;
+
+	        _this.init_options();
+
+	        _this.keyController.init(_this.app);
+
+	        _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
+
+	        _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
+
+	        _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
+
+	        _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
+
+	        _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
+
+	        _this.setup_universalMultitouch();
+
+	        _this.setup_documentListeners();
+
+	        //this.setup_msUniversalAppTouch();
+
+	        return _this;
+	    }
+
+	    _createClass(Input, [{
+	        key: "preventDefault",
+	        value: function preventDefault(e) {
+	            e.preventDefault();return e.target.app;
+	        }
+	    }, {
+	        key: "preventNextInput",
+	        value: function preventNextInput() {
+	            return this.preventNext = true;
+	        }
+	    }, {
+	        key: "confineMouse",
+	        value: function confineMouse() {
+
+	            return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
+	        }
+	    }, {
+	        key: "init_options",
+	        value: function init_options() {
+
+	            /*	Overrides the selection start event for selecting events	*/
+
+	            if (!this.app.options.get("override").SelectStart) {
+	                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
+	            }
+
+	            /*	Overrides the 'holdtouch, MSHoldVisual' event */
+
+	            if (!this.app.options.get("override").MSHoldVisual) {
+	                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
+	            }
+
+	            /* Overrides the ContextMenu event */
+
+	            if (this.app.options.get("override").ContextMenu) {
+	                this.app.document.oncontextmenu = this.preventDefault;
+	                this.app.window.self.oncontextmenu = this.preventDefault;
+	            }
+
+	            /*	Overrides dragstart event		*/
+
+	            if (this.app.options.get("override").Drag) {
+	                this.app.document.ondragstart = this.preventDefault;
+	                this.app.window.self.ondragstart = this.preventDefault;
+	            }
+
+	            /*	CSS based Overrides
+	                     - mstouch
+	                    - seamless ( toggles overflow )
+	                    - tight ( zeros padding and margin )
+	             */
+
+	            if (this.app.options.get("flags").mstouch) {
+	                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+	            }
+
+	            if (this.app.options.get("flags").seamless) {
+	                this.app.document.body.style.overflow = "hidden";
+	            }
+
+	            if (this.app.options.get("flags").tight) {
+	                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
+	            }
+	        }
+	    }, {
+	        key: "update",
+	        value: function update() {
+
+	            this.confineMouse();
+
+	            //Reset variables
+	            this.press = false;
+	            this.touch = 0;
+	            this.app.window.inside = 0;
+	            this.wheelDelta = 0;
+
+	            this.pressed ? this.duration++ : this.duration = 0;
+
+	            this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
+
+	            //this.setup_msUniversalAppTouch();
+
+	            if (this.delay > 0) {
+
+	                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	            }
+
+	            //reset code released, unused?
+	            this.codereleased = 0;
+
+	            return true;
+	        }
+	    }, {
+	        key: "setup_documentListeners",
+	        value: function setup_documentListeners() {
+
+	            var doc = document;
+	            var win = window;
+
+	            doc.addEventListener("mousedown", function () {
+	                window.focus();
+	            }, true);
+	            doc.addEventListener("touchstart", function () {
+	                window.focus();
+	            }, true);
+
+	            // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
+	            win.addEventListener("blur", function () {
+	                self.onWindowBlur();
+	            });
+
+	            win.onWindowBlur = function (evt) {
+
+	                console.log('blur');
+	                SJS.controller.list().input.pointerup(evt);
+	            };
+
+	            win.setSuspended = function (state) {
+
+	                if (state) console.log('suspended');else console.log('resume');
+	            };
+
+	            // Pause and resume on page becoming visible/invisible
+	            function onVisibilityChanged() {
+	                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
+	            };
+
+	            doc.addEventListener("visibilitychange", onVisibilityChanged, false);
+	            doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+	            doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+	            doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+	        }
+	    }, {
+	        key: "setup_universalMultitouch",
+	        value: function setup_universalMultitouch() {
+
+	            //touch-action: none;
+
+	            if (window.PointerEvent) {
+	                // Pointer events are supported.
+
+	                // Test for touch capable hardware
+	                if (navigator.maxTouchPoints) {}
+
+	                // Test for multi-touch capable hardware
+	                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
+
+	                // Check the maximum number of touch points the hardware supports
+	                //var touchPoints = navigator.maxTouchPoints;
+	            }
+
+	            this.multi = {
+
+	                list: []
+
+	            };
+
+	            this.touched = {
+
+	                count: 0,
+	                uplist: [],
+	                downlist: [],
+	                last: { x: 0, y: 0 },
+	                CheckTouchUp: function CheckTouchUp() {
+
+	                    return this.uplist[this.uplist.length - 1];
+	                },
+	                CheckTouchDown: function CheckTouchDown() {}
+
+	            };
+	        }
+	    }, {
+	        key: "setup_msUniversalAppTouch",
+	        value: function setup_msUniversalAppTouch() {
+
+	            return;
+
+	            var i = 0;
+
+	            var data = {
+	                app: this.app,
+	                x: 0,
+	                y: 0
+	            };
+
+	            if (this.pressed === false && this.lastpressed === true) {
+	                this.released = true, this.dist.x = 0, this.dist.y = 0;
+
+	                this.controls.up(data);
+	            }
+
+	            this.lastpressed = this.pressed;
+
+	            if (!this.wininitalize) try {
+
+	                //var w = Windows;
+	                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+
+	                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
+	                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
+	                this.wininitalize = true;
+
+	                data = {
+	                    app: this.app,
+	                    x: this.winposition.x,
+	                    y: this.winposition.y
+	                };
+	            } catch (e) {
+
+	                data = {
+	                    app: this.app,
+	                    x: 0,
+	                    y: 0
+	                };
+	            } else {
+	                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+	                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
+	                this.pressed = this.winpoint.isInContact;
+	                this.pointerDevice = this.winpoint.pointerDevice;
+
+	                var pt = this.pointerPoint.getCurrentPoint(1);
+	                var ptTargetProperties = pt.properties;
+
+	                if (this.released) {
+
+	                    var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
+
+	                    switch (pt.pointerDevice.pointerDeviceType) {
+	                        case "mouse":
+	                        case 2:
+	                            details += "\nPointer type: mouse";
+	                            details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
+	                            details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
+	                            details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
+	                            details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
+	                            details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
+	                            break;
+	                        case "pen":
+	                            details += "\nPointer type: pen";
+	                            if (pt.isInContact) {
+	                                details += "\nPressure: " + ptTargetProperties.pressure;
+	                                details += "\nrotation: " + ptTargetProperties.rotation;
+	                                details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
+	                            }
+	                            break;
+	                        case "touch":
+	                            details += "\nPointer type: touch";
+	                            details += "\nPressure: " + ptTargetProperties.pressure;
+	                            details += "\nrotation: " + ptTargetProperties.rotation;
+	                            details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                            details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                            break;
+	                        default:
+	                            details += "\nPointer type: " + "n/a";
+	                            break;
+	                    }
+	                    details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
+	                    //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
+	                    //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
+	                    //console.log(pt.pointerDevice);
+	                    //console.log(details);
+	                }
+	                i = this.winpoint;
+
+	                data.x = this.winposition.x;
+	                data.y = this.winposition.y;
+
+	                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
+	            }
+
+	            if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
+
+	            // console.log(i)
+	            //  if (Windows)
+	            //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
+	            //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
+	        }
+	    }]);
+
+	    return Input;
+	}(_inputcontroller3.default);
+
+	exports.default = Input;
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _vector = __webpack_require__(198);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	var _interfaces = __webpack_require__(195);
+
+	var _inputlistener = __webpack_require__(202);
+
+	var _inputlistener2 = _interopRequireDefault(_inputlistener);
+
+	var _inputkeycontroller = __webpack_require__(203);
+
+	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
+
+	var _inputscrollcontroller = __webpack_require__(204);
+
+	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Stores input data
+	* @access private
+	* @module
+	*
+	*/
+
+	var inputcontroller = function (_SJSClass) {
+	    _inherits(inputcontroller, _SJSClass);
+
+	    function inputcontroller() {
+	        _classCallCheck(this, inputcontroller);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
+	    }
+
+	    _createClass(inputcontroller, [{
+	        key: 'pointerup',
+	        value: function pointerup(evt) {
+
+	            if (typeof evt === 'undefined') return;
+	            if (typeof evt.target.app === 'undefined') return;
+
+	            var target = evt.target.app.input.constructor;
+
+	            target._pointerup(evt);
+	        }
+	    }, {
+	        key: 'pointermove',
+	        value: function pointermove(evt) {
+
+	            if (typeof evt === 'undefined') return;
+	            if (typeof evt.target.app === 'undefined') return;
+
+	            var target = evt.target.app.input.constructor;
+
+	            target._pointermove(evt);
+	        }
+	    }, {
+	        key: 'pointerdown',
+	        value: function pointerdown(evt) {
+
+	            if (typeof evt === 'undefined') return;
+	            if (typeof evt.target.app === 'undefined') return;
+
+	            var target = evt.target.app.input.constructor;
+
+	            target._pointerdown(evt);
+	        }
+	    }, {
+	        key: 'x',
+	        get: function get() {
+
+	            return this.constructor._x;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._x = value;
+	        }
+	    }, {
+	        key: 'y',
+	        get: function get() {
+
+	            return this.constructor._y;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._y = value;
+	        }
+	    }, {
+	        key: 'last',
+	        get: function get() {
+
+	            return this.constructor._last;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._last = value;
+	        }
+	    }, {
+	        key: 'pos',
+	        get: function get() {
+
+	            return this.constructor._pos;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._pos = value;
+	        }
+	    }, {
+	        key: 'dist',
+	        get: function get() {
+
+	            return this.constructor._dist;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._dist = value;
+	        }
+	    }, {
+	        key: 'end',
+	        get: function get() {
+
+	            return this.constructor._end;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._end = value;
+	        }
+	    }, {
+	        key: 'start',
+	        get: function get() {
+
+	            return this.constructor._start;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._start = value;
+	        }
+	    }, {
+	        key: 'duration',
+	        get: function get() {
+
+	            return this.constructor._duration;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._duration = value;
+	        }
+	    }, {
+	        key: 'angle',
+	        get: function get() {
+
+	            return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
+	        }
+	    }, {
+	        key: 'angleDelta',
+	        get: function get() {
+
+	            var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
+	            return delta;
+	        }
+	    }, {
+	        key: 'position',
+	        get: function get() {
+
+	            return new _vector2.default(this.x, this.y);
+	        },
+	        set: function set(value) {
+
+	            this.x = value.x;
+	            this.y = value.y;
+	        }
+	    }, {
+	        key: 'released',
+	        get: function get() {
+
+	            return this.constructor._released;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._released = value;
+	        }
+	    }, {
+	        key: 'pressed',
+	        get: function get() {
+
+	            return this.constructor._pressed;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._pressed = value;
+	        }
+	    }, {
+	        key: 'keyController',
+	        get: function get() {
+
+	            return this.constructor._keyController;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._keyController = value;
+	        }
+	    }, {
+	        key: 'scrollController',
+	        get: function get() {
+
+	            return this.constructor._scrollController;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._scrollController = value;
+	        }
+	    }, {
+	        key: 'horizontal',
+	        get: function get() {
+
+	            var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
+	            var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
+	            var mouse = -this.pressed * this.app.input.dist.x;
+	            var touch = -this.pressed * this.app.input.dist.x; //was touched
+
+	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+	            return { keyboard: keyboard, touch: touched };
+	        }
+	    }, {
+	        key: 'vertical',
+	        get: function get() {
+
+	            var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
+	            var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
+	            var mouse = this.pressed * this.app.input.dist.y;
+	            var touch = this.pressed * this.app.input.dist.y; //was touched
+
+	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+	            return { keyboard: keyboard, touch: touched };
+	        }
+	    }], [{
+	        key: '_pointerup',
+	        value: function _pointerup(evt) {
+
+	            var input = evt.target.app.input;
+
+	            var x = evt.x || evt.clientX || evt.pageX;
+
+	            var y = evt.y || evt.clientY || evt.pageY;
+
+	            input.last = input.end = new _vector2.default(x, y);
+
+	            input.pressed = false;
+
+	            input.released = true;
+
+	            return true;
+	        }
+	    }, {
+	        key: '_pointermove',
+	        value: function _pointermove(evt) {
+
+	            var input = evt.target.app.input;
+	            var x = evt.x || evt.clientX || evt.pageX;
+	            var y = evt.y || evt.clientY || evt.pageY;
+
+	            //var mouse_last = this.mouse_last;
+
+	            input.last = input.position = new _vector2.default(x, y);
+
+	            if (input.pressed) {
+
+	                var dx = (input.x - input.start.x) * evt.target.app.getScale();
+	                var dy = (input.y - input.start.y) * evt.target.app.getScale();
+	                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
+	            }
+
+	            if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
+
+	            if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
+
+	            this.mouse_last = input.dist.x;
+	        }
+	    }, {
+	        key: '_pointerdown',
+	        value: function _pointerdown(evt) {
+
+	            var input = evt.target.app.input;
+
+	            var x = evt.x || evt.clientX || evt.pageX;
+
+	            var y = evt.y || evt.clientY || evt.pageY;
+
+	            input.start = new _vector2.default(x, y);
+
+	            input.pressed = true;
+
+	            input.touch = true;
+
+	            input.touched.count++;
+
+	            input.touched.downlist.push(input.position);
+
+	            input.dist = new _vector2.default(0, 0);
+	        }
+	    }]);
+
+	    return inputcontroller;
+	}(_interfaces._SJSClass);
+
+	inputcontroller._x = 0;
+	inputcontroller._y = 0;
+	inputcontroller._last = new _vector2.default(0, 0);
+	inputcontroller._pos = new _vector2.default(0, 0);
+	inputcontroller._dist = new _vector2.default(0, 0);
+	inputcontroller._end = new _vector2.default(0, 0);
+	inputcontroller._start = new _vector2.default(0, 0);
+	inputcontroller._duration = 0;
+	inputcontroller._pressed = false;
+	inputcontroller._released = false;
+	inputcontroller._Listener = _inputlistener2.default;
+	inputcontroller._keyController = new _inputkeycontroller2.default();
+	inputcontroller._scrollController = _inputscrollcontroller2.default;
+	exports.default = inputcontroller;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	*  Sets up input listeners.
+	* @access private
+	* @module
+	* @example
+	* SJSInputListener
+	*    [listener0,listener1,listener2,element,function]
+	*
+	*    let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
+	*    let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
+	*    let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
+	*
+	*/
+
+	var InputListener = function () {
+	    function InputListener(a, b, c, d, elm, evt) {
+	        _classCallCheck(this, InputListener);
+
+	        this.elm = elm;
+
+	        if (window.PointerEvent) this.msPointer(a, evt);else if (window.MSPointerEvent) this.Pointer(b, evt);else this.mousePointer(c, evt);
+
+	        if ('ontouchstart' in window || navigator.maxTouchPoints) this.touchPointer(d, evt);
+	    }
+
+	    /**
+	    * @method Microsoft Pointers
+	    */
+
+	    _createClass(InputListener, [{
+	        key: 'msPointer',
+	        value: function msPointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+
+	        /**
+	        * @method Universal Pointers
+	        */
+
+	    }, {
+	        key: 'Pointer',
+	        value: function Pointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+
+	        /**
+	        * @method Touch Pointers
+	        */
+
+	    }, {
+	        key: 'touchPointer',
+	        value: function touchPointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+
+	        /**
+	        * @method Mouse Pointers
+	        */
+
+	    }, {
+	        key: 'mousePointer',
+	        value: function mousePointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+	    }]);
+
+	    return InputListener;
+	}();
+
+	exports.default = InputListener;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* Stores key input data
+	* @access private
+	* @module
+	*
+	*/
+
+	var inputkeycontroller = function () {
+	    function inputkeycontroller() {
+	        _classCallCheck(this, inputkeycontroller);
+	    }
+
+	    _createClass(inputkeycontroller, [{
+	        key: "key_down",
+	        value: function key_down(evt) {
+
+	            evt.input.key = true;
+	            evt.input.kpressed = true;
+	        }
+	    }, {
+	        key: "key_up",
+	        value: function key_up(evt) {
+	            evt.input.key = false;
+	            evt.input.kpressed = false;
+	            evt.input.kreleased = true;
+	            evt.input.kpressed = false;
+	        }
+	    }, {
+	        key: "keyboardCheck",
+	        value: function keyboardCheck(code) {
+
+	            var e = this.codeList.length - 1;
+
+	            for (var i = e; i >= 0; --i) {
+	                if (this.codeList[i] == code) return true;
+	            }return false;
+	        }
+	    }, {
+	        key: "keyboardPop",
+	        value: function keyboardPop(code) {
+
+	            var e = this.codeList.length - 1;
+	            for (var i = e; i >= 0; --i) {
+	                if (this.codeList[i] == code) this.codeList[i] = null;
+	            }
+	        }
+	    }, {
+	        key: "init",
+	        value: function init(app) {
+
+	            app.Listener(app.window.self, 'keydown', function (evt) {
+
+	                if (app.input.preventNext === true) evt.preventDefault();
+
+	                app.input.preventNext = false;
+
+	                app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
+
+	                app.input.keyController.codeList.push(app.input.codedown);
+
+	                if (evt.ctrlKey) app.input.control = true;
+
+	                app.input.pressed = true;
+	                app.input.released = false;
+
+	                app.input.keyController.key_down(app);
+	            });
+
+	            app.Listener(app.window.self, 'keyup', function (evt) {
+
+	                if (app.input.preventNext) evt.preventDefault();
+
+	                app.input.preventNext = false;
+	                app.input.codeup = app.input.keyController.keyCodes[evt.keyCode];
+
+	                app.input.keyController.keyboardPop(app.input.codeup);
+
+	                app.input.control = false;
+	                app.input.pressed = false;
+	                app.input.released = true;
+	                app.input.true = true;
+
+	                app.input.keyController.key_up(app);
+	            });
+
+	            return this.codes;
+	        }
+	    }, {
+	        key: "codeList",
+	        get: function get() {
+
+	            return this.constructor._codeList;
+	        }
+	    }, {
+	        key: "keyCodes",
+	        get: function get() {
+
+	            return this.constructor._keyCodes;
+	        }
+	    }], [{
+	        key: "_keyCodes",
+	        get: function get() {
+
+	            this.codes = [], this.codes[0] = "", this.codes[1] = "", this.codes[2] = "", this.codes[3] = "", this.codes[4] = "", this.codes[5] = "", this.codes[6] = "", this.codes[7] = "", this.codes[8] = "backspace", this.codes[9] = "tab", this.codes[13] = "enter", this.codes[16] = "shift", this.codes[17] = "ctrl", this.codes[18] = "alt", this.codes[19] = "pause/break", this.codes[20] = "capslock", this.codes[27] = "escape", this.codes[32] = "space", this.codes[33] = "pageup", this.codes[34] = "pagedown", this.codes[35] = "end", this.codes[36] = "home", this.codes[37] = "leftarrow", this.codes[38] = "uparrow", this.codes[39] = "rightarrow", this.codes[40] = "downarrow", this.codes[45] = "insert", this.codes[46] = "delete", this.codes[48] = "0", this.codes[49] = "1", this.codes[50] = "2", this.codes[51] = "3", this.codes[52] = "4", this.codes[53] = "5", this.codes[54] = "6", this.codes[55] = "7", this.codes[56] = "8", this.codes[57] = "9", this.codes[65] = "a", this.codes[66] = "b", this.codes[67] = "c", this.codes[68] = "d", this.codes[69] = "e", this.codes[70] = "f", this.codes[71] = "g", this.codes[72] = "h", this.codes[73] = "i", this.codes[74] = "j", this.codes[75] = "k", this.codes[76] = "l", this.codes[77] = "m", this.codes[78] = "n", this.codes[79] = "o", this.codes[80] = "p", this.codes[81] = "q", this.codes[82] = "r", this.codes[83] = "s", this.codes[84] = "t", this.codes[85] = "u", this.codes[86] = "v", this.codes[87] = "w", this.codes[88] = "x", this.codes[89] = "y", this.codes[90] = "z", this.codes[91] = "leftwindowkey", this.codes[92] = "rightwindowkey", this.codes[93] = "selectkey", this.codes[96] = "numpad0", this.codes[97] = "numpad1", this.codes[98] = "numpad2", this.codes[99] = "numpad3", this.codes[100] = "numpad4", this.codes[101] = "numpad5", this.codes[102] = "numpad6", this.codes[103] = "numpad7", this.codes[104] = "numpad8", this.codes[105] = "numpad9", this.codes[106] = "multiply", this.codes[107] = "add", this.codes[109] = "subtract", this.codes[110] = "decimalpoint", this.codes[111] = "divide", this.codes[112] = "f1", this.codes[113] = "f2", this.codes[114] = "f3", this.codes[115] = "f4", this.codes[116] = "f5", this.codes[117] = "f6", this.codes[118] = "f7", this.codes[119] = "f8", this.codes[120] = "f9", this.codes[121] = "f10", this.codes[122] = "f11", this.codes[123] = "f12", this.codes[144] = "numlock", this.codes[145] = "scrolllock", this.codes[175] = "Up (Wii?)", this.codes[176] = "Down (Wii?)", this.codes[177] = "Left (Wii?)", this.codes[178] = "Right (Wii?)", this.codes[170] = "- (Wii?)", this.codes[174] = "+ (Wii?)", this.codes[172] = "1 (Wii?)", this.codes[173] = "2 (Wii?)", this.codes[186] = "semi-colon", this.codes[187] = "equalsign", this.codes[188] = "comma", this.codes[189] = "dash", this.codes[190] = "period", this.codes[191] = "forwardslash", this.codes[192] = "graveaccent", this.codes[219] = "openbracket", this.codes[220] = "backslash", this.codes[221] = "closebraket", this.codes[222] = "singlequote";
+
+	            return this.codes;
+	        }
+	    }]);
+
+	    return inputkeycontroller;
+	}();
+
+	inputkeycontroller._codeList = [];
+	exports.default = inputkeycontroller;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	/**
+	* Sets up smooth scrolling
+	* @access private
+	* @module
+	*
+	*/
+
+	var inputscrollcontroller = {
+
+	    prototype: {
+
+	        /* Cache */
+
+	        x: 0,
+	        y: 1,
+	        target: { x: 0, y: 0 },
+
+	        accel: 1,
+
+	        active: null,
+	        reverse: false,
+	        a: false,
+
+	        window: window,
+	        doc: document.documentElement,
+
+	        //ScrollWheel Event
+	        event: function event(evt, delta) {
+
+	            if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
+
+	            if (this.app.options.get("seamless")) evt.preventDefault();
+
+	            //if (this.app.options.get("overridescroll")==false)
+	            return;
+
+	            /*
+	            this.app.input.wheelDelta = evt.wheelDelta;
+	             var doc = document.documentElement;
+	            var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	            var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+	                 //Flip for horizontal scrolling
+	               if (this.reverse)
+	               {
+	                   this.app.input.scroll.target.x = left;
+	                   this.app.input.scroll.target.y = top-evt.wheelDelta;
+	                   this.app.input.scroll.x = left;
+	                   this.app.input.scroll.y = top-evt.wheelDelta;
+	               }
+	               else{
+	                   this.app.input.scroll.target.y = 0;
+	                   this.app.input.scroll.target.x = left-evt.wheelDelta;
+	                   this.app.input.scroll.y = 0;
+	                   this.app.input.scroll.x = left-evt.wheelDelta;
+	               }
+	              */
+	            //App.ext.scroll.active = false;$
+	        },
+
+	        up: function up() {
+
+	            var transitionSpeed = 1;
+
+	            if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
+
+	            if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
+
+	            this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
+	            this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
+
+	            //if (this.a)
+	            //this.app.window.scrollTo(this.x,this.y),this.a = false;
+
+	            log(this.x, this.y);
+	        },
+
+	        //Update the position for smooth scrolling
+
+	        update: function update(x, y) {
+
+	            var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
+	            var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
+
+	            /* DEACTIVATE IF CONFUSED */
+	            if (!this.active) return;
+
+	            var LD = Math.round(-this.x + this.target.x) / 10;
+	            var YD = Math.round(-this.y + this.target.y) / 10;
+
+	            if (left < this.target.x) this.x += this.accel * LD;
+	            if (left > this.target.x) this.x += this.accel * LD;
+	            if (top < this.target.y) this.y += this.accel * YD;
+	            if (top > this.target.y) this.y += this.accel * YD;
+
+	            //	this.app.window.scrollTo(this.x,this.y);
+
+	            if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
+
+	            return true;
+	        },
+
+	        //Set position,
+
+	        to: function to(x, y) {
+
+	            this.target.x = x;
+	            this.target.y = y;
+	        }
+
+	    },
+
+	    constructor: function constructor(a) {
+	        return {
+	            app: { value: a },
+	            init: { value: function value() {
+	                    this.to(0, 0);
+	                    return this;
+	                }
+	            }
+	        };
+	    }
+
+	};
+
+	exports.default = inputscrollcontroller;
+
+/***/ },
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8929,7 +9247,7 @@
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(207);
+	var _visuals2 = __webpack_require__(206);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
@@ -9792,7 +10110,7 @@
 	};
 
 /***/ },
-/* 207 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9805,7 +10123,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(195);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11186,6 +11504,121 @@
 	exports.default = visuals;
 
 /***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _interfaces = __webpack_require__(195);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import {_State} from './state.js';
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @protected
+	*/
+
+	var _Core = function (_Legacy2) {
+		_inherits(_Core, _Legacy2);
+
+		_createClass(_Core, [{
+			key: 'main',
+
+			/**  @type {Number} */
+
+			get: function get() {
+
+				return this.get('main');
+			}
+
+			/**  @type {Number} */
+
+			/**
+	  * private variables
+	  * @type {Object}
+	  * @protected
+	  */
+
+			,
+			set: function set(newmain) {
+
+				var state = this.get('main');
+				var newstate = newmain;
+				state.name = newstate.name;
+				state.init = newstate.init;
+				state.update = newstate.update;
+				state.draw = newstate.draw;
+
+				return state;
+			}
+
+			/**  @type {Number} */
+
+		}, {
+			key: 'version',
+			get: function get() {
+
+				return this.get('version');
+			}
+
+			/**  @type {Number} */
+
+		}, {
+			key: 'fps',
+			get: function get() {
+
+				return this.client.update.step.fps.toFixed(2);
+			}
+
+			/**  @type {Constructor} */
+
+		}]);
+
+		function _Core() {
+			_classCallCheck(this, _Core);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+
+			_private.set(_this, _this.constructor.properties);
+
+			console.log(_this.head);
+
+			return _this;
+		}
+
+		return _Core;
+	}(_interfaces._Legacy);
+
+	_Core.properties = {
+
+		main: {},
+		version: '0.8.1'
+
+	};
+	exports.default = _Core;
+
+/***/ },
 /* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -11199,7 +11632,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(195);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12125,7 +12558,7 @@
 		value: true
 	});
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(195);
 
 	var _test2 = __webpack_require__(215);
 
@@ -12412,7 +12845,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(195);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12612,9 +13045,9 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(195);
 
-	var _vector = __webpack_require__(201);
+	var _vector = __webpack_require__(198);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
@@ -12891,472 +13324,135 @@
 /* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	"strict mode";
-	/** @module app */
-
-	/** Name. */
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.name = undefined;
 
-	var _math2 = __webpack_require__(205);
+	var _app = __webpack_require__(196);
 
-	var _math3 = _interopRequireDefault(_math2);
-
-	var _options2 = __webpack_require__(198);
-
-	var _options3 = _interopRequireDefault(_options2);
-
-	var _input2 = __webpack_require__(199);
-
-	var _input3 = _interopRequireDefault(_input2);
-
-	var _client2 = __webpack_require__(206);
-
-	var _client3 = _interopRequireDefault(_client2);
-
-	var _core = __webpack_require__(197);
-
-	var _core2 = _interopRequireDefault(_core);
-
-	var _canvas2 = __webpack_require__(208);
-
-	var _canvas3 = _interopRequireDefault(_canvas2);
-
-	var _user2 = __webpack_require__(209);
-
-	var _user3 = _interopRequireDefault(_user2);
-
-	var _ext2 = __webpack_require__(210);
-
-	var _ext3 = _interopRequireDefault(_ext2);
-
-	var _loader = __webpack_require__(214);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	var _particles = __webpack_require__(216);
-
-	var _particles2 = _interopRequireDefault(_particles);
+	var _app2 = _interopRequireDefault(_app);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var name = exports.name = 'core'; // (unfinished) To be built into application (to override current)
-
-	// (unfinished) To be built into application
-
-	window.SJSParticleController = _particles2.default; // Temporary for snowflakes
-
-	var date = new Date();
-
 	/**
-	* _Core_private
-	* @property
+	* Contains functions necessary to build the application.
 	* @private
 	*/
 
-	//let _private = new WeakMap();
+	var _Build = function () {
+		_createClass(_Build, [{
+			key: "buildPrototype",
 
-	/**
-	* Core of the framework, initalizes client, input and listeners.
-	* @protected
-	* @module
-	*
-	*/
+			/**
+	  *	Generates the app prototype.
+	  *	@type {Object}
+	  */
 
-	var _App = function (_Core2) {
-		_inherits(_App, _Core2);
+			value: function buildPrototype() {
 
-		/** Builds the core modules of the Application. */
+				/* temp stores the app during the create process, it is then returned */
 
-		function _App() {
-			_classCallCheck(this, _App);
+				var temp = {};
 
-			//_private.set(this,this.constructor.properties);
+				temp = new _app2.default(this.app);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_App).call(this));
+				temp.window = this.window;
 
-			_this.time = 0;
+				temp.document = document;
 
-			//this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
+				temp.id = this.window.appsNextId;
 
-			_this.options = _options3.default;
+				this.window.apps[temp.id] = temp;
 
-			_this.user = _user3.default;
+				this.window.appsNextId++;
 
-			_this.ext = _ext3.default;
-
-			_this.input = _input3.default;
-
-			_this.canvas = _canvas3.default;
-
-			_this.client = _client3.default;
-
-			_this.math = new _math3.default();
-
-			return _this;
-		}
-
-		/**
-	 * This function starts the application.
-	 * @method
-	 * @protected
-	 */
-
-		_createClass(_App, [{
-			key: 'start',
-			value: function start(w, h) {
-
-				var name = '';
-
-				this.client = this.Construct(this.client.prototype, this.client.constructor);
-
-				this.canvas = new _canvas3.default(this);
-
-				this.loop(this);
-
-				this.client.init(w || this.app.options.width, h || this.app.options.height);
-
-				this.input = new this.input(this);
+				return this.window.apps[temp.id];
 			}
 
 			/**
-	  * The main loop for the application
-	  * @method
-	  * @private
+	  *	Initalize the listeners for the application.
+	  *   @param {temp} temp - pass a reference to attach listeners
+	  *   @return {Method} returns self
 	  */
 
 		}, {
-			key: 'loop',
-			value: function loop(self) {
-				var _this2 = this;
+			key: "buildListeners",
+			value: function buildListeners(temp) {
 
-				//Use arrow function if available
-				var usearrow = true;
+				if (document.readyState == "complete" || document.readyState == "loaded") {
+					// document is already ready to go
 
-				if (usearrow) {
-
-					setTimeout(function () {
-
-						function AppLoop() {
-							self.client.loop();
-						}
-
-						function AppLoopData() {
-							self.client.loopData();
-						}
-
-						_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-					}, this.time);
-				} else {
-
-					setTimeout(function () {
-
-						function AppLoop() {
-							self.client.loop();
-						}
-
-						function AppLoopData() {
-							self.client.loopData();
-						}
-
-						self.client.initalize(AppLoop, AppLoopData, self.scale);
-					}, this.time);
+					console.log('ready');
 				}
-			}
-		}, {
-			key: 'OnLoad',
 
-			/**
-	  * Triggers when the application first loops.
-	  * @method
-	     * @param {Object} [self] - Reference to the app.
-	  * @override
-	  */
+				temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
 
-			value: function OnLoad(self) {
-
-				self.start();
+				return temp;
 			}
 
 			/**
-	  * Triggers on dom content load.
-	  * @method
-	     * @param {Event} [evt] - The passing event.
-	  * @override
+	  *	Attaches references to the global.window object.
+	  *	@type {Object}
 	  */
 
 		}, {
-			key: 'OnApplicationLoad',
-			value: function OnApplicationLoad(evt) {
+			key: "buildWindowReferences",
+			value: function buildWindowReferences() {
 
-				//Run .OnLoad
-				evt.target.app.OnLoad(evt.target.app);
+				var windowReference = window;
 
-				console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+				if (typeof windowReference.scripts != 'array') windowReference.scripts = [];
+
+				windowReference.SpiceJS = windowReference.SJS = this;
+
+				/* if no apps have been defined, create a new array */
+
+				if (!windowReference.apps) windowReference.apps = new Array(1);
+
+				/* if appsNextId isnt larger or equal to 0 assign it to 0 */
+
+				if (!windowReference.appsNextId >= 0) windowReference.appsNextId = 0;
 			}
 
 			/**
-	  * Event listener polyfill.
-	  * @method
-	     * @param {Element} [obj] - Element to trigger event on, fallback on window.
-	     * @param {Event} [evt] - The passing event.
-	     * @param {String} [listener] - The listener to build.
-	     * @param {Object} [param] - Paramater to pass.
+	  *	Attaches a reference to the Statistics module.
+	  *	@type {Object}
 	  */
 
 		}, {
-			key: 'Listener',
-			value: function Listener(obj, evt, listener, param) {
+			key: "buildStatsReferences",
+			value: function buildStatsReferences() {
 
-				/* Check obj param */
+				var statsReference = new this.constructor.properties.statistics();
 
-				if (_typeof(obj[0]) === "object") {
-
-					obj = obj[0] || window;
-				}
-
-				/* If addEventListener exist, add it, otherwise attachEvent. */
-
-				if (obj.addEventListener) {
-
-					obj.addEventListener(evt, listener, false);
-				} else {
-
-					obj.attachEvent("on" + evt, listener);
-				}
-
-				/* Assign App Reference */
-
-				obj.app = window.apps[this.id] = this;
-			}
-		}, {
-			key: 'Construct',
-
-			/**
-	  * Object constructor/factory polyfill.
-	  * @method
-	     * @param {Object} [prototype] - An object prototype.
-	     * @param {Object} [constructor] - An object constructor.
-	  */
-
-			value: function Construct(prototype, constructor) {
-
-				var isObj = false;
-				var obj = prototype;
-				var proto = prototype;
-				var construct = constructor;
-				var ret = {};
-				var type = undefined;
-
-				/* if prototype contains a prototype and constructor. */
-
-				if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-					construct = obj.constructor;
-					proto = obj.prototype;
-					isObj = true;
-				}
-
-				/* Grab type of constructor */
-
-				type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
-
-				/* Return & Create object based on constructor */
-				switch (type) {
-
-					/* Use only the prototype */
-					case 'undefined':
-						ret = Object.create(proto);
-						break;
-
-					/* Use constructor as object */
-					case 'object':
-						ret = Object.create(proto, construct);
-						break;
-
-					/* Use constructor as function */
-					case 'function':
-						ret = Object.create(proto, construct(this));
-						break;
-
-					/* Expected a type */
-					default:
-						console.log("Expected 'object' or 'function': Type is " + c);
-
-				}
-
-				if (isObj) prototype = ret;
-
-				return ret;
+				this.constructor.properties.statistics = statsReference;
 			}
 
 			/**
-	  * Artificial click
-	  * @method
-	     * @param {Event} [event] - Passing of the event.
-	     * @param {Element} [anchorObj] - Element to click.
+	  *	Attaches a reference to the Statistics module.
+	  *	@type {Object}
 	  */
 
-		}, {
-			key: 'click',
-			value: function click(event, anchorObj) {
-
-				if (anchorObj.click) {
-
-					anchorObj.click();
-				} else if (document.createEvent) {
-
-					if (event.target !== anchorObj) {
-
-						var evt = document.createEvent("MouseEvents");
-
-						evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-						anchorObj.dispatchEvent(evt);
-					}
-				}
-			}
 		}]);
 
-		return _App;
-	}(_core2.default);
+		function _Build() {
+			_classCallCheck(this, _Build);
 
-	exports.default = _App;
+			this.buildWindowReferences();
 
-/***/ },
-/* 218 */,
-/* 219 */
-/***/ function(module, exports) {
+			this.buildStatsReferences();
+		}
 
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* _private
-	* @protected
-	*/
-
-	var _private = new WeakMap();
-
-	/**
-	* @module
-	* @private
-	*/
-
-	var _Statistics_Core = function () {
-	    _createClass(_Statistics_Core, [{
-	        key: 'count',
-	        get: function get() {
-
-	            return this.monitor.count;
-	        },
-	        set: function set(value) {
-
-	            this.monitor.count = value;
-	        }
-	    }, {
-	        key: 'details',
-	        get: function get() {
-
-	            return _Statistics_Core._details;
-	        },
-	        set: function set(value) {
-
-	            this._details = _Statistics_Core._details;
-	        }
-	    }], [{
-	        key: '_details',
-	        value: function _details(type) {
-
-	            type = type;
-
-	            switch (type) {
-
-	                default:
-
-	                    return Object.keys(this.logs);
-
-	                case 'details':
-
-	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                case 'entries':
-
-	                    return Object.entries(this.logs);
-
-	                case 'values':
-
-	                    return Object.values(this.logs);
-
-	            }
-	        }
-	    }, {
-	        key: 'logs',
-	        get: function get() {
-
-	            return this.monitor.logs;
-	        },
-	        set: function set(value) {
-
-	            this.monitor = value;
-	        }
-	    }, {
-	        key: 'monitor',
-	        get: function get() {
-
-	            return this._monitor;
-	        },
-	        set: function set(value) {
-
-	            this._monitor = value;
-	        }
-	    }]);
-
-	    function _Statistics_Core() {
-	        _classCallCheck(this, _Statistics_Core);
-
-	        /** dfsdsf
-	        * @type {Array<>} sdf sdf
-	        * @private
-	        */
-
-	        this.logs = this.constructor.logs;
-	        this.logs.type = 'Array';
-
-	        this.count = 0;
-	    }
-
-	    return _Statistics_Core;
+		return _Build;
 	}();
 
-	_Statistics_Core._monitor = {
-
-	    count: 0,
-
-	    logs: []
-
-	};
-	exports.default = _Statistics_Core;
+	exports.default = _Build;
 
 /***/ }
 /******/ ]);

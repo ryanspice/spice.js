@@ -1,241 +1,29 @@
 /**
-*	@import
+* @import
+* @private
 */
 
-//import _controller from './modules/controller.js';
-
-import _statistics from './modules/statistics.js';
-
-import _App from './modules/app.js';
+import _Statistics from './modules/statistics.js';
+import _Build from './modules/build.js';
 
 /**
-* _private
-* @protected
+* Constants
+* @private
 */
 
 const _private = new WeakMap();
+const Window = window;
+const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
 
 /**
-* Main game controller. Handles instanciating instances and tracking information.
-* @access private
-* @module
-*
-*/
-
-export default class SpiceJS {
-
-    /** @type {Object} */
-
-    static properties = {
-
-		window:window,
-		temp:{}
-
-	};
-
-    /** @type {Object} */
-
-    static _statistics = _statistics;
-
-    /** @type {Object} */
-
-    static _controller =  {
-
-        /**
-        * List all of the instances of SpiceJS or
-        * @type {method}
-        * @param {number} id - Specify a specific instance to return.
-        */
-
-		list:function(id){
-
-            if (id)
-                return window.apps[id];
-            else
-			if (window.apps.length>1)
-				return window.apps;
-				else
-				return window.apps[0];
-
-		}
-
-	};
-
-    /** @type {Object} */
-
-    get() {
-
-        return this.proto;
-
-    }
-
-    /** @type {Object} */
-
-    create(target){
-
-        let tempReference = {};
-
-        let tempReferenceId = null;
-
-        let listReference = null;
-
-        let time = new Date().getTime();
-
-        this.statistics.monitor(()=> {
-
-            this.name = "scriptloadtime";
-
-            window.utils.loadExternalJS(window.scripts);
-
-            tempReference = this.generatePrototype();
-
-            tempReferenceId = (tempReference.id);
-
-            ///Temporary Fix for Safari and IE
-            //      document
-
-            listReference = this.controller.list(tempReferenceId);
-
-            this.initListeners(listReference);
-
-            // ^ F
-
-        }).then(() => {
-
-                this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-                listReference = this.controller.list(tempReferenceId);
-
-                /// New for After Loaded
-                this.statistics.monitor(() => {
-
-                    this.name = "loadtime";
-
-                    //this.initListeners(listReference);
-
-                }).then(() => {
-
-                    this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-                    this.statistics.log("build",time);
-
-                });
-
-        })
-
-        return tempReference;
-
-    }
-
-    /** @type {Object} */
-
-    temp = {};
-
-    generatePrototype(){
-
-        this.window = window;
-
-        //temp stores the app during the create process, it is then returned
-        var temp = {};
-
-        temp = new _App(this.app);
-
-        temp.window = this.window;
-
-        temp.document = document;
-
-        temp.id = this.window.appsNextId;
-
-        this.window.apps[temp.id] = temp;
-
-        this.window.appsNextId++;
-
-        return this.window.apps[temp.id];
-
-    }
-
-    /**
-    *   @param {temp} temp - pass a reference to attach listeners
-    *   @return {Method} returns self
-    */
-
-    initListeners(temp){
-
-        if (document.readyState == "complete" || document.readyState == "loaded") {
-             // document is already ready to go
-
-             console.log('ready')
-        }
-
-            temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-        return temp;
-    }
-
-        /** @type {Method} */
-
-    constructor(){
-
-        this.window = window;
-
-        if (typeof this.window.scripts != 'array')
-            this.window.scripts = [];
-
-        this.window.SpiceJS = this;
-
-        this.window.SJS = this;
-
-        //if no apps have been defined, create a new array
-        if (!this.window.apps)
-        	this.window	.apps = new Array(1);
-
-        //if appsNextId isnt larger or equal to 0 assign it to 0
-        if (!this.window.appsNextId>=0)
-        	this.window	.appsNextId = 0;
-
-        //Setup Statistics and Monitoring
-        this.statistics = new this.constructor._statistics(this);
-
-        //Reference static controller
-        this.controller = this.constructor._controller;
-
-    }
-
-}
-
-
-
-
-
-
-
-/*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*/
-
-
-
-/**
-* SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
+* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the framework. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
 * @access public
+* @emits {SpiceJS} Emit the application controller.
 * @example
 *
 *	((SpiceJS.create()).OnLoad = function (self) {
 *
 *		self.main = {
-*
-*		    name:"Example",
 *
 *		    init:function() {
 *
@@ -280,18 +68,170 @@ export default class SpiceJS {
 *
 */
 
+export default class SpiceJS extends _Build  {
 
- /**
-  * Catch the Windows variable from microsoft devices.
-  * @access public
-  * @const {pbject}
-  */
+	/**
+	* Private variables.
+	* @type {Object}
+	* @protected
+	*/
 
-const Windows = window.Windows =  (typeof Windows=='undefined'?window:Windows);
+	static properties = {
+
+		temp:{},
+
+		controller:{
+
+			/**
+			* List all of the instances of SpiceJS or
+			* @type {method}
+			* @param {number} id - Specify a specific instance to return.
+			*/
+
+			list:function(id){
+
+				if (id)
+					return window.apps[id];
+				else
+				if (window.apps.length>1)
+					return window.apps;
+					else
+					return window.apps[0];
+
+			}
+
+		},
+
+		statistics:_Statistics
+
+	};
+
+	/**
+    *  Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
+    */
+
+    constructor(){
+
+		super();
+
+		_private.set(this,this.constructor.properties);
+
+    }
+
+	/**
+	* Return the controller object
+	* @type {Element}
+	* @protected
+	*/
+
+	get window(){
+
+		return Window;
+
+	}
+
+	/**
+	* Return the controller object
+	* @type {Element}
+	* @protected
+	*/
+
+	get controller(){
+
+		return _private.get(this)['controller'];
+
+	}
+
+	/**
+	* Return the statistics object
+	* @type {Element}
+	* @protected
+	*/
+
+	get statistics() {
+
+	    return _private.get(this)['statistics'];
+
+	}
+
+	/**
+	*	Returns app prototype.
+	*	@type {Object}
+	*/
+
+    proto() {
+
+		console.warn('Warning this function is depreciated: SpiceJS.proto');
+
+        return this.proto;
+
+    }
+
+	/**
+	*	Begins the app build promise.
+	*	@type {Object}
+	*/
+
+	create(){
+
+	    let tempReference = {};
+
+	    let tempReferenceId = null;
+
+	    let listReference = null;
+
+	    let time = new Date().getTime();
+
+	    this.statistics.monitor(()=> {
+
+	        //this.name = "scriptloadtime";
+
+	        window.utils.loadExternalJS(window.scripts);
+
+	        tempReference = this.buildPrototype();
+
+	        tempReferenceId = (tempReference.id);
+
+	        ///Temporary Fix for Safari and IE
+	        //      document
+
+	        listReference = this.controller.list(tempReferenceId);
+
+	        this.buildListeners(listReference);
+
+	        // ^ F
+
+	    }).then(() => {
+
+	            this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+	            listReference = this.controller.list(tempReferenceId);
+
+	            /// New for After Loaded
+	            this.statistics.monitor(() => {
+
+	                //this.name = "loadtime";
+
+	                //this.initListeners(listReference);
+
+	            }).then(() => {
+
+	                this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+	                this.statistics.log("build",time);
+
+	            });
+
+	    })
+
+	    return tempReference;
+
+	}
+
+};
 
 /**
  * Export SpiceJS
- * @emits {SpiceJS} Emit the application controller.
  */
 
 export default new SpiceJS();
