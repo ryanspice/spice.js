@@ -5317,94 +5317,11 @@
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     *	@import
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
-	var _controller3 = __webpack_require__(192);
-
-	var _controller4 = _interopRequireDefault(_controller3);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
-	 * @access public
-	 * @example var Application = SpiceJS.create();
-	 *
-	 *        Application.OnLoad = function (self) {
-	 *
-	 *            self.Init("Example SpiceJS", 320, 720);
-	 *
-	 *            window.Application = this;
-	 *
-	 *        };
-	 *
-	 *    Application.main= {
-	 *
-	 *        name:"Example",
-	 *
-	 *        init:function() {
-	 *
-	 *            return true;
-	 *        },
-	 *
-	 *        update:function() {
-	 *
-	 *            return true;
-	 *        },
-	 *
-	 *        draw:function() {
-	 *
-	 *            return true;
-	 *        }
-	 *
-	 *    };
-	 *
-	 */
-
-	var SpiceJS = function (_controller2) {
-	  _inherits(SpiceJS, _controller2);
-
-	  function SpiceJS() {
-	    _classCallCheck(this, SpiceJS);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SpiceJS).apply(this, arguments));
-	  }
-
-	  return SpiceJS;
-	}(_controller4.default);
-
-	;
-
-	/**
-	 * Catch the Windows variable from microsoft devices.
-	 * @access public
-	 * @const {pbject}
-	 */
-
-	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
-
-	/**
-	 * Export SpiceJS
-	 * @emits {SpiceJS} Emit the application controller.
-	 */
-
-	exports.default = new SpiceJS();
-
-/***/ },
-/* 192 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	//import _controller from './modules/controller.js';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -5423,14 +5340,21 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
 	* Main game controller. Handles instanciating instances and tracking information.
 	* @access private
 	* @module
 	*
 	*/
 
-	var _controller = function () {
-	    _createClass(_controller, [{
+	var SpiceJS = function () {
+	    _createClass(SpiceJS, [{
 	        key: 'get',
 
 	        /** @type {Object} */
@@ -5441,6 +5365,8 @@
 
 	            return this.proto;
 	        }
+
+	        /** @type {Object} */
 
 	        /** @type {Object} */
 
@@ -5550,8 +5476,8 @@
 
 	    }]);
 
-	    function _controller() {
-	        _classCallCheck(this, _controller);
+	    function SpiceJS() {
+	        _classCallCheck(this, SpiceJS);
 
 	        this.temp = {};
 
@@ -5576,11 +5502,92 @@
 	        this.controller = this.constructor._controller;
 	    }
 
-	    return _controller;
+	    return SpiceJS;
 	}();
 
-	_controller._statistics = _statistics3.default;
-	_controller._controller = {
+	/*
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+	*/
+
+	/**
+	* SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
+	* @access public
+	* @example
+	*
+	*	((SpiceJS.create()).OnLoad = function (self) {
+	*
+	*		self.main = {
+	*
+	*		    name:"Example",
+	*
+	*		    init:function() {
+	*
+	*		        this.intro = new test(this.app);
+	*
+	*		    	this.particleController = new SJSParticleController(this.app);
+	*
+	*		        return true;
+	*		    },
+	*
+	*		    update:function() {
+	*
+	*				//this.intro.update();
+	*
+	*				this.particleController.update();
+	*
+	*		        return true;
+	*		    },
+	*
+	*		    draw:function() {
+	*
+	*		        //this.intro.draw();
+	*
+	*				this.particleController.draw();
+	*
+	*		        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
+	*
+	*		        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
+	*
+	*		        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
+	*
+	*		        return true;
+	*		    }
+	*
+	*		};
+	*
+	*	    self.start( 320, 720);
+	*
+	*	    window.Application = this;
+	*
+	*	});
+	*
+	*/
+
+	/**
+	 * Catch the Windows variable from microsoft devices.
+	 * @access public
+	 * @const {pbject}
+	 */
+
+	SpiceJS.properties = {
+
+	    window: window,
+	    temp: {}
+
+	};
+	SpiceJS._statistics = _statistics3.default;
+	SpiceJS._controller = {
 
 	    /**
 	    * List all of the instances of SpiceJS or
@@ -5594,9 +5601,18 @@
 	    }
 
 	};
-	exports.default = _controller;
+	exports.default = SpiceJS;
+	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
+
+	/**
+	 * Export SpiceJS
+	 * @emits {SpiceJS} Emit the application controller.
+	 */
+
+	exports.default = new SpiceJS();
 
 /***/ },
+/* 192 */,
 /* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5612,9 +5628,9 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _StatisticsController2 = __webpack_require__(195);
+	var _statistics_core = __webpack_require__(219);
 
-	var _StatisticsController3 = _interopRequireDefault(_StatisticsController2);
+	var _statistics_core2 = _interopRequireDefault(_statistics_core);
 
 	var _interfaces = __webpack_require__(196);
 
@@ -5653,8 +5669,8 @@
 	*       });
 	*/
 
-	var Statistics = function (_StatisticsController) {
-	    _inherits(Statistics, _StatisticsController);
+	var Statistics = function (_Statistics_Core2) {
+	    _inherits(Statistics, _Statistics_Core2);
 
 	    function Statistics() {
 	        _classCallCheck(this, Statistics);
@@ -5883,7 +5899,7 @@
 	    }]);
 
 	    return Statistics;
-	}(_StatisticsController3.default);
+	}(_statistics_core2.default);
 
 	exports.default = Statistics;
 
@@ -5995,120 +6011,7 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 195 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* @module
-	* @private
-	*/
-
-	var StatisticsController = function () {
-	    _createClass(StatisticsController, [{
-	        key: 'count',
-	        get: function get() {
-
-	            return this.monitor.count;
-	        },
-	        set: function set(value) {
-
-	            this.monitor.count = value;
-	        }
-	    }, {
-	        key: 'details',
-	        get: function get() {
-
-	            return StatisticsController._details;
-	        },
-	        set: function set(value) {
-
-	            this._details = StatisticsController._details;
-	        }
-	    }], [{
-	        key: '_details',
-	        value: function _details(type) {
-
-	            type = type;
-
-	            switch (type) {
-
-	                default:
-
-	                    return Object.keys(this.logs);
-
-	                case 'details':
-
-	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                case 'entries':
-
-	                    return Object.entries(this.logs);
-
-	                case 'values':
-
-	                    return Object.values(this.logs);
-
-	            }
-	        }
-	    }, {
-	        key: 'logs',
-	        get: function get() {
-
-	            return this.monitor.logs;
-	        },
-	        set: function set(value) {
-
-	            this.monitor = value;
-	        }
-	    }, {
-	        key: 'monitor',
-	        get: function get() {
-
-	            return this._monitor;
-	        },
-	        set: function set(value) {
-
-	            this._monitor = value;
-	        }
-	    }]);
-
-	    function StatisticsController() {
-	        _classCallCheck(this, StatisticsController);
-
-	        /** dfsdsf
-	        * @type {Array<>} sdf sdf
-	        * @private
-	        */
-
-	        this.logs = this.constructor.logs;
-	        this.logs.type = 'Array';
-
-	        this.count = 0;
-	    }
-
-	    return StatisticsController;
-	}();
-
-	StatisticsController._monitor = {
-
-	    count: 0,
-
-	    logs: []
-
-	};
-	exports.default = StatisticsController;
-
-/***/ },
+/* 195 */,
 /* 196 */
 /***/ function(module, exports) {
 
@@ -13332,6 +13235,128 @@
 	}(_core2.default);
 
 	exports.default = _App;
+
+/***/ },
+/* 218 */,
+/* 219 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* @module
+	* @private
+	*/
+
+	var _Statistics_Core = function () {
+	    _createClass(_Statistics_Core, [{
+	        key: 'count',
+	        get: function get() {
+
+	            return this.monitor.count;
+	        },
+	        set: function set(value) {
+
+	            this.monitor.count = value;
+	        }
+	    }, {
+	        key: 'details',
+	        get: function get() {
+
+	            return _Statistics_Core._details;
+	        },
+	        set: function set(value) {
+
+	            this._details = _Statistics_Core._details;
+	        }
+	    }], [{
+	        key: '_details',
+	        value: function _details(type) {
+
+	            type = type;
+
+	            switch (type) {
+
+	                default:
+
+	                    return Object.keys(this.logs);
+
+	                case 'details':
+
+	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
+
+	                case 'entries':
+
+	                    return Object.entries(this.logs);
+
+	                case 'values':
+
+	                    return Object.values(this.logs);
+
+	            }
+	        }
+	    }, {
+	        key: 'logs',
+	        get: function get() {
+
+	            return this.monitor.logs;
+	        },
+	        set: function set(value) {
+
+	            this.monitor = value;
+	        }
+	    }, {
+	        key: 'monitor',
+	        get: function get() {
+
+	            return this._monitor;
+	        },
+	        set: function set(value) {
+
+	            this._monitor = value;
+	        }
+	    }]);
+
+	    function _Statistics_Core() {
+	        _classCallCheck(this, _Statistics_Core);
+
+	        /** dfsdsf
+	        * @type {Array<>} sdf sdf
+	        * @private
+	        */
+
+	        this.logs = this.constructor.logs;
+	        this.logs.type = 'Array';
+
+	        this.count = 0;
+	    }
+
+	    return _Statistics_Core;
+	}();
+
+	_Statistics_Core._monitor = {
+
+	    count: 0,
+
+	    logs: []
+
+	};
+	exports.default = _Statistics_Core;
 
 /***/ }
 /******/ ]);

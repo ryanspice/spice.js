@@ -1,7 +1,7 @@
 import utils from './utils.js';
 
 
-import StatisticsController from './StatisticsController.js';
+import _Statistics_Core from './statistics_core.js';
 
 import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
 
@@ -31,7 +31,7 @@ import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
 *       });
 */
 
-class Statistics extends StatisticsController {
+class Statistics extends _Statistics_Core {
 
   /** Async Monitor of a function, returns duration.
    * @type {Promise}

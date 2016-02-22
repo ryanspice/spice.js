@@ -1,10 +1,16 @@
+/**
+* _private
+* @protected
+*/
+
+const _private = new WeakMap();
 
 /**
 * @module
 * @private
 */
 
-export default class StatisticsController {
+export default class _Statistics_Core {
 
 
     static get logs() {
@@ -45,13 +51,13 @@ export default class StatisticsController {
 
     get details() {
 
-        return StatisticsController._details;
+        return _Statistics_Core._details;
 
     }
 
     set details(value) {
 
-        this._details = StatisticsController._details;
+        this._details = _Statistics_Core._details;
 
     }
 
