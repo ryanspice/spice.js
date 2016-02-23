@@ -16,6 +16,7 @@ import _client from './client.js';
 import _Core from './core.js';
 
 import _canvas from './canvas.js';
+import {SGL} from './canvas.js';
 
 import _user from './user.js';
 
@@ -182,6 +183,10 @@ const date = new Date();
     * @param {Event} [evt] - The passing event.
     * @param {String} [listener] - The listener to build.
     * @param {Object} [param] - Paramater to pass.
+	*
+	* @example
+	* Application.Listener(window,'click',function(){console.log('eh');},'');
+	* Application.Click(new Event,window);
 	*/
 
     Listener(obj, evt, listener, param){
@@ -280,6 +285,20 @@ const date = new Date();
 
     click(event, anchorObj){
 
+		this.Click(event,anchorObj);
+
+    }
+
+	/**
+	* Artificial Click
+	* @method
+    * @param {Event} [event] - Passing of the event.
+    * @param {Element} [anchorObj] - Element to click.
+	*/
+
+    Click(event, anchorObj){
+
+		if (typeof anchorObj != 'undefined')
 		if (anchorObj.click){
 
 			anchorObj.click();
@@ -299,9 +318,9 @@ const date = new Date();
 
 		}
 
-    };
+    }
 
 
-}
+};
 
 export default _App;

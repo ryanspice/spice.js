@@ -5337,19 +5337,52 @@
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @import
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @private
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
-
-	/**
-	* Constants
-	* @private
-	*/
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _private = new WeakMap();
 	var Window = window;
 	var Windows = window.Windows = typeof Windows == 'undefined' ? Window : Windows;
+
+	var canvas;
+	var gl;
+	//
+	// start
+	//
+	// Called when the canvas is created to get the ball rolling.
+	// Figuratively, that is. There's nothing moving in this demo.
+	//
+	function start() {
+		canvas = document.getElementById("glcanvas");
+		initWebGL(canvas); // Initialize the GL context
+		// Only continue if WebGL is available and working
+		if (gl) {
+			console.log(gl);
+			gl.clearColor(0.0, 0.0, 0.0, 1.0); // Set clear color to black, fully opaque
+			gl.clearDepth(1.0); // Clear everything
+			gl.enable(gl.DEPTH_TEST); // Enable depth testing
+			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+		}
+	}
+	//
+	// initWebGL
+	//
+	// Initialize WebGL, returning the GL context or null if
+	// WebGL isn't available or could not be initialized.
+	//
+	function initWebGL() {
+		gl = null;
+		try {
+			gl = canvas.getContext("experimental-webgl");
+		} catch (e) {}
+		// If we don't have a GL context, give up now
+		if (!gl) {
+			alert("Unable to initialize WebGL. Your browser may not support it.");
+		}
+		console.log('webgl ' + gl);
+	}
+
+	window.start = start;
+	window.initWebGL = initWebGL;
 
 	/**
 	* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
@@ -5397,6 +5430,10 @@
 			_classCallCheck(this, SpiceJS);
 
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SpiceJS).call(this));
+
+			var statsReference = new _this.constructor.properties.statistics();
+
+			_this.constructor.properties.statistics = statsReference;
 
 			_private.set(_this, _this.constructor.properties);
 
@@ -5491,16 +5528,12 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+					value: true
 	});
 
 	var _utils = __webpack_require__(193);
 
 	var _utils2 = _interopRequireDefault(_utils);
-
-	var _statistics_core = __webpack_require__(194);
-
-	var _statistics_core2 = _interopRequireDefault(_statistics_core);
 
 	var _interfaces = __webpack_require__(195);
 
@@ -5510,9 +5543,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	var _private = new WeakMap();
 
 	/** This module is designed to monitor functions.
 	* @module
@@ -5526,7 +5557,6 @@
 	*
 	*           _this.name = "scriptloadtime";
 	*           _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
 	*           _this.statistics.monitor(function () {
 	*
 	*                   _this.name = "scriptloadtime2";
@@ -5539,238 +5569,227 @@
 	*       });
 	*/
 
-	var Statistics = function (_Statistics_Core2) {
-	    _inherits(Statistics, _Statistics_Core2);
+	var Statistics = function () {
 
-	    function Statistics() {
-	        _classCallCheck(this, Statistics);
+					/* */
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).apply(this, arguments));
-	    }
+					function Statistics() {
+									_classCallCheck(this, Statistics);
 
-	    _createClass(Statistics, [{
-	        key: 'monitor',
+									this.logs = this.constructor.logs;
+									this.logs.type = 'Array';
 
-	        /** Async Monitor of a function, returns duration.
-	         * @type {Promise}
-	         * @param {Function} func - Function to monitor
-	         * @param {Arguments} arg - Arguments to pass
-	         * @return {Number} as duration.
-	         */
+									this.count = 0;
 
-	        value: function () {
-	            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
-	                var startTime, endTime;
-	                return regeneratorRuntime.wrap(function _callee$(_context) {
-	                    while (1) {
-	                        switch (_context.prev = _context.next) {
-	                            case 0:
-	                                startTime = new Date().getTime();
-	                                _context.next = 3;
-	                                return func(arg);
+									_private.set(this, this.constructor.properties);
+					}
 
-	                            case 3:
-	                                endTime = new Date().getTime();
+					/** Async Monitor of a function, returns duration.
+	    * @type {Promise}
+	    * @param {Function} func - Function to monitor
+	    * @param {Arguments} arg - Arguments to pass
+	    * @return {Number} as duration.
+	    */
 
-	                                this.log("time", -startTime + endTime, func.name);
+					/**
+	    * Private variables.
+	    * @type {Object}
+	    */
 
-	                                return _context.abrupt('return', startTime - endTime);
+					_createClass(Statistics, [{
+									key: 'monitor',
+									value: function () {
+													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
+																	var startTime, endTime;
+																	return regeneratorRuntime.wrap(function _callee$(_context) {
+																					while (1) {
+																									switch (_context.prev = _context.next) {
+																													case 0:
+																																	startTime = new Date().getTime();
+																																	_context.next = 3;
+																																	return func(arg);
 
-	                            case 6:
-	                            case 'end':
-	                                return _context.stop();
-	                        }
-	                    }
-	                }, _callee, this);
-	            }));
+																													case 3:
+																																	endTime = new Date().getTime();
 
-	            return function monitor(_x, _x2) {
-	                return ref.apply(this, arguments);
-	            };
-	        }()
+																																	this.log("time", -startTime + endTime, func.name);
 
-	        /** Async
+																																	return _context.abrupt('return', startTime - endTime);
+
+																													case 6:
+																													case 'end':
+																																	return _context.stop();
+																									}
+																					}
+																	}, _callee, this);
+													}));
+
+													return function monitor(_x, _x2) {
+																	return ref.apply(this, arguments);
+													};
+									}()
+
+									/** Async - Unused Asyn logging....
 	         * @private
 	         */
 
-	    }, {
-	        key: 'log',
-	        value: function () {
-	            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	                var name,
-	                    curLog,
-	                    newLog,
-	                    hashLog,
-	                    time,
-	                    time2,
-	                    timeHash,
-	                    _args2 = arguments;
-	                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	                    while (1) {
-	                        switch (_context2.prev = _context2.next) {
-	                            case 0:
-	                                name = '';
-	                                curLog = this.logs;
-	                                newLog = {};
-	                                hashLog = {};
-	                                time = new Date().getTime();
-	                                time2 = new Date().getTime();
-	                                timeHash = this.count + time;
+					}, {
+									key: 'log',
+									value: function () {
+													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+																	var name,
+																	    curLog,
+																	    newLog,
+																	    hashLog,
+																	    time,
+																	    time2,
+																	    timeHash,
+																	    _args2 = arguments;
+																	return regeneratorRuntime.wrap(function _callee2$(_context2) {
+																					while (1) {
+																									switch (_context2.prev = _context2.next) {
+																													case 0:
+																																	name = '';
+																																	curLog = this.logs;
+																																	newLog = {};
+																																	hashLog = {};
+																																	time = new Date().getTime();
+																																	time2 = new Date().getTime();
+																																	timeHash = this.count + time;
 
-	                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
+																																	timeHash = _utils2.default.hashFnv32a(timeHash.toString());
 
-	                                if (typeof _args2[2] != 'undefined') {
+																																	if (typeof _args2[2] != 'undefined') {
 
-	                                    name = _args2[2];
+																																					name = _args2[2];
 
-	                                    if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+																																					if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
 
-	                                    hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+																																					hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
 
-	                                    hashLog = _args2[1];
+																																					hashLog = _args2[1];
 
-	                                    newLog[_args2[0]] = hashLog;
+																																					newLog[_args2[0]] = hashLog;
 
-	                                    curLog[name] = newLog;
-	                                } else {
+																																					curLog[name] = newLog;
+																																	} else {
 
-	                                    name = _args2[0];
+																																					name = _args2[0];
 
-	                                    if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+																																					if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
 
-	                                    hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+																																					hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
 
-	                                    hashLog = _args2[1];
+																																					hashLog = _args2[1];
 
-	                                    newLog[_args2[0]] = hashLog;
+																																					newLog[_args2[0]] = hashLog;
 
-	                                    curLog[name] = newLog;
-	                                }
+																																					curLog[name] = newLog;
+																																	}
 
-	                                this.count++;
+																																	this.count++;
 
-	                                this.logs = curLog;
+																																	this.logs = curLog;
 
-	                            case 11:
-	                            case 'end':
-	                                return _context2.stop();
-	                        }
-	                    }
-	                }, _callee2, this);
-	            }));
+																													case 11:
+																													case 'end':
+																																	return _context2.stop();
+																									}
+																					}
+																	}, _callee2, this);
+													}));
 
-	            return function log() {
-	                return ref.apply(this, arguments);
-	            };
-	        }()
+													return function log() {
+																	return ref.apply(this, arguments);
+													};
+									}()
 
-	        /** watch //to come
-	         * @private
-	         */
-
-	    }], [{
-	        key: 'watch',
-	        value: function watch(v) {
-
-	            var w = v;
-	        }
-
-	        /**
-	        * Converts and array of objects to CSV.
-	        * @module
-	        * @access private
+									/** watch //to come - to call a funnction periodically (based on argument 1)
+	        * @private
+	        	static watch(v){
+	        		let w = v;
+	        	}
 	        */
 
-	    }, {
-	        key: 'convertArrayOfObjectsToCSV',
-	        value: function convertArrayOfObjectsToCSV(args) {
+					}, {
+									key: 'count',
+									get: function get() {
 
-	            var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+													return this.monitor.count;
+									},
+									set: function set(value) {
 
-	            data = args.data || null;
+													this.monitor.count = value;
+									}
+					}, {
+									key: 'details',
+									get: function get() {
 
-	            if (data == null || !data.length) {
+													return _Statistics_Core._details;
+									},
+									set: function set(value) {
 
-	                return null;
-	            }
+													this._details = _Statistics_Core._details;
+									}
+					}], [{
+									key: '_details',
+									value: function _details(type) {
 
-	            columnDelimiter = args.columnDelimiter || ',';
+													type = type;
 
-	            lineDelimiter = args.lineDelimiter || '\n';
+													switch (type) {
 
-	            keys = Object.keys(data[0]);
+																	default:
 
-	            result = '';
+																					return Object.keys(this.logs);
 
-	            result += keys.join(columnDelimiter);
+																	case 'details':
 
-	            result += lineDelimiter;
+																					return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
 
-	            data.forEach(function (item) {
+																	case 'entries':
 
-	                ctr = 0;
+																					return Object.entries(this.logs);
 
-	                keys.forEach(function (key) {
+																	case 'values':
 
-	                    if (ctr > 0) result += columnDelimiter;
+																					return Object.values(this.logs);
 
-	                    result += item[key];
+													}
+									}
+					}, {
+									key: 'logs',
+									get: function get() {
 
-	                    ctr++;
-	                });
+													return this.monitor.logs;
+									},
+									set: function set(value) {
 
-	                result += lineDelimiter;
-	            });
+													this.monitor = value;
+									}
+					}, {
+									key: 'monitor',
+									get: function get() {
 
-	            return result;
-	        }
+													return this._monitor;
+									},
+									set: function set(value) {
 
-	        /**
-	        * Converts and array of objects to CSV.
-	        * @module
-	        * @access private
-	        */
+													this._monitor = value;
+									}
+					}]);
 
-	    }, {
-	        key: 'writeToCSV',
-	        value: function writeToCSV(name) {
+					return Statistics;
+	}();
 
-	            var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
+	Statistics.properties = {};
+	Statistics._monitor = {
 
-	            logStream.write('Initial line...');
+					count: 0,
 
-	            logStream.end('this is the end line');
+					logs: []
 
-	            var dataString = "";
-
-	            var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
-
-	            //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
-
-	            var csvContent = "data:text/csv;charset=utf-8,";
-
-	            data.forEach(function (infoArray, index) {
-
-	                dataString = infoArray.join(",");
-
-	                csvContent += index < data.length ? dataString + "\n" : dataString;
-	            });
-
-	            var encodedUri = encodeURI(csvContent);
-
-	            var link = document.createElement("a");
-
-	            link.setAttribute("href", encodedUri);
-
-	            link.setAttribute("download", name + ".csv");
-
-	            link.click();
-	        }
-	    }]);
-
-	    return Statistics;
-	}(_statistics_core2.default);
-
+	};
 	exports.default = Statistics;
 
 /***/ },
@@ -5874,6 +5893,94 @@
 	    }(document, "script", scripts);
 	};
 
+	/**
+	* Converts and array of objects to CSV.
+	* @module
+	* @access private
+	*/
+
+	utils.convertArrayOfObjectsToCSV = function (args) {
+
+	    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+	    data = args.data || null;
+
+	    if (data == null || !data.length) {
+
+	        return null;
+	    }
+
+	    columnDelimiter = args.columnDelimiter || ',';
+
+	    lineDelimiter = args.lineDelimiter || '\n';
+
+	    keys = Object.keys(data[0]);
+
+	    result = '';
+
+	    result += keys.join(columnDelimiter);
+
+	    result += lineDelimiter;
+
+	    data.forEach(function (item) {
+
+	        ctr = 0;
+
+	        keys.forEach(function (key) {
+
+	            if (ctr > 0) result += columnDelimiter;
+
+	            result += item[key];
+
+	            ctr++;
+	        });
+
+	        result += lineDelimiter;
+	    });
+
+	    return result;
+	};
+
+	/**
+	* Converts and array of objects to CSV.
+	* @module
+	* @access private
+	*/
+
+	utils.writeToCSV = function (name) {
+
+	    var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
+
+	    logStream.write('Initial line...');
+
+	    logStream.end('this is the end line');
+
+	    var dataString = "";
+
+	    var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
+
+	    //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
+
+	    var csvContent = "data:text/csv;charset=utf-8,";
+
+	    data.forEach(function (infoArray, index) {
+
+	        dataString = infoArray.join(",");
+
+	        csvContent += index < data.length ? dataString + "\n" : dataString;
+	    });
+
+	    var encodedUri = encodeURI(csvContent);
+
+	    var link = document.createElement("a");
+
+	    link.setAttribute("href", encodedUri);
+
+	    link.setAttribute("download", name + ".csv");
+
+	    link.click();
+	};
+
 	window.wait = wait;
 
 	window.utils = utils;
@@ -5881,127 +5988,7 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 194 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* _private
-	* @protected
-	*/
-
-	var _private = new WeakMap();
-
-	/**
-	* @module
-	* @private
-	*/
-
-	var _Statistics_Core = function () {
-	    _createClass(_Statistics_Core, [{
-	        key: 'count',
-	        get: function get() {
-
-	            return this.monitor.count;
-	        },
-	        set: function set(value) {
-
-	            this.monitor.count = value;
-	        }
-	    }, {
-	        key: 'details',
-	        get: function get() {
-
-	            return _Statistics_Core._details;
-	        },
-	        set: function set(value) {
-
-	            this._details = _Statistics_Core._details;
-	        }
-	    }], [{
-	        key: '_details',
-	        value: function _details(type) {
-
-	            type = type;
-
-	            switch (type) {
-
-	                default:
-
-	                    return Object.keys(this.logs);
-
-	                case 'details':
-
-	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                case 'entries':
-
-	                    return Object.entries(this.logs);
-
-	                case 'values':
-
-	                    return Object.values(this.logs);
-
-	            }
-	        }
-	    }, {
-	        key: 'logs',
-	        get: function get() {
-
-	            return this.monitor.logs;
-	        },
-	        set: function set(value) {
-
-	            this.monitor = value;
-	        }
-	    }, {
-	        key: 'monitor',
-	        get: function get() {
-
-	            return this._monitor;
-	        },
-	        set: function set(value) {
-
-	            this._monitor = value;
-	        }
-	    }]);
-
-	    function _Statistics_Core() {
-	        _classCallCheck(this, _Statistics_Core);
-
-	        /** dfsdsf
-	        * @type {Array<>} sdf sdf
-	        * @private
-	        */
-
-	        this.logs = this.constructor.logs;
-	        this.logs.type = 'Array';
-
-	        this.count = 0;
-	    }
-
-	    return _Statistics_Core;
-	}();
-
-	_Statistics_Core._monitor = {
-
-	    count: 0,
-
-	    logs: []
-
-	};
-	exports.default = _Statistics_Core;
-
-/***/ },
+/* 194 */,
 /* 195 */
 /***/ function(module, exports) {
 
@@ -6721,7 +6708,7 @@
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+				value: true
 	});
 	exports.name = undefined;
 
@@ -6797,261 +6784,281 @@
 	*/
 
 	var _App = function (_Core2) {
-		_inherits(_App, _Core2);
+				_inherits(_App, _Core2);
 
-		/** Builds the core modules of the Application. */
+				/** Builds the core modules of the Application. */
 
-		function _App() {
-			_classCallCheck(this, _App);
+				function _App() {
+							_classCallCheck(this, _App);
 
-			//_private.set(this,this.constructor.properties);
+							//_private.set(this,this.constructor.properties);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_App).call(this));
+							var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_App).call(this));
 
-			_this.time = 0;
+							_this.time = 0;
 
-			//this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
+							//this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
 
-			_this.options = _options3.default;
+							_this.options = _options3.default;
 
-			_this.user = _user3.default;
+							_this.user = _user3.default;
 
-			_this.ext = _ext3.default;
+							_this.ext = _ext3.default;
 
-			_this.input = _input3.default;
+							_this.input = _input3.default;
 
-			_this.canvas = _canvas3.default;
+							_this.canvas = _canvas3.default;
 
-			_this.client = _client3.default;
+							_this.client = _client3.default;
 
-			_this.math = new _math3.default();
+							_this.math = new _math3.default();
 
-			return _this;
-		}
-
-		/**
-	 * This function starts the application.
-	 * @method
-	 * @protected
-	 */
-
-		_createClass(_App, [{
-			key: 'start',
-			value: function start(w, h) {
-
-				var name = '';
-
-				this.client = this.Construct(this.client.prototype, this.client.constructor);
-
-				this.canvas = new _canvas3.default(this);
-
-				this.loop(this);
-
-				this.client.init(w || this.app.options.width, h || this.app.options.height);
-
-				this.input = new this.input(this);
-			}
-
-			/**
-	  * The main loop for the application
-	  * @method
-	  * @private
-	  */
-
-		}, {
-			key: 'loop',
-			value: function loop(self) {
-				var _this2 = this;
-
-				//Use arrow function if available
-				var usearrow = true;
-
-				if (usearrow) {
-
-					setTimeout(function () {
-
-						function AppLoop() {
-							self.client.loop();
-						}
-
-						function AppLoopData() {
-							self.client.loopData();
-						}
-
-						_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-					}, this.time);
-				} else {
-
-					setTimeout(function () {
-
-						function AppLoop() {
-							self.client.loop();
-						}
-
-						function AppLoopData() {
-							self.client.loopData();
-						}
-
-						self.client.initalize(AppLoop, AppLoopData, self.scale);
-					}, this.time);
-				}
-			}
-		}, {
-			key: 'OnLoad',
-
-			/**
-	  * Triggers when the application first loops.
-	  * @method
-	     * @param {Object} [self] - Reference to the app.
-	  * @override
-	  */
-
-			value: function OnLoad(self) {
-
-				self.start();
-			}
-
-			/**
-	  * Triggers on dom content load.
-	  * @method
-	     * @param {Event} [evt] - The passing event.
-	  * @override
-	  */
-
-		}, {
-			key: 'OnApplicationLoad',
-			value: function OnApplicationLoad(evt) {
-
-				//Run .OnLoad
-				evt.target.app.OnLoad(evt.target.app);
-
-				console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-			}
-
-			/**
-	  * Event listener polyfill.
-	  * @method
-	     * @param {Element} [obj] - Element to trigger event on, fallback on window.
-	     * @param {Event} [evt] - The passing event.
-	     * @param {String} [listener] - The listener to build.
-	     * @param {Object} [param] - Paramater to pass.
-	  */
-
-		}, {
-			key: 'Listener',
-			value: function Listener(obj, evt, listener, param) {
-
-				/* Check obj param */
-
-				if (_typeof(obj[0]) === "object") {
-
-					obj = obj[0] || window;
+							return _this;
 				}
 
-				/* If addEventListener exist, add it, otherwise attachEvent. */
+				/**
+	   * This function starts the application.
+	   * @method
+	   * @protected
+	   */
 
-				if (obj.addEventListener) {
+				_createClass(_App, [{
+							key: 'start',
+							value: function start(w, h) {
 
-					obj.addEventListener(evt, listener, false);
-				} else {
+										var name = '';
 
-					obj.attachEvent("on" + evt, listener);
-				}
+										this.client = this.Construct(this.client.prototype, this.client.constructor);
 
-				/* Assign App Reference */
+										this.canvas = new _canvas3.default(this);
 
-				obj.app = window.apps[this.id] = this;
-			}
-		}, {
-			key: 'Construct',
+										this.loop(this);
 
-			/**
-	  * Object constructor/factory polyfill.
-	  * @method
-	     * @param {Object} [prototype] - An object prototype.
-	     * @param {Object} [constructor] - An object constructor.
-	  */
+										this.client.init(w || this.app.options.width, h || this.app.options.height);
 
-			value: function Construct(prototype, constructor) {
+										this.input = new this.input(this);
+							}
 
-				var isObj = false;
-				var obj = prototype;
-				var proto = prototype;
-				var construct = constructor;
-				var ret = {};
-				var type = undefined;
+							/**
+	      * The main loop for the application
+	      * @method
+	      * @private
+	      */
 
-				/* if prototype contains a prototype and constructor. */
+				}, {
+							key: 'loop',
+							value: function loop(self) {
+										var _this2 = this;
 
-				if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-					construct = obj.constructor;
-					proto = obj.prototype;
-					isObj = true;
-				}
+										//Use arrow function if available
+										var usearrow = true;
 
-				/* Grab type of constructor */
+										if (usearrow) {
 
-				type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+													setTimeout(function () {
 
-				/* Return & Create object based on constructor */
-				switch (type) {
+																function AppLoop() {
+																			self.client.loop();
+																}
 
-					/* Use only the prototype */
-					case 'undefined':
-						ret = Object.create(proto);
-						break;
+																function AppLoopData() {
+																			self.client.loopData();
+																}
 
-					/* Use constructor as object */
-					case 'object':
-						ret = Object.create(proto, construct);
-						break;
+																_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+													}, this.time);
+										} else {
 
-					/* Use constructor as function */
-					case 'function':
-						ret = Object.create(proto, construct(this));
-						break;
+													setTimeout(function () {
 
-					/* Expected a type */
-					default:
-						console.log("Expected 'object' or 'function': Type is " + c);
+																function AppLoop() {
+																			self.client.loop();
+																}
 
-				}
+																function AppLoopData() {
+																			self.client.loopData();
+																}
 
-				if (isObj) prototype = ret;
+																self.client.initalize(AppLoop, AppLoopData, self.scale);
+													}, this.time);
+										}
+							}
+				}, {
+							key: 'OnLoad',
 
-				return ret;
-			}
+							/**
+	      * Triggers when the application first loops.
+	      * @method
+	         * @param {Object} [self] - Reference to the app.
+	      * @override
+	      */
 
-			/**
-	  * Artificial click
-	  * @method
-	     * @param {Event} [event] - Passing of the event.
-	     * @param {Element} [anchorObj] - Element to click.
-	  */
+							value: function OnLoad(self) {
 
-		}, {
-			key: 'click',
-			value: function click(event, anchorObj) {
+										self.start();
+							}
 
-				if (anchorObj.click) {
+							/**
+	      * Triggers on dom content load.
+	      * @method
+	         * @param {Event} [evt] - The passing event.
+	      * @override
+	      */
 
-					anchorObj.click();
-				} else if (document.createEvent) {
+				}, {
+							key: 'OnApplicationLoad',
+							value: function OnApplicationLoad(evt) {
 
-					if (event.target !== anchorObj) {
+										//Run .OnLoad
+										evt.target.app.OnLoad(evt.target.app);
 
-						var evt = document.createEvent("MouseEvents");
+										console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+							}
 
-						evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+							/**
+	      * Event listener polyfill.
+	      * @method
+	         * @param {Element} [obj] - Element to trigger event on, fallback on window.
+	         * @param {Event} [evt] - The passing event.
+	         * @param {String} [listener] - The listener to build.
+	         * @param {Object} [param] - Paramater to pass.
+	      *
+	      * @example
+	      * Application.Listener(window,'click',function(){console.log('eh');},'');
+	      * Application.Click(new Event,window);
+	      */
 
-						anchorObj.dispatchEvent(evt);
-					}
-				}
-			}
-		}]);
+				}, {
+							key: 'Listener',
+							value: function Listener(obj, evt, listener, param) {
 
-		return _App;
+										/* Check obj param */
+
+										if (_typeof(obj[0]) === "object") {
+
+													obj = obj[0] || window;
+										}
+
+										/* If addEventListener exist, add it, otherwise attachEvent. */
+
+										if (obj.addEventListener) {
+
+													obj.addEventListener(evt, listener, false);
+										} else {
+
+													obj.attachEvent("on" + evt, listener);
+										}
+
+										/* Assign App Reference */
+
+										obj.app = window.apps[this.id] = this;
+							}
+				}, {
+							key: 'Construct',
+
+							/**
+	      * Object constructor/factory polyfill.
+	      * @method
+	         * @param {Object} [prototype] - An object prototype.
+	         * @param {Object} [constructor] - An object constructor.
+	      */
+
+							value: function Construct(prototype, constructor) {
+
+										var isObj = false;
+										var obj = prototype;
+										var proto = prototype;
+										var construct = constructor;
+										var ret = {};
+										var type = undefined;
+
+										/* if prototype contains a prototype and constructor. */
+
+										if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+													construct = obj.constructor;
+													proto = obj.prototype;
+													isObj = true;
+										}
+
+										/* Grab type of constructor */
+
+										type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+										/* Return & Create object based on constructor */
+										switch (type) {
+
+													/* Use only the prototype */
+													case 'undefined':
+																ret = Object.create(proto);
+																break;
+
+													/* Use constructor as object */
+													case 'object':
+																ret = Object.create(proto, construct);
+																break;
+
+													/* Use constructor as function */
+													case 'function':
+																ret = Object.create(proto, construct(this));
+																break;
+
+													/* Expected a type */
+													default:
+																console.log("Expected 'object' or 'function': Type is " + c);
+
+										}
+
+										if (isObj) prototype = ret;
+
+										return ret;
+							}
+
+							/**
+	      * Artificial click
+	      * @method
+	         * @param {Event} [event] - Passing of the event.
+	         * @param {Element} [anchorObj] - Element to click.
+	      */
+
+				}, {
+							key: 'click',
+							value: function click(event, anchorObj) {
+
+										this.Click(event, anchorObj);
+							}
+
+							/**
+	      * Artificial Click
+	      * @method
+	         * @param {Event} [event] - Passing of the event.
+	         * @param {Element} [anchorObj] - Element to click.
+	      */
+
+				}, {
+							key: 'Click',
+							value: function Click(event, anchorObj) {
+
+										if (typeof anchorObj != 'undefined') if (anchorObj.click) {
+
+													anchorObj.click();
+										} else if (document.createEvent) {
+
+													if (event.target !== anchorObj) {
+
+																var evt = document.createEvent("MouseEvents");
+
+																evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+																anchorObj.dispatchEvent(evt);
+													}
+										}
+							}
+				}]);
+
+				return _App;
 	}(_core2.default);
+
+	;
 
 	exports.default = _App;
 
@@ -7970,6 +7977,8 @@
 	    //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
 
 	    flags: {
+
+	        webGL: true,
 
 	        canvas: true,
 	        mstouch: true,
@@ -11509,8 +11518,6 @@
 
 			_private.set(_this, _this.constructor.properties);
 
-			console.log(_this.head);
-
 			return _this;
 		}
 
@@ -11547,6 +11554,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	//import SGL from './sgl.js';
+
 	/**
 	* _private
 	* @protected
@@ -11580,6 +11589,8 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
 
 	        _private.set(_this, _this.constructor.properties);
+
+	        //SGL.start();
 
 	        //Cache canvases
 	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
@@ -13253,14 +13264,25 @@
 	*/
 
 	var _Build = function () {
+
+		/**
+	 *	Attaches a reference to the Statistics module.
+	 *	@type {Object}
+	 */
+
+		function _Build() {
+			_classCallCheck(this, _Build);
+
+			this.buildWindowReferences();
+		}
+
+		/**
+	 *	Generates the app prototype.
+	 *	@type {Object}
+	 */
+
 		_createClass(_Build, [{
 			key: "buildPrototype",
-
-			/**
-	  *	Generates the app prototype.
-	  *	@type {Object}
-	  */
-
 			value: function buildPrototype() {
 
 				/* temp stores the app during the create process, it is then returned */
@@ -13272,6 +13294,8 @@
 				temp.window = this.window;
 
 				temp.document = document;
+
+				temp.controller = this;
 
 				temp.id = this.window.appsNextId;
 
@@ -13325,20 +13349,6 @@
 				/* if appsNextId isnt larger or equal to 0 assign it to 0 */
 
 				if (!windowReference.appsNextId >= 0) windowReference.appsNextId = 0;
-			}
-
-			/**
-	  *	Attaches a reference to the Statistics module.
-	  *	@type {Object}
-	  */
-
-		}, {
-			key: "buildStatsReferences",
-			value: function buildStatsReferences() {
-
-				var statsReference = new this.constructor.properties.statistics();
-
-				this.constructor.properties.statistics = statsReference;
 			}
 
 			/**
@@ -13400,35 +13410,13 @@
 
 				return tempReference;
 			}
-
-			/**
-	  *	Returns app prototype.
-	  *	@type {Object} null - b
-	      proto() {
-	  		console.warn('Warning this function is depreciated: SpiceJS.proto');
-	          return this.proto;
-	      }
-	  	*/
-
-			/**
-	  *	Attaches a reference to the Statistics module.
-	  *	@type {Object}
-	  */
-
 		}]);
-
-		function _Build() {
-			_classCallCheck(this, _Build);
-
-			this.buildWindowReferences();
-
-			this.buildStatsReferences();
-		}
 
 		return _Build;
 	}();
 
 	exports.default = _Build;
+	;
 
 /***/ }
 /******/ ]);

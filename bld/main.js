@@ -1,45 +1,51 @@
 
 ((SpiceJS.create()).OnLoad = function (self) {
 
-	self.main = {
+	self.controller.statistics.monitor(function(){
 
-	    name:"Example",
+		self.main = {
 
-	    init:function() {
+		    name:"Example",
 
-	        this.intro = new test(this.app);
+		    init:function() {
 
-	    	this.particleController = new SJSParticleController(this.app);
+		        this.intro = new test(this.app);
 
-	        return true;
-	    },
+		    	this.particleController = new SJSParticleController(this.app);
 
-	    update:function() {
+		        return true;
+		    },
 
-			//this.intro.update();
+		    update:function() {
 
-			this.particleController.update();
+				//this.intro.update();
 
-	        return true;
-	    },
+				this.particleController.update();
 
-	    draw:function() {
+		        return true;
+		    },
 
-	        //this.intro.draw();
+		    draw:function() {
 
-			this.particleController.draw();
+		        //this.intro.draw();
 
-	        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
+				this.particleController.draw();
 
-	        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
-	        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
+		        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
 
-	        return true;
-	    }
+		        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
+		        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
 
-	};
+		        return true;
+		    }
 
-    self.start( 320, 720);
+		};
+
+		self.start( 320, 720);
+
+		console.log("Example: OnApplicationStart")
+
+	})
 
     window.Application = this;
 

@@ -1,10 +1,8 @@
+
 import utils from './utils.js';
-
-
-import _Statistics_Core from './statistics_core.js';
-
 import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
 
+const _private = new WeakMap();
 
 /** This module is designed to monitor functions.
 * @module
@@ -18,7 +16,6 @@ import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
 *
 *           _this.name = "scriptloadtime";
 *           _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
 *           _this.statistics.monitor(function () {
 *
 *                   _this.name = "scriptloadtime2";
@@ -31,214 +28,230 @@ import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
 *       });
 */
 
-class Statistics extends _Statistics_Core {
+class Statistics {
 
-  /** Async Monitor of a function, returns duration.
-   * @type {Promise}
-   * @param {Function} func - Function to monitor
-   * @param {Arguments} arg - Arguments to pass
-   * @return {Number} as duration.
-   */
+	/**
+	* Private variables.
+	* @type {Object}
+	*/
 
-    async monitor(func,arg){
+	static properties = {};
 
-        let startTime = new Date().getTime();
+	/* */
 
-        await func(arg);
+	constructor(){
 
-        let endTime = new Date().getTime();
+        this.logs = this.constructor.logs;
+        this.logs.type = 'Array';
 
-        this.log("time",(-startTime+endTime),func.name);
+        this.count = 0;
 
-        return startTime - endTime;
+		_private.set(this,this.constructor.properties);
+
     }
 
-    /** Async
-     * @private
-     */
+	/** Async Monitor of a function, returns duration.
+	* @type {Promise}
+	* @param {Function} func - Function to monitor
+	* @param {Arguments} arg - Arguments to pass
+	* @return {Number} as duration.
+	*/
 
-    async log(){
+	async monitor(func,arg){
 
-        let name = '';
+	    let startTime = new Date().getTime();
 
-        let curLog = this.logs;
+	    await func(arg);
 
-        let newLog = {};
+	    let endTime = new Date().getTime();
 
-        let hashLog = {};
+	    this.log("time",(-startTime+endTime),func.name);
 
-        let time = (new Date().getTime());
+	    return startTime - endTime;
+	}
 
-        let time2 = (new Date().getTime());
+	/** Async - Unused Asyn logging....
+	 * @private
+	 */
 
-        let timeHash = this.count + time;
+	async log(){
 
-        timeHash = utils.hashFnv32a(timeHash.toString());
+	    let name = '';
 
-        if (typeof arguments[2] != 'undefined')
+	    let curLog = this.logs;
+
+	    let newLog = {};
+
+	    let hashLog = {};
+
+	    let time = (new Date().getTime());
+
+	    let time2 = (new Date().getTime());
+
+	    let timeHash = this.count + time;
+
+	    timeHash = utils.hashFnv32a(timeHash.toString());
+
+	    if (typeof arguments[2] != 'undefined')
+	    {
+
+	        name = arguments[2];
+
+	        if (name=='compile')
+	            newLog = curLog[name] || new _Compile(name);
+	        else
+	        if (name=='build')
+	            newLog = curLog[name] || new _Build(name);
+	        else
+	        if (name=='loop')
+	            newLog = curLog[name] || new _Loop(name);
+	        else
+	        if (name=='state')
+	            newLog = curLog[name] || new _App(name);
+	        else
+	            newLog = curLog[name] || new _Log(name);
+
+	        hashLog = newLog[ this.count + " " +arguments[0]] || new _Log(name);
+
+	        hashLog = arguments[1];
+
+	        newLog[arguments[0]] = hashLog;
+
+	        curLog[name] = newLog;
+
+	    }
+	    else {
+
+	        name = arguments[0];
+
+	        if (name=='compile')
+	            newLog = curLog[name] || new _Compile(name);
+	        else
+	        if (name=='build')
+	            newLog = curLog[name] || new _Build(name);
+	        else
+	        if (name=='loop')
+	            newLog = curLog[name] || new _Loop(name);
+	        else
+	        if (name=='state')
+	            newLog = curLog[name] || new _App(name);
+	        else
+	            newLog = curLog[name] || new _Log(name);
+
+	        hashLog = newLog[ this.count + " " +arguments[0]] || new _Log(name);
+
+	        hashLog = arguments[1];
+
+	        newLog[arguments[0]] = hashLog;
+
+	        curLog[name] = newLog;
+
+	    }
+
+	    this.count++;
+
+	    this.logs = curLog;
+
+	}
+
+	/** watch //to come - to call a funnction periodically (based on argument 1)
+	* @private
+
+	static watch(v){
+
+		let w = v;
+
+	}
+	*/
+
+    get count() {
+
+        return this.monitor.count;
+
+    }
+
+    set count(value) {
+
+        this.monitor.count = value;
+
+    }
+
+    get details() {
+
+        return _Statistics_Core._details;
+
+    }
+
+    set details(value) {
+
+        this._details = _Statistics_Core._details;
+
+    }
+
+	static get logs() {
+
+	    return this.monitor.logs;
+
+	}
+
+	static set logs(value) {
+
+	    this.monitor = value;
+
+	}
+
+	static get monitor() {
+
+	    return this._monitor;
+
+	}
+
+	static set monitor(value) {
+
+	    this._monitor = value;
+
+	}
+
+    static _monitor = {
+
+        count:0,
+
+        logs:[]
+
+    };
+
+    static _details(type){
+
+        type = type;
+
+        switch (type)
         {
 
-            name = arguments[2];
+            default:
 
-            if (name=='compile')
-                newLog = curLog[name] || new _Compile(name);
-            else
-            if (name=='build')
-                newLog = curLog[name] || new _Build(name);
-            else
-            if (name=='loop')
-                newLog = curLog[name] || new _Loop(name);
-            else
-            if (name=='state')
-                newLog = curLog[name] || new _App(name);
-            else
-                newLog = curLog[name] || new _Log(name);
+            return Object.keys(this.logs);
 
-            hashLog = newLog[ this.count + " " +arguments[0]] || new _Log(name);
+            case 'details':
 
-            hashLog = arguments[1];
+            return Object.create(
 
-            newLog[arguments[0]] = hashLog;
+              Object.getPrototypeOf(this.logs),
 
-            curLog[name] = newLog;
+              Object.getOwnPropertyDescriptors(this.logs)
 
-        }
-        else {
+            );
 
-            name = arguments[0];
+            case 'entries':
 
-            if (name=='compile')
-                newLog = curLog[name] || new _Compile(name);
-            else
-            if (name=='build')
-                newLog = curLog[name] || new _Build(name);
-            else
-            if (name=='loop')
-                newLog = curLog[name] || new _Loop(name);
-            else
-            if (name=='state')
-                newLog = curLog[name] || new _App(name);
-            else
-                newLog = curLog[name] || new _Log(name);
+            return Object.entries(this.logs);
 
-            hashLog = newLog[ this.count + " " +arguments[0]] || new _Log(name);
+            case 'values':
 
-            hashLog = arguments[1];
-
-            newLog[arguments[0]] = hashLog;
-
-            curLog[name] = newLog;
+            return Object.values(this.logs);
 
         }
 
-        this.count++;
-
-        this.logs = curLog;
-
-    }
-
-    /** watch //to come
-     * @private
-     */
-
-     static watch(v){
-
-         let w = v;
-
-     }
-
-    /**
-    * Converts and array of objects to CSV.
-    * @module
-    * @access private
-    */
-
-    static convertArrayOfObjectsToCSV(args) {
-
-        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
-
-        data = args.data || null;
-
-        if (data == null || !data.length) {
-
-            return null;
-
-        }
-
-        columnDelimiter = args.columnDelimiter || ',';
-
-        lineDelimiter = args.lineDelimiter || '\n';
-
-        keys = Object.keys(data[0]);
-
-        result = '';
-
-        result += keys.join(columnDelimiter);
-
-        result += lineDelimiter;
-
-        data.forEach(function(item) {
-
-            ctr = 0;
-
-            keys.forEach(function(key) {
-
-                if (ctr > 0) result += columnDelimiter;
-
-                result += item[key];
-
-                ctr++;
-
-            });
-
-            result += lineDelimiter;
-
-        });
-
-        return result;
-    }
-
-    /**
-    * Converts and array of objects to CSV.
-    * @module
-    * @access private
-    */
-
-    static writeToCSV(name){
-
-        var logStream = fs.createWriteStream('log.txt', {'flags': 'a'});
-
-        logStream.write('Initial line...');
-
-        logStream.end('this is the end line');
-
-        let dataString = "";
-
-        var data =this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
-
-        //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
-
-        var csvContent = "data:text/csv;charset=utf-8,";
-
-        data.forEach(function(infoArray, index){
-
-           dataString = infoArray.join(",");
-
-           csvContent += index < data.length ? dataString+ "\n" : dataString;
-
-        });
-
-        var encodedUri = encodeURI(csvContent);
-
-        var link = document.createElement("a");
-
-        link.setAttribute("href", encodedUri);
-
-        link.setAttribute("download", name+".csv");
-
-        link.click();
-
-    }
+    };
 
 }
 

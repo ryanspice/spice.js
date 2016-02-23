@@ -1,19 +1,68 @@
-/**
-* @import
-* @private
-*/
 
 import _Statistics from './modules/statistics.js';
 import _Build from './modules/build.js';
 
-/**
-* Constants
-* @private
-*/
-
 const _private = new WeakMap();
 const Window = window;
 const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
+
+
+
+
+var canvas;
+var gl;
+//
+// start
+//
+// Called when the canvas is created to get the ball rolling.
+// Figuratively, that is. There's nothing moving in this demo.
+//
+function start() {
+  canvas = document.getElementById("glcanvas");
+  initWebGL(canvas);      // Initialize the GL context
+  // Only continue if WebGL is available and working
+  if (gl) {
+  				  console.log(gl);
+	gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Set clear color to black, fully opaque
+	gl.clearDepth(1.0);                 // Clear everything
+	gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+	gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+  }
+}
+//
+// initWebGL
+//
+// Initialize WebGL, returning the GL context or null if
+// WebGL isn't available or could not be initialized.
+//
+function initWebGL() {
+  gl = null;
+  try {
+	gl = canvas.getContext("experimental-webgl");
+  }
+  catch(e) {
+  }
+  // If we don't have a GL context, give up now
+  if (!gl) {
+	alert("Unable to initialize WebGL. Your browser may not support it.");
+  }
+  console.log('webgl '+gl);
+}
+
+window.start = start;
+window.initWebGL = initWebGL;
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
 * SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
@@ -94,6 +143,10 @@ export default class SpiceJS extends _Build  {
     constructor(){
 
 		super();
+
+		let statsReference = new this.constructor.properties.statistics();
+
+		this.constructor.properties.statistics = statsReference;
 
 		_private.set(this,this.constructor.properties);
 

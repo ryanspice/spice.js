@@ -9,6 +9,17 @@ import _App from './app.js';
 export default class _Build {
 
 		/**
+		*	Attaches a reference to the Statistics module.
+		*	@type {Object}
+		*/
+
+		constructor(){
+
+			this.buildWindowReferences();
+
+		}
+
+		/**
 		*	Generates the app prototype.
 		*	@type {Object}
 		*/
@@ -24,6 +35,8 @@ export default class _Build {
 	        temp.window = this.window;
 
 	        temp.document = document;
+
+	        temp.controller = this;
 
 	        temp.id = this.window.appsNextId;
 
@@ -77,19 +90,6 @@ export default class _Build {
 
 	        if (!windowReference.appsNextId>=0)
 	        	windowReference	.appsNextId = 0;
-
-		}
-
-		/**
-		*	Attaches a reference to the Statistics module.
-		*	@type {Object}
-		*/
-
-		buildStatsReferences(){
-
-			let statsReference = new this.constructor.properties.statistics();
-
-			this.constructor.properties.statistics = statsReference;
 
 		}
 
@@ -154,38 +154,4 @@ export default class _Build {
 
 		}
 
-
-		/**
-		*	Returns app prototype.
-		*	@type {Object} null - b
-
-	    proto() {
-
-			console.warn('Warning this function is depreciated: SpiceJS.proto');
-
-	        return this.proto;
-
-	    }
-
-		*/
-
-
-
-
-		/**
-		*	Attaches a reference to the Statistics module.
-		*	@type {Object}
-		*/
-
-		constructor(){
-
-
-					this.buildWindowReferences();
-
-					this.buildStatsReferences();
-
-		}
-
-
-
-}
+};

@@ -79,8 +79,6 @@ export default class _Core extends _Legacy {
 
 		_private.set(this,this.constructor.properties);
 
-		console.log(this.head);
-
     }
 
 }

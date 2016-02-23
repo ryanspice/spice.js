@@ -1,4 +1,5 @@
 
+
 export default {
 
     overridescroll:false,
@@ -27,6 +28,8 @@ export default {
     },
 
     flags:{
+
+		webGL:true,
 
         canvas:true,
         mstouch:true,
