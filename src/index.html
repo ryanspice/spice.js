@@ -6,6 +6,9 @@
 
 	    <meta charset="UTF-8">
 
+			    <script rel="prefetch" type="application/x-javascript"  src="./vendor/sylvester.js" ></script>
+						<script rel="prefetch" type="application/x-javascript"  src="./vendor/glUtils.js" ></script>
+
 	    <script rel="prefetch" type="application/x-javascript" src="./vendor/spice.js"></script>
 
 	    <script rel="prefetch" type="application/x-javascript" name="main" src="./main.js" ></script>
@@ -13,10 +16,35 @@
 		<script type="text/JavaScript">
 
 		</script>
+
+
+				<!-- Fragment shader program -->
+
+				<script id="shader-fs" type="x-shader/x-fragment">
+				    void main(void) {
+				        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+				    }
+				</script>
+
+				<!-- Vertex shader program -->
+
+				<script id="shader-vs" type="x-shader/x-vertex">
+				  attribute vec3 aVertexPosition;
+				  uniform mat4 uMVMatrix;
+				  uniform mat4 uPMatrix;
+				  void main(void) {
+				    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+				  }
+				</script>
+
 	</head>
 
-	<body onload="start()">
-      <canvas id="glcanvas" width="350" height="250" style="position:fixed; left:0px; top:0px; ">
+	<body onload="window.start()">
+
+
+
+
+      <canvas id="glcanvas" width="350" height="250" style="position:fixed; left:0px; top:0px; z-index:2;">
         Your browser doesn't appear to support the <code>&lt;canvas&gt;</code> element.
       </canvas>
 

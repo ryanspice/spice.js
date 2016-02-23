@@ -5331,6 +5331,10 @@
 
 	var _build2 = _interopRequireDefault(_build);
 
+	var _sgl = __webpack_require__(218);
+
+	var _sgl2 = _interopRequireDefault(_sgl);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5342,47 +5346,6 @@
 	var _private = new WeakMap();
 	var Window = window;
 	var Windows = window.Windows = typeof Windows == 'undefined' ? Window : Windows;
-
-	var canvas;
-	var gl;
-	//
-	// start
-	//
-	// Called when the canvas is created to get the ball rolling.
-	// Figuratively, that is. There's nothing moving in this demo.
-	//
-	function start() {
-		canvas = document.getElementById("glcanvas");
-		initWebGL(canvas); // Initialize the GL context
-		// Only continue if WebGL is available and working
-		if (gl) {
-			console.log(gl);
-			gl.clearColor(0.0, 0.0, 0.0, 1.0); // Set clear color to black, fully opaque
-			gl.clearDepth(1.0); // Clear everything
-			gl.enable(gl.DEPTH_TEST); // Enable depth testing
-			gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-		}
-	}
-	//
-	// initWebGL
-	//
-	// Initialize WebGL, returning the GL context or null if
-	// WebGL isn't available or could not be initialized.
-	//
-	function initWebGL() {
-		gl = null;
-		try {
-			gl = canvas.getContext("experimental-webgl");
-		} catch (e) {}
-		// If we don't have a GL context, give up now
-		if (!gl) {
-			alert("Unable to initialize WebGL. Your browser may not support it.");
-		}
-		console.log('webgl ' + gl);
-	}
-
-	window.start = start;
-	window.initWebGL = initWebGL;
 
 	/**
 	* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
@@ -13417,6 +13380,301 @@
 
 	exports.default = _Build;
 	;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SGL = function () {
+	  function SGL() {
+	    _classCallCheck(this, SGL);
+	  }
+
+	  _createClass(SGL, [{
+	    key: "start",
+	    value: function start() {}
+	  }]);
+
+	  return SGL;
+	}();
+
+	exports.default = SGL;
+
+	var canvas;
+	var gl;
+	var squareVerticesBuffer;
+	var mvMatrix;
+	var shaderProgram;
+	var vertexPositionAttribute;
+	var perspectiveMatrix;
+
+	//
+	// start
+	//
+	// Called when the canvas is created to get the ball rolling.
+	// Figuratively, that is. There's nothing moving in this demo.
+	//
+	function start() {
+	  canvas = document.getElementById("glcanvas");
+
+	  initWebGL(canvas); // Initialize the GL context
+
+	  // Only continue if WebGL is available and working
+
+	  if (gl) {
+	    gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+	    gl.clearDepth(1.0); // Clear everything
+	    gl.enable(gl.DEPTH_TEST); // Enable depth testing
+	    gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+
+	    // Initialize the shaders; this is where all the lighting for the
+	    // vertices and so forth is established.
+
+	    initShaders();
+
+	    // Here's where we call the routine that builds all the objects
+	    // we'll be drawing.
+
+	    initBuffers();
+
+	    initTextures();
+
+	    // Set up to draw the scene periodically.
+
+	    setInterval(drawScene, 15);
+	  }
+	}
+
+	//
+	// initWebGL
+	//
+	// Initialize WebGL, returning the GL context or null if
+	// WebGL isn't available or could not be initialized.
+	//
+	function initWebGL() {
+	  gl = null;
+
+	  try {
+	    gl = canvas.getContext("experimental-webgl");
+	  } catch (e) {}
+
+	  // If we don't have a GL context, give up now
+
+	  if (!gl) {
+	    alert("Unable to initialize WebGL. Your browser may not support it.");
+	  }
+	}
+
+	//
+	// initBuffers
+	//
+	// Initialize the buffers we'll need. For this demo, we just have
+	// one object -- a simple two-dimensional square.
+	//
+	function initBuffers() {
+
+	  // Create a buffer for the square's vertices.
+
+	  squareVerticesBuffer = gl.createBuffer();
+
+	  // Select the squareVerticesBuffer as the one to apply vertex
+	  // operations to from here out.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+
+	  // Now create an array of vertices for the square. Note that the Z
+	  // coordinate is always 0 here.
+
+	  var vertices = [1.0, 1.0, 0.0, -1.0, 1.0, 0.0, 1.0, -1.0, 0.0, -1.0, -1.0, 0.0];
+
+	  // Now pass the list of vertices into WebGL to build the shape. We
+	  // do this by creating a Float32Array from the JavaScript array,
+	  // then use it to fill the current vertex buffer.
+
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	}
+
+	//
+	// drawScene
+	//
+	// Draw the scene.
+	//
+	function drawScene() {
+	  // Clear the canvas before we start drawing on it.
+
+	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	  // Establish the perspective with which we want to view the
+	  // scene. Our field of view is 45 degrees, with a width/height
+	  // ratio of 640:480, and we only want to see objects between 0.1 units
+	  // and 100 units away from the camera.
+
+	  perspectiveMatrix = makePerspective(45, 640.0 / 480.0, 0.1, 100.0);
+
+	  // Set the drawing position to the "identity" point, which is
+	  // the center of the scene.
+
+	  loadIdentity();
+
+	  // Now move the drawing position a bit to where we want to start
+	  // drawing the square.
+
+	  mvTranslate([-0.0, 0.0, -6.0]);
+
+	  // Draw the square by binding the array buffer to the square's vertices
+	  // array, setting attributes, and pushing it to GL.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+	  setMatrixUniforms();
+	  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	}
+
+	//
+	// initShaders
+	//
+	// Initialize the shaders, so WebGL knows how to light our scene.
+	//
+	function initShaders() {
+	  var fragmentShader = getShader(gl, "shader-fs");
+	  var vertexShader = getShader(gl, "shader-vs");
+
+	  // Create the shader program
+
+	  shaderProgram = gl.createProgram();
+	  gl.attachShader(shaderProgram, vertexShader);
+	  gl.attachShader(shaderProgram, fragmentShader);
+	  gl.linkProgram(shaderProgram);
+
+	  // If creating the shader program failed, alert
+
+	  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+	    alert("Unable to initialize the shader program.");
+	  }
+
+	  gl.useProgram(shaderProgram);
+
+	  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	  gl.enableVertexAttribArray(vertexPositionAttribute);
+	}
+
+	//
+	// getShader
+	//
+	// Loads a shader program by scouring the current document,
+	// looking for a script with the specified ID.
+	//
+	function getShader(gl, id) {
+	  var shaderScript = document.getElementById(id);
+
+	  // Didn't find an element with the specified ID; abort.
+
+	  if (!shaderScript) {
+	    return null;
+	  }
+
+	  // Walk through the source element's children, building the
+	  // shader source string.
+
+	  var theSource = "";
+	  var currentChild = shaderScript.firstChild;
+
+	  while (currentChild) {
+	    if (currentChild.nodeType == 3) {
+	      theSource += currentChild.textContent;
+	    }
+
+	    currentChild = currentChild.nextSibling;
+	  }
+
+	  // Now figure out what type of shader script we have,
+	  // based on its MIME type.
+
+	  var shader;
+
+	  if (shaderScript.type == "x-shader/x-fragment") {
+	    shader = gl.createShader(gl.FRAGMENT_SHADER);
+	  } else if (shaderScript.type == "x-shader/x-vertex") {
+	    shader = gl.createShader(gl.VERTEX_SHADER);
+	  } else {
+	    return null; // Unknown shader type
+	  }
+
+	  // Send the source to the shader object
+
+	  gl.shaderSource(shader, theSource);
+
+	  // Compile the shader program
+
+	  gl.compileShader(shader);
+
+	  // See if it compiled successfully
+
+	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+	    alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+	    return null;
+	  }
+
+	  return shader;
+	}
+
+	//
+	// Matrix utility functions
+	//
+
+	function loadIdentity() {
+	  mvMatrix = Matrix.I(4);
+	}
+
+	function multMatrix(m) {
+	  mvMatrix = mvMatrix.x(m);
+	}
+
+	function mvTranslate(v) {
+	  multMatrix(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
+	}
+
+	function setMatrixUniforms() {
+	  var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+	  gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
+
+	  var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+	  gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
+	}
+
+	var cubeTexture;
+	var cubeImage;
+
+	function initTextures() {
+	  cubeTexture = gl.createTexture();
+	  cubeImage = new Image();
+	  cubeImage.onload = function () {
+	    handleTextureLoaded(cubeImage, cubeTexture);
+	  };
+	  cubeImage.src = "../bld/flakes.png";
+	}
+
+	function handleTextureLoaded(image, texture) {
+	  gl.bindTexture(gl.TEXTURE_2D, texture);
+	  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+	  gl.generateMipmap(gl.TEXTURE_2D);
+	  gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+
+	window.start = start;
+	window.initWebGL = initWebGL;
 
 /***/ }
 /******/ ]);
