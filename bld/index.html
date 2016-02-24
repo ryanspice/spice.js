@@ -8,6 +8,7 @@
 
 			    <script rel="prefetch" type="application/x-javascript"  src="./vendor/sylvester.js" ></script>
 						<script rel="prefetch" type="application/x-javascript"  src="./vendor/glUtils.js" ></script>
+						<script rel="prefetch" type="application/x-javascript"  src="./vendor/gl-matrix.js" ></script>
 
 	    <script rel="prefetch" type="application/x-javascript" src="./vendor/spice.js"></script>
 
@@ -18,24 +19,43 @@
 		</script>
 
 
-				<!-- Fragment shader program -->
+		<!-- Fragment shader program -->
 
-				<script id="shader-fs" type="x-shader/x-fragment">
-				    void main(void) {
-				        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-				    }
-				</script>
+	    <script id="shader-fs" type="x-shader/x-fragment">
+		void main(void) {
+	      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+	    }
+	    </script>
 
-				<!-- Vertex shader program -->
+	    <!-- Vertex shader program -->
 
-				<script id="shader-vs" type="x-shader/x-vertex">
-				  attribute vec3 aVertexPosition;
-				  uniform mat4 uMVMatrix;
-				  uniform mat4 uPMatrix;
-				  void main(void) {
-				    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-				  }
-				</script>
+	    <script id="shader-vs" type="x-shader/x-vertex">
+	      attribute vec3 aVertexPosition;
+
+	     // attribute vec2 aTextureCoord;
+
+	      uniform mat4 uMVMatrix;
+	      uniform mat4 uPMatrix;
+
+	     // varying highp vec2 vTextureCoord;
+
+	      void main(void) {
+	        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+
+	        //vTextureCoord = aTextureCoord;
+
+	      }
+	    </script>
+
+
+
+
+
+
+
+
+
+
 
 	</head>
 
@@ -44,7 +64,7 @@
 
 
 
-      <canvas id="glcanvas" width="350" height="250" style="position:fixed; left:0px; top:0px; z-index:2;">
+      <canvas id="glcanvas" style="position:fixed; left:0px; top:0px; z-index:2;">
         Your browser doesn't appear to support the <code>&lt;canvas&gt;</code> element.
       </canvas>
 

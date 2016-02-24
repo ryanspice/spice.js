@@ -10,18 +10,6 @@ export default class _SGL {
 
 	}
 
-
-	get square() {
-
-		return [
-		    100.0,  100.0,  0.0,
-		    -100.0, 100.0,  0.0,
-		    100.0,  -100.0, 0.0,
-		    -100.0, -100.0, 0.0
-		  ];
-
-	}
-
 	get opacity() {
 
 		return 0;
@@ -58,28 +46,6 @@ var vertexPositionAttribute;
 var textureCoordAttribute;
 var perspectiveMatrix;
 
-var squareVerticesBuffer;
-
-var angleInRadians = 0;
-var scale = 1;
-var translation = [0, 0];
-var width = 100;
-var height = 30;
-function setRectangle(gl, x, y, width, height) {
-  var x1 = x;
-  var x2 = x + width;
-  var y1 = y;
-  var y2 = y + height;
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-     x1, y1,
-     x2, y1,
-     x1, y2,
-     x1, y2,
-     x2, y1,
-     x2, y2]), gl.STATIC_DRAW);
-}
-var rect;
-
 
 //
 // start
@@ -89,16 +55,13 @@ var rect;
 function start() {
   canvas = document.getElementById("glcanvas");
 
-	canvas.width = window.innerWidth;;
-	canvas.height = window.innerHeight;
-
   initWebGL(canvas);      // Initialize the GL context
 
   // Only continue if WebGL is available and working
 
   if (gl) {
     gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);  // Clear to black, fully opaque
-//    gl.clearDepth(1.0);                 // Clear everything
+    gl.clearDepth(1.0);                 // Clear everything
 
     //gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
 
@@ -121,64 +84,15 @@ function start() {
 
     initTextures();
 
-
-
     // Set up to draw the scene periodically.
 
 	setTimeout(function(){
 
+
     	setInterval(drawScene, 15);
-
 	},300)
-
   }
-
 }
-
-	function matrixMultiply(m1, m2) {
-	    var result = [];
-	    for (var i = 0; i < m1.length; i++) {
-	        result[i] = [];
-	        for (var j = 0; j < m2[0].length; j++) {
-	            var sum = 0;
-	            for (var k = 0; k < m1[0].length; k++) {
-	                sum += m1[i][k] * m2[k][j];
-	            }
-	            result[i][j] = sum;
-	        }
-	    }
-	    return result;
-	}
-// Returns a random integer from 0 to range - 1.
-function randomInt(range) {
-  return Math.floor(Math.random() * range);
-}
-function makeTranslation(tx, ty) {
-  return [
-    1, 0, 0,
-    0, 1, 0,
-    tx, ty, 1
-  ];
-}
-
-function makeRotation(angleInRadians) {
-  var c = Math.cos(angleInRadians);
-  var s = Math.sin(angleInRadians);
-  return [
-    c,-s, 0,
-    s, c, 0,
-    0, 0, 1
-  ];
-}
-
-function makeScale(sx, sy) {
-  return [
-    sx, 0, 0,
-    0, sy, 0,
-    0, 0, 1
-  ];
-}
-
 
 //
 // initWebGL
@@ -209,15 +123,6 @@ function initWebGL() {
 // one object -- a simple two-dimensional cube.
 //
 function initBuffers() {
-
-	squareVerticesBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(SGL.square), gl.STATIC_DRAW);
-
-
-
-//	rect = new setRectangle(gl, 0,0,100,100);
-
 
   // Create a buffer for the cube's vertices.
 
@@ -365,75 +270,26 @@ function handleTextureLoaded(image, texture) {
   gl.bindTexture(gl.TEXTURE_2D, null);
 }
 
-
-
-
-function make2DProjection(width, height) {
-  // Note: This matrix flips the Y axis so that 0 is at the top.
-  return [
-    2 / width, 0, 0,
-    0, -2 / height, 0,
-    -1, 1, 1
-  ];
-}
-
-
-
 //
 // drawScene
 //
 // Draw the scene.
 //
-
 function drawScene() {
 
-	canvas = document.getElementById("glcanvas");
 
 
-		var sw = 32;
-		var sh = 32;
-		var w = window.innerWidth;
-		var h = window.innerHeight;
-		if (typeof Application != 'undefined')
-			sw = Application.client.setWidth,
-			sh = Application.client.setHeight,
-			w = Application.client.width * Application.client.scale,
-			h = Application.client.height * Application.client.scale;
 
-
-		canvas.width = w;
-		canvas.height = h;
-
-		  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1,150);
-		  perspectiveMatrix = makeOrtho(0, w*2 * (sw/w), 0, h, 0.1,150);
   // Clear the canvas before we start drawing on it.
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-
-
-
-/*
-var s = function(w,h){
-
-	return makeOrtho(w/2, 0, h/2, 0, 0.1,150);
-
-}
-*/
-//  perspectiveMatrix = s(-w, w, -h, h, 0.1,150);
-
 
   // Establish the perspective with which we want to view the
   // scene. Our field of view is 45 degrees, with a width/height
   // ratio of 640:480, and we only want to see objects between 0.1 units
   // and 100 units away from the camera.
 
-//perspectiveMatrix = makePerspective(45, 640.0/480.0, 0.1, 100.0);
-
-//perspectiveMatrix = makeOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100);
-
-
-
+perspectiveMatrix = makePerspective(45, 640.0/480.0, 0.1, 5.0);
 //mat4.ortho(perspectiveMatrix, -1.0, 1.0, -1.0, 1.0, 0.1, 100);
 
 //perspectiveMatrix = mat4.ortho(makePerspective(45, 640.0/480.0, 0.1, 100.0), -1.0, 1.0, -1.0, 1.0, 0.1, 100);
@@ -446,73 +302,13 @@ var s = function(w,h){
   // Now move the drawing position a bit to where we want to start
   // drawing the cube.
 
-  mvTranslate([0, 0, -1.0]);
+  mvTranslate([-0.0, 0.0, -6.0]);
 
   // Save the current matrix, then rotate before we draw.
 
   mvPushMatrix();
 
-
-
-
-
-
-
-
-      // Setup a rectangle
-      //setRectangle(gl, translation[0], translation[1], width, height);
-
-      // Draw the rectangle.
-      //gl.drawArrays(gl.TRIANGLES, 0, 6);
-
 //  mvRotate(cubeRotation, [1, 0, 1]);
-
-
-
-var drawSquare = function(x,y){
-y = 0;
-	mvTranslate([x, 0, -0.0]);
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
-	gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-	setMatrixUniforms();
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	mvTranslate([-x, 0, -0.0]);
-
-}
-
-drawSquare(0,h/2);
-
-
-
-return;
-
-
-
-
-
-
-
-
-
-//  mvTranslate([-1.2, 0.5, -0.0]);
-///DrawSquare
-
-
-  perspectiveMatrix = makeOrtho(-w, w, -h,h, 0.1,150);
-
-
-/*
-
-gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
-gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-setMatrixUniforms();
-gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-*/
-
-  //mvTranslate([1.2, 0.5, -0.0]);
-
-
 
   // Draw the cube by binding the array buffer to the cube's vertices
   // array, setting attributes, and pushing it to GL.
@@ -533,14 +329,11 @@ gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
   // Draw the cube.
 
-
+/*
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
   setMatrixUniforms();
-
   gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
-
-  /**/
-
+*/
 
 
 
@@ -589,8 +382,8 @@ function initShaders() {
   vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
   gl.enableVertexAttribArray(vertexPositionAttribute);
 
-//  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
- // gl.enableVertexAttribArray(textureCoordAttribute);
+  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+  gl.enableVertexAttribArray(textureCoordAttribute);
 }
 
 //
@@ -600,9 +393,7 @@ function initShaders() {
 // looking for a script with the specified ID.
 //
 function getShader(gl, id) {
-  var shaderScript, theSource, currentChild, shader;
-
-  shaderScript = document.getElementById(id);
+  var shaderScript = document.getElementById(id);
 
   // Didn't find an element with the specified ID; abort.
 

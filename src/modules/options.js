@@ -42,6 +42,7 @@ export default {
 
     canvas:{
 
+			opacity:0,
             override:false,                              //Toggle the use of options.canvas
             name:'canvas',                             //Use canvas.name
             buffername:'buffer',                  //Use canvas.buffer
