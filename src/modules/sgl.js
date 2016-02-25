@@ -1,12 +1,18 @@
+
+const _private = new WeakMap();
+
 export default class _SGL {
 
 	static properties = {
 
+		tras:{s:null},
 		opacity:0
 
 	};
 
 	constructor() {
+
+        _private.set(this,this.constructor.properties);
 
 	}
 
@@ -27,6 +33,19 @@ export default class _SGL {
 		return 0;
 
 	}
+
+	get scale() {
+
+		return _private.get(this)['tras'].s;
+
+	}
+
+	set scale(value) {
+
+		 _private.get(this)['tras'].s = value;
+
+	}
+
 
 	start(){
 
@@ -97,15 +116,11 @@ function start() {
   // Only continue if WebGL is available and working
 
   if (gl) {
-    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);  // Clear to black, fully opaque
-//    gl.clearDepth(1.0);                 // Clear everything
 
+    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);
+    gl.clearDepth(1.0);
     //gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-
-	// Disable depth testing. This way, the last object drawn is always in "front".
-	// WebGL will not attempt to determine whether one object lies behind another.
-	gl.disable(gl.DEPTH_TEST);
-
+	gl.disable(gl.DEPTH_TEST);	// Disable depth testing. This way, the last object drawn is always in "front".	// WebGL will not attempt to determine whether one object lies behind another.
 
     // Initialize the shaders; this is where all the lighting for the
     // vertices and so forth is established.
@@ -214,6 +229,7 @@ function initBuffers() {
 	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
 	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(SGL.square), gl.STATIC_DRAW);
 
+return;
 
 
 //	rect = new setRectangle(gl, 0,0,100,100);
@@ -470,18 +486,37 @@ var s = function(w,h){
 
 
 var drawSquare = function(x,y){
+
+	var squareRotation = 0.0;
+//	mvPushMatrix();
+//	mvRotate(squareRotation, [1, 0, 1]);
+
+
 y = 0;
 	mvTranslate([x, 0, -0.0]);
+
+
+	// Set the scale.
+       gl.uniform2fv(scaleLocation, scale);
+
+
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+
+
 	gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+//	gl.vertexAttribPointer(draw_scale, 1, gl.FLOAT, false, 0, 0);
+
+
 	setMatrixUniforms();
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 	mvTranslate([-x, 0, -0.0]);
 
+//	mvPopMatrix();
+
 }
 
 drawSquare(0,h/2);
-
 
 
 return;
@@ -567,6 +602,10 @@ gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 //
 // Initialize the shaders, so WebGL knows how to light our scene.
 //
+
+var scale = [10,10];
+var scaleLocation;
+
 function initShaders() {
   var fragmentShader = getShader(gl, "shader-fs");
   var vertexShader = getShader(gl, "shader-vs");
@@ -586,8 +625,15 @@ function initShaders() {
 
   gl.useProgram(shaderProgram);
 
-  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-  gl.enableVertexAttribArray(vertexPositionAttribute);
+    vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+    gl.enableVertexAttribArray(vertexPositionAttribute);
+
+
+	//Curr Draw Scale
+	scaleLocation = gl.getUniformLocation(shaderProgram, "u_scale");
+
+
+//	gl.enableVertexAttribArray(draw_scale);
 
 //  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
  // gl.enableVertexAttribArray(textureCoordAttribute);

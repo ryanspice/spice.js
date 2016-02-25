@@ -5327,11 +5327,11 @@
 
 	var _statistics2 = _interopRequireDefault(_statistics);
 
-	var _build = __webpack_require__(217);
+	var _build = __webpack_require__(195);
 
 	var _build2 = _interopRequireDefault(_build);
 
-	var _sgl = __webpack_require__(218);
+	var _sgl = __webpack_require__(217);
 
 	var _sgl2 = _interopRequireDefault(_sgl);
 
@@ -5498,7 +5498,7 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5951,8 +5951,7 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 194 */,
-/* 195 */
+/* 194 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6655,6 +6654,186 @@
 	exports._App = _App;
 	exports._Build = _Build;
 	exports._Legacy = _Legacy;
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _app = __webpack_require__(196);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* Contains functions necessary to build the application.
+	* @private
+	*/
+
+	var _Build = function () {
+
+		/**
+	 *	Attaches a reference to the Statistics module.
+	 *	@type {Object}
+	 */
+
+		function _Build() {
+			_classCallCheck(this, _Build);
+
+			this.buildWindowReferences();
+		}
+
+		/**
+	 *	Generates the app prototype.
+	 *	@type {Object}
+	 */
+
+		_createClass(_Build, [{
+			key: "buildPrototype",
+			value: function buildPrototype() {
+
+				/* temp stores the app during the create process, it is then returned */
+
+				var temp = {};
+
+				temp = new _app2.default(this.app);
+
+				temp.window = this.window;
+
+				temp.document = document;
+
+				temp.controller = this;
+
+				temp.id = this.window.appsNextId;
+
+				this.window.apps[temp.id] = temp;
+
+				this.window.appsNextId++;
+
+				return this.window.apps[temp.id];
+			}
+
+			/**
+	  *	Initalize the listeners for the application.
+	  *   @param {temp} temp - pass a reference to attach listeners
+	  *   @return {Method} returns self
+	  */
+
+		}, {
+			key: "buildListeners",
+			value: function buildListeners(temp) {
+
+				if (document.readyState == "complete" || document.readyState == "loaded") {
+					// document is already ready to go
+
+					console.log('ready');
+				}
+
+				temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+
+				return temp;
+			}
+
+			/**
+	  *	Attaches references to the global.window object.
+	  *	@type {Object}
+	  */
+
+		}, {
+			key: "buildWindowReferences",
+			value: function buildWindowReferences() {
+
+				var windowReference = window;
+
+				if (typeof windowReference.scripts != 'array') windowReference.scripts = [];
+
+				windowReference.SpiceJS = windowReference.SJS = this;
+
+				/* if no apps have been defined, create a new array */
+
+				if (!windowReference.apps) windowReference.apps = new Array(1);
+
+				/* if appsNextId isnt larger or equal to 0 assign it to 0 */
+
+				if (!windowReference.appsNextId >= 0) windowReference.appsNextId = 0;
+			}
+
+			/**
+	  *	Begins the app build promise.
+	  *	@return {Object} a - b
+	  */
+
+		}, {
+			key: "create",
+			value: function create() {
+				var _this = this;
+
+				var tempReference = {};
+
+				var tempReferenceId = null;
+
+				var listReference = null;
+
+				var time = new Date().getTime();
+
+				this.statistics.monitor(function () {
+
+					//this.name = "scriptloadtime";
+
+					window.utils.loadExternalJS(window.scripts);
+
+					tempReference = _this.buildPrototype();
+
+					tempReferenceId = tempReference.id;
+
+					///Temporary Fix for Safari and IE
+					//      document
+
+					listReference = _this.controller.list(tempReferenceId);
+
+					_this.buildListeners(listReference);
+
+					// ^ F
+				}).then(function () {
+
+					_this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+					listReference = _this.controller.list(tempReferenceId);
+
+					/// New for After Loaded
+					_this.statistics.monitor(function () {
+
+						//this.name = "loadtime";
+
+						//this.initListeners(listReference);
+
+					}).then(function () {
+
+						_this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+						_this.statistics.log("build", time);
+					});
+				});
+
+				return tempReference;
+			}
+		}]);
+
+		return _Build;
+	}();
+
+	exports.default = _Build;
+	;
 
 /***/ },
 /* 196 */
@@ -7750,7 +7929,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8433,7 +8612,7 @@
 
 	var _vector2 = _interopRequireDefault(_vector);
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	var _inputlistener = __webpack_require__(202);
 
@@ -10003,7 +10182,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11395,7 +11574,7 @@
 		value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11510,7 +11689,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12440,7 +12619,7 @@
 		value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	var _test2 = __webpack_require__(215);
 
@@ -12727,7 +12906,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12927,7 +13106,7 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(195);
+	var _interfaces = __webpack_require__(194);
 
 	var _vector = __webpack_require__(198);
 
@@ -13204,189 +13383,9 @@
 
 /***/ },
 /* 217 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _app = __webpack_require__(196);
-
-	var _app2 = _interopRequireDefault(_app);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* Contains functions necessary to build the application.
-	* @private
-	*/
-
-	var _Build = function () {
-
-		/**
-	 *	Attaches a reference to the Statistics module.
-	 *	@type {Object}
-	 */
-
-		function _Build() {
-			_classCallCheck(this, _Build);
-
-			this.buildWindowReferences();
-		}
-
-		/**
-	 *	Generates the app prototype.
-	 *	@type {Object}
-	 */
-
-		_createClass(_Build, [{
-			key: "buildPrototype",
-			value: function buildPrototype() {
-
-				/* temp stores the app during the create process, it is then returned */
-
-				var temp = {};
-
-				temp = new _app2.default(this.app);
-
-				temp.window = this.window;
-
-				temp.document = document;
-
-				temp.controller = this;
-
-				temp.id = this.window.appsNextId;
-
-				this.window.apps[temp.id] = temp;
-
-				this.window.appsNextId++;
-
-				return this.window.apps[temp.id];
-			}
-
-			/**
-	  *	Initalize the listeners for the application.
-	  *   @param {temp} temp - pass a reference to attach listeners
-	  *   @return {Method} returns self
-	  */
-
-		}, {
-			key: "buildListeners",
-			value: function buildListeners(temp) {
-
-				if (document.readyState == "complete" || document.readyState == "loaded") {
-					// document is already ready to go
-
-					console.log('ready');
-				}
-
-				temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-				return temp;
-			}
-
-			/**
-	  *	Attaches references to the global.window object.
-	  *	@type {Object}
-	  */
-
-		}, {
-			key: "buildWindowReferences",
-			value: function buildWindowReferences() {
-
-				var windowReference = window;
-
-				if (typeof windowReference.scripts != 'array') windowReference.scripts = [];
-
-				windowReference.SpiceJS = windowReference.SJS = this;
-
-				/* if no apps have been defined, create a new array */
-
-				if (!windowReference.apps) windowReference.apps = new Array(1);
-
-				/* if appsNextId isnt larger or equal to 0 assign it to 0 */
-
-				if (!windowReference.appsNextId >= 0) windowReference.appsNextId = 0;
-			}
-
-			/**
-	  *	Begins the app build promise.
-	  *	@return {Object} a - b
-	  */
-
-		}, {
-			key: "create",
-			value: function create() {
-				var _this = this;
-
-				var tempReference = {};
-
-				var tempReferenceId = null;
-
-				var listReference = null;
-
-				var time = new Date().getTime();
-
-				this.statistics.monitor(function () {
-
-					//this.name = "scriptloadtime";
-
-					window.utils.loadExternalJS(window.scripts);
-
-					tempReference = _this.buildPrototype();
-
-					tempReferenceId = tempReference.id;
-
-					///Temporary Fix for Safari and IE
-					//      document
-
-					listReference = _this.controller.list(tempReferenceId);
-
-					_this.buildListeners(listReference);
-
-					// ^ F
-				}).then(function () {
-
-					_this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-					listReference = _this.controller.list(tempReferenceId);
-
-					/// New for After Loaded
-					_this.statistics.monitor(function () {
-
-						//this.name = "loadtime";
-
-						//this.initListeners(listReference);
-
-					}).then(function () {
-
-						_this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-						_this.statistics.log("build", time);
-					});
-				});
-
-				return tempReference;
-			}
-		}]);
-
-		return _Build;
-	}();
-
-	exports.default = _Build;
-	;
-
-/***/ },
-/* 218 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -13396,25 +13395,39 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	var _private = new WeakMap();
+
 	var _SGL = function () {
 	  function _SGL() {
 	    _classCallCheck(this, _SGL);
+
+	    _private.set(this, this.constructor.properties);
 	  }
 
 	  _createClass(_SGL, [{
-	    key: "start",
+	    key: 'start',
 	    value: function start() {}
 	  }, {
-	    key: "square",
+	    key: 'square',
 	    get: function get() {
 
 	      return [100.0, 100.0, 0.0, -100.0, 100.0, 0.0, 100.0, -100.0, 0.0, -100.0, -100.0, 0.0];
 	    }
 	  }, {
-	    key: "opacity",
+	    key: 'opacity',
 	    get: function get() {
 
 	      return 0;
+	    }
+	  }, {
+	    key: 'scale',
+	    get: function get() {
+
+	      return _private.get(this)['tras'].s;
+	    },
+	    set: function set(value) {
+
+	      _private.get(this)['tras'].s = value;
 	    }
 	  }]);
 
@@ -13423,6 +13436,7 @@
 
 	_SGL.properties = {
 
+	  tras: { s: null },
 	  opacity: 0
 
 	};
@@ -13481,14 +13495,11 @@
 	  // Only continue if WebGL is available and working
 
 	  if (gl) {
-	    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity); // Clear to black, fully opaque
-	    //    gl.clearDepth(1.0);                 // Clear everything
 
+	    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);
+	    gl.clearDepth(1.0);
 	    //gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-
-	    // Disable depth testing. This way, the last object drawn is always in "front".
-	    // WebGL will not attempt to determine whether one object lies behind another.
-	    gl.disable(gl.DEPTH_TEST);
+	    gl.disable(gl.DEPTH_TEST); // Disable depth testing. This way, the last object drawn is always in "front".	// WebGL will not attempt to determine whether one object lies behind another.
 
 	    // Initialize the shaders; this is where all the lighting for the
 	    // vertices and so forth is established.
@@ -13576,6 +13587,8 @@
 	  squareVerticesBuffer = gl.createBuffer();
 	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
 	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(SGL.square), gl.STATIC_DRAW);
+
+	  return;
 
 	  //	rect = new setRectangle(gl, 0,0,100,100);
 
@@ -13760,13 +13773,28 @@
 	  //  mvRotate(cubeRotation, [1, 0, 1]);
 
 	  var drawSquare = function drawSquare(x, y) {
+
+	    var squareRotation = 0.0;
+	    //	mvPushMatrix();
+	    //	mvRotate(squareRotation, [1, 0, 1]);
+
 	    y = 0;
 	    mvTranslate([x, 0, -0.0]);
+
+	    // Set the scale.
+	    gl.uniform2fv(scaleLocation, scale);
+
 	    gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+
 	    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	    //	gl.vertexAttribPointer(draw_scale, 1, gl.FLOAT, false, 0, 0);
+
 	    setMatrixUniforms();
 	    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 	    mvTranslate([-x, 0, -0.0]);
+
+	    //	mvPopMatrix();
 	  };
 
 	  drawSquare(0, h / 2);
@@ -13836,6 +13864,10 @@
 	//
 	// Initialize the shaders, so WebGL knows how to light our scene.
 	//
+
+	var scale = [10, 10];
+	var scaleLocation;
+
 	function initShaders() {
 	  var fragmentShader = getShader(gl, "shader-fs");
 	  var vertexShader = getShader(gl, "shader-vs");
@@ -13857,6 +13889,11 @@
 
 	  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 	  gl.enableVertexAttribArray(vertexPositionAttribute);
+
+	  //Curr Draw Scale
+	  scaleLocation = gl.getUniformLocation(shaderProgram, "u_scale");
+
+	  //	gl.enableVertexAttribArray(draw_scale);
 
 	  //  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 	  // gl.enableVertexAttribArray(textureCoordAttribute);
