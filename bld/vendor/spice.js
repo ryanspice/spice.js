@@ -6192,10 +6192,10 @@
 	        }
 
 	        /*
-	            getFps(){
-	                 return this.client.update.step.fps;
+	        	    getFps(){
+	        	         return this.client.update.step.fps;
 	           }
-	        	*/
+	        		*/
 
 	    }, {
 	        key: 'getCurrent',
@@ -9952,7 +9952,7 @@
 	                    return;
 
 	                    /*
-	                     this.mute;
+	                      this.mute;
 	                    if (this.sound[this.current]==="undefined")
 	                        return;
 	                    if (this.sound[this.current].currentTime >= this.length)
@@ -9961,10 +9961,10 @@
 	                        {
 	                            this.current = 0;
 	                        }
-	                         this.sound[this.current].currentTime = 0;
+	                          this.sound[this.current].currentTime = 0;
 	                        this.sound[this.current].play();
 	                    }
-	                      */
+	                        */
 	                }
 	            },
 	            constructor: function constructor() {
@@ -11708,7 +11708,7 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _interfaces = __webpack_require__(194);
@@ -11732,258 +11732,258 @@
 	var xOff = 0;
 
 	var SJSParticleController = (function (_Loader) {
-	    _inherits(SJSParticleController, _Loader);
+	        _inherits(SJSParticleController, _Loader);
 
-	    function SJSParticleController(app) {
-	        _classCallCheck(this, SJSParticleController);
+	        function SJSParticleController(app) {
+	                _classCallCheck(this, SJSParticleController);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
 
-	        _this.SJSParticleList = [];
+	                _this.SJSParticleList = [];
 
-	        _this.particleLimit = 1500;
+	                _this.particleLimit = 1500;
 
-	        _this.flakes = new Image();
+	                _this.flakes = new Image();
 
-	        _this.flakes0 = new Image();
+	                _this.flakes0 = new Image();
 
-	        for (var i = 0; i < 16; i++) {
-	            _this['flakes' + i] = new Image();
-	        }for (var i = 0; i < 16; i++) {
-	            _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
-	        }return _this;
-	    }
-
-	    _createClass(SJSParticleController, [{
-	        key: 'clear',
-	        value: function clear() {
-
-	            this.SJSParticleList = [];
+	                for (var i = 0; i < 16; i++) {
+	                        _this['flakes' + i] = new Image();
+	                }for (var i = 0; i < 16; i++) {
+	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
+	                }return _this;
 	        }
-	    }, {
-	        key: 'appendParticle',
-	        value: function appendParticle() {
 
-	            var length = this.SJSParticleList.length;
+	        _createClass(SJSParticleController, [{
+	                key: 'clear',
+	                value: function clear() {
 
-	            if (length > this.particleLimit) return;
+	                        this.SJSParticleList = [];
+	                }
+	        }, {
+	                key: 'appendParticle',
+	                value: function appendParticle() {
 
-	            var width = this.app.getWidth();
+	                        var length = this.SJSParticleList.length;
 
-	            var height = this.app.getHeight();
+	                        if (length > this.particleLimit) return;
 
-	            var scale = this.app.getScale();
+	                        var width = this.app.getWidth();
 
-	            var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
+	                        var height = this.app.getHeight();
 
-	            var End = new _vector2.default(Math.random() * width, 0);
+	                        var scale = this.app.getScale();
 
-	            End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+	                        var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
 
-	            var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+	                        var End = new _vector2.default(Math.random() * width, 0);
 
-	            this.SJSParticleList.push(newParticle);
+	                        End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
 
-	            return;
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
+	                        var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
 
-	            var length = this.SJSParticleList.length;
+	                        this.SJSParticleList.push(newParticle);
 
-	            this.appendParticle();
+	                        return;
+	                }
+	        }, {
+	                key: 'update',
+	                value: function update() {
 
-	            if (length == 0) return;
+	                        var length = this.SJSParticleList.length;
 
-	            var i = length - 1;
+	                        this.appendParticle();
 
-	            for (i; i; --i) {
+	                        if (length == 0) return;
 
-	                var particle = this.SJSParticleList[i];
+	                        var i = length - 1;
 
-	                particle.update();
-	            }
+	                        for (i; i; --i) {
 
-	            return;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
+	                                var particle = this.SJSParticleList[i];
 
-	            var error = this.getBufferLength();
+	                                particle.update();
+	                        }
 
-	            //    console.log(error)
-	            if (error > 0) {
-	                this.visuals.rect(0, 0, 10, 10, '#FF0000');
-	                return;
-	            }
+	                        return;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
 
-	            var length = this.SJSParticleList.length;
+	                        var error = this.getBufferLength();
 
-	            if (length == 0) return;
+	                        //    console.log(error)
+	                        if (error > 0) {
+	                                this.visuals.rect(0, 0, 10, 10, '#FF0000');
+	                                return;
+	                        }
 
-	            var i = length - 1;
+	                        var length = this.SJSParticleList.length;
 
-	            for (i; i; --i) {
+	                        if (length == 0) return;
 
-	                var particle = this.SJSParticleList[i];
+	                        var i = length - 1;
 
-	                particle.draw();
-	            }
-	        }
-	    }]);
+	                        for (i; i; --i) {
 
-	    return SJSParticleController;
+	                                var particle = this.SJSParticleList[i];
+
+	                                particle.draw();
+	                        }
+	                }
+	        }]);
+
+	        return SJSParticleController;
 	})(_loader2.default);
 
 	exports.default = SJSParticleController;
 
 	var SJSParticle = (function (_SJSClass) {
-	    _inherits(SJSParticle, _SJSClass);
+	        _inherits(SJSParticle, _SJSClass);
 
-	    function SJSParticle(app, pos, target, vel, marker, usePhysics) {
-	        _classCallCheck(this, SJSParticle);
+	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
+	                _classCallCheck(this, SJSParticle);
 
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
+	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
 
-	        var loader = window.Loader; // this.app.getCurrent().particleController;
+	                var loader = window.Loader; // this.app.getCurrent().particleController;
 
-	        //this.img = loader.getImageReference('../flakes');
-	        _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
+	                //this.img = loader.getImageReference('../flakes');
+	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
 
-	        _this2.t = Math.round(1 + Math.random() * 5);
+	                _this2.t = Math.round(1 + Math.random() * 5);
 
-	        _this2.gravity = 0.5;
+	                _this2.gravity = 0.5;
 
-	        _this2.alpha = 0.75 + Math.random() * 0.25;
+	                _this2.alpha = 0.75 + Math.random() * 0.25;
 
-	        _this2.easing = Math.random() * 0.2;
+	                _this2.easing = Math.random() * 0.2;
 
-	        _this2.fade = Math.random() * 0.1;
+	                _this2.fade = Math.random() * 0.1;
 
-	        _this2.gridX = marker % 120;
+	                _this2.gridX = marker % 120;
 
-	        _this2.gridY = Math.floor(marker / 120) * 12;
+	                _this2.gridY = Math.floor(marker / 120) * 12;
 
-	        _this2.color = marker;
+	                _this2.color = marker;
 
-	        _this2.scale = 3 * Math.random() * 3 * Application.getScale();
+	                _this2.scale = 3 * Math.random() * 3 * Application.getScale();
 
-	        _this2.start = 30 + Math.random() * 180;
+	                _this2.start = 30 + Math.random() * 180;
 
-	        _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
+	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
 
-	        _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
+	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
 
-	        _this2.del = false;
+	                _this2.del = false;
 
-	        _this2.pos = {
-	            x: pos.x || 0,
-	            y: pos.y || 0
-	        };
+	                _this2.pos = {
+	                        x: pos.x || 0,
+	                        y: pos.y || 0
+	                };
 
-	        _this2.vel = {
-	            x: vel.x || 0,
-	            y: vel.y || 0
-	        };
+	                _this2.vel = {
+	                        x: vel.x || 0,
+	                        y: vel.y || 0
+	                };
 
-	        _this2.lastPos = {
-	            x: _this2.pos.x,
-	            y: _this2.pos.y
-	        };
+	                _this2.lastPos = {
+	                        x: _this2.pos.x,
+	                        y: _this2.pos.y
+	                };
 
-	        _this2.target = {
-	            y: target.y || 0,
-	            x: target.x || 0
-	        };
+	                _this2.target = {
+	                        y: target.y || 0,
+	                        x: target.x || 0
+	                };
 
-	        _this2.pos = new _vector2.default(pos.x, pos.y);
-	        _this2.vel = new _vector2.default(vel.x, vel.y);
-	        _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
-	        _this2.target = new _vector2.default(target.x, target.y);
+	                _this2.pos = new _vector2.default(pos.x, pos.y);
+	                _this2.vel = new _vector2.default(vel.x, vel.y);
+	                _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
+	                _this2.target = new _vector2.default(target.x, target.y);
 
-	        _this2.usePhysics = usePhysics || false;
+	                _this2.usePhysics = usePhysics || false;
 
-	        if (!_this2.usePhysics) {
+	                if (!_this2.usePhysics) {
 
-	            _this2.dir = Math.random() * 1;
+	                        _this2.dir = Math.random() * 1;
 
-	            if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
-	        } else {
+	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
+	                } else {
 
-	            if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                }
+
+	                return _this2;
 	        }
 
-	        return _this2;
-	    }
+	        _createClass(SJSParticle, [{
+	                key: 'update',
+	                value: function update() {
 
-	    _createClass(SJSParticle, [{
-	        key: 'update',
-	        value: function update() {
+	                        var width = this.app.getWidth();
 
-	            var width = this.app.getWidth();
+	                        var height = this.app.getHeight();
 
-	            var height = this.app.getHeight();
+	                        var scale = this.app.getScale();
 
-	            var scale = this.app.getScale();
+	                        // Check to Delete
 
-	            // Check to Delete
+	                        if (this.del) {
 
-	            if (this.del) {
+	                                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
+	                                var target = { x: Math.random() * width, y: 2 * height / scale };
+	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
 
-	                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
-	                var target = { x: Math.random() * width, y: 2 * height / scale };
-	                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
+	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
 
-	                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
+	                                return;
+	                        }
 
-	                return;
-	            }
+	                        // Move Object
 
-	            // Move Object
+	                        var distance = this.target.y - this.pos.y;
 
-	            var distance = this.target.y - this.pos.y;
+	                        var val = this.target.x / 200;
 
-	            var val = this.target.x / 200;
+	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
 
-	            this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
+	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
 
-	            if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
+	                        val = this.pos.x / 200;
 
-	            val = this.pos.x / 200;
+	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
 
-	            if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
+	                        var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
+	                        var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
+	                        this.pos.x += xdir;
 
-	            var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
-	            var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
-	            this.pos.x += xdir;
+	                        // Check if out of bounds
 
-	            // Check if out of bounds
+	                        if (this.pos.y > 600) {
+	                                this.alpha -= 0.01;
 
-	            if (this.pos.y > 600) {
-	                this.alpha -= 0.01;
+	                                if (this.alpha < 0.01) this.del = true;
+	                        }
 
-	                if (this.alpha < 0.01) this.del = true;
-	            }
+	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
 
-	            if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
+	                        //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
+	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //else
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
-	            //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
-	            //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	            //else
-	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	                }
+	        }]);
 
-	            this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
-	        }
-	    }]);
-
-	    return SJSParticle;
+	        return SJSParticle;
 	})(_interfaces._SJSClass);
 
 /***/ },
