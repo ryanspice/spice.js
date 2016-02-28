@@ -9,51 +9,53 @@ export default {
 
             app:{value:app},
 
-            init:{writable: false,configurable:false,enumerable:false,value:function(name,w,h){
+            init:{writable: false,configurable:false,enumerable:false,value:function(w,h){
 
-                    //Set App.client.discription to the name
-                    this.discription = name;
+				var name  = '';
 
-                    //Depreciated setWidth-height: use w + h
-                    //Set App.client.w
-                    //Set App.client.h
-                    //Set App.client.width
-                    //Set App.client.height
-                    //Set App.client.setWidth
-                    //Set App.client.setHeight
+                //Set App.client.discription to the name
+                this.discription = "description";
 
-                    this.w = this.width = this.setWidth = w;
-                    this.h = this.height = this.setHeight = h;
+                //Depreciated setWidth-height: use w + h
+                //Set App.client.w
+                //Set App.client.h
+                //Set App.client.width
+                //Set App.client.height
+                //Set App.client.setWidth
+                //Set App.client.setHeight
 
-                    //Build Extensions
-                    (this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
+                this.w = this.width = this.setWidth = w;
+                this.h = this.height = this.setHeight = h;
 
-                    //Build Visuals
-                    (this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
+                //Build Extensions
+                (this.app.ext = this.app.Construct(this.app.ext.prototype,this.app.ext.constructor)).init(name);
 
-                    //Build
-                    (this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
+                //Build Visuals
+                (this.visuals = this.app.Construct(this.visuals.prototype,this.visuals.constructor)).init(this);
 
-                    //Build
-                    this.room = Object.create(this.room.prototype,this.room.constructor(this.app)).init();
+                //Build
+                (this.graphics = this.app.Construct(this.graphics.prototype,this.graphics.constructor)).init();
 
-                    //Build
-                    (this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
+                //Build
+                this.room = Object.create(this.room.prototype,this.room.constructor(this.app)).init();
 
-                    //Build
-                    (this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(app.options.targetfps,app.options.targetfps);
+                //Build
+                (this.audio = this.audio = Object.create(this.audio.prototype,this.audio.constructor())).init();
 
-                    //Build
-                    (this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
+                //Build
+                (this.mainLoop = Object.create(this.pace.prototype,this.pace.constructor(this))).init(app.options.targetfps,app.options.targetfps);
 
-                    //Build
-                    this.main = Object.create(this.app.main);
+                //Build
+                (this.second = Object.create(this.pace.prototype,this.pace.constructor(this))).init(1.0,app.options.targetfps);
 
-                    //Build
-                    (this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
+                //Build
+                this.main = Object.create(this.app.main);
+
+                //Build
+                (this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
+
 
                 }
-
             }
 
         }
@@ -94,26 +96,23 @@ export default {
         },
 
         //Client features loop
-
         loopData:function(){
 
-            if (this.app)
-                if (this.app.input)
-                    if (this.app.input.update)
-                    {
+            //if (this.app)
+            //if (this.app.input)
+            //if (this.app.input.update)
+            //{
 
-                        //Return true or false, update audio
-                        //this.mute = this.audio.update();
+            //Return true or false, update audio
+            //this.mute = this.audio.update();
 
-                        this.update.size_difference(this);
+                    this.update.size_difference(this);
 
-                        //Update Input
-                        this.app.input.update();
-
-                    }
+                    //Update Input
+                    this.app.input.update();
+            //}
 
             setTimeout(this.client_data,1000 / 60);
-
         },
 
         loop:function(a){
@@ -146,12 +145,17 @@ export default {
 
         },
 
-        //Client update loop
+		/**
+		* Client Update Loop
+		* @class
+		* @protected
+		*/
+
         update:{
 
             //Cache Vars
-            last:{w:0,h:0},
-            difference:{x:0,y:0},
+            last:new Math.Vector(),
+            difference:new Math.Vector(),
             scaler:{s:1,x:1,y:1},
             scaling:true,
             scalediff:0,
@@ -161,13 +165,47 @@ export default {
             set:0,
             frames:0,
 
-            //Calculate client size
+			/**
+			* Calculate differences between the canvas size last frame and this frame
+			* @method
+			* @private
+			*/
+
             size_difference:function(app){
 
-                //Calculate difference of with and height in this frame vs last frame
-                this.difference = (app.Math.Vector.Difference(new app.Math.Vec(this.last.w.toFixed(4),this.last.h.toFixed(4)),new app.Math.Vec(app.width.toFixed(4),app.height.toFixed(4))));
+				let x = this.last.x;
+
+				let y = this.last.y;
+
+				let w = app.width;
+
+				let h = app.height;
+
+				let vector_size0 = new Math.Vector(x,y);
+
+				let vector_size1 = new Math.Vector(w,h);
+
+				if (x==w)
+					if (y==h)
+					{
+
+						this.difference = new Math.Vector(0,0);
+
+						return;
+
+					}
+
+				this.difference = app.Math.Vector.Difference(vector_size0,vector_size1);
+
+				return;
 
             },
+
+			/**
+			* Resize the canvas
+			* @method
+			* @private
+			*/
 
             size:function(app){
 
@@ -176,10 +214,10 @@ export default {
                     return false;
 
                 //Reassign width and height
-                app.app.canvas.canvas.width  = this.last.w = app.width;
-                app.app.canvas.canvas.height = this.last.h = app.height;
-                app.app.canvas.buffer.width  = this.last.w = app.width;
-                app.app.canvas.buffer.height = this.last.h = app.height;
+                app.app.canvas.canvas.width  = this.last.x = app.width;
+                app.app.canvas.canvas.height = this.last.y = app.height;
+                app.app.canvas.buffer.width  = this.last.x = app.width;
+                app.app.canvas.buffer.height = this.last.y = app.height;
 
                 return true;
             },

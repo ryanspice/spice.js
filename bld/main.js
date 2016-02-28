@@ -1,55 +1,52 @@
 
-var Application = SpiceJS.create();
+((SpiceJS.create()).OnLoad = function (self) {
 
-//Application OnLoad
+	self.controller.statistics.monitor(function(){
 
-Application.OnLoad = function (self) {
+		self.main = {
 
-    self.main = {
+		    name:"Example",
 
-        name:"Example",
+		    init:function() {
 
-        init:function() {
+		        this.intro = new test(this.app);
 
-            //this.visuals.setBleed(1);
+		    	this.particleController = new SJSParticleController(this.app);
 
-        	this.particleController = new SJSParticleController(this.app);
+		        return true;
+		    },
 
-            this.intro = new test(this.app);
+		    update:function() {
 
-            return true;
-        },
+				//this.intro.update();
 
-        update:function() {
+				this.particleController.update();
 
-            //console.log(Application.input.keyController.keyboardCheck('w'));
+		        return true;
+		    },
 
-    		this.particleController.update();
+		    draw:function() {
 
-            //this.intro.update();
+		        //this.intro.draw();
 
-            return true;
-        },
+				this.particleController.draw();
 
-        draw:function() {
+		        this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
 
-            //this.intro.draw();
+		        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
+		        this.visuals.text_ext(this.app.version,100,150,"#FFFFFF",1,1);
 
-    		this.particleController.draw();
+		        return true;
+		    }
 
-            this.visuals.text_ext(this.particleController.SJSParticleList.length,100,50,"#FFFFFF",1,1);
+		};
 
-            this.visuals.text_ext(this.app.fps.toFixed(2),100,100,"#FFFFFF",1,1);
+		self.start( 320, 720);
 
-            return true;
+		console.log("Example: OnApplicationStart")
 
-        }
-
-    };
-
-    self.start(320, 720);
-
+	})
 
     window.Application = this;
 
-};
+});

@@ -1,5 +1,6 @@
 
 import { _Canvas_Core } from './interfaces.js';
+//import SGL from './sgl.js';
 
 /**
 * _private
@@ -43,6 +44,8 @@ export default class Canvas extends _Canvas_Core {
 
         //Assign private properties
         _private.set(this,this.constructor.properties);
+
+		//SGL.start();
 
         //Cache canvases
         let temp_canvas = document.getElementById(this.app.options.target.canvas);

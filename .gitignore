@@ -9,3 +9,7 @@ SpiceJS + Html5 Boilerplate/
 Thumbs.db
 snippet
 .DS_Store
+
+src/docs.scss
+
+src/docs.css

@@ -14,16 +14,15 @@
 [completed]:$completed;
 [in-testing]:$in-testing;
 
+
+SpiceJS is an Html5 canvas framework designed for rapid prototyping of games, ads and all sorts of animations.
+
 Developed by: [Ryan Spice](http://twitter.com/ryanspice/)
 
 To get started, check out [the documentation](http://js.ryanspice.com)!
 
-Current documentation is for an older version of SpiceJS.
-
-## table of contents
-
+## table of infos
 * [features][features]
-
 	* [completed][completed]
 	* [in-testing][in-testing]
 	* [coming soon][coming soon]
@@ -31,12 +30,7 @@ Current documentation is for an older version of SpiceJS.
 	* [essential functions][essential functions]
 	* [setting up your application][setting up your application]
 	* [further readings...][further readings...]
-
 * [examples][examples]
- * [particle][particle]
- * [animations][animations]
- * [parallax][parallax]
- * [isometric][isometric]
 
 ## features	 
 

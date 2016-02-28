@@ -5317,13 +5317,23 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 
-	var _controller3 = __webpack_require__(192);
+	var _statistics = __webpack_require__(192);
 
-	var _controller4 = _interopRequireDefault(_controller3);
+	var _statistics2 = _interopRequireDefault(_statistics);
+
+	var _build = __webpack_require__(195);
+
+	var _build2 = _interopRequireDefault(_build);
+
+	var _sgl = __webpack_require__(216);
+
+	var _sgl2 = _interopRequireDefault(_sgl);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5333,67 +5343,141 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var _private = new WeakMap();
+	var Window = window;
+	var Windows = window.Windows = typeof Windows == 'undefined' ? Window : Windows;
+
 	/**
-	 * SpiceJS is the main corns and beans, here you can control all aspects of the framework. The main class will instanciate and manage app canveses.
-	 * @access public
-	 * @example var Application = SpiceJS.create();
-	 *
-	 *        Application.OnLoad = function (self) {
-	 *
-	 *            self.Init("Example SpiceJS", 320, 720);
-	 *
-	 *            window.Application = this;
-	 *
-	 *        };
-	 *
-	 *    Application.main= {
-	 *
-	 *        name:"Example",
-	 *
-	 *        init:function() {
-	 *
-	 *            return true;
-	 *        },
-	 *
-	 *        update:function() {
-	 *
-	 *            return true;
-	 *        },
-	 *
-	 *        draw:function() {
-	 *
-	 *            return true;
-	 *        }
-	 *
-	 *    };
-	 *
+	* SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
+	* @access public
+	* @emits {SpiceJS} Emit the application controller.
+	* @example
+	*
+	*	((SpiceJS.create()).OnLoad = function (self) {
+	*
+	*		self.main = {
+	*
+	*		    init:function() {
+	*
+	*		    },
+	*
+	*		    update:function() {
+	*
+	*		    },
+	*
+	*		    draw:function() {
+	*
+	*		        this.visuals.text_ext(this.app.fps,100,100,"#FFFFFF",1,1);
+	*
+	*		    }
+	*
+	*		};
+	*
+	*	    self.start( 320, 720);
+	*
+	*	    window.Application = this;
+	*
+	*	});
+	*
+	*/
+
+	var SpiceJS = (function (_Build2) {
+		_inherits(SpiceJS, _Build2);
+
+		/**
+	    *  Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
+	 * @private
+	    */
+
+		function SpiceJS() {
+			_classCallCheck(this, SpiceJS);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SpiceJS).call(this));
+
+			var statsReference = new _this.constructor.properties.statistics();
+
+			_this.constructor.properties.statistics = statsReference;
+
+			_private.set(_this, _this.constructor.properties);
+
+			return _this;
+		}
+
+		/**
+	 * Reference to the canvas/app global controller.
+	 * @type {Object}
+	 * @protected
 	 */
 
-	var SpiceJS = (function (_controller2) {
-	  _inherits(SpiceJS, _controller2);
+		/**
+	 * Private variables. Statistics and Controller are only accessable through reference.
+	 * @type {Object}
+	 */
 
-	  function SpiceJS() {
-	    _classCallCheck(this, SpiceJS);
+		_createClass(SpiceJS, [{
+			key: 'controller',
+			get: function get() {
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SpiceJS).apply(this, arguments));
-	  }
+				return _private.get(this)['controller'];
+			}
 
-	  return SpiceJS;
-	})(_controller4.default);
+			/**
+	  * Reference to the statistics object.
+	  * @type {Object}
+	  * @protected
+	  */
 
+		}, {
+			key: 'statistics',
+			get: function get() {
+
+				return _private.get(this)['statistics'];
+			}
+
+			/**
+	  * Reference to the Window object.
+	  * @type {Element}
+	  * @protected
+	  */
+
+		}, {
+			key: 'window',
+			get: function get() {
+
+				return Window;
+			}
+		}]);
+
+		return SpiceJS;
+	})(_build2.default);
+
+	SpiceJS.properties = {
+
+		temp: {},
+
+		controller: {
+
+			/**
+	  * List all of the instances of SpiceJS or
+	  * @type {method}
+	  * @param {number} id - Specify a specific instance to return.
+	  */
+
+			list: function list(id) {
+
+				if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
+			}
+
+		},
+
+		statistics: _statistics2.default
+
+	};
+	exports.default = SpiceJS;
 	;
 
 	/**
-	 * Catch the Windows variable from microsoft devices.
-	 * @access public
-	 * @const {pbject}
-	 */
-
-	var Windows = window.Windows = typeof Windows == 'undefined' ? window : Windows;
-
-	/**
 	 * Export SpiceJS
-	 * @emits {SpiceJS} Emit the application controller.
 	 */
 
 	exports.default = new SpiceJS();
@@ -5407,216 +5491,14 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	        value: true
+					value: true
 	});
 
-	var _statistics2 = __webpack_require__(193);
-
-	var _statistics3 = _interopRequireDefault(_statistics2);
-
-	var _core = __webpack_require__(197);
-
-	var _core2 = _interopRequireDefault(_core);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* Main game controller. Handles instanciating instances and tracking information.
-	* @access private
-	* @module
-	*
-	*/
-
-	var _controller = (function () {
-	        _createClass(_controller, [{
-	                key: 'get',
-
-	                /** @type {Object} */
-
-	                /** @type {Object} */
-
-	                value: function get() {
-
-	                        return this.proto;
-	                }
-
-	                /** @type {Object} */
-
-	                /** @type {Object} */
-
-	        }, {
-	                key: 'create',
-	                value: function create(target) {
-	                        var _this = this;
-
-	                        var tempReference = {};
-
-	                        var tempReferenceId = null;
-
-	                        var listReference = null;
-
-	                        var time = new Date().getTime();
-
-	                        this.statistics.monitor(function () {
-
-	                                _this.name = "scriptloadtime";
-
-	                                window.utils.loadExternalJS(window.scripts);
-
-	                                tempReference = _this.generatePrototype();
-
-	                                tempReferenceId = tempReference.id;
-
-	                                ///Temporary Fix for Safari and IE
-	                                //      document
-
-	                                listReference = _this.controller.list(tempReferenceId);
-
-	                                _this.initListeners(listReference);
-
-	                                // ^ F
-	                        }).then(function () {
-
-	                                _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
-	                                listReference = _this.controller.list(tempReferenceId);
-
-	                                /// New for After Loaded
-	                                _this.statistics.monitor(function () {
-
-	                                        _this.name = "loadtime";
-
-	                                        //this.initListeners(listReference);
-	                                }).then(function () {
-
-	                                        _this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
-
-	                                        _this.statistics.log("build", time);
-	                                });
-	                        });
-
-	                        return tempReference;
-	                }
-
-	                /** @type {Object} */
-
-	        }, {
-	                key: 'generatePrototype',
-	                value: function generatePrototype() {
-
-	                        this.window = window;
-
-	                        //temp stores the app during the create process, it is then returned
-	                        var temp = {};
-
-	                        temp = new _core2.default(this.app);
-
-	                        temp.window = this.window;
-
-	                        temp.document = document;
-
-	                        temp.id = this.window.appsNextId;
-
-	                        this.window.apps[temp.id] = temp;
-
-	                        this.window.appsNextId++;
-
-	                        return this.window.apps[temp.id];
-	                }
-
-	                /**
-	                *   @param {temp} temp - pass a reference to attach listeners
-	                *   @return {Method} returns self
-	                */
-
-	        }, {
-	                key: 'initListeners',
-	                value: function initListeners(temp) {
-
-	                        if (document.readyState == "complete" || document.readyState == "loaded") {
-	                                // document is already ready to go
-
-	                                console.log('ready');
-	                        }
-
-	                        temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
-
-	                        return temp;
-	                }
-
-	                /** @type {Method} */
-
-	        }]);
-
-	        function _controller() {
-	                _classCallCheck(this, _controller);
-
-	                this.temp = {};
-
-	                this.window = window;
-
-	                if (typeof this.window.scripts != 'array') this.window.scripts = [];
-
-	                this.window.SpiceJS = this;
-
-	                this.window.SJS = this;
-
-	                //if no apps have been defined, create a new array
-	                if (!this.window.apps) this.window.apps = new Array(1);
-
-	                //if appsNextId isnt larger or equal to 0 assign it to 0
-	                if (!this.window.appsNextId >= 0) this.window.appsNextId = 0;
-
-	                //Setup Statistics and Monitoring
-	                this.statistics = new this.constructor._statistics(this);
-
-	                //Reference static controller
-	                this.controller = this.constructor._controller;
-	        }
-
-	        return _controller;
-	})();
-
-	_controller._statistics = _statistics3.default;
-	_controller._controller = {
-
-	        /**
-	        * List all of the instances of SpiceJS or
-	        * @type {method}
-	        * @param {number} id - Specify a specific instance to return.
-	        */
-
-	        list: function list(id) {
-
-	                if (id) return window.apps[id];else if (window.apps.length > 1) return window.apps;else return window.apps[0];
-	        }
-
-	};
-	exports.default = _controller;
-
-/***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _utils = __webpack_require__(194);
+	var _utils = __webpack_require__(193);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _StatisticsController2 = __webpack_require__(195);
-
-	var _StatisticsController3 = _interopRequireDefault(_StatisticsController2);
-
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(194);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5624,9 +5506,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	var _private = new WeakMap();
 
 	/** This module is designed to monitor functions.
 	* @module
@@ -5640,7 +5520,6 @@
 	*
 	*           _this.name = "scriptloadtime";
 	*           _this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
-
 	*           _this.statistics.monitor(function () {
 	*
 	*                   _this.name = "scriptloadtime2";
@@ -5653,242 +5532,231 @@
 	*       });
 	*/
 
-	var Statistics = (function (_StatisticsController) {
-	        _inherits(Statistics, _StatisticsController);
-
-	        function Statistics() {
-	                _classCallCheck(this, Statistics);
-
-	                return _possibleConstructorReturn(this, Object.getPrototypeOf(Statistics).apply(this, arguments));
-	        }
+	var Statistics = (function () {
+
+					/* */
+
+					function Statistics() {
+									_classCallCheck(this, Statistics);
+
+									this.logs = this.constructor.logs;
+									this.logs.type = 'Array';
+
+									this.count = 0;
+
+									_private.set(this, this.constructor.properties);
+					}
+
+					/** Async Monitor of a function, returns duration.
+	    * @type {Promise}
+	    * @param {Function} func - Function to monitor
+	    * @param {Arguments} arg - Arguments to pass
+	    * @return {Number} as duration.
+	    */
 
-	        _createClass(Statistics, [{
-	                key: 'monitor',
+					/**
+	    * Private variables.
+	    * @type {Object}
+	    */
 
-	                /** Async Monitor of a function, returns duration.
-	                 * @type {Promise}
-	                 * @param {Function} func - Function to monitor
-	                 * @param {Arguments} arg - Arguments to pass
-	                 * @return {Number} as duration.
-	                 */
-
-	                value: (function () {
-	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
-	                                var startTime, endTime;
-	                                return regeneratorRuntime.wrap(function _callee$(_context) {
-	                                        while (1) {
-	                                                switch (_context.prev = _context.next) {
-	                                                        case 0:
-	                                                                startTime = new Date().getTime();
-	                                                                _context.next = 3;
-	                                                                return func(arg);
-
-	                                                        case 3:
-	                                                                endTime = new Date().getTime();
-
-	                                                                this.log("time", -startTime + endTime, func.name);
-
-	                                                                return _context.abrupt('return', startTime - endTime);
+					_createClass(Statistics, [{
+									key: 'monitor',
+									value: (function () {
+													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
+																	var startTime, endTime;
+																	return regeneratorRuntime.wrap(function _callee$(_context) {
+																					while (1) {
+																									switch (_context.prev = _context.next) {
+																													case 0:
+																																	startTime = new Date().getTime();
+																																	_context.next = 3;
+																																	return func(arg);
+
+																													case 3:
+																																	endTime = new Date().getTime();
+
+																																	this.log("time", -startTime + endTime, func.name);
+
+																																	return _context.abrupt('return', startTime - endTime);
+
+																													case 6:
+																													case 'end':
+																																	return _context.stop();
+																									}
+																					}
+																	}, _callee, this);
+													}));
+
+													return function monitor(_x, _x2) {
+																	return ref.apply(this, arguments);
+													};
+									})()
+
+									/** Async - Unused Asyn logging....
+	         * @private
+	         */
+
+					}, {
+									key: 'log',
+									value: (function () {
+													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+																	var name,
+																	    curLog,
+																	    newLog,
+																	    hashLog,
+																	    time,
+																	    time2,
+																	    timeHash,
+																	    _args2 = arguments;
+																	return regeneratorRuntime.wrap(function _callee2$(_context2) {
+																					while (1) {
+																									switch (_context2.prev = _context2.next) {
+																													case 0:
+																																	name = '';
+																																	curLog = this.logs;
+																																	newLog = {};
+																																	hashLog = {};
+																																	time = new Date().getTime();
+																																	time2 = new Date().getTime();
+																																	timeHash = this.count + time;
 
-	                                                        case 6:
-	                                                        case 'end':
-	                                                                return _context.stop();
-	                                                }
-	                                        }
-	                                }, _callee, this);
-	                        }));
-
-	                        return function monitor(_x, _x2) {
-	                                return ref.apply(this, arguments);
-	                        };
-	                })()
-
-	                /** Async
-	                 * @private
-	                 */
+																																	timeHash = _utils2.default.hashFnv32a(timeHash.toString());
 
-	        }, {
-	                key: 'log',
-	                value: (function () {
-	                        var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-	                                var name,
-	                                    curLog,
-	                                    newLog,
-	                                    hashLog,
-	                                    time,
-	                                    time2,
-	                                    timeHash,
-	                                    _args2 = arguments;
-	                                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-	                                        while (1) {
-	                                                switch (_context2.prev = _context2.next) {
-	                                                        case 0:
-	                                                                name = '';
-	                                                                curLog = this.logs;
-	                                                                newLog = {};
-	                                                                hashLog = {};
-	                                                                time = new Date().getTime();
-	                                                                time2 = new Date().getTime();
-	                                                                timeHash = this.count + time;
+																																	if (typeof _args2[2] != 'undefined') {
 
-	                                                                timeHash = _utils2.default.hashFnv32a(timeHash.toString());
+																																					name = _args2[2];
 
-	                                                                if (typeof _args2[2] != 'undefined') {
+																																					if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
 
-	                                                                        name = _args2[2];
+																																					hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
 
-	                                                                        if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+																																					hashLog = _args2[1];
 
-	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+																																					newLog[_args2[0]] = hashLog;
 
-	                                                                        hashLog = _args2[1];
+																																					curLog[name] = newLog;
+																																	} else {
 
-	                                                                        newLog[_args2[0]] = hashLog;
+																																					name = _args2[0];
 
-	                                                                        curLog[name] = newLog;
-	                                                                } else {
+																																					if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
 
-	                                                                        name = _args2[0];
+																																					hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
 
-	                                                                        if (name == 'compile') newLog = curLog[name] || new _interfaces._Compile(name);else if (name == 'build') newLog = curLog[name] || new _interfaces._Build(name);else if (name == 'loop') newLog = curLog[name] || new _interfaces._Loop(name);else if (name == 'state') newLog = curLog[name] || new _interfaces._App(name);else newLog = curLog[name] || new _interfaces._Log(name);
+																																					hashLog = _args2[1];
 
-	                                                                        hashLog = newLog[this.count + " " + _args2[0]] || new _interfaces._Log(name);
+																																					newLog[_args2[0]] = hashLog;
 
-	                                                                        hashLog = _args2[1];
+																																					curLog[name] = newLog;
+																																	}
 
-	                                                                        newLog[_args2[0]] = hashLog;
+																																	this.count++;
 
-	                                                                        curLog[name] = newLog;
-	                                                                }
+																																	this.logs = curLog;
 
-	                                                                this.count++;
+																													case 11:
+																													case 'end':
+																																	return _context2.stop();
+																									}
+																					}
+																	}, _callee2, this);
+													}));
 
-	                                                                this.logs = curLog;
+													return function log() {
+																	return ref.apply(this, arguments);
+													};
+									})()
 
-	                                                        case 11:
-	                                                        case 'end':
-	                                                                return _context2.stop();
-	                                                }
-	                                        }
-	                                }, _callee2, this);
-	                        }));
+									/** watch //to come - to call a funnction periodically (based on argument 1)
+	        * @private
+	        	static watch(v){
+	        		let w = v;
+	        	}
+	        */
 
-	                        return function log() {
-	                                return ref.apply(this, arguments);
-	                        };
-	                })()
+					}, {
+									key: 'count',
+									get: function get() {
 
-	                /** watch //to come
-	                 * @private
-	                 */
+													return this.monitor.count;
+									},
+									set: function set(value) {
 
-	        }], [{
-	                key: 'watch',
-	                value: function watch(v) {
+													this.monitor.count = value;
+									}
+					}, {
+									key: 'details',
+									get: function get() {
 
-	                        var w = v;
-	                }
+													return _Statistics_Core._details;
+									},
+									set: function set(value) {
 
-	                /**
-	                * Converts and array of objects to CSV.
-	                * @module
-	                * @access private
-	                */
+													this._details = _Statistics_Core._details;
+									}
+					}], [{
+									key: '_details',
+									value: function _details(type) {
 
-	        }, {
-	                key: 'convertArrayOfObjectsToCSV',
-	                value: function convertArrayOfObjectsToCSV(args) {
+													type = type;
 
-	                        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+													switch (type) {
 
-	                        data = args.data || null;
+																	default:
 
-	                        if (data == null || !data.length) {
+																					return Object.keys(this.logs);
 
-	                                return null;
-	                        }
+																	case 'details':
 
-	                        columnDelimiter = args.columnDelimiter || ',';
+																					return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
 
-	                        lineDelimiter = args.lineDelimiter || '\n';
+																	case 'entries':
 
-	                        keys = Object.keys(data[0]);
+																					return Object.entries(this.logs);
 
-	                        result = '';
+																	case 'values':
 
-	                        result += keys.join(columnDelimiter);
+																					return Object.values(this.logs);
 
-	                        result += lineDelimiter;
+													}
+									}
+					}, {
+									key: 'logs',
+									get: function get() {
 
-	                        data.forEach(function (item) {
+													return this.monitor.logs;
+									},
+									set: function set(value) {
 
-	                                ctr = 0;
+													this.monitor = value;
+									}
+					}, {
+									key: 'monitor',
+									get: function get() {
 
-	                                keys.forEach(function (key) {
+													return this._monitor;
+									},
+									set: function set(value) {
 
-	                                        if (ctr > 0) result += columnDelimiter;
+													this._monitor = value;
+									}
+					}]);
 
-	                                        result += item[key];
+					return Statistics;
+	})();
 
-	                                        ctr++;
-	                                });
+	Statistics.properties = {};
+	Statistics._monitor = {
 
-	                                result += lineDelimiter;
-	                        });
+					count: 0,
 
-	                        return result;
-	                }
+					logs: []
 
-	                /**
-	                * Converts and array of objects to CSV.
-	                * @module
-	                * @access private
-	                */
-
-	        }, {
-	                key: 'writeToCSV',
-	                value: function writeToCSV(name) {
-
-	                        var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
-
-	                        logStream.write('Initial line...');
-
-	                        logStream.end('this is the end line');
-
-	                        var dataString = "";
-
-	                        var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
-
-	                        //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
-
-	                        var csvContent = "data:text/csv;charset=utf-8,";
-
-	                        data.forEach(function (infoArray, index) {
-
-	                                dataString = infoArray.join(",");
-
-	                                csvContent += index < data.length ? dataString + "\n" : dataString;
-	                        });
-
-	                        var encodedUri = encodeURI(csvContent);
-
-	                        var link = document.createElement("a");
-
-	                        link.setAttribute("href", encodedUri);
-
-	                        link.setAttribute("download", name + ".csv");
-
-	                        link.click();
-	                }
-	        }]);
-
-	        return Statistics;
-	})(_StatisticsController3.default);
-
+	};
 	exports.default = Statistics;
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5988,6 +5856,94 @@
 	    })(document, "script", scripts);
 	};
 
+	/**
+	* Converts and array of objects to CSV.
+	* @module
+	* @access private
+	*/
+
+	utils.convertArrayOfObjectsToCSV = function (args) {
+
+	    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+	    data = args.data || null;
+
+	    if (data == null || !data.length) {
+
+	        return null;
+	    }
+
+	    columnDelimiter = args.columnDelimiter || ',';
+
+	    lineDelimiter = args.lineDelimiter || '\n';
+
+	    keys = Object.keys(data[0]);
+
+	    result = '';
+
+	    result += keys.join(columnDelimiter);
+
+	    result += lineDelimiter;
+
+	    data.forEach(function (item) {
+
+	        ctr = 0;
+
+	        keys.forEach(function (key) {
+
+	            if (ctr > 0) result += columnDelimiter;
+
+	            result += item[key];
+
+	            ctr++;
+	        });
+
+	        result += lineDelimiter;
+	    });
+
+	    return result;
+	};
+
+	/**
+	* Converts and array of objects to CSV.
+	* @module
+	* @access private
+	*/
+
+	utils.writeToCSV = function (name) {
+
+	    var logStream = fs.createWriteStream('log.txt', { 'flags': 'a' });
+
+	    logStream.write('Initial line...');
+
+	    logStream.end('this is the end line');
+
+	    var dataString = "";
+
+	    var data = this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
+
+	    //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
+
+	    var csvContent = "data:text/csv;charset=utf-8,";
+
+	    data.forEach(function (infoArray, index) {
+
+	        dataString = infoArray.join(",");
+
+	        csvContent += index < data.length ? dataString + "\n" : dataString;
+	    });
+
+	    var encodedUri = encodeURI(csvContent);
+
+	    var link = document.createElement("a");
+
+	    link.setAttribute("href", encodedUri);
+
+	    link.setAttribute("download", name + ".csv");
+
+	    link.click();
+	};
+
 	window.wait = wait;
 
 	window.utils = utils;
@@ -5995,121 +5951,7 @@
 	exports.default = window.utils;
 
 /***/ },
-/* 195 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* @module
-	* @private
-	*/
-
-	var StatisticsController = (function () {
-	    _createClass(StatisticsController, [{
-	        key: 'count',
-	        get: function get() {
-
-	            return this.monitor.count;
-	        },
-	        set: function set(value) {
-
-	            this.monitor.count = value;
-	        }
-	    }, {
-	        key: 'details',
-	        get: function get() {
-
-	            return StatisticsController._details;
-	        },
-	        set: function set(value) {
-
-	            this._details = StatisticsController._details;
-	        }
-	    }], [{
-	        key: '_details',
-	        value: function _details(type) {
-
-	            type = type;
-
-	            switch (type) {
-
-	                default:
-
-	                    return Object.keys(this.logs);
-
-	                case 'details':
-
-	                    return Object.create(Object.getPrototypeOf(this.logs), Object.getOwnPropertyDescriptors(this.logs));
-
-	                case 'entries':
-
-	                    return Object.entries(this.logs);
-
-	                case 'values':
-
-	                    return Object.values(this.logs);
-
-	            }
-	        }
-	    }, {
-	        key: 'logs',
-	        get: function get() {
-
-	            return this.monitor.logs;
-	        },
-	        set: function set(value) {
-
-	            this.monitor = value;
-	        }
-	    }, {
-	        key: 'monitor',
-	        get: function get() {
-
-	            return this._monitor;
-	        },
-	        set: function set(value) {
-
-	            this._monitor = value;
-	        }
-	    }]);
-
-	    function StatisticsController() {
-	        _classCallCheck(this, StatisticsController);
-
-	        /** dfsdsf
-	        * @type {Array<>} sdf sdf
-	        * @private
-	        */
-
-	        this.logs = this.constructor.logs;
-	        this.logs.type = 'Array';
-
-	        this.count = 0;
-	    }
-
-	    return StatisticsController;
-	})();
-
-	StatisticsController._monitor = {
-
-	    count: 0,
-
-	    logs: []
-
-	};
-	exports.default = StatisticsController;
-
-/***/ },
-/* 196 */
+/* 194 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6198,13 +6040,20 @@
 	*/
 
 	/**
+	* Vector_private
+	* @property
+	* @private
+	*/
+
+	_Interface.properties = { name: 'interface' };
+	var _Vector_private = new WeakMap();
+
+	/**
 	* Vector
 	* @module
 	* @interface
 	* @private
 	*/
-
-	_Interface.properties = { name: 'interface' };
 
 	var _Vector = (function (_Interface2) {
 	    _inherits(_Vector, _Interface2);
@@ -6219,6 +6068,12 @@
 
 	    /**  @type {Number} */
 
+	    /**
+	       * Set Vector private variables
+	       * @type {Object}
+	       * @protected
+	       */
+
 	    function _Vector() {
 	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
@@ -6226,6 +6081,8 @@
 	        _classCallCheck(this, _Vector);
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Vector).call(this));
+
+	        _Vector_private.set(_this, _this.constructor.properties);
 
 	        _this.position = { x: x, y: y };
 
@@ -6256,6 +6113,10 @@
 	* @private
 	*/
 
+	_Vector.properties = {
+	    x: 0,
+	    y: 0
+	};
 	_Vector._x = _number;
 	_Vector._y = _number;
 	_Vector.position = _method;
@@ -6306,18 +6167,117 @@
 	_SJSClass.visuals = _object;
 	_SJSClass.graphics = _object;
 
-	var _Core = (function (_Interface4) {
-	    _inherits(_Core, _Interface4);
+	var _Legacy = (function (_Interface4) {
+	    _inherits(_Legacy, _Interface4);
 
-	    function _Core() {
-	        _classCallCheck(this, _Core);
+	    function _Legacy() {
+	        _classCallCheck(this, _Legacy);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(_Legacy).apply(this, arguments));
 	    }
 
-	    /**  @type {Number} */
+	    _createClass(_Legacy, [{
+	        key: 'create',
 
-	    return _Core;
+	        /**
+	        * Legacy functions.
+	        * @method
+	           * @param {Event} [event] - Passing of the event.
+	           * @param {Element} [anchorObj] - Element to click.
+	        */
+
+	        value: function create(a) {
+	            //console.warn('	    create(a)');
+	            return this.Construct(a || {}, this.client.room);
+	        }
+
+	        /*
+	            getFps(){
+	                 return this.client.update.step.fps;
+	           }
+	        	*/
+
+	    }, {
+	        key: 'getCurrent',
+	        value: function getCurrent() {
+	            //console.warn('	    getCurrent()');
+	            return this.client.update.state.current;
+	        }
+	    }, {
+	        key: 'getConnection',
+	        value: function getConnection() {
+	            //console.warn('	    getConnection()');
+	            return this.ext.connect.offline;
+	        }
+	    }, {
+	        key: 'getConnectionError',
+	        value: function getConnectionError() {
+	            //console.warn('	    getConnectionError()');
+	            return this.ext.connect.error;
+	        }
+	    }, {
+	        key: 'getConnectionAttempts',
+	        value: function getConnectionAttempts() {
+	            //console.warn('	    getConnectionAttempts()');
+	            return this.ext.connect.connectionAttempts;
+	        }
+	    }, {
+	        key: 'getDelta',
+	        value: function getDelta() {
+	            //console.warn('	    getDelta()');
+	            return this.client.update.step.delta;
+	        }
+	    }, {
+	        key: 'getScale',
+	        value: function getScale() {
+	            //console.warn('	    getScale()');
+	            return this.client.scale;
+	        }
+	    }, {
+	        key: 'getWidth',
+	        value: function getWidth() {
+	            //console.warn('	    getWidth()');
+	            return this.client.setWidth;
+	        }
+	    }, {
+	        key: 'getHeight',
+	        value: function getHeight() {
+	            //console.warn('	    getHeight()');
+	            return this.client.setHeight;
+	        }
+	    }, {
+	        key: 'getScaledWidth',
+	        value: function getScaledWidth() {
+	            //console.warn('	    getScaledWidth()');
+	            return this.client.width;
+	        }
+	    }, {
+	        key: 'getScaledHeight',
+	        value: function getScaledHeight() {
+	            //console.warn('	    getScaledHeight()');
+	            return this.client.height;
+	        }
+	    }, {
+	        key: 'setTitle',
+	        value: function setTitle(title) {
+	            //console.warn('	    ');
+	            return document.title == title ? document.title : document.title = title;
+	        }
+	    }, {
+	        key: 'setState',
+	        value: function setState(state) {
+	            //console.warn('	    ');
+	            return this.client.update.state.set(state, true);
+	        }
+	    }, {
+	        key: 'toggleWidescreen',
+	        value: function toggleWidescreen() {
+	            //console.warn('	    toggleWidescreen()');
+	            return this.client.update.fullscale = !this.client.update.fullscale;
+	        }
+	    }]);
+
+	    return _Legacy;
 	})(_Interface);
 
 	/*  Extends SJSClass
@@ -6334,7 +6294,6 @@
 	* @private
 	*/
 
-	_Core._fps = _number;
 	var doc = function doc() {
 
 	    return document;
@@ -6685,6 +6644,7 @@
 	    return _Build;
 	})();
 
+	exports._Interface = _Interface;
 	exports._Vector = _Vector;
 	exports._SJSClass = _SJSClass;
 	exports._Log = _Log;
@@ -6693,60 +6653,242 @@
 	exports._Canvas_Core = _Canvas_Core;
 	exports._App = _App;
 	exports._Build = _Build;
-	exports._Core = _Core;
+	exports._Legacy = _Legacy;
 
 /***/ },
-/* 197 */
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _app = __webpack_require__(196);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* Contains functions necessary to build the application.
+	* @private
+	*/
+
+	var _Build = (function () {
+
+		/**
+	 *	Attaches a reference to the Statistics module.
+	 *	@type {Object}
+	 */
+
+		function _Build() {
+			_classCallCheck(this, _Build);
+
+			this.buildWindowReferences();
+		}
+
+		/**
+	 *	Generates the app prototype.
+	 *	@type {Object}
+	 */
+
+		_createClass(_Build, [{
+			key: "buildPrototype",
+			value: function buildPrototype() {
+
+				/* temp stores the app during the create process, it is then returned */
+
+				var temp = {};
+
+				temp = new _app2.default(this.app);
+
+				temp.window = this.window;
+
+				temp.document = document;
+
+				temp.controller = this;
+
+				temp.id = this.window.appsNextId;
+
+				this.window.apps[temp.id] = temp;
+
+				this.window.appsNextId++;
+
+				return this.window.apps[temp.id];
+			}
+
+			/**
+	  *	Initalize the listeners for the application.
+	  *   @param {temp} temp - pass a reference to attach listeners
+	  *   @return {Method} returns self
+	  */
+
+		}, {
+			key: "buildListeners",
+			value: function buildListeners(temp) {
+
+				if (document.readyState == "complete" || document.readyState == "loaded") {
+					// document is already ready to go
+
+					console.log('ready');
+				}
+
+				temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
+
+				return temp;
+			}
+
+			/**
+	  *	Attaches references to the global.window object.
+	  *	@type {Object}
+	  */
+
+		}, {
+			key: "buildWindowReferences",
+			value: function buildWindowReferences() {
+
+				var windowReference = window;
+
+				if (typeof windowReference.scripts != 'array') windowReference.scripts = [];
+
+				windowReference.SpiceJS = windowReference.SJS = this;
+
+				/* if no apps have been defined, create a new array */
+
+				if (!windowReference.apps) windowReference.apps = new Array(1);
+
+				/* if appsNextId isnt larger or equal to 0 assign it to 0 */
+
+				if (!windowReference.appsNextId >= 0) windowReference.appsNextId = 0;
+			}
+
+			/**
+	  *	Begins the app build promise.
+	  *	@return {Object} a - b
+	  */
+
+		}, {
+			key: "create",
+			value: function create() {
+				var _this = this;
+
+				var tempReference = {};
+
+				var tempReferenceId = null;
+
+				var listReference = null;
+
+				var time = new Date().getTime();
+
+				this.statistics.monitor(function () {
+
+					//this.name = "scriptloadtime";
+
+					window.utils.loadExternalJS(window.scripts);
+
+					tempReference = _this.buildPrototype();
+
+					tempReferenceId = tempReference.id;
+
+					///Temporary Fix for Safari and IE
+					//      document
+
+					listReference = _this.controller.list(tempReferenceId);
+
+					_this.buildListeners(listReference);
+
+					// ^ F
+				}).then(function () {
+
+					_this.statistics.log("compileloadtime", new Date().getTime() - time, 'build');
+
+					listReference = _this.controller.list(tempReferenceId);
+
+					/// New for After Loaded
+					_this.statistics.monitor(function () {
+
+						//this.name = "loadtime";
+
+						//this.initListeners(listReference);
+
+					}).then(function () {
+
+						_this.statistics.log("scriptloadtime", new Date().getTime() - time, 'build');
+
+						_this.statistics.log("build", time);
+					});
+				});
+
+				return tempReference;
+			}
+		}]);
+
+		return _Build;
+	})();
+
+	exports.default = _Build;
+	;
+
+/***/ },
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	"strict mode";
-	/** @module core */
+	/** @module app */
 
 	/** Name. */
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+				value: true
 	});
 	exports.name = undefined;
 
-	var _options2 = __webpack_require__(198);
-
-	var _options3 = _interopRequireDefault(_options2);
-
-	var _input2 = __webpack_require__(199);
-
-	var _input3 = _interopRequireDefault(_input2);
-
-	var _math2 = __webpack_require__(205);
+	var _math2 = __webpack_require__(197);
 
 	var _math3 = _interopRequireDefault(_math2);
 
-	var _client2 = __webpack_require__(206);
+	var _options2 = __webpack_require__(199);
+
+	var _options3 = _interopRequireDefault(_options2);
+
+	var _input2 = __webpack_require__(200);
+
+	var _input3 = _interopRequireDefault(_input2);
+
+	var _client2 = __webpack_require__(205);
 
 	var _client3 = _interopRequireDefault(_client2);
 
-	var _interfaces = __webpack_require__(196);
+	var _core = __webpack_require__(206);
 
-	var _canvas2 = __webpack_require__(208);
+	var _core2 = _interopRequireDefault(_core);
+
+	var _canvas2 = __webpack_require__(207);
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
 
-	var _user2 = __webpack_require__(209);
+	var _user2 = __webpack_require__(208);
 
 	var _user3 = _interopRequireDefault(_user2);
 
-	var _ext2 = __webpack_require__(210);
+	var _ext2 = __webpack_require__(209);
 
 	var _ext3 = _interopRequireDefault(_ext2);
 
-	var _loader = __webpack_require__(214);
+	var _loader = __webpack_require__(213);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _particles = __webpack_require__(216);
+	var _particles = __webpack_require__(215);
 
 	var _particles2 = _interopRequireDefault(_particles);
 
@@ -6769,1772 +6911,301 @@
 	var date = new Date();
 
 	/**
+	* _Core_private
+	* @property
+	* @private
+	*/
+
+	//let _private = new WeakMap();
+
+	/**
 	* Core of the framework, initalizes client, input and listeners.
 	* @protected
 	* @module
 	*
 	*/
 
-	var _core = (function (_Core2) {
-	    _inherits(_core, _Core2);
+	var _App = (function (_Core2) {
+				_inherits(_App, _Core2);
 
-	    _createClass(_core, [{
-	        key: 'start',
+				/** Builds the core modules of the Application. */
 
-	        /**
-	        * Method invoked to start the application
-	        * @method
-	        * @param {x} Width of the canvas
-	        * @param {y} Height of the canvas
-	        */
+				function _App() {
+							_classCallCheck(this, _App);
 
-	        value: function start(w, h) {
-	            var _this2 = this;
+							//_private.set(this,this.constructor.properties);
 
-	            var name = "";
+							var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_App).call(this));
 
-	            var self = this;
+							_this.time = 0;
 
-	            this.client = this.Construct(this.client.prototype, this.client.constructor);
+							//this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
 
-	            this.canvas = new _canvas3.default(this);
+							_this.options = _options3.default;
 
-	            var usearrow = true;
+							_this.user = _user3.default;
 
-	            /**
-	            /* If use arrow functions is set to true
-	            /*   unknown and keeping for debugging
-	            */
+							_this.ext = _ext3.default;
 
-	            if (usearrow) {
+							_this.input = _input3.default;
 
-	                setTimeout(function () {
+							_this.canvas = _canvas3.default;
 
-	                    function AppLoop() {
-	                        self.client.loop();
-	                    }
+							_this.client = _client3.default;
 
-	                    function AppLoopData() {
-	                        self.client.loopData();
-	                    }
+							_this.math = new _math3.default();
 
-	                    _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-	                }, this.time);
-	            } else {
+							return _this;
+				}
 
-	                setTimeout(function () {
+				/**
+	   * This function starts the application.
+	   * @method
+	   * @protected
+	   */
 
-	                    function AppLoop() {
-	                        self.client.loop();
-	                    }
+				_createClass(_App, [{
+							key: 'start',
+							value: function start(w, h) {
 
-	                    function AppLoopData() {
-	                        self.client.loopData();
-	                    }
+										var name = '';
 
-	                    self.client.initalize(AppLoop, AppLoopData, self.scale);
-	                }, this.time);
-	            }
+										this.client = this.Construct(this.client.prototype, this.client.constructor);
 
-	            this.client.init(name, w, h);
+										this.canvas = new _canvas3.default(this);
 
-	            this.input = new this.input(this);
-	        }
+										this.loop(this);
 
-	        /**
-	        * OnLoad event
-	        * @method
-	        * @param {self} Pass a reference to the canvas.
-	        */
+										this.client.init(w || this.app.options.width, h || this.app.options.height);
 
-	    }, {
-	        key: 'OnLoad',
-	        value: function OnLoad(self) {
+										this.input = new this.input(this);
+							}
 
-	            self.start(480, 320);
-	        }
+							/**
+	      * The main loop for the application
+	      * @method
+	      * @private
+	      */
 
-	        /**
-	        * OnApplicationLoad event (when the first cycle happens)
-	        * @method
-	        * @param {self} Pass a reference to the event.
-	        */
+				}, {
+							key: 'loop',
+							value: function loop(self) {
+										var _this2 = this;
 
-	    }, {
-	        key: 'OnApplicationLoad',
-	        value: function OnApplicationLoad(evt) {
+										//Use arrow function if available
+										var usearrow = true;
 
-	            //console.log(evt)
-	            //Run .OnLoad
-	            evt.target.app.OnLoad(evt.target.app);
+										if (usearrow) {
 
-	            console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
-	        }
+													setTimeout(function () {
 
-	        /**
-	        * Listener event polyfill
-	        * @method
-	        * @param {obj} object that it is firing on
-	        * @param {evt} passing the event
-	        * @param {listener} listener type
-	        * @param {param} any paramaters
-	        */
+																function AppLoop() {
+																			self.client.loop();
+																}
 
-	    }, {
-	        key: 'Listener',
-	        value: function Listener(obj, evt, listener, param) {
+																function AppLoopData() {
+																			self.client.loopData();
+																}
 
-	            if (_typeof(obj[0]) === "object") obj = obj[0] || window;
+																_this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+													}, this.time);
+										} else {
 
-	            //If addEventListener exist, add it, otherwise attachEvent
-	            if (obj.addEventListener) obj.addEventListener(evt, listener, false);else obj.attachEvent("on" + evt, listener);
+													setTimeout(function () {
 
-	            obj.app = window.apps[this.id] = this;
-	        }
+																function AppLoop() {
+																			self.client.loop();
+																}
 
-	        /**
-	        * Constructs prototype/constructor
-	        * @param {number} x - position.x
-	        * @param {number} y - position.y
-	        */
+																function AppLoopData() {
+																			self.client.loopData();
+																}
 
-	    }, {
-	        key: 'Construct',
-	        value: function Construct(prototype, constructor) {
+																self.client.initalize(AppLoop, AppLoopData, self.scale);
+													}, this.time);
+										}
+							}
+				}, {
+							key: 'OnLoad',
 
-	            //Cache vars
-	            var isObj = false;
-	            var obj = prototype;
-	            var proto = prototype;
-	            var construct = constructor;
-	            var ret = {};
+							/**
+	      * Triggers when the application first loops.
+	      * @method
+	         * @param {Object} [self] - Reference to the app.
+	      * @override
+	      */
 
-	            //if prototype contains a prototype and constructor
-	            if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-	                construct = obj.constructor;
-	                proto = obj.prototype;
-	                isObj = true;
-	            }
+							value: function OnLoad(self) {
 
-	            //Grab type of constructor
-	            var c = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+										self.start();
+							}
 
-	            //Return & Create object based on constructor
-	            switch (c) {
+							/**
+	      * Triggers on dom content load.
+	      * @method
+	         * @param {Event} [evt] - The passing event.
+	      * @override
+	      */
+
+				}, {
+							key: 'OnApplicationLoad',
+							value: function OnApplicationLoad(evt) {
 
-	                case 'undefined':
+										//Run .OnLoad
+										evt.target.app.OnLoad(evt.target.app);
 
-	                    //Use only the prototype
-	                    ret = Object.create(proto);
+										console.log(evt.target.app.getCurrent().name + ': OnApplicationLoad');
+							}
 
-	                    break;
-	                case 'object':
+							/**
+	      * Event listener polyfill.
+	      * @method
+	         * @param {Element} [obj] - Element to trigger event on, fallback on window.
+	         * @param {Event} [evt] - The passing event.
+	         * @param {String} [listener] - The listener to build.
+	         * @param {Object} [param] - Paramater to pass.
+	      *
+	      * @example
+	      * Application.Listener(window,'click',function(){console.log('eh');},'');
+	      * Application.Click(new Event,window);
+	      */
 
-	                    //Use constructor as object
-	                    ret = Object.create(proto, construct);
+				}, {
+							key: 'Listener',
+							value: function Listener(obj, evt, listener, param) {
 
-	                    break;
-	                case 'function':
+										/* Check obj param */
+
+										if (_typeof(obj[0]) === "object") {
 
-	                    //Use constructor as function
-	                    ret = Object.create(proto, construct(this));
+													obj = obj[0] || window;
+										}
 
-	                    break;
-	                default:
+										/* If addEventListener exist, add it, otherwise attachEvent. */
 
-	                    //Expected a type
-	                    console.log("Expected 'object' or 'function': Type is " + c);
-	            }
+										if (obj.addEventListener) {
 
-	            if (isObj) {
-	                prototype = ret;
-	            }
+													obj.addEventListener(evt, listener, false);
+										} else {
 
-	            return ret;
-	        }
-	    }, {
-	        key: 'click',
+													obj.attachEvent("on" + evt, listener);
+										}
 
-	        /**
-	        * on click(triggerclick?)
-	        * @param {number} x - position.x
-	        * @param {number} y - position.y
-	        */
+										/* Assign App Reference */
 
-	        value: function click(event, anchorObj) {
+										obj.app = window.apps[this.id] = this;
+							}
+				}, {
+							key: 'Construct',
 
-	            //If .click
-	            if (anchorObj.click) {
+							/**
+	      * Object constructor/factory polyfill.
+	      * @method
+	         * @param {Object} [prototype] - An object prototype.
+	         * @param {Object} [constructor] - An object constructor.
+	      */
 
-	                anchorObj.click();
-	            } else if (document.createEvent) {
+							value: function Construct(prototype, constructor) {
 
-	                if (event.target !== anchorObj) {
+										var isObj = false;
+										var obj = prototype;
+										var proto = prototype;
+										var construct = constructor;
+										var ret = {};
+										var type = undefined;
 
-	                    var evt = document.createEvent("MouseEvents");
+										/* if prototype contains a prototype and constructor. */
 
-	                    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+										if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+													construct = obj.constructor;
+													proto = obj.prototype;
+													isObj = true;
+										}
 
-	                    anchorObj.dispatchEvent(evt);
-	                }
-	            }
-	        }
-	    }, {
-	        key: 'version',
+										/* Grab type of constructor */
 
-	        /**  @type {Number} */
+										type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
 
-	        get: function get() {
+										/* Return & Create object based on constructor */
+										switch (type) {
 
-	            return this.constructor.VN;
-	        }
+													/* Use only the prototype */
+													case 'undefined':
+																ret = Object.create(proto);
+																break;
 
-	        /**  @type {Number} */
+													/* Use constructor as object */
+													case 'object':
+																ret = Object.create(proto, construct);
+																break;
 
-	        ,
-	        set: function set(val) {
+													/* Use constructor as function */
+													case 'function':
+																ret = Object.create(proto, construct(this));
+																break;
 
-	            this.constructor.VN = val;
-	        }
+													/* Expected a type */
+													default:
+																console.log("Expected 'object' or 'function': Type is " + c);
 
-	        /**  @type {Number} */
+										}
 
-	    }, {
-	        key: 'fps',
-	        get: function get() {
+										if (isObj) prototype = ret;
 
-	            return Number(this.client.fps);
-	        }
-	    }]);
+										return ret;
+							}
 
-	    /**
-	    * Builds the core modules of the Application.
-	    */
+							/**
+	      * Artificial click
+	      * @method
+	         * @param {Event} [event] - Passing of the event.
+	         * @param {Element} [anchorObj] - Element to click.
+	      */
 
-	    function _core() {
-	        _classCallCheck(this, _core);
+				}, {
+							key: 'click',
+							value: function click(event, anchorObj) {
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_core).call(this));
+										this.Click(event, anchorObj);
+							}
 
-	        _this.time = 0;
+							/**
+	      * Artificial Click
+	      * @method
+	         * @param {Event} [event] - Passing of the event.
+	         * @param {Element} [anchorObj] - Element to click.
+	      */
 
-	        _this.main = { name: "Main", init: function init() {}, update: function update() {}, draw: function draw() {
-	                return true;
-	            } };
+				}, {
+							key: 'Click',
+							value: function Click(event, anchorObj) {
 
-	        _this.user = _user3.default;
+										if (typeof anchorObj != 'undefined') if (anchorObj.click) {
 
-	        _this.ext = _ext3.default;
+													anchorObj.click();
+										} else if (document.createEvent) {
 
-	        _this.input = _input3.default;
+													if (event.target !== anchorObj) {
 
-	        _this.canvas = _canvas3.default;
+																var evt = document.createEvent("MouseEvents");
 
-	        _this.client = _client3.default;
+																evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 
-	        _this.math = new _math3.default();
+																anchorObj.dispatchEvent(evt);
+													}
+										}
+							}
+				}]);
 
-	        var watch = (_this.options = _options3.default).watch;
+				return _App;
+	})(_core2.default);
 
-	        if (watch.fps == true) {
+	;
 
-	            setInterval(function () {
-	                console.log(_this.fps);
-	            }, 200);
-	        }
-
-	        return _this;
-	    }
-
-	    _createClass(_core, [{
-	        key: 'create',
-
-	        /**
-	        * Legacy Functions
-	        *
-	        *
-	        *
-	        *
-	        *
-	        *
-	        *
-	        *
-	        *
-	        *
-	        */
-
-	        value: function create(a) {
-
-	            return this.Construct(a || {}, this.client.room);
-	        }
-	    }, {
-	        key: 'getCurrent',
-	        value: function getCurrent() {
-
-	            return this.client.update.state.current;
-	        }
-	    }, {
-	        key: 'getConnection',
-	        value: function getConnection() {
-
-	            return this.ext.connect.offline;
-	        }
-	    }, {
-	        key: 'getConnectionError',
-	        value: function getConnectionError() {
-
-	            return this.ext.connect.error;
-	        }
-	    }, {
-	        key: 'getConnectionAttempts',
-	        value: function getConnectionAttempts() {
-
-	            return this.ext.connect.connectionAttempts;
-	        }
-	    }, {
-	        key: 'getDelta',
-	        value: function getDelta() {
-
-	            return this.client.update.step.delta;
-	        }
-	    }, {
-	        key: 'getScale',
-	        value: function getScale() {
-
-	            return this.client.scale;
-	        }
-	    }, {
-	        key: 'getWidth',
-	        value: function getWidth() {
-
-	            return this.client.setWidth;
-	        }
-	    }, {
-	        key: 'getHeight',
-	        value: function getHeight() {
-
-	            return this.client.setHeight;
-	        }
-	    }, {
-	        key: 'getScaledWidth',
-	        value: function getScaledWidth() {
-
-	            return this.client.width;
-	        }
-	    }, {
-	        key: 'getScaledHeight',
-	        value: function getScaledHeight() {
-
-	            return this.client.height;
-	        }
-	    }, {
-	        key: 'setTitle',
-	        value: function setTitle(title) {
-
-	            return document.title == title ? document.title : document.title = title;
-	        }
-	    }, {
-	        key: 'setState',
-	        value: function setState(state) {
-
-	            return this.client.update.state.set(state, true);
-	        }
-	    }, {
-	        key: 'toggleWidescreen',
-	        value: function toggleWidescreen() {
-
-	            return this.client.update.fullscale = !this.client.update.fullscale;
-	        }
-	    }]);
-
-	    return _core;
-	})(_interfaces._Core);
-
-	exports.default = _core;
+	exports.default = _App;
 
 /***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	exports.default = {
-
-	    overridescroll: false,
-	    drag: 0,
-	    targetfps: 60,
-	    mute: false,
-
-	    watch: {
-
-	        fps: false
-
-	    },
-
-	    paths: {
-
-	        data: "data/",
-	        images: "images/",
-	        url: ""
-
-	    },
-
-	    target: {
-	        canvas: null, // String - Id of the main canvas
-	        buffer: null, // String - Id of the buffer canvas
-	        blitter: null },
-
-	    // String - Id of the blitting canvas
-	    global: {
-
-	        globalCompositeOperation: "destination-in" },
-
-	    //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
-
-	    flags: {
-
-	        canvas: true,
-	        mstouch: true,
-	        seamless: true,
-	        tight: true,
-	        touchprevent: true,
-	        opaque: true
-
-	    },
-
-	    canvas: {
-
-	        override: false, //Toggle the use of options.canvas
-	        name: 'canvas', //Use canvas.name
-	        buffername: 'buffer', //Use canvas.buffer
-	        buffer: true, //Toggle the use of double-buffering
-	        background: '#000000', //Assign canvas element background colour
-
-	        //Assign canvas element position properties
-	        position: {
-	            //position:'absolute',
-	            //top:0,
-	            //left:window.innerWidth/2,
-	            //center:true,
-	            //z:1
-	            position: 'absolute',
-	            top: "",
-	            left: window.innerWidth * 2,
-	            //left:"",
-	            center: false,
-	            z: 1
-	        },
-
-	        //Assign canvas size properties
-	        size: {
-
-	            width: window.innerWidth,
-	            height: window.innerHeight
-
-	        }
-
-	    },
-
-	    msFlags: {
-
-	        msZoom: false
-
-	    },
-
-	    //Override Functions
-	    override: {
-
-	        keyboard: true,
-	        mouse: true,
-	        MSHoldVisual: false,
-	        SelectStart: false,
-	        ContextMenu: true,
-	        Drag: true
-
-	    },
-
-	    //Return Options Value
-	    get: function get(attr) {
-
-	        //If Attribute
-	        if (attr) {
-
-	            //Get list of apps
-	            var list = SpiceJS.controller.list();
-
-	            //list is object
-	            if ((typeof list === "undefined" ? "undefined" : _typeof(list)) == "object") {
-	                //return window.apps.option.
-	                for (var attrname in this) {
-	                    if (attrname == attr) return eval("list.options." + attrname);
-	                }
-	            } else {
-	                for (var i = window.apps.length - 1; i >= 0; i--) {
-	                    for (var attrname in this) {
-	                        if (attrname == attr) {
-	                            var l = [];
-	                            l.push(eval("list[" + i + "].options." + attrname));
-	                        }
-	                    }
-	                }return l;
-	            }
-
-	            return null;
-	        } else return this;
-	    },
-
-	    set: function set(options) {
-
-	        for (var attrname in options) {
-	            this[attrname] = options[attrname];
-	        };
-
-	        return this;
-	    }
-
-	};
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _inputcontroller2 = __webpack_require__(200);
-
-	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* Main game controller. Handles instanciating instances and tracking information.
-	* @access private
-	* @module
-	*
-	*/
-
-	var Input = (function (_inputcontroller) {
-	        _inherits(Input, _inputcontroller);
-
-	        function Input(app, pointerPoint) {
-	                _classCallCheck(this, Input);
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
-
-	                _this.delay = 0;
-
-	                _this.touch = false;
-
-	                _this.touch_dist = { x: 0, y: 0 };
-
-	                _this.key = false;
-
-	                _this.keyPower = 0;
-
-	                _this.keyup = false;
-
-	                _this.keydown = false;
-
-	                _this.codes = [];
-
-	                _this.codeList = [];
-
-	                _this.control = false;
-
-	                _this.confine = false;
-
-	                _this.preventNext = true;
-
-	                _this.init_options();
-
-	                _this.keyController.init(_this.app);
-
-	                _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
-
-	                _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
-
-	                _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
-
-	                _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
-
-	                _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
-
-	                _this.setup_universalMultitouch();
-
-	                _this.setup_documentListeners();
-
-	                //this.setup_msUniversalAppTouch();
-
-	                return _this;
-	        }
-
-	        _createClass(Input, [{
-	                key: "preventDefault",
-	                value: function preventDefault(e) {
-	                        e.preventDefault();return e.target.app;
-	                }
-	        }, {
-	                key: "preventNextInput",
-	                value: function preventNextInput() {
-	                        return this.preventNext = true;
-	                }
-	        }, {
-	                key: "confineMouse",
-	                value: function confineMouse() {
-
-	                        return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
-	                }
-	        }, {
-	                key: "init_options",
-	                value: function init_options() {
-
-	                        /*	Overrides the selection start event for selecting events	*/
-
-	                        if (!this.app.options.get("override").SelectStart) {
-	                                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
-	                        }
-
-	                        /*	Overrides the 'holdtouch, MSHoldVisual' event */
-
-	                        if (!this.app.options.get("override").MSHoldVisual) {
-	                                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
-	                        }
-
-	                        /* Overrides the ContextMenu event */
-
-	                        if (this.app.options.get("override").ContextMenu) {
-	                                this.app.document.oncontextmenu = this.preventDefault;
-	                                this.app.window.self.oncontextmenu = this.preventDefault;
-	                        }
-
-	                        /*	Overrides dragstart event		*/
-
-	                        if (this.app.options.get("override").Drag) {
-	                                this.app.document.ondragstart = this.preventDefault;
-	                                this.app.window.self.ondragstart = this.preventDefault;
-	                        }
-
-	                        /*	CSS based Overrides
-	                                  - mstouch
-	                                - seamless ( toggles overflow )
-	                                - tight ( zeros padding and margin )
-	                          */
-
-	                        if (this.app.options.get("flags").mstouch) {
-	                                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
-	                        }
-
-	                        if (this.app.options.get("flags").seamless) {
-	                                this.app.document.body.style.overflow = "hidden";
-	                        }
-
-	                        if (this.app.options.get("flags").tight) {
-	                                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
-	                        }
-	                }
-	        }, {
-	                key: "update",
-	                value: function update() {
-
-	                        this.confineMouse();
-
-	                        //Reset variables
-	                        this.press = false;
-	                        this.touch = 0;
-	                        this.app.window.inside = 0;
-	                        this.wheelDelta = 0;
-
-	                        this.pressed ? this.duration++ : this.duration = 0;
-
-	                        this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
-
-	                        //this.setup_msUniversalAppTouch();
-
-	                        if (this.delay > 0) {
-
-	                                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
-	                        }
-
-	                        //reset code released, unused?
-	                        this.codereleased = 0;
-
-	                        return true;
-	                }
-	        }, {
-	                key: "setup_documentListeners",
-	                value: function setup_documentListeners() {
-
-	                        var doc = document;
-	                        var win = window;
-
-	                        doc.addEventListener("mousedown", function () {
-	                                window.focus();
-	                        }, true);
-	                        doc.addEventListener("touchstart", function () {
-	                                window.focus();
-	                        }, true);
-
-	                        // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
-	                        win.addEventListener("blur", function () {
-	                                self.onWindowBlur();
-	                        });
-
-	                        win.onWindowBlur = function (evt) {
-
-	                                console.log('blur');
-	                                SJS.controller.list().input.pointerup(evt);
-	                        };
-
-	                        win.setSuspended = function (state) {
-
-	                                if (state) console.log('suspended');else console.log('resume');
-	                        };
-
-	                        // Pause and resume on page becoming visible/invisible
-	                        function onVisibilityChanged() {
-	                                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
-	                        };
-
-	                        doc.addEventListener("visibilitychange", onVisibilityChanged, false);
-	                        doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
-	                        doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
-	                        doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
-	                }
-	        }, {
-	                key: "setup_universalMultitouch",
-	                value: function setup_universalMultitouch() {
-
-	                        //touch-action: none;
-
-	                        if (window.PointerEvent) {
-	                                // Pointer events are supported.
-
-	                                // Test for touch capable hardware
-	                                if (navigator.maxTouchPoints) {}
-
-	                                // Test for multi-touch capable hardware
-	                                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
-
-	                                // Check the maximum number of touch points the hardware supports
-	                                //var touchPoints = navigator.maxTouchPoints;
-	                        }
-
-	                        this.multi = {
-
-	                                list: []
-
-	                        };
-
-	                        this.touched = {
-
-	                                count: 0,
-	                                uplist: [],
-	                                downlist: [],
-	                                last: { x: 0, y: 0 },
-	                                CheckTouchUp: function CheckTouchUp() {
-
-	                                        return this.uplist[this.uplist.length - 1];
-	                                },
-	                                CheckTouchDown: function CheckTouchDown() {}
-
-	                        };
-	                }
-	        }, {
-	                key: "setup_msUniversalAppTouch",
-	                value: function setup_msUniversalAppTouch() {
-
-	                        return;
-
-	                        var i = 0;
-
-	                        var data = {
-	                                app: this.app,
-	                                x: 0,
-	                                y: 0
-	                        };
-
-	                        if (this.pressed === false && this.lastpressed === true) {
-	                                this.released = true, this.dist.x = 0, this.dist.y = 0;
-
-	                                this.controls.up(data);
-	                        }
-
-	                        this.lastpressed = this.pressed;
-
-	                        if (!this.wininitalize) try {
-
-	                                //var w = Windows;
-	                                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-
-	                                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
-	                                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
-	                                this.wininitalize = true;
-
-	                                data = {
-	                                        app: this.app,
-	                                        x: this.winposition.x,
-	                                        y: this.winposition.y
-	                                };
-	                        } catch (e) {
-
-	                                data = {
-	                                        app: this.app,
-	                                        x: 0,
-	                                        y: 0
-	                                };
-	                        } else {
-	                                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
-	                                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
-	                                this.pressed = this.winpoint.isInContact;
-	                                this.pointerDevice = this.winpoint.pointerDevice;
-
-	                                var pt = this.pointerPoint.getCurrentPoint(1);
-	                                var ptTargetProperties = pt.properties;
-
-	                                if (this.released) {
-
-	                                        var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
-
-	                                        switch (pt.pointerDevice.pointerDeviceType) {
-	                                                case "mouse":
-	                                                case 2:
-	                                                        details += "\nPointer type: mouse";
-	                                                        details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
-	                                                        details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
-	                                                        details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
-	                                                        details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
-	                                                        details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
-	                                                        break;
-	                                                case "pen":
-	                                                        details += "\nPointer type: pen";
-	                                                        if (pt.isInContact) {
-	                                                                details += "\nPressure: " + ptTargetProperties.pressure;
-	                                                                details += "\nrotation: " + ptTargetProperties.rotation;
-	                                                                details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
-	                                                        }
-	                                                        break;
-	                                                case "touch":
-	                                                        details += "\nPointer type: touch";
-	                                                        details += "\nPressure: " + ptTargetProperties.pressure;
-	                                                        details += "\nrotation: " + ptTargetProperties.rotation;
-	                                                        details += "\nTilt X: " + ptTargetProperties.tiltX;
-	                                                        details += "\nTilt Y: " + ptTargetProperties.tiltY;
-	                                                        break;
-	                                                default:
-	                                                        details += "\nPointer type: " + "n/a";
-	                                                        break;
-	                                        }
-	                                        details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
-	                                        //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
-	                                        //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
-	                                        //console.log(pt.pointerDevice);
-	                                        //console.log(details);
-	                                }
-	                                i = this.winpoint;
-
-	                                data.x = this.winposition.x;
-	                                data.y = this.winposition.y;
-
-	                                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
-	                        }
-
-	                        if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
-
-	                        // console.log(i)
-	                        //  if (Windows)
-	                        //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
-	                        //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
-	                }
-	        }]);
-
-	        return Input;
-	})(_inputcontroller3.default);
-
-	exports.default = Input;
-
-/***/ },
-/* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _vector = __webpack_require__(201);
-
-	var _vector2 = _interopRequireDefault(_vector);
-
-	var _interfaces = __webpack_require__(196);
-
-	var _inputlistener = __webpack_require__(202);
-
-	var _inputlistener2 = _interopRequireDefault(_inputlistener);
-
-	var _inputkeycontroller = __webpack_require__(203);
-
-	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
-
-	var _inputscrollcontroller = __webpack_require__(204);
-
-	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* Stores input data
-	* @access private
-	* @module
-	*
-	*/
-
-	var inputcontroller = (function (_SJSClass) {
-	        _inherits(inputcontroller, _SJSClass);
-
-	        function inputcontroller() {
-	                _classCallCheck(this, inputcontroller);
-
-	                return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
-	        }
-
-	        _createClass(inputcontroller, [{
-	                key: 'pointerup',
-	                value: function pointerup(evt) {
-
-	                        if (typeof evt === 'undefined') return;
-	                        if (typeof evt.target.app === 'undefined') return;
-
-	                        var target = evt.target.app.input.constructor;
-
-	                        target._pointerup(evt);
-	                }
-	        }, {
-	                key: 'pointermove',
-	                value: function pointermove(evt) {
-
-	                        if (typeof evt === 'undefined') return;
-	                        if (typeof evt.target.app === 'undefined') return;
-
-	                        var target = evt.target.app.input.constructor;
-
-	                        target._pointermove(evt);
-	                }
-	        }, {
-	                key: 'pointerdown',
-	                value: function pointerdown(evt) {
-
-	                        if (typeof evt === 'undefined') return;
-	                        if (typeof evt.target.app === 'undefined') return;
-
-	                        var target = evt.target.app.input.constructor;
-
-	                        target._pointerdown(evt);
-	                }
-	        }, {
-	                key: 'x',
-	                get: function get() {
-
-	                        return this.constructor._x;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._x = value;
-	                }
-	        }, {
-	                key: 'y',
-	                get: function get() {
-
-	                        return this.constructor._y;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._y = value;
-	                }
-	        }, {
-	                key: 'last',
-	                get: function get() {
-
-	                        return this.constructor._last;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._last = value;
-	                }
-	        }, {
-	                key: 'pos',
-	                get: function get() {
-
-	                        return this.constructor._pos;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._pos = value;
-	                }
-	        }, {
-	                key: 'dist',
-	                get: function get() {
-
-	                        return this.constructor._dist;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._dist = value;
-	                }
-	        }, {
-	                key: 'end',
-	                get: function get() {
-
-	                        return this.constructor._end;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._end = value;
-	                }
-	        }, {
-	                key: 'start',
-	                get: function get() {
-
-	                        return this.constructor._start;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._start = value;
-	                }
-	        }, {
-	                key: 'duration',
-	                get: function get() {
-
-	                        return this.constructor._duration;
-	                },
-	                set: function set(value) {
-
-	                        this.constructor._duration = value;
-	                }
-	        }, {
-	                key: 'angle',
-	                get: function get() {
-
-	                        return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
-	                }
-	        }, {
-	                key: 'angleDelta',
-	                get: function get() {
-
-	                        var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
-	                        return delta;
-	                }
-	        }, {
-	                key: 'position',
-	                get: function get() {
-
-	                        return new _vector2.default(this.x, this.y);
-	                },
-	                set: function set(value) {
-
-	                        this.x = value.x;
-	                        this.y = value.y;
-	                }
-	        }, {
-	                key: 'released',
-	                get: function get() {
-
-	                        return this.constructor._released;
-	                },
-	                set: function set(value) {
-
-	                        return this.constructor._released = value;
-	                }
-	        }, {
-	                key: 'pressed',
-	                get: function get() {
-
-	                        return this.constructor._pressed;
-	                },
-	                set: function set(value) {
-
-	                        return this.constructor._pressed = value;
-	                }
-	        }, {
-	                key: 'keyController',
-	                get: function get() {
-
-	                        return this.constructor._keyController;
-	                },
-	                set: function set(value) {
-
-	                        return this.constructor._keyController = value;
-	                }
-	        }, {
-	                key: 'scrollController',
-	                get: function get() {
-
-	                        return this.constructor._scrollController;
-	                },
-	                set: function set(value) {
-
-	                        return this.constructor._scrollController = value;
-	                }
-	        }, {
-	                key: 'horizontal',
-	                get: function get() {
-
-	                        var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
-	                        var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
-	                        var mouse = -this.pressed * this.app.input.dist.x;
-	                        var touch = -this.pressed * this.app.input.dist.x; //was touched
-
-	                        var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	                        var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
-
-	                        return { keyboard: keyboard, touch: touched };
-	                }
-	        }, {
-	                key: 'vertical',
-	                get: function get() {
-
-	                        var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
-	                        var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
-	                        var mouse = this.pressed * this.app.input.dist.y;
-	                        var touch = this.pressed * this.app.input.dist.y; //was touched
-
-	                        var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
-	                        var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
-
-	                        return { keyboard: keyboard, touch: touched };
-	                }
-	        }], [{
-	                key: '_pointerup',
-	                value: function _pointerup(evt) {
-
-	                        var input = evt.target.app.input;
-
-	                        var x = evt.x || evt.clientX || evt.pageX;
-
-	                        var y = evt.y || evt.clientY || evt.pageY;
-
-	                        input.last = input.end = new _vector2.default(x, y);
-
-	                        input.pressed = false;
-
-	                        input.released = true;
-
-	                        return true;
-	                }
-	        }, {
-	                key: '_pointermove',
-	                value: function _pointermove(evt) {
-
-	                        var input = evt.target.app.input;
-	                        var x = evt.x || evt.clientX || evt.pageX;
-	                        var y = evt.y || evt.clientY || evt.pageY;
-
-	                        //var mouse_last = this.mouse_last;
-
-	                        input.last = input.position = new _vector2.default(x, y);
-
-	                        if (input.pressed) {
-
-	                                var dx = (input.x - input.start.x) * evt.target.app.getScale();
-	                                var dy = (input.y - input.start.y) * evt.target.app.getScale();
-	                                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
-	                        }
-
-	                        if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
-
-	                        if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
-
-	                        this.mouse_last = input.dist.x;
-	                }
-	        }, {
-	                key: '_pointerdown',
-	                value: function _pointerdown(evt) {
-
-	                        var input = evt.target.app.input;
-
-	                        var x = evt.x || evt.clientX || evt.pageX;
-
-	                        var y = evt.y || evt.clientY || evt.pageY;
-
-	                        input.start = new _vector2.default(x, y);
-
-	                        input.pressed = true;
-
-	                        input.touch = true;
-
-	                        input.touched.count++;
-
-	                        input.touched.downlist.push(input.position);
-
-	                        input.dist = new _vector2.default(0, 0);
-	                }
-	        }]);
-
-	        return inputcontroller;
-	})(_interfaces._SJSClass);
-
-	inputcontroller._x = 0;
-	inputcontroller._y = 0;
-	inputcontroller._last = new _vector2.default(0, 0);
-	inputcontroller._pos = new _vector2.default(0, 0);
-	inputcontroller._dist = new _vector2.default(0, 0);
-	inputcontroller._end = new _vector2.default(0, 0);
-	inputcontroller._start = new _vector2.default(0, 0);
-	inputcontroller._duration = 0;
-	inputcontroller._pressed = false;
-	inputcontroller._released = false;
-	inputcontroller._Listener = _inputlistener2.default;
-	inputcontroller._keyController = new _inputkeycontroller2.default();
-	inputcontroller._scrollController = _inputscrollcontroller2.default;
-	exports.default = inputcontroller;
-
-/***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _interfaces = __webpack_require__(196);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* @module
-	* @access public
-	* @example
-	* let vector = new Vector(1,1);
-	*/
-
-	var Vector = (function (_Vector2) {
-	    _inherits(Vector, _Vector2);
-
-	    function Vector() {
-	        _classCallCheck(this, Vector);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
-	    }
-
-	    _createClass(Vector, [{
-	        key: 'multiply',
-
-	        //equals(p) { return this.#x === p.#x && this.#y === p.#y }
-
-	        //toString() { return `Point<${ this.#x },${ this.#y }>` }
-	        /**
-	        * Multiply vector position
-	        * @method
-	        * @param {Number} a - multiply X
-	        * @param {Number} b - multiply Y
-	        * @return {Vector}
-	        */
-
-	        value: function multiply(a, b) {
-
-	            this._x *= a;
-	            this._y *= b;
-
-	            return this;
-	        }
-
-	        /**
-	        * Offset vector position
-	        * @method
-	        * @param {Number} a - multiply X
-	        * @param {Number} b - multiply Y
-	        * @return {Vector}
-	        */
-
-	    }, {
-	        key: 'offset',
-	        value: function offset(a, b) {
-
-	            this._x += a;
-	            this._y += b;
-
-	            return this;
-	        }
-
-	        /**
-	        * Get vector position
-	        * @type {Object}
-	        */
-
-	    }, {
-	        key: 'position',
-	        get: function get() {
-
-	            return this;
-	        }
-
-	        /**
-	        * Set vector position
-	        * @type {Object}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.position = new Vector(5,5);
-	        * PointA.position = {x:0,y:0};
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this.x = value.x;
-	            this.y = value.y;
-	        }
-
-	        /**
-	        * Get x position
-	        * @type {Number}
-	        */
-
-	    }, {
-	        key: 'x',
-	        get: function get() {
-
-	            return this._x;
-	        }
-
-	        /**
-	        * Set x position
-	        * @type {Number}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.position.x = {x:0,y:0};
-	        * PointA.x = 2;
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this._x = value;
-	        }
-
-	        /**
-	        * Get y position
-	        * @type {Number}
-	        */
-
-	    }, {
-	        key: 'y',
-	        get: function get() {
-
-	            return this._y;
-	        }
-
-	        /**
-	        * Set y position
-	        * @type {Number}
-	        * @example
-	        * var PointA = new Vector(2,1);
-	        * PointA.y = 2;
-	        */
-
-	        ,
-	        set: function set(value) {
-
-	            this._y = value;
-	        }
-	    }]);
-
-	    return Vector;
-	})(_interfaces._Vector);
-
-	exports.default = Vector;
-
-/***/ },
-/* 202 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	*  Sets up input listeners.
-	* @access private
-	* @module
-	* @example
-	* SJSInputListener
-	*    [listener0,listener1,listener2,element,function]
-	*
-	*    let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
-	*    let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
-	*    let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
-	*
-	*/
-
-	var InputListener = (function () {
-	    function InputListener(a, b, c, d, elm, evt) {
-	        _classCallCheck(this, InputListener);
-
-	        this.elm = elm;
-
-	        if (window.PointerEvent) this.msPointer(a, evt);else if (window.MSPointerEvent) this.Pointer(b, evt);else this.mousePointer(c, evt);
-
-	        if ('ontouchstart' in window || navigator.maxTouchPoints) this.touchPointer(d, evt);
-	    }
-
-	    /**
-	    * @method Microsoft Pointers
-	    */
-
-	    _createClass(InputListener, [{
-	        key: 'msPointer',
-	        value: function msPointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-
-	        /**
-	        * @method Universal Pointers
-	        */
-
-	    }, {
-	        key: 'Pointer',
-	        value: function Pointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-
-	        /**
-	        * @method Touch Pointers
-	        */
-
-	    }, {
-	        key: 'touchPointer',
-	        value: function touchPointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-
-	        /**
-	        * @method Mouse Pointers
-	        */
-
-	    }, {
-	        key: 'mousePointer',
-	        value: function mousePointer(e, evt) {
-
-	            window.addEventListener(e, evt, false);
-	        }
-	    }]);
-
-	    return InputListener;
-	})();
-
-	exports.default = InputListener;
-
-/***/ },
-/* 203 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* Stores key input data
-	* @access private
-	* @module
-	*
-	*/
-
-	var inputkeycontroller = (function () {
-	    function inputkeycontroller() {
-	        _classCallCheck(this, inputkeycontroller);
-	    }
-
-	    _createClass(inputkeycontroller, [{
-	        key: "key_down",
-	        value: function key_down(evt) {
-
-	            evt.input.key = true;
-	            evt.input.kpressed = true;
-	        }
-	    }, {
-	        key: "key_up",
-	        value: function key_up(evt) {
-	            evt.input.key = false;
-	            evt.input.kpressed = false;
-	            evt.input.kreleased = true;
-	            evt.input.kpressed = false;
-	        }
-	    }, {
-	        key: "keyboardCheck",
-	        value: function keyboardCheck(code) {
-
-	            var e = this.codeList.length - 1;
-
-	            for (var i = e; i >= 0; --i) {
-	                if (this.codeList[i] == code) return true;
-	            }return false;
-	        }
-	    }, {
-	        key: "keyboardPop",
-	        value: function keyboardPop(code) {
-
-	            var e = this.codeList.length - 1;
-	            for (var i = e; i >= 0; --i) {
-	                if (this.codeList[i] == code) this.codeList[i] = null;
-	            }
-	        }
-	    }, {
-	        key: "init",
-	        value: function init(app) {
-
-	            app.Listener(app.window.self, 'keydown', function (evt) {
-
-	                if (app.input.preventNext === true) evt.preventDefault();
-
-	                app.input.preventNext = false;
-
-	                app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
-
-	                app.input.keyController.codeList.push(app.input.codedown);
-
-	                if (evt.ctrlKey) app.input.control = true;
-
-	                app.input.pressed = true;
-	                app.input.released = false;
-
-	                app.input.keyController.key_down(app);
-	            });
-
-	            app.Listener(app.window.self, 'keyup', function (evt) {
-
-	                if (app.input.preventNext) evt.preventDefault();
-
-	                app.input.preventNext = false;
-	                app.input.codeup = app.input.keyController.keyCodes[evt.keyCode];
-
-	                app.input.keyController.keyboardPop(app.input.codeup);
-
-	                app.input.control = false;
-	                app.input.pressed = false;
-	                app.input.released = true;
-	                app.input.true = true;
-
-	                app.input.keyController.key_up(app);
-	            });
-
-	            return this.codes;
-	        }
-	    }, {
-	        key: "codeList",
-	        get: function get() {
-
-	            return this.constructor._codeList;
-	        }
-	    }, {
-	        key: "keyCodes",
-	        get: function get() {
-
-	            return this.constructor._keyCodes;
-	        }
-	    }], [{
-	        key: "_keyCodes",
-	        get: function get() {
-
-	            this.codes = [], this.codes[0] = "", this.codes[1] = "", this.codes[2] = "", this.codes[3] = "", this.codes[4] = "", this.codes[5] = "", this.codes[6] = "", this.codes[7] = "", this.codes[8] = "backspace", this.codes[9] = "tab", this.codes[13] = "enter", this.codes[16] = "shift", this.codes[17] = "ctrl", this.codes[18] = "alt", this.codes[19] = "pause/break", this.codes[20] = "capslock", this.codes[27] = "escape", this.codes[32] = "space", this.codes[33] = "pageup", this.codes[34] = "pagedown", this.codes[35] = "end", this.codes[36] = "home", this.codes[37] = "leftarrow", this.codes[38] = "uparrow", this.codes[39] = "rightarrow", this.codes[40] = "downarrow", this.codes[45] = "insert", this.codes[46] = "delete", this.codes[48] = "0", this.codes[49] = "1", this.codes[50] = "2", this.codes[51] = "3", this.codes[52] = "4", this.codes[53] = "5", this.codes[54] = "6", this.codes[55] = "7", this.codes[56] = "8", this.codes[57] = "9", this.codes[65] = "a", this.codes[66] = "b", this.codes[67] = "c", this.codes[68] = "d", this.codes[69] = "e", this.codes[70] = "f", this.codes[71] = "g", this.codes[72] = "h", this.codes[73] = "i", this.codes[74] = "j", this.codes[75] = "k", this.codes[76] = "l", this.codes[77] = "m", this.codes[78] = "n", this.codes[79] = "o", this.codes[80] = "p", this.codes[81] = "q", this.codes[82] = "r", this.codes[83] = "s", this.codes[84] = "t", this.codes[85] = "u", this.codes[86] = "v", this.codes[87] = "w", this.codes[88] = "x", this.codes[89] = "y", this.codes[90] = "z", this.codes[91] = "leftwindowkey", this.codes[92] = "rightwindowkey", this.codes[93] = "selectkey", this.codes[96] = "numpad0", this.codes[97] = "numpad1", this.codes[98] = "numpad2", this.codes[99] = "numpad3", this.codes[100] = "numpad4", this.codes[101] = "numpad5", this.codes[102] = "numpad6", this.codes[103] = "numpad7", this.codes[104] = "numpad8", this.codes[105] = "numpad9", this.codes[106] = "multiply", this.codes[107] = "add", this.codes[109] = "subtract", this.codes[110] = "decimalpoint", this.codes[111] = "divide", this.codes[112] = "f1", this.codes[113] = "f2", this.codes[114] = "f3", this.codes[115] = "f4", this.codes[116] = "f5", this.codes[117] = "f6", this.codes[118] = "f7", this.codes[119] = "f8", this.codes[120] = "f9", this.codes[121] = "f10", this.codes[122] = "f11", this.codes[123] = "f12", this.codes[144] = "numlock", this.codes[145] = "scrolllock", this.codes[175] = "Up (Wii?)", this.codes[176] = "Down (Wii?)", this.codes[177] = "Left (Wii?)", this.codes[178] = "Right (Wii?)", this.codes[170] = "- (Wii?)", this.codes[174] = "+ (Wii?)", this.codes[172] = "1 (Wii?)", this.codes[173] = "2 (Wii?)", this.codes[186] = "semi-colon", this.codes[187] = "equalsign", this.codes[188] = "comma", this.codes[189] = "dash", this.codes[190] = "period", this.codes[191] = "forwardslash", this.codes[192] = "graveaccent", this.codes[219] = "openbracket", this.codes[220] = "backslash", this.codes[221] = "closebraket", this.codes[222] = "singlequote";
-
-	            return this.codes;
-	        }
-	    }]);
-
-	    return inputkeycontroller;
-	})();
-
-	inputkeycontroller._codeList = [];
-	exports.default = inputkeycontroller;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	/**
-	* Sets up smooth scrolling
-	* @access private
-	* @module
-	*
-	*/
-
-	var inputscrollcontroller = {
-
-	        prototype: {
-
-	                /* Cache */
-
-	                x: 0,
-	                y: 1,
-	                target: { x: 0, y: 0 },
-
-	                accel: 1,
-
-	                active: null,
-	                reverse: false,
-	                a: false,
-
-	                window: window,
-	                doc: document.documentElement,
-
-	                //ScrollWheel Event
-	                event: function event(evt, delta) {
-
-	                        if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
-
-	                        if (this.app.options.get("seamless")) evt.preventDefault();
-
-	                        //if (this.app.options.get("overridescroll")==false)
-	                        return;
-
-	                        /*
-	                        this.app.input.wheelDelta = evt.wheelDelta;
-	                          var doc = document.documentElement;
-	                        var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	                        var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
-	                               //Flip for horizontal scrolling
-	                           if (this.reverse)
-	                           {
-	                               this.app.input.scroll.target.x = left;
-	                               this.app.input.scroll.target.y = top-evt.wheelDelta;
-	                               this.app.input.scroll.x = left;
-	                               this.app.input.scroll.y = top-evt.wheelDelta;
-	                           }
-	                           else{
-	                               this.app.input.scroll.target.y = 0;
-	                               this.app.input.scroll.target.x = left-evt.wheelDelta;
-	                               this.app.input.scroll.y = 0;
-	                               this.app.input.scroll.x = left-evt.wheelDelta;
-	                           }
-	                          */
-	                        //App.ext.scroll.active = false;$
-	                },
-
-	                up: function up() {
-
-	                        var transitionSpeed = 1;
-
-	                        if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
-
-	                        if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
-
-	                        this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
-	                        this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
-
-	                        //if (this.a)
-	                        //this.app.window.scrollTo(this.x,this.y),this.a = false;
-
-	                        log(this.x, this.y);
-	                },
-
-	                //Update the position for smooth scrolling
-
-	                update: function update(x, y) {
-
-	                        var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
-	                        var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
-
-	                        /* DEACTIVATE IF CONFUSED */
-	                        if (!this.active) return;
-
-	                        var LD = Math.round(-this.x + this.target.x) / 10;
-	                        var YD = Math.round(-this.y + this.target.y) / 10;
-
-	                        if (left < this.target.x) this.x += this.accel * LD;
-	                        if (left > this.target.x) this.x += this.accel * LD;
-	                        if (top < this.target.y) this.y += this.accel * YD;
-	                        if (top > this.target.y) this.y += this.accel * YD;
-
-	                        //	this.app.window.scrollTo(this.x,this.y);
-
-	                        if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
-
-	                        return true;
-	                },
-
-	                //Set position,
-
-	                to: function to(x, y) {
-
-	                        this.target.x = x;
-	                        this.target.y = y;
-	                }
-
-	        },
-
-	        constructor: function constructor(a) {
-	                return {
-	                        app: { value: a },
-	                        init: { value: function value() {
-	                                        this.to(0, 0);
-	                                        return this;
-	                                }
-	                        }
-	                };
-	        }
-
-	};
-
-	exports.default = inputscrollcontroller;
-
-/***/ },
-/* 205 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8545,7 +7216,7 @@
 		value: true
 	});
 
-	var _vector = __webpack_require__(201);
+	var _vector = __webpack_require__(198);
 
 	var _vector2 = _interopRequireDefault(_vector);
 
@@ -9237,10 +7908,6 @@
 
 		function Math() {
 			_classCallCheck(this, Math);
-
-			this.vector = _vector2.default;
-			window.Math.vector = this.vector;
-			window.Math.Vector = window.Math.vector;
 		}
 
 		return Math;
@@ -9248,8 +7915,1388 @@
 
 	exports.default = Math;
 
+	window.Math.vector = window.Math.Vector = _vector2.default;
+
 /***/ },
-/* 206 */
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* @module
+	* @access public
+	* @example
+	* let vector = new Vector(1,1);
+	*/
+
+	var Vector = (function (_Vector2) {
+	    _inherits(Vector, _Vector2);
+
+	    function Vector() {
+	        _classCallCheck(this, Vector);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Vector).apply(this, arguments));
+	    }
+
+	    _createClass(Vector, [{
+	        key: 'multiply',
+
+	        //equals(p) { return this.#x === p.#x && this.#y === p.#y }
+
+	        //toString() { return `Point<${ this.#x },${ this.#y }>` }
+	        /**
+	        * Multiply vector position
+	        * @method
+	        * @param {Number} a - multiply X
+	        * @param {Number} b - multiply Y
+	        * @return {Vector}
+	        */
+
+	        value: function multiply(a, b) {
+
+	            this._x *= a;
+	            this._y *= b;
+
+	            return this;
+	        }
+
+	        /**
+	        * Offset vector position
+	        * @method
+	        * @param {Number} a - multiply X
+	        * @param {Number} b - multiply Y
+	        * @return {Vector}
+	        */
+
+	    }, {
+	        key: 'offset',
+	        value: function offset(a, b) {
+
+	            this._x += a;
+	            this._y += b;
+
+	            return this;
+	        }
+
+	        /**
+	        * Get vector position
+	        * @type {Object}
+	        */
+
+	    }, {
+	        key: 'position',
+	        get: function get() {
+
+	            return this;
+	        }
+
+	        /**
+	        * Set vector position
+	        * @type {Object}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.position = new Vector(5,5);
+	        * PointA.position = {x:0,y:0};
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this.x = value.x;
+	            this.y = value.y;
+	        }
+
+	        /**
+	        * Get x position
+	        * @type {Number}
+	        */
+
+	    }, {
+	        key: 'x',
+	        get: function get() {
+
+	            return this._x;
+	        }
+
+	        /**
+	        * Set x position
+	        * @type {Number}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.position.x = {x:0,y:0};
+	        * PointA.x = 2;
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this._x = value;
+	        }
+
+	        /**
+	        * Get y position
+	        * @type {Number}
+	        */
+
+	    }, {
+	        key: 'y',
+	        get: function get() {
+
+	            return this._y;
+	        }
+
+	        /**
+	        * Set y position
+	        * @type {Number}
+	        * @example
+	        * var PointA = new Vector(2,1);
+	        * PointA.y = 2;
+	        */
+
+	        ,
+	        set: function set(value) {
+
+	            this._y = value;
+	        }
+	    }]);
+
+	    return Vector;
+	})(_interfaces._Vector);
+
+	exports.default = Vector;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	exports.default = {
+
+	    overridescroll: false,
+	    drag: 0,
+	    targetfps: 60,
+	    mute: false,
+
+	    paths: {
+
+	        data: "data/",
+	        images: "images/",
+	        url: ""
+
+	    },
+
+	    target: {
+	        canvas: null, // String - Id of the main canvas
+	        buffer: null, // String - Id of the buffer canvas
+	        blitter: null },
+
+	    // String - Id of the blitting canvas
+	    global: {
+
+	        globalCompositeOperation: "destination-in" },
+
+	    //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
+
+	    flags: {
+
+	        webGL: true,
+
+	        canvas: true,
+	        mstouch: true,
+	        seamless: true,
+	        tight: true,
+	        touchprevent: true,
+	        opaque: true
+
+	    },
+
+	    canvas: {
+
+	        opacity: 0,
+	        override: false, //Toggle the use of options.canvas
+	        name: 'canvas', //Use canvas.name
+	        buffername: 'buffer', //Use canvas.buffer
+	        buffer: true, //Toggle the use of double-buffering
+	        background: '#000000', //Assign canvas element background colour
+
+	        //Assign canvas element position properties
+	        position: {
+	            //position:'absolute',
+	            //top:0,
+	            //left:window.innerWidth/2,
+	            //center:true,
+	            //z:1
+	            position: 'absolute',
+	            top: "",
+	            left: window.innerWidth * 2,
+	            //left:"",
+	            center: false,
+	            z: 1
+	        },
+
+	        //Assign canvas size properties
+	        size: {
+
+	            width: window.innerWidth,
+	            height: window.innerHeight
+
+	        }
+
+	    },
+
+	    msFlags: {
+
+	        msZoom: false
+
+	    },
+
+	    //Override Functions
+	    override: {
+
+	        keyboard: true,
+	        mouse: true,
+	        MSHoldVisual: false,
+	        SelectStart: false,
+	        ContextMenu: true,
+	        Drag: true
+
+	    },
+
+	    //Return Options Value
+	    get: function get(attr) {
+
+	        //If Attribute
+	        if (attr) {
+
+	            //Get list of apps
+	            var list = SpiceJS.controller.list();
+
+	            //list is object
+	            if ((typeof list === "undefined" ? "undefined" : _typeof(list)) == "object") {
+	                //return window.apps.option.
+	                for (var attrname in this) {
+	                    if (attrname == attr) return eval("list.options." + attrname);
+	                }
+	            } else {
+	                for (var i = window.apps.length - 1; i >= 0; i--) {
+	                    for (var attrname in this) {
+	                        if (attrname == attr) {
+	                            var l = [];
+	                            l.push(eval("list[" + i + "].options." + attrname));
+	                        }
+	                    }
+	                }return l;
+	            }
+
+	            return null;
+	        } else return this;
+	    },
+
+	    set: function set(options) {
+
+	        for (var attrname in options) {
+	            this[attrname] = options[attrname];
+	        };
+
+	        return this;
+	    }
+
+	};
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _inputcontroller2 = __webpack_require__(201);
+
+	var _inputcontroller3 = _interopRequireDefault(_inputcontroller2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Main game controller. Handles instanciating instances and tracking information.
+	* @access private
+	* @module
+	*
+	*/
+
+	var Input = (function (_inputcontroller) {
+	    _inherits(Input, _inputcontroller);
+
+	    function Input(app, pointerPoint) {
+	        _classCallCheck(this, Input);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Input).call(this, app));
+
+	        _this.delay = 0;
+
+	        _this.touch = false;
+
+	        _this.touch_dist = { x: 0, y: 0 };
+
+	        _this.key = false;
+
+	        _this.keyPower = 0;
+
+	        _this.keyup = false;
+
+	        _this.keydown = false;
+
+	        _this.codes = [];
+
+	        _this.codeList = [];
+
+	        _this.control = false;
+
+	        _this.confine = false;
+
+	        _this.preventNext = true;
+
+	        _this.init_options();
+
+	        _this.keyController.init(_this.app);
+
+	        _this.down = new _this.constructor._Listener("pointerdown", "MSPointerDown", "mousedown", "touchstart", _this.app.window, _this.pointerdown);
+
+	        _this.up = new _this.constructor._Listener("pointerup", "MSPointerUp", "mouseup", "touchmove", _this.app.window, _this.pointerup);
+
+	        _this.move = new _this.constructor._Listener("pointermove", "MSPointerMove", "mousemove", "touchend", _this.app.window, _this.pointermove);
+
+	        _this.scrollController = _this.app.Construct(_this.scrollController.prototype, _this.scrollController.constructor).init();
+
+	        _this.pointerPoint = pointerPoint; //this.support(pointerPoint);
+
+	        _this.setup_universalMultitouch();
+
+	        _this.setup_documentListeners();
+
+	        //this.setup_msUniversalAppTouch();
+
+	        return _this;
+	    }
+
+	    _createClass(Input, [{
+	        key: "preventDefault",
+	        value: function preventDefault(e) {
+	            e.preventDefault();return e.target.app;
+	        }
+	    }, {
+	        key: "preventNextInput",
+	        value: function preventNextInput() {
+	            return this.preventNext = true;
+	        }
+	    }, {
+	        key: "confineMouse",
+	        value: function confineMouse() {
+
+	            return this.confine ? (this.y < this.app.client.visuals.fixY(0) ? (this.app.window.y = 0, this.app.window.inside -= 1) : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? (this.app.window.y = this.app.client.visuals.fixW(this.app.client.setHeight), this.app.window.inside += 1) : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? (this.app.window.x = 0, this.app.window.inside -= 1) : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? (this.app.window.x = this.app.client.visuals.fixW(this.app.client.setWidth), this.app.window.inside += 1) : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x) : (this.y < this.app.client.visuals.fixY(0) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.y > this.app.client.visuals.fixY(this.app.client.setHeight) ? this.app.window.y = -this.app.client.visuals.fixY(0) + this.y : this.app.window.y = -this.app.client.visuals.fixY(0) + this.y, this.x < this.app.client.visuals.fixX(0) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.x > this.app.client.visuals.fixX(this.app.client.setWidth) ? this.app.window.x = -this.app.client.visuals.fixX(0) + this.x : this.app.window.x = -this.app.client.visuals.fixX(0) + this.x);
+	        }
+	    }, {
+	        key: "init_options",
+	        value: function init_options() {
+
+	            /*	Overrides the selection start event for selecting events	*/
+
+	            if (!this.app.options.get("override").SelectStart) {
+	                this.app.Listener(this.app.canvas.canvas, 'selectstart', this.preventDefault);
+	            }
+
+	            /*	Overrides the 'holdtouch, MSHoldVisual' event */
+
+	            if (!this.app.options.get("override").MSHoldVisual) {
+	                this.app.Listener(this.app.canvas.canvas, 'MSHoldVisual', this.preventDefault);
+	            }
+
+	            /* Overrides the ContextMenu event */
+
+	            if (this.app.options.get("override").ContextMenu) {
+	                this.app.document.oncontextmenu = this.preventDefault;
+	                this.app.window.self.oncontextmenu = this.preventDefault;
+	            }
+
+	            /*	Overrides dragstart event		*/
+
+	            if (this.app.options.get("override").Drag) {
+	                this.app.document.ondragstart = this.preventDefault;
+	                this.app.window.self.ondragstart = this.preventDefault;
+	            }
+
+	            /*	CSS based Overrides
+	                     - mstouch
+	                    - seamless ( toggles overflow )
+	                    - tight ( zeros padding and margin )
+	             */
+
+	            if (this.app.options.get("flags").mstouch) {
+	                this.app.document.body.setAttribute("style", "-ms-touch-action: none; ms-content-zooming: none; touch-action: none; -ms-overflow-style: none;");
+	            }
+
+	            if (this.app.options.get("flags").seamless) {
+	                this.app.document.body.style.overflow = "hidden";
+	            }
+
+	            if (this.app.options.get("flags").tight) {
+	                this.app.document.body.style.padding = "0px", this.app.document.body.style.margin = "0px auto";
+	            }
+	        }
+	    }, {
+	        key: "update",
+	        value: function update() {
+
+	            this.confineMouse();
+
+	            //Reset variables
+	            this.press = false;
+	            this.touch = 0;
+	            this.app.window.inside = 0;
+	            this.wheelDelta = 0;
+
+	            this.pressed ? this.duration++ : this.duration = 0;
+
+	            this.released ? (this.released = false, this.dist.x = 0, this.dist.y = 0) : null;
+
+	            //this.setup_msUniversalAppTouch();
+
+	            if (this.delay > 0) {
+
+	                this.delay -= Math.floor(this.delay - 1 * this.app.getDelta());
+	            }
+
+	            //reset code released, unused?
+	            this.codereleased = 0;
+
+	            return true;
+	        }
+	    }, {
+	        key: "setup_documentListeners",
+	        value: function setup_documentListeners() {
+
+	            var doc = document;
+	            var win = window;
+
+	            doc.addEventListener("mousedown", function () {
+	                window.focus();
+	            }, true);
+	            doc.addEventListener("touchstart", function () {
+	                window.focus();
+	            }, true);
+
+	            // Inform all plugins and behaviors of blur events so they can reset any keyboard key flags
+	            win.addEventListener("blur", function () {
+	                self.onWindowBlur();
+	            });
+
+	            win.onWindowBlur = function (evt) {
+
+	                console.log('blur');
+	                SJS.controller.list().input.pointerup(evt);
+	            };
+
+	            win.setSuspended = function (state) {
+
+	                if (state) console.log('suspended');else console.log('resume');
+	            };
+
+	            // Pause and resume on page becoming visible/invisible
+	            function onVisibilityChanged() {
+	                if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) setSuspended(true);else setSuspended(false);
+	            };
+
+	            doc.addEventListener("visibilitychange", onVisibilityChanged, false);
+	            doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+	            doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+	            doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+	        }
+	    }, {
+	        key: "setup_universalMultitouch",
+	        value: function setup_universalMultitouch() {
+
+	            //touch-action: none;
+
+	            if (window.PointerEvent) {
+	                // Pointer events are supported.
+
+	                // Test for touch capable hardware
+	                if (navigator.maxTouchPoints) {}
+
+	                // Test for multi-touch capable hardware
+	                if (navigator.maxTouchPoints && navigator.maxTouchPoints > 1) {}
+
+	                // Check the maximum number of touch points the hardware supports
+	                //var touchPoints = navigator.maxTouchPoints;
+	            }
+
+	            this.multi = {
+
+	                list: []
+
+	            };
+
+	            this.touched = {
+
+	                count: 0,
+	                uplist: [],
+	                downlist: [],
+	                last: { x: 0, y: 0 },
+	                CheckTouchUp: function CheckTouchUp() {
+
+	                    return this.uplist[this.uplist.length - 1];
+	                },
+	                CheckTouchDown: function CheckTouchDown() {}
+
+	            };
+	        }
+	    }, {
+	        key: "setup_msUniversalAppTouch",
+	        value: function setup_msUniversalAppTouch() {
+
+	            return;
+
+	            var i = 0;
+
+	            var data = {
+	                app: this.app,
+	                x: 0,
+	                y: 0
+	            };
+
+	            if (this.pressed === false && this.lastpressed === true) {
+	                this.released = true, this.dist.x = 0, this.dist.y = 0;
+
+	                this.controls.up(data);
+	            }
+
+	            this.lastpressed = this.pressed;
+
+	            if (!this.wininitalize) try {
+
+	                //var w = Windows;
+	                //var p = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+
+	                this.pressed = Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact;
+	                this.pointerDevice = Windows.UI.Input.PointerPoint.getCurrentPoint(1).pointerDevice;
+	                this.wininitalize = true;
+
+	                data = {
+	                    app: this.app,
+	                    x: this.winposition.x,
+	                    y: this.winposition.y
+	                };
+	            } catch (e) {
+
+	                data = {
+	                    app: this.app,
+	                    x: 0,
+	                    y: 0
+	                };
+	            } else {
+	                this.winpoint = Windows.UI.Input.PointerPoint.getCurrentPoint(1);
+	                this.winposition = this.pointerPoint.getCurrentPoint(1).rawPosition;
+	                this.pressed = this.winpoint.isInContact;
+	                this.pointerDevice = this.winpoint.pointerDevice;
+
+	                var pt = this.pointerPoint.getCurrentPoint(1);
+	                var ptTargetProperties = pt.properties;
+
+	                if (this.released) {
+
+	                    var details = "Pointer Id: " + pt.pointerId + " device: " + pt.pointerDevice.pointerDeviceType;
+
+	                    switch (pt.pointerDevice.pointerDeviceType) {
+	                        case "mouse":
+	                        case 2:
+	                            details += "\nPointer type: mouse";
+	                            details += "\nLeft button: " + ptTargetProperties.isLeftButtonPressed;
+	                            details += "\nRight button: " + ptTargetProperties.isRightButtonPressed;
+	                            details += "\nWheel button: " + ptTargetProperties.isMiddleButtonPressed;
+	                            details += "\nX1 button: " + ptTargetProperties.isXButton1Pressed;
+	                            details += "\nX2 button: " + ptTargetProperties.isXButton2Pressed;
+	                            break;
+	                        case "pen":
+	                            details += "\nPointer type: pen";
+	                            if (pt.isInContact) {
+	                                details += "\nPressure: " + ptTargetProperties.pressure;
+	                                details += "\nrotation: " + ptTargetProperties.rotation;
+	                                details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                                details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                                details += "\nBarrel button pressed: " + ptTargetProperties.isBarrelButtonPressed;
+	                            }
+	                            break;
+	                        case "touch":
+	                            details += "\nPointer type: touch";
+	                            details += "\nPressure: " + ptTargetProperties.pressure;
+	                            details += "\nrotation: " + ptTargetProperties.rotation;
+	                            details += "\nTilt X: " + ptTargetProperties.tiltX;
+	                            details += "\nTilt Y: " + ptTargetProperties.tiltY;
+	                            break;
+	                        default:
+	                            details += "\nPointer type: " + "n/a";
+	                            break;
+	                    }
+	                    details += "\n x:" + this.winposition.x + " y: " + this.winposition.y;
+	                    //details += "\nPointer location (target): " + pt.offsetX + ", " + pt.offsetY;
+	                    //details += "\nPointer location (screen): " + pt.screenX + ", " + pt.screenY;
+	                    //console.log(pt.pointerDevice);
+	                    //console.log(details);
+	                }
+	                i = this.winpoint;
+
+	                data.x = this.winposition.x;
+	                data.y = this.winposition.y;
+
+	                if (this.pressed === true && this.lastpressed === true) this.controls.move(data);
+	            }
+
+	            if (this.pressed === true && this.lastpressed === false) this.controls.down(data);
+
+	            // console.log(i)
+	            //  if (Windows)
+	            //  if (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact)
+	            //  this.pressed = (Windows.UI.Input.PointerPoint.getCurrentPoint(1).isInContact);
+	        }
+	    }]);
+
+	    return Input;
+	})(_inputcontroller3.default);
+
+	exports.default = Input;
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _vector = __webpack_require__(198);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	var _interfaces = __webpack_require__(194);
+
+	var _inputlistener = __webpack_require__(202);
+
+	var _inputlistener2 = _interopRequireDefault(_inputlistener);
+
+	var _inputkeycontroller = __webpack_require__(203);
+
+	var _inputkeycontroller2 = _interopRequireDefault(_inputkeycontroller);
+
+	var _inputscrollcontroller = __webpack_require__(204);
+
+	var _inputscrollcontroller2 = _interopRequireDefault(_inputscrollcontroller);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Stores input data
+	* @access private
+	* @module
+	*
+	*/
+
+	var inputcontroller = (function (_SJSClass) {
+	    _inherits(inputcontroller, _SJSClass);
+
+	    function inputcontroller() {
+	        _classCallCheck(this, inputcontroller);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(inputcontroller).apply(this, arguments));
+	    }
+
+	    _createClass(inputcontroller, [{
+	        key: 'pointerup',
+	        value: function pointerup(evt) {
+
+	            if (typeof evt === 'undefined') return;
+	            if (typeof evt.target.app === 'undefined') return;
+
+	            var target = evt.target.app.input.constructor;
+
+	            target._pointerup(evt);
+	        }
+	    }, {
+	        key: 'pointermove',
+	        value: function pointermove(evt) {
+
+	            if (typeof evt === 'undefined') return;
+	            if (typeof evt.target.app === 'undefined') return;
+
+	            var target = evt.target.app.input.constructor;
+
+	            target._pointermove(evt);
+	        }
+	    }, {
+	        key: 'pointerdown',
+	        value: function pointerdown(evt) {
+
+	            if (typeof evt === 'undefined') return;
+	            if (typeof evt.target.app === 'undefined') return;
+
+	            var target = evt.target.app.input.constructor;
+
+	            target._pointerdown(evt);
+	        }
+	    }, {
+	        key: 'x',
+	        get: function get() {
+
+	            return this.constructor._x;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._x = value;
+	        }
+	    }, {
+	        key: 'y',
+	        get: function get() {
+
+	            return this.constructor._y;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._y = value;
+	        }
+	    }, {
+	        key: 'last',
+	        get: function get() {
+
+	            return this.constructor._last;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._last = value;
+	        }
+	    }, {
+	        key: 'pos',
+	        get: function get() {
+
+	            return this.constructor._pos;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._pos = value;
+	        }
+	    }, {
+	        key: 'dist',
+	        get: function get() {
+
+	            return this.constructor._dist;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._dist = value;
+	        }
+	    }, {
+	        key: 'end',
+	        get: function get() {
+
+	            return this.constructor._end;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._end = value;
+	        }
+	    }, {
+	        key: 'start',
+	        get: function get() {
+
+	            return this.constructor._start;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._start = value;
+	        }
+	    }, {
+	        key: 'duration',
+	        get: function get() {
+
+	            return this.constructor._duration;
+	        },
+	        set: function set(value) {
+
+	            this.constructor._duration = value;
+	        }
+	    }, {
+	        key: 'angle',
+	        get: function get() {
+
+	            return 57.2957795 * Math.atan2(this.end.y - this.start.y, this.end.x - this.start.x);
+	        }
+	    }, {
+	        key: 'angleDelta',
+	        get: function get() {
+
+	            var delta = (this.dist.x * this.dist.x + this.dist.y * this.dist.y) / 2;
+	            return delta;
+	        }
+	    }, {
+	        key: 'position',
+	        get: function get() {
+
+	            return new _vector2.default(this.x, this.y);
+	        },
+	        set: function set(value) {
+
+	            this.x = value.x;
+	            this.y = value.y;
+	        }
+	    }, {
+	        key: 'released',
+	        get: function get() {
+
+	            return this.constructor._released;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._released = value;
+	        }
+	    }, {
+	        key: 'pressed',
+	        get: function get() {
+
+	            return this.constructor._pressed;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._pressed = value;
+	        }
+	    }, {
+	        key: 'keyController',
+	        get: function get() {
+
+	            return this.constructor._keyController;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._keyController = value;
+	        }
+	    }, {
+	        key: 'scrollController',
+	        get: function get() {
+
+	            return this.constructor._scrollController;
+	        },
+	        set: function set(value) {
+
+	            return this.constructor._scrollController = value;
+	        }
+	    }, {
+	        key: 'horizontal',
+	        get: function get() {
+
+	            var wasd = this.app.input.keyController.keyboardCheck("a") - this.app.input.keyController.keyboardCheck("d");
+	            var arrows = this.app.input.keyController.keyboardCheck("leftarrow") - this.app.input.keyController.keyboardCheck("rightarrow");
+	            var mouse = -this.pressed * this.app.input.dist.x;
+	            var touch = -this.pressed * this.app.input.dist.x; //was touched
+
+	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+	            return { keyboard: keyboard, touch: touched };
+	        }
+	    }, {
+	        key: 'vertical',
+	        get: function get() {
+
+	            var wasd = this.app.input.keyController.keyboardCheck("s") - this.app.input.keyController.keyboardCheck("w");
+	            var arrows = this.app.input.keyController.keyboardCheck("downarrow") - this.app.input.keyController.keyboardCheck("uparrow");
+	            var mouse = this.pressed * this.app.input.dist.y;
+	            var touch = this.pressed * this.app.input.dist.y; //was touched
+
+	            var keyboard = this.app.client.Math.Clamp(wasd || arrows, -1, 1);
+	            var touched = this.app.client.Math.Clamp(mouse || touch, -1, 1);
+
+	            return { keyboard: keyboard, touch: touched };
+	        }
+	    }], [{
+	        key: '_pointerup',
+	        value: function _pointerup(evt) {
+
+	            var input = evt.target.app.input;
+
+	            var x = evt.x || evt.clientX || evt.pageX;
+
+	            var y = evt.y || evt.clientY || evt.pageY;
+
+	            input.last = input.end = new _vector2.default(x, y);
+
+	            input.pressed = false;
+
+	            input.released = true;
+
+	            return true;
+	        }
+	    }, {
+	        key: '_pointermove',
+	        value: function _pointermove(evt) {
+
+	            var input = evt.target.app.input;
+	            var x = evt.x || evt.clientX || evt.pageX;
+	            var y = evt.y || evt.clientY || evt.pageY;
+
+	            //var mouse_last = this.mouse_last;
+
+	            input.last = input.position = new _vector2.default(x, y);
+
+	            if (input.pressed) {
+
+	                var dx = (input.x - input.start.x) * evt.target.app.getScale();
+	                var dy = (input.y - input.start.y) * evt.target.app.getScale();
+	                input.dist = new _vector2.default(dx.toFixed(2), dy.toFixed(2));
+	            }
+
+	            if (input.dist.x > 0) if (this.mouse_last * 0.99 > input.dist.x) input.start.x = input.x, input.dist.x = 0;
+
+	            if (input.dist.x < 0) if (this.mouse_last * 0.99 < input.dist.x) input.start.x = input.x, input.dist.x = 0;
+
+	            this.mouse_last = input.dist.x;
+	        }
+	    }, {
+	        key: '_pointerdown',
+	        value: function _pointerdown(evt) {
+
+	            var input = evt.target.app.input;
+
+	            var x = evt.x || evt.clientX || evt.pageX;
+
+	            var y = evt.y || evt.clientY || evt.pageY;
+
+	            input.start = new _vector2.default(x, y);
+
+	            input.pressed = true;
+
+	            input.touch = true;
+
+	            input.touched.count++;
+
+	            input.touched.downlist.push(input.position);
+
+	            input.dist = new _vector2.default(0, 0);
+	        }
+	    }]);
+
+	    return inputcontroller;
+	})(_interfaces._SJSClass);
+
+	inputcontroller._x = 0;
+	inputcontroller._y = 0;
+	inputcontroller._last = new _vector2.default(0, 0);
+	inputcontroller._pos = new _vector2.default(0, 0);
+	inputcontroller._dist = new _vector2.default(0, 0);
+	inputcontroller._end = new _vector2.default(0, 0);
+	inputcontroller._start = new _vector2.default(0, 0);
+	inputcontroller._duration = 0;
+	inputcontroller._pressed = false;
+	inputcontroller._released = false;
+	inputcontroller._Listener = _inputlistener2.default;
+	inputcontroller._keyController = new _inputkeycontroller2.default();
+	inputcontroller._scrollController = _inputscrollcontroller2.default;
+	exports.default = inputcontroller;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	*  Sets up input listeners.
+	* @access private
+	* @module
+	* @example
+	* SJSInputListener
+	*    [listener0,listener1,listener2,element,function]
+	*
+	*    let down = new SJSInputListener("pointerdown","MSPointerDown","mousedown",this.app.window,this.pointerdown);
+	*    let up = new SJSInputListener("pointerup","MSPointerUp","mouseup",this.app.window,this.pointerup);
+	*    let move = new SJSInputListener("pointermove","MSPointerMove","mousemove",this.app.window,this.pointermove);
+	*
+	*/
+
+	var InputListener = (function () {
+	    function InputListener(a, b, c, d, elm, evt) {
+	        _classCallCheck(this, InputListener);
+
+	        this.elm = elm;
+
+	        if (window.PointerEvent) this.msPointer(a, evt);else if (window.MSPointerEvent) this.Pointer(b, evt);else this.mousePointer(c, evt);
+
+	        if ('ontouchstart' in window || navigator.maxTouchPoints) this.touchPointer(d, evt);
+	    }
+
+	    /**
+	    * @method Microsoft Pointers
+	    */
+
+	    _createClass(InputListener, [{
+	        key: 'msPointer',
+	        value: function msPointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+
+	        /**
+	        * @method Universal Pointers
+	        */
+
+	    }, {
+	        key: 'Pointer',
+	        value: function Pointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+
+	        /**
+	        * @method Touch Pointers
+	        */
+
+	    }, {
+	        key: 'touchPointer',
+	        value: function touchPointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+
+	        /**
+	        * @method Mouse Pointers
+	        */
+
+	    }, {
+	        key: 'mousePointer',
+	        value: function mousePointer(e, evt) {
+
+	            window.addEventListener(e, evt, false);
+	        }
+	    }]);
+
+	    return InputListener;
+	})();
+
+	exports.default = InputListener;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* Stores key input data
+	* @access private
+	* @module
+	*
+	*/
+
+	var inputkeycontroller = (function () {
+	    function inputkeycontroller() {
+	        _classCallCheck(this, inputkeycontroller);
+	    }
+
+	    _createClass(inputkeycontroller, [{
+	        key: "key_down",
+	        value: function key_down(evt) {
+
+	            evt.input.key = true;
+	            evt.input.kpressed = true;
+	        }
+	    }, {
+	        key: "key_up",
+	        value: function key_up(evt) {
+	            evt.input.key = false;
+	            evt.input.kpressed = false;
+	            evt.input.kreleased = true;
+	            evt.input.kpressed = false;
+	        }
+	    }, {
+	        key: "keyboardCheck",
+	        value: function keyboardCheck(code) {
+
+	            var e = this.codeList.length - 1;
+
+	            for (var i = e; i >= 0; --i) {
+	                if (this.codeList[i] == code) return true;
+	            }return false;
+	        }
+	    }, {
+	        key: "keyboardPop",
+	        value: function keyboardPop(code) {
+
+	            var e = this.codeList.length - 1;
+	            for (var i = e; i >= 0; --i) {
+	                if (this.codeList[i] == code) this.codeList[i] = null;
+	            }
+	        }
+	    }, {
+	        key: "init",
+	        value: function init(app) {
+
+	            app.Listener(app.window.self, 'keydown', function (evt) {
+
+	                if (app.input.preventNext === true) evt.preventDefault();
+
+	                app.input.preventNext = false;
+
+	                app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
+
+	                app.input.keyController.codeList.push(app.input.codedown);
+
+	                if (evt.ctrlKey) app.input.control = true;
+
+	                app.input.pressed = true;
+	                app.input.released = false;
+
+	                app.input.keyController.key_down(app);
+	            });
+
+	            app.Listener(app.window.self, 'keyup', function (evt) {
+
+	                if (app.input.preventNext) evt.preventDefault();
+
+	                app.input.preventNext = false;
+	                app.input.codeup = app.input.keyController.keyCodes[evt.keyCode];
+
+	                app.input.keyController.keyboardPop(app.input.codeup);
+
+	                app.input.control = false;
+	                app.input.pressed = false;
+	                app.input.released = true;
+	                app.input.true = true;
+
+	                app.input.keyController.key_up(app);
+	            });
+
+	            return this.codes;
+	        }
+	    }, {
+	        key: "codeList",
+	        get: function get() {
+
+	            return this.constructor._codeList;
+	        }
+	    }, {
+	        key: "keyCodes",
+	        get: function get() {
+
+	            return this.constructor._keyCodes;
+	        }
+	    }], [{
+	        key: "_keyCodes",
+	        get: function get() {
+
+	            this.codes = [], this.codes[0] = "", this.codes[1] = "", this.codes[2] = "", this.codes[3] = "", this.codes[4] = "", this.codes[5] = "", this.codes[6] = "", this.codes[7] = "", this.codes[8] = "backspace", this.codes[9] = "tab", this.codes[13] = "enter", this.codes[16] = "shift", this.codes[17] = "ctrl", this.codes[18] = "alt", this.codes[19] = "pause/break", this.codes[20] = "capslock", this.codes[27] = "escape", this.codes[32] = "space", this.codes[33] = "pageup", this.codes[34] = "pagedown", this.codes[35] = "end", this.codes[36] = "home", this.codes[37] = "leftarrow", this.codes[38] = "uparrow", this.codes[39] = "rightarrow", this.codes[40] = "downarrow", this.codes[45] = "insert", this.codes[46] = "delete", this.codes[48] = "0", this.codes[49] = "1", this.codes[50] = "2", this.codes[51] = "3", this.codes[52] = "4", this.codes[53] = "5", this.codes[54] = "6", this.codes[55] = "7", this.codes[56] = "8", this.codes[57] = "9", this.codes[65] = "a", this.codes[66] = "b", this.codes[67] = "c", this.codes[68] = "d", this.codes[69] = "e", this.codes[70] = "f", this.codes[71] = "g", this.codes[72] = "h", this.codes[73] = "i", this.codes[74] = "j", this.codes[75] = "k", this.codes[76] = "l", this.codes[77] = "m", this.codes[78] = "n", this.codes[79] = "o", this.codes[80] = "p", this.codes[81] = "q", this.codes[82] = "r", this.codes[83] = "s", this.codes[84] = "t", this.codes[85] = "u", this.codes[86] = "v", this.codes[87] = "w", this.codes[88] = "x", this.codes[89] = "y", this.codes[90] = "z", this.codes[91] = "leftwindowkey", this.codes[92] = "rightwindowkey", this.codes[93] = "selectkey", this.codes[96] = "numpad0", this.codes[97] = "numpad1", this.codes[98] = "numpad2", this.codes[99] = "numpad3", this.codes[100] = "numpad4", this.codes[101] = "numpad5", this.codes[102] = "numpad6", this.codes[103] = "numpad7", this.codes[104] = "numpad8", this.codes[105] = "numpad9", this.codes[106] = "multiply", this.codes[107] = "add", this.codes[109] = "subtract", this.codes[110] = "decimalpoint", this.codes[111] = "divide", this.codes[112] = "f1", this.codes[113] = "f2", this.codes[114] = "f3", this.codes[115] = "f4", this.codes[116] = "f5", this.codes[117] = "f6", this.codes[118] = "f7", this.codes[119] = "f8", this.codes[120] = "f9", this.codes[121] = "f10", this.codes[122] = "f11", this.codes[123] = "f12", this.codes[144] = "numlock", this.codes[145] = "scrolllock", this.codes[175] = "Up (Wii?)", this.codes[176] = "Down (Wii?)", this.codes[177] = "Left (Wii?)", this.codes[178] = "Right (Wii?)", this.codes[170] = "- (Wii?)", this.codes[174] = "+ (Wii?)", this.codes[172] = "1 (Wii?)", this.codes[173] = "2 (Wii?)", this.codes[186] = "semi-colon", this.codes[187] = "equalsign", this.codes[188] = "comma", this.codes[189] = "dash", this.codes[190] = "period", this.codes[191] = "forwardslash", this.codes[192] = "graveaccent", this.codes[219] = "openbracket", this.codes[220] = "backslash", this.codes[221] = "closebraket", this.codes[222] = "singlequote";
+
+	            return this.codes;
+	        }
+	    }]);
+
+	    return inputkeycontroller;
+	})();
+
+	inputkeycontroller._codeList = [];
+	exports.default = inputkeycontroller;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	/**
+	* Sets up smooth scrolling
+	* @access private
+	* @module
+	*
+	*/
+
+	var inputscrollcontroller = {
+
+	    prototype: {
+
+	        /* Cache */
+
+	        x: 0,
+	        y: 1,
+	        target: { x: 0, y: 0 },
+
+	        accel: 1,
+
+	        active: null,
+	        reverse: false,
+	        a: false,
+
+	        window: window,
+	        doc: document.documentElement,
+
+	        //ScrollWheel Event
+	        event: function event(evt, delta) {
+
+	            if (this.app.options.get("seamless")) this.app.input.scroll.a = true;
+
+	            if (this.app.options.get("seamless")) evt.preventDefault();
+
+	            //if (this.app.options.get("overridescroll")==false)
+	            return;
+
+	            /*
+	            this.app.input.wheelDelta = evt.wheelDelta;
+	             var doc = document.documentElement;
+	            var left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+	            var top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+	                 //Flip for horizontal scrolling
+	               if (this.reverse)
+	               {
+	                   this.app.input.scroll.target.x = left;
+	                   this.app.input.scroll.target.y = top-evt.wheelDelta;
+	                   this.app.input.scroll.x = left;
+	                   this.app.input.scroll.y = top-evt.wheelDelta;
+	               }
+	               else{
+	                   this.app.input.scroll.target.y = 0;
+	                   this.app.input.scroll.target.x = left-evt.wheelDelta;
+	                   this.app.input.scroll.y = 0;
+	                   this.app.input.scroll.x = left-evt.wheelDelta;
+	               }
+	              */
+	            //App.ext.scroll.active = false;$
+	        },
+
+	        up: function up() {
+
+	            var transitionSpeed = 1;
+
+	            if (this.target.x > this.x) this.x += this.app.client.Math.Clamp(Math.floor((this.target.x - this.x) * transitionSpeed), 1, 100), this.a = true;
+
+	            if (this.target.x < this.x) this.x -= this.app.client.Math.Clamp(Math.floor((this.x - this.target.x) * transitionSpeed), 1, 100), this.a = true;
+
+	            this.x = this.app.client.Math.Clamp(this.x, 0, window.innerWidth * 3);
+	            this.target.x = this.app.client.Math.Clamp(this.target.x, 0, window.innerWidth * 3);
+
+	            //if (this.a)
+	            //this.app.window.scrollTo(this.x,this.y),this.a = false;
+
+	            log(this.x, this.y);
+	        },
+
+	        //Update the position for smooth scrolling
+
+	        update: function update(x, y) {
+
+	            var left = (this.app.window.pageXOffset || this.app.document.scrollLeft) - (this.app.document.clientLeft || 0);
+	            var top = (this.app.window.pageYOffset || this.app.document.scrollTop) - (this.app.document.clientTop || 0);
+
+	            /* DEACTIVATE IF CONFUSED */
+	            if (!this.active) return;
+
+	            var LD = Math.round(-this.x + this.target.x) / 10;
+	            var YD = Math.round(-this.y + this.target.y) / 10;
+
+	            if (left < this.target.x) this.x += this.accel * LD;
+	            if (left > this.target.x) this.x += this.accel * LD;
+	            if (top < this.target.y) this.y += this.accel * YD;
+	            if (top > this.target.y) this.y += this.accel * YD;
+
+	            //	this.app.window.scrollTo(this.x,this.y);
+
+	            if (Math.round(this.x / 10) == Math.round(this.target.x / 10) && Math.round(this.y / 10) == Math.round(this.target.y / 10)) return false;
+
+	            return true;
+	        },
+
+	        //Set position,
+
+	        to: function to(x, y) {
+
+	            this.target.x = x;
+	            this.target.y = y;
+	        }
+
+	    },
+
+	    constructor: function constructor(a) {
+	        return {
+	            app: { value: a },
+	            init: { value: function value() {
+	                    this.to(0, 0);
+	                    return this;
+	                }
+	            }
+	        };
+	    }
+
+	};
+
+	exports.default = inputscrollcontroller;
+
+/***/ },
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9258,7 +9305,7 @@
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(207);
+	var _visuals2 = __webpack_require__(217);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
@@ -9274,10 +9321,12 @@
 
 	            app: { value: app },
 
-	            init: { writable: false, configurable: false, enumerable: false, value: function value(name, w, h) {
+	            init: { writable: false, configurable: false, enumerable: false, value: function value(w, h) {
+
+	                    var name = '';
 
 	                    //Set App.client.discription to the name
-	                    this.discription = name;
+	                    this.discription = "description";
 
 	                    //Depreciated setWidth-height: use w + h
 	                    //Set App.client.w
@@ -9317,7 +9366,6 @@
 	                    //Build
 	                    (this.update.state = Object.create(this.update.state.prototype, this.update.state.constructor(this))).init(this.main);
 	                }
-
 	            }
 
 	        };
@@ -9355,19 +9403,21 @@
 	        },
 
 	        //Client features loop
-
 	        loopData: function loopData() {
 
-	            if (this.app) if (this.app.input) if (this.app.input.update) {
+	            //if (this.app)
+	            //if (this.app.input)
+	            //if (this.app.input.update)
+	            //{
 
-	                //Return true or false, update audio
-	                //this.mute = this.audio.update();
+	            //Return true or false, update audio
+	            //this.mute = this.audio.update();
 
-	                this.update.size_difference(this);
+	            this.update.size_difference(this);
 
-	                //Update Input
-	                this.app.input.update();
-	            }
+	            //Update Input
+	            this.app.input.update();
+	            //}
 
 	            setTimeout(this.client_data, 1000 / 60);
 	        },
@@ -9400,12 +9450,17 @@
 	            });
 	        },
 
-	        //Client update loop
+	        /**
+	        * Client Update Loop
+	        * @class
+	        * @protected
+	        */
+
 	        update: {
 
 	            //Cache Vars
-	            last: { w: 0, h: 0 },
-	            difference: { x: 0, y: 0 },
+	            last: new Math.Vector(),
+	            difference: new Math.Vector(),
 	            scaler: { s: 1, x: 1, y: 1 },
 	            scaling: true,
 	            scalediff: 0,
@@ -9415,12 +9470,43 @@
 	            set: 0,
 	            frames: 0,
 
-	            //Calculate client size
+	            /**
+	            * Calculate differences between the canvas size last frame and this frame
+	            * @method
+	            * @private
+	            */
+
 	            size_difference: function size_difference(app) {
 
-	                //Calculate difference of with and height in this frame vs last frame
-	                this.difference = app.Math.Vector.Difference(new app.Math.Vec(this.last.w.toFixed(4), this.last.h.toFixed(4)), new app.Math.Vec(app.width.toFixed(4), app.height.toFixed(4)));
+	                var x = this.last.x;
+
+	                var y = this.last.y;
+
+	                var w = app.width;
+
+	                var h = app.height;
+
+	                var vector_size0 = new Math.Vector(x, y);
+
+	                var vector_size1 = new Math.Vector(w, h);
+
+	                if (x == w) if (y == h) {
+
+	                    this.difference = new Math.Vector(0, 0);
+
+	                    return;
+	                }
+
+	                this.difference = app.Math.Vector.Difference(vector_size0, vector_size1);
+
+	                return;
 	            },
+
+	            /**
+	            * Resize the canvas
+	            * @method
+	            * @private
+	            */
 
 	            size: function size(app) {
 
@@ -9428,10 +9514,10 @@
 	                if (this.difference.x + this.difference.y == 0) return false;
 
 	                //Reassign width and height
-	                app.app.canvas.canvas.width = this.last.w = app.width;
-	                app.app.canvas.canvas.height = this.last.h = app.height;
-	                app.app.canvas.buffer.width = this.last.w = app.width;
-	                app.app.canvas.buffer.height = this.last.h = app.height;
+	                app.app.canvas.canvas.width = this.last.x = app.width;
+	                app.app.canvas.canvas.height = this.last.y = app.height;
+	                app.app.canvas.buffer.width = this.last.x = app.width;
+	                app.app.canvas.buffer.height = this.last.y = app.height;
 
 	                return true;
 	            },
@@ -9866,7 +9952,7 @@
 	                    return;
 
 	                    /*
-	                      this.mute;
+	                     this.mute;
 	                    if (this.sound[this.current]==="undefined")
 	                        return;
 	                    if (this.sound[this.current].currentTime >= this.length)
@@ -9875,10 +9961,10 @@
 	                        {
 	                            this.current = 0;
 	                        }
-	                          this.sound[this.current].currentTime = 0;
+	                         this.sound[this.current].currentTime = 0;
 	                        this.sound[this.current].play();
 	                    }
-	                        */
+	                      */
 	                }
 	            },
 	            constructor: function constructor() {
@@ -10084,7 +10170,1337 @@
 	};
 
 /***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import {_State} from './state.js';
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @protected
+	*/
+
+	var _Core = (function (_Legacy2) {
+		_inherits(_Core, _Legacy2);
+
+		_createClass(_Core, [{
+			key: 'main',
+
+			/**  @type {Number} */
+
+			get: function get() {
+
+				return this.get('main');
+			}
+
+			/**  @type {Number} */
+
+			/**
+	  * private variables
+	  * @type {Object}
+	  * @protected
+	  */
+
+			,
+			set: function set(newmain) {
+
+				var state = this.get('main');
+				var newstate = newmain;
+				state.name = newstate.name;
+				state.init = newstate.init;
+				state.update = newstate.update;
+				state.draw = newstate.draw;
+
+				return state;
+			}
+
+			/**  @type {Number} */
+
+		}, {
+			key: 'version',
+			get: function get() {
+
+				return this.get('version');
+			}
+
+			/**  @type {Number} */
+
+		}, {
+			key: 'fps',
+			get: function get() {
+
+				return this.client.update.step.fps.toFixed(2);
+			}
+
+			/**  @type {Constructor} */
+
+		}]);
+
+		function _Core() {
+			_classCallCheck(this, _Core);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+
+			_private.set(_this, _this.constructor.properties);
+
+			return _this;
+		}
+
+		return _Core;
+	})(_interfaces._Legacy);
+
+	_Core.properties = {
+
+		main: {},
+		version: '0.8.1'
+
+	};
+	exports.default = _Core;
+
+/***/ },
 /* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import SGL from './sgl.js';
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* Initalizes canvas elements or attaches to existing elements at options.target.canvas. Handles creation of header and style elements.
+	* @protected
+	* @module
+	*
+	*/
+
+	var Canvas = (function (_Canvas_Core2) {
+	    _inherits(Canvas, _Canvas_Core2);
+
+	    /**
+	    * This is the constructor for the canvas module.
+	    * @param {number} x - position.x
+	    * @param {number} y - position.y
+	    */
+
+	    function Canvas(app) {
+	        _classCallCheck(this, Canvas);
+
+	        //Assign private properties
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
+
+	        _private.set(_this, _this.constructor.properties);
+
+	        //SGL.start();
+
+	        //Cache canvases
+	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
+	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
+	        var temp_blitter = document.getElementById(_this.app.options.target.blitter);
+	        var options = _this.app.options;
+
+	        //Check canvas variables
+	        if (temp_canvas) {
+
+	            //    if (temp_buffer)
+	            //        temp_buffer;
+
+	        } else {
+
+	                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
+
+	                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
+	            }
+	        temp_canvas.mozOpaque = options.flags.opaque;
+	        //Assign canvas elements
+
+	        var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
+
+	        var _this$style2 = _slicedToArray(_this$style, 4);
+
+	        _this.canvas = _this$style2[0];
+	        _this.buffer = _this$style2[1];
+	        _this.blitter = _this$style2[2];
+	        _this.rendering_style = _this$style2[3];
+
+	        _this.head.appendChild(_this.rendering_style);
+
+	        return _possibleConstructorReturn(_this, true);
+	    }
+
+	    /**
+	    * Style provided canvases
+	    * @type {null}
+	    * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
+	    * @protected
+	    */
+
+	    /**
+	    * Set documents private variables
+	    * @type {Object}
+	    * @protected
+	    */
+
+	    _createClass(Canvas, [{
+	        key: 'style',
+	        value: function style(temp_canvas, temp_buffer, temp_blitter) {
+
+	            temp_canvas.style.position = this.app.options.canvas.position.position;
+
+	            temp_canvas.style.zIndex = this.app.options.canvas.position.z;
+
+	            if (this.app.options.canvas.buffer) {
+	                temp_buffer.style.position = this.app.options.canvas.position.position;
+
+	                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
+	            }
+
+	            if (this.app.options.canvas.override) {
+
+	                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
+
+	                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
+
+	                if (this.app.options.canvas.buffer) {
+	                    temp_buffer.style.left = this.app.options.canvas.position.left + "px";
+
+	                    temp_buffer.style.top = this.app.options.canvas.position.top + "px";
+	                }
+	            }
+
+	            return [temp_canvas, temp_buffer, temp_blitter];
+	        }
+
+	        /**
+	        * Construct a canvas element.
+	        * @type {Id}
+	        * @param {Element} a - Creates a canvas element and attaches it to the body.
+	        * @protected
+	        */
+
+	    }, {
+	        key: 'construct_canvas',
+	        value: function construct_canvas(id) {
+
+	            var c = this.doc.createElement("canvas");
+
+	            var c_id = id + "_" + this.app.id;
+
+	            c.id = c_id;
+
+	            this.doc.body.appendChild(c);
+
+	            return this.doc.getElementById(c_id);
+	        }
+	    }]);
+
+	    return Canvas;
+	})(_interfaces._Canvas_Core);
+
+	Canvas.properties = {
+	    name: 'canvas',
+	    canvas: [],
+	    docs: document,
+	    head: document.getElementsByTagName('head')[0],
+	    _rendering_style: document.createElement('style')
+	};
+	exports.default = Canvas;
+	;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+	    //	//To ensure your data is filled, use a callback return your response data.
+	    //	var facebook = function(){ return App.user.pull();};
+	    //
+	    //	//Your facebook ID, callback function(){}
+	    //	App.user.fbconnect(id, facebook)
+	    name: "",
+	    id: "",
+	    locale: "",
+	    gender: "",
+	    updated_time: "",
+	    timezone: "",
+	    quotes: "",
+	    response: {},
+
+	    //returns the response object
+	    get: function get() {
+	        return this.response;
+	    },
+
+	    //facebook connection
+	    fbconnect: function con(appid, callback) {
+	        window.fbAsyncInit = function () {
+	            FB.init({
+	                appId: appid,
+	                status: true, // check login status
+	                cookie: true, // enable cookies to allow the server to access the session
+	                xfbml: true // parse XFBML
+	            });
+	            FB.login(function () {
+	                FB.api('/me/feed', 'post', { message: 'Hello, world!' });
+	            }, { scope: 'publish_actions' });
+	        };
+
+	        // Load the SDK asynchronously
+	        (function (d) {
+	            var js,
+	                id = 'facebook-jssdk',
+	                ref = d.getElementsByTagName('script')[0];
+	            if (d.getElementById(id)) {
+	                return;
+	            }
+	            js = d.createElement('script');js.id = id;js.async = true;
+	            js.src = "//connect.facebook.net/en_US/all.js";
+	            ref.parentNode.insertBefore(js, ref);
+	        })(document);
+
+	        // Here we run a very simple Flappy of the Graph API after login is successful.
+	        // This testAPI() function is only called in those cases.
+
+	        /*
+	        function testAPI() {
+	        console.log('Welcome!  Fetching your information.... ');
+	           FB.api('/me', function(response) {
+	              App.user.facebook(response);
+	              callback(response);
+	            log('Good to see you, ' + response.name + '.');
+	          });
+	        }
+	          */
+	    },
+
+	    //facebook callback
+	    facebook: function facebook(response) {
+	        this.response = response;
+	        this.name = this.response.name;
+	        this.id = this.response.id;
+	        this.locale = this.response.locale;
+	        this.gender = this.response.gender;
+	        this.updated_time = this.response.updated_time;
+	        this.timezone = this.response.timezone;
+	        this.quotes = this.response.quotes;
+	    }
+
+	};
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _cookies = __webpack_require__(210);
+
+	var _cookies2 = _interopRequireDefault(_cookies);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+
+	    constructor: function constructor(app) {
+
+	        return {
+
+	            app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	            init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
+
+	                    //Set app/document title
+
+	                    this.app.setTitle(document.title + "." + this.app.main.name);
+
+	                    //Construct App.ext components
+
+	                    this.app.Construct(this.useragent).init();
+
+	                    this.app.Construct(this.metatag).init();
+
+	                    //this.app.Construct(this.cookies).init();
+
+	                    this.cookies = new _cookies2.default(this.app);
+
+	                    this.app.Construct(this.cursor).init();
+
+	                    this.app.Construct(this.connect).init();
+	                }
+	            }
+	        };
+	    },
+	    prototype: {
+
+	        //UserAgent Information
+	        //	Assists in detecting the platform that you are running on.
+
+	        useragent: {
+
+	            //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
+
+	            prototype: {
+
+	                //Cached Navigator.userAgent
+	                agent: navigator.userAgent,
+
+	                //
+	                mouse: false,
+	                touch: false,
+	                keyboard: false,
+	                windows: false,
+	                chrome: false,
+	                safari: false,
+	                iemobile: false,
+	                nokia: false,
+	                ie: false,
+	                ios: false,
+	                blackberry: false,
+	                playbook: false,
+	                bb10: false,
+	                mobile: false,
+
+	                //Match user agent for IE
+	                IE: function IE() {
+
+	                    return this.agent.match(/Trident/i) ? true : false;
+	                },
+
+	                //Match user agent for iOS
+	                iOS: function iOS() {
+
+	                    return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
+	                },
+
+	                //Match user agent for Nokia
+	                Nokia: function Nokia() {
+
+	                    return this.agent.match(/Nokia/i) ? true : false;
+	                },
+
+	                //Determine mobile or windows based on useragent
+	                Mobile: function Mobile() {
+
+	                    return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+	                },
+
+	                //Match user agent for Chrome
+	                Chrome: function Chrome() {
+
+	                    return this.chrome = this.agent.match(/Chrome/i) ? true : false;
+	                },
+
+	                //Match user agent for Safari
+	                Safari: function Safari() {
+
+	                    return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
+	                },
+
+	                Desktop: function Desktop() {
+
+	                    return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
+	                },
+
+	                //Match user agent for Android
+	                Android: function Android() {
+	                    return this.agent.match(/Android/i) ? true : false;
+	                },
+
+	                //Match user agent for IEMobile
+	                IEMobile: function IEMobile() {
+
+	                    var trident = this.agent.match(/IEMobile/i);
+	                    var windowsphone = this.agent.match(/Windows Phone/i);
+	                    var touch = this.agent.match(/touch/i);
+
+	                    return trident || windowsphone || touch ? true : false;
+	                },
+
+	                //Match user agent for Blackberry
+	                BlackBerry: function BlackBerry() {
+	                    this.playbook = this.agent.match(/PlayBook/i) || false;
+	                    this.bb10 = this.agent.match(/BB10/i) || false;
+	                    return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
+	                }
+
+	            },
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed useragent object
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	                    init: { writable: false, configurable: false, enumerable: false, value: function value() {
+
+	                            //Query Browser
+	                            this.chrome = this.Chrome();
+	                            this.safari = this.Safari();
+	                            this.iemobile = this.IEMobile();
+	                            this.nokia = this.Nokia();
+	                            this.ie = this.trident = this.IE();
+
+	                            this.blackberry = this.BlackBerry();
+	                            this.ios = this.iOS();
+	                            this.android = this.Android();
+
+	                            this.touch = this.Mobile();
+	                            this.mouse = !this.Mobile() || this.BlackBerry();
+
+	                            this.keyboard = this.Desktop() || this.BlackBerry();
+
+	                            this.Mobile();
+	                            this.Desktop();
+
+	                            this.app.ext.useragent = this;
+	                            //return this;
+	                        }
+	                    }
+	                };
+	            }
+
+	        },
+
+	        //Cookie Storage
+	        //	Polyfill provided by ScottHamper
+	        //	https://github.com/ScottHamper/Cookies#api-reference
+
+	        cookies: _cookies2.default,
+
+	        //MetaTag Handler
+	        //	Assists in dynamically applying metatags.
+	        //	Automatically applies Microsoft, Apple and common metatags.
+
+	        metatag: {
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed metatag object.
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	                    init: { value: function value() {
+
+	                            //execute polyfill
+	                            this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
+	                            this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
+	                            this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
+	                            this.metaAppend(this.metaTag("cursor-event-mode", "native"));
+	                            this.metaAppend(this.metaTag("touch-event-mode", "native"));
+	                            this.metaAppend(this.metaTag("HandheldFriendly", "True"));
+
+	                            if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
+	                            if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
+
+	                            this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
+
+	                            //Cache Control
+	                            this.metaAppend(this.metaTag("cache-control", "max-age=0"));
+	                            this.metaAppend(this.metaTag("cache-control", "no-cache"));
+	                            this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
+	                            this.metaAppend(this.metaTag("pragma", "no-cache"));
+
+	                            this.app.ext.metatag = this;
+
+	                            //Return this
+	                            return this;
+	                        }
+	                    }
+	                };
+	            },
+
+	            prototype: {
+
+	                //Default injected tags
+	                ms_taphighlight: "no",
+	                apple_webapp: "yes",
+	                apple_statusbar: "black",
+	                devicedpi: true,
+	                devicewidth: true,
+
+	                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+	                metaFavicon: function metaFavicon(img) {
+
+	                    this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
+	                },
+
+	                //Construct a standard metaLink element
+	                metaLink: function metaLink(href, rel, type) {
+
+	                    //Create link element
+	                    this.link = document.createElement('link');
+
+	                    //Assign element values
+	                    this.link.href = href;
+	                    this.link.rel = rel;
+	                    this.link.type = type;
+
+	                    //Return link
+	                    return this.link;
+	                },
+
+	                //Construct a standard metaTag element
+	                metaTag: function metaTag(name, content) {
+
+	                    //Create link element
+	                    this.meta = document.createElement('meta');
+
+	                    //Assign element values
+	                    this.meta.content = content;
+	                    this.meta.name = name;
+
+	                    //Return tag
+	                    return this.meta;
+	                },
+
+	                //Append a meta object to the <head>
+	                metaAppend: function metaAppend(meta) {
+
+	                    //Append child to header
+	                    if (this.head.appendChild(meta)) {
+	                        //Count number of headers
+	                        this.count++;
+
+	                        //Return success
+	                        return true;
+	                    } else return false;
+	                },
+
+	                //Cached data
+	                head: document.getElementsByTagName('head')[0],
+	                link: null,
+	                meta: null,
+	                count: 0
+
+	            }
+
+	        },
+
+	        //Cursor Handler
+	        //	Logs last cursor and allows to easily change the cursor on the fly
+
+	        cursor: {
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed metatag object.
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+	                    init: { value: function value() {
+
+	                            this.set(this.wait);
+
+	                            this.app.ext.cursor = this;
+	                        }
+	                    }
+	                };
+	            },
+
+	            prototype: {
+
+	                //Cached cursor types
+	                auto: "auto",
+	                inherit: "inherit",
+	                crosshair: "crosshair",
+	                def: "default",
+	                help: "help",
+	                move: "move",
+	                pointer: "pointer",
+	                progress: "progress",
+	                text: "text",
+	                wait: "wait",
+	                eresize: "e-resize",
+	                neresize: "ne-resize",
+	                nwresize: "nw-resize",
+	                nresize: "n-resize",
+	                seresize: "se-resize",
+	                swresize: "sw-resize",
+	                sresize: "s-resize",
+	                wresize: "w-resize",
+
+	                //Properties
+	                current: "auto",
+	                last: "auto",
+	                changed: false,
+	                count: 0,
+	                lock: 0,
+	                delay: 4,
+
+	                set: function set(cursor, lock) {
+
+	                    if (this.last == cursor || this.lock) return;
+
+	                    this.last = this.current;
+
+	                    this.current = cursor;
+
+	                    /*
+	                    if (this.app.options.target.buffer)
+	                        this.app.canvas.buffer.style.cursor=this.current;
+	                        this.app.canvas.canvas.style.cursor=this.current;
+	                     document.body.style.cursor=this.current;
+	                    */
+	                    this.changed = true;
+	                    this.count++;
+	                }
+
+	            }
+
+	        },
+
+	        //Connection Controller
+	        //	Assists in making ajax calls and allows you to test your connection.
+	        //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
+
+	        connect: {
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed metatag object.
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+	                    init: { value: function value() {
+
+	                            //Execute a test on the connection
+	                            this.test();
+
+	                            this.app.ext.connect = this;
+	                        }
+	                    }
+	                };
+	            },
+
+	            prototype: {
+
+	                //Properties
+	                offline: false,
+	                connectionAttempts: 0,
+	                error: null,
+	                window: window,
+
+	                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
+	                load: function load(address, callback, arg0, arg1) {
+
+	                    var xmlhttp;
+	                    if (window.XMLHttpRequest) {
+	                        // code for IE7+, Firefox, Chrome, Opera, Safari
+	                        xmlhttp = new XMLHttpRequest();
+	                    } else {
+	                        // code for IE6, IE5
+	                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	                    }
+	                    xmlhttp.onreadystatechange = function () {
+	                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                            callback(xmlhttp.response, arg0, arg1);
+	                        }
+	                    };
+	                    xmlhttp.open("GET", address, true);
+	                    xmlhttp.send();
+	                },
+
+	                //An aJax request to check wither or not you are connected to the internet
+	                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
+	                hostReachable: function hostReachable() {
+	                    return;
+	                    /*
+	                                        //if local host return offline
+	                                        if ((this.window.location.hostname).toString()=="127.0.0.1")
+	                                            return false;
+	                    
+	                                        // Handle IE and more capable browsers
+	                                        var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
+	                                        var status;
+	                    
+	                    
+	                                        // Open new request as a HEAD to the root hostname with a random param to bust the cache
+	                                        xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
+	                    
+	                                        // Issue request and handle response
+	                                        try {
+	                                            xhr.send();
+	                                            return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
+	                    
+	                                        } catch (error) {
+	                    
+	                                            if (this.connectionAttempts<1)
+	                                                this.connectionAttempts++,this.hostReachable();
+	                                            this.error = error;
+	                                            return false;
+	                                        }
+	                    */
+	                },
+
+	                test: function test(app) {
+
+	                    return this.offline = this.hostReachable();
+	                }
+
+	            }
+
+	        }
+
+	    }
+	};
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
+	* @module
+	* @public
+	*/
+
+	var Cookies =
+
+	/**
+	* The constructor will fill window.Cookies with a new instance.
+	* @param {Object} app - reference to the app.
+	*/
+
+	function Cookies() {
+	    _classCallCheck(this, Cookies);
+
+	    var factory = function factory(window) {
+	        if (_typeof(window.document) !== 'object') {
+	            throw new Error('Cookies.js requires a `window` with a `document` object');
+	        }
+
+	        var Cookies = window.Cookies = function (key, value, options) {
+	            return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
+	        };
+
+	        // Allows for setter injection in unit tests
+	        Cookies._document = window.document;
+
+	        // Used to ensure cookie keys do not collide with
+	        // built-in `Object` properties
+	        Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
+
+	        Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+
+	        Cookies.defaults = {
+	            path: '/',
+	            secure: false
+	        };
+
+	        Cookies.get = function (key) {
+	            if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
+	                Cookies._renewCache();
+	            }
+
+	            return Cookies._cache[Cookies._cacheKeyPrefix + key];
+	        };
+
+	        Cookies.set = function (key, value, options) {
+	            options = Cookies._getExtendedOptions(options);
+	            options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
+
+	            Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
+
+	            return Cookies;
+	        };
+
+	        Cookies.expire = function (key, options) {
+	            return Cookies.set(key, undefined, options);
+	        };
+
+	        Cookies._getExtendedOptions = function (options) {
+	            return {
+	                path: options && options.path || Cookies.defaults.path,
+	                domain: options && options.domain || Cookies.defaults.domain,
+	                expires: options && options.expires || Cookies.defaults.expires,
+	                secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
+	            };
+	        };
+
+	        Cookies._isValidDate = function (date) {
+	            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
+	        };
+
+	        Cookies._getExpiresDate = function (expires, now) {
+	            now = now || new Date();
+
+	            if (typeof expires === 'number') {
+	                expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
+	            } else if (typeof expires === 'string') {
+	                expires = new Date(expires);
+	            }
+
+	            if (expires && !Cookies._isValidDate(expires)) {
+	                throw new Error('`expires` parameter cannot be converted to a valid Date instance');
+	            }
+
+	            return expires;
+	        };
+
+	        Cookies._generateCookieString = function (key, value, options) {
+	            key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
+	            key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
+	            value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
+	            options = options || {};
+
+	            var cookieString = key + '=' + value;
+	            cookieString += options.path ? ';path=' + options.path : '';
+	            cookieString += options.domain ? ';domain=' + options.domain : '';
+	            cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
+	            cookieString += options.secure ? ';secure' : '';
+
+	            return cookieString;
+	        };
+
+	        Cookies._getCacheFromString = function (documentCookie) {
+	            var cookieCache = {};
+	            var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
+
+	            for (var i = 0; i < cookiesArray.length; i++) {
+	                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+
+	                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
+	                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+	                }
+	            }
+
+	            return cookieCache;
+	        };
+
+	        Cookies._getKeyValuePairFromCookieString = function (cookieString) {
+	            // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
+	            var separatorIndex = cookieString.indexOf('=');
+
+	            // IE omits the "=" when the cookie value is an empty string
+	            separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
+
+	            return {
+	                key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
+	                value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
+	            };
+	        };
+
+	        Cookies._renewCache = function () {
+	            Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
+	            Cookies._cachedDocumentCookie = Cookies._document.cookie;
+	        };
+
+	        Cookies._areEnabled = function () {
+	            var testKey = 'cookies.js';
+	            var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
+	            Cookies.expire(testKey);
+	            return areEnabled;
+	        };
+
+	        Cookies.enabled = Cookies._areEnabled();
+
+	        return Cookies;
+	    };
+
+	    var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
+	    var AMD = "function" === 'function' && __webpack_require__(212);
+	    var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
+	    var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
+	    // AMD support
+	    if (AMD) {
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	            return cookiesExport;
+	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        // CommonJS/Node.js support
+	    } else if (objectExports) {
+	            // Support Node.js specific `module.exports` (which can be a function)
+	            if (moduleExports) {
+	                exports = module.exports = cookiesExport;
+	            }
+	            // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+	            exports.Cookies = cookiesExport;
+	        } else {
+	            global.Cookies = cookiesExport;
+	        }
+
+	    return Cookies;
+	};
+
+	exports.default = Cookies;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(211)(module)))
+
+/***/ },
+/* 211 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 212 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	var _test2 = __webpack_require__(214);
+
+	var _test3 = _interopRequireDefault(_test2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	window.test = _test3.default;
+
+	var Loader = (function (_SJSClass) {
+		_inherits(Loader, _SJSClass);
+
+		function Loader(app) {
+			_classCallCheck(this, Loader);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
+
+			_this.ImageCache = [];
+
+			_this.ImageBuffer = [];
+
+			_this.ImageBufferTime = 3;
+			_this.asyncLoadCacheIndex = 0;
+
+			window.Loader = _this;
+
+			return _this;
+		}
+
+		_createClass(Loader, [{
+			key: 'checkLoaded',
+			value: function checkLoaded(name) {
+				var _this2 = this;
+
+				if (!this.getImageReference(name).complete) {
+
+					setTimeout(function () {
+
+						_this2.checkLoaded(name);
+					}, this.ImageBufferTime);
+				} else {
+
+					this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
+				}
+
+				return this.getImageReference(name);
+			}
+		}, {
+			key: 'getBufferLength',
+			value: function getBufferLength() {
+
+				return this.ImageBuffer.length;
+			}
+		}, {
+			key: 'getImageReference',
+			value: function getImageReference(string) {
+
+				var elementPos = this.ImageCache.map(function (img) {
+
+					return img.string;
+				}).indexOf(string);
+
+				var objectFound = this.ImageCache[elementPos];
+
+				return objectFound;
+			}
+		}, {
+			key: 'loadImage',
+			value: function loadImage(string) {
+				var _this3 = this;
+
+				var name = string;
+
+				var img = this.graphics.load(string);
+
+				var cacheIndex = this.ImageCache.push(img);
+
+				img.string = name;
+
+				this.ImageBuffer.push(name);
+
+				setTimeout(function () {
+
+					_this3.checkLoaded(name);
+				}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
+
+				return this.ImageCache[cacheIndex - 1];
+			}
+		}, {
+			key: 'getBase64Image',
+			value: function getBase64Image(img) {
+
+				// Create an empty canvas element
+				var canvas = document.createElement("canvas");
+				canvas.width = img.width;
+				canvas.height = img.height;
+
+				// Copy the image contents to the canvas
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(img, 0, 0);
+
+				// Get the data-URL formatted image
+				// Firefox supports PNG and JPEG. You could check img.src to
+				// guess the original format, but be aware the using "image/jpg"
+				// will re-encode the image.
+				var dataURL = canvas.toDataURL("image/png");
+
+				return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+			}
+		}, {
+			key: 'createImageData',
+			value: function createImageData(img) {
+
+				// Create an empty canvas element
+				var canvas = document.createElement("canvas");
+				var ctx = canvas.getContext("2d");
+
+				canvas.width = img.width;
+				canvas.height = img.height;
+				canvas.style.background = 'transparent';
+				canvas.background = 'transparent';
+
+				var canvas2 = this.app.canvas.buffer.getContext('2d');
+				//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
+				var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
+
+				//var canvas2_img = new Image();
+				//canvas2_img.src = canvas2_data;
+
+				var img = document.createElement("img");
+				img.src = this.app.canvas.canvas.toDataURL("image/png");
+
+				// Copy the image contents to the canvas
+				//this.visuals.putData(canvas2_data,0,0);
+
+				//var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+				//ctx.putImageData(canvas2_data,0,0);
+
+				ctx.drawImage(img, 0, 0);
+				//ctx.drawImage(canvas2_img, 0, 0);
+
+				var newData2 = ctx.getImageData(0, 0, img.width, img.height);
+
+				return newData2;
+			}
+		}, {
+			key: 'asyncLoadImage',
+			value: (function () {
+				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
+					var _this4 = this;
+
+					var name, img, cacheIndex;
+					return regeneratorRuntime.wrap(function _callee$(_context) {
+						while (1) {
+							switch (_context.prev = _context.next) {
+								case 0:
+									name = string;
+									_context.next = 3;
+									return this.graphics.load(name);
+
+								case 3:
+									img = _context.sent;
+
+									img.string = name;
+
+									_context.next = 7;
+									return this.ImageCache.push(img);
+
+								case 7:
+									cacheIndex = _context.sent;
+									_context.next = 10;
+									return this.ImageBuffer.push(name + suffex);
+
+								case 10:
+									_context.next = 12;
+									return setTimeout(function () {
+
+										var _img = _this4.checkLoaded(name);
+
+										//_img.base64 = this.getBase64Image(_img);
+										//_img.imgdata = this.createImageData(_img);
+
+										_this4.ImageCache[cacheIndex - 1] = _img;
+										//console.log(this.getBase64Image(_img))
+										//console.log('eh');
+										//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+										//console.log(this.ImageCache[cacheIndex-1])
+									}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
+
+								case 12:
+									this.asyncLoadCacheIndex = cacheIndex;
+
+									return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
+
+								case 14:
+								case 'end':
+									return _context.stop();
+							}
+						}
+					}, _callee, this);
+				}));
+
+				return function asyncLoadImage(_x, _x2) {
+					return ref.apply(this, arguments);
+				};
+			})()
+		}, {
+			key: 'asyncLoadImageData',
+			value: (function () {
+				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
+					var _this5 = this;
+
+					var _index, _image;
+
+					return regeneratorRuntime.wrap(function _callee2$(_context2) {
+						while (1) {
+							switch (_context2.prev = _context2.next) {
+								case 0:
+									_index = this.asyncLoadCacheIndex;
+									_context2.next = 3;
+									return this.asyncLoadImage(string, "_blit").then(function (img) {
+
+										//let _cacheIndex =  this.ImageCache.push(img);
+
+										//console.log( this.ImageCache[_cacheIndex-1]=img)
+
+										var buffindex = _this5.ImageBuffer.push(string + "_blit");
+
+										_this5[string2] = img;
+										_this5[string2].addEventListener('load', function () {
+
+											_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
+
+											_this5[string2].string = string2;
+
+											_this5.ImageCache.push(_this5[string2]);
+
+											_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
+										});
+									});
+
+								case 3:
+									_image = _context2.sent;
+									return _context2.abrupt('return', _image);
+
+								case 5:
+								case 'end':
+									return _context2.stop();
+							}
+						}
+					}, _callee2, this);
+				}));
+
+				return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
+					return ref.apply(this, arguments);
+				};
+			})()
+		}]);
+
+		return Loader;
+	})(_interfaces._SJSClass);
+
+	exports.default = Loader;
+
+/***/ },
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10095,7 +11511,1127 @@
 	    value: true
 	});
 
-	var _interfaces = __webpack_require__(196);
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Test Module for running tyhe game
+	* @module
+	* @private
+	*/
+
+	var test = (function (_SJSClass) {
+	    _inherits(test, _SJSClass);
+
+	    function test(app) {
+	        _classCallCheck(this, test);
+
+	        //this.Loader = this.app.getCurrent().Loader;
+	        /*
+	                this.SplashScreen = [];
+	        
+	        		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
+	        
+	        		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
+	        
+	        		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
+	        
+	                this.Background = this.Loader.loadImage('intro/background');
+	        
+	                this.begin = this.Loader.loadImage('intro/begin');
+	        
+	        		this.ScoreNumber = [];
+	        
+	        		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
+	        		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
+	        		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
+	        		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
+	        		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
+	        		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
+	        		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
+	        		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
+	        		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
+	        		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
+	        
+	                this.Loader.loadImage('interface/iconoffline');
+	        
+	                this.Loader.loadImage('interface/iconp');
+	        
+	                this.Loader.loadImage('interface/iconvolume');
+	        
+	                this.Loader.loadImage('interface/iconx');
+	        */
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
+
+	        _this.StartPhase = 2;
+	        _this.StartAlpha = 2;
+
+	        _this.xxx = 0;
+	        _this.start = false;
+
+	        //		(this.particles = this.app.create(SB_.prototype)).init();
+
+	        //(this.loading = this.app.create(Loading.prototype)).init();
+	        //(this.statusicons = this.app.create(StatusIco.prototype)).init();
+	        //(this.characterselect = this.app.create(Characterselect.prototype)).init();
+
+	        //    this.particles = new SB_(this.app);
+
+	        //        this.loading = new Loading(this.app);
+
+	        //        this.statusicons = new StatusIco(this.app);
+
+	        //        this.characterselect = new Characterselect(this.app);
+
+	        _this.continue = false;
+
+	        _this.sceneX = -190;
+	        _this.scenePhase = 0;
+	        _this.sceneEndX = 1;
+
+	        _this.sceneStartSpeed = 3;
+	        _this.sceneEndSpeed = 4;
+
+	        _this.sceneSpeed = _this.sceneStartSpeed;
+	        return _this;
+	    }
+
+	    _createClass(test, [{
+	        key: "draw",
+	        value: function draw() {
+
+	            //    if (this.Loader.getBufferLength()>0)
+	            //        return;
+
+	            var sw = this.app.getScaledWidth();
+	            var sh = this.app.getScaledHeight();
+	            var h = this.app.getHeight();
+	            var w = this.app.getWidth();
+	            var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
+
+	            if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
+
+	            this.Background = {};
+	            this.Background.width = sw;
+
+	            var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
+
+	            if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
+	            /*
+	                    this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
+	            
+	                    if (this.scenePhase==2)
+	                        this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
+	                    else
+	                        this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
+	            */
+	            this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+	            /*
+	                    if (this.continue == true)
+	            			this.characterselect.draw();
+	                    else
+	                        this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
+	            */
+
+	            this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+
+	            if (this.scenePhase == 2) {
+	                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                /*
+	                			this.particles._draw();
+	                
+	                			if (this.graphics.getErrors())
+	                				this.loading.draw();
+	                			else	{
+	                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
+	                				if (this.continue==false)
+	                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                
+	                				this.app.ext.cursor.set('pointer');
+	                
+	                			}
+	                            */
+	            } else {}
+
+	                //	this.loading.draw();
+
+	                //	this.statusicons.draw(0.29);
+	        }
+	    }, {
+	        key: "update",
+	        value: function update() {
+
+	            //    this.loading.update();
+	            //	this.statusicons.update();
+
+	            //    if (this.Loader.getBufferLength()>0)
+	            //        return;
+
+	            var tick = this.sceneSpeed;
+
+	            if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
+	                //    this.particles._update();
+	                //	this.characterselect.update();
+	                this.sceneX += tick;
+	            } else if (this.scenePhase < 2) {
+
+	                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
+
+	                if (this.app.input.released) this.sceneSpeed = 10;
+
+	                this.sceneX += tick;
+
+	                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+
+	                if (this.scenePhase > 2) this.scenePhase = 2;
+	            }
+	        }
+	    }]);
+
+	    return test;
+	})(_interfaces._SJSClass);
+
+	exports.default = test;
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	var _vector = __webpack_require__(198);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	var _loader = __webpack_require__(213);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var xOff = 0;
+
+	var SJSParticleController = (function (_Loader) {
+	    _inherits(SJSParticleController, _Loader);
+
+	    function SJSParticleController(app) {
+	        _classCallCheck(this, SJSParticleController);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
+
+	        _this.SJSParticleList = [];
+
+	        _this.particleLimit = 1500;
+
+	        _this.flakes = new Image();
+
+	        _this.flakes0 = new Image();
+
+	        for (var i = 0; i < 16; i++) {
+	            _this['flakes' + i] = new Image();
+	        }for (var i = 0; i < 16; i++) {
+	            _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
+	        }return _this;
+	    }
+
+	    _createClass(SJSParticleController, [{
+	        key: 'clear',
+	        value: function clear() {
+
+	            this.SJSParticleList = [];
+	        }
+	    }, {
+	        key: 'appendParticle',
+	        value: function appendParticle() {
+
+	            var length = this.SJSParticleList.length;
+
+	            if (length > this.particleLimit) return;
+
+	            var width = this.app.getWidth();
+
+	            var height = this.app.getHeight();
+
+	            var scale = this.app.getScale();
+
+	            var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
+
+	            var End = new _vector2.default(Math.random() * width, 0);
+
+	            End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+
+	            var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+
+	            this.SJSParticleList.push(newParticle);
+
+	            return;
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+
+	            var length = this.SJSParticleList.length;
+
+	            this.appendParticle();
+
+	            if (length == 0) return;
+
+	            var i = length - 1;
+
+	            for (i; i; --i) {
+
+	                var particle = this.SJSParticleList[i];
+
+	                particle.update();
+	            }
+
+	            return;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw() {
+
+	            var error = this.getBufferLength();
+
+	            //    console.log(error)
+	            if (error > 0) {
+	                this.visuals.rect(0, 0, 10, 10, '#FF0000');
+	                return;
+	            }
+
+	            var length = this.SJSParticleList.length;
+
+	            if (length == 0) return;
+
+	            var i = length - 1;
+
+	            for (i; i; --i) {
+
+	                var particle = this.SJSParticleList[i];
+
+	                particle.draw();
+	            }
+	        }
+	    }]);
+
+	    return SJSParticleController;
+	})(_loader2.default);
+
+	exports.default = SJSParticleController;
+
+	var SJSParticle = (function (_SJSClass) {
+	    _inherits(SJSParticle, _SJSClass);
+
+	    function SJSParticle(app, pos, target, vel, marker, usePhysics) {
+	        _classCallCheck(this, SJSParticle);
+
+	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
+
+	        var loader = window.Loader; // this.app.getCurrent().particleController;
+
+	        //this.img = loader.getImageReference('../flakes');
+	        _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
+
+	        _this2.t = Math.round(1 + Math.random() * 5);
+
+	        _this2.gravity = 0.5;
+
+	        _this2.alpha = 0.75 + Math.random() * 0.25;
+
+	        _this2.easing = Math.random() * 0.2;
+
+	        _this2.fade = Math.random() * 0.1;
+
+	        _this2.gridX = marker % 120;
+
+	        _this2.gridY = Math.floor(marker / 120) * 12;
+
+	        _this2.color = marker;
+
+	        _this2.scale = 3 * Math.random() * 3 * Application.getScale();
+
+	        _this2.start = 30 + Math.random() * 180;
+
+	        _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
+
+	        _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
+
+	        _this2.del = false;
+
+	        _this2.pos = {
+	            x: pos.x || 0,
+	            y: pos.y || 0
+	        };
+
+	        _this2.vel = {
+	            x: vel.x || 0,
+	            y: vel.y || 0
+	        };
+
+	        _this2.lastPos = {
+	            x: _this2.pos.x,
+	            y: _this2.pos.y
+	        };
+
+	        _this2.target = {
+	            y: target.y || 0,
+	            x: target.x || 0
+	        };
+
+	        _this2.pos = new _vector2.default(pos.x, pos.y);
+	        _this2.vel = new _vector2.default(vel.x, vel.y);
+	        _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
+	        _this2.target = new _vector2.default(target.x, target.y);
+
+	        _this2.usePhysics = usePhysics || false;
+
+	        if (!_this2.usePhysics) {
+
+	            _this2.dir = Math.random() * 1;
+
+	            if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
+	        } else {
+
+	            if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	        }
+
+	        return _this2;
+	    }
+
+	    _createClass(SJSParticle, [{
+	        key: 'update',
+	        value: function update() {
+
+	            var width = this.app.getWidth();
+
+	            var height = this.app.getHeight();
+
+	            var scale = this.app.getScale();
+
+	            // Check to Delete
+
+	            if (this.del) {
+
+	                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
+	                var target = { x: Math.random() * width, y: 2 * height / scale };
+	                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
+
+	                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
+
+	                return;
+	            }
+
+	            // Move Object
+
+	            var distance = this.target.y - this.pos.y;
+
+	            var val = this.target.x / 200;
+
+	            this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
+
+	            if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
+
+	            val = this.pos.x / 200;
+
+	            if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
+
+	            var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
+	            var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
+	            this.pos.x += xdir;
+
+	            // Check if out of bounds
+
+	            if (this.pos.y > 600) {
+	                this.alpha -= 0.01;
+
+	                if (this.alpha < 0.01) this.del = true;
+	            }
+
+	            if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw() {
+
+	            //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
+	            //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	            //else
+	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+
+	            this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	        }
+	    }]);
+
+	    return SJSParticle;
+	})(_interfaces._SJSClass);
+
+/***/ },
+/* 216 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var _private = new WeakMap();
+
+	var _SGL = (function () {
+	  function _SGL() {
+	    _classCallCheck(this, _SGL);
+
+	    _private.set(this, this.constructor.properties);
+	  }
+
+	  _createClass(_SGL, [{
+	    key: 'start',
+	    value: function start() {}
+	  }, {
+	    key: 'square',
+	    get: function get() {
+
+	      return [100.0, 100.0, 0.0, -100.0, 100.0, 0.0, 100.0, -100.0, 0.0, -100.0, -100.0, 0.0];
+	    }
+	  }, {
+	    key: 'opacity',
+	    get: function get() {
+
+	      return 0;
+	    }
+	  }, {
+	    key: 'scale',
+	    get: function get() {
+
+	      return _private.get(this)['tras'].s;
+	    },
+	    set: function set(value) {
+
+	      _private.get(this)['tras'].s = value;
+	    }
+	  }]);
+
+	  return _SGL;
+	})();
+
+	_SGL.properties = {
+
+	  tras: { s: null },
+	  opacity: 0
+
+	};
+	exports.default = _SGL;
+
+	var SGL = new _SGL();
+
+	var canvas;
+	var gl;
+
+	var cubeVerticesBuffer;
+	var cubeVerticesTextureCoordBuffer;
+	var cubeVerticesIndexBuffer;
+	var cubeVerticesIndexBuffer;
+	var cubeRotation = 0.0;
+	var lastCubeUpdateTime = 0;
+
+	var cubeImage;
+	var cubeTexture;
+
+	var mvMatrix;
+	var shaderProgram;
+	var vertexPositionAttribute;
+	var textureCoordAttribute;
+	var perspectiveMatrix;
+
+	var squareVerticesBuffer;
+
+	var angleInRadians = 0;
+	var scale = 1;
+	var translation = [0, 0];
+	var width = 100;
+	var height = 30;
+	function setRectangle(gl, x, y, width, height) {
+	  var x1 = x;
+	  var x2 = x + width;
+	  var y1 = y;
+	  var y2 = y + height;
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([x1, y1, x2, y1, x1, y2, x1, y2, x2, y1, x2, y2]), gl.STATIC_DRAW);
+	}
+	var rect;
+
+	//
+	// start
+	//
+	// Called when the canvas is created to get the ball rolling.
+	//
+	function start() {
+	  canvas = document.getElementById("glcanvas");
+
+	  canvas.width = window.innerWidth;;
+	  canvas.height = window.innerHeight;
+
+	  initWebGL(canvas); // Initialize the GL context
+
+	  // Only continue if WebGL is available and working
+
+	  if (gl) {
+
+	    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);
+	    gl.clearDepth(1.0);
+	    //gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+	    gl.disable(gl.DEPTH_TEST); // Disable depth testing. This way, the last object drawn is always in "front".	// WebGL will not attempt to determine whether one object lies behind another.
+
+	    // Initialize the shaders; this is where all the lighting for the
+	    // vertices and so forth is established.
+
+	    initShaders();
+
+	    // Here's where we call the routine that builds all the objects
+	    // we'll be drawing.
+
+	    initBuffers();
+
+	    // Next, load and set up the textures we'll be using.
+
+	    initTextures();
+
+	    // Set up to draw the scene periodically.
+
+	    setTimeout(function () {
+
+	      setInterval(drawScene, 15);
+	    }, 300);
+	  }
+	}
+
+	function matrixMultiply(m1, m2) {
+	  var result = [];
+	  for (var i = 0; i < m1.length; i++) {
+	    result[i] = [];
+	    for (var j = 0; j < m2[0].length; j++) {
+	      var sum = 0;
+	      for (var k = 0; k < m1[0].length; k++) {
+	        sum += m1[i][k] * m2[k][j];
+	      }
+	      result[i][j] = sum;
+	    }
+	  }
+	  return result;
+	}
+	// Returns a random integer from 0 to range - 1.
+	function randomInt(range) {
+	  return Math.floor(Math.random() * range);
+	}
+	function makeTranslation(tx, ty) {
+	  return [1, 0, 0, 0, 1, 0, tx, ty, 1];
+	}
+
+	function makeRotation(angleInRadians) {
+	  var c = Math.cos(angleInRadians);
+	  var s = Math.sin(angleInRadians);
+	  return [c, -s, 0, s, c, 0, 0, 0, 1];
+	}
+
+	function makeScale(sx, sy) {
+	  return [sx, 0, 0, 0, sy, 0, 0, 0, 1];
+	}
+
+	//
+	// initWebGL
+	//
+	// Initialize WebGL, returning the GL context or null if
+	// WebGL isn't available or could not be initialized.
+	//
+	function initWebGL() {
+	  gl = null;
+
+	  try {
+	    gl = canvas.getContext("experimental-webgl");
+	  } catch (e) {}
+
+	  // If we don't have a GL context, give up now
+
+	  if (!gl) {
+	    alert("Unable to initialize WebGL. Your browser may not support it.");
+	  }
+	}
+
+	//
+	// initBuffers
+	//
+	// Initialize the buffers we'll need. For this demo, we just have
+	// one object -- a simple two-dimensional cube.
+	//
+	function initBuffers() {
+
+	  squareVerticesBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(SGL.square), gl.STATIC_DRAW);
+
+	  return;
+
+	  //	rect = new setRectangle(gl, 0,0,100,100);
+
+	  // Create a buffer for the cube's vertices.
+
+	  cubeVerticesBuffer = gl.createBuffer();
+
+	  // Select the cubeVerticesBuffer as the one to apply vertex
+	  // operations to from here out.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
+
+	  // Now create an array of vertices for the cube.
+
+	  var vertices = [
+	  // Front face
+	  -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+
+	  // Back face
+	  -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,
+
+	  // Top face
+	  -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,
+
+	  // Bottom face
+	  -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+
+	  // Right face
+	  1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
+
+	  // Left face
+	  -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0];
+
+	  // Now pass the list of vertices into WebGL to build the shape. We
+	  // do this by creating a Float32Array from the JavaScript array,
+	  // then use it to fill the current vertex buffer.
+
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+	  // Map the texture onto the cube's faces.
+
+	  cubeVerticesTextureCoordBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+
+	  var textureCoordinates = [
+	  // Front
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Back
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Top
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Bottom
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Right
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Left
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
+
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+	  // Build the element array buffer; this specifies the indices
+	  // into the vertex array for each face's vertices.
+
+	  cubeVerticesIndexBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+
+	  // This array defines each face as two triangles, using the
+	  // indices into the vertex array to specify each triangle's
+	  // position.
+
+	  var cubeVertexIndices = [0, 1, 2, 0, 2, 3, // front
+	  4, 5, 6, 4, 6, 7, // back
+	  8, 9, 10, 8, 10, 11, // top
+	  12, 13, 14, 12, 14, 15, // bottom
+	  16, 17, 18, 16, 18, 19, // right
+	  20, 21, 22, 20, 22, 23 // left
+	  ];
+
+	  // Now send the element array to GL
+
+	  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+	}
+
+	//
+	// initTextures
+	//
+	// Initialize the textures we'll be using, then initiate a load of
+	// the texture images. The handleTextureLoaded() callback will finish
+	// the job; it gets called each time a texture finishes loading.
+	//
+	function initTextures() {
+	  cubeTexture = gl.createTexture();
+	  cubeImage = new Image();
+	  cubeImage.onload = function () {
+	    handleTextureLoaded(cubeImage, cubeTexture);
+	  };
+	  cubeImage.src = "./flakes.png";
+	}
+
+	function handleTextureLoaded(image, texture) {
+	  console.log("handleTextureLoaded, image = " + image);
+	  gl.bindTexture(gl.TEXTURE_2D, texture);
+	  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+	  gl.generateMipmap(gl.TEXTURE_2D);
+	  gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+
+	function make2DProjection(width, height) {
+	  // Note: This matrix flips the Y axis so that 0 is at the top.
+	  return [2 / width, 0, 0, 0, -2 / height, 0, -1, 1, 1];
+	}
+
+	//
+	// drawScene
+	//
+	// Draw the scene.
+	//
+
+	function drawScene() {
+
+	  canvas = document.getElementById("glcanvas");
+
+	  var sw = 32;
+	  var sh = 32;
+	  var w = window.innerWidth;
+	  var h = window.innerHeight;
+	  if (typeof Application != 'undefined') sw = Application.client.setWidth, sh = Application.client.setHeight, w = Application.client.width * Application.client.scale, h = Application.client.height * Application.client.scale;
+
+	  canvas.width = w;
+	  canvas.height = h;
+
+	  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1, 150);
+	  perspectiveMatrix = makeOrtho(0, w * 2 * (sw / w), 0, h, 0.1, 150);
+	  // Clear the canvas before we start drawing on it.
+
+	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	  /*
+	  var s = function(w,h){
+	  
+	  	return makeOrtho(w/2, 0, h/2, 0, 0.1,150);
+	  
+	  }
+	  */
+	  //  perspectiveMatrix = s(-w, w, -h, h, 0.1,150);
+
+	  // Establish the perspective with which we want to view the
+	  // scene. Our field of view is 45 degrees, with a width/height
+	  // ratio of 640:480, and we only want to see objects between 0.1 units
+	  // and 100 units away from the camera.
+
+	  //perspectiveMatrix = makePerspective(45, 640.0/480.0, 0.1, 100.0);
+
+	  //perspectiveMatrix = makeOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
+	  //mat4.ortho(perspectiveMatrix, -1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
+	  //perspectiveMatrix = mat4.ortho(makePerspective(45, 640.0/480.0, 0.1, 100.0), -1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
+	  // Set the drawing position to the "identity" point, which is
+	  // the center of the scene.
+
+	  loadIdentity();
+
+	  // Now move the drawing position a bit to where we want to start
+	  // drawing the cube.
+
+	  mvTranslate([0, 0, -1.0]);
+
+	  // Save the current matrix, then rotate before we draw.
+
+	  mvPushMatrix();
+
+	  // Setup a rectangle
+	  //setRectangle(gl, translation[0], translation[1], width, height);
+
+	  // Draw the rectangle.
+	  //gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+	  //  mvRotate(cubeRotation, [1, 0, 1]);
+
+	  var drawSquare = function drawSquare(x, y) {
+
+	    var squareRotation = 0.0;
+	    //	mvPushMatrix();
+	    //	mvRotate(squareRotation, [1, 0, 1]);
+
+	    y = 0;
+	    mvTranslate([x, 0, -0.0]);
+
+	    // Set the scale.
+	    gl.uniform2fv(scaleLocation, scale);
+
+	    gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+
+	    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	    //	gl.vertexAttribPointer(draw_scale, 1, gl.FLOAT, false, 0, 0);
+
+	    setMatrixUniforms();
+	    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	    mvTranslate([-x, 0, -0.0]);
+
+	    //	mvPopMatrix();
+	  };
+
+	  drawSquare(0, h / 2);
+
+	  return;
+
+	  //  mvTranslate([-1.2, 0.5, -0.0]);
+	  ///DrawSquare
+
+	  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1, 150);
+
+	  /*
+	  
+	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+	  setMatrixUniforms();
+	  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	  
+	  */
+
+	  //mvTranslate([1.2, 0.5, -0.0]);
+
+	  // Draw the cube by binding the array buffer to the cube's vertices
+	  // array, setting attributes, and pushing it to GL.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
+	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	  // Set the texture coordinates attribute for the vertices.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+	  gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+	  // Specify the texture to map onto the faces.
+
+	  gl.activeTexture(gl.TEXTURE0);
+	  gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
+	  gl.uniform1i(gl.getUniformLocation(shaderProgram, "uSampler"), 0);
+
+	  // Draw the cube.
+
+	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+	  setMatrixUniforms();
+
+	  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+
+	  /**/
+
+	  // Restore the original matrix
+
+	  mvPopMatrix();
+
+	  // Update the rotation for the next draw, if it's time to do so.
+
+	  var currentTime = new Date().getTime();
+	  if (lastCubeUpdateTime) {
+	    var delta = currentTime - lastCubeUpdateTime;
+
+	    cubeRotation += 30 * delta / 1000.0;
+	  }
+
+	  lastCubeUpdateTime = currentTime;
+	}
+
+	//
+	// initShaders
+	//
+	// Initialize the shaders, so WebGL knows how to light our scene.
+	//
+
+	var scale = [10, 10];
+	var scaleLocation;
+
+	function initShaders() {
+	  var fragmentShader = getShader(gl, "shader-fs");
+	  var vertexShader = getShader(gl, "shader-vs");
+
+	  // Create the shader program
+
+	  shaderProgram = gl.createProgram();
+	  gl.attachShader(shaderProgram, vertexShader);
+	  gl.attachShader(shaderProgram, fragmentShader);
+	  gl.linkProgram(shaderProgram);
+
+	  // If creating the shader program failed, alert
+
+	  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+	    alert("Unable to initialize the shader program.");
+	  }
+
+	  gl.useProgram(shaderProgram);
+
+	  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	  gl.enableVertexAttribArray(vertexPositionAttribute);
+
+	  //Curr Draw Scale
+	  scaleLocation = gl.getUniformLocation(shaderProgram, "u_scale");
+
+	  //	gl.enableVertexAttribArray(draw_scale);
+
+	  //  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+	  // gl.enableVertexAttribArray(textureCoordAttribute);
+	}
+
+	//
+	// getShader
+	//
+	// Loads a shader program by scouring the current document,
+	// looking for a script with the specified ID.
+	//
+	function getShader(gl, id) {
+	  var shaderScript, theSource, currentChild, shader;
+
+	  shaderScript = document.getElementById(id);
+
+	  // Didn't find an element with the specified ID; abort.
+
+	  if (!shaderScript) {
+	    return null;
+	  }
+
+	  // Walk through the source element's children, building the
+	  // shader source string.
+
+	  var theSource = "";
+	  var currentChild = shaderScript.firstChild;
+
+	  while (currentChild) {
+	    if (currentChild.nodeType == 3) {
+	      theSource += currentChild.textContent;
+	    }
+
+	    currentChild = currentChild.nextSibling;
+	  }
+
+	  // Now figure out what type of shader script we have,
+	  // based on its MIME type.
+
+	  var shader;
+
+	  if (shaderScript.type == "x-shader/x-fragment") {
+	    shader = gl.createShader(gl.FRAGMENT_SHADER);
+	  } else if (shaderScript.type == "x-shader/x-vertex") {
+	    shader = gl.createShader(gl.VERTEX_SHADER);
+	  } else {
+	    return null; // Unknown shader type
+	  }
+
+	  // Send the source to the shader object
+
+	  gl.shaderSource(shader, theSource);
+
+	  // Compile the shader program
+
+	  gl.compileShader(shader);
+
+	  // See if it compiled successfully
+
+	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+	    alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+	    return null;
+	  }
+
+	  return shader;
+	}
+
+	//
+	// Matrix utility functions
+	//
+
+	function loadIdentity() {
+	  mvMatrix = Matrix.I(4);
+	}
+
+	function multMatrix(m) {
+	  mvMatrix = mvMatrix.x(m);
+	}
+
+	function mvTranslate(v) {
+	  multMatrix(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
+	}
+
+	function setMatrixUniforms() {
+	  var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+	  gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
+
+	  var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+	  gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
+	}
+
+	var mvMatrixStack = [];
+
+	function mvPushMatrix(m) {
+	  if (m) {
+	    mvMatrixStack.push(m.dup());
+	    mvMatrix = m.dup();
+	  } else {
+	    mvMatrixStack.push(mvMatrix.dup());
+	  }
+	}
+
+	function mvPopMatrix() {
+	  if (!mvMatrixStack.length) {
+	    throw "Can't pop from an empty matrix stack.";
+	  }
+
+	  mvMatrix = mvMatrixStack.pop();
+	  return mvMatrix;
+	}
+
+	function mvRotate(angle, v) {
+	  var inRadians = angle * Math.PI / 180.0;
+	  var m = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
+	  multMatrix(m);
+	}
+
+	window.start = start;
+	window.initWebGL = initWebGL;
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
@@ -10351,7 +12887,7 @@
 	            //this.text_ext("y: "+Math.round(App.input.window.y*100)/100,75,70,"#FFFFFF",1,1,0);
 	            if (App.fps<20)
 	            console.log("FPSLow: "+App.fps);
-	              var data = [
+	             var data = [
 	                        [this.app.client.name],
 	                        [App.code+ " " +App.codefmk],
 	                        [this.app.client.name],
@@ -10360,7 +12896,7 @@
 	                        "x "+Math.round(App.input.x*100)/100		,
 	                        "x "+Math.round(App.input.window.x*100)/100,
 	                        "d "+App.input.pressed+"   p "+App.input.duration,
-	                            "y "+Math.round(App.input.y*100)/100		,
+	                          "y "+Math.round(App.input.y*100)/100		,
 	                        "y "+Math.round(App.input.window.y*100)/100,
 	                        (App.ext.useragent.trident)?"Input: "+"Touch":"Input: Mouse",
 	                        ],
@@ -10388,7 +12924,7 @@
 	                        "state ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(this.app.client.update.state.current):"?"),"",
 	                        "ext ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.kilobyteCount(App.ext):"?"),"",
 	                        "Total ",(App.ext.debug.strength!=="Lite"?this.app.client.Math.Data.Total():"?"),""
-	                          ]
+	                         ]
 	                    ];
 	                    for(var t=0,tt=0,p=65,tr=0,ii=0;ii<data.length&&(6!=ii||"Lite"!=App.ext.debug.strength);++ii)
 	                        {
@@ -10400,7 +12936,7 @@
 	                        t=0;
 	                        tt++
 	                        };
-	              //this.text_ext("D: "+App.input.duration,210,55);
+	             //this.text_ext("D: "+App.input.duration,210,55);
 	            //this.text_ext("P: "+App.input.pressed,160,55);
 	            //(App.ext.useragent.trident)?this.text_ext("Input: "+"Touch",160,70):this.text_ext("Input: "+"Mouse",160,70);
 	            //this.text_ext("I: "+App.input.window.inside+" X: "+App.input.window.x+" Y: "+App.input.window.y,155,70);
@@ -10419,7 +12955,7 @@
 	            this.text_ext("Log: "+App.ext.debug.text,35,this.app.client.setHeight-25,this.point);
 	            if (App.ext.debug.strength=="Lite")
 	                return;
-	                  try {
+	                 try {
 	            //this.text_ext("visuals: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.visuals) 		+"kb",25,235,"#FFFFFF",1,1,0);
 	            }catch(e){}
 	            //this.text_ext("graphics: " + this.app.client.Math.Data.kilobyteCount(this.app.client.graphics) 		+"kb",25,250,"#FFFFFF",1,1,0);
@@ -10427,7 +12963,7 @@
 	            //this.text_ext("_State: " 	+ this.app.client.Math.Data.kilobyteCount(this.app.client.update.state) 	+"kb",25,280,"#FFFFFF",1,1,0);
 	            //this.text_ext("ext: " 		+ this.app.client.Math.Data.kilobyteCount(App.ext) 					+"kb",25,295,"#FFFFFF",1,1,0);
 	            //this.text_ext("Total: "		+ this.app.client.Math.Data.Total()								+"kb",25,325,"#FFFFFF",1,1,0);
-	                */
+	              */
 	        },
 
 	        blit: function blit(img, offx, offy) {
@@ -10990,7 +13526,7 @@
 	            var y = position.y;
 
 	            /*
-	                          if (!r){
+	                         if (!r){
 	                        x = this.app.input.touched.last.x;
 	                        y = this.app.input.touched.last.y;}
 	            */
@@ -11125,13 +13661,13 @@
 	        }
 
 	        /*
-	              circle now allows passing vectors
-	              Test: argument based functions
+	             circle now allows passing vectors
+	             Test: argument based functions
 	                Method1:
 	                    if based on first argument
 	                        Method2 (unused):
 	                            inherit _circle function and pass accordingly
-	          */
+	         */
 
 	        , circle: function circle(XVec, YR, RC, CA, A) {
 
@@ -11322,7 +13858,7 @@
 
 	                    /*var orig_aspect = this.original_width / this.original_height;
 	                    var cur_aspect = this.width / this.height;
-	                    		// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+	                    	// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
 	                    if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
 	                    	this.aspect_scale = this.height / this.original_height;
 	                    else
@@ -11455,13 +13991,13 @@
 	                    {
 	                    	var orig_aspect = this.original_width / this.original_height;
 	                    	var cur_aspect = this.width / this.height;
-	                    			// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+	                    		// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
 	                    	if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
 	                    		this.aspect_scale = this.height / this.original_height;
 	                    	else
 	                    		this.aspect_scale = this.width / this.original_width;
 	                    }
-	                            */
+	                           */
 	                    // Non-fullscreen games on retina displays never call setSize to enable hi-dpi display.
 	                    // Do this now if the device has hi-dpi support.
 	                    //if (this.fullscreen_mode === 0 && this.isRetina && this.devicePixelRatio > 1)
@@ -11476,1706 +14012,6 @@
 	};
 
 	exports.default = visuals;
-
-/***/ },
-/* 208 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _interfaces = __webpack_require__(196);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* _private
-	* @protected
-	*/
-
-	var _private = new WeakMap();
-
-	/**
-	* Initalizes canvas elements or attaches to existing elements at options.target.canvas. Handles creation of header and style elements.
-	* @protected
-	* @module
-	*
-	*/
-
-	var Canvas = (function (_Canvas_Core2) {
-	        _inherits(Canvas, _Canvas_Core2);
-
-	        /**
-	        * This is the constructor for the canvas module.
-	        * @param {number} x - position.x
-	        * @param {number} y - position.y
-	        */
-
-	        function Canvas(app) {
-	                _classCallCheck(this, Canvas);
-
-	                //Assign private properties
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
-
-	                _private.set(_this, _this.constructor.properties);
-
-	                //Cache canvases
-	                var temp_canvas = document.getElementById(_this.app.options.target.canvas);
-	                var temp_buffer = document.getElementById(_this.app.options.target.buffer);
-	                var temp_blitter = document.getElementById(_this.app.options.target.blitter);
-	                var options = _this.app.options;
-
-	                //Check canvas variables
-	                if (temp_canvas) {
-
-	                        //    if (temp_buffer)
-	                        //        temp_buffer;
-
-	                } else {
-
-	                                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
-
-	                                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
-	                        }
-	                temp_canvas.mozOpaque = options.flags.opaque;
-	                //Assign canvas elements
-
-	                var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
-
-	                var _this$style2 = _slicedToArray(_this$style, 4);
-
-	                _this.canvas = _this$style2[0];
-	                _this.buffer = _this$style2[1];
-	                _this.blitter = _this$style2[2];
-	                _this.rendering_style = _this$style2[3];
-
-	                _this.head.appendChild(_this.rendering_style);
-
-	                return _possibleConstructorReturn(_this, true);
-	        }
-
-	        /**
-	        * Style provided canvases
-	        * @type {null}
-	        * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
-	        * @protected
-	        */
-
-	        /**
-	        * Set documents private variables
-	        * @type {Object}
-	        * @protected
-	        */
-
-	        _createClass(Canvas, [{
-	                key: 'style',
-	                value: function style(temp_canvas, temp_buffer, temp_blitter) {
-
-	                        temp_canvas.style.position = this.app.options.canvas.position.position;
-
-	                        temp_canvas.style.zIndex = this.app.options.canvas.position.z;
-
-	                        if (this.app.options.canvas.buffer) {
-	                                temp_buffer.style.position = this.app.options.canvas.position.position;
-
-	                                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
-	                        }
-
-	                        if (this.app.options.canvas.override) {
-
-	                                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
-
-	                                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
-
-	                                if (this.app.options.canvas.buffer) {
-	                                        temp_buffer.style.left = this.app.options.canvas.position.left + "px";
-
-	                                        temp_buffer.style.top = this.app.options.canvas.position.top + "px";
-	                                }
-	                        }
-
-	                        return [temp_canvas, temp_buffer, temp_blitter];
-	                }
-
-	                /**
-	                * Construct a canvas element.
-	                * @type {Id}
-	                * @param {Element} a - Creates a canvas element and attaches it to the body.
-	                * @protected
-	                */
-
-	        }, {
-	                key: 'construct_canvas',
-	                value: function construct_canvas(id) {
-
-	                        var c = this.doc.createElement("canvas");
-
-	                        var c_id = id + "_" + this.app.id;
-
-	                        c.id = c_id;
-
-	                        this.doc.body.appendChild(c);
-
-	                        return this.doc.getElementById(c_id);
-	                }
-	        }]);
-
-	        return Canvas;
-	})(_interfaces._Canvas_Core);
-
-	Canvas.properties = {
-	        name: 'canvas',
-	        canvas: [],
-	        docs: document,
-	        head: document.getElementsByTagName('head')[0],
-	        _rendering_style: document.createElement('style')
-	};
-	exports.default = Canvas;
-	;
-
-/***/ },
-/* 209 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = {
-	    //	//To ensure your data is filled, use a callback return your response data.
-	    //	var facebook = function(){ return App.user.pull();};
-	    //
-	    //	//Your facebook ID, callback function(){}
-	    //	App.user.fbconnect(id, facebook)
-	    name: "",
-	    id: "",
-	    locale: "",
-	    gender: "",
-	    updated_time: "",
-	    timezone: "",
-	    quotes: "",
-	    response: {},
-
-	    //returns the response object
-	    get: function get() {
-	        return this.response;
-	    },
-
-	    //facebook connection
-	    fbconnect: function con(appid, callback) {
-	        window.fbAsyncInit = function () {
-	            FB.init({
-	                appId: appid,
-	                status: true, // check login status
-	                cookie: true, // enable cookies to allow the server to access the session
-	                xfbml: true // parse XFBML
-	            });
-	            FB.login(function () {
-	                FB.api('/me/feed', 'post', { message: 'Hello, world!' });
-	            }, { scope: 'publish_actions' });
-	        };
-
-	        // Load the SDK asynchronously
-	        (function (d) {
-	            var js,
-	                id = 'facebook-jssdk',
-	                ref = d.getElementsByTagName('script')[0];
-	            if (d.getElementById(id)) {
-	                return;
-	            }
-	            js = d.createElement('script');js.id = id;js.async = true;
-	            js.src = "//connect.facebook.net/en_US/all.js";
-	            ref.parentNode.insertBefore(js, ref);
-	        })(document);
-
-	        // Here we run a very simple Flappy of the Graph API after login is successful.
-	        // This testAPI() function is only called in those cases.
-
-	        /*
-	        function testAPI() {
-	        console.log('Welcome!  Fetching your information.... ');
-	            FB.api('/me', function(response) {
-	              App.user.facebook(response);
-	              callback(response);
-	            log('Good to see you, ' + response.name + '.');
-	          });
-	        }
-	            */
-	    },
-
-	    //facebook callback
-	    facebook: function facebook(response) {
-	        this.response = response;
-	        this.name = this.response.name;
-	        this.id = this.response.id;
-	        this.locale = this.response.locale;
-	        this.gender = this.response.gender;
-	        this.updated_time = this.response.updated_time;
-	        this.timezone = this.response.timezone;
-	        this.quotes = this.response.quotes;
-	    }
-
-	};
-
-/***/ },
-/* 210 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	                value: true
-	});
-
-	var _cookies = __webpack_require__(211);
-
-	var _cookies2 = _interopRequireDefault(_cookies);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-
-	                constructor: function constructor(app) {
-
-	                                return {
-
-	                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                                                init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
-
-	                                                                                //Set app/document title
-
-	                                                                                this.app.setTitle(document.title + "." + this.app.main.name);
-
-	                                                                                //Construct App.ext components
-
-	                                                                                this.app.Construct(this.useragent).init();
-
-	                                                                                this.app.Construct(this.metatag).init();
-
-	                                                                                //this.app.Construct(this.cookies).init();
-
-	                                                                                this.cookies = new _cookies2.default(this.app);
-
-	                                                                                this.app.Construct(this.cursor).init();
-
-	                                                                                this.app.Construct(this.connect).init();
-	                                                                }
-	                                                }
-	                                };
-	                },
-	                prototype: {
-
-	                                //UserAgent Information
-	                                //	Assists in detecting the platform that you are running on.
-
-	                                useragent: {
-
-	                                                //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
-
-	                                                prototype: {
-
-	                                                                //Cached Navigator.userAgent
-	                                                                agent: navigator.userAgent,
-
-	                                                                //
-	                                                                mouse: false,
-	                                                                touch: false,
-	                                                                keyboard: false,
-	                                                                windows: false,
-	                                                                chrome: false,
-	                                                                safari: false,
-	                                                                iemobile: false,
-	                                                                nokia: false,
-	                                                                ie: false,
-	                                                                ios: false,
-	                                                                blackberry: false,
-	                                                                playbook: false,
-	                                                                bb10: false,
-	                                                                mobile: false,
-
-	                                                                //Match user agent for IE
-	                                                                IE: function IE() {
-
-	                                                                                return this.agent.match(/Trident/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for iOS
-	                                                                iOS: function iOS() {
-
-	                                                                                return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for Nokia
-	                                                                Nokia: function Nokia() {
-
-	                                                                                return this.agent.match(/Nokia/i) ? true : false;
-	                                                                },
-
-	                                                                //Determine mobile or windows based on useragent
-	                                                                Mobile: function Mobile() {
-
-	                                                                                return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-	                                                                },
-
-	                                                                //Match user agent for Chrome
-	                                                                Chrome: function Chrome() {
-
-	                                                                                return this.chrome = this.agent.match(/Chrome/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for Safari
-	                                                                Safari: function Safari() {
-
-	                                                                                return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
-	                                                                },
-
-	                                                                Desktop: function Desktop() {
-
-	                                                                                return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
-	                                                                },
-
-	                                                                //Match user agent for Android
-	                                                                Android: function Android() {
-	                                                                                return this.agent.match(/Android/i) ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for IEMobile
-	                                                                IEMobile: function IEMobile() {
-
-	                                                                                var trident = this.agent.match(/IEMobile/i);
-	                                                                                var windowsphone = this.agent.match(/Windows Phone/i);
-	                                                                                var touch = this.agent.match(/touch/i);
-
-	                                                                                return trident || windowsphone || touch ? true : false;
-	                                                                },
-
-	                                                                //Match user agent for Blackberry
-	                                                                BlackBerry: function BlackBerry() {
-	                                                                                this.playbook = this.agent.match(/PlayBook/i) || false;
-	                                                                                this.bb10 = this.agent.match(/BB10/i) || false;
-	                                                                                return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
-	                                                                }
-
-	                                                },
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed useragent object
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                                                                                init: { writable: false, configurable: false, enumerable: false, value: function value() {
-
-	                                                                                                                //Query Browser
-	                                                                                                                this.chrome = this.Chrome();
-	                                                                                                                this.safari = this.Safari();
-	                                                                                                                this.iemobile = this.IEMobile();
-	                                                                                                                this.nokia = this.Nokia();
-	                                                                                                                this.ie = this.trident = this.IE();
-
-	                                                                                                                this.blackberry = this.BlackBerry();
-	                                                                                                                this.ios = this.iOS();
-	                                                                                                                this.android = this.Android();
-
-	                                                                                                                this.touch = this.Mobile();
-	                                                                                                                this.mouse = !this.Mobile() || this.BlackBerry();
-
-	                                                                                                                this.keyboard = this.Desktop() || this.BlackBerry();
-
-	                                                                                                                this.Mobile();
-	                                                                                                                this.Desktop();
-
-	                                                                                                                this.app.ext.useragent = this;
-	                                                                                                                //return this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                }
-
-	                                },
-
-	                                //Cookie Storage
-	                                //	Polyfill provided by ScottHamper
-	                                //	https://github.com/ScottHamper/Cookies#api-reference
-
-	                                cookies: _cookies2.default,
-
-	                                //MetaTag Handler
-	                                //	Assists in dynamically applying metatags.
-	                                //	Automatically applies Microsoft, Apple and common metatags.
-
-	                                metatag: {
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed metatag object.
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                                                                                init: { value: function value() {
-
-	                                                                                                                //execute polyfill
-	                                                                                                                this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
-	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
-	                                                                                                                this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
-	                                                                                                                this.metaAppend(this.metaTag("cursor-event-mode", "native"));
-	                                                                                                                this.metaAppend(this.metaTag("touch-event-mode", "native"));
-	                                                                                                                this.metaAppend(this.metaTag("HandheldFriendly", "True"));
-
-	                                                                                                                if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
-	                                                                                                                if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
-
-	                                                                                                                this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
-
-	                                                                                                                //Cache Control
-	                                                                                                                this.metaAppend(this.metaTag("cache-control", "max-age=0"));
-	                                                                                                                this.metaAppend(this.metaTag("cache-control", "no-cache"));
-	                                                                                                                this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
-	                                                                                                                this.metaAppend(this.metaTag("pragma", "no-cache"));
-
-	                                                                                                                this.app.ext.metatag = this;
-
-	                                                                                                                //Return this
-	                                                                                                                return this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                },
-
-	                                                prototype: {
-
-	                                                                //Default injected tags
-	                                                                ms_taphighlight: "no",
-	                                                                apple_webapp: "yes",
-	                                                                apple_statusbar: "black",
-	                                                                devicedpi: true,
-	                                                                devicewidth: true,
-
-	                                                                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
-	                                                                metaFavicon: function metaFavicon(img) {
-
-	                                                                                this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
-	                                                                },
-
-	                                                                //Construct a standard metaLink element
-	                                                                metaLink: function metaLink(href, rel, type) {
-
-	                                                                                //Create link element
-	                                                                                this.link = document.createElement('link');
-
-	                                                                                //Assign element values
-	                                                                                this.link.href = href;
-	                                                                                this.link.rel = rel;
-	                                                                                this.link.type = type;
-
-	                                                                                //Return link
-	                                                                                return this.link;
-	                                                                },
-
-	                                                                //Construct a standard metaTag element
-	                                                                metaTag: function metaTag(name, content) {
-
-	                                                                                //Create link element
-	                                                                                this.meta = document.createElement('meta');
-
-	                                                                                //Assign element values
-	                                                                                this.meta.content = content;
-	                                                                                this.meta.name = name;
-
-	                                                                                //Return tag
-	                                                                                return this.meta;
-	                                                                },
-
-	                                                                //Append a meta object to the <head>
-	                                                                metaAppend: function metaAppend(meta) {
-
-	                                                                                //Append child to header
-	                                                                                if (this.head.appendChild(meta)) {
-	                                                                                                //Count number of headers
-	                                                                                                this.count++;
-
-	                                                                                                //Return success
-	                                                                                                return true;
-	                                                                                } else return false;
-	                                                                },
-
-	                                                                //Cached data
-	                                                                head: document.getElementsByTagName('head')[0],
-	                                                                link: null,
-	                                                                meta: null,
-	                                                                count: 0
-
-	                                                }
-
-	                                },
-
-	                                //Cursor Handler
-	                                //	Logs last cursor and allows to easily change the cursor on the fly
-
-	                                cursor: {
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed metatag object.
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-	                                                                                init: { value: function value() {
-
-	                                                                                                                this.set(this.wait);
-
-	                                                                                                                this.app.ext.cursor = this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                },
-
-	                                                prototype: {
-
-	                                                                //Cached cursor types
-	                                                                auto: "auto",
-	                                                                inherit: "inherit",
-	                                                                crosshair: "crosshair",
-	                                                                def: "default",
-	                                                                help: "help",
-	                                                                move: "move",
-	                                                                pointer: "pointer",
-	                                                                progress: "progress",
-	                                                                text: "text",
-	                                                                wait: "wait",
-	                                                                eresize: "e-resize",
-	                                                                neresize: "ne-resize",
-	                                                                nwresize: "nw-resize",
-	                                                                nresize: "n-resize",
-	                                                                seresize: "se-resize",
-	                                                                swresize: "sw-resize",
-	                                                                sresize: "s-resize",
-	                                                                wresize: "w-resize",
-
-	                                                                //Properties
-	                                                                current: "auto",
-	                                                                last: "auto",
-	                                                                changed: false,
-	                                                                count: 0,
-	                                                                lock: 0,
-	                                                                delay: 4,
-
-	                                                                set: function set(cursor, lock) {
-
-	                                                                                if (this.last == cursor || this.lock) return;
-
-	                                                                                this.last = this.current;
-
-	                                                                                this.current = cursor;
-
-	                                                                                /*
-	                                                                                if (this.app.options.target.buffer)
-	                                                                                    this.app.canvas.buffer.style.cursor=this.current;
-	                                                                                    this.app.canvas.canvas.style.cursor=this.current;
-	                                                                                  document.body.style.cursor=this.current;
-	                                                                                */
-	                                                                                this.changed = true;
-	                                                                                this.count++;
-	                                                                }
-
-	                                                }
-
-	                                },
-
-	                                //Connection Controller
-	                                //	Assists in making ajax calls and allows you to test your connection.
-	                                //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
-
-	                                connect: {
-
-	                                                constructor: function constructor(app) {
-
-	                                                                //Return constructed metatag object.
-	                                                                return {
-	                                                                                app: { writable: false, configurable: false, enumerable: false, value: app },
-	                                                                                init: { value: function value() {
-
-	                                                                                                                //Execute a test on the connection
-	                                                                                                                this.test();
-
-	                                                                                                                this.app.ext.connect = this;
-	                                                                                                }
-	                                                                                }
-	                                                                };
-	                                                },
-
-	                                                prototype: {
-
-	                                                                //Properties
-	                                                                offline: false,
-	                                                                connectionAttempts: 0,
-	                                                                error: null,
-	                                                                window: window,
-
-	                                                                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
-	                                                                load: function load(address, callback, arg0, arg1) {
-
-	                                                                                var xmlhttp;
-	                                                                                if (window.XMLHttpRequest) {
-	                                                                                                // code for IE7+, Firefox, Chrome, Opera, Safari
-	                                                                                                xmlhttp = new XMLHttpRequest();
-	                                                                                } else {
-	                                                                                                // code for IE6, IE5
-	                                                                                                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	                                                                                }
-	                                                                                xmlhttp.onreadystatechange = function () {
-	                                                                                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                                                                                                                callback(xmlhttp.response, arg0, arg1);
-	                                                                                                }
-	                                                                                };
-	                                                                                xmlhttp.open("GET", address, true);
-	                                                                                xmlhttp.send();
-	                                                                },
-
-	                                                                //An aJax request to check wither or not you are connected to the internet
-	                                                                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
-	                                                                hostReachable: function hostReachable() {
-	                                                                                return;
-	                                                                                /*
-	                                                                                                    //if local host return offline
-	                                                                                                    if ((this.window.location.hostname).toString()=="127.0.0.1")
-	                                                                                                        return false;
-	                                                                                
-	                                                                                                    // Handle IE and more capable browsers
-	                                                                                                    var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
-	                                                                                                    var status;
-	                                                                                
-	                                                                                
-	                                                                                                    // Open new request as a HEAD to the root hostname with a random param to bust the cache
-	                                                                                                    xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
-	                                                                                
-	                                                                                                    // Issue request and handle response
-	                                                                                                    try {
-	                                                                                                        xhr.send();
-	                                                                                                        return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
-	                                                                                
-	                                                                                                    } catch (error) {
-	                                                                                
-	                                                                                                        if (this.connectionAttempts<1)
-	                                                                                                            this.connectionAttempts++,this.hostReachable();
-	                                                                                                        this.error = error;
-	                                                                                                        return false;
-	                                                                                                    }
-	                                                                                */
-	                                                                },
-
-	                                                                test: function test(app) {
-
-	                                                                                return this.offline = this.hostReachable();
-	                                                                }
-
-	                                                }
-
-	                                }
-
-	                }
-	};
-
-/***/ },
-/* 211 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
-	* @module
-	* @public
-	*/
-
-	var Cookies =
-
-	/**
-	* The constructor will fill window.Cookies with a new instance.
-	* @param {Object} app - reference to the app.
-	*/
-
-	function Cookies() {
-	    _classCallCheck(this, Cookies);
-
-	    var factory = function factory(window) {
-	        if (_typeof(window.document) !== 'object') {
-	            throw new Error('Cookies.js requires a `window` with a `document` object');
-	        }
-
-	        var Cookies = window.Cookies = function (key, value, options) {
-	            return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
-	        };
-
-	        // Allows for setter injection in unit tests
-	        Cookies._document = window.document;
-
-	        // Used to ensure cookie keys do not collide with
-	        // built-in `Object` properties
-	        Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
-
-	        Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-	        Cookies.defaults = {
-	            path: '/',
-	            secure: false
-	        };
-
-	        Cookies.get = function (key) {
-	            if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-	                Cookies._renewCache();
-	            }
-
-	            return Cookies._cache[Cookies._cacheKeyPrefix + key];
-	        };
-
-	        Cookies.set = function (key, value, options) {
-	            options = Cookies._getExtendedOptions(options);
-	            options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
-
-	            Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
-
-	            return Cookies;
-	        };
-
-	        Cookies.expire = function (key, options) {
-	            return Cookies.set(key, undefined, options);
-	        };
-
-	        Cookies._getExtendedOptions = function (options) {
-	            return {
-	                path: options && options.path || Cookies.defaults.path,
-	                domain: options && options.domain || Cookies.defaults.domain,
-	                expires: options && options.expires || Cookies.defaults.expires,
-	                secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
-	            };
-	        };
-
-	        Cookies._isValidDate = function (date) {
-	            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
-	        };
-
-	        Cookies._getExpiresDate = function (expires, now) {
-	            now = now || new Date();
-
-	            if (typeof expires === 'number') {
-	                expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
-	            } else if (typeof expires === 'string') {
-	                expires = new Date(expires);
-	            }
-
-	            if (expires && !Cookies._isValidDate(expires)) {
-	                throw new Error('`expires` parameter cannot be converted to a valid Date instance');
-	            }
-
-	            return expires;
-	        };
-
-	        Cookies._generateCookieString = function (key, value, options) {
-	            key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-	            key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
-	            value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-	            options = options || {};
-
-	            var cookieString = key + '=' + value;
-	            cookieString += options.path ? ';path=' + options.path : '';
-	            cookieString += options.domain ? ';domain=' + options.domain : '';
-	            cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-	            cookieString += options.secure ? ';secure' : '';
-
-	            return cookieString;
-	        };
-
-	        Cookies._getCacheFromString = function (documentCookie) {
-	            var cookieCache = {};
-	            var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
-
-	            for (var i = 0; i < cookiesArray.length; i++) {
-	                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-	                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-	                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
-	                }
-	            }
-
-	            return cookieCache;
-	        };
-
-	        Cookies._getKeyValuePairFromCookieString = function (cookieString) {
-	            // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
-	            var separatorIndex = cookieString.indexOf('=');
-
-	            // IE omits the "=" when the cookie value is an empty string
-	            separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
-
-	            return {
-	                key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
-	                value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
-	            };
-	        };
-
-	        Cookies._renewCache = function () {
-	            Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
-	            Cookies._cachedDocumentCookie = Cookies._document.cookie;
-	        };
-
-	        Cookies._areEnabled = function () {
-	            var testKey = 'cookies.js';
-	            var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-	            Cookies.expire(testKey);
-	            return areEnabled;
-	        };
-
-	        Cookies.enabled = Cookies._areEnabled();
-
-	        return Cookies;
-	    };
-
-	    var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	    var AMD = "function" === 'function' && __webpack_require__(213);
-	    var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
-	    var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
-	    // AMD support
-	    if (AMD) {
-	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	            return cookiesExport;
-	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	        // CommonJS/Node.js support
-	    } else if (objectExports) {
-	            // Support Node.js specific `module.exports` (which can be a function)
-	            if (moduleExports) {
-	                exports = module.exports = cookiesExport;
-	            }
-	            // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-	            exports.Cookies = cookiesExport;
-	        } else {
-	            global.Cookies = cookiesExport;
-	        }
-
-	    return Cookies;
-	};
-
-	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(212)(module)))
-
-/***/ },
-/* 212 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 213 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ },
-/* 214 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-			value: true
-	});
-
-	var _interfaces = __webpack_require__(196);
-
-	var _test2 = __webpack_require__(215);
-
-	var _test3 = _interopRequireDefault(_test2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	window.test = _test3.default;
-
-	var Loader = (function (_SJSClass) {
-			_inherits(Loader, _SJSClass);
-
-			function Loader(app) {
-					_classCallCheck(this, Loader);
-
-					var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
-
-					_this.ImageCache = [];
-
-					_this.ImageBuffer = [];
-
-					_this.ImageBufferTime = 3;
-					_this.asyncLoadCacheIndex = 0;
-
-					window.Loader = _this;
-
-					return _this;
-			}
-
-			_createClass(Loader, [{
-					key: 'checkLoaded',
-					value: function checkLoaded(name) {
-							var _this2 = this;
-
-							if (!this.getImageReference(name).complete) {
-
-									setTimeout(function () {
-
-											_this2.checkLoaded(name);
-									}, this.ImageBufferTime);
-							} else {
-
-									this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
-							}
-
-							return this.getImageReference(name);
-					}
-			}, {
-					key: 'getBufferLength',
-					value: function getBufferLength() {
-
-							return this.ImageBuffer.length;
-					}
-			}, {
-					key: 'getImageReference',
-					value: function getImageReference(string) {
-
-							var elementPos = this.ImageCache.map(function (img) {
-
-									return img.string;
-							}).indexOf(string);
-
-							var objectFound = this.ImageCache[elementPos];
-
-							return objectFound;
-					}
-			}, {
-					key: 'loadImage',
-					value: function loadImage(string) {
-							var _this3 = this;
-
-							var name = string;
-
-							var img = this.graphics.load(string);
-
-							var cacheIndex = this.ImageCache.push(img);
-
-							img.string = name;
-
-							this.ImageBuffer.push(name);
-
-							setTimeout(function () {
-
-									_this3.checkLoaded(name);
-							}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-							return this.ImageCache[cacheIndex - 1];
-					}
-			}, {
-					key: 'getBase64Image',
-					value: function getBase64Image(img) {
-
-							// Create an empty canvas element
-							var canvas = document.createElement("canvas");
-							canvas.width = img.width;
-							canvas.height = img.height;
-
-							// Copy the image contents to the canvas
-							var ctx = canvas.getContext("2d");
-							ctx.drawImage(img, 0, 0);
-
-							// Get the data-URL formatted image
-							// Firefox supports PNG and JPEG. You could check img.src to
-							// guess the original format, but be aware the using "image/jpg"
-							// will re-encode the image.
-							var dataURL = canvas.toDataURL("image/png");
-
-							return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-					}
-			}, {
-					key: 'createImageData',
-					value: function createImageData(img) {
-
-							// Create an empty canvas element
-							var canvas = document.createElement("canvas");
-							var ctx = canvas.getContext("2d");
-
-							canvas.width = img.width;
-							canvas.height = img.height;
-							canvas.style.background = 'transparent';
-							canvas.background = 'transparent';
-
-							var canvas2 = this.app.canvas.buffer.getContext('2d');
-							//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
-							var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
-
-							//var canvas2_img = new Image();
-							//canvas2_img.src = canvas2_data;
-
-							var img = document.createElement("img");
-							img.src = this.app.canvas.canvas.toDataURL("image/png");
-
-							// Copy the image contents to the canvas
-							//this.visuals.putData(canvas2_data,0,0);
-
-							//var newData = canvas2.getImageData(0,0,img.width,img.height);
-
-							//ctx.putImageData(canvas2_data,0,0);
-
-							ctx.drawImage(img, 0, 0);
-							//ctx.drawImage(canvas2_img, 0, 0);
-
-							var newData2 = ctx.getImageData(0, 0, img.width, img.height);
-
-							return newData2;
-					}
-			}, {
-					key: 'asyncLoadImage',
-					value: (function () {
-							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
-									var _this4 = this;
-
-									var name, img, cacheIndex;
-									return regeneratorRuntime.wrap(function _callee$(_context) {
-											while (1) {
-													switch (_context.prev = _context.next) {
-															case 0:
-																	name = string;
-																	_context.next = 3;
-																	return this.graphics.load(name);
-
-															case 3:
-																	img = _context.sent;
-
-																	img.string = name;
-
-																	_context.next = 7;
-																	return this.ImageCache.push(img);
-
-															case 7:
-																	cacheIndex = _context.sent;
-																	_context.next = 10;
-																	return this.ImageBuffer.push(name + suffex);
-
-															case 10:
-																	_context.next = 12;
-																	return setTimeout(function () {
-
-																			var _img = _this4.checkLoaded(name);
-
-																			//_img.base64 = this.getBase64Image(_img);
-																			//_img.imgdata = this.createImageData(_img);
-
-																			_this4.ImageCache[cacheIndex - 1] = _img;
-																			//console.log(this.getBase64Image(_img))
-																			//console.log('eh');
-																			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
-
-																			//console.log(this.ImageCache[cacheIndex-1])
-																	}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-															case 12:
-																	this.asyncLoadCacheIndex = cacheIndex;
-
-																	return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
-
-															case 14:
-															case 'end':
-																	return _context.stop();
-													}
-											}
-									}, _callee, this);
-							}));
-
-							return function asyncLoadImage(_x, _x2) {
-									return ref.apply(this, arguments);
-							};
-					})()
-			}, {
-					key: 'asyncLoadImageData',
-					value: (function () {
-							var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
-									var _this5 = this;
-
-									var _index, _image;
-
-									return regeneratorRuntime.wrap(function _callee2$(_context2) {
-											while (1) {
-													switch (_context2.prev = _context2.next) {
-															case 0:
-																	_index = this.asyncLoadCacheIndex;
-																	_context2.next = 3;
-																	return this.asyncLoadImage(string, "_blit").then(function (img) {
-
-																			//let _cacheIndex =  this.ImageCache.push(img);
-
-																			//console.log( this.ImageCache[_cacheIndex-1]=img)
-
-																			var buffindex = _this5.ImageBuffer.push(string + "_blit");
-
-																			_this5[string2] = img;
-																			_this5[string2].addEventListener('load', function () {
-
-																					_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
-
-																					_this5[string2].string = string2;
-
-																					_this5.ImageCache.push(_this5[string2]);
-
-																					_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
-																			});
-																	});
-
-															case 3:
-																	_image = _context2.sent;
-																	return _context2.abrupt('return', _image);
-
-															case 5:
-															case 'end':
-																	return _context2.stop();
-													}
-											}
-									}, _callee2, this);
-							}));
-
-							return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
-									return ref.apply(this, arguments);
-							};
-					})()
-			}]);
-
-			return Loader;
-	})(_interfaces._SJSClass);
-
-	exports.default = Loader;
-
-/***/ },
-/* 215 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _interfaces = __webpack_require__(196);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	* Test Module for running tyhe game
-	* @module
-	* @private
-	*/
-
-	var test = (function (_SJSClass) {
-	        _inherits(test, _SJSClass);
-
-	        function test(app) {
-	                _classCallCheck(this, test);
-
-	                //this.Loader = this.app.getCurrent().Loader;
-	                /*
-	                        this.SplashScreen = [];
-	                
-	                		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
-	                
-	                		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
-	                
-	                		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
-	                
-	                        this.Background = this.Loader.loadImage('intro/background');
-	                
-	                        this.begin = this.Loader.loadImage('intro/begin');
-	                
-	                		this.ScoreNumber = [];
-	                
-	                		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
-	                		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
-	                		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
-	                		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
-	                		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
-	                		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
-	                		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
-	                		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
-	                		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
-	                		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
-	                
-	                        this.Loader.loadImage('interface/iconoffline');
-	                
-	                        this.Loader.loadImage('interface/iconp');
-	                
-	                        this.Loader.loadImage('interface/iconvolume');
-	                
-	                        this.Loader.loadImage('interface/iconx');
-	                */
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
-
-	                _this.StartPhase = 2;
-	                _this.StartAlpha = 2;
-
-	                _this.xxx = 0;
-	                _this.start = false;
-
-	                //		(this.particles = this.app.create(SB_.prototype)).init();
-
-	                //(this.loading = this.app.create(Loading.prototype)).init();
-	                //(this.statusicons = this.app.create(StatusIco.prototype)).init();
-	                //(this.characterselect = this.app.create(Characterselect.prototype)).init();
-
-	                //    this.particles = new SB_(this.app);
-
-	                //        this.loading = new Loading(this.app);
-
-	                //        this.statusicons = new StatusIco(this.app);
-
-	                //        this.characterselect = new Characterselect(this.app);
-
-	                _this.continue = false;
-
-	                _this.sceneX = -190;
-	                _this.scenePhase = 0;
-	                _this.sceneEndX = 1;
-
-	                _this.sceneStartSpeed = 3;
-	                _this.sceneEndSpeed = 4;
-
-	                _this.sceneSpeed = _this.sceneStartSpeed;
-	                return _this;
-	        }
-
-	        _createClass(test, [{
-	                key: "draw",
-	                value: function draw() {
-
-	                        //    if (this.Loader.getBufferLength()>0)
-	                        //        return;
-
-	                        var sw = this.app.getScaledWidth();
-	                        var sh = this.app.getScaledHeight();
-	                        var h = this.app.getHeight();
-	                        var w = this.app.getWidth();
-	                        var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
-
-	                        if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
-
-	                        this.Background = {};
-	                        this.Background.width = sw;
-
-	                        var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
-
-	                        if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
-	                        /*
-	                                this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
-	                        
-	                                if (this.scenePhase==2)
-	                                    this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
-	                                else
-	                                    this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
-	                        */
-	                        this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-	                        /*
-	                                if (this.continue == true)
-	                        			this.characterselect.draw();
-	                                else
-	                                    this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
-	                        */
-
-	                        this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-
-	                        if (this.scenePhase == 2) {
-	                                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
-	                                /*
-	                                			this.particles._draw();
-	                                
-	                                			if (this.graphics.getErrors())
-	                                				this.loading.draw();
-	                                			else	{
-	                                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
-	                                				if (this.continue==false)
-	                                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
-	                                
-	                                				this.app.ext.cursor.set('pointer');
-	                                
-	                                			}
-	                                            */
-	                        } else {}
-
-	                                //	this.loading.draw();
-
-	                                //	this.statusicons.draw(0.29);
-	                }
-	        }, {
-	                key: "update",
-	                value: function update() {
-
-	                        //    this.loading.update();
-	                        //	this.statusicons.update();
-
-	                        //    if (this.Loader.getBufferLength()>0)
-	                        //        return;
-
-	                        var tick = this.sceneSpeed;
-
-	                        if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
-	                                //    this.particles._update();
-	                                //	this.characterselect.update();
-	                                this.sceneX += tick;
-	                        } else if (this.scenePhase < 2) {
-
-	                                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
-
-	                                if (this.app.input.released) this.sceneSpeed = 10;
-
-	                                this.sceneX += tick;
-
-	                                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
-
-	                                if (this.scenePhase > 2) this.scenePhase = 2;
-	                        }
-	                }
-	        }]);
-
-	        return test;
-	})(_interfaces._SJSClass);
-
-	exports.default = test;
-
-/***/ },
-/* 216 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _interfaces = __webpack_require__(196);
-
-	var _vector = __webpack_require__(201);
-
-	var _vector2 = _interopRequireDefault(_vector);
-
-	var _loader = __webpack_require__(214);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var xOff = 0;
-
-	var SJSParticleController = (function (_Loader) {
-	        _inherits(SJSParticleController, _Loader);
-
-	        function SJSParticleController(app) {
-	                _classCallCheck(this, SJSParticleController);
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
-
-	                _this.SJSParticleList = [];
-
-	                _this.particleLimit = 1500;
-
-	                _this.flakes = new Image();
-
-	                _this.flakes0 = new Image();
-
-	                for (var i = 0; i < 16; i++) {
-	                        _this['flakes' + i] = new Image();
-	                }for (var i = 0; i < 16; i++) {
-	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
-	                }return _this;
-	        }
-
-	        _createClass(SJSParticleController, [{
-	                key: 'clear',
-	                value: function clear() {
-
-	                        this.SJSParticleList = [];
-	                }
-	        }, {
-	                key: 'appendParticle',
-	                value: function appendParticle() {
-
-	                        var length = this.SJSParticleList.length;
-
-	                        if (length > this.particleLimit) return;
-
-	                        var width = this.app.getWidth();
-
-	                        var height = this.app.getHeight();
-
-	                        var scale = this.app.getScale();
-
-	                        var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
-
-	                        var End = new _vector2.default(Math.random() * width, 0);
-
-	                        End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
-
-	                        var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
-
-	                        this.SJSParticleList.push(newParticle);
-
-	                        return;
-	                }
-	        }, {
-	                key: 'update',
-	                value: function update() {
-
-	                        var length = this.SJSParticleList.length;
-
-	                        this.appendParticle();
-
-	                        if (length == 0) return;
-
-	                        var i = length - 1;
-
-	                        for (i; i; --i) {
-
-	                                var particle = this.SJSParticleList[i];
-
-	                                particle.update();
-	                        }
-
-	                        return;
-	                }
-	        }, {
-	                key: 'draw',
-	                value: function draw() {
-
-	                        var error = this.getBufferLength();
-
-	                        //    console.log(error)
-	                        if (error > 0) {
-	                                this.visuals.rect(0, 0, 10, 10, '#FF0000');
-	                                return;
-	                        }
-
-	                        var length = this.SJSParticleList.length;
-
-	                        if (length == 0) return;
-
-	                        var i = length - 1;
-
-	                        for (i; i; --i) {
-
-	                                var particle = this.SJSParticleList[i];
-
-	                                particle.draw();
-	                        }
-	                }
-	        }]);
-
-	        return SJSParticleController;
-	})(_loader2.default);
-
-	exports.default = SJSParticleController;
-
-	var SJSParticle = (function (_SJSClass) {
-	        _inherits(SJSParticle, _SJSClass);
-
-	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
-	                _classCallCheck(this, SJSParticle);
-
-	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
-
-	                var loader = window.Loader; // this.app.getCurrent().particleController;
-
-	                //this.img = loader.getImageReference('../flakes');
-	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
-
-	                _this2.t = Math.round(1 + Math.random() * 5);
-
-	                _this2.gravity = 0.5;
-
-	                _this2.alpha = 0.75 + Math.random() * 0.25;
-
-	                _this2.easing = Math.random() * 0.2;
-
-	                _this2.fade = Math.random() * 0.1;
-
-	                _this2.gridX = marker % 120;
-
-	                _this2.gridY = Math.floor(marker / 120) * 12;
-
-	                _this2.color = marker;
-
-	                _this2.scale = 3 * Math.random() * 3 * Application.getScale();
-
-	                _this2.start = 30 + Math.random() * 180;
-
-	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
-
-	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
-
-	                _this2.del = false;
-
-	                _this2.pos = {
-	                        x: pos.x || 0,
-	                        y: pos.y || 0
-	                };
-
-	                _this2.vel = {
-	                        x: vel.x || 0,
-	                        y: vel.y || 0
-	                };
-
-	                _this2.lastPos = {
-	                        x: _this2.pos.x,
-	                        y: _this2.pos.y
-	                };
-
-	                _this2.target = {
-	                        y: target.y || 0,
-	                        x: target.x || 0
-	                };
-
-	                _this2.pos = new _vector2.default(pos.x, pos.y);
-	                _this2.vel = new _vector2.default(vel.x, vel.y);
-	                _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
-	                _this2.target = new _vector2.default(target.x, target.y);
-
-	                _this2.usePhysics = usePhysics || false;
-
-	                if (!_this2.usePhysics) {
-
-	                        _this2.dir = Math.random() * 1;
-
-	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
-	                } else {
-
-	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
-	                }
-
-	                return _this2;
-	        }
-
-	        _createClass(SJSParticle, [{
-	                key: 'update',
-	                value: function update() {
-
-	                        var width = this.app.getWidth();
-
-	                        var height = this.app.getHeight();
-
-	                        var scale = this.app.getScale();
-
-	                        // Check to Delete
-
-	                        if (this.del) {
-
-	                                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
-	                                var target = { x: Math.random() * width, y: 2 * height / scale };
-	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
-
-	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
-
-	                                return;
-	                        }
-
-	                        // Move Object
-
-	                        var distance = this.target.y - this.pos.y;
-
-	                        var val = this.target.x / 200;
-
-	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
-
-	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
-
-	                        val = this.pos.x / 200;
-
-	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
-
-	                        var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
-	                        var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
-	                        this.pos.x += xdir;
-
-	                        // Check if out of bounds
-
-	                        if (this.pos.y > 600) {
-	                                this.alpha -= 0.01;
-
-	                                if (this.alpha < 0.01) this.del = true;
-	                        }
-
-	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
-	                }
-	        }, {
-	                key: 'draw',
-	                value: function draw() {
-
-	                        //if ((this.app.fps<25)||(this.app.getScale()<0.8))
-	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	                        //else
-	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-
-	                        this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
-	                }
-	        }]);
-
-	        return SJSParticle;
-	})(_interfaces._SJSClass);
 
 /***/ }
 /******/ ]);

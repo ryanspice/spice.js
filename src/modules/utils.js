@@ -94,8 +94,109 @@ utils.loadExternalJS = function(scripts) {
 
 }
 
+/**
+* Converts and array of objects to CSV.
+* @module
+* @access private
+*/
+
+utils.convertArrayOfObjectsToCSV = function(args) {
+
+    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+    data = args.data || null;
+
+    if (data == null || !data.length) {
+
+        return null;
+
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    keys = Object.keys(data[0]);
+
+    result = '';
+
+    result += keys.join(columnDelimiter);
+
+    result += lineDelimiter;
+
+    data.forEach(function(item) {
+
+        ctr = 0;
+
+        keys.forEach(function(key) {
+
+            if (ctr > 0) result += columnDelimiter;
+
+            result += item[key];
+
+            ctr++;
+
+        });
+
+        result += lineDelimiter;
+
+    });
+
+    return result;
+}
+
+/**
+* Converts and array of objects to CSV.
+* @module
+* @access private
+*/
+
+utils.writeToCSV = function(name){
+
+    var logStream = fs.createWriteStream('log.txt', {'flags': 'a'});
+
+    logStream.write('Initial line...');
+
+    logStream.end('this is the end line');
+
+    let dataString = "";
+
+    var data =this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
+
+    //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
+
+    var csvContent = "data:text/csv;charset=utf-8,";
+
+    data.forEach(function(infoArray, index){
+
+       dataString = infoArray.join(",");
+
+       csvContent += index < data.length ? dataString+ "\n" : dataString;
+
+    });
+
+    var encodedUri = encodeURI(csvContent);
+
+    var link = document.createElement("a");
+
+    link.setAttribute("href", encodedUri);
+
+    link.setAttribute("download", name+".csv");
+
+    link.click();
+
+}
+
 window.wait = wait;
 
 window.utils = utils;
+
+
+
+
+
+
+
+
 
 export default window.utils;

@@ -4,5 +4,6 @@
   "destination": "./docs",
   "plugins": [
       {"name": "esdoc-es7-plugin"}
-    ]
+  ],
+  "styles": ["./src/docs.css"]
 }

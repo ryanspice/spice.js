@@ -1,16 +1,11 @@
 
+
 export default {
 
     overridescroll:false,
     drag:0,
     targetfps:60,
     mute:false,
-
-    watch:{
-
-        fps:false
-
-    },
 
     paths:{
 
@@ -34,6 +29,8 @@ export default {
 
     flags:{
 
+		webGL:true,
+
         canvas:true,
         mstouch:true,
         seamless:true,
@@ -45,6 +42,7 @@ export default {
 
     canvas:{
 
+			opacity:0,
             override:false,                              //Toggle the use of options.canvas
             name:'canvas',                             //Use canvas.name
             buffername:'buffer',                  //Use canvas.buffer

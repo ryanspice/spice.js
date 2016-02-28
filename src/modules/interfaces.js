@@ -69,6 +69,14 @@ class _Interface {
 */
 
 /**
+* Vector_private
+* @property
+* @private
+*/
+
+let _Vector_private = new WeakMap();
+
+/**
 * Vector
 * @module
 * @interface
@@ -76,6 +84,17 @@ class _Interface {
 */
 
  class _Vector extends _Interface {
+
+	 /**
+     * Set Vector private variables
+     * @type {Object}
+     * @protected
+     */
+
+     static properties = {
+         x:0,
+		 y:0
+     };
 
     /**  @type {Number} */
 
@@ -107,7 +126,10 @@ class _Interface {
 
         super();
 
+		_Vector_private.set(this,this.constructor.properties);
+
         this.position = {x ,y};
+
 
     };
 
@@ -171,20 +193,99 @@ class _Interface {
 
 }
 
+class _Legacy extends _Interface {
 
-class _Core extends _Interface {
 
-    /**  @type {Number} */
+		/**
+		* Legacy functions.
+		* @method
+	    * @param {Event} [event] - Passing of the event.
+	    * @param {Element} [anchorObj] - Element to click.
+		*/
 
-    static _fps = _number;
+	    create(a){
+			//console.warn('	    create(a)');
+	        return this.Construct(a||{},this.client.room);
+	    }
 
-    constructor() {
+		/*
 
-        super();
+	    getFps(){
 
-    };
+	         return this.client.update.step.fps;
+	    }
+
+		*/
+
+	    getCurrent(){
+			//console.warn('	    getCurrent()');
+	        return this.client.update.state.current;
+	    }
+
+	    getConnection(){
+			//console.warn('	    getConnection()');
+	        return this.ext.connect.offline;
+	    }
+
+	    getConnectionError(){
+			//console.warn('	    getConnectionError()');
+	        return this.ext.connect.error;
+	    }
+
+	    getConnectionAttempts(){
+			//console.warn('	    getConnectionAttempts()');
+	        return this.ext.connect.connectionAttempts;
+	    }
+
+	    getDelta(){
+			//console.warn('	    getDelta()');
+	        return this.client.update.step.delta;
+	    }
+
+	    getScale(){
+			//console.warn('	    getScale()');
+	        return this.client.scale;
+	    }
+
+	    getWidth(){
+			//console.warn('	    getWidth()');
+	        return this.client.setWidth;
+	    }
+
+	    getHeight(){
+			//console.warn('	    getHeight()');
+	        return this.client.setHeight;
+	    }
+
+	    getScaledWidth(){
+			//console.warn('	    getScaledWidth()');
+	        return this.client.width;
+	    }
+
+	    getScaledHeight(){
+			//console.warn('	    getScaledHeight()');
+	        return this.client.height;
+	    }
+
+	    setTitle(title){
+			//console.warn('	    ');
+	        return (document.title==title?(document.title):(document.title=title));
+
+	    }
+
+	    setState(state){
+			//console.warn('	    ');
+	        return this.client.update.state.set(state,true);
+	    }
+
+	    toggleWidescreen(){
+			//console.warn('	    toggleWidescreen()');
+	         return this.client.update.fullscale = !this.client.update.fullscale;
+	    }
+
 
 }
+
 
 /*  Extends SJSClass
 
@@ -343,8 +444,6 @@ const doc = function doc(){
      //this._blitter = canvas;
 
     }
-
-
 
     constructor(app) {
         super(app);
@@ -535,4 +634,4 @@ class _Build {
 
 }
 
-export {_Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas_Core, _App, _Build, _Core};
+export {_Interface, _Vector,_SJSClass, _Log, _Loop, _Compile, _Canvas_Core, _App, _Build, _Legacy};
