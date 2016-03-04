@@ -91,7 +91,14 @@ export default class _State extends _Interface {
 
 		/* Pas Application.main and attache events below */
 
-		[this.update] = [function(){console.log('eh')}];
+
+				if (typeof obj !='undefined') {
+
+					[this.update,this.draw,this.init,this.name] = [obj.update,obj.draw,obj.init,obj.name];
+
+				}
+
+
 
 	}
 

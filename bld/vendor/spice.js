@@ -5317,7 +5317,7 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -5331,7 +5331,7 @@
 
 	var _build2 = _interopRequireDefault(_build);
 
-	var _sgl = __webpack_require__(216);
+	var _sgl = __webpack_require__(217);
 
 	var _sgl2 = _interopRequireDefault(_sgl);
 
@@ -5381,7 +5381,7 @@
 	*
 	*/
 
-	var SpiceJS = (function (_Build2) {
+	var SpiceJS = function (_Build2) {
 		_inherits(SpiceJS, _Build2);
 
 		/**
@@ -5449,7 +5449,7 @@
 		}]);
 
 		return SpiceJS;
-	})(_build2.default);
+	}(_build2.default);
 
 	SpiceJS.properties = {
 
@@ -5488,7 +5488,7 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 					value: true
@@ -5502,7 +5502,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5532,7 +5532,7 @@
 	*       });
 	*/
 
-	var Statistics = (function () {
+	var Statistics = function () {
 
 					/* */
 
@@ -5561,7 +5561,7 @@
 
 					_createClass(Statistics, [{
 									key: 'monitor',
-									value: (function () {
+									value: function () {
 													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
 																	var startTime, endTime;
 																	return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -5590,7 +5590,7 @@
 													return function monitor(_x, _x2) {
 																	return ref.apply(this, arguments);
 													};
-									})()
+									}()
 
 									/** Async - Unused Asyn logging....
 	         * @private
@@ -5598,7 +5598,7 @@
 
 					}, {
 									key: 'log',
-									value: (function () {
+									value: function () {
 													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
 																	var name,
 																	    curLog,
@@ -5665,7 +5665,7 @@
 													return function log() {
 																	return ref.apply(this, arguments);
 													};
-									})()
+									}()
 
 									/** watch //to come - to call a funnction periodically (based on argument 1)
 	        * @private
@@ -5743,7 +5743,7 @@
 					}]);
 
 					return Statistics;
-	})();
+	}();
 
 	Statistics.properties = {};
 	Statistics._monitor = {
@@ -5841,7 +5841,7 @@
 
 	utils.loadExternalJS = function (scripts) {
 
-	    !(function (e, t, r) {
+	    !function (e, t, r) {
 
 	        function n() {
 
@@ -5853,7 +5853,7 @@
 	        for (var s, a, c, d = [], i = e.scripts[0], o = "onreadystatechange", f = "readyState"; s = r.shift();) {
 	            a = e.createElement(t), "" in i ? (a.async = !1, e.head.appendChild(a)) : i[f] ? (d.push(a), a[o] = n) : e.write("<" + t + ' src="' + s + '" defer></' + t + ">"), a.src = s;
 	        }
-	    })(document, "script", scripts);
+	    }(document, "script", scripts);
 	};
 
 	/**
@@ -5956,7 +5956,7 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -5997,7 +5997,7 @@
 	* @private
 	*/
 
-	var _Interface = (function () {
+	var _Interface = function () {
 
 	    /**  @type {Constructor} */
 
@@ -6029,7 +6029,7 @@
 	    }]);
 
 	    return _Interface;
-	})();
+	}();
 
 	/*
 
@@ -6055,7 +6055,7 @@
 	* @private
 	*/
 
-	var _Vector = (function (_Interface2) {
+	var _Vector = function (_Interface2) {
 	    _inherits(_Vector, _Interface2);
 
 	    /**
@@ -6096,7 +6096,7 @@
 	    /**  @type {Number} */
 
 	    return _Vector;
-	})(_Interface);
+	}(_Interface);
 
 	/*
 
@@ -6123,7 +6123,7 @@
 	_Vector.multiply = _method;
 	_Vector.offset = _method;
 
-	var _SJSClass = (function (_Interface3) {
+	var _SJSClass = function (_Interface3) {
 	    _inherits(_SJSClass, _Interface3);
 
 	    /**
@@ -6161,13 +6161,13 @@
 	    /**  @type {Number} */
 
 	    return _SJSClass;
-	})(_Interface);
+	}(_Interface);
 
 	_SJSClass.app = _object;
 	_SJSClass.visuals = _object;
 	_SJSClass.graphics = _object;
 
-	var _Legacy = (function (_Interface4) {
+	var _Legacy = function (_Interface4) {
 	    _inherits(_Legacy, _Interface4);
 
 	    function _Legacy() {
@@ -6192,10 +6192,10 @@
 	        }
 
 	        /*
-	        	    getFps(){
-	        	         return this.client.update.step.fps;
+	            getFps(){
+	                 return this.client.update.step.fps;
 	           }
-	        		*/
+	        	*/
 
 	    }, {
 	        key: 'getCurrent',
@@ -6278,7 +6278,7 @@
 	    }]);
 
 	    return _Legacy;
-	})(_Interface);
+	}(_Interface);
 
 	/*  Extends SJSClass
 
@@ -6306,7 +6306,7 @@
 	* @protected
 	*/
 
-	var _Canvas_Core = (function (_SJSClass2) {
+	var _Canvas_Core = function (_SJSClass2) {
 	    _inherits(_Canvas_Core, _SJSClass2);
 
 	    _createClass(_Canvas_Core, [{
@@ -6453,7 +6453,7 @@
 	    }
 
 	    return _Canvas_Core;
-	})(_SJSClass);
+	}(_SJSClass);
 
 	/*
 
@@ -6470,7 +6470,7 @@
 	* @protected
 	*/
 
-	var _Log = (function () {
+	var _Log = function () {
 	    _createClass(_Log, null, [{
 	        key: 'time',
 
@@ -6520,7 +6520,7 @@
 	    }
 
 	    return _Log;
-	})();
+	}();
 
 	/**
 	*
@@ -6529,7 +6529,7 @@
 	* @private
 	*/
 
-	var _Loop = (function (_Log2) {
+	var _Loop = function (_Log2) {
 	    _inherits(_Loop, _Log2);
 
 	    function _Loop() {
@@ -6539,7 +6539,7 @@
 	    }
 
 	    return _Loop;
-	})(_Log);
+	}(_Log);
 
 	/**
 	*
@@ -6548,7 +6548,7 @@
 	* @private
 	*/
 
-	var _Compile = (function (_Log3) {
+	var _Compile = function (_Log3) {
 	    _inherits(_Compile, _Log3);
 
 	    function _Compile() {
@@ -6558,7 +6558,7 @@
 	    }
 
 	    return _Compile;
-	})(_Log);
+	}(_Log);
 
 	/**
 	*
@@ -6567,7 +6567,7 @@
 	* @private
 	*/
 
-	var _App = (function () {
+	var _App = function () {
 	    function _App() {
 	        _classCallCheck(this, _App);
 	    }
@@ -6595,7 +6595,7 @@
 	    }]);
 
 	    return _App;
-	})();
+	}();
 
 	/**
 	*
@@ -6604,7 +6604,7 @@
 	* @private
 	*/
 
-	var _Build = (function () {
+	var _Build = function () {
 	    function _Build() {
 	        _classCallCheck(this, _Build);
 	    }
@@ -6642,7 +6642,7 @@
 	    }]);
 
 	    return _Build;
-	})();
+	}();
 
 	exports._Interface = _Interface;
 	exports._Vector = _Vector;
@@ -6661,7 +6661,7 @@
 
 	"use strict";
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -6680,7 +6680,7 @@
 	* @private
 	*/
 
-	var _Build = (function () {
+	var _Build = function () {
 
 		/**
 	 *	Attaches a reference to the Statistics module.
@@ -6830,7 +6830,7 @@
 		}]);
 
 		return _Build;
-	})();
+	}();
 
 	exports.default = _Build;
 	;
@@ -6845,7 +6845,9 @@
 
 	/** Name. */
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 				value: true
@@ -6868,33 +6870,31 @@
 
 	var _client3 = _interopRequireDefault(_client2);
 
-	var _core = __webpack_require__(206);
+	var _core = __webpack_require__(207);
 
 	var _core2 = _interopRequireDefault(_core);
 
-	var _canvas2 = __webpack_require__(207);
+	var _canvas2 = __webpack_require__(208);
 
 	var _canvas3 = _interopRequireDefault(_canvas2);
 
-	var _user2 = __webpack_require__(208);
+	var _user2 = __webpack_require__(209);
 
 	var _user3 = _interopRequireDefault(_user2);
 
-	var _ext2 = __webpack_require__(209);
+	var _ext2 = __webpack_require__(210);
 
 	var _ext3 = _interopRequireDefault(_ext2);
 
-	var _loader = __webpack_require__(213);
+	var _loader = __webpack_require__(214);
 
 	var _loader2 = _interopRequireDefault(_loader);
 
-	var _particles = __webpack_require__(215);
+	var _particles = __webpack_require__(216);
 
 	var _particles2 = _interopRequireDefault(_particles);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6925,7 +6925,7 @@
 	*
 	*/
 
-	var _App = (function (_Core2) {
+	var _App = function (_Core2) {
 				_inherits(_App, _Core2);
 
 				/** Builds the core modules of the Application. */
@@ -7198,7 +7198,7 @@
 				}]);
 
 				return _App;
-	})(_core2.default);
+	}(_core2.default);
 
 	;
 
@@ -7210,7 +7210,7 @@
 
 	"use strict";
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -7231,7 +7231,7 @@
 	* Application.client.math
 	*/
 
-	var Math = (function () {
+	var Math = function () {
 		_createClass(Math, [{
 			key: "minmax4",
 
@@ -7911,7 +7911,7 @@
 		}
 
 		return Math;
-	})();
+	}();
 
 	exports.default = Math;
 
@@ -7923,7 +7923,7 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -7944,7 +7944,7 @@
 	* let vector = new Vector(1,1);
 	*/
 
-	var Vector = (function (_Vector2) {
+	var Vector = function (_Vector2) {
 	    _inherits(Vector, _Vector2);
 
 	    function Vector() {
@@ -8076,7 +8076,7 @@
 	    }]);
 
 	    return Vector;
-	})(_interfaces._Vector);
+	}(_interfaces._Vector);
 
 	exports.default = Vector;
 
@@ -8086,12 +8086,11 @@
 
 	"use strict";
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
 	exports.default = {
 
 	    overridescroll: false,
@@ -8231,7 +8230,7 @@
 
 	"use strict";
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8256,7 +8255,7 @@
 	*
 	*/
 
-	var Input = (function (_inputcontroller) {
+	var Input = function (_inputcontroller) {
 	    _inherits(Input, _inputcontroller);
 
 	    function Input(app, pointerPoint) {
@@ -8593,7 +8592,7 @@
 	    }]);
 
 	    return Input;
-	})(_inputcontroller3.default);
+	}(_inputcontroller3.default);
 
 	exports.default = Input;
 
@@ -8603,7 +8602,7 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8642,7 +8641,7 @@
 	*
 	*/
 
-	var inputcontroller = (function (_SJSClass) {
+	var inputcontroller = function (_SJSClass) {
 	    _inherits(inputcontroller, _SJSClass);
 
 	    function inputcontroller() {
@@ -8924,7 +8923,7 @@
 	    }]);
 
 	    return inputcontroller;
-	})(_interfaces._SJSClass);
+	}(_interfaces._SJSClass);
 
 	inputcontroller._x = 0;
 	inputcontroller._y = 0;
@@ -8947,7 +8946,7 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8969,7 +8968,7 @@
 	*
 	*/
 
-	var InputListener = (function () {
+	var InputListener = function () {
 	    function InputListener(a, b, c, d, elm, evt) {
 	        _classCallCheck(this, InputListener);
 
@@ -9026,7 +9025,7 @@
 	    }]);
 
 	    return InputListener;
-	})();
+	}();
 
 	exports.default = InputListener;
 
@@ -9036,7 +9035,7 @@
 
 	"use strict";
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -9051,7 +9050,7 @@
 	*
 	*/
 
-	var inputkeycontroller = (function () {
+	var inputkeycontroller = function () {
 	    function inputkeycontroller() {
 	        _classCallCheck(this, inputkeycontroller);
 	    }
@@ -9154,7 +9153,7 @@
 	    }]);
 
 	    return inputkeycontroller;
-	})();
+	}();
 
 	inputkeycontroller._codeList = [];
 	exports.default = inputkeycontroller;
@@ -9301,17 +9300,17 @@
 
 	'use strict';
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	var _visuals2 = __webpack_require__(217);
+	var _visuals2 = __webpack_require__(206);
 
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	exports.default = {
 
@@ -9952,7 +9951,7 @@
 	                    return;
 
 	                    /*
-	                      this.mute;
+	                     this.mute;
 	                    if (this.sound[this.current]==="undefined")
 	                        return;
 	                    if (this.sound[this.current].currentTime >= this.length)
@@ -9961,10 +9960,10 @@
 	                        {
 	                            this.current = 0;
 	                        }
-	                          this.sound[this.current].currentTime = 0;
+	                         this.sound[this.current].currentTime = 0;
 	                        this.sound[this.current].play();
 	                    }
-	                        */
+	                      */
 	                }
 	            },
 	            constructor: function constructor() {
@@ -10173,1339 +10172,11 @@
 /* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _interfaces = __webpack_require__(194);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	//import {_State} from './state.js';
-
-	/**
-	* _private
-	* @protected
-	*/
-
-	var _private = new WeakMap();
-
-	/**
-	* Vector
-	* @module
-	* @interface
-	* @protected
-	*/
-
-	var _Core = (function (_Legacy2) {
-		_inherits(_Core, _Legacy2);
-
-		_createClass(_Core, [{
-			key: 'main',
-
-			/**  @type {Number} */
-
-			get: function get() {
-
-				return this.get('main');
-			}
-
-			/**  @type {Number} */
-
-			/**
-	  * private variables
-	  * @type {Object}
-	  * @protected
-	  */
-
-			,
-			set: function set(newmain) {
-
-				var state = this.get('main');
-				var newstate = newmain;
-				state.name = newstate.name;
-				state.init = newstate.init;
-				state.update = newstate.update;
-				state.draw = newstate.draw;
-
-				return state;
-			}
-
-			/**  @type {Number} */
-
-		}, {
-			key: 'version',
-			get: function get() {
-
-				return this.get('version');
-			}
-
-			/**  @type {Number} */
-
-		}, {
-			key: 'fps',
-			get: function get() {
-
-				return this.client.update.step.fps.toFixed(2);
-			}
-
-			/**  @type {Constructor} */
-
-		}]);
-
-		function _Core() {
-			_classCallCheck(this, _Core);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
-
-			_private.set(_this, _this.constructor.properties);
-
-			return _this;
-		}
-
-		return _Core;
-	})(_interfaces._Legacy);
-
-	_Core.properties = {
-
-		main: {},
-		version: '0.8.1'
-
-	};
-	exports.default = _Core;
-
-/***/ },
-/* 207 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _interfaces = __webpack_require__(194);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	//import SGL from './sgl.js';
-
-	/**
-	* _private
-	* @protected
-	*/
-
-	var _private = new WeakMap();
-
-	/**
-	* Initalizes canvas elements or attaches to existing elements at options.target.canvas. Handles creation of header and style elements.
-	* @protected
-	* @module
-	*
-	*/
-
-	var Canvas = (function (_Canvas_Core2) {
-	    _inherits(Canvas, _Canvas_Core2);
-
-	    /**
-	    * This is the constructor for the canvas module.
-	    * @param {number} x - position.x
-	    * @param {number} y - position.y
-	    */
-
-	    function Canvas(app) {
-	        _classCallCheck(this, Canvas);
-
-	        //Assign private properties
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
-
-	        _private.set(_this, _this.constructor.properties);
-
-	        //SGL.start();
-
-	        //Cache canvases
-	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
-	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
-	        var temp_blitter = document.getElementById(_this.app.options.target.blitter);
-	        var options = _this.app.options;
-
-	        //Check canvas variables
-	        if (temp_canvas) {
-
-	            //    if (temp_buffer)
-	            //        temp_buffer;
-
-	        } else {
-
-	                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
-
-	                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
-	            }
-	        temp_canvas.mozOpaque = options.flags.opaque;
-	        //Assign canvas elements
-
-	        var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
-
-	        var _this$style2 = _slicedToArray(_this$style, 4);
-
-	        _this.canvas = _this$style2[0];
-	        _this.buffer = _this$style2[1];
-	        _this.blitter = _this$style2[2];
-	        _this.rendering_style = _this$style2[3];
-
-	        _this.head.appendChild(_this.rendering_style);
-
-	        return _possibleConstructorReturn(_this, true);
-	    }
-
-	    /**
-	    * Style provided canvases
-	    * @type {null}
-	    * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
-	    * @protected
-	    */
-
-	    /**
-	    * Set documents private variables
-	    * @type {Object}
-	    * @protected
-	    */
-
-	    _createClass(Canvas, [{
-	        key: 'style',
-	        value: function style(temp_canvas, temp_buffer, temp_blitter) {
-
-	            temp_canvas.style.position = this.app.options.canvas.position.position;
-
-	            temp_canvas.style.zIndex = this.app.options.canvas.position.z;
-
-	            if (this.app.options.canvas.buffer) {
-	                temp_buffer.style.position = this.app.options.canvas.position.position;
-
-	                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
-	            }
-
-	            if (this.app.options.canvas.override) {
-
-	                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
-
-	                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
-
-	                if (this.app.options.canvas.buffer) {
-	                    temp_buffer.style.left = this.app.options.canvas.position.left + "px";
-
-	                    temp_buffer.style.top = this.app.options.canvas.position.top + "px";
-	                }
-	            }
-
-	            return [temp_canvas, temp_buffer, temp_blitter];
-	        }
-
-	        /**
-	        * Construct a canvas element.
-	        * @type {Id}
-	        * @param {Element} a - Creates a canvas element and attaches it to the body.
-	        * @protected
-	        */
-
-	    }, {
-	        key: 'construct_canvas',
-	        value: function construct_canvas(id) {
-
-	            var c = this.doc.createElement("canvas");
-
-	            var c_id = id + "_" + this.app.id;
-
-	            c.id = c_id;
-
-	            this.doc.body.appendChild(c);
-
-	            return this.doc.getElementById(c_id);
-	        }
-	    }]);
-
-	    return Canvas;
-	})(_interfaces._Canvas_Core);
-
-	Canvas.properties = {
-	    name: 'canvas',
-	    canvas: [],
-	    docs: document,
-	    head: document.getElementsByTagName('head')[0],
-	    _rendering_style: document.createElement('style')
-	};
-	exports.default = Canvas;
-	;
-
-/***/ },
-/* 208 */
-/***/ function(module, exports) {
-
 	"use strict";
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = {
-	    //	//To ensure your data is filled, use a callback return your response data.
-	    //	var facebook = function(){ return App.user.pull();};
-	    //
-	    //	//Your facebook ID, callback function(){}
-	    //	App.user.fbconnect(id, facebook)
-	    name: "",
-	    id: "",
-	    locale: "",
-	    gender: "",
-	    updated_time: "",
-	    timezone: "",
-	    quotes: "",
-	    response: {},
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	    //returns the response object
-	    get: function get() {
-	        return this.response;
-	    },
-
-	    //facebook connection
-	    fbconnect: function con(appid, callback) {
-	        window.fbAsyncInit = function () {
-	            FB.init({
-	                appId: appid,
-	                status: true, // check login status
-	                cookie: true, // enable cookies to allow the server to access the session
-	                xfbml: true // parse XFBML
-	            });
-	            FB.login(function () {
-	                FB.api('/me/feed', 'post', { message: 'Hello, world!' });
-	            }, { scope: 'publish_actions' });
-	        };
-
-	        // Load the SDK asynchronously
-	        (function (d) {
-	            var js,
-	                id = 'facebook-jssdk',
-	                ref = d.getElementsByTagName('script')[0];
-	            if (d.getElementById(id)) {
-	                return;
-	            }
-	            js = d.createElement('script');js.id = id;js.async = true;
-	            js.src = "//connect.facebook.net/en_US/all.js";
-	            ref.parentNode.insertBefore(js, ref);
-	        })(document);
-
-	        // Here we run a very simple Flappy of the Graph API after login is successful.
-	        // This testAPI() function is only called in those cases.
-
-	        /*
-	        function testAPI() {
-	        console.log('Welcome!  Fetching your information.... ');
-	           FB.api('/me', function(response) {
-	              App.user.facebook(response);
-	              callback(response);
-	            log('Good to see you, ' + response.name + '.');
-	          });
-	        }
-	          */
-	    },
-
-	    //facebook callback
-	    facebook: function facebook(response) {
-	        this.response = response;
-	        this.name = this.response.name;
-	        this.id = this.response.id;
-	        this.locale = this.response.locale;
-	        this.gender = this.response.gender;
-	        this.updated_time = this.response.updated_time;
-	        this.timezone = this.response.timezone;
-	        this.quotes = this.response.quotes;
-	    }
-
-	};
-
-/***/ },
-/* 209 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _cookies = __webpack_require__(210);
-
-	var _cookies2 = _interopRequireDefault(_cookies);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-
-	    constructor: function constructor(app) {
-
-	        return {
-
-	            app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	            init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
-
-	                    //Set app/document title
-
-	                    this.app.setTitle(document.title + "." + this.app.main.name);
-
-	                    //Construct App.ext components
-
-	                    this.app.Construct(this.useragent).init();
-
-	                    this.app.Construct(this.metatag).init();
-
-	                    //this.app.Construct(this.cookies).init();
-
-	                    this.cookies = new _cookies2.default(this.app);
-
-	                    this.app.Construct(this.cursor).init();
-
-	                    this.app.Construct(this.connect).init();
-	                }
-	            }
-	        };
-	    },
-	    prototype: {
-
-	        //UserAgent Information
-	        //	Assists in detecting the platform that you are running on.
-
-	        useragent: {
-
-	            //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
-
-	            prototype: {
-
-	                //Cached Navigator.userAgent
-	                agent: navigator.userAgent,
-
-	                //
-	                mouse: false,
-	                touch: false,
-	                keyboard: false,
-	                windows: false,
-	                chrome: false,
-	                safari: false,
-	                iemobile: false,
-	                nokia: false,
-	                ie: false,
-	                ios: false,
-	                blackberry: false,
-	                playbook: false,
-	                bb10: false,
-	                mobile: false,
-
-	                //Match user agent for IE
-	                IE: function IE() {
-
-	                    return this.agent.match(/Trident/i) ? true : false;
-	                },
-
-	                //Match user agent for iOS
-	                iOS: function iOS() {
-
-	                    return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
-	                },
-
-	                //Match user agent for Nokia
-	                Nokia: function Nokia() {
-
-	                    return this.agent.match(/Nokia/i) ? true : false;
-	                },
-
-	                //Determine mobile or windows based on useragent
-	                Mobile: function Mobile() {
-
-	                    return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
-	                },
-
-	                //Match user agent for Chrome
-	                Chrome: function Chrome() {
-
-	                    return this.chrome = this.agent.match(/Chrome/i) ? true : false;
-	                },
-
-	                //Match user agent for Safari
-	                Safari: function Safari() {
-
-	                    return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
-	                },
-
-	                Desktop: function Desktop() {
-
-	                    return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
-	                },
-
-	                //Match user agent for Android
-	                Android: function Android() {
-	                    return this.agent.match(/Android/i) ? true : false;
-	                },
-
-	                //Match user agent for IEMobile
-	                IEMobile: function IEMobile() {
-
-	                    var trident = this.agent.match(/IEMobile/i);
-	                    var windowsphone = this.agent.match(/Windows Phone/i);
-	                    var touch = this.agent.match(/touch/i);
-
-	                    return trident || windowsphone || touch ? true : false;
-	                },
-
-	                //Match user agent for Blackberry
-	                BlackBerry: function BlackBerry() {
-	                    this.playbook = this.agent.match(/PlayBook/i) || false;
-	                    this.bb10 = this.agent.match(/BB10/i) || false;
-	                    return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
-	                }
-
-	            },
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed useragent object
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                    init: { writable: false, configurable: false, enumerable: false, value: function value() {
-
-	                            //Query Browser
-	                            this.chrome = this.Chrome();
-	                            this.safari = this.Safari();
-	                            this.iemobile = this.IEMobile();
-	                            this.nokia = this.Nokia();
-	                            this.ie = this.trident = this.IE();
-
-	                            this.blackberry = this.BlackBerry();
-	                            this.ios = this.iOS();
-	                            this.android = this.Android();
-
-	                            this.touch = this.Mobile();
-	                            this.mouse = !this.Mobile() || this.BlackBerry();
-
-	                            this.keyboard = this.Desktop() || this.BlackBerry();
-
-	                            this.Mobile();
-	                            this.Desktop();
-
-	                            this.app.ext.useragent = this;
-	                            //return this;
-	                        }
-	                    }
-	                };
-	            }
-
-	        },
-
-	        //Cookie Storage
-	        //	Polyfill provided by ScottHamper
-	        //	https://github.com/ScottHamper/Cookies#api-reference
-
-	        cookies: _cookies2.default,
-
-	        //MetaTag Handler
-	        //	Assists in dynamically applying metatags.
-	        //	Automatically applies Microsoft, Apple and common metatags.
-
-	        metatag: {
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed metatag object.
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-
-	                    init: { value: function value() {
-
-	                            //execute polyfill
-	                            this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
-	                            this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
-	                            this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
-	                            this.metaAppend(this.metaTag("cursor-event-mode", "native"));
-	                            this.metaAppend(this.metaTag("touch-event-mode", "native"));
-	                            this.metaAppend(this.metaTag("HandheldFriendly", "True"));
-
-	                            if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
-	                            if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
-
-	                            this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
-
-	                            //Cache Control
-	                            this.metaAppend(this.metaTag("cache-control", "max-age=0"));
-	                            this.metaAppend(this.metaTag("cache-control", "no-cache"));
-	                            this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
-	                            this.metaAppend(this.metaTag("pragma", "no-cache"));
-
-	                            this.app.ext.metatag = this;
-
-	                            //Return this
-	                            return this;
-	                        }
-	                    }
-	                };
-	            },
-
-	            prototype: {
-
-	                //Default injected tags
-	                ms_taphighlight: "no",
-	                apple_webapp: "yes",
-	                apple_statusbar: "black",
-	                devicedpi: true,
-	                devicewidth: true,
-
-	                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
-	                metaFavicon: function metaFavicon(img) {
-
-	                    this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
-	                },
-
-	                //Construct a standard metaLink element
-	                metaLink: function metaLink(href, rel, type) {
-
-	                    //Create link element
-	                    this.link = document.createElement('link');
-
-	                    //Assign element values
-	                    this.link.href = href;
-	                    this.link.rel = rel;
-	                    this.link.type = type;
-
-	                    //Return link
-	                    return this.link;
-	                },
-
-	                //Construct a standard metaTag element
-	                metaTag: function metaTag(name, content) {
-
-	                    //Create link element
-	                    this.meta = document.createElement('meta');
-
-	                    //Assign element values
-	                    this.meta.content = content;
-	                    this.meta.name = name;
-
-	                    //Return tag
-	                    return this.meta;
-	                },
-
-	                //Append a meta object to the <head>
-	                metaAppend: function metaAppend(meta) {
-
-	                    //Append child to header
-	                    if (this.head.appendChild(meta)) {
-	                        //Count number of headers
-	                        this.count++;
-
-	                        //Return success
-	                        return true;
-	                    } else return false;
-	                },
-
-	                //Cached data
-	                head: document.getElementsByTagName('head')[0],
-	                link: null,
-	                meta: null,
-	                count: 0
-
-	            }
-
-	        },
-
-	        //Cursor Handler
-	        //	Logs last cursor and allows to easily change the cursor on the fly
-
-	        cursor: {
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed metatag object.
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-	                    init: { value: function value() {
-
-	                            this.set(this.wait);
-
-	                            this.app.ext.cursor = this;
-	                        }
-	                    }
-	                };
-	            },
-
-	            prototype: {
-
-	                //Cached cursor types
-	                auto: "auto",
-	                inherit: "inherit",
-	                crosshair: "crosshair",
-	                def: "default",
-	                help: "help",
-	                move: "move",
-	                pointer: "pointer",
-	                progress: "progress",
-	                text: "text",
-	                wait: "wait",
-	                eresize: "e-resize",
-	                neresize: "ne-resize",
-	                nwresize: "nw-resize",
-	                nresize: "n-resize",
-	                seresize: "se-resize",
-	                swresize: "sw-resize",
-	                sresize: "s-resize",
-	                wresize: "w-resize",
-
-	                //Properties
-	                current: "auto",
-	                last: "auto",
-	                changed: false,
-	                count: 0,
-	                lock: 0,
-	                delay: 4,
-
-	                set: function set(cursor, lock) {
-
-	                    if (this.last == cursor || this.lock) return;
-
-	                    this.last = this.current;
-
-	                    this.current = cursor;
-
-	                    /*
-	                    if (this.app.options.target.buffer)
-	                        this.app.canvas.buffer.style.cursor=this.current;
-	                        this.app.canvas.canvas.style.cursor=this.current;
-	                     document.body.style.cursor=this.current;
-	                    */
-	                    this.changed = true;
-	                    this.count++;
-	                }
-
-	            }
-
-	        },
-
-	        //Connection Controller
-	        //	Assists in making ajax calls and allows you to test your connection.
-	        //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
-
-	        connect: {
-
-	            constructor: function constructor(app) {
-
-	                //Return constructed metatag object.
-	                return {
-	                    app: { writable: false, configurable: false, enumerable: false, value: app },
-	                    init: { value: function value() {
-
-	                            //Execute a test on the connection
-	                            this.test();
-
-	                            this.app.ext.connect = this;
-	                        }
-	                    }
-	                };
-	            },
-
-	            prototype: {
-
-	                //Properties
-	                offline: false,
-	                connectionAttempts: 0,
-	                error: null,
-	                window: window,
-
-	                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
-	                load: function load(address, callback, arg0, arg1) {
-
-	                    var xmlhttp;
-	                    if (window.XMLHttpRequest) {
-	                        // code for IE7+, Firefox, Chrome, Opera, Safari
-	                        xmlhttp = new XMLHttpRequest();
-	                    } else {
-	                        // code for IE6, IE5
-	                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	                    }
-	                    xmlhttp.onreadystatechange = function () {
-	                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-	                            callback(xmlhttp.response, arg0, arg1);
-	                        }
-	                    };
-	                    xmlhttp.open("GET", address, true);
-	                    xmlhttp.send();
-	                },
-
-	                //An aJax request to check wither or not you are connected to the internet
-	                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
-	                hostReachable: function hostReachable() {
-	                    return;
-	                    /*
-	                                        //if local host return offline
-	                                        if ((this.window.location.hostname).toString()=="127.0.0.1")
-	                                            return false;
-	                    
-	                                        // Handle IE and more capable browsers
-	                                        var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
-	                                        var status;
-	                    
-	                    
-	                                        // Open new request as a HEAD to the root hostname with a random param to bust the cache
-	                                        xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
-	                    
-	                                        // Issue request and handle response
-	                                        try {
-	                                            xhr.send();
-	                                            return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
-	                    
-	                                        } catch (error) {
-	                    
-	                                            if (this.connectionAttempts<1)
-	                                                this.connectionAttempts++,this.hostReachable();
-	                                            this.error = error;
-	                                            return false;
-	                                        }
-	                    */
-	                },
-
-	                test: function test(app) {
-
-	                    return this.offline = this.hostReachable();
-	                }
-
-	            }
-
-	        }
-
-	    }
-	};
-
-/***/ },
-/* 210 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	* <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
-	* @module
-	* @public
-	*/
-
-	var Cookies =
-
-	/**
-	* The constructor will fill window.Cookies with a new instance.
-	* @param {Object} app - reference to the app.
-	*/
-
-	function Cookies() {
-	    _classCallCheck(this, Cookies);
-
-	    var factory = function factory(window) {
-	        if (_typeof(window.document) !== 'object') {
-	            throw new Error('Cookies.js requires a `window` with a `document` object');
-	        }
-
-	        var Cookies = window.Cookies = function (key, value, options) {
-	            return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
-	        };
-
-	        // Allows for setter injection in unit tests
-	        Cookies._document = window.document;
-
-	        // Used to ensure cookie keys do not collide with
-	        // built-in `Object` properties
-	        Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
-
-	        Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-	        Cookies.defaults = {
-	            path: '/',
-	            secure: false
-	        };
-
-	        Cookies.get = function (key) {
-	            if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-	                Cookies._renewCache();
-	            }
-
-	            return Cookies._cache[Cookies._cacheKeyPrefix + key];
-	        };
-
-	        Cookies.set = function (key, value, options) {
-	            options = Cookies._getExtendedOptions(options);
-	            options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
-
-	            Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
-
-	            return Cookies;
-	        };
-
-	        Cookies.expire = function (key, options) {
-	            return Cookies.set(key, undefined, options);
-	        };
-
-	        Cookies._getExtendedOptions = function (options) {
-	            return {
-	                path: options && options.path || Cookies.defaults.path,
-	                domain: options && options.domain || Cookies.defaults.domain,
-	                expires: options && options.expires || Cookies.defaults.expires,
-	                secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
-	            };
-	        };
-
-	        Cookies._isValidDate = function (date) {
-	            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
-	        };
-
-	        Cookies._getExpiresDate = function (expires, now) {
-	            now = now || new Date();
-
-	            if (typeof expires === 'number') {
-	                expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
-	            } else if (typeof expires === 'string') {
-	                expires = new Date(expires);
-	            }
-
-	            if (expires && !Cookies._isValidDate(expires)) {
-	                throw new Error('`expires` parameter cannot be converted to a valid Date instance');
-	            }
-
-	            return expires;
-	        };
-
-	        Cookies._generateCookieString = function (key, value, options) {
-	            key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-	            key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
-	            value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-	            options = options || {};
-
-	            var cookieString = key + '=' + value;
-	            cookieString += options.path ? ';path=' + options.path : '';
-	            cookieString += options.domain ? ';domain=' + options.domain : '';
-	            cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-	            cookieString += options.secure ? ';secure' : '';
-
-	            return cookieString;
-	        };
-
-	        Cookies._getCacheFromString = function (documentCookie) {
-	            var cookieCache = {};
-	            var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
-
-	            for (var i = 0; i < cookiesArray.length; i++) {
-	                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-	                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-	                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
-	                }
-	            }
-
-	            return cookieCache;
-	        };
-
-	        Cookies._getKeyValuePairFromCookieString = function (cookieString) {
-	            // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
-	            var separatorIndex = cookieString.indexOf('=');
-
-	            // IE omits the "=" when the cookie value is an empty string
-	            separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
-
-	            return {
-	                key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
-	                value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
-	            };
-	        };
-
-	        Cookies._renewCache = function () {
-	            Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
-	            Cookies._cachedDocumentCookie = Cookies._document.cookie;
-	        };
-
-	        Cookies._areEnabled = function () {
-	            var testKey = 'cookies.js';
-	            var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-	            Cookies.expire(testKey);
-	            return areEnabled;
-	        };
-
-	        Cookies.enabled = Cookies._areEnabled();
-
-	        return Cookies;
-	    };
-
-	    var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
-	    var AMD = "function" === 'function' && __webpack_require__(212);
-	    var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
-	    var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
-	    // AMD support
-	    if (AMD) {
-	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	            return cookiesExport;
-	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	        // CommonJS/Node.js support
-	    } else if (objectExports) {
-	            // Support Node.js specific `module.exports` (which can be a function)
-	            if (moduleExports) {
-	                exports = module.exports = cookiesExport;
-	            }
-	            // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-	            exports.Cookies = cookiesExport;
-	        } else {
-	            global.Cookies = cookiesExport;
-	        }
-
-	    return Cookies;
-	};
-
-	exports.default = Cookies;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(211)(module)))
-
-/***/ },
-/* 211 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 212 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ },
-/* 213 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _interfaces = __webpack_require__(194);
-
-	var _test2 = __webpack_require__(214);
-
-	var _test3 = _interopRequireDefault(_test2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	window.test = _test3.default;
-
-	var Loader = (function (_SJSClass) {
-		_inherits(Loader, _SJSClass);
-
-		function Loader(app) {
-			_classCallCheck(this, Loader);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
-
-			_this.ImageCache = [];
-
-			_this.ImageBuffer = [];
-
-			_this.ImageBufferTime = 3;
-			_this.asyncLoadCacheIndex = 0;
-
-			window.Loader = _this;
-
-			return _this;
-		}
-
-		_createClass(Loader, [{
-			key: 'checkLoaded',
-			value: function checkLoaded(name) {
-				var _this2 = this;
-
-				if (!this.getImageReference(name).complete) {
-
-					setTimeout(function () {
-
-						_this2.checkLoaded(name);
-					}, this.ImageBufferTime);
-				} else {
-
-					this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
-				}
-
-				return this.getImageReference(name);
-			}
-		}, {
-			key: 'getBufferLength',
-			value: function getBufferLength() {
-
-				return this.ImageBuffer.length;
-			}
-		}, {
-			key: 'getImageReference',
-			value: function getImageReference(string) {
-
-				var elementPos = this.ImageCache.map(function (img) {
-
-					return img.string;
-				}).indexOf(string);
-
-				var objectFound = this.ImageCache[elementPos];
-
-				return objectFound;
-			}
-		}, {
-			key: 'loadImage',
-			value: function loadImage(string) {
-				var _this3 = this;
-
-				var name = string;
-
-				var img = this.graphics.load(string);
-
-				var cacheIndex = this.ImageCache.push(img);
-
-				img.string = name;
-
-				this.ImageBuffer.push(name);
-
-				setTimeout(function () {
-
-					_this3.checkLoaded(name);
-				}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-				return this.ImageCache[cacheIndex - 1];
-			}
-		}, {
-			key: 'getBase64Image',
-			value: function getBase64Image(img) {
-
-				// Create an empty canvas element
-				var canvas = document.createElement("canvas");
-				canvas.width = img.width;
-				canvas.height = img.height;
-
-				// Copy the image contents to the canvas
-				var ctx = canvas.getContext("2d");
-				ctx.drawImage(img, 0, 0);
-
-				// Get the data-URL formatted image
-				// Firefox supports PNG and JPEG. You could check img.src to
-				// guess the original format, but be aware the using "image/jpg"
-				// will re-encode the image.
-				var dataURL = canvas.toDataURL("image/png");
-
-				return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-			}
-		}, {
-			key: 'createImageData',
-			value: function createImageData(img) {
-
-				// Create an empty canvas element
-				var canvas = document.createElement("canvas");
-				var ctx = canvas.getContext("2d");
-
-				canvas.width = img.width;
-				canvas.height = img.height;
-				canvas.style.background = 'transparent';
-				canvas.background = 'transparent';
-
-				var canvas2 = this.app.canvas.buffer.getContext('2d');
-				//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
-				var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
-
-				//var canvas2_img = new Image();
-				//canvas2_img.src = canvas2_data;
-
-				var img = document.createElement("img");
-				img.src = this.app.canvas.canvas.toDataURL("image/png");
-
-				// Copy the image contents to the canvas
-				//this.visuals.putData(canvas2_data,0,0);
-
-				//var newData = canvas2.getImageData(0,0,img.width,img.height);
-
-				//ctx.putImageData(canvas2_data,0,0);
-
-				ctx.drawImage(img, 0, 0);
-				//ctx.drawImage(canvas2_img, 0, 0);
-
-				var newData2 = ctx.getImageData(0, 0, img.width, img.height);
-
-				return newData2;
-			}
-		}, {
-			key: 'asyncLoadImage',
-			value: (function () {
-				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
-					var _this4 = this;
-
-					var name, img, cacheIndex;
-					return regeneratorRuntime.wrap(function _callee$(_context) {
-						while (1) {
-							switch (_context.prev = _context.next) {
-								case 0:
-									name = string;
-									_context.next = 3;
-									return this.graphics.load(name);
-
-								case 3:
-									img = _context.sent;
-
-									img.string = name;
-
-									_context.next = 7;
-									return this.ImageCache.push(img);
-
-								case 7:
-									cacheIndex = _context.sent;
-									_context.next = 10;
-									return this.ImageBuffer.push(name + suffex);
-
-								case 10:
-									_context.next = 12;
-									return setTimeout(function () {
-
-										var _img = _this4.checkLoaded(name);
-
-										//_img.base64 = this.getBase64Image(_img);
-										//_img.imgdata = this.createImageData(_img);
-
-										_this4.ImageCache[cacheIndex - 1] = _img;
-										//console.log(this.getBase64Image(_img))
-										//console.log('eh');
-										//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
-
-										//console.log(this.ImageCache[cacheIndex-1])
-									}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
-
-								case 12:
-									this.asyncLoadCacheIndex = cacheIndex;
-
-									return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
-
-								case 14:
-								case 'end':
-									return _context.stop();
-							}
-						}
-					}, _callee, this);
-				}));
-
-				return function asyncLoadImage(_x, _x2) {
-					return ref.apply(this, arguments);
-				};
-			})()
-		}, {
-			key: 'asyncLoadImageData',
-			value: (function () {
-				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
-					var _this5 = this;
-
-					var _index, _image;
-
-					return regeneratorRuntime.wrap(function _callee2$(_context2) {
-						while (1) {
-							switch (_context2.prev = _context2.next) {
-								case 0:
-									_index = this.asyncLoadCacheIndex;
-									_context2.next = 3;
-									return this.asyncLoadImage(string, "_blit").then(function (img) {
-
-										//let _cacheIndex =  this.ImageCache.push(img);
-
-										//console.log( this.ImageCache[_cacheIndex-1]=img)
-
-										var buffindex = _this5.ImageBuffer.push(string + "_blit");
-
-										_this5[string2] = img;
-										_this5[string2].addEventListener('load', function () {
-
-											_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
-
-											_this5[string2].string = string2;
-
-											_this5.ImageCache.push(_this5[string2]);
-
-											_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
-										});
-									});
-
-								case 3:
-									_image = _context2.sent;
-									return _context2.abrupt('return', _image);
-
-								case 5:
-								case 'end':
-									return _context2.stop();
-							}
-						}
-					}, _callee2, this);
-				}));
-
-				return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
-					return ref.apply(this, arguments);
-				};
-			})()
-		}]);
-
-		return Loader;
-	})(_interfaces._SJSClass);
-
-	exports.default = Loader;
-
-/***/ },
-/* 214 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -11519,1129 +10190,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	/**
-	* Test Module for running tyhe game
-	* @module
-	* @private
-	*/
-
-	var test = (function (_SJSClass) {
-	    _inherits(test, _SJSClass);
-
-	    function test(app) {
-	        _classCallCheck(this, test);
-
-	        //this.Loader = this.app.getCurrent().Loader;
-	        /*
-	                this.SplashScreen = [];
-	        
-	        		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
-	        
-	        		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
-	        
-	        		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
-	        
-	                this.Background = this.Loader.loadImage('intro/background');
-	        
-	                this.begin = this.Loader.loadImage('intro/begin');
-	        
-	        		this.ScoreNumber = [];
-	        
-	        		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
-	        		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
-	        		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
-	        		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
-	        		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
-	        		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
-	        		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
-	        		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
-	        		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
-	        		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
-	        
-	                this.Loader.loadImage('interface/iconoffline');
-	        
-	                this.Loader.loadImage('interface/iconp');
-	        
-	                this.Loader.loadImage('interface/iconvolume');
-	        
-	                this.Loader.loadImage('interface/iconx');
-	        */
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
-
-	        _this.StartPhase = 2;
-	        _this.StartAlpha = 2;
-
-	        _this.xxx = 0;
-	        _this.start = false;
-
-	        //		(this.particles = this.app.create(SB_.prototype)).init();
-
-	        //(this.loading = this.app.create(Loading.prototype)).init();
-	        //(this.statusicons = this.app.create(StatusIco.prototype)).init();
-	        //(this.characterselect = this.app.create(Characterselect.prototype)).init();
-
-	        //    this.particles = new SB_(this.app);
-
-	        //        this.loading = new Loading(this.app);
-
-	        //        this.statusicons = new StatusIco(this.app);
-
-	        //        this.characterselect = new Characterselect(this.app);
-
-	        _this.continue = false;
-
-	        _this.sceneX = -190;
-	        _this.scenePhase = 0;
-	        _this.sceneEndX = 1;
-
-	        _this.sceneStartSpeed = 3;
-	        _this.sceneEndSpeed = 4;
-
-	        _this.sceneSpeed = _this.sceneStartSpeed;
-	        return _this;
-	    }
-
-	    _createClass(test, [{
-	        key: "draw",
-	        value: function draw() {
-
-	            //    if (this.Loader.getBufferLength()>0)
-	            //        return;
-
-	            var sw = this.app.getScaledWidth();
-	            var sh = this.app.getScaledHeight();
-	            var h = this.app.getHeight();
-	            var w = this.app.getWidth();
-	            var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
-
-	            if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
-
-	            this.Background = {};
-	            this.Background.width = sw;
-
-	            var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
-
-	            if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
-	            /*
-	                    this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
-	            
-	                    if (this.scenePhase==2)
-	                        this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
-	                    else
-	                        this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
-	            */
-	            this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-	            /*
-	                    if (this.continue == true)
-	            			this.characterselect.draw();
-	                    else
-	                        this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
-	            */
-
-	            this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
-
-	            if (this.scenePhase == 2) {
-	                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
-	                /*
-	                			this.particles._draw();
-	                
-	                			if (this.graphics.getErrors())
-	                				this.loading.draw();
-	                			else	{
-	                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
-	                				if (this.continue==false)
-	                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
-	                
-	                				this.app.ext.cursor.set('pointer');
-	                
-	                			}
-	                            */
-	            } else {}
-
-	                //	this.loading.draw();
-
-	                //	this.statusicons.draw(0.29);
-	        }
-	    }, {
-	        key: "update",
-	        value: function update() {
-
-	            //    this.loading.update();
-	            //	this.statusicons.update();
-
-	            //    if (this.Loader.getBufferLength()>0)
-	            //        return;
-
-	            var tick = this.sceneSpeed;
-
-	            if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
-	                //    this.particles._update();
-	                //	this.characterselect.update();
-	                this.sceneX += tick;
-	            } else if (this.scenePhase < 2) {
-
-	                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
-
-	                if (this.app.input.released) this.sceneSpeed = 10;
-
-	                this.sceneX += tick;
-
-	                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
-
-	                if (this.scenePhase > 2) this.scenePhase = 2;
-	            }
-	        }
-	    }]);
-
-	    return test;
-	})(_interfaces._SJSClass);
-
-	exports.default = test;
-
-/***/ },
-/* 215 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	        value: true
-	});
-
-	var _interfaces = __webpack_require__(194);
-
-	var _vector = __webpack_require__(198);
-
-	var _vector2 = _interopRequireDefault(_vector);
-
-	var _loader = __webpack_require__(213);
-
-	var _loader2 = _interopRequireDefault(_loader);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var xOff = 0;
-
-	var SJSParticleController = (function (_Loader) {
-	        _inherits(SJSParticleController, _Loader);
-
-	        function SJSParticleController(app) {
-	                _classCallCheck(this, SJSParticleController);
-
-	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
-
-	                _this.SJSParticleList = [];
-
-	                _this.particleLimit = 1500;
-
-	                _this.flakes = new Image();
-
-	                _this.flakes0 = new Image();
-
-	                for (var i = 0; i < 16; i++) {
-	                        _this['flakes' + i] = new Image();
-	                }for (var i = 0; i < 16; i++) {
-	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
-	                }return _this;
-	        }
-
-	        _createClass(SJSParticleController, [{
-	                key: 'clear',
-	                value: function clear() {
-
-	                        this.SJSParticleList = [];
-	                }
-	        }, {
-	                key: 'appendParticle',
-	                value: function appendParticle() {
-
-	                        var length = this.SJSParticleList.length;
-
-	                        if (length > this.particleLimit) return;
-
-	                        var width = this.app.getWidth();
-
-	                        var height = this.app.getHeight();
-
-	                        var scale = this.app.getScale();
-
-	                        var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
-
-	                        var End = new _vector2.default(Math.random() * width, 0);
-
-	                        End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
-
-	                        var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
-
-	                        this.SJSParticleList.push(newParticle);
-
-	                        return;
-	                }
-	        }, {
-	                key: 'update',
-	                value: function update() {
-
-	                        var length = this.SJSParticleList.length;
-
-	                        this.appendParticle();
-
-	                        if (length == 0) return;
-
-	                        var i = length - 1;
-
-	                        for (i; i; --i) {
-
-	                                var particle = this.SJSParticleList[i];
-
-	                                particle.update();
-	                        }
-
-	                        return;
-	                }
-	        }, {
-	                key: 'draw',
-	                value: function draw() {
-
-	                        var error = this.getBufferLength();
-
-	                        //    console.log(error)
-	                        if (error > 0) {
-	                                this.visuals.rect(0, 0, 10, 10, '#FF0000');
-	                                return;
-	                        }
-
-	                        var length = this.SJSParticleList.length;
-
-	                        if (length == 0) return;
-
-	                        var i = length - 1;
-
-	                        for (i; i; --i) {
-
-	                                var particle = this.SJSParticleList[i];
-
-	                                particle.draw();
-	                        }
-	                }
-	        }]);
-
-	        return SJSParticleController;
-	})(_loader2.default);
-
-	exports.default = SJSParticleController;
-
-	var SJSParticle = (function (_SJSClass) {
-	        _inherits(SJSParticle, _SJSClass);
-
-	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
-	                _classCallCheck(this, SJSParticle);
-
-	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
-
-	                var loader = window.Loader; // this.app.getCurrent().particleController;
-
-	                //this.img = loader.getImageReference('../flakes');
-	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
-
-	                _this2.t = Math.round(1 + Math.random() * 5);
-
-	                _this2.gravity = 0.5;
-
-	                _this2.alpha = 0.75 + Math.random() * 0.25;
-
-	                _this2.easing = Math.random() * 0.2;
-
-	                _this2.fade = Math.random() * 0.1;
-
-	                _this2.gridX = marker % 120;
-
-	                _this2.gridY = Math.floor(marker / 120) * 12;
-
-	                _this2.color = marker;
-
-	                _this2.scale = 3 * Math.random() * 3 * Application.getScale();
-
-	                _this2.start = 30 + Math.random() * 180;
-
-	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
-
-	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
-
-	                _this2.del = false;
-
-	                _this2.pos = {
-	                        x: pos.x || 0,
-	                        y: pos.y || 0
-	                };
-
-	                _this2.vel = {
-	                        x: vel.x || 0,
-	                        y: vel.y || 0
-	                };
-
-	                _this2.lastPos = {
-	                        x: _this2.pos.x,
-	                        y: _this2.pos.y
-	                };
-
-	                _this2.target = {
-	                        y: target.y || 0,
-	                        x: target.x || 0
-	                };
-
-	                _this2.pos = new _vector2.default(pos.x, pos.y);
-	                _this2.vel = new _vector2.default(vel.x, vel.y);
-	                _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
-	                _this2.target = new _vector2.default(target.x, target.y);
-
-	                _this2.usePhysics = usePhysics || false;
-
-	                if (!_this2.usePhysics) {
-
-	                        _this2.dir = Math.random() * 1;
-
-	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
-	                } else {
-
-	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
-	                }
-
-	                return _this2;
-	        }
-
-	        _createClass(SJSParticle, [{
-	                key: 'update',
-	                value: function update() {
-
-	                        var width = this.app.getWidth();
-
-	                        var height = this.app.getHeight();
-
-	                        var scale = this.app.getScale();
-
-	                        // Check to Delete
-
-	                        if (this.del) {
-
-	                                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
-	                                var target = { x: Math.random() * width, y: 2 * height / scale };
-	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
-
-	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
-
-	                                return;
-	                        }
-
-	                        // Move Object
-
-	                        var distance = this.target.y - this.pos.y;
-
-	                        var val = this.target.x / 200;
-
-	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
-
-	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
-
-	                        val = this.pos.x / 200;
-
-	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
-
-	                        var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
-	                        var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
-	                        this.pos.x += xdir;
-
-	                        // Check if out of bounds
-
-	                        if (this.pos.y > 600) {
-	                                this.alpha -= 0.01;
-
-	                                if (this.alpha < 0.01) this.del = true;
-	                        }
-
-	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
-	                }
-	        }, {
-	                key: 'draw',
-	                value: function draw() {
-
-	                        //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
-	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	                        //else
-	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-
-	                        this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
-	                }
-	        }]);
-
-	        return SJSParticle;
-	})(_interfaces._SJSClass);
-
-/***/ },
-/* 216 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var _private = new WeakMap();
-
-	var _SGL = (function () {
-	  function _SGL() {
-	    _classCallCheck(this, _SGL);
-
-	    _private.set(this, this.constructor.properties);
-	  }
-
-	  _createClass(_SGL, [{
-	    key: 'start',
-	    value: function start() {}
-	  }, {
-	    key: 'square',
-	    get: function get() {
-
-	      return [100.0, 100.0, 0.0, -100.0, 100.0, 0.0, 100.0, -100.0, 0.0, -100.0, -100.0, 0.0];
-	    }
-	  }, {
-	    key: 'opacity',
-	    get: function get() {
-
-	      return 0;
-	    }
-	  }, {
-	    key: 'scale',
-	    get: function get() {
-
-	      return _private.get(this)['tras'].s;
-	    },
-	    set: function set(value) {
-
-	      _private.get(this)['tras'].s = value;
-	    }
-	  }]);
-
-	  return _SGL;
-	})();
-
-	_SGL.properties = {
-
-	  tras: { s: null },
-	  opacity: 0
-
-	};
-	exports.default = _SGL;
-
-	var SGL = new _SGL();
-
-	var canvas;
-	var gl;
-
-	var cubeVerticesBuffer;
-	var cubeVerticesTextureCoordBuffer;
-	var cubeVerticesIndexBuffer;
-	var cubeVerticesIndexBuffer;
-	var cubeRotation = 0.0;
-	var lastCubeUpdateTime = 0;
-
-	var cubeImage;
-	var cubeTexture;
-
-	var mvMatrix;
-	var shaderProgram;
-	var vertexPositionAttribute;
-	var textureCoordAttribute;
-	var perspectiveMatrix;
-
-	var squareVerticesBuffer;
-
-	var angleInRadians = 0;
-	var scale = 1;
-	var translation = [0, 0];
-	var width = 100;
-	var height = 30;
-	function setRectangle(gl, x, y, width, height) {
-	  var x1 = x;
-	  var x2 = x + width;
-	  var y1 = y;
-	  var y2 = y + height;
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([x1, y1, x2, y1, x1, y2, x1, y2, x2, y1, x2, y2]), gl.STATIC_DRAW);
-	}
-	var rect;
-
-	//
-	// start
-	//
-	// Called when the canvas is created to get the ball rolling.
-	//
-	function start() {
-	  canvas = document.getElementById("glcanvas");
-
-	  canvas.width = window.innerWidth;;
-	  canvas.height = window.innerHeight;
-
-	  initWebGL(canvas); // Initialize the GL context
-
-	  // Only continue if WebGL is available and working
-
-	  if (gl) {
-
-	    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);
-	    gl.clearDepth(1.0);
-	    //gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-	    gl.disable(gl.DEPTH_TEST); // Disable depth testing. This way, the last object drawn is always in "front".	// WebGL will not attempt to determine whether one object lies behind another.
-
-	    // Initialize the shaders; this is where all the lighting for the
-	    // vertices and so forth is established.
-
-	    initShaders();
-
-	    // Here's where we call the routine that builds all the objects
-	    // we'll be drawing.
-
-	    initBuffers();
-
-	    // Next, load and set up the textures we'll be using.
-
-	    initTextures();
-
-	    // Set up to draw the scene periodically.
-
-	    setTimeout(function () {
-
-	      setInterval(drawScene, 15);
-	    }, 300);
-	  }
-	}
-
-	function matrixMultiply(m1, m2) {
-	  var result = [];
-	  for (var i = 0; i < m1.length; i++) {
-	    result[i] = [];
-	    for (var j = 0; j < m2[0].length; j++) {
-	      var sum = 0;
-	      for (var k = 0; k < m1[0].length; k++) {
-	        sum += m1[i][k] * m2[k][j];
-	      }
-	      result[i][j] = sum;
-	    }
-	  }
-	  return result;
-	}
-	// Returns a random integer from 0 to range - 1.
-	function randomInt(range) {
-	  return Math.floor(Math.random() * range);
-	}
-	function makeTranslation(tx, ty) {
-	  return [1, 0, 0, 0, 1, 0, tx, ty, 1];
-	}
-
-	function makeRotation(angleInRadians) {
-	  var c = Math.cos(angleInRadians);
-	  var s = Math.sin(angleInRadians);
-	  return [c, -s, 0, s, c, 0, 0, 0, 1];
-	}
-
-	function makeScale(sx, sy) {
-	  return [sx, 0, 0, 0, sy, 0, 0, 0, 1];
-	}
-
-	//
-	// initWebGL
-	//
-	// Initialize WebGL, returning the GL context or null if
-	// WebGL isn't available or could not be initialized.
-	//
-	function initWebGL() {
-	  gl = null;
-
-	  try {
-	    gl = canvas.getContext("experimental-webgl");
-	  } catch (e) {}
-
-	  // If we don't have a GL context, give up now
-
-	  if (!gl) {
-	    alert("Unable to initialize WebGL. Your browser may not support it.");
-	  }
-	}
-
-	//
-	// initBuffers
-	//
-	// Initialize the buffers we'll need. For this demo, we just have
-	// one object -- a simple two-dimensional cube.
-	//
-	function initBuffers() {
-
-	  squareVerticesBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(SGL.square), gl.STATIC_DRAW);
-
-	  return;
-
-	  //	rect = new setRectangle(gl, 0,0,100,100);
-
-	  // Create a buffer for the cube's vertices.
-
-	  cubeVerticesBuffer = gl.createBuffer();
-
-	  // Select the cubeVerticesBuffer as the one to apply vertex
-	  // operations to from here out.
-
-	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
-
-	  // Now create an array of vertices for the cube.
-
-	  var vertices = [
-	  // Front face
-	  -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
-
-	  // Back face
-	  -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,
-
-	  // Top face
-	  -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,
-
-	  // Bottom face
-	  -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
-
-	  // Right face
-	  1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
-
-	  // Left face
-	  -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0];
-
-	  // Now pass the list of vertices into WebGL to build the shape. We
-	  // do this by creating a Float32Array from the JavaScript array,
-	  // then use it to fill the current vertex buffer.
-
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-	  // Map the texture onto the cube's faces.
-
-	  cubeVerticesTextureCoordBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
-
-	  var textureCoordinates = [
-	  // Front
-	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	  // Back
-	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	  // Top
-	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	  // Bottom
-	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	  // Right
-	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	  // Left
-	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-
-	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
-
-	  // Build the element array buffer; this specifies the indices
-	  // into the vertex array for each face's vertices.
-
-	  cubeVerticesIndexBuffer = gl.createBuffer();
-	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
-
-	  // This array defines each face as two triangles, using the
-	  // indices into the vertex array to specify each triangle's
-	  // position.
-
-	  var cubeVertexIndices = [0, 1, 2, 0, 2, 3, // front
-	  4, 5, 6, 4, 6, 7, // back
-	  8, 9, 10, 8, 10, 11, // top
-	  12, 13, 14, 12, 14, 15, // bottom
-	  16, 17, 18, 16, 18, 19, // right
-	  20, 21, 22, 20, 22, 23 // left
-	  ];
-
-	  // Now send the element array to GL
-
-	  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-	}
-
-	//
-	// initTextures
-	//
-	// Initialize the textures we'll be using, then initiate a load of
-	// the texture images. The handleTextureLoaded() callback will finish
-	// the job; it gets called each time a texture finishes loading.
-	//
-	function initTextures() {
-	  cubeTexture = gl.createTexture();
-	  cubeImage = new Image();
-	  cubeImage.onload = function () {
-	    handleTextureLoaded(cubeImage, cubeTexture);
-	  };
-	  cubeImage.src = "./flakes.png";
-	}
-
-	function handleTextureLoaded(image, texture) {
-	  console.log("handleTextureLoaded, image = " + image);
-	  gl.bindTexture(gl.TEXTURE_2D, texture);
-	  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-	  gl.generateMipmap(gl.TEXTURE_2D);
-	  gl.bindTexture(gl.TEXTURE_2D, null);
-	}
-
-	function make2DProjection(width, height) {
-	  // Note: This matrix flips the Y axis so that 0 is at the top.
-	  return [2 / width, 0, 0, 0, -2 / height, 0, -1, 1, 1];
-	}
-
-	//
-	// drawScene
-	//
-	// Draw the scene.
-	//
-
-	function drawScene() {
-
-	  canvas = document.getElementById("glcanvas");
-
-	  var sw = 32;
-	  var sh = 32;
-	  var w = window.innerWidth;
-	  var h = window.innerHeight;
-	  if (typeof Application != 'undefined') sw = Application.client.setWidth, sh = Application.client.setHeight, w = Application.client.width * Application.client.scale, h = Application.client.height * Application.client.scale;
-
-	  canvas.width = w;
-	  canvas.height = h;
-
-	  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1, 150);
-	  perspectiveMatrix = makeOrtho(0, w * 2 * (sw / w), 0, h, 0.1, 150);
-	  // Clear the canvas before we start drawing on it.
-
-	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-	  /*
-	  var s = function(w,h){
-	  
-	  	return makeOrtho(w/2, 0, h/2, 0, 0.1,150);
-	  
-	  }
-	  */
-	  //  perspectiveMatrix = s(-w, w, -h, h, 0.1,150);
-
-	  // Establish the perspective with which we want to view the
-	  // scene. Our field of view is 45 degrees, with a width/height
-	  // ratio of 640:480, and we only want to see objects between 0.1 units
-	  // and 100 units away from the camera.
-
-	  //perspectiveMatrix = makePerspective(45, 640.0/480.0, 0.1, 100.0);
-
-	  //perspectiveMatrix = makeOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100);
-
-	  //mat4.ortho(perspectiveMatrix, -1.0, 1.0, -1.0, 1.0, 0.1, 100);
-
-	  //perspectiveMatrix = mat4.ortho(makePerspective(45, 640.0/480.0, 0.1, 100.0), -1.0, 1.0, -1.0, 1.0, 0.1, 100);
-
-	  // Set the drawing position to the "identity" point, which is
-	  // the center of the scene.
-
-	  loadIdentity();
-
-	  // Now move the drawing position a bit to where we want to start
-	  // drawing the cube.
-
-	  mvTranslate([0, 0, -1.0]);
-
-	  // Save the current matrix, then rotate before we draw.
-
-	  mvPushMatrix();
-
-	  // Setup a rectangle
-	  //setRectangle(gl, translation[0], translation[1], width, height);
-
-	  // Draw the rectangle.
-	  //gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-	  //  mvRotate(cubeRotation, [1, 0, 1]);
-
-	  var drawSquare = function drawSquare(x, y) {
-
-	    var squareRotation = 0.0;
-	    //	mvPushMatrix();
-	    //	mvRotate(squareRotation, [1, 0, 1]);
-
-	    y = 0;
-	    mvTranslate([x, 0, -0.0]);
-
-	    // Set the scale.
-	    gl.uniform2fv(scaleLocation, scale);
-
-	    gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
-
-	    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-	    //	gl.vertexAttribPointer(draw_scale, 1, gl.FLOAT, false, 0, 0);
-
-	    setMatrixUniforms();
-	    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	    mvTranslate([-x, 0, -0.0]);
-
-	    //	mvPopMatrix();
-	  };
-
-	  drawSquare(0, h / 2);
-
-	  return;
-
-	  //  mvTranslate([-1.2, 0.5, -0.0]);
-	  ///DrawSquare
-
-	  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1, 150);
-
-	  /*
-	  
-	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
-	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-	  setMatrixUniforms();
-	  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	  
-	  */
-
-	  //mvTranslate([1.2, 0.5, -0.0]);
-
-	  // Draw the cube by binding the array buffer to the cube's vertices
-	  // array, setting attributes, and pushing it to GL.
-
-	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
-	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-	  // Set the texture coordinates attribute for the vertices.
-
-	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
-	  gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
-
-	  // Specify the texture to map onto the faces.
-
-	  gl.activeTexture(gl.TEXTURE0);
-	  gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
-	  gl.uniform1i(gl.getUniformLocation(shaderProgram, "uSampler"), 0);
-
-	  // Draw the cube.
-
-	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
-	  setMatrixUniforms();
-
-	  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
-
-	  /**/
-
-	  // Restore the original matrix
-
-	  mvPopMatrix();
-
-	  // Update the rotation for the next draw, if it's time to do so.
-
-	  var currentTime = new Date().getTime();
-	  if (lastCubeUpdateTime) {
-	    var delta = currentTime - lastCubeUpdateTime;
-
-	    cubeRotation += 30 * delta / 1000.0;
-	  }
-
-	  lastCubeUpdateTime = currentTime;
-	}
-
-	//
-	// initShaders
-	//
-	// Initialize the shaders, so WebGL knows how to light our scene.
-	//
-
-	var scale = [10, 10];
-	var scaleLocation;
-
-	function initShaders() {
-	  var fragmentShader = getShader(gl, "shader-fs");
-	  var vertexShader = getShader(gl, "shader-vs");
-
-	  // Create the shader program
-
-	  shaderProgram = gl.createProgram();
-	  gl.attachShader(shaderProgram, vertexShader);
-	  gl.attachShader(shaderProgram, fragmentShader);
-	  gl.linkProgram(shaderProgram);
-
-	  // If creating the shader program failed, alert
-
-	  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-	    alert("Unable to initialize the shader program.");
-	  }
-
-	  gl.useProgram(shaderProgram);
-
-	  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-	  gl.enableVertexAttribArray(vertexPositionAttribute);
-
-	  //Curr Draw Scale
-	  scaleLocation = gl.getUniformLocation(shaderProgram, "u_scale");
-
-	  //	gl.enableVertexAttribArray(draw_scale);
-
-	  //  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-	  // gl.enableVertexAttribArray(textureCoordAttribute);
-	}
-
-	//
-	// getShader
-	//
-	// Loads a shader program by scouring the current document,
-	// looking for a script with the specified ID.
-	//
-	function getShader(gl, id) {
-	  var shaderScript, theSource, currentChild, shader;
-
-	  shaderScript = document.getElementById(id);
-
-	  // Didn't find an element with the specified ID; abort.
-
-	  if (!shaderScript) {
-	    return null;
-	  }
-
-	  // Walk through the source element's children, building the
-	  // shader source string.
-
-	  var theSource = "";
-	  var currentChild = shaderScript.firstChild;
-
-	  while (currentChild) {
-	    if (currentChild.nodeType == 3) {
-	      theSource += currentChild.textContent;
-	    }
-
-	    currentChild = currentChild.nextSibling;
-	  }
-
-	  // Now figure out what type of shader script we have,
-	  // based on its MIME type.
-
-	  var shader;
-
-	  if (shaderScript.type == "x-shader/x-fragment") {
-	    shader = gl.createShader(gl.FRAGMENT_SHADER);
-	  } else if (shaderScript.type == "x-shader/x-vertex") {
-	    shader = gl.createShader(gl.VERTEX_SHADER);
-	  } else {
-	    return null; // Unknown shader type
-	  }
-
-	  // Send the source to the shader object
-
-	  gl.shaderSource(shader, theSource);
-
-	  // Compile the shader program
-
-	  gl.compileShader(shader);
-
-	  // See if it compiled successfully
-
-	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-	    alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
-	    return null;
-	  }
-
-	  return shader;
-	}
-
-	//
-	// Matrix utility functions
-	//
-
-	function loadIdentity() {
-	  mvMatrix = Matrix.I(4);
-	}
-
-	function multMatrix(m) {
-	  mvMatrix = mvMatrix.x(m);
-	}
-
-	function mvTranslate(v) {
-	  multMatrix(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
-	}
-
-	function setMatrixUniforms() {
-	  var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-	  gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
-
-	  var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-	  gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
-	}
-
-	var mvMatrixStack = [];
-
-	function mvPushMatrix(m) {
-	  if (m) {
-	    mvMatrixStack.push(m.dup());
-	    mvMatrix = m.dup();
-	  } else {
-	    mvMatrixStack.push(mvMatrix.dup());
-	  }
-	}
-
-	function mvPopMatrix() {
-	  if (!mvMatrixStack.length) {
-	    throw "Can't pop from an empty matrix stack.";
-	  }
-
-	  mvMatrix = mvMatrixStack.pop();
-	  return mvMatrix;
-	}
-
-	function mvRotate(angle, v) {
-	  var inRadians = angle * Math.PI / 180.0;
-	  var m = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
-	  multMatrix(m);
-	}
-
-	window.start = start;
-	window.initWebGL = initWebGL;
-
-/***/ },
-/* 217 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _interfaces = __webpack_require__(194);
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _Visuals = (function (_SJSClass) {
+	var _Visuals = function (_SJSClass) {
 	    _inherits(_Visuals, _SJSClass);
 
 	    function _Visuals(app) {
@@ -12651,9 +10200,9 @@
 	    }
 
 	    return _Visuals;
-	})(_interfaces._SJSClass);
+	}(_interfaces._SJSClass);
 
-	var _Pipe = (function () {
+	var _Pipe = function () {
 	    function _Pipe() {
 	        _classCallCheck(this, _Pipe);
 	    }
@@ -12664,7 +10213,7 @@
 	    }]);
 
 	    return _Pipe;
-	})();
+	}();
 
 	var visuals = visuals || {};
 	visuals = {
@@ -14012,6 +11561,2458 @@
 	};
 
 	exports.default = visuals;
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import {_State} from './state.js';
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* Vector
+	* @module
+	* @interface
+	* @protected
+	*/
+
+	var _Core = function (_Legacy2) {
+		_inherits(_Core, _Legacy2);
+
+		_createClass(_Core, [{
+			key: 'main',
+
+			/**  @type {Number} */
+
+			get: function get() {
+
+				return this.get('main');
+			}
+
+			/**  @type {Number} */
+
+			/**
+	  * private variables
+	  * @type {Object}
+	  * @protected
+	  */
+
+			,
+			set: function set(newmain) {
+
+				var state = this.get('main');
+				var newstate = newmain;
+				state.name = newstate.name;
+				state.init = newstate.init;
+				state.update = newstate.update;
+				state.draw = newstate.draw;
+
+				return state;
+			}
+
+			/**  @type {Number} */
+
+		}, {
+			key: 'version',
+			get: function get() {
+
+				return this.get('version');
+			}
+
+			/**  @type {Number} */
+
+		}, {
+			key: 'fps',
+			get: function get() {
+
+				return this.client.update.step.fps.toFixed(2);
+			}
+
+			/**  @type {Constructor} */
+
+		}]);
+
+		function _Core() {
+			_classCallCheck(this, _Core);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_Core).call(this));
+
+			_private.set(_this, _this.constructor.properties);
+
+			return _this;
+		}
+
+		return _Core;
+	}(_interfaces._Legacy);
+
+	_Core.properties = {
+
+		main: {},
+		version: '0.8.1'
+
+	};
+	exports.default = _Core;
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//import SGL from './sgl.js';
+
+	/**
+	* _private
+	* @protected
+	*/
+
+	var _private = new WeakMap();
+
+	/**
+	* Initalizes canvas elements or attaches to existing elements at options.target.canvas. Handles creation of header and style elements.
+	* @protected
+	* @module
+	*
+	*/
+
+	var Canvas = function (_Canvas_Core2) {
+	    _inherits(Canvas, _Canvas_Core2);
+
+	    /**
+	    * This is the constructor for the canvas module.
+	    * @param {number} x - position.x
+	    * @param {number} y - position.y
+	    */
+
+	    function Canvas(app) {
+	        var _ret;
+
+	        _classCallCheck(this, Canvas);
+
+	        //Assign private properties
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Canvas).call(this, app));
+
+	        _private.set(_this, _this.constructor.properties);
+
+	        //SGL.start();
+
+	        //Cache canvases
+	        var temp_canvas = document.getElementById(_this.app.options.target.canvas);
+	        var temp_buffer = document.getElementById(_this.app.options.target.buffer);
+	        var temp_blitter = document.getElementById(_this.app.options.target.blitter);
+	        var options = _this.app.options;
+
+	        //Check canvas variables
+	        if (temp_canvas) {
+
+	            //    if (temp_buffer)
+	            //        temp_buffer;
+
+	        } else {
+
+	                temp_canvas = _this.construct_canvas(_this.app.options.canvas.name);
+
+	                if (_this.app.options.canvas.buffer) temp_buffer = _this.construct_canvas(_this.app.options.canvas.buffername);
+	            }
+	        temp_canvas.mozOpaque = options.flags.opaque;
+	        //Assign canvas elements
+
+	        var _this$style = _this.style(temp_canvas, temp_buffer, _this.construct_canvas('blitter'), _this.app.options.canvas.style);
+
+	        var _this$style2 = _slicedToArray(_this$style, 4);
+
+	        _this.canvas = _this$style2[0];
+	        _this.buffer = _this$style2[1];
+	        _this.blitter = _this$style2[2];
+	        _this.rendering_style = _this$style2[3];
+
+	        _this.head.appendChild(_this.rendering_style);
+
+	        return _ret = true, _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    /**
+	    * Style provided canvases
+	    * @type {null}
+	    * @param {Element, Element, Element} a - Pass 3 canvases: main, buffer and blitting canvas
+	    * @protected
+	    */
+
+	    /**
+	    * Set documents private variables
+	    * @type {Object}
+	    * @protected
+	    */
+
+	    _createClass(Canvas, [{
+	        key: 'style',
+	        value: function style(temp_canvas, temp_buffer, temp_blitter) {
+
+	            temp_canvas.style.position = this.app.options.canvas.position.position;
+
+	            temp_canvas.style.zIndex = this.app.options.canvas.position.z;
+
+	            if (this.app.options.canvas.buffer) {
+	                temp_buffer.style.position = this.app.options.canvas.position.position;
+
+	                temp_buffer.style.zIndex = this.app.options.canvas.position.z - 1;
+	            }
+
+	            if (this.app.options.canvas.override) {
+
+	                temp_canvas.style.left = this.app.options.canvas.position.left + "px";
+
+	                temp_canvas.style.top = this.app.options.canvas.position.top + "px";
+
+	                if (this.app.options.canvas.buffer) {
+	                    temp_buffer.style.left = this.app.options.canvas.position.left + "px";
+
+	                    temp_buffer.style.top = this.app.options.canvas.position.top + "px";
+	                }
+	            }
+
+	            return [temp_canvas, temp_buffer, temp_blitter];
+	        }
+
+	        /**
+	        * Construct a canvas element.
+	        * @type {Id}
+	        * @param {Element} a - Creates a canvas element and attaches it to the body.
+	        * @protected
+	        */
+
+	    }, {
+	        key: 'construct_canvas',
+	        value: function construct_canvas(id) {
+
+	            var c = this.doc.createElement("canvas");
+
+	            var c_id = id + "_" + this.app.id;
+
+	            c.id = c_id;
+
+	            this.doc.body.appendChild(c);
+
+	            return this.doc.getElementById(c_id);
+	        }
+	    }]);
+
+	    return Canvas;
+	}(_interfaces._Canvas_Core);
+
+	Canvas.properties = {
+	    name: 'canvas',
+	    canvas: [],
+	    docs: document,
+	    head: document.getElementsByTagName('head')[0],
+	    _rendering_style: document.createElement('style')
+	};
+	exports.default = Canvas;
+	;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+	    //	//To ensure your data is filled, use a callback return your response data.
+	    //	var facebook = function(){ return App.user.pull();};
+	    //
+	    //	//Your facebook ID, callback function(){}
+	    //	App.user.fbconnect(id, facebook)
+	    name: "",
+	    id: "",
+	    locale: "",
+	    gender: "",
+	    updated_time: "",
+	    timezone: "",
+	    quotes: "",
+	    response: {},
+
+	    //returns the response object
+	    get: function get() {
+	        return this.response;
+	    },
+
+	    //facebook connection
+	    fbconnect: function con(appid, callback) {
+	        window.fbAsyncInit = function () {
+	            FB.init({
+	                appId: appid,
+	                status: true, // check login status
+	                cookie: true, // enable cookies to allow the server to access the session
+	                xfbml: true // parse XFBML
+	            });
+	            FB.login(function () {
+	                FB.api('/me/feed', 'post', { message: 'Hello, world!' });
+	            }, { scope: 'publish_actions' });
+	        };
+
+	        // Load the SDK asynchronously
+	        (function (d) {
+	            var js,
+	                id = 'facebook-jssdk',
+	                ref = d.getElementsByTagName('script')[0];
+	            if (d.getElementById(id)) {
+	                return;
+	            }
+	            js = d.createElement('script');js.id = id;js.async = true;
+	            js.src = "//connect.facebook.net/en_US/all.js";
+	            ref.parentNode.insertBefore(js, ref);
+	        })(document);
+
+	        // Here we run a very simple Flappy of the Graph API after login is successful.
+	        // This testAPI() function is only called in those cases.
+
+	        /*
+	        function testAPI() {
+	        console.log('Welcome!  Fetching your information.... ');
+	           FB.api('/me', function(response) {
+	              App.user.facebook(response);
+	              callback(response);
+	            log('Good to see you, ' + response.name + '.');
+	          });
+	        }
+	          */
+	    },
+
+	    //facebook callback
+	    facebook: function facebook(response) {
+	        this.response = response;
+	        this.name = this.response.name;
+	        this.id = this.response.id;
+	        this.locale = this.response.locale;
+	        this.gender = this.response.gender;
+	        this.updated_time = this.response.updated_time;
+	        this.timezone = this.response.timezone;
+	        this.quotes = this.response.quotes;
+	    }
+
+	};
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _cookies = __webpack_require__(211);
+
+	var _cookies2 = _interopRequireDefault(_cookies);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+
+	    constructor: function constructor(app) {
+
+	        return {
+
+	            app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	            init: { writable: false, configurable: false, enumerable: false, value: function value(name) {
+
+	                    //Set app/document title
+
+	                    this.app.setTitle(document.title + "." + this.app.main.name);
+
+	                    //Construct App.ext components
+
+	                    this.app.Construct(this.useragent).init();
+
+	                    this.app.Construct(this.metatag).init();
+
+	                    //this.app.Construct(this.cookies).init();
+
+	                    this.cookies = new _cookies2.default(this.app);
+
+	                    this.app.Construct(this.cursor).init();
+
+	                    this.app.Construct(this.connect).init();
+	                }
+	            }
+	        };
+	    },
+	    prototype: {
+
+	        //UserAgent Information
+	        //	Assists in detecting the platform that you are running on.
+
+	        useragent: {
+
+	            //	Use useragent lightly as some would assume that sniffing the useragent is unreliable. I digress.
+
+	            prototype: {
+
+	                //Cached Navigator.userAgent
+	                agent: navigator.userAgent,
+
+	                //
+	                mouse: false,
+	                touch: false,
+	                keyboard: false,
+	                windows: false,
+	                chrome: false,
+	                safari: false,
+	                iemobile: false,
+	                nokia: false,
+	                ie: false,
+	                ios: false,
+	                blackberry: false,
+	                playbook: false,
+	                bb10: false,
+	                mobile: false,
+
+	                //Match user agent for IE
+	                IE: function IE() {
+
+	                    return this.agent.match(/Trident/i) ? true : false;
+	                },
+
+	                //Match user agent for iOS
+	                iOS: function iOS() {
+
+	                    return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
+	                },
+
+	                //Match user agent for Nokia
+	                Nokia: function Nokia() {
+
+	                    return this.agent.match(/Nokia/i) ? true : false;
+	                },
+
+	                //Determine mobile or windows based on useragent
+	                Mobile: function Mobile() {
+
+	                    return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
+	                },
+
+	                //Match user agent for Chrome
+	                Chrome: function Chrome() {
+
+	                    return this.chrome = this.agent.match(/Chrome/i) ? true : false;
+	                },
+
+	                //Match user agent for Safari
+	                Safari: function Safari() {
+
+	                    return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
+	                },
+
+	                Desktop: function Desktop() {
+
+	                    return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
+	                },
+
+	                //Match user agent for Android
+	                Android: function Android() {
+	                    return this.agent.match(/Android/i) ? true : false;
+	                },
+
+	                //Match user agent for IEMobile
+	                IEMobile: function IEMobile() {
+
+	                    var trident = this.agent.match(/IEMobile/i);
+	                    var windowsphone = this.agent.match(/Windows Phone/i);
+	                    var touch = this.agent.match(/touch/i);
+
+	                    return trident || windowsphone || touch ? true : false;
+	                },
+
+	                //Match user agent for Blackberry
+	                BlackBerry: function BlackBerry() {
+	                    this.playbook = this.agent.match(/PlayBook/i) || false;
+	                    this.bb10 = this.agent.match(/BB10/i) || false;
+	                    return this.agent.match(/BlackBerry/i) || this.playbook || this.bb10 ? true : false;
+	                }
+
+	            },
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed useragent object
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	                    init: { writable: false, configurable: false, enumerable: false, value: function value() {
+
+	                            //Query Browser
+	                            this.chrome = this.Chrome();
+	                            this.safari = this.Safari();
+	                            this.iemobile = this.IEMobile();
+	                            this.nokia = this.Nokia();
+	                            this.ie = this.trident = this.IE();
+
+	                            this.blackberry = this.BlackBerry();
+	                            this.ios = this.iOS();
+	                            this.android = this.Android();
+
+	                            this.touch = this.Mobile();
+	                            this.mouse = !this.Mobile() || this.BlackBerry();
+
+	                            this.keyboard = this.Desktop() || this.BlackBerry();
+
+	                            this.Mobile();
+	                            this.Desktop();
+
+	                            this.app.ext.useragent = this;
+	                            //return this;
+	                        }
+	                    }
+	                };
+	            }
+
+	        },
+
+	        //Cookie Storage
+	        //	Polyfill provided by ScottHamper
+	        //	https://github.com/ScottHamper/Cookies#api-reference
+
+	        cookies: _cookies2.default,
+
+	        //MetaTag Handler
+	        //	Assists in dynamically applying metatags.
+	        //	Automatically applies Microsoft, Apple and common metatags.
+
+	        metatag: {
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed metatag object.
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+
+	                    init: { value: function value() {
+
+	                            //execute polyfill
+	                            this.metaAppend(this.metaTag("msapplication-tap-highlight", this.ms_taphighlight));
+	                            this.metaAppend(this.metaTag("apple-mobile-web-app-capable", this.apple_webapp));
+	                            this.metaAppend(this.metaTag("apple-mobile-web-app-status-bar-style", this.apple_statusbar));
+	                            this.metaAppend(this.metaTag("cursor-event-mode", "native"));
+	                            this.metaAppend(this.metaTag("touch-event-mode", "native"));
+	                            this.metaAppend(this.metaTag("HandheldFriendly", "True"));
+
+	                            if (this.devicewidth) this.metaAppend(this.metaTag("viewport", "width=device-width, user-scalable=no"));
+	                            if (this.devicedpi) this.metaAppend(this.metaTag("viewport", "target-densitydpi=" + this.app.client.setWidth + ",-webkit-min-device-pixel-ratio=1,min-resolution:=" + this.app.client.setWidth + ",-moz-device-pixel-ratio=1"));
+
+	                            this.metaAppend(this.metaTag("viewport", "user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"));
+
+	                            //Cache Control
+	                            this.metaAppend(this.metaTag("cache-control", "max-age=0"));
+	                            this.metaAppend(this.metaTag("cache-control", "no-cache"));
+	                            this.metaAppend(this.metaTag("expires", "Tue, 01 Jan 1980 1:00:00 GMT"));
+	                            this.metaAppend(this.metaTag("pragma", "no-cache"));
+
+	                            this.app.ext.metatag = this;
+
+	                            //Return this
+	                            return this;
+	                        }
+	                    }
+	                };
+	            },
+
+	            prototype: {
+
+	                //Default injected tags
+	                ms_taphighlight: "no",
+	                apple_webapp: "yes",
+	                apple_statusbar: "black",
+	                devicedpi: true,
+	                devicewidth: true,
+
+	                //Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+	                metaFavicon: function metaFavicon(img) {
+
+	                    this.metaAppend(this.metaLink(img, "shortcut icon", "image/png"));
+	                },
+
+	                //Construct a standard metaLink element
+	                metaLink: function metaLink(href, rel, type) {
+
+	                    //Create link element
+	                    this.link = document.createElement('link');
+
+	                    //Assign element values
+	                    this.link.href = href;
+	                    this.link.rel = rel;
+	                    this.link.type = type;
+
+	                    //Return link
+	                    return this.link;
+	                },
+
+	                //Construct a standard metaTag element
+	                metaTag: function metaTag(name, content) {
+
+	                    //Create link element
+	                    this.meta = document.createElement('meta');
+
+	                    //Assign element values
+	                    this.meta.content = content;
+	                    this.meta.name = name;
+
+	                    //Return tag
+	                    return this.meta;
+	                },
+
+	                //Append a meta object to the <head>
+	                metaAppend: function metaAppend(meta) {
+
+	                    //Append child to header
+	                    if (this.head.appendChild(meta)) {
+	                        //Count number of headers
+	                        this.count++;
+
+	                        //Return success
+	                        return true;
+	                    } else return false;
+	                },
+
+	                //Cached data
+	                head: document.getElementsByTagName('head')[0],
+	                link: null,
+	                meta: null,
+	                count: 0
+
+	            }
+
+	        },
+
+	        //Cursor Handler
+	        //	Logs last cursor and allows to easily change the cursor on the fly
+
+	        cursor: {
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed metatag object.
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+	                    init: { value: function value() {
+
+	                            this.set(this.wait);
+
+	                            this.app.ext.cursor = this;
+	                        }
+	                    }
+	                };
+	            },
+
+	            prototype: {
+
+	                //Cached cursor types
+	                auto: "auto",
+	                inherit: "inherit",
+	                crosshair: "crosshair",
+	                def: "default",
+	                help: "help",
+	                move: "move",
+	                pointer: "pointer",
+	                progress: "progress",
+	                text: "text",
+	                wait: "wait",
+	                eresize: "e-resize",
+	                neresize: "ne-resize",
+	                nwresize: "nw-resize",
+	                nresize: "n-resize",
+	                seresize: "se-resize",
+	                swresize: "sw-resize",
+	                sresize: "s-resize",
+	                wresize: "w-resize",
+
+	                //Properties
+	                current: "auto",
+	                last: "auto",
+	                changed: false,
+	                count: 0,
+	                lock: 0,
+	                delay: 4,
+
+	                set: function set(cursor, lock) {
+
+	                    if (this.last == cursor || this.lock) return;
+
+	                    this.last = this.current;
+
+	                    this.current = cursor;
+
+	                    /*
+	                    if (this.app.options.target.buffer)
+	                        this.app.canvas.buffer.style.cursor=this.current;
+	                        this.app.canvas.canvas.style.cursor=this.current;
+	                     document.body.style.cursor=this.current;
+	                    */
+	                    this.changed = true;
+	                    this.count++;
+	                }
+
+	            }
+
+	        },
+
+	        //Connection Controller
+	        //	Assists in making ajax calls and allows you to test your connection.
+	        //	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
+
+	        connect: {
+
+	            constructor: function constructor(app) {
+
+	                //Return constructed metatag object.
+	                return {
+	                    app: { writable: false, configurable: false, enumerable: false, value: app },
+	                    init: { value: function value() {
+
+	                            //Execute a test on the connection
+	                            this.test();
+
+	                            this.app.ext.connect = this;
+	                        }
+	                    }
+	                };
+	            },
+
+	            prototype: {
+
+	                //Properties
+	                offline: false,
+	                connectionAttempts: 0,
+	                error: null,
+	                window: window,
+
+	                //An aJax request for a file of your choosing. runs callback once finished (response,arg0,arg1)
+	                load: function load(address, callback, arg0, arg1) {
+
+	                    var xmlhttp;
+	                    if (window.XMLHttpRequest) {
+	                        // code for IE7+, Firefox, Chrome, Opera, Safari
+	                        xmlhttp = new XMLHttpRequest();
+	                    } else {
+	                        // code for IE6, IE5
+	                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	                    }
+	                    xmlhttp.onreadystatechange = function () {
+	                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                            callback(xmlhttp.response, arg0, arg1);
+	                        }
+	                    };
+	                    xmlhttp.open("GET", address, true);
+	                    xmlhttp.send();
+	                },
+
+	                //An aJax request to check wither or not you are connected to the internet
+	                // jpsilvashy / hostReachable.js - https://gist.github.com/jpsilvashy/5725579
+	                hostReachable: function hostReachable() {
+	                    return;
+	                    /*
+	                                        //if local host return offline
+	                                        if ((this.window.location.hostname).toString()=="127.0.0.1")
+	                                            return false;
+	                    
+	                                        // Handle IE and more capable browsers
+	                                        var xhr = new ( this.window.ActiveXObject || XMLHttpRequest )( "Microsoft.XMLHTTP" );
+	                                        var status;
+	                    
+	                    
+	                                        // Open new request as a HEAD to the root hostname with a random param to bust the cache
+	                                        xhr.open( "HEAD", "//" + this.window.location.hostname + "/?rand=" + Math.floor((1 + Math.random()) * 0x10000), false );
+	                    
+	                                        // Issue request and handle response
+	                                        try {
+	                                            xhr.send();
+	                                            return ( xhr.status >= 200 && xhr.status < 300 || xhr.status === 304 );
+	                    
+	                                        } catch (error) {
+	                    
+	                                            if (this.connectionAttempts<1)
+	                                                this.connectionAttempts++,this.hostReachable();
+	                                            this.error = error;
+	                                            return false;
+	                                        }
+	                    */
+	                },
+
+	                test: function test(app) {
+
+	                    return this.offline = this.hostReachable();
+	                }
+
+	            }
+
+	        }
+
+	    }
+	};
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
+	* @module
+	* @public
+	*/
+
+	var Cookies =
+
+	/**
+	* The constructor will fill window.Cookies with a new instance.
+	* @param {Object} app - reference to the app.
+	*/
+
+	function Cookies() {
+	    _classCallCheck(this, Cookies);
+
+	    var factory = function factory(window) {
+	        if (_typeof(window.document) !== 'object') {
+	            throw new Error('Cookies.js requires a `window` with a `document` object');
+	        }
+
+	        var Cookies = window.Cookies = function (key, value, options) {
+	            return arguments.length === 1 ? Cookies.get(key) : Cookies.set(key, value, options);
+	        };
+
+	        // Allows for setter injection in unit tests
+	        Cookies._document = window.document;
+
+	        // Used to ensure cookie keys do not collide with
+	        // built-in `Object` properties
+	        Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
+
+	        Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+
+	        Cookies.defaults = {
+	            path: '/',
+	            secure: false
+	        };
+
+	        Cookies.get = function (key) {
+	            if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
+	                Cookies._renewCache();
+	            }
+
+	            return Cookies._cache[Cookies._cacheKeyPrefix + key];
+	        };
+
+	        Cookies.set = function (key, value, options) {
+	            options = Cookies._getExtendedOptions(options);
+	            options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
+
+	            Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
+
+	            return Cookies;
+	        };
+
+	        Cookies.expire = function (key, options) {
+	            return Cookies.set(key, undefined, options);
+	        };
+
+	        Cookies._getExtendedOptions = function (options) {
+	            return {
+	                path: options && options.path || Cookies.defaults.path,
+	                domain: options && options.domain || Cookies.defaults.domain,
+	                expires: options && options.expires || Cookies.defaults.expires,
+	                secure: options && options.secure !== undefined ? options.secure : Cookies.defaults.secure
+	            };
+	        };
+
+	        Cookies._isValidDate = function (date) {
+	            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
+	        };
+
+	        Cookies._getExpiresDate = function (expires, now) {
+	            now = now || new Date();
+
+	            if (typeof expires === 'number') {
+	                expires = expires === Infinity ? Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
+	            } else if (typeof expires === 'string') {
+	                expires = new Date(expires);
+	            }
+
+	            if (expires && !Cookies._isValidDate(expires)) {
+	                throw new Error('`expires` parameter cannot be converted to a valid Date instance');
+	            }
+
+	            return expires;
+	        };
+
+	        Cookies._generateCookieString = function (key, value, options) {
+	            key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
+	            key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
+	            value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
+	            options = options || {};
+
+	            var cookieString = key + '=' + value;
+	            cookieString += options.path ? ';path=' + options.path : '';
+	            cookieString += options.domain ? ';domain=' + options.domain : '';
+	            cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
+	            cookieString += options.secure ? ';secure' : '';
+
+	            return cookieString;
+	        };
+
+	        Cookies._getCacheFromString = function (documentCookie) {
+	            var cookieCache = {};
+	            var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
+
+	            for (var i = 0; i < cookiesArray.length; i++) {
+	                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+
+	                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
+	                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
+	                }
+	            }
+
+	            return cookieCache;
+	        };
+
+	        Cookies._getKeyValuePairFromCookieString = function (cookieString) {
+	            // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
+	            var separatorIndex = cookieString.indexOf('=');
+
+	            // IE omits the "=" when the cookie value is an empty string
+	            separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
+
+	            return {
+	                key: decodeURIComponent(cookieString.substr(0, separatorIndex)),
+	                value: decodeURIComponent(cookieString.substr(separatorIndex + 1))
+	            };
+	        };
+
+	        Cookies._renewCache = function () {
+	            Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
+	            Cookies._cachedDocumentCookie = Cookies._document.cookie;
+	        };
+
+	        Cookies._areEnabled = function () {
+	            var testKey = 'cookies.js';
+	            var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
+	            Cookies.expire(testKey);
+	            return areEnabled;
+	        };
+
+	        Cookies.enabled = Cookies._areEnabled();
+
+	        return Cookies;
+	    };
+
+	    var cookiesExport = _typeof(global.document) === 'object' ? factory(global) : factory;
+	    var AMD = "function" === 'function' && __webpack_require__(213);
+	    var objectExports = ( false ? 'undefined' : _typeof(exports)) === 'object';
+	    var moduleExports = ( false ? 'undefined' : _typeof(module)) === 'object' && _typeof(module.exports) === 'object';
+	    // AMD support
+	    if (AMD) {
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	            return cookiesExport;
+	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        // CommonJS/Node.js support
+	    } else if (objectExports) {
+	            // Support Node.js specific `module.exports` (which can be a function)
+	            if (moduleExports) {
+	                exports = module.exports = cookiesExport;
+	            }
+	            // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+	            exports.Cookies = cookiesExport;
+	        } else {
+	            global.Cookies = cookiesExport;
+	        }
+
+	    return Cookies;
+	};
+
+	exports.default = Cookies;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(212)(module)))
+
+/***/ },
+/* 212 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 213 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	var _test2 = __webpack_require__(215);
+
+	var _test3 = _interopRequireDefault(_test2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	window.test = _test3.default;
+
+	var Loader = function (_SJSClass) {
+		_inherits(Loader, _SJSClass);
+
+		function Loader(app) {
+			_classCallCheck(this, Loader);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this, app));
+
+			_this.ImageCache = [];
+
+			_this.ImageBuffer = [];
+
+			_this.ImageBufferTime = 3;
+			_this.asyncLoadCacheIndex = 0;
+
+			window.Loader = _this;
+
+			return _this;
+		}
+
+		_createClass(Loader, [{
+			key: 'checkLoaded',
+			value: function checkLoaded(name) {
+				var _this2 = this;
+
+				if (!this.getImageReference(name).complete) {
+
+					setTimeout(function () {
+
+						_this2.checkLoaded(name);
+					}, this.ImageBufferTime);
+				} else {
+
+					this.ImageBuffer.splice(this.ImageBuffer.indexOf(name));
+				}
+
+				return this.getImageReference(name);
+			}
+		}, {
+			key: 'getBufferLength',
+			value: function getBufferLength() {
+
+				return this.ImageBuffer.length;
+			}
+		}, {
+			key: 'getImageReference',
+			value: function getImageReference(string) {
+
+				var elementPos = this.ImageCache.map(function (img) {
+
+					return img.string;
+				}).indexOf(string);
+
+				var objectFound = this.ImageCache[elementPos];
+
+				return objectFound;
+			}
+		}, {
+			key: 'loadImage',
+			value: function loadImage(string) {
+				var _this3 = this;
+
+				var name = string;
+
+				var img = this.graphics.load(string);
+
+				var cacheIndex = this.ImageCache.push(img);
+
+				img.string = name;
+
+				this.ImageBuffer.push(name);
+
+				setTimeout(function () {
+
+					_this3.checkLoaded(name);
+				}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
+
+				return this.ImageCache[cacheIndex - 1];
+			}
+		}, {
+			key: 'getBase64Image',
+			value: function getBase64Image(img) {
+
+				// Create an empty canvas element
+				var canvas = document.createElement("canvas");
+				canvas.width = img.width;
+				canvas.height = img.height;
+
+				// Copy the image contents to the canvas
+				var ctx = canvas.getContext("2d");
+				ctx.drawImage(img, 0, 0);
+
+				// Get the data-URL formatted image
+				// Firefox supports PNG and JPEG. You could check img.src to
+				// guess the original format, but be aware the using "image/jpg"
+				// will re-encode the image.
+				var dataURL = canvas.toDataURL("image/png");
+
+				return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+			}
+		}, {
+			key: 'createImageData',
+			value: function createImageData(img) {
+
+				// Create an empty canvas element
+				var canvas = document.createElement("canvas");
+				var ctx = canvas.getContext("2d");
+
+				canvas.width = img.width;
+				canvas.height = img.height;
+				canvas.style.background = 'transparent';
+				canvas.background = 'transparent';
+
+				var canvas2 = this.app.canvas.buffer.getContext('2d');
+				//var canvas2_data = canvas2.getImageData(0,0,img.width,img.height);
+				var canvas2_data = canvas2.getImageData(0, 0, 100, 100);
+
+				//var canvas2_img = new Image();
+				//canvas2_img.src = canvas2_data;
+
+				var img = document.createElement("img");
+				img.src = this.app.canvas.canvas.toDataURL("image/png");
+
+				// Copy the image contents to the canvas
+				//this.visuals.putData(canvas2_data,0,0);
+
+				//var newData = canvas2.getImageData(0,0,img.width,img.height);
+
+				//ctx.putImageData(canvas2_data,0,0);
+
+				ctx.drawImage(img, 0, 0);
+				//ctx.drawImage(canvas2_img, 0, 0);
+
+				var newData2 = ctx.getImageData(0, 0, img.width, img.height);
+
+				return newData2;
+			}
+		}, {
+			key: 'asyncLoadImage',
+			value: function () {
+				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
+					var _this4 = this;
+
+					var name, img, cacheIndex;
+					return regeneratorRuntime.wrap(function _callee$(_context) {
+						while (1) {
+							switch (_context.prev = _context.next) {
+								case 0:
+									name = string;
+									_context.next = 3;
+									return this.graphics.load(name);
+
+								case 3:
+									img = _context.sent;
+
+									img.string = name;
+
+									_context.next = 7;
+									return this.ImageCache.push(img);
+
+								case 7:
+									cacheIndex = _context.sent;
+									_context.next = 10;
+									return this.ImageBuffer.push(name + suffex);
+
+								case 10:
+									_context.next = 12;
+									return setTimeout(function () {
+
+										var _img = _this4.checkLoaded(name);
+
+										//_img.base64 = this.getBase64Image(_img);
+										//_img.imgdata = this.createImageData(_img);
+
+										_this4.ImageCache[cacheIndex - 1] = _img;
+										//console.log(this.getBase64Image(_img))
+										//console.log('eh');
+										//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+										//console.log(this.ImageCache[cacheIndex-1])
+									}, this.ImageBufferTime + 0.1 * this.ImageBuffer.length);
+
+								case 12:
+									this.asyncLoadCacheIndex = cacheIndex;
+
+									return _context.abrupt('return', this.ImageCache[cacheIndex - 1]);
+
+								case 14:
+								case 'end':
+									return _context.stop();
+							}
+						}
+					}, _callee, this);
+				}));
+
+				return function asyncLoadImage(_x, _x2) {
+					return ref.apply(this, arguments);
+				};
+			}()
+		}, {
+			key: 'asyncLoadImageData',
+			value: function () {
+				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
+					var _this5 = this;
+
+					var _index, _image;
+
+					return regeneratorRuntime.wrap(function _callee2$(_context2) {
+						while (1) {
+							switch (_context2.prev = _context2.next) {
+								case 0:
+									_index = this.asyncLoadCacheIndex;
+									_context2.next = 3;
+									return this.asyncLoadImage(string, "_blit").then(function (img) {
+
+										//let _cacheIndex =  this.ImageCache.push(img);
+
+										//console.log( this.ImageCache[_cacheIndex-1]=img)
+
+										var buffindex = _this5.ImageBuffer.push(string + "_blit");
+
+										_this5[string2] = img;
+										_this5[string2].addEventListener('load', function () {
+
+											_this5[string2] = _this5.visuals.blit(_this5[string2], x, y);
+
+											_this5[string2].string = string2;
+
+											_this5.ImageCache.push(_this5[string2]);
+
+											_this5.ImageBuffer.splice(_this5.ImageBuffer.indexOf(string + "_blit2"), 1);
+										});
+									});
+
+								case 3:
+									_image = _context2.sent;
+									return _context2.abrupt('return', _image);
+
+								case 5:
+								case 'end':
+									return _context2.stop();
+							}
+						}
+					}, _callee2, this);
+				}));
+
+				return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
+					return ref.apply(this, arguments);
+				};
+			}()
+		}]);
+
+		return Loader;
+	}(_interfaces._SJSClass);
+
+	exports.default = Loader;
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	* Test Module for running tyhe game
+	* @module
+	* @private
+	*/
+
+	var test = function (_SJSClass) {
+	    _inherits(test, _SJSClass);
+
+	    function test(app) {
+	        _classCallCheck(this, test);
+
+	        //this.Loader = this.app.getCurrent().Loader;
+	        /*
+	                this.SplashScreen = [];
+	        
+	        		this.SplashScreen[0] = this.Loader.loadImage('intro/SplashScreen');
+	        
+	        		this.SplashScreen[1] = this.Loader.loadImage('intro/spicejsicon');
+	        
+	        		this.SplashScreen[2] = this.Loader.loadImage('intro/ryanspice');
+	        
+	                this.Background = this.Loader.loadImage('intro/background');
+	        
+	                this.begin = this.Loader.loadImage('intro/begin');
+	        
+	        		this.ScoreNumber = [];
+	        
+	        		this.ScoreNumber[0] = this.Loader.loadImage('interface/score/score_0');
+	        		this.ScoreNumber[1] = this.Loader.loadImage('interface/score/score_1');
+	        		this.ScoreNumber[2] = this.Loader.loadImage('interface/score/score_2');
+	        		this.ScoreNumber[3] = this.Loader.loadImage('interface/score/score_3');
+	        		this.ScoreNumber[4] = this.Loader.loadImage('interface/score/score_4');
+	        		this.ScoreNumber[5] = this.Loader.loadImage('interface/score/score_5');
+	        		this.ScoreNumber[6] = this.Loader.loadImage('interface/score/score_6');
+	        		this.ScoreNumber[7] = this.Loader.loadImage('interface/score/score_7');
+	        		this.ScoreNumber[8] = this.Loader.loadImage('interface/score/score_8');
+	        		this.ScoreNumber[9] = this.Loader.loadImage('interface/score/score_9');
+	        
+	                this.Loader.loadImage('interface/iconoffline');
+	        
+	                this.Loader.loadImage('interface/iconp');
+	        
+	                this.Loader.loadImage('interface/iconvolume');
+	        
+	                this.Loader.loadImage('interface/iconx');
+	        */
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(test).call(this, app));
+
+	        _this.StartPhase = 2;
+	        _this.StartAlpha = 2;
+
+	        _this.xxx = 0;
+	        _this.start = false;
+
+	        //		(this.particles = this.app.create(SB_.prototype)).init();
+
+	        //(this.loading = this.app.create(Loading.prototype)).init();
+	        //(this.statusicons = this.app.create(StatusIco.prototype)).init();
+	        //(this.characterselect = this.app.create(Characterselect.prototype)).init();
+
+	        //    this.particles = new SB_(this.app);
+
+	        //        this.loading = new Loading(this.app);
+
+	        //        this.statusicons = new StatusIco(this.app);
+
+	        //        this.characterselect = new Characterselect(this.app);
+
+	        _this.continue = false;
+
+	        _this.sceneX = -190;
+	        _this.scenePhase = 0;
+	        _this.sceneEndX = 1;
+
+	        _this.sceneStartSpeed = 3;
+	        _this.sceneEndSpeed = 4;
+
+	        _this.sceneSpeed = _this.sceneStartSpeed;
+	        return _this;
+	    }
+
+	    _createClass(test, [{
+	        key: "draw",
+	        value: function draw() {
+
+	            //    if (this.Loader.getBufferLength()>0)
+	            //        return;
+
+	            var sw = this.app.getScaledWidth();
+	            var sh = this.app.getScaledHeight();
+	            var h = this.app.getHeight();
+	            var w = this.app.getWidth();
+	            var alpha = 0.5 + Math.sin(this.sceneX / 120) * 0.5;
+
+	            if (this.scenePhase == 2) if (this.sceneX > 320) alpha = 0.5 + Math.sin(320 / 120) * 0.5;
+
+	            this.Background = {};
+	            this.Background.width = sw;
+
+	            var alpha2 = 0.25 + Math.sin(this.sceneX / 120) * 0.55 - this.sceneEndX;
+
+	            if (this.scenePhase == 2) alpha2 = this.sceneEndX, this.sceneSpeed = this.sceneEndSpeed;
+	            /*
+	                    this.visuals.image_ext(this.Background,this.app.getWidth()/2,this.app.getHeight()/2, 1,alpha,true);
+	            
+	                    if (this.scenePhase==2)
+	                        this.visuals.rect_ext(this.app.getWidth()/2,this.app.getHeight()/2,this.app.getScaledWidth()*2,this.app.getHeight(), 1,alpha2,true,"#FFFFFF");
+	                    else
+	                        this.visuals.rect_ext(-sw,0,sw*3,h,1,1,0,"#000000");
+	            */
+	            this.visuals.rect_gradient(w / 2, h / 2, this.Background.width, h, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+	            /*
+	                    if (this.continue == true)
+	            			this.characterselect.draw();
+	                    else
+	                        this.visuals.image_ext(this.SplashScreen[2-this.scenePhase],this.app.getWidth()/2,300, 1,alpha,true);
+	            */
+
+	            this.visuals.rect_gradient(w / 2, h * 0, this.Background.width, h * 2, 1, alpha * 0.9, 1, "transparent", "#5e5fdf");
+
+	            if (this.scenePhase == 2) {
+	                if (this.sceneEndX > 0) this.sceneEndX -= 0.1;else this.sceneEndX = 0;
+	                /*
+	                			this.particles._draw();
+	                
+	                			if (this.graphics.getErrors())
+	                				this.loading.draw();
+	                			else	{
+	                				var a = this.app.client.Math.Clamp(Math.cos(this.sceneX/25),0,1);
+	                				if (this.continue==false)
+	                				this.visuals.image_ext(this.begin,this.app.getWidth()/2,500, 1,a,1);
+	                
+	                				this.app.ext.cursor.set('pointer');
+	                
+	                			}
+	                            */
+	            } else {}
+
+	                //	this.loading.draw();
+
+	                //	this.statusicons.draw(0.29);
+	        }
+	    }, {
+	        key: "update",
+	        value: function update() {
+
+	            //    this.loading.update();
+	            //	this.statusicons.update();
+
+	            //    if (this.Loader.getBufferLength()>0)
+	            //        return;
+
+	            var tick = this.sceneSpeed;
+
+	            if (this.scenePhase > 2) this.scenePhase = 2;else if (this.scenePhase == 2) {
+	                //    this.particles._update();
+	                //	this.characterselect.update();
+	                this.sceneX += tick;
+	            } else if (this.scenePhase < 2) {
+
+	                if (this.scenePhase == 2) if (this.app.input.released) if (this.continue == false) this.continue = true;
+
+	                if (this.app.input.released) this.sceneSpeed = 10;
+
+	                this.sceneX += tick;
+
+	                if (this.sceneX > 520) this.sceneX = -190, this.scenePhase++;
+
+	                if (this.scenePhase > 2) this.scenePhase = 2;
+	            }
+	        }
+	    }]);
+
+	    return test;
+	}(_interfaces._SJSClass);
+
+	exports.default = test;
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _interfaces = __webpack_require__(194);
+
+	var _vector = __webpack_require__(198);
+
+	var _vector2 = _interopRequireDefault(_vector);
+
+	var _loader = __webpack_require__(214);
+
+	var _loader2 = _interopRequireDefault(_loader);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var xOff = 0;
+
+	var SJSParticleController = function (_Loader) {
+	    _inherits(SJSParticleController, _Loader);
+
+	    function SJSParticleController(app) {
+	        _classCallCheck(this, SJSParticleController);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
+
+	        _this.SJSParticleList = [];
+
+	        _this.particleLimit = 1500;
+
+	        _this.flakes = new Image();
+
+	        _this.flakes0 = new Image();
+
+	        for (var i = 0; i < 16; i++) {
+	            _this['flakes' + i] = new Image();
+	        }for (var i = 0; i < 16; i++) {
+	            _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
+	        }return _this;
+	    }
+
+	    _createClass(SJSParticleController, [{
+	        key: 'clear',
+	        value: function clear() {
+
+	            this.SJSParticleList = [];
+	        }
+	    }, {
+	        key: 'appendParticle',
+	        value: function appendParticle() {
+
+	            var length = this.SJSParticleList.length;
+
+	            if (length > this.particleLimit) return;
+
+	            var width = this.app.getWidth();
+
+	            var height = this.app.getHeight();
+
+	            var scale = this.app.getScale();
+
+	            var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
+
+	            var End = new _vector2.default(Math.random() * width, 0);
+
+	            End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+
+	            var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+
+	            this.SJSParticleList.push(newParticle);
+
+	            return;
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+
+	            var length = this.SJSParticleList.length;
+
+	            this.appendParticle();
+
+	            if (length == 0) return;
+
+	            var i = length - 1;
+
+	            for (i; i; --i) {
+
+	                var particle = this.SJSParticleList[i];
+
+	                particle.update();
+	            }
+
+	            return;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw() {
+
+	            var error = this.getBufferLength();
+
+	            //    console.log(error)
+	            if (error > 0) {
+	                this.visuals.rect(0, 0, 10, 10, '#FF0000');
+	                return;
+	            }
+
+	            var length = this.SJSParticleList.length;
+
+	            if (length == 0) return;
+
+	            var i = length - 1;
+
+	            for (i; i; --i) {
+
+	                var particle = this.SJSParticleList[i];
+
+	                particle.draw();
+	            }
+	        }
+	    }]);
+
+	    return SJSParticleController;
+	}(_loader2.default);
+
+	exports.default = SJSParticleController;
+
+	var SJSParticle = function (_SJSClass) {
+	    _inherits(SJSParticle, _SJSClass);
+
+	    function SJSParticle(app, pos, target, vel, marker, usePhysics) {
+	        _classCallCheck(this, SJSParticle);
+
+	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
+
+	        var loader = window.Loader; // this.app.getCurrent().particleController;
+
+	        //this.img = loader.getImageReference('../flakes');
+	        _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
+
+	        _this2.t = Math.round(1 + Math.random() * 5);
+
+	        _this2.gravity = 0.5;
+
+	        _this2.alpha = 0.75 + Math.random() * 0.25;
+
+	        _this2.easing = Math.random() * 0.2;
+
+	        _this2.fade = Math.random() * 0.1;
+
+	        _this2.gridX = marker % 120;
+
+	        _this2.gridY = Math.floor(marker / 120) * 12;
+
+	        _this2.color = marker;
+
+	        _this2.scale = 3 * Math.random() * 3 * Application.getScale();
+
+	        _this2.start = 30 + Math.random() * 180;
+
+	        _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
+
+	        _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
+
+	        _this2.del = false;
+
+	        _this2.pos = {
+	            x: pos.x || 0,
+	            y: pos.y || 0
+	        };
+
+	        _this2.vel = {
+	            x: vel.x || 0,
+	            y: vel.y || 0
+	        };
+
+	        _this2.lastPos = {
+	            x: _this2.pos.x,
+	            y: _this2.pos.y
+	        };
+
+	        _this2.target = {
+	            y: target.y || 0,
+	            x: target.x || 0
+	        };
+
+	        _this2.pos = new _vector2.default(pos.x, pos.y);
+	        _this2.vel = new _vector2.default(vel.x, vel.y);
+	        _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
+	        _this2.target = new _vector2.default(target.x, target.y);
+
+	        _this2.usePhysics = usePhysics || false;
+
+	        if (!_this2.usePhysics) {
+
+	            _this2.dir = Math.random() * 1;
+
+	            if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
+	        } else {
+
+	            if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	        }
+
+	        return _this2;
+	    }
+
+	    _createClass(SJSParticle, [{
+	        key: 'update',
+	        value: function update() {
+
+	            var width = this.app.getWidth();
+
+	            var height = this.app.getHeight();
+
+	            var scale = this.app.getScale();
+
+	            // Check to Delete
+
+	            if (this.del) {
+
+	                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
+	                var target = { x: Math.random() * width, y: 2 * height / scale };
+	                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
+
+	                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
+
+	                return;
+	            }
+
+	            // Move Object
+
+	            var distance = this.target.y - this.pos.y;
+
+	            var val = this.target.x / 200;
+
+	            this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
+
+	            if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
+
+	            val = this.pos.x / 200;
+
+	            if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
+
+	            var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
+	            var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
+	            this.pos.x += xdir;
+
+	            // Check if out of bounds
+
+	            if (this.pos.y > 600) {
+	                this.alpha -= 0.01;
+
+	                if (this.alpha < 0.01) this.del = true;
+	            }
+
+	            if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw() {
+
+	            //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
+	            //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	            //else
+	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+
+	            this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	        }
+	    }]);
+
+	    return SJSParticle;
+	}(_interfaces._SJSClass);
+
+/***/ },
+/* 217 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var _private = new WeakMap();
+
+	var _SGL = function () {
+	  function _SGL() {
+	    _classCallCheck(this, _SGL);
+
+	    _private.set(this, this.constructor.properties);
+	  }
+
+	  _createClass(_SGL, [{
+	    key: 'start',
+	    value: function start() {}
+	  }, {
+	    key: 'square',
+	    get: function get() {
+
+	      return [100.0, 100.0, 0.0, -100.0, 100.0, 0.0, 100.0, -100.0, 0.0, -100.0, -100.0, 0.0];
+	    }
+	  }, {
+	    key: 'opacity',
+	    get: function get() {
+
+	      return 0;
+	    }
+	  }, {
+	    key: 'scale',
+	    get: function get() {
+
+	      return _private.get(this)['tras'].s;
+	    },
+	    set: function set(value) {
+
+	      _private.get(this)['tras'].s = value;
+	    }
+	  }]);
+
+	  return _SGL;
+	}();
+
+	_SGL.properties = {
+
+	  tras: { s: null },
+	  opacity: 0
+
+	};
+	exports.default = _SGL;
+
+	var SGL = new _SGL();
+
+	var canvas;
+	var gl;
+
+	var cubeVerticesBuffer;
+	var cubeVerticesTextureCoordBuffer;
+	var cubeVerticesIndexBuffer;
+	var cubeVerticesIndexBuffer;
+	var cubeRotation = 0.0;
+	var lastCubeUpdateTime = 0;
+
+	var cubeImage;
+	var cubeTexture;
+
+	var mvMatrix;
+	var shaderProgram;
+	var vertexPositionAttribute;
+	var textureCoordAttribute;
+	var perspectiveMatrix;
+
+	var squareVerticesBuffer;
+
+	var angleInRadians = 0;
+	var scale = 1;
+	var translation = [0, 0];
+	var width = 100;
+	var height = 30;
+	function setRectangle(gl, x, y, width, height) {
+	  var x1 = x;
+	  var x2 = x + width;
+	  var y1 = y;
+	  var y2 = y + height;
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([x1, y1, x2, y1, x1, y2, x1, y2, x2, y1, x2, y2]), gl.STATIC_DRAW);
+	}
+	var rect;
+
+	//
+	// start
+	//
+	// Called when the canvas is created to get the ball rolling.
+	//
+	function start() {
+	  canvas = document.getElementById("glcanvas");
+
+	  canvas.width = window.innerWidth;;
+	  canvas.height = window.innerHeight;
+
+	  initWebGL(canvas); // Initialize the GL context
+
+	  // Only continue if WebGL is available and working
+
+	  if (gl) {
+
+	    gl.clearColor(0.0, 0.0, 0.0, SGL.opacity);
+	    gl.clearDepth(1.0);
+	    //gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+	    gl.disable(gl.DEPTH_TEST); // Disable depth testing. This way, the last object drawn is always in "front".	// WebGL will not attempt to determine whether one object lies behind another.
+
+	    // Initialize the shaders; this is where all the lighting for the
+	    // vertices and so forth is established.
+
+	    initShaders();
+
+	    // Here's where we call the routine that builds all the objects
+	    // we'll be drawing.
+
+	    initBuffers();
+
+	    // Next, load and set up the textures we'll be using.
+
+	    initTextures();
+
+	    // Set up to draw the scene periodically.
+
+	    setTimeout(function () {
+
+	      setInterval(drawScene, 15);
+	    }, 300);
+	  }
+	}
+
+	function matrixMultiply(m1, m2) {
+	  var result = [];
+	  for (var i = 0; i < m1.length; i++) {
+	    result[i] = [];
+	    for (var j = 0; j < m2[0].length; j++) {
+	      var sum = 0;
+	      for (var k = 0; k < m1[0].length; k++) {
+	        sum += m1[i][k] * m2[k][j];
+	      }
+	      result[i][j] = sum;
+	    }
+	  }
+	  return result;
+	}
+	// Returns a random integer from 0 to range - 1.
+	function randomInt(range) {
+	  return Math.floor(Math.random() * range);
+	}
+	function makeTranslation(tx, ty) {
+	  return [1, 0, 0, 0, 1, 0, tx, ty, 1];
+	}
+
+	function makeRotation(angleInRadians) {
+	  var c = Math.cos(angleInRadians);
+	  var s = Math.sin(angleInRadians);
+	  return [c, -s, 0, s, c, 0, 0, 0, 1];
+	}
+
+	function makeScale(sx, sy) {
+	  return [sx, 0, 0, 0, sy, 0, 0, 0, 1];
+	}
+
+	//
+	// initWebGL
+	//
+	// Initialize WebGL, returning the GL context or null if
+	// WebGL isn't available or could not be initialized.
+	//
+	function initWebGL() {
+	  gl = null;
+
+	  try {
+	    gl = canvas.getContext("experimental-webgl");
+	  } catch (e) {}
+
+	  // If we don't have a GL context, give up now
+
+	  if (!gl) {
+	    alert("Unable to initialize WebGL. Your browser may not support it.");
+	  }
+	}
+
+	//
+	// initBuffers
+	//
+	// Initialize the buffers we'll need. For this demo, we just have
+	// one object -- a simple two-dimensional cube.
+	//
+	function initBuffers() {
+
+	  squareVerticesBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(SGL.square), gl.STATIC_DRAW);
+
+	  return;
+
+	  //	rect = new setRectangle(gl, 0,0,100,100);
+
+	  // Create a buffer for the cube's vertices.
+
+	  cubeVerticesBuffer = gl.createBuffer();
+
+	  // Select the cubeVerticesBuffer as the one to apply vertex
+	  // operations to from here out.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
+
+	  // Now create an array of vertices for the cube.
+
+	  var vertices = [
+	  // Front face
+	  -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+
+	  // Back face
+	  -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,
+
+	  // Top face
+	  -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,
+
+	  // Bottom face
+	  -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+
+	  // Right face
+	  1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
+
+	  // Left face
+	  -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0];
+
+	  // Now pass the list of vertices into WebGL to build the shape. We
+	  // do this by creating a Float32Array from the JavaScript array,
+	  // then use it to fill the current vertex buffer.
+
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+	  // Map the texture onto the cube's faces.
+
+	  cubeVerticesTextureCoordBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+
+	  var textureCoordinates = [
+	  // Front
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Back
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Top
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Bottom
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Right
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	  // Left
+	  0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
+
+	  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+	  // Build the element array buffer; this specifies the indices
+	  // into the vertex array for each face's vertices.
+
+	  cubeVerticesIndexBuffer = gl.createBuffer();
+	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+
+	  // This array defines each face as two triangles, using the
+	  // indices into the vertex array to specify each triangle's
+	  // position.
+
+	  var cubeVertexIndices = [0, 1, 2, 0, 2, 3, // front
+	  4, 5, 6, 4, 6, 7, // back
+	  8, 9, 10, 8, 10, 11, // top
+	  12, 13, 14, 12, 14, 15, // bottom
+	  16, 17, 18, 16, 18, 19, // right
+	  20, 21, 22, 20, 22, 23 // left
+	  ];
+
+	  // Now send the element array to GL
+
+	  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+	}
+
+	//
+	// initTextures
+	//
+	// Initialize the textures we'll be using, then initiate a load of
+	// the texture images. The handleTextureLoaded() callback will finish
+	// the job; it gets called each time a texture finishes loading.
+	//
+	function initTextures() {
+	  cubeTexture = gl.createTexture();
+	  cubeImage = new Image();
+	  cubeImage.onload = function () {
+	    handleTextureLoaded(cubeImage, cubeTexture);
+	  };
+	  cubeImage.src = "./flakes.png";
+	}
+
+	function handleTextureLoaded(image, texture) {
+	  console.log("handleTextureLoaded, image = " + image);
+	  gl.bindTexture(gl.TEXTURE_2D, texture);
+	  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+	  gl.generateMipmap(gl.TEXTURE_2D);
+	  gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+
+	function make2DProjection(width, height) {
+	  // Note: This matrix flips the Y axis so that 0 is at the top.
+	  return [2 / width, 0, 0, 0, -2 / height, 0, -1, 1, 1];
+	}
+
+	//
+	// drawScene
+	//
+	// Draw the scene.
+	//
+
+	function drawScene() {
+
+	  canvas = document.getElementById("glcanvas");
+
+	  var sw = 32;
+	  var sh = 32;
+	  var w = window.innerWidth;
+	  var h = window.innerHeight;
+	  if (typeof Application != 'undefined') sw = Application.client.setWidth, sh = Application.client.setHeight, w = Application.client.width * Application.client.scale, h = Application.client.height * Application.client.scale;
+
+	  canvas.width = w;
+	  canvas.height = h;
+
+	  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1, 150);
+	  perspectiveMatrix = makeOrtho(0, w * 2 * (sw / w), 0, h, 0.1, 150);
+	  // Clear the canvas before we start drawing on it.
+
+	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	  /*
+	  var s = function(w,h){
+	  
+	  	return makeOrtho(w/2, 0, h/2, 0, 0.1,150);
+	  
+	  }
+	  */
+	  //  perspectiveMatrix = s(-w, w, -h, h, 0.1,150);
+
+	  // Establish the perspective with which we want to view the
+	  // scene. Our field of view is 45 degrees, with a width/height
+	  // ratio of 640:480, and we only want to see objects between 0.1 units
+	  // and 100 units away from the camera.
+
+	  //perspectiveMatrix = makePerspective(45, 640.0/480.0, 0.1, 100.0);
+
+	  //perspectiveMatrix = makeOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
+	  //mat4.ortho(perspectiveMatrix, -1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
+	  //perspectiveMatrix = mat4.ortho(makePerspective(45, 640.0/480.0, 0.1, 100.0), -1.0, 1.0, -1.0, 1.0, 0.1, 100);
+
+	  // Set the drawing position to the "identity" point, which is
+	  // the center of the scene.
+
+	  loadIdentity();
+
+	  // Now move the drawing position a bit to where we want to start
+	  // drawing the cube.
+
+	  mvTranslate([0, 0, -1.0]);
+
+	  // Save the current matrix, then rotate before we draw.
+
+	  mvPushMatrix();
+
+	  // Setup a rectangle
+	  //setRectangle(gl, translation[0], translation[1], width, height);
+
+	  // Draw the rectangle.
+	  //gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+	  //  mvRotate(cubeRotation, [1, 0, 1]);
+
+	  var drawSquare = function drawSquare(x, y) {
+
+	    var squareRotation = 0.0;
+	    //	mvPushMatrix();
+	    //	mvRotate(squareRotation, [1, 0, 1]);
+
+	    y = 0;
+	    mvTranslate([x, 0, -0.0]);
+
+	    // Set the scale.
+	    gl.uniform2fv(scaleLocation, scale);
+
+	    gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+
+	    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	    //	gl.vertexAttribPointer(draw_scale, 1, gl.FLOAT, false, 0, 0);
+
+	    setMatrixUniforms();
+	    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	    mvTranslate([-x, 0, -0.0]);
+
+	    //	mvPopMatrix();
+	  };
+
+	  drawSquare(0, h / 2);
+
+	  return;
+
+	  //  mvTranslate([-1.2, 0.5, -0.0]);
+	  ///DrawSquare
+
+	  perspectiveMatrix = makeOrtho(-w, w, -h, h, 0.1, 150);
+
+	  /*
+	  
+	  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+	  setMatrixUniforms();
+	  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	  
+	  */
+
+	  //mvTranslate([1.2, 0.5, -0.0]);
+
+	  // Draw the cube by binding the array buffer to the cube's vertices
+	  // array, setting attributes, and pushing it to GL.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
+	  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+	  // Set the texture coordinates attribute for the vertices.
+
+	  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+	  gl.vertexAttribPointer(textureCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+	  // Specify the texture to map onto the faces.
+
+	  gl.activeTexture(gl.TEXTURE0);
+	  gl.bindTexture(gl.TEXTURE_2D, cubeTexture);
+	  gl.uniform1i(gl.getUniformLocation(shaderProgram, "uSampler"), 0);
+
+	  // Draw the cube.
+
+	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
+	  setMatrixUniforms();
+
+	  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+
+	  /**/
+
+	  // Restore the original matrix
+
+	  mvPopMatrix();
+
+	  // Update the rotation for the next draw, if it's time to do so.
+
+	  var currentTime = new Date().getTime();
+	  if (lastCubeUpdateTime) {
+	    var delta = currentTime - lastCubeUpdateTime;
+
+	    cubeRotation += 30 * delta / 1000.0;
+	  }
+
+	  lastCubeUpdateTime = currentTime;
+	}
+
+	//
+	// initShaders
+	//
+	// Initialize the shaders, so WebGL knows how to light our scene.
+	//
+
+	var scale = [10, 10];
+	var scaleLocation;
+
+	function initShaders() {
+	  var fragmentShader = getShader(gl, "shader-fs");
+	  var vertexShader = getShader(gl, "shader-vs");
+
+	  // Create the shader program
+
+	  shaderProgram = gl.createProgram();
+	  gl.attachShader(shaderProgram, vertexShader);
+	  gl.attachShader(shaderProgram, fragmentShader);
+	  gl.linkProgram(shaderProgram);
+
+	  // If creating the shader program failed, alert
+
+	  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+	    alert("Unable to initialize the shader program.");
+	  }
+
+	  gl.useProgram(shaderProgram);
+
+	  vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	  gl.enableVertexAttribArray(vertexPositionAttribute);
+
+	  //Curr Draw Scale
+	  scaleLocation = gl.getUniformLocation(shaderProgram, "u_scale");
+
+	  //	gl.enableVertexAttribArray(draw_scale);
+
+	  //  textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+	  // gl.enableVertexAttribArray(textureCoordAttribute);
+	}
+
+	//
+	// getShader
+	//
+	// Loads a shader program by scouring the current document,
+	// looking for a script with the specified ID.
+	//
+	function getShader(gl, id) {
+	  var shaderScript, theSource, currentChild, shader;
+
+	  shaderScript = document.getElementById(id);
+
+	  // Didn't find an element with the specified ID; abort.
+
+	  if (!shaderScript) {
+	    return null;
+	  }
+
+	  // Walk through the source element's children, building the
+	  // shader source string.
+
+	  var theSource = "";
+	  var currentChild = shaderScript.firstChild;
+
+	  while (currentChild) {
+	    if (currentChild.nodeType == 3) {
+	      theSource += currentChild.textContent;
+	    }
+
+	    currentChild = currentChild.nextSibling;
+	  }
+
+	  // Now figure out what type of shader script we have,
+	  // based on its MIME type.
+
+	  var shader;
+
+	  if (shaderScript.type == "x-shader/x-fragment") {
+	    shader = gl.createShader(gl.FRAGMENT_SHADER);
+	  } else if (shaderScript.type == "x-shader/x-vertex") {
+	    shader = gl.createShader(gl.VERTEX_SHADER);
+	  } else {
+	    return null; // Unknown shader type
+	  }
+
+	  // Send the source to the shader object
+
+	  gl.shaderSource(shader, theSource);
+
+	  // Compile the shader program
+
+	  gl.compileShader(shader);
+
+	  // See if it compiled successfully
+
+	  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+	    alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+	    return null;
+	  }
+
+	  return shader;
+	}
+
+	//
+	// Matrix utility functions
+	//
+
+	function loadIdentity() {
+	  mvMatrix = Matrix.I(4);
+	}
+
+	function multMatrix(m) {
+	  mvMatrix = mvMatrix.x(m);
+	}
+
+	function mvTranslate(v) {
+	  multMatrix(Matrix.Translation($V([v[0], v[1], v[2]])).ensure4x4());
+	}
+
+	function setMatrixUniforms() {
+	  var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+	  gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
+
+	  var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+	  gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
+	}
+
+	var mvMatrixStack = [];
+
+	function mvPushMatrix(m) {
+	  if (m) {
+	    mvMatrixStack.push(m.dup());
+	    mvMatrix = m.dup();
+	  } else {
+	    mvMatrixStack.push(mvMatrix.dup());
+	  }
+	}
+
+	function mvPopMatrix() {
+	  if (!mvMatrixStack.length) {
+	    throw "Can't pop from an empty matrix stack.";
+	  }
+
+	  mvMatrix = mvMatrixStack.pop();
+	  return mvMatrix;
+	}
+
+	function mvRotate(angle, v) {
+	  var inRadians = angle * Math.PI / 180.0;
+	  var m = Matrix.Rotation(inRadians, $V([v[0], v[1], v[2]])).ensure4x4();
+	  multMatrix(m);
+	}
+
+	window.start = start;
+	window.initWebGL = initWebGL;
 
 /***/ }
 /******/ ]);
