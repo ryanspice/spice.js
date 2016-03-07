@@ -15,7 +15,8 @@ export default class SJSParticleController extends Loader {
 
         this.SJSParticleList = [];
 
-        this.particleLimit = 1500;
+        //this.particleLimit = 1500;
+        this.particleLimit = 100;
 
         this.flakes = new Image();
 

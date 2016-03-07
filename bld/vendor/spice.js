@@ -5317,7 +5317,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -5381,7 +5381,7 @@
 	*
 	*/
 
-	var SpiceJS = function (_Build2) {
+	var SpiceJS = (function (_Build2) {
 		_inherits(SpiceJS, _Build2);
 
 		/**
@@ -5449,7 +5449,7 @@
 		}]);
 
 		return SpiceJS;
-	}(_build2.default);
+	})(_build2.default);
 
 	SpiceJS.properties = {
 
@@ -5488,7 +5488,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 					value: true
@@ -5502,7 +5502,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5532,7 +5532,7 @@
 	*       });
 	*/
 
-	var Statistics = function () {
+	var Statistics = (function () {
 
 					/* */
 
@@ -5561,7 +5561,7 @@
 
 					_createClass(Statistics, [{
 									key: 'monitor',
-									value: function () {
+									value: (function () {
 													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(func, arg) {
 																	var startTime, endTime;
 																	return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -5590,7 +5590,7 @@
 													return function monitor(_x, _x2) {
 																	return ref.apply(this, arguments);
 													};
-									}()
+									})()
 
 									/** Async - Unused Asyn logging....
 	         * @private
@@ -5598,7 +5598,7 @@
 
 					}, {
 									key: 'log',
-									value: function () {
+									value: (function () {
 													var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
 																	var name,
 																	    curLog,
@@ -5665,7 +5665,7 @@
 													return function log() {
 																	return ref.apply(this, arguments);
 													};
-									}()
+									})()
 
 									/** watch //to come - to call a funnction periodically (based on argument 1)
 	        * @private
@@ -5743,7 +5743,7 @@
 					}]);
 
 					return Statistics;
-	}();
+	})();
 
 	Statistics.properties = {};
 	Statistics._monitor = {
@@ -5841,7 +5841,7 @@
 
 	utils.loadExternalJS = function (scripts) {
 
-	    !function (e, t, r) {
+	    !(function (e, t, r) {
 
 	        function n() {
 
@@ -5853,7 +5853,7 @@
 	        for (var s, a, c, d = [], i = e.scripts[0], o = "onreadystatechange", f = "readyState"; s = r.shift();) {
 	            a = e.createElement(t), "" in i ? (a.async = !1, e.head.appendChild(a)) : i[f] ? (d.push(a), a[o] = n) : e.write("<" + t + ' src="' + s + '" defer></' + t + ">"), a.src = s;
 	        }
-	    }(document, "script", scripts);
+	    })(document, "script", scripts);
 	};
 
 	/**
@@ -5956,7 +5956,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -5997,7 +5997,7 @@
 	* @private
 	*/
 
-	var _Interface = function () {
+	var _Interface = (function () {
 
 	    /**  @type {Constructor} */
 
@@ -6029,7 +6029,7 @@
 	    }]);
 
 	    return _Interface;
-	}();
+	})();
 
 	/*
 
@@ -6055,7 +6055,7 @@
 	* @private
 	*/
 
-	var _Vector = function (_Interface2) {
+	var _Vector = (function (_Interface2) {
 	    _inherits(_Vector, _Interface2);
 
 	    /**
@@ -6096,7 +6096,7 @@
 	    /**  @type {Number} */
 
 	    return _Vector;
-	}(_Interface);
+	})(_Interface);
 
 	/*
 
@@ -6123,7 +6123,7 @@
 	_Vector.multiply = _method;
 	_Vector.offset = _method;
 
-	var _SJSClass = function (_Interface3) {
+	var _SJSClass = (function (_Interface3) {
 	    _inherits(_SJSClass, _Interface3);
 
 	    /**
@@ -6161,13 +6161,13 @@
 	    /**  @type {Number} */
 
 	    return _SJSClass;
-	}(_Interface);
+	})(_Interface);
 
 	_SJSClass.app = _object;
 	_SJSClass.visuals = _object;
 	_SJSClass.graphics = _object;
 
-	var _Legacy = function (_Interface4) {
+	var _Legacy = (function (_Interface4) {
 	    _inherits(_Legacy, _Interface4);
 
 	    function _Legacy() {
@@ -6192,10 +6192,10 @@
 	        }
 
 	        /*
-	            getFps(){
-	                 return this.client.update.step.fps;
+	        	    getFps(){
+	        	         return this.client.update.step.fps;
 	           }
-	        	*/
+	        		*/
 
 	    }, {
 	        key: 'getCurrent',
@@ -6278,7 +6278,7 @@
 	    }]);
 
 	    return _Legacy;
-	}(_Interface);
+	})(_Interface);
 
 	/*  Extends SJSClass
 
@@ -6306,7 +6306,7 @@
 	* @protected
 	*/
 
-	var _Canvas_Core = function (_SJSClass2) {
+	var _Canvas_Core = (function (_SJSClass2) {
 	    _inherits(_Canvas_Core, _SJSClass2);
 
 	    _createClass(_Canvas_Core, [{
@@ -6453,7 +6453,7 @@
 	    }
 
 	    return _Canvas_Core;
-	}(_SJSClass);
+	})(_SJSClass);
 
 	/*
 
@@ -6470,7 +6470,7 @@
 	* @protected
 	*/
 
-	var _Log = function () {
+	var _Log = (function () {
 	    _createClass(_Log, null, [{
 	        key: 'time',
 
@@ -6520,7 +6520,7 @@
 	    }
 
 	    return _Log;
-	}();
+	})();
 
 	/**
 	*
@@ -6529,7 +6529,7 @@
 	* @private
 	*/
 
-	var _Loop = function (_Log2) {
+	var _Loop = (function (_Log2) {
 	    _inherits(_Loop, _Log2);
 
 	    function _Loop() {
@@ -6539,7 +6539,7 @@
 	    }
 
 	    return _Loop;
-	}(_Log);
+	})(_Log);
 
 	/**
 	*
@@ -6548,7 +6548,7 @@
 	* @private
 	*/
 
-	var _Compile = function (_Log3) {
+	var _Compile = (function (_Log3) {
 	    _inherits(_Compile, _Log3);
 
 	    function _Compile() {
@@ -6558,7 +6558,7 @@
 	    }
 
 	    return _Compile;
-	}(_Log);
+	})(_Log);
 
 	/**
 	*
@@ -6567,7 +6567,7 @@
 	* @private
 	*/
 
-	var _App = function () {
+	var _App = (function () {
 	    function _App() {
 	        _classCallCheck(this, _App);
 	    }
@@ -6595,7 +6595,7 @@
 	    }]);
 
 	    return _App;
-	}();
+	})();
 
 	/**
 	*
@@ -6604,7 +6604,7 @@
 	* @private
 	*/
 
-	var _Build = function () {
+	var _Build = (function () {
 	    function _Build() {
 	        _classCallCheck(this, _Build);
 	    }
@@ -6642,7 +6642,7 @@
 	    }]);
 
 	    return _Build;
-	}();
+	})();
 
 	exports._Interface = _Interface;
 	exports._Vector = _Vector;
@@ -6661,7 +6661,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -6680,7 +6680,7 @@
 	* @private
 	*/
 
-	var _Build = function () {
+	var _Build = (function () {
 
 		/**
 	 *	Attaches a reference to the Statistics module.
@@ -6830,7 +6830,7 @@
 		}]);
 
 		return _Build;
-	}();
+	})();
 
 	exports.default = _Build;
 	;
@@ -6845,9 +6845,7 @@
 
 	/** Name. */
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 				value: true
@@ -6896,6 +6894,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -6925,7 +6925,7 @@
 	*
 	*/
 
-	var _App = function (_Core2) {
+	var _App = (function (_Core2) {
 				_inherits(_App, _Core2);
 
 				/** Builds the core modules of the Application. */
@@ -7198,7 +7198,7 @@
 				}]);
 
 				return _App;
-	}(_core2.default);
+	})(_core2.default);
 
 	;
 
@@ -7210,7 +7210,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -7231,7 +7231,7 @@
 	* Application.client.math
 	*/
 
-	var Math = function () {
+	var Math = (function () {
 		_createClass(Math, [{
 			key: "minmax4",
 
@@ -7911,7 +7911,7 @@
 		}
 
 		return Math;
-	}();
+	})();
 
 	exports.default = Math;
 
@@ -7923,7 +7923,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -7944,7 +7944,7 @@
 	* let vector = new Vector(1,1);
 	*/
 
-	var Vector = function (_Vector2) {
+	var Vector = (function (_Vector2) {
 	    _inherits(Vector, _Vector2);
 
 	    function Vector() {
@@ -8076,7 +8076,7 @@
 	    }]);
 
 	    return Vector;
-	}(_interfaces._Vector);
+	})(_interfaces._Vector);
 
 	exports.default = Vector;
 
@@ -8086,11 +8086,12 @@
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	exports.default = {
 
 	    overridescroll: false,
@@ -8230,7 +8231,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8255,7 +8256,7 @@
 	*
 	*/
 
-	var Input = function (_inputcontroller) {
+	var Input = (function (_inputcontroller) {
 	    _inherits(Input, _inputcontroller);
 
 	    function Input(app, pointerPoint) {
@@ -8592,7 +8593,7 @@
 	    }]);
 
 	    return Input;
-	}(_inputcontroller3.default);
+	})(_inputcontroller3.default);
 
 	exports.default = Input;
 
@@ -8602,7 +8603,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8641,7 +8642,7 @@
 	*
 	*/
 
-	var inputcontroller = function (_SJSClass) {
+	var inputcontroller = (function (_SJSClass) {
 	    _inherits(inputcontroller, _SJSClass);
 
 	    function inputcontroller() {
@@ -8923,7 +8924,7 @@
 	    }]);
 
 	    return inputcontroller;
-	}(_interfaces._SJSClass);
+	})(_interfaces._SJSClass);
 
 	inputcontroller._x = 0;
 	inputcontroller._y = 0;
@@ -8946,7 +8947,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -8968,7 +8969,7 @@
 	*
 	*/
 
-	var InputListener = function () {
+	var InputListener = (function () {
 	    function InputListener(a, b, c, d, elm, evt) {
 	        _classCallCheck(this, InputListener);
 
@@ -9025,7 +9026,7 @@
 	    }]);
 
 	    return InputListener;
-	}();
+	})();
 
 	exports.default = InputListener;
 
@@ -9035,7 +9036,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -9050,7 +9051,7 @@
 	*
 	*/
 
-	var inputkeycontroller = function () {
+	var inputkeycontroller = (function () {
 	    function inputkeycontroller() {
 	        _classCallCheck(this, inputkeycontroller);
 	    }
@@ -9153,7 +9154,7 @@
 	    }]);
 
 	    return inputkeycontroller;
-	}();
+	})();
 
 	inputkeycontroller._codeList = [];
 	exports.default = inputkeycontroller;
@@ -9300,8 +9301,6 @@
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -9311,6 +9310,8 @@
 	var _visuals3 = _interopRequireDefault(_visuals2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	exports.default = {
 
@@ -9951,7 +9952,7 @@
 	                    return;
 
 	                    /*
-	                     this.mute;
+	                      this.mute;
 	                    if (this.sound[this.current]==="undefined")
 	                        return;
 	                    if (this.sound[this.current].currentTime >= this.length)
@@ -9960,10 +9961,10 @@
 	                        {
 	                            this.current = 0;
 	                        }
-	                         this.sound[this.current].currentTime = 0;
+	                          this.sound[this.current].currentTime = 0;
 	                        this.sound[this.current].play();
 	                    }
-	                      */
+	                        */
 	                }
 	            },
 	            constructor: function constructor() {
@@ -10174,9 +10175,7 @@
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -10184,13 +10183,15 @@
 
 	var _interfaces = __webpack_require__(194);
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _Visuals = function (_SJSClass) {
+	var _Visuals = (function (_SJSClass) {
 	    _inherits(_Visuals, _SJSClass);
 
 	    function _Visuals(app) {
@@ -10200,9 +10201,9 @@
 	    }
 
 	    return _Visuals;
-	}(_interfaces._SJSClass);
+	})(_interfaces._SJSClass);
 
-	var _Pipe = function () {
+	var _Pipe = (function () {
 	    function _Pipe() {
 	        _classCallCheck(this, _Pipe);
 	    }
@@ -10213,7 +10214,7 @@
 	    }]);
 
 	    return _Pipe;
-	}();
+	})();
 
 	var visuals = visuals || {};
 	visuals = {
@@ -11568,7 +11569,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -11598,7 +11599,7 @@
 	* @protected
 	*/
 
-	var _Core = function (_Legacy2) {
+	var _Core = (function (_Legacy2) {
 		_inherits(_Core, _Legacy2);
 
 		_createClass(_Core, [{
@@ -11665,7 +11666,7 @@
 		}
 
 		return _Core;
-	}(_interfaces._Legacy);
+	})(_interfaces._Legacy);
 
 	_Core.properties = {
 
@@ -11681,9 +11682,9 @@
 
 	'use strict';
 
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -11713,7 +11714,7 @@
 	*
 	*/
 
-	var Canvas = function (_Canvas_Core2) {
+	var Canvas = (function (_Canvas_Core2) {
 	    _inherits(Canvas, _Canvas_Core2);
 
 	    /**
@@ -11723,8 +11724,6 @@
 	    */
 
 	    function Canvas(app) {
-	        var _ret;
-
 	        _classCallCheck(this, Canvas);
 
 	        //Assign private properties
@@ -11767,7 +11766,7 @@
 
 	        _this.head.appendChild(_this.rendering_style);
 
-	        return _ret = true, _possibleConstructorReturn(_this, _ret);
+	        return _possibleConstructorReturn(_this, true);
 	    }
 
 	    /**
@@ -11837,7 +11836,7 @@
 	    }]);
 
 	    return Canvas;
-	}(_interfaces._Canvas_Core);
+	})(_interfaces._Canvas_Core);
 
 	Canvas.properties = {
 	    name: 'canvas',
@@ -12399,11 +12398,11 @@
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12613,7 +12612,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -12627,7 +12626,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } step("next"); }); }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12637,7 +12636,7 @@
 
 	window.test = _test3.default;
 
-	var Loader = function (_SJSClass) {
+	var Loader = (function (_SJSClass) {
 		_inherits(Loader, _SJSClass);
 
 		function Loader(app) {
@@ -12776,7 +12775,7 @@
 			}
 		}, {
 			key: 'asyncLoadImage',
-			value: function () {
+			value: (function () {
 				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(string, suffex) {
 					var _this4 = this;
 
@@ -12835,10 +12834,10 @@
 				return function asyncLoadImage(_x, _x2) {
 					return ref.apply(this, arguments);
 				};
-			}()
+			})()
 		}, {
 			key: 'asyncLoadImageData',
-			value: function () {
+			value: (function () {
 				var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(string, string2, x, y) {
 					var _this5 = this;
 
@@ -12886,11 +12885,11 @@
 				return function asyncLoadImageData(_x3, _x4, _x5, _x6) {
 					return ref.apply(this, arguments);
 				};
-			}()
+			})()
 		}]);
 
 		return Loader;
-	}(_interfaces._SJSClass);
+	})(_interfaces._SJSClass);
 
 	exports.default = Loader;
 
@@ -12900,7 +12899,7 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -12920,7 +12919,7 @@
 	* @private
 	*/
 
-	var test = function (_SJSClass) {
+	var test = (function (_SJSClass) {
 	    _inherits(test, _SJSClass);
 
 	    function test(app) {
@@ -13090,7 +13089,7 @@
 	    }]);
 
 	    return test;
-	}(_interfaces._SJSClass);
+	})(_interfaces._SJSClass);
 
 	exports.default = test;
 
@@ -13100,10 +13099,10 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	        value: true
 	});
 
 	var _interfaces = __webpack_require__(194);
@@ -13126,260 +13125,261 @@
 
 	var xOff = 0;
 
-	var SJSParticleController = function (_Loader) {
-	    _inherits(SJSParticleController, _Loader);
+	var SJSParticleController = (function (_Loader) {
+	        _inherits(SJSParticleController, _Loader);
 
-	    function SJSParticleController(app) {
-	        _classCallCheck(this, SJSParticleController);
+	        function SJSParticleController(app) {
+	                _classCallCheck(this, SJSParticleController);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
+	                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticleController).call(this, app));
 
-	        _this.SJSParticleList = [];
+	                _this.SJSParticleList = [];
 
-	        _this.particleLimit = 1500;
+	                //this.particleLimit = 1500;
+	                _this.particleLimit = 100;
 
-	        _this.flakes = new Image();
+	                _this.flakes = new Image();
 
-	        _this.flakes0 = new Image();
+	                _this.flakes0 = new Image();
 
-	        for (var i = 0; i < 16; i++) {
-	            _this['flakes' + i] = new Image();
-	        }for (var i = 0; i < 16; i++) {
-	            _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
-	        }return _this;
-	    }
-
-	    _createClass(SJSParticleController, [{
-	        key: 'clear',
-	        value: function clear() {
-
-	            this.SJSParticleList = [];
+	                for (var i = 0; i < 16; i++) {
+	                        _this['flakes' + i] = new Image();
+	                }for (var i = 0; i < 16; i++) {
+	                        _this.asyncLoadImageData('../flakes', 'flakes' + i, i * 32, 0 * 32);
+	                }return _this;
 	        }
-	    }, {
-	        key: 'appendParticle',
-	        value: function appendParticle() {
 
-	            var length = this.SJSParticleList.length;
+	        _createClass(SJSParticleController, [{
+	                key: 'clear',
+	                value: function clear() {
 
-	            if (length > this.particleLimit) return;
+	                        this.SJSParticleList = [];
+	                }
+	        }, {
+	                key: 'appendParticle',
+	                value: function appendParticle() {
 
-	            var width = this.app.getWidth();
+	                        var length = this.SJSParticleList.length;
 
-	            var height = this.app.getHeight();
+	                        if (length > this.particleLimit) return;
 
-	            var scale = this.app.getScale();
+	                        var width = this.app.getWidth();
 
-	            var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
+	                        var height = this.app.getHeight();
 
-	            var End = new _vector2.default(Math.random() * width, 0);
+	                        var scale = this.app.getScale();
 
-	            End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
+	                        var Start = new _vector2.default(xOff - width + Math.random() * width * 3, Math.random() * -25);
 
-	            var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
+	                        var End = new _vector2.default(Math.random() * width, 0);
 
-	            this.SJSParticleList.push(newParticle);
+	                        End = new _vector2.default(Start.x + Math.random() * width - Math.random() * width, 0);
 
-	            return;
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
+	                        var newParticle = new SJSParticle(this.app, Start, { x: End.x, y: 2 * height / scale }, { x: Math.random() * 0.1 + 0.5, y: Math.random() * 0.15 + 0.1 }, "#AAFFFF", false);
 
-	            var length = this.SJSParticleList.length;
+	                        this.SJSParticleList.push(newParticle);
 
-	            this.appendParticle();
+	                        return;
+	                }
+	        }, {
+	                key: 'update',
+	                value: function update() {
 
-	            if (length == 0) return;
+	                        var length = this.SJSParticleList.length;
 
-	            var i = length - 1;
+	                        this.appendParticle();
 
-	            for (i; i; --i) {
+	                        if (length == 0) return;
 
-	                var particle = this.SJSParticleList[i];
+	                        var i = length - 1;
 
-	                particle.update();
-	            }
+	                        for (i; i; --i) {
 
-	            return;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
+	                                var particle = this.SJSParticleList[i];
 
-	            var error = this.getBufferLength();
+	                                particle.update();
+	                        }
 
-	            //    console.log(error)
-	            if (error > 0) {
-	                this.visuals.rect(0, 0, 10, 10, '#FF0000');
-	                return;
-	            }
+	                        return;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
 
-	            var length = this.SJSParticleList.length;
+	                        var error = this.getBufferLength();
 
-	            if (length == 0) return;
+	                        //    console.log(error)
+	                        if (error > 0) {
+	                                this.visuals.rect(0, 0, 10, 10, '#FF0000');
+	                                return;
+	                        }
 
-	            var i = length - 1;
+	                        var length = this.SJSParticleList.length;
 
-	            for (i; i; --i) {
+	                        if (length == 0) return;
 
-	                var particle = this.SJSParticleList[i];
+	                        var i = length - 1;
 
-	                particle.draw();
-	            }
-	        }
-	    }]);
+	                        for (i; i; --i) {
 
-	    return SJSParticleController;
-	}(_loader2.default);
+	                                var particle = this.SJSParticleList[i];
+
+	                                particle.draw();
+	                        }
+	                }
+	        }]);
+
+	        return SJSParticleController;
+	})(_loader2.default);
 
 	exports.default = SJSParticleController;
 
-	var SJSParticle = function (_SJSClass) {
-	    _inherits(SJSParticle, _SJSClass);
+	var SJSParticle = (function (_SJSClass) {
+	        _inherits(SJSParticle, _SJSClass);
 
-	    function SJSParticle(app, pos, target, vel, marker, usePhysics) {
-	        _classCallCheck(this, SJSParticle);
+	        function SJSParticle(app, pos, target, vel, marker, usePhysics) {
+	                _classCallCheck(this, SJSParticle);
 
-	        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
+	                var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SJSParticle).call(this, app));
 
-	        var loader = window.Loader; // this.app.getCurrent().particleController;
+	                var loader = window.Loader; // this.app.getCurrent().particleController;
 
-	        //this.img = loader.getImageReference('../flakes');
-	        _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
+	                //this.img = loader.getImageReference('../flakes');
+	                _this2.img = loader.getImageReference('flakes' + Math.round(Math.random() * 15));
 
-	        _this2.t = Math.round(1 + Math.random() * 5);
+	                _this2.t = Math.round(1 + Math.random() * 5);
 
-	        _this2.gravity = 0.5;
+	                _this2.gravity = 0.5;
 
-	        _this2.alpha = 0.75 + Math.random() * 0.25;
+	                _this2.alpha = 0.75 + Math.random() * 0.25;
 
-	        _this2.easing = Math.random() * 0.2;
+	                _this2.easing = Math.random() * 0.2;
 
-	        _this2.fade = Math.random() * 0.1;
+	                _this2.fade = Math.random() * 0.1;
 
-	        _this2.gridX = marker % 120;
+	                _this2.gridX = marker % 120;
 
-	        _this2.gridY = Math.floor(marker / 120) * 12;
+	                _this2.gridY = Math.floor(marker / 120) * 12;
 
-	        _this2.color = marker;
+	                _this2.color = marker;
 
-	        _this2.scale = 3 * Math.random() * 3 * Application.getScale();
+	                _this2.scale = 3 * Math.random() * 3 * Application.getScale();
 
-	        _this2.start = 30 + Math.random() * 180;
+	                _this2.start = 30 + Math.random() * 180;
 
-	        _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
+	                _this2.offx = 32 * Math.round(Math.random() * (512 / 32));
 
-	        _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
+	                _this2.offy = 32 * Math.round(Math.random() * (512 / 32));
 
-	        _this2.del = false;
+	                _this2.del = false;
 
-	        _this2.pos = {
-	            x: pos.x || 0,
-	            y: pos.y || 0
-	        };
+	                _this2.pos = {
+	                        x: pos.x || 0,
+	                        y: pos.y || 0
+	                };
 
-	        _this2.vel = {
-	            x: vel.x || 0,
-	            y: vel.y || 0
-	        };
+	                _this2.vel = {
+	                        x: vel.x || 0,
+	                        y: vel.y || 0
+	                };
 
-	        _this2.lastPos = {
-	            x: _this2.pos.x,
-	            y: _this2.pos.y
-	        };
+	                _this2.lastPos = {
+	                        x: _this2.pos.x,
+	                        y: _this2.pos.y
+	                };
 
-	        _this2.target = {
-	            y: target.y || 0,
-	            x: target.x || 0
-	        };
+	                _this2.target = {
+	                        y: target.y || 0,
+	                        x: target.x || 0
+	                };
 
-	        _this2.pos = new _vector2.default(pos.x, pos.y);
-	        _this2.vel = new _vector2.default(vel.x, vel.y);
-	        _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
-	        _this2.target = new _vector2.default(target.x, target.y);
+	                _this2.pos = new _vector2.default(pos.x, pos.y);
+	                _this2.vel = new _vector2.default(vel.x, vel.y);
+	                _this2.lastPos = new _vector2.default(_this2.pos.x, _this2.pos.y);
+	                _this2.target = new _vector2.default(target.x, target.y);
 
-	        _this2.usePhysics = usePhysics || false;
+	                _this2.usePhysics = usePhysics || false;
 
-	        if (!_this2.usePhysics) {
+	                if (!_this2.usePhysics) {
 
-	            _this2.dir = Math.random() * 1;
+	                        _this2.dir = Math.random() * 1;
 
-	            if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
-	        } else {
+	                        if (_this2.dir > 0.5) _this2.dir = 1;else _this2.dir = -1;
+	                } else {
 
-	            if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                        if (pos.x - target.x >= 0) _this2.dir = 1;else _this2.dir = -1;
+	                }
+
+	                return _this2;
 	        }
 
-	        return _this2;
-	    }
+	        _createClass(SJSParticle, [{
+	                key: 'update',
+	                value: function update() {
 
-	    _createClass(SJSParticle, [{
-	        key: 'update',
-	        value: function update() {
+	                        var width = this.app.getWidth();
 
-	            var width = this.app.getWidth();
+	                        var height = this.app.getHeight();
 
-	            var height = this.app.getHeight();
+	                        var scale = this.app.getScale();
 
-	            var scale = this.app.getScale();
+	                        // Check to Delete
 
-	            // Check to Delete
+	                        if (this.del) {
 
-	            if (this.del) {
+	                                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
+	                                var target = { x: Math.random() * width, y: 2 * height / scale };
+	                                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
 
-	                var start = new _vector2.default(-xOff - width + Math.random() * width * 3, Math.random() * -100);
-	                var target = { x: Math.random() * width, y: 2 * height / scale };
-	                var velocity = { x: Math.random() * 0.5, y: Math.random() * 0.1 };
+	                                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
 
-	                this.constructor(this.app, start, target, velocity, "#AAFFFF", false);
+	                                return;
+	                        }
 
-	                return;
-	            }
+	                        // Move Object
 
-	            // Move Object
+	                        var distance = this.target.y - this.pos.y;
 
-	            var distance = this.target.y - this.pos.y;
+	                        var val = this.target.x / 200;
 
-	            var val = this.target.x / 200;
+	                        this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
 
-	            this.pos.y += this.vel.y * (distance / 100) * (0.3 + this.easing * this.gravity) + Math.min(10, val) * (1 - this.usePhysics);
+	                        if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
 
-	            if (!this.usePhysics) if (Math.random() > 0.99) this.vel.y += 0.2;
+	                        val = this.pos.x / 200;
 
-	            val = this.pos.x / 200;
+	                        if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
 
-	            if (this.dir == 0) this.pos.x += this.dir * this.vel.x * Math.sin(this.pos.y / this.start) + (val - val / 2) * (1 - this.usePhysics);else this.pos.x += this.dir * this.vel.x * this.pos.y / this.start + (val - val / 2) * (1 - this.usePhysics);
+	                        var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
+	                        var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
+	                        this.pos.x += xdir;
 
-	            var xdir = this.app.input.horizontal.keyboard || this.app.input.horizontal.touch;
-	            var ydir = this.app.input.vertical.keyboard || this.app.input.vertical.touch;
-	            this.pos.x += xdir;
+	                        // Check if out of bounds
 
-	            // Check if out of bounds
+	                        if (this.pos.y > 600) {
+	                                this.alpha -= 0.01;
 
-	            if (this.pos.y > 600) {
-	                this.alpha -= 0.01;
+	                                if (this.alpha < 0.01) this.del = true;
+	                        }
 
-	                if (this.alpha < 0.01) this.del = true;
-	            }
+	                        if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
+	                }
+	        }, {
+	                key: 'draw',
+	                value: function draw() {
 
-	            if (xOff + this.pos.x < -width || xOff + this.lastPos.x + 25 < -width || xOff + this.pos.x > width * 2 || xOff + this.lastPos.x + 25 > width * 2 || this.pos.y > height) this.del = true;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
+	                        //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
+	                        //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //else
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
 
-	            //if ((this.app.getFps()<25)||(this.app.getScale()<0.8))
-	            //this.visuals.rect_ext(this.pos.x,this.pos.y,5,5,0.2+this.scale/10,this.alpha,1,"#FFFFFF",+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	            //else
-	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
-	            //this.visuals.image_part_rotate(this.img,this.pos.x,this.pos.y,0.2+this.scale/30,this.alpha,1,+this.offx,this.offy,32,32,this.vel.x+this.pos.y);
+	                        this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
+	                }
+	        }]);
 
-	            this.visuals.image_rotate(this.img, this.pos.x, this.pos.y, 0.2 + this.scale / 30, this.vel.x - this.pos.y, this.alpha, 1, 1);
-	        }
-	    }]);
-
-	    return SJSParticle;
-	}(_interfaces._SJSClass);
+	        return SJSParticle;
+	})(_interfaces._SJSClass);
 
 /***/ },
 /* 217 */
@@ -13387,7 +13387,7 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -13397,7 +13397,7 @@
 
 	var _private = new WeakMap();
 
-	var _SGL = function () {
+	var _SGL = (function () {
 	  function _SGL() {
 	    _classCallCheck(this, _SGL);
 
@@ -13432,7 +13432,7 @@
 	  }]);
 
 	  return _SGL;
-	}();
+	})();
 
 	_SGL.properties = {
 
