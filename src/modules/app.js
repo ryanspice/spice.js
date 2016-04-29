@@ -1,116 +1,62 @@
-"strict mode"
-/** @module app */
+/* @flow */
 
+console.time('SJS:B:app.js');
 
-/** Name. */
-export const name = 'core';
+import _Core from './core/core';
 
-import _math from './math/math.js';
+import Twitter from './render/twitter.js';
 
-import _options from './options.js';
+/** App is the main app controller, here you can access input, math, data and graphics controllers.
+*	@module
+*	@private */
 
-import _input from './input/input.js';
+import _math from './core/math/math';
+import _options from './options';
+import _input from './input/input';
+import _client from './client';
+import _canvas from './canvas';
+import {SGL} from './canvas';
+import _user from './user';
+import _ext from './ext';
 
-import _client from './client.js';
-
-import _Core from './core.js';
-
-import _canvas from './canvas.js';
-
-import {SGL} from './canvas.js';
-
-import _user from './user.js';
-
-import _ext from './ext.js';
-
-import Loader from './loader.js'; // (unfinished) To be built into application (to override current)
-
+//import {Vector} from './math/vector.js';
 import Particles from './particles.js'; // (unfinished) To be built into application
 
 window.SJSParticleController = Particles; // Temporary for snowflakes
 
 const date = new Date();
 
-/**
-* _Core_private
-* @property
-* @private
-*/
-
-//let _private = new WeakMap();
-
-/**
-* Core of the framework, initalizes client, input and listeners.
-* @protected
+/** Core of the framework, initalizes client, input and listeners.
 * @module
-*
-*/
+* @protected */
 
- class _App extends _Core {
+ export default class _App extends _Core {
+
+    time:number = 0;
+    options:_options = _options;
+    user:_user = _user;
+    ext:_ext = _ext;
+    input:_input = _input;
+    canvas:_canvas = _canvas;
+    client:_client = _client;
+    math:_math = new _math();
 
     /** Builds the core modules of the Application. */
 
-    constructor(){
-
-        super();
-
-		//_private.set(this,this.constructor.properties);
-
-        this.time = 0;
-
-        //this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
-
-        this.options = _options;
-
-        this.user = _user;
-
-        this.ext = _ext;
-
-        this.input = _input;
-
-        this.canvas = _canvas;
-
-        this.client = _client;
-
-        this.math = new _math();
-
+    constructor():void {
+        super(new _weakmap());
     }
 
-	/**
-	* This function starts the application.
+	/** The main loop for the application, use arrow functions, if arrows exist
 	* @method
-	* @protected
-	*/
+	* @private */
 
-    start(w, h){
-
-		var name = '';
-
-       this.client = this.Construct(this.client.prototype,this.client.constructor);
-
-       this.canvas =  new _canvas(this);
-
-       this.loop(this);
-
-       this.client.init(w||this.app.options.width,h||this.app.options.height);
-
-       this.input = new this.input(this);
-
-    }
-
-	/**
-	* The main loop for the application
-	* @method
-	* @private
-	*/
-
-	loop(self){
+	loop(self:_App):void {
 
 		//Use arrow function if available
 		var usearrow = true;
 
-		if (usearrow)
-		{
+		if (usearrow) {
 
 			setTimeout(() => {
 
@@ -126,178 +72,165 @@ const date = new Date();
 
 			}, this.time);
 
+		} else {
+
+			setTimeout(	(function(){
+
+						function AppLoop(){
+							self.client.loop();
+						}
+
+						function AppLoopData(){
+							self.client.loopData();
+						}
+
+						self.client.initalize(AppLoop,AppLoopData,self.scale);
+
+			}),this.time);
+
 		}
-		else
-			{
 
-				setTimeout(	(function(){
+	}
 
-							function AppLoop(){
-								self.client.loop();
-							}
+	/** This function starts the application.
+	* @method
+	* @override */
 
-							function AppLoopData(){
-								self.client.loopData();
-							}
+    start(w:number|null=0, h:number|null=0):void {
 
-							self.client.initalize(AppLoop,AppLoopData,self.scale);
+       this.client = this.Construct(this.client.prototype,this.client.constructor);
 
-				}),this.time);
+       this.canvas =  new _canvas(this);
 
-			}
+       this.loop(this);
 
-	};
+       this.client.init(w||this.app.options.width,h||this.app.options.height);
 
-	/**
-	* Triggers when the application first loops.
+       this.input = new this.input(this);
+
+    }
+
+	/** Triggers when the application first loops.
 	* @method
     * @param {Object} [self] - Reference to the app.
-	* @override
-	*/
+	* @override	*/
 
-    OnLoad(self){
-
+    OnLoad(self:_App):void {
         self.start();
-
     }
 
-	/**
-	* Triggers on dom content load.
+	/** Triggers on dom content load.
 	* @method
     * @param {Event} [evt] - The passing event.
-	* @override
-	*/
+	* @override	*/
 
-    OnApplicationLoad(evt){
+    OnApplicationLoad(evt:any):void {
 
-       //Run .OnLoad
        evt.target.app.OnLoad(evt.target.app);
-
-       console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
+       console.log("SJS:B:"+evt.target.app.client.main.name+': OnApplicationLoad');
 
     }
 
-	/**
-	* Event listener polyfill.
+	/** Event listener polyfill.
 	* @method
     * @param {Element} [obj] - Element to trigger event on, fallback on window.
     * @param {Event} [evt] - The passing event.
     * @param {String} [listener] - The listener to build.
     * @param {Object} [param] - Paramater to pass.
-	*
 	* @example
 	* Application.Listener(window,'click',function(){console.log('eh');},'');
-	* Application.Click(new Event,window);
-	*/
+	* Application.Click(new Event,window);	*/
 
-    Listener(obj, evt, listener, param){
-
-        /* Check obj param */
+    Listener(obj:object, evt:any, listener:any, param:any):void {
 
         if (typeof obj[0] === "object") {
-
 		    obj = obj[0] || window;
-
-		}
-
-        /* If addEventListener exist, add it, otherwise attachEvent. */
+        }
 
         if (obj.addEventListener) {
-
             obj.addEventListener(evt, listener, false);
-
 		}	else {
-
 			obj.attachEvent("on" + evt, listener);
-
 		}
-
-		/* Assign App Reference */
 
         obj.app = window.apps[this.id] = this;
 
-    };
+    }
 
-	/**
-	* Object constructor/factory polyfill.
+	/** Object constructor/factory polyfill.
 	* @method
     * @param {Object} [prototype] - An object prototype.
-    * @param {Object} [constructor] - An object constructor.
-	*/
+    * @param {Object} [constructor] - An object constructor. */
 
-    Construct(prototype,constructor){
+    Construct(prototype:object,constructor:object):_App  {
 
-       let  isObj = false;
-       let  obj = prototype;
-       let  proto = prototype;
-       let  construct = constructor;
-       let  ret = {};
-	   let type;
+        let  isObj:bool = false;
+        let  obj:object = prototype;
+        let  proto:object = prototype;
+        let  construct:object = constructor;
+        let  ret:object = {};
+        let type;
 
-       /* if prototype contains a prototype and constructor. */
+        /* if prototype contains a prototype and constructor. */
 
-		if (typeof obj.prototype !== 'undefined')
-			if (typeof obj.constructor !== 'undefined')	{
-				construct = obj.constructor;
-				proto = obj.prototype;
-				isObj = true;
-			}
+        if (typeof obj.prototype !== 'undefined')
+        	if (typeof obj.constructor !== 'undefined')	{
+        		construct = obj.constructor;
+        		proto = obj.prototype;
+        		isObj = true;
+        	}
 
-       /* Grab type of constructor */
+        /* Grab type of constructor */
 
         type = typeof construct;
 
-       /* Return & Create object based on constructor */
-       switch(type)	{
+        /* Return & Create object based on constructor */
+        switch(type)	{
 
-		   /* Use only the prototype */
-	       case 'undefined':
-	           ret = Object.create(proto);
-	       break;
+           /* Use only the prototype */
+           case 'undefined':
+               ret = Object.create(proto);
+           break;
 
-		   /* Use constructor as object */
-	       case 'object':
-	           ret = Object.create(proto,construct);
-	       break;
+           /* Use constructor as object */
+           case 'object':
+               ret = Object.create(proto,construct);
+           break;
 
-		   /* Use constructor as function */
-	       case 'function':
-	           ret = Object.create(proto,construct(this));
-	       break;
+           /* Use constructor as function */
+           case 'function':
+               ret = Object.create(proto,construct(this));
+           break;
 
-		   /* Expected a type */
-	       default:
-				console.log("Expected 'object' or 'function': Type is "+c);
+           /* Expected a type */
+           default:
+        		console.warn("Expected 'object' or 'function': Type is "+type);
 
-       }
+        }
 
-       if (isObj)
-           prototype = ret;
+        if (isObj)
+            prototype = ret;
 
        return ret;
     }
 
-	/**
-	* Artificial click
+    /* Too refractor this below code into the input ? /**/
+
+	/** Artificial click CASE 1
 	* @method
     * @param {Event} [event] - Passing of the event.
-    * @param {Element} [anchorObj] - Element to click.
-	*/
+    * @param {Element} [anchorObj] - Element to click. */
 
-    click(event, anchorObj){
-
+    click(event:object, anchorObj:object):void {
 		this.Click(event,anchorObj);
-
     }
 
-	/**
-	* Artificial Click
+	/** Artificial Click CASE 2
 	* @method
     * @param {Event} [event] - Passing of the event.
-    * @param {Element} [anchorObj] - Element to click.
-	*/
+    * @param {Element} [anchorObj] - Element to click.	*/
 
-    Click(event, anchorObj){
+    Click(event:object, anchorObj:object):void {
 
 		if (typeof anchorObj != 'undefined')
 		if (anchorObj.click){
@@ -309,7 +242,7 @@ const date = new Date();
 
 			if(event.target !== anchorObj){
 
-			var evt = document.createEvent("MouseEvents");
+			let evt:any = document.createEvent("MouseEvents");
 
 			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 
@@ -321,7 +254,11 @@ const date = new Date();
 
     }
 
-
 };
 
-export default _App;
+// _App;
+
+/** Name. */
+export const name = 'core';
+
+console.timeEnd('SJS:B:app.js');

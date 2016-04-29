@@ -1,6 +1,111 @@
+/* @flow */
+
+import _IFace from './core/interfaces/IFace.js';
 
 import utils from './utils.js';
-import {_Log, _Loop, _Compile, _App, _Build}  from './interfaces.js';
+
+//import {_Log, _Loop, _Compile, _App}  from './interfaces.js';
+
+/** @module
+* @interface
+* @protected
+
+class _Log {	static get time() {
+
+        return (this._time);
+
+    }
+	static set time(value) {
+
+        return (this._time = value);
+
+    }
+	static get id() {
+
+        return (this._id);
+
+    }
+	static set id(value) {
+
+        return (this._id = value);
+
+    }
+
+    constructor(id){
+
+        this.id = id || 0;
+
+    }
+
+}
+
+
+* @module
+* @interface
+* @private
+
+
+class _Loop extends _Log  {
+
+    constructor(){
+
+        super();
+
+    }
+
+}
+
+
+* @module
+* @interface
+* @private
+
+
+class _Compile extends _Log  {
+
+    constructor(){
+
+        super();
+
+    }
+
+}
+
+
+*
+* @module
+* @interface
+* @private
+
+
+class _App {
+
+    static get fps() {
+        console.trace(this);
+        return (this._fps);
+
+    }
+
+    static set fps(value) {
+        console.trace(this);
+        return (this._fps = value);
+
+    }
+
+    static get scale() {
+        console.trace(this);
+        return (this._scale);
+
+    }
+
+    static set scale(value) {
+        console.trace(this);
+        return (this._scale = value);
+
+    }
+
+}
+*/
 
 const _private = new WeakMap();
 
@@ -30,21 +135,14 @@ const _private = new WeakMap();
 
 class Statistics {
 
-	/**
-	* Private variables.
-	* @type {Object}
-	*/
-
 	static properties = {};
-
-	/* */
 
 	constructor(){
 
+		this.count = 0;
+
         this.logs = this.constructor.logs;
         this.logs.type = 'Array';
-
-        this.count = 0;
 
 		_private.set(this,this.constructor.properties);
 
@@ -54,8 +152,7 @@ class Statistics {
 	* @type {Promise}
 	* @param {Function} func - Function to monitor
 	* @param {Arguments} arg - Arguments to pass
-	* @return {Number} as duration.
-	*/
+	* @return {Number} as duration.	*/
 
 	async monitor(func,arg){
 
@@ -71,10 +168,11 @@ class Statistics {
 	}
 
 	/** Async - Unused Asyn logging....
-	 * @private
-	 */
+	 * @private */
 
 	async log(){
+
+		return;
 
 	    let name = '';
 
@@ -99,9 +197,9 @@ class Statistics {
 
 	        if (name=='compile')
 	            newLog = curLog[name] || new _Compile(name);
-	        else
-	        if (name=='build')
-	            newLog = curLog[name] || new _Build(name);
+	        //else
+	        //if (name=='build')
+	        //    newLog = curLog[name] || new _Build(name);
 	        else
 	        if (name=='loop')
 	            newLog = curLog[name] || new _Loop(name);
@@ -126,9 +224,9 @@ class Statistics {
 
 	        if (name=='compile')
 	            newLog = curLog[name] || new _Compile(name);
-	        else
-	        if (name=='build')
-	            newLog = curLog[name] || new _Build(name);
+	        //else
+	        //if (name=='build')
+	        //    newLog = curLog[name] || new _Build(name);
 	        else
 	        if (name=='loop')
 	            newLog = curLog[name] || new _Loop(name);
@@ -155,14 +253,7 @@ class Statistics {
 	}
 
 	/** watch //to come - to call a funnction periodically (based on argument 1)
-	* @private
-
-	static watch(v){
-
-		let w = v;
-
-	}
-	*/
+	* @private */
 
     get count() {
 

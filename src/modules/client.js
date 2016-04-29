@@ -1,5 +1,7 @@
 
 import _visuals from './visuals.js';
+import _math from './core/math/math.js';
+import _loader from './loader.js';
 
 export default {
 
@@ -10,6 +12,8 @@ export default {
             app:{value:app},
 
             init:{writable: false,configurable:false,enumerable:false,value:function(w,h){
+
+
 
 				var name  = '';
 
@@ -51,10 +55,52 @@ export default {
                 //Build
                 this.main = Object.create(this.app.main);
 
-                //Build
-                (this.update.state = Object.create(this.update.state.prototype,this.update.state.constructor(this))).init(this.main);
+				this.loader = window.Loader = new _loader(this.app);
+
+				this.renderer = Renderer;
 
 
+				this.data = {
+					Zip:null,
+					JSZip:JSZip,
+					JSZipUtils:JSZipUtils
+				};
+
+				//Pull in zip for images.
+				let self = this;
+				let bundle = './img.bundle.zip';
+
+				///Watch the bundle timer.
+				timer(bundle);
+
+				//Asyncronus
+				this.data.JSZipUtils.getBinaryContent(bundle, (err, data)=> {
+
+					this.renderer.renderMarkup();
+
+					if(err) {
+
+						console.warn(err); // or handle err
+
+					} else {
+
+						let seconds = timerEnd(bundle);
+
+						console.warn(`The package ${bundle} loaded in ${seconds} seconds.`);
+
+						//self.bundles[ bundle.split('/')[1] ] = window.ZID = new JSZip(data);
+						/*self.bundles[ bundle.split('/')[1] ] = */
+
+						this.data.Zip = new this.data.JSZip(data);
+
+						(self.update.state = Object.create(self.update.state.prototype,self.update.state.constructor(self))).init(self.main);
+
+					}
+
+
+				});
+
+				/* End Constructor */
                 }
             }
 
@@ -65,7 +111,7 @@ export default {
     //Client prototype, functions
     prototype:{
 
-        //Client initalize
+        //Client initalize - - Make Async
         initalize:function(loop,loopdata,scale) {
 
             //scale to scale
@@ -77,17 +123,18 @@ export default {
             //Assign client_data to loop
             this.client_data = loopdata;
 
-            //Request Animation Frame with this.client_f
-            requestAnimationFrame(this.client_f);
+			console.log(this);
 
-            //setTimeout(loopdata,1000 / 60);
+			//Request Animation Frame with this.client_f
+			requestAnimationFrame(this.client_f);
 
-            setTimeout(()=>{
+			//setTimeout(loopdata,1000 / 60);
 
-                this.client_data();
+			setTimeout(()=>{
 
-            },1000/59)
+				this.client_data();
 
+			},1000/59);
 
             this.app.ext.cursor.set(this.app.ext.cursor.def);
 
@@ -139,7 +186,7 @@ export default {
             SpiceJS.statistics.monitor(loop).then(function(){
 
                 SpiceJS.statistics.log("fps",SpiceJS.controller.list().fps,'state');
-                SpiceJS.statistics.log("scale",SpiceJS.controller.list().getScale(),'state');
+                SpiceJS.statistics.log("scale",SpiceJS.controller.list().client.scale,'state');
 
             });
 
@@ -154,6 +201,7 @@ export default {
         update:{
 
             //Cache Vars
+			t:(Math),
             last:new Math.Vector(),
             difference:new Math.Vector(),
             scaler:{s:1,x:1,y:1},
@@ -848,6 +896,20 @@ export default {
 
             },
 
+            loadFromZip:function(name,file){
+
+
+
+                //if (typeof file==="undefined")
+                //    file =  this.app.options.get("paths").images+""+name;
+                    file =  name;
+
+                this.Sources.append(this.SpriteAppendZip(name,file));
+
+                return this.Sources.getByName(name);
+
+            },
+
             SpriteCreate:function(file,src,name){
 
                 this.SpriteLoadNumber++;
@@ -858,9 +920,32 @@ export default {
 
             },
 
+			/*
+			*
+			*
+			*/
+
             SpriteAppend:function(name,file){
 
-                return (this.img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
+				let image = (this.img = this.SpriteCreate(file,this.path + file + ".png",name)).get();
+
+                return image;
+
+            },
+
+			/**
+			* Create Sprite and Append @method
+			* @param name - File Name
+			* @param file - Zip file to look in
+			*/
+
+            SpriteAppendZip:function(name,file){
+
+				// KEEP let image;
+
+				let image = (this.img = this.SpriteCreate(file,file ,name)).getFromZip();
+
+                return image;
 
             },
 
@@ -879,7 +964,8 @@ export default {
                 return this.SpriteWebItems[name];
 
             },
-            graphicsLibrary:function(){
+
+			graphicsLibrary:function(){
                 this.Sprite = Object.create(null);
                 this.Sources = Object.create(null);
                 this.Sources.prototype = {
@@ -914,16 +1000,77 @@ export default {
                 return true;
             },
             Base:{
+
                 get:function() {
+
                         var img = new Image();
                         img.src = this.src;
                         img.file = this.file;
                         img.name = this.name;
                         img.number = 1+ window.apps[0].client.graphics.SpriteLoadErrors++;
-                        img.onload = function() {
-                                window.apps[0].client.graphics.SpriteLoadErrors--;
 
-                            };
+                        img.onload = function() {
+
+                            window.apps[0].client.graphics.SpriteLoadErrors--;
+
+                        };
+
+                        return img;
+
+                    },
+
+					/*
+
+					Retrieve Zip
+
+					*/
+
+					retrieveZipFile:function(file){
+
+						file = String(file);
+
+						var t = Application.client.data.Zip.file(file).asUint8Array();
+
+						var strings = [], chunksize = 0xffff;
+
+						var len = t.length;
+
+						// There is a maximum stack size. We cannot call String.fromCharCode with as many arguments as we want
+
+						var i = 0;
+						for (i; i * chunksize < len; i++){
+
+							strings.push(String.fromCharCode.apply(null, t.subarray(i * chunksize, (i + 1) * chunksize)));
+
+						}
+
+						var content = btoa(strings.join(''));
+
+						return "data:image/png;base64," + String(content).trim();
+
+					},
+
+                getFromZip:function() {
+
+                        var img = new Image();
+
+						var file = String(this.src);
+
+
+						img.src = this.retrieveZipFile(this.src);
+
+                        img.file = this.file;
+
+                        img.name = this.name;
+
+                        img.number = 1+ window.apps[0].client.graphics.SpriteLoadErrors++;
+
+                        img.onload = function() {
+
+                            window.apps[0].client.graphics.SpriteLoadErrors--;
+
+                        };
+
                         return img;
                     },
                 unload:function() {

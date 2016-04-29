@@ -1,5 +1,6 @@
 
-import {_SJSClass as SJSClass} from './interfaces.js';
+//import {Vector} from './math/vector.js';
+import {_SJSClass as SJSClass} from './core/sjs.js';
 
 class _Visuals extends SJSClass {
 
@@ -706,6 +707,7 @@ visuals = {
             (this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
         },
         image_ext:function(image,x,y,s,a,c){
+
             this.stat = this.chk(x,y,image.width,image.height,s,a,c);
             (this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
         },
@@ -1537,8 +1539,6 @@ visuals = {
                 this.blitter_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
 
                 this.buffer_context.globalCompositeOperation = this.app.options.global.globalCompositeOperation;
-
-                console.log(this.canvas_context)
 
                 if (this.app.options.canvas.buffer)
                     this.buffer_context = this.buffer.getContext("2d",attribs);

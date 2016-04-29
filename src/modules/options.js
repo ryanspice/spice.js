@@ -29,13 +29,13 @@ export default {
 
     flags:{
 
-		webGL:true,
+		webGL:false,
 
         canvas:true,
         mstouch:true,
-        seamless:true,
+        seamless:false,
         tight:true,
-        touchprevent:true,
+        touchprevent:false,
         opaque:true,
 
     },
@@ -83,12 +83,12 @@ export default {
     //Override Functions
     override:{
 
-        keyboard:true,
-        mouse:true,
+        keyboard:false,
+        mouse:false,
         MSHoldVisual:false,
         SelectStart:false,
-        ContextMenu:true,
-        Drag:true
+        ContextMenu:false,
+        Drag:false
 
     },
 

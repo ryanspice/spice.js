@@ -1,13 +1,59 @@
-import {_Vector} from '../interfaces.js';
+/* @flow */
 
-/**
+console.time('SJS:B:vector.js');
+
+import _IFace from '../interfaces/IFace';
+
+/** Vector2
+* @module
+* @access public
+* @example let vector = new Math.Vector2(1,1); */
+
+export class Vector2 extends _IFace<IVector> {
+
+    static properties:object = { name:'Vector2',x:0, y:0 };
+
+    constructor(x:number = 0, y:number = 0){
+        super(new _weakmap());
+        this.position = {x ,y};
+    };
+
+}
+
+window.Vector2 = (new Vector2(new _weakmap()):_Inf);
+
+/** Vector
 * @module
 * @access public
 * @example
 * let vector = new Vector(1,1);
 */
 
-export default class Vector extends _Vector {
+export default class Vector extends _IFace<_Inf> {
+
+    position:vector;
+
+	 /** Set Vector private variables
+     * @type {Object}
+     * @protected */
+
+    static properties:object = {
+        name:"Vector",
+        x:_number,
+        y:_number
+    };
+
+    /** This is the constructor for the vector
+    * @param {number} x - position.x
+    * @param {number} y - position.y */
+
+    constructor(x: number = 0,y: number = 0):void {
+
+            super(new _weakmap());
+			this.position = {x ,y};
+
+    };
+
 
     //equals(p) { return this.#x === p.#x && this.#y === p.#y }
 
@@ -126,3 +172,5 @@ export default class Vector extends _Vector {
     }
 
 }
+
+console.timeEnd('SJS:B:vector.js');

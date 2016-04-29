@@ -1,5 +1,44 @@
 import Vector from './vector.js';
 
+window.Math.vector = window.Math.Vector = Vector;
+
+/**
+2DSprite
+* @interface
+* @private
+*/
+const _private_Sprite = new WeakMap();
+
+class _Sprite extends Vector {
+
+	static properties = {
+		sx:0,
+		sy:0
+
+	};
+
+	get position(){
+
+		return this;
+
+	}
+
+	constructor(){
+
+
+		super();
+
+		_private_Sprite.set(this,this.constructor.properties);
+
+	}
+
+
+}
+
+window.sprite = _Sprite;
+
+window.sprite2 = new _Sprite();
+
 /**
 * @module
 * @access public
@@ -783,5 +822,3 @@ export default class Math {
     }
 
 }
-
-window.Math.vector = window.Math.Vector = Vector;

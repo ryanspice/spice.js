@@ -1,11 +1,41 @@
 
-import _Statistics from './modules/statistics.js';
-import _Build from './modules/build.js';
-import SGL from './modules/sgl.js';
+/* @noflow - due to jszip and jszip-tils require not being defined */
+/* @flow */
 
-const _private = new WeakMap();
-const Window = window;
-const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
+/** The Main Entrypoint for SpiceJS
+*	@module */
+
+console.time('SpiceJS');
+
+/* Core components
+*	_Statistics - used to monitor the application
+*	_Build - controls instanciating App/Canvas instances
+*	_State - a standard statecontroller to be overriden and used in the app
+*/
+
+import _Build from './modules/core/build';
+import _State from './modules/state';
+import _Statistics from './modules/statistics';
+
+/* setInnerHTML
+* 		A polyfill based off react's core rendering
+*/
+
+import setInnerHTML from './modules/render/setInnerHTML.js';
+
+/* JSZip & JSZipUtils
+* 		Library to read Zip files from the server.
+*/
+
+const JSZip:object = window.JSZip = require("jszip");
+const JSZipUtils:object = window.JSZipUtils = require("jszip-utils");
+
+/* Window & Windows
+* 		Cache window into Window const. Query for Windows.
+*/
+
+const Window:object = window;
+const Windows:object = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
 
 /**
 * SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
@@ -41,26 +71,21 @@ const Windows = window.Windows =  (typeof Windows=='undefined'?Window:Windows);
 *
 */
 
-export default class SpiceJS extends _Build  {
-
-	/**
-	* Private variables. Statistics and Controller are only accessable through reference.
-	* @type {Object}
-	*/
+export class SpiceJS extends _Build  {
 
 	static properties = {
 
 		temp:{},
 
+		statistics:_Statistics,
+
 		controller:{
 
-			/**
-			* List all of the instances of SpiceJS or
+			/** List all of the instances of SpiceJS or
 			* @type {method}
-			* @param {number} id - Specify a specific instance to return.
-			*/
+			* @param {number} id - Specify a specific instance to return.	*/
 
-			list:function(id){
+			list:function(id:number):void {
 
 				if (id)
 					return window.apps[id];
@@ -72,69 +97,54 @@ export default class SpiceJS extends _Build  {
 
 			}
 
-		},
+		}
 
-		statistics:_Statistics
+	}
 
-	};
+	/** Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
+	* @private	*/
 
-	/**
-    *  Creates a new SpiceJS() to instanciate multiple configurations. Constructor builds references.
-	* @private
-    */
+    constructor(map:weakmap):void {
 
-    constructor(){
+		super(map);
 
-		super();
-
-		let statsReference = new this.constructor.properties.statistics();
-
-		this.constructor.properties.statistics = statsReference;
-
-		_private.set(this,this.constructor.properties);
+		this.constructor.properties.statistics = new this.constructor.properties.statistics();
 
     }
 
-	/**
-	* Reference to the canvas/app global controller.
-	* @type {Object}
-	* @protected
-	*/
+	/** Reference the state object
+	* @type {Element}	*/
 
-	get controller(){
-
-		return _private.get(this)['controller'];
-
+	get aState():_State {
+		return _State;
 	}
 
-	/**
-	* Reference to the statistics object.
+	/** Reference to the canvas/app global controller.
 	* @type {Object}
-	* @protected
-	*/
+	* @protected	*/
 
-	get statistics() {
-
-	    return _private.get(this)['statistics'];
-
+	get controller():object {
+		return this.constructor.map.get(this)['controller'];
 	}
 
-	/**
-	* Reference to the Window object.
-	* @type {Element}
-	* @protected
-	*/
+	/** Reference to the statistics object.
+	* @type {Object}
+	* @protected	*/
 
-	get window(){
+	get statistics():object {
+		return this.constructor.map.get(this)['statistics'];
+	}
 
+	/** Reference to the Window object.
+	* @type {Element}	*/
+
+	get window():object {
 		return Window;
-
 	}
 
-};
 
-/**
- * Export SpiceJS
- */
+}
 
-export default new SpiceJS();
+export default new SpiceJS(new _weakmap());
+
+console.timeEnd('SpiceJS');

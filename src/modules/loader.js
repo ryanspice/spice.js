@@ -1,17 +1,33 @@
 
-import {_SJSClass as SJSClass} from './interfaces.js';
+import {_SJSClass as SJSClass} from './core/sjs';
 
  import _test from './test.js'
 
 window.test = _test;
 
-export default class Loader extends SJSClass {
+
+
+
+
+export default class _loader extends SJSClass {
 
 	constructor(app) {
 
 		super(app);
 
 		this.ImageCache = [];
+		this.ImageMap = new Map();
+
+		let self = this;
+		this.ImageCache.push = function(){
+
+			var A = Array.prototype.push.apply(this,arguments);
+
+			self.ImageMap = self.ImageCache.map(function(a){return a.name;});
+
+			return A;
+
+		}
 
 		this.ImageBuffer = [];
 
@@ -49,15 +65,8 @@ export default class Loader extends SJSClass {
 
 	getImageReference(string) {
 
-		let elementPos = this.ImageCache.map(function(img) {
+		return this.ImageCache[this.ImageMap.indexOf(string)];
 
-			return img.string;
-
-		}).indexOf(string);
-
-		let objectFound = this.ImageCache[elementPos];
-
-		return objectFound;
 	}
 
 	loadImage(string) {
@@ -163,8 +172,10 @@ export default class Loader extends SJSClass {
 
 
 			this.ImageCache[cacheIndex - 1] = _img;
+
+
 			//console.log(this.getBase64Image(_img))
-			//console.log('eh');
+			//			console.log(this.ImageCache[cacheIndex - 1] );
 			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
 
 			//console.log(this.ImageCache[cacheIndex-1])
@@ -174,6 +185,43 @@ export default class Loader extends SJSClass {
 
 		return this.ImageCache[cacheIndex - 1];
 	}
+
+	async asyncLoadZipImage(string,suffex) {
+
+		let name = string;
+
+		let img = await this.graphics.loadFromZip(name);
+
+		img.string = name;
+
+		let cacheIndex = await this.ImageCache.push(img);
+
+		await this.ImageBuffer.push(name+suffex);
+
+		await setTimeout(()=> {
+
+			let _img = this.checkLoaded(name);
+
+			//_img.base64 = this.getBase64Image(_img);
+			//_img.imgdata = this.createImageData(_img);
+
+
+
+			this.ImageCache[cacheIndex - 1] = _img;
+
+
+			//console.log(this.getBase64Image(_img))
+			//			console.log(this.ImageCache[cacheIndex - 1] );
+			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+			//console.log(this.ImageCache[cacheIndex-1])
+
+		}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length))
+		this.asyncLoadCacheIndex = cacheIndex;
+
+		return this.ImageCache[cacheIndex - 1];
+	}
+
 	async asyncLoadImageData(string,string2,x,y) {
 
 		let _index = this.asyncLoadCacheIndex;
@@ -201,6 +249,33 @@ export default class Loader extends SJSClass {
         });
 
 		return _image;
+	}
+
+	async asyncLoadImageDataFromZip(string,string2,x,y) {
+
+		let _index = this.asyncLoadCacheIndex;
+		let _image = await this.asyncLoadZipImage(string,"_blit").then((img)=>{
+
+				//let _cacheIndex =  this.ImageCache.push(img);
+//				console.log( this.ImageCache[_cacheIndex-1]=img)
+/*
+				let buffindex = this.ImageBuffer.push(string+"_blit");
+
+                this[string2] = img;
+                this[string2].addEventListener('load',()=>{
+
+                        this[string2] = this.visuals.blit(this[string2],x,y)
+
+		                this[string2].string = string2;
+
+						this.ImageCache.push(this[string2]);
+
+								this.ImageBuffer.splice(this.ImageBuffer.indexOf(string+"_blit2"),1);
+                })
+*/
+        });
+
+		return _image || string;
 	}
 
 }

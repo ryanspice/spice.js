@@ -13,7 +13,7 @@ export default {
 
                 //Set app/document title
 
-                this.app.setTitle(document.title+"."+this.app.main.name);
+                //this.app.setTitle(document.title+"."+this.app.main.name);
 
                 //Construct App.ext components
 
