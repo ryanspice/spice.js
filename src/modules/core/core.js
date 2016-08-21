@@ -1,6 +1,5 @@
 /* @flow */
 
-<<<<<<< HEAD
 import Options from '../client/options';
 
 import _user from '../user';
@@ -19,17 +18,10 @@ const _BUILD_LAST_ = '08-2016';
 
 const _BUILD_FIRST_ = '12-2013';
 
-=======
-console.time('SJS:B:core.js');
-
-import legacy_core from './legacy/legacy-core';
-
->>>>>>> origin/master
 /** core component to the application, including version info, the main reference, and other details
 * @module
 * @protected */
 
-<<<<<<< HEAD
 export default class Core extends legacy_core {
 
     options:Options = Options;
@@ -89,25 +81,6 @@ export default class Core extends legacy_core {
 
 		return scale;
 	}
-=======
-export default class _Core extends legacy_core {
-
-	static properties = {
-		main:{},
-		version:"0.8.1",
-		version_details:{
-			_official_:'0.8.2',
-			_renderer_:'0.0.1',
-			_canvas_:'0.8.0',
-
-			_firstbuild_:'12-2013',
-		}
-	};
-
-    constructor(map:weakmap):void {
-        super(map);
-    }
->>>>>>> origin/master
 
     /**  @type {number} */
 
@@ -118,55 +91,32 @@ export default class _Core extends legacy_core {
     /**  @type {number} */
 
 	get fps():number {
-<<<<<<< HEAD
 
 		return this.client.update.step.fps.toFixedNumber(2);
-=======
-		return this.client.update.step.fps.toFixed(2);
->>>>>>> origin/master
 	}
 
     /**  @type {object} */
 
-<<<<<<< HEAD
 	get main():Object {
-=======
-	get main():object {
->>>>>>> origin/master
 		return this.get('main');
 	}
 
     /**  @type {object} */
 
-<<<<<<< HEAD
 	set main(newmain:Object):Object {
 
 		let state:Object = this.get('main');
 		//console.log(newmain,this);
 		let newstate:Object = newmain;
-=======
-	set main(newmain:object):object {
-
-		let state:object = this.get('main');
-		let newstate:object = newmain;
->>>>>>> origin/master
 		state.name = newstate.name;
 		state.init = newstate.init;
 		state.update = newstate.update;
 		state.draw = newstate.draw;
-<<<<<<< HEAD
 		state.app = this;
 		state.visuals = this.client.visuals;
 		state.graphics = this.client.graphics;
-=======
->>>>>>> origin/master
 
 		return state;
 	}
 
 }
-<<<<<<< HEAD
-=======
-
-console.timeEnd('SJS:B:core.js');
->>>>>>> origin/master

@@ -178,11 +178,7 @@ class _Compile extends _Log  {
 * @private
 */
 
-<<<<<<< HEAD
 class App {
-=======
-class _App {
->>>>>>> origin/master
 
     static get fps() {
         console.trace(this);
@@ -265,8 +261,4 @@ class _Build {
 */
 console.timeEnd('Interface');
 
-<<<<<<< HEAD
 export {_Interface,  _Log, _Loop, _Compile,  App, _Build, _Legacy};
-=======
-export {_Interface,  _Log, _Loop, _Compile,  _App, _Build, _Legacy};
->>>>>>> origin/master

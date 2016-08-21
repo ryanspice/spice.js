@@ -1,17 +1,8 @@
 /* @flow */
-<<<<<<< HEAD:src/modules/etc/statistics.js
 
 import utils from '../utils.js';
 
 //import {_Log, _Loop, _Compile, App}  from './interfaces.js';
-=======
-
-import _IFace from './core/interfaces/IFace.js';
-
-import utils from './utils.js';
-
-//import {_Log, _Loop, _Compile, _App}  from './interfaces.js';
->>>>>>> origin/master:src/modules/statistics.js
 
 /** @module
 * @interface
@@ -85,11 +76,7 @@ class _Compile extends _Log  {
 * @private
 
 
-<<<<<<< HEAD:src/modules/etc/statistics.js
 class App {
-=======
-class _App {
->>>>>>> origin/master:src/modules/statistics.js
 
     static get fps() {
         console.trace(this);
@@ -144,11 +131,7 @@ const _private = new WeakMap();
 *       });
 */
 
-<<<<<<< HEAD:src/modules/etc/statistics.js
 export default class Statistics {
-=======
-class Statistics {
->>>>>>> origin/master:src/modules/statistics.js
 
 	static properties = {};
 

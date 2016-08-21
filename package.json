@@ -1,43 +1,10 @@
 {
-<<<<<<< HEAD
   "name": "ryanspice2016-spicejs",
   "version": "8.1.1",
   "description": "SpiceJS - Html5 Canvas API Framework",
   "main": "./src/spice.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-=======
-  "name": "ryanspice2016-web",
-  "version": "0.0.8",
-  "description": "Html5 Canvas API Framework",
-  "main": "./src/main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-core": "^6.7.2",
-    "babel-loader": "^6.2.4",
-    "babel-plugin-transform-class-properties": "^6.6.0",
-    "babel-plugin-transform-runtime": "^6.6.0",
-    "babel-polyfill": "^6.2.0",
-    "babel-preset-es2015": "^6.1.18",
-    "babel-preset-es2015-native-modules": "^6.6.0",
-    "babel-preset-stage-0": "^6.1.18",
-    "css-loader": "^0.23.1",
-    "file-loader": "^0.8.5",
-    "flow-bin": "^0.22.1",
-    "fs": "0.0.2",
-    "jszip": "^2.5.0",
-    "jszip-utils": "0.0.2",
-    "style-loader": "^0.13.0",
-    "webpack": "^2.1.0-beta.4"
-  },
-  "dependencies": {
-    "html-webpack-plugin": "^1.7.0",
-    "babel-runtime": "^6.6.1",
-    "es6-promise": "^3.1.2"
->>>>>>> origin/master
   },
   "license": "MIT",
   "devDependencies": {
@@ -67,21 +34,10 @@
     "style-loader": "^0.13.0",
     "webpack": "^2.1.0-beta.4"
   },
-<<<<<<< HEAD
   "dependencies": {
     "html-webpack-plugin": "^1.7.0",
     "babel-runtime": "^6.6.1",
     "es6-promise": "^3.1.2"
   },
   "author": "Ryan Tyler Spice-Finnie"
-=======
-  "keywords": [
-    "games",
-    "html5",
-    "javascript",
-    "game"
-  ],
-  "author": "Ryan Spice",
-  "homepage": "https://github.com/ryanspice/spice.js#readme"
->>>>>>> origin/master
 }

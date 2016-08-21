@@ -32,10 +32,7 @@ export default {
     flags:{
 
 		webGL:false,
-<<<<<<< HEAD:src/modules/client/options.js
 
-=======
->>>>>>> origin/master:src/modules/options.js
 
         canvas:true,
         mstouch:true,

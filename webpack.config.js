@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-
-require("babel-core/register");
-
-const webpack = require('webpack');
-const path = require('path');
-=======
->>>>>>> origin/master
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-// html = new HtmlWebpackPlugin({ title: 'Webpack App' });
-
-<<<<<<< HEAD
-const env = process.argv.indexOf('--env') === -1 ? false : true;
-=======
-function run_cmd(cmd, args, callBack ) {
-
-    var child = spawn(cmd, args);
-
-    var resp = "";
-
-    child.stdout.on('data', function (buffer) { resp += buffer.toString() });
-
-    child.stdout.on('end', function() { callBack (resp) });
-
-} // ()
-
-run_cmd( "C:/Git/spice.js/logs/loggins.bat", ["a","b","c","d"], function(text) { console.log (text) });
-*/
 
 require("babel-core/register");
 
@@ -37,8 +8,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // html = new HtmlWebpackPlugin({ title: 'Webpack App' });
 
 const env = process.argv.indexOf('--env') === -1 ? false : true;
-
->>>>>>> origin/master
 const source = {
     input:{
         js:'./spice.js',
@@ -68,7 +37,6 @@ const source = {
 
 if (env===true)
 {
-<<<<<<< HEAD
 
     source.output.js = "app.min.js";
 
@@ -91,34 +59,12 @@ if (env===true)
 
 
 
-=======
-
-    source.output.js = "spice.min.js";
-
-    source.plugins.push(new webpack.optimize.UglifyJsPlugin({
-	      compress: {
-	        warnings: true
-	      },
-	      output: {
-	        comments: false
-	      },
-	      sourceMap: false
-	    })
-	);
-
-    source.plugins.push(new webpack.optimize.DedupePlugin() );
-//    webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html, template:'./src/index.html' }));
-    //webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html404, template:'./src/404.html' }));
-}
-
->>>>>>> origin/master
 module.exports = {
   context: '',
   entry: {
 	js:['babel-polyfill', './src/spice.js']
   },
   output: {
-<<<<<<< HEAD
     path: "./bld/",
     filename: source.output.js
   },
@@ -127,13 +73,6 @@ module.exports = {
     loaders: [
 
 
-=======
-    path: "./bld/vendor",
-    filename: source.output.js
-  },
-  module: {
-    loaders: [
->>>>>>> origin/master
       {
         test: /\.html$/,
         loader: 'file',
@@ -141,11 +80,8 @@ module.exports = {
           name: '[name].[ext]'
         }
       },
-<<<<<<< HEAD
 
 
-=======
->>>>>>> origin/master
       {
         test: /\.css$/,
         loaders: [
@@ -153,11 +89,8 @@ module.exports = {
           'css'
         ]
       },
-<<<<<<< HEAD
 
 
-=======
->>>>>>> origin/master
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -166,12 +99,9 @@ module.exports = {
           'babel-loader'
         ]
       },
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> origin/master
     ],
   },
   resolve: {
@@ -184,12 +114,7 @@ module.exports = {
   },
   plugins:source.plugins,
   devServer: {
-<<<<<<< HEAD
     contentBase: './bld',
       hot: true
-=======
-    contentBase: './bld'
-     // hot: true
->>>>>>> origin/master
    }
 }

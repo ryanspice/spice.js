@@ -7,10 +7,7 @@ window.Math.vector = window.Math.Vector = Vector;
 * @interface
 * @private
 */
-<<<<<<< HEAD:src/modules/core/math/math.js
 /*
-=======
->>>>>>> origin/master:src/modules/core/math/math.js
 const _private_Sprite = new WeakMap();
 
 class _Sprite extends Vector {
@@ -42,11 +39,8 @@ class _Sprite extends Vector {
 window.sprite = _Sprite;
 
 window.sprite2 = new _Sprite();
-<<<<<<< HEAD:src/modules/core/math/math.js
 */
 
-=======
->>>>>>> origin/master:src/modules/core/math/math.js
 
 /**
 * @module
