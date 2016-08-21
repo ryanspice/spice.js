@@ -1,4 +1,6 @@
 
+import gamepad from './gamepad';
+
 import inputcontroller from './inputcontroller.js';
 
 /**
@@ -57,6 +59,45 @@ export default class Input extends inputcontroller {
         this.setup_documentListeners();
 
         //this.setup_msUniversalAppTouch();
+
+    }
+
+	/* Too refractor this below code into the input ? /**/
+
+	/** Artificial click CASE 1	_ WIP
+	* @method
+    * @param {Event} [event] - Passing of the event.
+    * @param {Element} [anchorObj] - Element to click. */
+
+    click(event:object, anchorObj:object):void {
+     }
+
+	/** Artificial Click CASE 2	_ WIP
+	* @method
+    * @param {Event} [event] - Passing of the event.
+    * @param {Element} [anchorObj] - Element to click.	*/
+
+    Click(event:object|null, anchorObj:object|null):void {
+
+						console.log(this.document)
+		if (typeof anchorObj != 'undefined')
+		if (anchorObj.click){
+
+			anchorObj.click();
+
+		} else if (document.createEvent){
+
+				console.log(this.document)
+			if(event.target !== anchorObj){
+			let evt:any = document.createEvent("MouseEvents");
+
+			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+			anchorObj.dispatchEvent(evt);
+
+			}
+
+		}
 
     }
 
@@ -149,6 +190,7 @@ export default class Input extends inputcontroller {
     update(){
 
 		this.confineMouse();
+		this.gamepads = gamepad();
 
 		//Reset variables
 		this.press = false;
@@ -301,7 +343,7 @@ export default class Input extends inputcontroller {
         }
 
         this.lastpressed = this.pressed;
-
+/*
         if (!this.wininitalize)
         try {
 
@@ -390,7 +432,7 @@ export default class Input extends inputcontroller {
         if ((this.pressed===true)&&(this.lastpressed===true))
             this.controls.move(data);
 
-        }
+        }*/
 
 
 

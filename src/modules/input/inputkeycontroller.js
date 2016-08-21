@@ -58,8 +58,7 @@ export default class inputkeycontroller {
         	var e = this.codeList.length-1;
         	for (var i = e;i>=0;--i)
         		if (this.codeList[i]==code)
-        			this.codeList[i] = null;
-
+        			this.codeList.splice(i,1);
         }
 
        init(app){
@@ -72,8 +71,7 @@ export default class inputkeycontroller {
                     app.input.preventNext = false;
 
                     app.input.keyController.codedown = app.input.keyController.keyCodes[evt.keyCode];
-
-                    app.input.keyController.codeList.push(app.input.codedown);
+                    app.input.keyController.codeList.push(app.input.keyController.codedown);
 
                     if (evt.ctrlKey)
                         app.input.control = true;

@@ -4,83 +4,31 @@
 
 	<head>
 
-	    <meta charset="UTF-8">
+	    <meta charset="UTF-8" />
 
-			    <script rel="prefetch" type="application/x-javascript"  src="./vendor/sylvester.js" ></script>
-						<script rel="prefetch" type="application/x-javascript"  src="./vendor/glUtils.js" ></script>
-						<script rel="prefetch" type="application/x-javascript"  src="./vendor/gl-matrix.js" ></script>
+	    <script rel="prefetch" type="application/x-javascript" src="./vendor.js"></script>
 
-	    <script rel="prefetch" type="application/x-javascript" src="./vendor/spice.js"></script>
+	    <script rel="prefetch" type="application/x-javascript" name="main" src="./spice.js" ></script>
 
-	    <script rel="prefetch" type="application/x-javascript" name="main" src="./main.js" ></script>
+		<script  type="application/x-javascript" defer>
 
-		<script type="text/JavaScript">
+
+			var _App = ((SpiceJS.create()).OnLoad = function (self) {
+
+				var width = 1224;
+				var height = 720;
+
+				self.main = {update:function(){},draw:function(){},init:function(){}};
+
+				self.start(width, height);
+
+				window.Application = this;
+
+			});
 
 		</script>
 
-
-		<!-- Fragment shader program -->
-
-	    <script id="shader-fs" type="x-shader/x-fragment">
-
-			void main(void) {
-		      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-		    }
-
-	    </script>
-
-	    <!-- Vertex shader program -->
-
-	    <script id="shader-vs" type="x-shader/x-vertex">
-
-	      attribute vec3 aVertexPosition;
-		  attribute vec2 a_position;
-
-		  uniform vec2 u_scale;
-
-	     // attribute vec2 aTextureCoord;
-
-	      uniform mat4 uMVMatrix;
-	      uniform mat4 uPMatrix;
-
-	     // varying highp vec2 vTextureCoord;
-
-	      void main(void) {
-
-
-			  			  // Scale the positon
-			  			  vec2 scaledPosition = a_position * u_scale;
-
-	        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1);
-
-	        //vTextureCoord = aTextureCoord;
-
-	      }
-
-	    </script>
-
-
-
-
-
-
-
-
-
-
-
 	</head>
-
-	<body onload="window.start()">
-
-
-
-
-      <canvas id="glcanvas" style="position:fixed; left:0px; top:0px; z-index:2;">
-        Your browser doesn't appear to support the <code>&lt;canvas&gt;</code> element.
-      </canvas>
-
-    </body>
 
 
 </html>

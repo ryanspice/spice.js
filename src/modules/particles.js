@@ -1,7 +1,7 @@
 
-import {_SJSClass as SJSClass} from './interfaces.js';
+import {_SJSClass as SJSClass} from './core/sjs';
 
-import Vector from './math/vector';
+import Vector from './core/math/vector';
 
 import Loader from './loader.js';
 
@@ -15,8 +15,7 @@ export default class SJSParticleController extends Loader {
 
         this.SJSParticleList = [];
 
-        //this.particleLimit = 1500;
-        this.particleLimit = 100;
+        this.particleLimit = 150;
 
         this.flakes = new Image();
 
@@ -27,6 +26,14 @@ export default class SJSParticleController extends Loader {
 
         for(var i = 0; i<16; i++)
             this.asyncLoadImageData('../flakes','flakes'+i, i*32, 0*32);
+
+
+
+		for(var i = 0; i<3; i++)
+	        this['bg'+i] = new Image();
+
+	    for(var i = 0; i<3; i++)
+	        this.asyncLoadImage('../bg'+i,'bg'+i);
 
     }
 
@@ -87,6 +94,7 @@ export default class SJSParticleController extends Loader {
 
     draw()  {
 
+
         let error = (this.getBufferLength());
 
     //    console.log(error)
@@ -94,6 +102,14 @@ export default class SJSParticleController extends Loader {
             {
                 this.visuals.rect(0,0,10,10,'#FF0000')
                 return;}
+
+
+					//console.log(loader.bg0);
+
+					//console.log( loader.ImageCache[0]);
+
+
+
 
         let length = this.SJSParticleList.length;
 

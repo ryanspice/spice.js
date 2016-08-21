@@ -1,3 +1,32 @@
+
+Number.prototype.toFixedNumber = function(x, base){
+  var pow = Math.pow(base||10,x);
+  return +( Math.round(this*pow) / pow );
+}
+
+
+function wait(t){
+
+    return new Promise((r) => setTimeout(r, t));
+
+}
+
+var timers = {};
+
+window.timer = function timer(name) {
+    timers[name + '_start'] = window.performance.now();
+}
+
+window.timerEnd = function timerEnd(name) {
+    if (!timers[name + '_start']) return undefined;
+    var time = window.performance.now() - timers[name + '_start'];
+    var amount = timers[name + '_amount'] = timers[name + '_amount'] ? timers[name + '_amount'] + 1 : 1;
+    var sum = timers[name + '_sum'] = timers[name + '_sum'] ? timers[name + '_sum'] + time : time;
+    timers[name + '_avg'] = sum / amount;
+    delete timers[name + '_start'];
+    return time;
+}
+
 var utils = utils || {};
 
 utils.FNV_OFFSET_32 = 0x811c9dc5;
@@ -31,14 +60,6 @@ utils.toHex = function (val) {
     return ("0000000" + (val >>> 0).toString(16)).substr(-8);
 
 };
-
-function wait(t){
-
-    return new Promise((r) => setTimeout(r, t));
-
-}
-
-//Fill animation frame
 
 utils.requestAnimationFrame = function(){
 
@@ -94,12 +115,6 @@ utils.loadExternalJS = function(scripts) {
 
 }
 
-/**
-* Converts and array of objects to CSV.
-* @module
-* @access private
-*/
-
 utils.convertArrayOfObjectsToCSV = function(args) {
 
     var result, ctr, keys, columnDelimiter, lineDelimiter, data;
@@ -145,12 +160,6 @@ utils.convertArrayOfObjectsToCSV = function(args) {
     return result;
 }
 
-/**
-* Converts and array of objects to CSV.
-* @module
-* @access private
-*/
-
 utils.writeToCSV = function(name){
 
     var logStream = fs.createWriteStream('log.txt', {'flags': 'a'});
@@ -190,13 +199,5 @@ utils.writeToCSV = function(name){
 window.wait = wait;
 
 window.utils = utils;
-
-
-
-
-
-
-
-
 
 export default window.utils;

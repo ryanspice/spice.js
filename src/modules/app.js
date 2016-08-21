@@ -1,327 +1,215 @@
-"strict mode"
-/** @module app */
+/* @flow */
 
+/** App is the main app controller, here you can access input, math, data and graphics controllers.
+*	@module */
 
-/** Name. */
-export const name = 'core';
+import Core from './core/core';
 
-import _math from './math/math.js';
+import State from './core/state.js';
 
-import _options from './options.js';
+import Canvas from './canvas';
 
-import _input from './input/input.js';
+/** WIP Modules
+*	@module */
 
-import _client from './client.js';
+import Client from './client';
 
-import _Core from './core.js';
+import _input from './input/input';
 
-import _canvas from './canvas.js';
+//import Particles from './particles.js'; // (unfinished) To be built into application
 
-import {SGL} from './canvas.js';
+//window.SJSParticleController = Particles; // Temporary for snowflakes
 
-import _user from './user.js';
-
-import _ext from './ext.js';
-
-import Loader from './loader.js'; // (unfinished) To be built into application (to override current)
-
-import Particles from './particles.js'; // (unfinished) To be built into application
-
-window.SJSParticleController = Particles; // Temporary for snowflakes
-
-const date = new Date();
-
-/**
-* _Core_private
-* @property
-* @private
-*/
-
-//let _private = new WeakMap();
-
-/**
-* Core of the framework, initalizes client, input and listeners.
-* @protected
+/** Core of the framework, initalizes client, input and listeners.
 * @module
-*
-*/
+* @protected */
 
- class _App extends _Core {
+ export default class App extends Core {
 
-    /** Builds the core modules of the Application. */
+     canvas:Canvas = Canvas;
+     client:Client;
 
-    constructor(){
-
-        super();
-
-		//_private.set(this,this.constructor.properties);
-
-        this.time = 0;
-
-        //this.main = {name:"Main",init:function() {},update:function() {},draw:function() {return true;}};
-
-        this.options = _options;
-
-        this.user = _user;
-
-        this.ext = _ext;
-
-        this.input = _input;
-
-        this.canvas = _canvas;
-
-        this.client = _client;
-
-        this.math = new _math();
-
-    }
-
-	/**
-	* This function starts the application.
+	/** The main loop for the application, use arrow functions, if arrows exist
 	* @method
-	* @protected
-	*/
+	* @private */
 
-    start(w, h){
-
-		var name = '';
-
-       this.client = this.Construct(this.client.prototype,this.client.constructor);
-
-       this.canvas =  new _canvas(this);
-
-       this.loop(this);
-
-       this.client.init(w||this.app.options.width,h||this.app.options.height);
-
-       this.input = new this.input(this);
-
-    }
-
-	/**
-	* The main loop for the application
-	* @method
-	* @private
-	*/
-
-	loop(self){
+	loop(self:App):void {
 
 		//Use arrow function if available
-		var usearrow = true;
 
-		if (usearrow)
-		{
+		var usearrow = true;
+		if (usearrow) {
 
 			setTimeout(() => {
 
 				function AppLoop(){
 					self.client.loop();
+					self.client.loopData();
 				}
 
 				function AppLoopData(){
-					self.client.loopData();
+
+					///For loops that dont need to be run at 60fps
+
 				}
 
 				this.client.initalize(AppLoop,AppLoopData,this.scale);
 
 			}, this.time);
 
+		} else {
+
+			setTimeout(	(function(){
+
+						function AppLoop(){
+							self.client.loop();
+							self.client.loopData();
+						}
+
+						function AppLoopData(){
+
+							///For loops that dont need to be run at 60fps
+
+						}
+
+						self.client.initalize(AppLoop,AppLoopData,self.scale);
+
+			}),this.time);
+
 		}
-		else
-			{
 
-				setTimeout(	(function(){
+	}
 
-							function AppLoop(){
-								self.client.loop();
-							}
+	/** This function starts the application.
+	* @method
+	* @override */
 
-							function AppLoopData(){
-								self.client.loopData();
-							}
+    start(w:number|null=0, h:number|null=0):void {
 
-							self.client.initalize(AppLoop,AppLoopData,self.scale);
+		let clientProposedWidth = w || this.app.options.width;
 
-				}),this.time);
+		let clientProposedHeight = h || this.app.options.height;
 
-			}
+		this.main = Object.create(this.main);
 
-	};
+		this.canvas =  new this.canvas(this);
 
-	/**
-	* Triggers when the application first loops.
+		this.client = new Client(this,clientProposedWidth,clientProposedHeight);
+
+		this.client.update.inital(this);
+
+		this.input = new _input(this);
+
+		this.loop(this);
+
+    }
+
+	/** Triggers when the application first loops.
 	* @method
     * @param {Object} [self] - Reference to the app.
-	* @override
-	*/
+	* @override	*/
 
-    OnLoad(self){
+    OnLoad(self):void {
 
         self.start();
 
     }
 
-	/**
-	* Triggers on dom content load.
+	/** Triggers on dom content load.
 	* @method
     * @param {Event} [evt] - The passing event.
-	* @override
-	*/
+	* @override	*/
 
-    OnApplicationLoad(evt){
+    OnApplicationLoad(evt:any):void {
 
-       //Run .OnLoad
        evt.target.app.OnLoad(evt.target.app);
-
-       console.log(evt.target.app.getCurrent().name+': OnApplicationLoad');
 
     }
 
-	/**
-	* Event listener polyfill.
+	/** Event listener polyfill.
 	* @method
     * @param {Element} [obj] - Element to trigger event on, fallback on window.
     * @param {Event} [evt] - The passing event.
     * @param {String} [listener] - The listener to build.
     * @param {Object} [param] - Paramater to pass.
-	*
 	* @example
-	* Application.Listener(window,'click',function(){console.log('eh');},'');
-	* Application.Click(new Event,window);
-	*/
+	* Application.Listener(window,'click',function(){////console.log('eh');},'');
+	* Application.Click(new Event,window);	*/
 
-    Listener(obj, evt, listener, param){
-
-        /* Check obj param */
+    Listener(obj:Object, evt:any, listener:any, param:any):void {
 
         if (typeof obj[0] === "object") {
-
 		    obj = obj[0] || window;
-
-		}
-
-        /* If addEventListener exist, add it, otherwise attachEvent. */
+        }
 
         if (obj.addEventListener) {
-
             obj.addEventListener(evt, listener, false);
-
 		}	else {
-
 			obj.attachEvent("on" + evt, listener);
-
 		}
-
-		/* Assign App Reference */
 
         obj.app = window.apps[this.id] = this;
 
-    };
+    }
 
-	/**
-	* Object constructor/factory polyfill.
+	/** Object constructor/factory polyfill. MAY be unnecessary.
 	* @method
     * @param {Object} [prototype] - An object prototype.
-    * @param {Object} [constructor] - An object constructor.
-	*/
+    * @param {Object} [constructor] - An object constructor. */
 
-    Construct(prototype,constructor){
+    Construct(prototype:Object,constructor:Object|void ):App|Object  {
 
-       let  isObj = false;
-       let  obj = prototype;
-       let  proto = prototype;
-       let  construct = constructor;
-       let  ret = {};
-	   let type;
+        let  isObj:bool = false;
+        let  obj:Object = prototype;
+        let  proto:Object = prototype;
+        let  construct:Object|void = constructor;
+        let  ret:Object = {};
+        let type;
 
-       /* if prototype contains a prototype and constructor. */
+        /* if prototype contains a prototype and constructor. */
 
-		if (typeof obj.prototype !== 'undefined')
-			if (typeof obj.constructor !== 'undefined')	{
-				construct = obj.constructor;
-				proto = obj.prototype;
-				isObj = true;
-			}
+        if (typeof obj.prototype !== 'undefined')
+        	if (typeof obj.constructor !== 'undefined')	{
+        		construct = obj.constructor;
+        		proto = obj.prototype;
+        		isObj = true;
+        	}
 
-       /* Grab type of constructor */
+        /* Grab type of constructor */
 
         type = typeof construct;
 
-       /* Return & Create object based on constructor */
-       switch(type)	{
+        /* Return & Create object based on constructor */
+        switch(type)	{
 
-		   /* Use only the prototype */
-	       case 'undefined':
-	           ret = Object.create(proto);
-	       break;
+           /* Use only the prototype */
+           case 'undefined':
+               ret = Object.create(proto);
+           break;
 
-		   /* Use constructor as object */
-	       case 'object':
-	           ret = Object.create(proto,construct);
-	       break;
+           /* Use constructor as object */
+           case 'object':
+               ret = Object.create(proto,construct);
+           break;
 
-		   /* Use constructor as function */
-	       case 'function':
-	           ret = Object.create(proto,construct(this));
-	       break;
+           /* Use constructor as function */
+           case 'function':
+               ret = Object.create(proto,construct(this));
+           break;
 
-		   /* Expected a type */
-	       default:
-				console.log("Expected 'object' or 'function': Type is "+c);
+           /* Expected a type */
+           default:
+        		console.warn("Expected 'object' or 'function': Type is "+type);
 
-       }
+        }
 
-       if (isObj)
-           prototype = ret;
+        if (isObj)
+            prototype = ret;
+
+        console.warn(ret,typeof ret);
 
        return ret;
-    }
-
-	/**
-	* Artificial click
-	* @method
-    * @param {Event} [event] - Passing of the event.
-    * @param {Element} [anchorObj] - Element to click.
-	*/
-
-    click(event, anchorObj){
-
-		this.Click(event,anchorObj);
 
     }
 
-	/**
-	* Artificial Click
-	* @method
-    * @param {Event} [event] - Passing of the event.
-    * @param {Element} [anchorObj] - Element to click.
-	*/
-
-    Click(event, anchorObj){
-
-		if (typeof anchorObj != 'undefined')
-		if (anchorObj.click){
-
-			anchorObj.click();
-
-		}	else
-		if (document.createEvent){
-
-			if(event.target !== anchorObj){
-
-			var evt = document.createEvent("MouseEvents");
-
-			evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-			anchorObj.dispatchEvent(evt);
-
-			}
-
-		}
-
-    }
-
-
-};
-
-export default _App;
+}

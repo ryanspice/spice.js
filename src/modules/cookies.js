@@ -1,6 +1,7 @@
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
+* @noflow
 * @module
 * @public
 */
