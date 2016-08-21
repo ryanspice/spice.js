@@ -5,7 +5,11 @@ type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
 
 export type object = Object;
 //export type string = string;
+<<<<<<< HEAD
 let X:Number,y:Number = 0;
+=======
+
+>>>>>>> origin/master
 export type vector<X,Y> = {x:X,y:Y};
 
 export type app<APP,VISUALS,GRAPHICS> = {app:APP,visuals:VISUALS, graphics: GRAPHICS};

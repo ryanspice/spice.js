@@ -210,6 +210,45 @@ export default class _loader extends SJSClass {
 			this.ImageCache[cacheIndex - 1] = _img;
 
 
+<<<<<<< HEAD
+=======
+			//console.log(this.getBase64Image(_img))
+			//			console.log(this.ImageCache[cacheIndex - 1] );
+			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));
+
+			//console.log(this.ImageCache[cacheIndex-1])
+
+		}, this.ImageBufferTime + (0.1 * this.ImageBuffer.length))
+		this.asyncLoadCacheIndex = cacheIndex;
+
+		return this.ImageCache[cacheIndex - 1];
+	}
+
+	async asyncLoadZipImage(string,suffex) {
+
+		let name = string;
+
+		let img = await this.graphics.loadFromZip(name);
+
+		img.string = name;
+
+		let cacheIndex = await this.ImageCache.push(img);
+
+		await this.ImageBuffer.push(name+suffex);
+
+		await setTimeout(()=> {
+
+			let _img = this.checkLoaded(name);
+
+			//_img.base64 = this.getBase64Image(_img);
+			//_img.imgdata = this.createImageData(_img);
+
+
+
+			this.ImageCache[cacheIndex - 1] = _img;
+
+
+>>>>>>> origin/master
 			//console.log(this.getBase64Image(_img))
 			//			console.log(this.ImageCache[cacheIndex - 1] );
 			//this.ImageCache[cacheIndex - 1].src = this.getBase64Image(this.checkLoaded(name));

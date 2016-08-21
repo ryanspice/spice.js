@@ -4,7 +4,11 @@ import _IFace from '../interfaces/IFace';
 
 interface ILegacyCore {
 
+<<<<<<< HEAD
     create:Object;
+=======
+    create:object;
+>>>>>>> origin/master
     getConnectionAttempts():mixed;
     client:mixed;
     ext:mixed;
@@ -19,7 +23,13 @@ interface ILegacyCore {
 export default class legacy_core<ILegacyCore> extends _IFace {
 
 
+<<<<<<< HEAD
     constructor(map:WeakMap):void {
+=======
+	/** Pushes map to _IFace */
+
+    constructor(map:weakmap):void {
+>>>>>>> origin/master
         super(map);
     }
 
@@ -29,12 +39,20 @@ export default class legacy_core<ILegacyCore> extends _IFace {
     *       dont use
     */
 
+<<<<<<< HEAD
     create(a:Object ):Object {
+=======
+    create(a:object ):object {
+>>>>>>> origin/master
         console.trace('	    create(a)');
         return this.Construct(a||{},this.client.room);
     }
 
+<<<<<<< HEAD
     getCurrent():Object{
+=======
+    getCurrent():object{
+>>>>>>> origin/master
     console.trace('SJS:legacy-core.js:	    getCurrent()');
     return this.client.update.state.current;
     }
@@ -93,7 +111,11 @@ export default class legacy_core<ILegacyCore> extends _IFace {
 
     }
 
+<<<<<<< HEAD
     setState(state:Object ):Object {
+=======
+    setState(state:object ):object {
+>>>>>>> origin/master
     console.trace('SJS:legacy-core.js:	     setState(state)');
     return this.client.update.state.set(state,true);
     }

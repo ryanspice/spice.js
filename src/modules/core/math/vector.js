@@ -3,7 +3,10 @@
 console.time('SJS:B:vector.js');
 
 import _IFace from '../interfaces/IFace';
+<<<<<<< HEAD:src/modules/core/math/vector.js
 var t = 0;
+=======
+>>>>>>> origin/master:src/modules/core/math/vector.js
 
 /** Vector2
 * @module
@@ -15,13 +18,21 @@ export class Vector2 extends _IFace<IVector> {
     static properties:object = { name:'Vector2',x:0, y:0 };
 
     constructor(x:number = 0, y:number = 0){
+<<<<<<< HEAD:src/modules/core/math/vector.js
         super(new weakmap());
+=======
+        super(new _weakmap());
+>>>>>>> origin/master:src/modules/core/math/vector.js
         this.position = {x ,y};
     };
 
 }
 
+<<<<<<< HEAD:src/modules/core/math/vector.js
 //window.Vector2 = (new Vector2(0,0):_Inf);
+=======
+window.Vector2 = (new Vector2(new _weakmap()):_Inf);
+>>>>>>> origin/master:src/modules/core/math/vector.js
 
 /** Vector
 * @module
@@ -31,6 +42,33 @@ export class Vector2 extends _IFace<IVector> {
 */
 
 export default class Vector extends _IFace<_Inf> {
+<<<<<<< HEAD:src/modules/core/math/vector.js
+=======
+
+    position:vector;
+
+	 /** Set Vector private variables
+     * @type {Object}
+     * @protected */
+
+    static properties:object = {
+        name:"Vector",
+        x:_number,
+        y:_number
+    };
+
+    /** This is the constructor for the vector
+    * @param {number} x - position.x
+    * @param {number} y - position.y */
+
+    constructor(x: number = 0,y: number = 0):void {
+
+            super(new _weakmap());
+			this.position = {x ,y};
+
+    };
+
+>>>>>>> origin/master:src/modules/core/math/vector.js
 
     position:vector;
 

@@ -1,5 +1,175 @@
 
+<<<<<<< HEAD
 import IFace from './core/interfaces/IFace';
+=======
+import { _SJSClass } from './core/sjs';
+
+/**
+* Canvas Interface
+* @module
+* @interface
+* @protected
+*/
+
+export class _Canvas_Core extends _SJSClass {
+
+    /**
+    * Get document element
+    * @type {Element}
+    * @protected
+    */
+
+    get doc(){
+
+        return this.get('docs');
+
+    }
+
+    /**
+    * Get header element
+    * @type {Element}
+    * @protected
+    */
+
+    get head(){
+
+        return this.get('head');
+
+    }
+
+    /**
+    * Get gendering element
+    * @type {Element}
+    * @protected
+    */
+
+    get rendering_style(){
+
+        return this.get('_rendering_style');
+
+    }
+
+    /**
+    * Set rendering element styles
+    * @type {CSS}
+    * @protected
+    * @example
+    * var Style = "canvas { position:fixed; z-index:25; }"
+    * Application.canvas.rendering_style(Style)
+    */
+
+    set rendering_style(style){
+
+        let customstyle = style || "";
+        let viewport = '@-ms-viewport {width:100%;height:100%;}';
+        let img_rendering = '#Client, #Buffer, img[srcApp=".gif"],img[srcApp=".jpg"], img[srcApp=".png"] {image-rendering: -moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;-ms-interpolation-mode: nearest-neighbor;}';
+
+        let rendering = this.get('_rendering_style');
+        rendering.innerHTML = rendering.innerText =  viewport + img_rendering + customstyle;
+
+    }
+
+    /**
+    * Get rendering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    get canvas() {
+
+        return this.get('canvas')[0];
+
+    }
+
+    /**
+    * Set rendering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    set canvas(canvas) {
+
+        this.get('canvas')[0] = canvas;
+
+    }
+
+    /**
+    * Get buffering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    get buffer(){
+
+        return this.get('canvas')[1];
+
+    }
+
+    /**
+    * Set buffering canvas
+    * @type {Element}
+    * @protected
+    */
+
+    set buffer(canvas){
+
+        this.get('canvas')[1] = canvas;
+
+    }
+
+    /**
+    * Get blitting canvas
+    * @type {Element}
+    * @protected
+    */
+
+    get blitter(){
+
+        return this.get('canvas')[2];
+
+    }
+
+    /**
+    * Set blitting canvas
+    * @type {Element}
+    * @protected
+    */
+
+    set blitter(canvas){
+
+        this.get('canvas')[2] = canvas;
+     //this._blitter = canvas;
+
+    }
+
+    constructor(app) {
+        super(app);
+
+
+    };
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//import SGL from './sgl.js';
+>>>>>>> origin/master
 
 import type {
     weakmap

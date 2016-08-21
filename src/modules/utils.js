@@ -1,10 +1,13 @@
 
+<<<<<<< HEAD
 Number.prototype.toFixedNumber = function(x, base){
   var pow = Math.pow(base||10,x);
   return +( Math.round(this*pow) / pow );
 }
 
 
+=======
+>>>>>>> origin/master
 function wait(t){
 
     return new Promise((r) => setTimeout(r, t));

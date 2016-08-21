@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 import State from './core/state.js';
+=======
+import _State from './state.js';
+>>>>>>> origin/master
 
 /**
 * _private
@@ -14,7 +18,11 @@ const _private = new WeakMap();
 * @protected
 */
 
+<<<<<<< HEAD
 export default class Renderer extends State {
+=======
+export default class renderer extends _State {
+>>>>>>> origin/master
 
 	/**
 	* private variables
@@ -128,7 +136,11 @@ export default class Renderer extends State {
 
 }
 
+<<<<<<< HEAD
 new Renderer();
+=======
+new renderer();
+>>>>>>> origin/master
 
 window.MarkupBuffer = [];
 window.MarkupRecall = function(func){
