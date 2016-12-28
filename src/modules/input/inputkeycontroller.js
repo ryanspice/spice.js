@@ -76,7 +76,7 @@ export default class inputkeycontroller {
                     if (evt.ctrlKey)
                         app.input.control = true;
 
-                    app.input.pressed = true;
+                    //app.input.pressed = true;
                     app.input.released = false;
 
                     app.input.keyController.key_down(app);

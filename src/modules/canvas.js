@@ -1,11 +1,6 @@
 
 import IFace from './core/interfaces/IFace';
 
-import type {
-    weakmap
-} from "./core/interfaces/ITypes";
-
-
 /**
 * Canvas Interface
 * @module
