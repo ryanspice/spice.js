@@ -1,12 +1,27 @@
 {
   "name": "ryanspice2016-spicejs",
-  "version": "0.8.1.2",
+  "version": "0.8.2",
   "description": "SpiceJS - Html5 Canvas API Framework",
   "main": "./src/spice.js",
   "scripts": {
     "start": "webpack-dev-server --hot --inline --port=3333",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "Ryan Tyler Spice-Finnie",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanspice/spice.js.git"
+  },
+  "keywords": [
+    "gamemaker",
+    "game",
+    "html5",
+    "games"
+  ],
+  "bugs": {
+    "url": "https://github.com/ryanspice/spice.js/issues"
+  },
+  "homepage": "https://github.com/ryanspice/spice.js#readme",
   "license": "MIT",
   "devDependencies": {
   	"babel-core": "^6.13.2",
@@ -40,20 +55,5 @@
     "html-webpack-plugin": "^1.7.0",
     "babel-runtime": "^6.6.1",
     "es6-promise": "^3.1.2"
-  },
-  "author": "Ryan Tyler Spice-Finnie",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ryanspice/spice.js.git"
-  },
-  "keywords": [
-    "gamemaker",
-    "game",
-    "html5",
-    "games"
-  ],
-  "bugs": {
-    "url": "https://github.com/ryanspice/spice.js/issues"
-  },
-  "homepage": "https://github.com/ryanspice/spice.js#readme"
+  }
 }
