@@ -7,6 +7,7 @@
 type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
 
 export type object = Object;
+
 //export type string = string;
 
 
@@ -42,10 +43,9 @@ export type vector<X=0,Y=0> = {x:0,y:0};
 
 export type app<APP,VISUALS,GRAPHICS> = {app:APP,visuals:VISUALS, graphics: GRAPHICS};
 
-export type _weakmap = WeakMap;
+type _weakmap = WeakMap;
 
 export type weakmap = WeakMap;
-export type object = Object;
 
 //var weakmap:weakmap;
 
