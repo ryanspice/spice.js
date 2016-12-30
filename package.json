@@ -1,6 +1,6 @@
 {
   "name": "ryanspice2016-spicejs",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "SpiceJS - Html5 Canvas API Framework",
   "main": "./src/spice.js",
   "scripts": {
