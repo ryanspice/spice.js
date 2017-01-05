@@ -19517,13 +19517,13 @@ var Renderer = function (_State) {
 	}, {
 		key: 'renderMarkup',
 		value: function () {
-			var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-				var arr, is, node, i, markup;
+			var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(node) {
+				var arr, is, i, markup;
 				return regeneratorRuntime.wrap(function _callee$(_context) {
 					while (1) {
 						switch (_context.prev = _context.next) {
 							case 0:
-								arr = this.buffer, is = arr.length, node = node, i = is - 1;
+								arr = this.buffer, is = arr.length, i = is - 1;
 								i;
 
 							case 2:
@@ -19549,7 +19549,7 @@ var Renderer = function (_State) {
 				}, _callee, this);
 			}));
 
-			function renderMarkup() {
+			function renderMarkup(_x) {
 				return _ref.apply(this, arguments);
 			}
 

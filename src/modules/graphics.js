@@ -276,7 +276,8 @@ export default class Graphics extends Library {
 
 		SpriteUnload(name:string):void {
 
-			delete this.Sources.getByName(name);
+			//To implement deleting the source file
+			//delete this.Sources.getByName(name);
 
 		}
 

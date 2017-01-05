@@ -5,6 +5,8 @@ const webpack = require('webpack');
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ClosureCompilerPlugin = require('webpack-closure-compiler');
+
 // html = new HtmlWebpackPlugin({ title: 'Webpack App' });
 
 const env = process.argv.indexOf('--env') === -1 ? false : true;
@@ -53,6 +55,15 @@ if (env===true)
 
     source.plugins.push(new webpack.optimize.DedupePlugin() );
 
+	source.plugins.push(new ClosureCompilerPlugin({
+          compiler: {
+            language_in: 'ECMASCRIPT6',
+            language_out: 'ECMASCRIPT5',
+            compilation_level: 'SIMPLE'
+		},
+          concurrency: 3,
+	  }));
+
     //webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html404, template:'./src/404.html' }));
 }
 
@@ -99,6 +110,7 @@ module.exports = {
           'babel-loader'
         ]
       },
+
 
 
 

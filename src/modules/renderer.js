@@ -108,11 +108,10 @@ export default class Renderer extends State {
 	*/
 
 
-	async renderMarkup(){
+	async renderMarkup(node){
 
 		let arr = this.buffer
 			,	is = arr.length
-			,	node = node
 			,	 i = is-1;
 
 		for (i; i>=0; i--) {
