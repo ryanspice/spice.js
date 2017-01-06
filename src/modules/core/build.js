@@ -10,6 +10,7 @@ import App from '../app.js';
 
 export default class Build extends IFace {
 
+	app:Function;
 	id:number=0;
 
 	document:Object = document;
@@ -32,20 +33,23 @@ export default class Build extends IFace {
 
 	buildWindowReferences():void {
 
-        if (typeof this.window.scripts != typeof [])
+        if (typeof this.window.scripts != typeof []) {
             this.window.scripts = [];
+		}
 
         this.window.SpiceJS = this.window.SJS = this;
 
         /* if no apps have been defined, create a new array */
 
-        if (!this.window.apps)
-        	this.window	.apps = new Array(1);
+        if (!this.window.apps) {
+        	this.window.apps = new Array(1);
+		}
 
         /* if appsNextId isnt larger or equal to 0 assign it to 0 */
 
-        if (!this.window.appsNextId>=0)
+        if (!this.window.appsNextId>=0) {
         	this.window.appsNextId = 0;
+		}
 
 	}
 
@@ -106,7 +110,9 @@ export default class Build extends IFace {
 
 	        //this.name = "scriptloadtime";
 
-	        window.utils.loadExternalJS(window.scripts);
+			// Load External JS files.
+
+	        this.utils.loadExternalJS(window.scripts);
 
 	        tempReference = this.buildPrototype();
 

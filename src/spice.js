@@ -15,10 +15,9 @@ import utils from './modules/utils';
 
 import Build from './modules/core/build';
 
-import setInnerHTML from './modules/render/setInnerHTML.js';
-
-import Twitter from './modules/render/twitter.js';
-
+/* Unused  */
+//import setInnerHTML from './modules/render/setInnerHTML.js';
+//import Twitter from './modules/render/twitter.js';
 
 /* Window & Windows
 * 		Cache window into Window const. Query for Windows.
@@ -107,6 +106,13 @@ export class SpiceJS extends Build  {
 		//this.constructor.properties.statistics = new this.constructor.properties.statistics();
 
     }
+
+	/** Reference UTILS
+	* @type {Element}	*/
+
+	get utils():Object {
+		return utils;
+	}
 
 	/** Reference the state object
 	* @type {Element}	*/
