@@ -41,7 +41,7 @@ if (env===true)
 {
 
     source.output.js = "spice.min.js";
-/*
+
     source.plugins.push(new webpack.optimize.UglifyJsPlugin({
 	      compress: {
 	        warnings: true
@@ -52,8 +52,7 @@ if (env===true)
 	      sourceMap: true
 	    })
 	);
-*/
-
+/*
 	source.plugins.push(new ClosureCompilerPlugin({
           compiler: {
             language_in: 'ECMASCRIPT6',
@@ -62,12 +61,10 @@ if (env===true)
 		},
           concurrency: 3,
 	  }));
+*/
 
     //webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html404, template:'./src/404.html' }));
 }
-
-
-
 
 module.exports = {
   context: '',
@@ -109,9 +106,6 @@ module.exports = {
           'babel-loader'
         ]
       },
-
-
-
 
     ],
   },

@@ -2,6 +2,14 @@
 
 import _math from './core/math/math.js';
 
+/* JSZip & JSZipUtils
+* 		Library to read Zip files from the server.
+*/
+
+const JSZip:Object = require("jszip");
+const JSZipUtils:Object = require("jszip-utils");
+
+
 var _Math = {
 	Vec: function(x,y){
 		this.x = x;
