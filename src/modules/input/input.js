@@ -139,6 +139,9 @@ export default class Input extends inputcontroller {
 
     init_options(){
 
+		//Temporary Disabled due to ClosureCompilerPlugin
+		//return;
+
         /*	Overrides the selection start event for selecting events	*/
 
         if (!this.app.options.get("override").SelectStart){

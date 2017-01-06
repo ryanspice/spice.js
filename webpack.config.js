@@ -40,8 +40,8 @@ const source = {
 if (env===true)
 {
 
-    source.output.js = "app.min.js";
-
+    source.output.js = "spice.min.js";
+/*
     source.plugins.push(new webpack.optimize.UglifyJsPlugin({
 	      compress: {
 	        warnings: true
@@ -49,11 +49,10 @@ if (env===true)
 	      output: {
 	        comments: false
 	      },
-	      sourceMap: false
+	      sourceMap: true
 	    })
 	);
-
-    source.plugins.push(new webpack.optimize.DedupePlugin() );
+*/
 
 	source.plugins.push(new ClosureCompilerPlugin({
           compiler: {
