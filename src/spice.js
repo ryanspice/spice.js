@@ -15,16 +15,9 @@ import utils from './modules/utils';
 
 import Build from './modules/core/build';
 
-import setInnerHTML from './modules/render/setInnerHTML.js';
-
-import Twitter from './modules/render/twitter.js';
-
-/* JSZip & JSZipUtils
-* 		Library to read Zip files from the server.
-*/
-
-const JSZip:Object = window.JSZip = require("jszip");
-const JSZipUtils:Object = window.JSZipUtils = require("jszip-utils");
+/* Unused  */
+//import setInnerHTML from './modules/render/setInnerHTML.js';
+//import Twitter from './modules/render/twitter.js';
 
 /* Window & Windows
 * 		Cache window into Window const. Query for Windows.
@@ -35,7 +28,7 @@ const Windows:Object = window.Windows =  (typeof Windows=='undefined'?Window:Win
 
 /**
 * SpiceJS is the main corns and beans, this returns an app object which you can control all aspects of the  game. The main class will be instance specific alowing you to define multiple canvases. You can also view statistics and control group canvases through the object.
-* @access public
+* @public
 * @emits {SpiceJS} Emit the application controller.
 * @example
 *
@@ -68,6 +61,11 @@ const Windows:Object = window.Windows =  (typeof Windows=='undefined'?Window:Win
 */
 
 export class SpiceJS extends Build  {
+
+	/**
+	 * 	Common Functions
+	 * 	@private
+	 */
 
 	static properties = {
 
@@ -102,11 +100,19 @@ export class SpiceJS extends Build  {
 
     constructor(map:WeakMap):void {
 
+
 		super(map);
 
 		//this.constructor.properties.statistics = new this.constructor.properties.statistics();
 
     }
+
+	/** Reference UTILS
+	* @type {Element}	*/
+
+	get utils():Object {
+		return utils;
+	}
 
 	/** Reference the state object
 	* @type {Element}	*/
