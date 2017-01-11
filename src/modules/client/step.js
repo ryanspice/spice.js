@@ -1,10 +1,11 @@
 /* @flow */
 
 import _IFace from '../core/interfaces/IFace';
-
+/*
 import type {
 	Pace
-} from "../core/interfaces/ITypes";
+} from "../core/interfaces/ITypes";*/
+import Pace from "../core/pace";
 
 /** The state class which the main game state inherits
 *	@module */
@@ -41,9 +42,9 @@ export default class Step extends _IFace {
     * @protected
     */
 
-	set fps(value){
+	set fps(val:number ):void {
 
-    	this.get('data')[0] = 1 * (this.clean() / value * 1E3);
+    	this.get('data')[0] = 1 * (this.clean() / val * 1E3);
 
 	}
 
@@ -51,7 +52,7 @@ export default class Step extends _IFace {
     * @protected
     */
 
-	get fps(){
+	get fps():number {
 
 		return this.get('data')[0];
 
@@ -74,18 +75,22 @@ export default class Step extends _IFace {
         return true;
     }
 
-	/* Reset Frames, Return Frames ( Pass F*/
+	/*
+	*	Reset Frames
+	*/
 
-    clean():number|void {
+    clean():number {
 
-        let f = this.frames;
+        let f = this.frames || 1;
 
         this.frames = 0;
 
         return f;
     }
 
-	/* Game Loop, Increment Frames */
+	/*
+	*	Game Loop, Increment Frames
+	*/
 
     tick(a:Pace,b:Pace,app:Object):number {
 
@@ -96,7 +101,9 @@ export default class Step extends _IFace {
         return this.fps;
     }
 
-	/* */
+	/*
+	*
+	*/
 
 	second(step:Pace,app:Object):boolean {
 
@@ -114,7 +121,9 @@ export default class Step extends _IFace {
 		return true;
 	}
 
-	/* */
+	/*
+	*
+	*/
 
     first(step:Pace,app:Object):boolean {
 
@@ -145,7 +154,7 @@ export default class Step extends _IFace {
 
         if (this.pending>step.targetfps) {
 
-			this.pending-=(this.adding/step.targetfps)*step.targetfps;
+			this.pending-=(this.padding/step.targetfps)*step.targetfps;
 
 			this.padding++;
 

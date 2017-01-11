@@ -2,14 +2,8 @@
 .*/node_modules/*
 .*node_modules/.*
 
-[include]
-./sjs/modules/core/interfaces/IFace.js
-
-
-[libs]
-./sjs/modules/types.js
-
 [options]
+
 esproposal.class_static_fields=enable
 
 esproposal.class_instance_fields=enable
@@ -17,5 +11,7 @@ esproposal.class_instance_fields=enable
 esproposal.decorators=warn
 
 esproposal.export_star_as=enable
+
 unsafe.enable_getters_and_setters=true
+
 module.system=haste

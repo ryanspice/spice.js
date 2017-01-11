@@ -6,10 +6,53 @@
 
 import IFace from './interfaces/IFace';
 
+/* utils - universal helper functions */
+
+import utils from '../utils';
+
 import App from '../app.js';
 
-export default class Build extends IFace {
 
+/* Window & Windows - Cache window into Window const. Query for Windows. */
+
+const Window:Object = window;
+
+const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Window);
+
+/* Console - cache console var */
+
+const Console:Object = console;
+
+export default class Build extends IFace {
+	static properties = {
+
+		temp:{},
+
+		/* WIP - temp removed
+		statistics:Statistics,
+		*/
+
+		controller:{
+
+			/** List all of the instances of SpiceJS or
+			* @type {method}
+			* @param {number} id - Specify a specific instance to return.	*/
+
+			list:function(id:number = 0):void|Object {
+
+				if (id)
+					return Window.apps[id];
+				else
+				if (Window.apps.length>1)
+					return Window.apps;
+					else
+					return Window.apps[0];
+
+			}
+
+		}
+
+	}
 	app:Function;
 	id:number=0;
 
@@ -18,7 +61,7 @@ export default class Build extends IFace {
 	/** Attaches a reference to the Statistics module.
 	*	@constructor	*/
 
-	constructor(map:WeakMap):void {
+	constructor(map:WeakMap<>):void {
 
 		super(map);
 
@@ -26,6 +69,57 @@ export default class Build extends IFace {
 
 		this.buildWindowReferences();
 
+	}
+
+	/** Reference to the Window object.
+	* @type {Element}	*/
+
+	get window():Object {
+		return Window;
+	}
+
+	/** Reference UTILS
+	* @type {Element}	*/
+
+	get utils():Object {
+		return utils;
+	}
+
+	/** Reference the state object
+	* @type {Element}	*/
+
+	get aState():Object {
+		return this.app.main;
+	}
+
+	/** Reference to the canvas/app global controller.
+	* @type {Object}
+	* @protected	*/
+
+	get controller():Object {
+		return this.constructor.map.get(this)['controller'];
+	}
+
+	/** Reference to the statistics object.
+	* @type {Object}
+	* @protected	*/
+
+	get statistics():Object {
+		return this.constructor.map.get(this)['statistics'];
+	}
+
+	/**
+	* @type {Element}	*/
+
+	time(str:string):void {
+		Console.timeEnd(str);
+	}
+
+	/**
+	* @type {Element}	*/
+
+	timeEnd(str:string):void {
+		Console.timeEnd(str);
 	}
 
 	/** Attaches references to the global.window object.

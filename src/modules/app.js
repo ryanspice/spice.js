@@ -109,7 +109,7 @@ import _input from './input/input';
     * @param {Object} [self] - Reference to the app.
 	* @override	*/
 
-    OnLoad(self):void {
+    OnLoad(self:Object):void {
 
         self.start();
 
@@ -157,12 +157,12 @@ import _input from './input/input';
     * @param {Object} [prototype] - An object prototype.
     * @param {Object} [constructor] - An object constructor. */
 
-    Construct(prototype:Object,constructor:Object|void ):App|Object  {
+    Construct(prototype:Object,constructor:Function ):App|Object  {
 
         let  isObj:bool = false;
         let  obj:Object = prototype;
         let  proto:Object = prototype;
-        let  construct:Object|void = constructor;
+        let  construct:Function = constructor;
         let  ret:Object = {};
         let type;
 
@@ -206,7 +206,7 @@ import _input from './input/input';
         if (isObj)
             prototype = ret;
 
-        console.warn(ret,typeof ret);
+        //console.warn(ret,typeof ret);
 
        return ret;
 

@@ -1,4 +1,8 @@
 {
+  "globals": {
+    "document": true,
+    "window": true
+  },
   "parser": "babel-eslint",
   "parserOptions": {
   "sourceType": "module",
@@ -18,6 +22,9 @@
   "no-unused-vars": 2,
   "no-underscore-dangle": 2,
   "no-alert": 2,
-  "no-lone-blocks": 2
+  "no-lone-blocks": 2,
+  "unsafe":{
+"enable_getters_and_setters":true
 
+      }
 }

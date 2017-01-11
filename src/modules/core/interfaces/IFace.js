@@ -13,6 +13,9 @@ const Types:ITypes = new ITypes();
 
 const _IMap = new WeakMap();
 
+type K = any;
+type V = any;
+
  class _IFace  {
 
     static properties:object = { name:'interface', map:null, version:0 };
@@ -55,7 +58,7 @@ const _IMap = new WeakMap();
 
     /**  @type {mixed} */
 
-    get(value:string):mixed {
+    get(value:string):Object {
 		return this.constructor.map.get(this)[value];
 	}
 

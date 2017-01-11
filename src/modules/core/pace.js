@@ -1,4 +1,10 @@
+/* @flow */
+
 export default class Pace {
+
+	adding:number = 1;
+
+	targetfps:number = 60;
 
 	timer:number =	0;
 
@@ -8,7 +14,9 @@ export default class Pace {
 
 	delta:number = 1;
 
-	constructor(rate,fps){
+	Step:Function;
+
+	constructor(rate:any,fps:any){
 		//Debug.log('Pace: Init');
 		this.targetfps = fps;
 		this.timer = new Date().getTime();
@@ -18,12 +26,12 @@ export default class Pace {
 		return true;
 	}
 
-	Time(app):number {
+	Time(app:any):number {
 		this.timer = new Date().getTime();
 		return this.timer - this.offset;
 	}
 
-	Step(app):boolean {
+	Step(app:any):boolean {
 		this.delta = this.Time(app);
 		var step = this.rate*this.delta;
 		if (step>1.0)
