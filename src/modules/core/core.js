@@ -18,6 +18,10 @@ const _BUILD_LAST_ = '08-2016';
 
 const _BUILD_FIRST_ = '12-2013';
 
+import type {
+	IoVersion
+} from "../../shared/version";
+
 /** core component to the application, including version info, the main reference, and other details
 * @module
 * @protected */
@@ -42,11 +46,11 @@ export default class Core extends legacy_core {
 
 	scale:number;
 
-	app:object;
+	app:Object;
 
 	id:number=0;
 
-	static properties = {
+	static properties:IoVersion = {
 		main:{},
 		version:_BUILD_OFFICIAL_ + _BUILD_LAST_,
 		version_details:{
@@ -84,7 +88,7 @@ export default class Core extends legacy_core {
 
     /**  @type {number} */
 
-	get version():number {
+	get version():String {
 		return this.get('version');
 	}
 
@@ -106,8 +110,9 @@ export default class Core extends legacy_core {
 	set main(newmain:Object):Object {
 
 		let state:Object = this.get('main');
-		//console.log(newmain,this);
+
 		let newstate:Object = newmain;
+
 		state.name = newstate.name;
 		state.init = newstate.init;
 		state.update = newstate.update;

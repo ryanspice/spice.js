@@ -16,6 +16,16 @@ interface ILegacyCore {
 
 }
 
+class bammarjara {
+
+	constructor(){
+		(this:ILegacyCore)
+
+	}
+
+}
+
+
 export default class legacy_core<ILegacyCore> extends _IFace {
 
 
