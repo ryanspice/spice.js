@@ -1178,31 +1178,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //console.time('Types2');
 
 var _NodeCallback_ = function () {
-    function _NodeCallback_(input) {
-        return typeof input === 'function';
-    }
+	function _NodeCallback_(input) {
+		return typeof input === 'function';
+	}
 
-    ;
-    Object.defineProperty(_NodeCallback_, Symbol.hasInstance, {
-        value: function value(input) {
-            return _NodeCallback_(input);
-        }
-    });
-    return _NodeCallback_;
+	;
+	Object.defineProperty(_NodeCallback_, Symbol.hasInstance, {
+		value: function value(input) {
+			return _NodeCallback_(input);
+		}
+	});
+	return _NodeCallback_;
 }();
 
 var object = function () {
-    function object(input) {
-        return input instanceof Object;
-    }
+	function object(input) {
+		return input instanceof Object;
+	}
 
-    ;
-    Object.defineProperty(object, Symbol.hasInstance, {
-        value: function value(input) {
-            return object(input);
-        }
-    });
-    return object;
+	;
+	Object.defineProperty(object, Symbol.hasInstance, {
+		value: function value(input) {
+			return object(input);
+		}
+	});
+	return object;
 }();
 
 //export type string = string;
@@ -1212,17 +1212,17 @@ var object = function () {
  */
 
 var IPace = function () {
-    function IPace(input) {
-        return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.timer === 'number' && typeof input.targetfps === 'number' && typeof input.Step === 'function' && typeof input.Time === 'function' && typeof input.GetStepsPerSecond === 'function';
-    }
+	function IPace(input) {
+		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.timer === 'number' && typeof input.targetfps === 'number' && typeof input.Step === 'function' && typeof input.Time === 'function' && typeof input.GetStepsPerSecond === 'function';
+	}
 
-    ;
-    Object.defineProperty(IPace, Symbol.hasInstance, {
-        value: function value(input) {
-            return IPace(input);
-        }
-    });
-    return IPace;
+	;
+	Object.defineProperty(IPace, Symbol.hasInstance, {
+		value: function value(input) {
+			return IPace(input);
+		}
+	});
+	return IPace;
 }();
 
 /**
@@ -1230,184 +1230,184 @@ var IPace = function () {
  */
 
 var IStep = function () {
-    function IStep(input) {
-        return input != null && input.delta_speed instanceof Number && input.increment instanceof Number && input.addings instanceof Number && input.adding instanceof Number && input.delta instanceof Number && input.frames instanceof Number && input.fps instanceof Number;
-    }
+	function IStep(input) {
+		return input != null && input.app instanceof Object && typeof input.delta === 'number' && typeof input.frames === 'number' && typeof input.pending === 'number' && typeof input.padding === 'number' && typeof input.increment === 'number' && typeof input.delta_speed === 'number' && typeof input.fps === 'number' && typeof input.ceil === 'function' && typeof input.focus === 'function' && typeof input.clean === 'function' && typeof input.tick === 'function' && typeof input.second === 'function' && typeof input.first === 'function';
+	}
 
-    ;
-    Object.defineProperty(IStep, Symbol.hasInstance, {
-        value: function value(input) {
-            return IStep(input);
-        }
-    });
-    return IStep;
+	;
+	Object.defineProperty(IStep, Symbol.hasInstance, {
+		value: function value(input) {
+			return IStep(input);
+		}
+	});
+	return IStep;
 }();
 
 var TClient = function () {
-    function TClient(input) {
-        return input != null && typeof input.discription === 'string' && vector(input.projectSize) && object(input.app) && object(input.Math) && object(input.particles) && object(input.visuals) && object(input.graphics) && object(input.ext) && object(input.room) && object(input.audio) && object(input.mainLoop) && object(input.second) && object(input.loader) && object(input.update) && object(input.renderer) && object(input.data);
-    }
+	function TClient(input) {
+		return input != null && typeof input.discription === 'string' && vector(input.projectSize) && object(input.app) && object(input.Math) && object(input.particles) && object(input.visuals) && object(input.graphics) && object(input.ext) && object(input.room) && object(input.audio) && object(input.mainLoop) && object(input.second) && object(input.loader) && object(input.update) && object(input.renderer) && object(input.data);
+	}
 
-    ;
-    Object.defineProperty(TClient, Symbol.hasInstance, {
-        value: function value(input) {
-            return TClient(input);
-        }
-    });
-    return TClient;
+	;
+	Object.defineProperty(TClient, Symbol.hasInstance, {
+		value: function value(input) {
+			return TClient(input);
+		}
+	});
+	return TClient;
 }();
 
 var vector = function () {
-    function vector(input) {
-        return input != null && input.x === 0 && input.y === 0;
-    }
+	function vector(input) {
+		return input != null && input.x === 0 && input.y === 0;
+	}
 
-    ;
-    Object.defineProperty(vector, Symbol.hasInstance, {
-        value: function value(input) {
-            return vector(input);
-        }
-    });
-    return vector;
+	;
+	Object.defineProperty(vector, Symbol.hasInstance, {
+		value: function value(input) {
+			return vector(input);
+		}
+	});
+	return vector;
 }();
 
 var app = function () {
-    function app(input) {
-        return input != null && input.app instanceof APP && input.visuals instanceof VISUALS && input.graphics instanceof GRAPHICS;
-    }
+	function app(input) {
+		return input != null && input.app instanceof APP && input.visuals instanceof VISUALS && input.graphics instanceof GRAPHICS;
+	}
 
-    ;
-    Object.defineProperty(app, Symbol.hasInstance, {
-        value: function value(input) {
-            return app(input);
-        }
-    });
-    return app;
+	;
+	Object.defineProperty(app, Symbol.hasInstance, {
+		value: function value(input) {
+			return app(input);
+		}
+	});
+	return app;
 }();
 
 var _weakmap = function () {
-    function _weakmap(input) {
-        return input instanceof WeakMap;
-    }
+	function _weakmap(input) {
+		return input instanceof WeakMap;
+	}
 
-    ;
-    Object.defineProperty(_weakmap, Symbol.hasInstance, {
-        value: function value(input) {
-            return _weakmap(input);
-        }
-    });
-    return _weakmap;
+	;
+	Object.defineProperty(_weakmap, Symbol.hasInstance, {
+		value: function value(input) {
+			return _weakmap(input);
+		}
+	});
+	return _weakmap;
 }();
 
 var weakmap = function () {
-    function weakmap(input) {
-        return input instanceof WeakMap;
-    }
+	function weakmap(input) {
+		return input instanceof WeakMap;
+	}
 
-    ;
-    Object.defineProperty(weakmap, Symbol.hasInstance, {
-        value: function value(input) {
-            return weakmap(input);
-        }
-    });
-    return weakmap;
+	;
+	Object.defineProperty(weakmap, Symbol.hasInstance, {
+		value: function value(input) {
+			return weakmap(input);
+		}
+	});
+	return weakmap;
 }();
 
 //var weakmap:weakmap;
 
 //export type number = number;
 var method = function () {
-    function method(input) {
-        return typeof input === 'function';
-    }
+	function method(input) {
+		return typeof input === 'function';
+	}
 
-    ;
-    Object.defineProperty(method, Symbol.hasInstance, {
-        value: function value(input) {
-            return method(input);
-        }
-    });
-    return method;
+	;
+	Object.defineProperty(method, Symbol.hasInstance, {
+		value: function value(input) {
+			return method(input);
+		}
+	});
+	return method;
 }();
 
 var _metatag = document.createElement('meta');
 
 var metatag = function () {
-    function metatag(input) {
-        return input instanceof _metatag;
-    }
+	function metatag(input) {
+		return input instanceof _metatag;
+	}
 
-    ;
-    Object.defineProperty(metatag, Symbol.hasInstance, {
-        value: function value(input) {
-            return metatag(input);
-        }
-    });
-    return metatag;
+	;
+	Object.defineProperty(metatag, Symbol.hasInstance, {
+		value: function value(input) {
+			return metatag(input);
+		}
+	});
+	return metatag;
 }();
 
 var element = function () {
-    function element(input) {
-        return object(input);
-    }
+	function element(input) {
+		return object(input);
+	}
 
-    ;
-    Object.defineProperty(element, Symbol.hasInstance, {
-        value: function value(input) {
-            return element(input);
-        }
-    });
-    return element;
+	;
+	Object.defineProperty(element, Symbol.hasInstance, {
+		value: function value(input) {
+			return element(input);
+		}
+	});
+	return element;
 }();
 
 var array = function () {
-    function array(input) {
-        return Array.isArray(input);
-    }
+	function array(input) {
+		return Array.isArray(input);
+	}
 
-    ;
-    Object.defineProperty(array, Symbol.hasInstance, {
-        value: function value(input) {
-            return array(input);
-        }
-    });
-    return array;
+	;
+	Object.defineProperty(array, Symbol.hasInstance, {
+		value: function value(input) {
+			return array(input);
+		}
+	});
+	return array;
 }();
 var array_string = function () {
-    function array_string(input) {
-        return Array.isArray(input) && input.every(function (item) {
-            return typeof item === 'string';
-        });
-    }
+	function array_string(input) {
+		return Array.isArray(input) && input.every(function (item) {
+			return typeof item === 'string';
+		});
+	}
 
-    ;
-    Object.defineProperty(array_string, Symbol.hasInstance, {
-        value: function value(input) {
-            return array_string(input);
-        }
-    });
-    return array_string;
+	;
+	Object.defineProperty(array_string, Symbol.hasInstance, {
+		value: function value(input) {
+			return array_string(input);
+		}
+	});
+	return array_string;
 }();
 var array_number = function () {
-    function array_number(input) {
-        return Array.isArray(input) && input.every(function (item) {
-            return typeof item === 'number';
-        });
-    }
+	function array_number(input) {
+		return Array.isArray(input) && input.every(function (item) {
+			return typeof item === 'number';
+		});
+	}
 
-    ;
-    Object.defineProperty(array_number, Symbol.hasInstance, {
-        value: function value(input) {
-            return array_number(input);
-        }
-    });
-    return array_number;
+	;
+	Object.defineProperty(array_number, Symbol.hasInstance, {
+		value: function value(input) {
+			return array_number(input);
+		}
+	});
+	return array_number;
 }();
 
 var _object = {};
 
 if (!object(_object)) {
-    throw new TypeError("Value of variable \"_object\" violates contract.\n\nExpected:\nobject\n\nGot:\n" + _inspect(_object));
+	throw new TypeError("Value of variable \"_object\" violates contract.\n\nExpected:\nobject\n\nGot:\n" + _inspect(_object));
 }
 
 var _string = "";
@@ -1421,32 +1421,32 @@ var _vector = { x: 0, y: 0 };
 
 
 if (!vector(_vector)) {
-    throw new TypeError("Value of variable \"_vector\" violates contract.\n\nExpected:\nvector\n\nGot:\n" + _inspect(_vector));
+	throw new TypeError("Value of variable \"_vector\" violates contract.\n\nExpected:\nvector\n\nGot:\n" + _inspect(_vector));
 }
 
 var _number = 0;
 var _method = function _method() {};
 
 if (!method(_method)) {
-    throw new TypeError("Value of variable \"_method\" violates contract.\n\nExpected:\nmethod\n\nGot:\n" + _inspect(_method));
+	throw new TypeError("Value of variable \"_method\" violates contract.\n\nExpected:\nmethod\n\nGot:\n" + _inspect(_method));
 }
 
 var _array = [];
 
 if (!array(_array)) {
-    throw new TypeError("Value of variable \"_array\" violates contract.\n\nExpected:\narray\n\nGot:\n" + _inspect(_array));
+	throw new TypeError("Value of variable \"_array\" violates contract.\n\nExpected:\narray\n\nGot:\n" + _inspect(_array));
 }
 
 var _array_number = [0];
 
 if (!array_number(_array_number)) {
-    throw new TypeError("Value of variable \"_array_number\" violates contract.\n\nExpected:\narray_number\n\nGot:\n" + _inspect(_array_number));
+	throw new TypeError("Value of variable \"_array_number\" violates contract.\n\nExpected:\narray_number\n\nGot:\n" + _inspect(_array_number));
 }
 
 var _array_string = [""];
 
 if (!array_string(_array_string)) {
-    throw new TypeError("Value of variable \"_array_string\" violates contract.\n\nExpected:\narray_string\n\nGot:\n" + _inspect(_array_string));
+	throw new TypeError("Value of variable \"_array_string\" violates contract.\n\nExpected:\narray_string\n\nGot:\n" + _inspect(_array_string));
 }
 
 var types = [['_object', _object], ['_vector', _vector], ['_string', _string],
@@ -1454,51 +1454,51 @@ var types = [['_object', _object], ['_vector', _vector], ['_string', _string],
 ['_number', _number], ['_method', _method], ['_array', _array], ['_array_number', _array_number], ['_array_string', _array_string]];
 
 if (!array(types)) {
-    throw new TypeError("Value of variable \"types\" violates contract.\n\nExpected:\narray\n\nGot:\n" + _inspect(types));
+	throw new TypeError("Value of variable \"types\" violates contract.\n\nExpected:\narray\n\nGot:\n" + _inspect(types));
 }
 
 var _ITypes = function () {
-    function _ITypes(input) {
-        return input != null && array(input.list) && method(input.get);
-    }
+	function _ITypes(input) {
+		return input != null && array(input.list) && method(input.get);
+	}
 
-    ;
-    Object.defineProperty(_ITypes, Symbol.hasInstance, {
-        value: function value(input) {
-            return _ITypes(input);
-        }
-    });
-    return _ITypes;
+	;
+	Object.defineProperty(_ITypes, Symbol.hasInstance, {
+		value: function value(input) {
+			return _ITypes(input);
+		}
+	});
+	return _ITypes;
 }();
 
 ;
 
 var ITypes = function () {
-    function ITypes() {
-        _classCallCheck(this, ITypes);
+	function ITypes() {
+		_classCallCheck(this, ITypes);
 
-        this.get().forEach(function (entry, e) {
+		this.get().forEach(function (entry, e) {
 
-            window[entry[0]] = entry[1];
-        });
-    }
+			window[entry[0]] = entry[1];
+		});
+	}
 
-    _createClass(ITypes, [{
-        key: "get",
-        value: function get() {
-            function _ref2(_id2) {
-                if (!array(_id2)) {
-                    throw new TypeError("Function return value violates contract.\n\nExpected:\narray\n\nGot:\n" + _inspect(_id2));
-                }
+	_createClass(ITypes, [{
+		key: "get",
+		value: function get() {
+			function _ref2(_id2) {
+				if (!array(_id2)) {
+					throw new TypeError("Function return value violates contract.\n\nExpected:\narray\n\nGot:\n" + _inspect(_id2));
+				}
 
-                return _id2;
-            }
+				return _id2;
+			}
 
-            return _ref2(types);
-        }
-    }]);
+			return _ref2(types);
+		}
+	}]);
 
-    return ITypes;
+	return ITypes;
 }();
 
 ;
@@ -1510,76 +1510,76 @@ var ITypes = function () {
 /* harmony default export */ exports["a"] = ITypes;
 
 function _inspect(input, depth) {
-    var maxDepth = 4;
-    var maxKeys = 15;
+	var maxDepth = 4;
+	var maxKeys = 15;
 
-    if (depth === undefined) {
-        depth = 0;
-    }
+	if (depth === undefined) {
+		depth = 0;
+	}
 
-    depth += 1;
+	depth += 1;
 
-    if (input === null) {
-        return 'null';
-    } else if (input === undefined) {
-        return 'void';
-    } else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-        return typeof input === "undefined" ? "undefined" : _typeof(input);
-    } else if (Array.isArray(input)) {
-        if (input.length > 0) {
-            var _ret = function () {
-                if (depth > maxDepth) return {
-                        v: '[...]'
-                    };
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === "undefined" ? "undefined" : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
 
-                var first = _inspect(input[0], depth);
+				var first = _inspect(input[0], depth);
 
-                if (input.every(function (item) {
-                    return _inspect(item, depth) === first;
-                })) {
-                    return {
-                        v: first.trim() + '[]'
-                    };
-                } else {
-                    return {
-                        v: '[' + input.slice(0, maxKeys).map(function (item) {
-                            return _inspect(item, depth);
-                        }).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-                    };
-                }
-            }();
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
+				} else {
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
+				}
+			}();
 
-            if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-        } else {
-            return 'Array';
-        }
-    } else {
-        var keys = Object.keys(input);
+			if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+		} else {
+			return 'Array';
+		}
+	} else {
+		var keys = Object.keys(input);
 
-        if (!keys.length) {
-            if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-                return input.constructor.name;
-            } else {
-                return 'Object';
-            }
-        }
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
 
-        if (depth > maxDepth) return '{...}';
-        var indent = '  '.repeat(depth - 1);
-        var entries = keys.slice(0, maxKeys).map(function (key) {
-            return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-        }).join('\n  ' + indent);
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
 
-        if (keys.length >= maxKeys) {
-            entries += '\n  ' + indent + '...';
-        }
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
 
-        if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-            return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-        } else {
-            return '{\n  ' + indent + entries + '\n' + indent + '}';
-        }
-    }
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
 }
 
 /***/ },
@@ -13873,12 +13873,12 @@ var Step = function (_WeakMapThingy) {
 
 	/** @public */
 
-	function Step() {
+	function Step(map) {
 		var _ret;
 
 		_classCallCheck(this, Step);
 
-		var _this = _possibleConstructorReturn(this, (Step.__proto__ || Object.getPrototypeOf(Step)).call(this, new WeakMap()));
+		var _this = _possibleConstructorReturn(this, (Step.__proto__ || Object.getPrototypeOf(Step)).call(this, map));
 
 		_this.delta = 1;
 		_this.frames = 0;
@@ -13989,13 +13989,32 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
 			}
 
-			if (typeof step == 'undefined' || !step.Step(app)) return false;
+			/*
+   Legacy Code: See if works without first check
+   if ((typeof step == 'undefined')||(!step.Step(app)))
+   	return false;
+   */
+
+			//To Remove
+			try {
+				if (!step.Step(app)) return false;
+			} catch (e) {
+				console.trace("Step: Second: step undefined");
+			};
 
 			this.frames++;
 
-			for (var s = this.padding; s >= 0; --s) {
-				if (app.client.update.state.initalized) this.focus() ? app.client.update.state.update() : null;
-			}this.padding = 0;
+			var s = this.padding;
+
+			for (s; s >= 0; --s) {
+
+				if (app.client.update.state.initalized) {
+
+					this.focus() ? app.client.update.state.update() : null;
+				}
+			}
+
+			this.padding = 0;
 
 			return true;
 		}
@@ -14015,7 +14034,18 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
 			}
 
-			if (typeof step == 'undefined' || !step.Step(app)) return false;
+			/*
+   Legacy Code: See if works without first check
+   if ((typeof step == 'undefined')||(!step.Step(app)))
+             return false;
+   */
+
+			//To Remove
+			try {
+				if (!step.Step(app)) return false;
+			} catch (e) {
+				console.trace("Step: First: step undefined");
+			};
 
 			this.fps = step.delta;
 
@@ -14024,19 +14054,33 @@ var Step = function (_WeakMapThingy) {
 			}
 
 			var n = step.targetfps / this.fps * 100000;
+
 			this.delta = this.ceil(n) / 100000;
+
+			// Limit FPS Catchup
 
 			if (!(typeof this.delta === 'number')) {
 				throw new TypeError('Value of "this.delta" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.delta));
 			}
 
-			if (this.delta > 2.5) this.delta = 2.5;
+			if (this.delta > 2.5) {
 
-			if (this.delta !== this.delta + 1) app.client.delta = this.delta_speed = this.delta;else app.client.delta = this.delta_speed = 1;
+				this.delta = 2.5;
+			}
+
+			if (this.delta !== this.delta + 1) {
+
+				app.client.delta = this.delta_speed = this.delta;
+			} else {
+
+				app.client.delta = this.delta_speed = 1;
+			}
 
 			this.app = app;
 
-			if (this.fps == 0) return false;
+			if (this.fps == 0) {
+				return false;
+			}
 
 			this.increment = -step.targetfps + step.targetfps * (step.targetfps / this.fps);
 

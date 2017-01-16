@@ -38,9 +38,9 @@ export default class Step extends WeakMapThingy {
 
 	};
 
-	constructor() {
+	constructor(map:any) {
 
-		super(new WeakMap());
+		super(map);
 		return (this:IStep);
 	}
 
@@ -113,14 +113,31 @@ export default class Step extends WeakMapThingy {
 
 	second(step:IPace,app:Object):boolean {
 
+		/*
+		Legacy Code: See if works without first check
 		if ((typeof step == 'undefined')||(!step.Step(app)))
 			return false;
+		*/
+
+		//To Remove
+		try{
+			if (!step.Step(app))
+				return false;
+		} catch(e){ console.trace("Step: Second: step undefined"); };
 
 		this.frames++;
 
-		for(var s =this.padding;s>=0;--s)
-			if (app.client.update.state.initalized)
-				(this.focus())?app.client.update.state.update():null;
+		let s = this.padding;
+
+		for(s;s>=0;--s) {
+
+			if (app.client.update.state.initalized) {
+
+					(this.focus())?app.client.update.state.update():null;
+
+			}
+
+		}
 
 		this.padding = 0;
 
@@ -133,34 +150,54 @@ export default class Step extends WeakMapThingy {
 
     first(step:IPace,app:Object):boolean {
 
-        if ((typeof step == 'undefined')||(!step.Step(app)))
+		/*
+		Legacy Code: See if works without first check
+		if ((typeof step == 'undefined')||(!step.Step(app)))
             return false;
+		*/
+
+		//To Remove
+		try{
+			if (!step.Step(app))
+				return false;
+		} catch(e){ console.trace("Step: First: step undefined"); };
 
         this.fps = step.delta;
 
 		let n = (step.targetfps / this.fps)*100000;
+
         this.delta = this.ceil(n)/100000;
 
-        if ((this.delta>2.5))
+		// Limit FPS Catchup
+        if (this.delta>2.5) {
+
             this.delta = 2.5;
 
-        if (this.delta!==this.delta+1)
-            app.client.delta = this.delta_speed = this.delta;
-        else
+		}
+
+        if (this.delta!==this.delta+1) {
+
+			app.client.delta = this.delta_speed = this.delta;
+
+		} else {
+
             app.client.delta = this.delta_speed = 1;
+
+		}
 
         this.app = app;
 
-        if (this.fps==0)
+        if (this.fps==0) {
             return false;
+		}
 
-        this.increment = -step.targetfps+ (step.targetfps*(step.targetfps / this.fps));
+        this.increment = -step.targetfps + (step.targetfps * (step.targetfps / this.fps));
 
         this.pending+=this.increment;
 
-        if (this.pending>step.targetfps) {
+        if (this.pending > step.targetfps) {
 
-			this.pending-=(this.padding/step.targetfps)*step.targetfps;
+			this.pending -= (this.padding / step.targetfps) * step.targetfps;
 
 			this.padding++;
 

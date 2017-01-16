@@ -15,6 +15,7 @@ export type object = Object;
  */
 
 export type IPace = {
+
 	delta: number;
 	offset: number;
 	rate: number;
@@ -23,6 +24,7 @@ export type IPace = {
 	+Step:Function;
 	+Time:Function;
 	+GetStepsPerSecond:Function;
+
 };
 
 /**
@@ -31,16 +33,23 @@ export type IPace = {
 
  export type IStep = {
 
-     delta_speed:Number,
-     increment:Number,
-     addings:Number,
-     adding:Number,
-     delta:Number,
-
-     frames:Number,
-     fps:Number
+	app:Object;
+	delta:number;
+	frames:number;
+	pending:number;
+	padding:number;
+	increment:number;
+	delta_speed:number;
+	fps:number;
+	+ceil:Function;
+	+focus:Function;
+	+clean:Function;
+	+tick:Function;
+	+second:Function;
+	+first:Function;
 
  }
+
 
 export type TClient = {
 	discription:string;
