@@ -1157,30 +1157,30 @@ module.exports = function(bitmap, value){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return IApp; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IExt; });
+/* unused harmony export ICore */
+/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IExt; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return ICookies; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return IUseragent; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return IMetatags; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return ICursor; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return IConnect; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IOptions; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IPace; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IOptions; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IPace; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IRoom; });
-/* unused harmony export ICore */
-/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStatsBuffer; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IRoom; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IStatsBuffer; });
 /* unused harmony export TClient */
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -1248,6 +1248,24 @@ var IApp = function () {
 		}
 	});
 	return IApp;
+}();
+
+/**
+* @interface App
+*/
+
+var ICore = function () {
+	function ICore(input) {
+		return input != null && IOptions(input.options) && IExt(input.ext) && input.visuals instanceof Object && input.input instanceof Object && input.user instanceof dtoFacebook && input.client instanceof Object && input.math instanceof Object && typeof input.time === 'number' && typeof input.scale === 'number' && IApp(input.app) && typeof input.id === 'number';
+	}
+
+	;
+	Object.defineProperty(ICore, Symbol.hasInstance, {
+		value: function value(input) {
+			return ICore(input);
+		}
+	});
+	return ICore;
 }();
 
 /**
@@ -1418,7 +1436,7 @@ var IStep = function () {
 
 var IState = function () {
 	function IState(input) {
-		return input != null && input.app instanceof Object && input.visuals instanceof Object && input.graphics instanceof Object && typeof input.initalized === 'boolean' && typeof input.update === 'function' && typeof input.draw === 'function' && typeof input.name === 'function' && typeof input.init === 'function';
+		return input != null && typeof input.name === 'string' && input.app instanceof Object && input.visuals instanceof Object && input.graphics instanceof Object && typeof input.initalized === 'boolean' && typeof input.update === 'function' && typeof input.draw === 'function' && typeof input.name === 'function' && typeof input.init === 'function';
 	}
 
 	;
@@ -1446,24 +1464,6 @@ var IRoom = function () {
 		}
 	});
 	return IRoom;
-}();
-
-/**
- * @interface Core
- */
-
-var ICore = function () {
-	function ICore(input) {
-		return input != null && input.options instanceof Object && input.ext instanceof Object && input.visuals instanceof Object && input.input instanceof Object && input.user instanceof _user && input.client instanceof Object && input.math instanceof _math && typeof input.time === 'number' && typeof input.scale === 'number' && IApp(input.app);
-	}
-
-	;
-	Object.defineProperty(ICore, Symbol.hasInstance, {
-		value: function value(input) {
-			return ICore(input);
-		}
-	});
-	return ICore;
 }();
 
 /**
@@ -5062,7 +5062,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["g" /* IStatsBuffer */];
+var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["h" /* IStatsBuffer */];
 
 /*
 *
@@ -9371,7 +9371,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["d" /* IPace */];
+var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["f" /* IPace */];
 
 
 
@@ -12719,8 +12719,8 @@ function _inspect(input, depth) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dto_facebook_user__ = __webpack_require__(285);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__math_math__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__legacy_legacy_core__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dto_dtoTypes__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dto_dtoTypes__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_version__ = __webpack_require__(139);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -12740,10 +12740,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-
-var dtoFacebook = __WEBPACK_IMPORTED_MODULE_4__dto_dtoTypes__["a" /* dtoFacebook */];
-
-
 var _BUILD_OFFICIAL_ = '0.8.2';
 
 var _BUILD_RENDERER_ = '0.0.1';
@@ -12755,8 +12751,12 @@ var _BUILD_LAST_ = '08-2016';
 var _BUILD_FIRST_ = '12-2013';
 
 
-var IApp = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes_js__["b" /* IApp */],
-    IOptions = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes_js__["c" /* IOptions */];
+var IApp = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["b" /* IApp */],
+    IExt = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["c" /* IExt */],
+    IOptions = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["d" /* IOptions */],
+    IState = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["e" /* IState */];
+
+var dtoFacebook = __WEBPACK_IMPORTED_MODULE_5__dto_dtoTypes__["a" /* dtoFacebook */];
 
 var IoVersion = __WEBPACK_IMPORTED_MODULE_6__shared_version__["a" /* IoVersion */];
 
@@ -13348,7 +13348,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["b" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["d" /* IPace */];
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
 
 /*
 * Base Pace class for caluclating the Pacing of the Application
@@ -13568,7 +13568,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["b" /* IApp */],
-    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["h" /* IRoom */];
+    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["i" /* IRoom */];
 
 /**
 *
@@ -13715,8 +13715,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["b" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IPace */],
-    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* IStep */];
+    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* IPace */],
+    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["g" /* IStep */];
 
 /** The state class which the main game state inherits
 *	@module */
@@ -14702,10 +14702,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["i" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* array_string */],
-    IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["l" /* IExt */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["l" /* array_string */],
+    IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["b" /* IApp */],
+    IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["c" /* IExt */],
     ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["m" /* ICookies */],
     IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* IUseragent */],
     IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* IMetatags */],
@@ -14744,8 +14745,8 @@ var Ext = function (_SJSClass2) {
 
 		_classCallCheck(this, Ext);
 
-		if (!object(app)) {
-			throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nobject\n\nGot:\n' + _inspect(app));
+		if (!IApp(app)) {
+			throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
 		}
 
 		//Checks for If node?
@@ -30915,7 +30916,7 @@ function _inspect(input, depth) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 
-var IOptions = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["c" /* IOptions */];
+var IOptions = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["d" /* IOptions */];
 
 
 /* harmony default export */ exports["a"] = {

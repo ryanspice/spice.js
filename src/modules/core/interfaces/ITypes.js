@@ -237,6 +237,9 @@ export type IPace = {
  */
 
 export type IState = {
+
+	+name:string;
+
 	app:Object;
 	visuals:Object;
 	graphics:Object;
