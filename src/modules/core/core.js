@@ -8,7 +8,6 @@ import _math from './math/math';
 
 import legacy_core from './legacy/legacy-core';
 
-import type {dtoFacebook} from '../dto/dtoTypes';
 
 const _BUILD_OFFICIAL_ = '0.8.2';
 
@@ -22,8 +21,13 @@ const _BUILD_FIRST_ = '12-2013';
 
 import type {
 	IApp,
+	IExt,
 	IOptions
 	} from "./interfaces/ITypes.js";
+
+import type {
+	dtoFacebook
+	} from '../dto/dtoTypes';
 
 import type {
 	IoVersion
@@ -37,7 +41,7 @@ export default class Core extends legacy_core {
 
     options:IOptions = Options;
 
-    ext:Object;
+    ext:IExt;
 
     visuals:Object;
 

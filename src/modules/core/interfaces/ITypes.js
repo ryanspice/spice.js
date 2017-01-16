@@ -21,6 +21,36 @@ export type object = Object;
  };
 
 /**
+* @interface App
+*/
+
+export type ICore = {
+
+	options:IOptions;
+
+	ext:IExt;
+
+	visuals:Object;
+
+	input:Object;
+
+	user:dtoFacebook;
+
+	client:Object;
+
+	math:Object;
+
+	time:number;
+
+	scale:number;
+
+	app:IApp;
+
+	id:number;
+
+};
+
+/**
 * @interface
 */
 
@@ -225,25 +255,6 @@ export type IState = {
 export type IRoom = {
 	started:boolean;
 	+Started:Function;
-}
-
-/**
- * @interface Core
- */
-
-export type ICore = {
-
-	options:Object;
-    ext:Object;
-    visuals:Object;
-    input:Object;
-    user:_user;
-    client:Object;
-    math:_math;
-    time:number;
-	scale:number;
-	app:IApp;
-
 }
 
 /**

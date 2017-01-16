@@ -7,6 +7,7 @@ import type {
     weakmap,
     object,
     array_string,
+	IApp,
 	IExt,
 	ICookies,
 	IUseragent,
@@ -62,7 +63,7 @@ export default class Ext extends _SJSClass {
 	/*	Constructor
 	/*	*/
 
-    constructor(app:object ){
+    constructor(app:IApp ){
 
 		super(app);
 
