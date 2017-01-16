@@ -1,6 +1,7 @@
 
 console.time('Types');
 
+
 type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
 
 export type object = Object;
@@ -46,12 +47,12 @@ const types:array = [
     ['_array_string',_array_string]
 ];
 
-interface _ITypes {
+interface _types {
     list:array;
     get:method;
 };
 
-class ITypes<T:number> {
+class types<T:number> {
 
     constructor():void {
 
@@ -75,4 +76,4 @@ console.timeEnd('Types');
 
 export {_vector, _weakmap, _number, _string, _method, _object, _array, _array_string, _array_number};
 
-export default ITypes;
+export default types;

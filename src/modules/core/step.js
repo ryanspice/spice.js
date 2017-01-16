@@ -1,18 +1,18 @@
 /* @flow */
 
-import _IFace from '../core/interfaces/IFace';
-/*
+import WeakMapThingy from './thingy';
+
 import type {
-	Pace
-} from "../core/interfaces/ITypes";*/
-import Pace from "../core/pace";
+	IPace,
+	IStep
+} from "../core/interfaces/ITypes";
 
 /** The state class which the main game state inherits
 *	@module */
 
 const FPS = 0;
 
-export default class Step extends _IFace {
+export default class Step extends WeakMapThingy {
 
 	/** @public */
 
@@ -37,6 +37,12 @@ export default class Step extends _IFace {
 		]
 
 	};
+
+	constructor() {
+
+		super(new WeakMap());
+		return (this:IStep);
+	}
 
 	/**
     * @protected
@@ -92,7 +98,7 @@ export default class Step extends _IFace {
 	*	Game Loop, Increment Frames
 	*/
 
-    tick(a:Pace,b:Pace,app:Object):number {
+    tick(a:IPace,b:IPace,app:Object):number {
 
         this.first(a,app);
 
@@ -105,7 +111,7 @@ export default class Step extends _IFace {
 	*
 	*/
 
-	second(step:Pace,app:Object):boolean {
+	second(step:IPace,app:Object):boolean {
 
 		if ((typeof step == 'undefined')||(!step.Step(app)))
 			return false;
@@ -125,7 +131,7 @@ export default class Step extends _IFace {
 	*
 	*/
 
-    first(step:Pace,app:Object):boolean {
+    first(step:IPace,app:Object):boolean {
 
         if ((typeof step == 'undefined')||(!step.Step(app)))
             return false;

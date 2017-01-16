@@ -28,15 +28,15 @@ declare interface IVector {
     y:number;
 }
 
-declare module "_IFace" {
+declare module "WeakMapThingy" {
   declare function exports(args: any): any;
 }
-
+/*
 declare module "IFace" {
   declare function exports(args: any): any;
 }
-
-declare class _IFace {
+*/
+declare class WeakMapThingy {
 
 
 }

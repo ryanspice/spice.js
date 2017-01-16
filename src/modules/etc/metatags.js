@@ -7,7 +7,7 @@ console.time('SJS:B:metatags.js');
 *	@module
 *	@public */
 
-import _IFace from '../core/interfaces/IFace';
+import WeakMapThingy from '../core/thingy';
 
 import type {
     metatag

@@ -1,11 +1,11 @@
 /* @noflow - due to destructuring */
 
-import _IFace from './interfaces/IFace';
+import WeakMapThingy from './thingy';
 
 /** The state class which the main game state inherits
 *	@module */
 
-export default class State extends _IFace {
+export default class State extends WeakMapThingy {
 
 	/** @private */
 

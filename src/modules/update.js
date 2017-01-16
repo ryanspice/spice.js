@@ -6,7 +6,7 @@
 
 import {_SJSClass as SJSClass} from './core/sjs.js';
 
-import Step from './client/step.js';
+import Step from './core/step.js';
 
 import State from './core/state.js';
 

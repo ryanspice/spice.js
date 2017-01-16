@@ -1,7 +1,7 @@
 
 /* @flow */
 
-import ITypes from "./ITypes";
+import ITypes from "./interfaces/ITypes";
 
 const Types:ITypes = new ITypes();
 
@@ -16,9 +16,9 @@ const _IMap = new WeakMap();
 type K = any;
 type V = any;
 
- class _IFace  {
+ class WeakMapThingy  {
 
-    static properties:object = { name:'interface', map:null, version:0 };
+    static properties:object = { name:'sjsclass', map:null, version:0 };
     static map:WeakMap = _IMap;
 
     map:WeakMap = _IMap;
@@ -71,4 +71,4 @@ type V = any;
 };
 
 
-export default _IFace;
+export default WeakMapThingy;

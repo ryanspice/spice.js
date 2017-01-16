@@ -4,12 +4,12 @@ console.time('SJS:B:sjs.js');
 
 import App from '../app.js';
 
-import _IFace from './interfaces/IFace.js';
+import WeakMapThingy from './/thingy.js';
 
 /** SJSClass - Used to create objects which inherit the Application.
 * @module */
 
-export class _SJSClass extends _IFace {
+export class _SJSClass extends WeakMapThingy {
 
     /** This is the constructor for the class
     * @param {Object} app[ - instance of spicejs] */

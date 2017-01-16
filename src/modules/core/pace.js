@@ -1,45 +1,78 @@
 /* @flow */
 
+import type {
+	IPace
+	} from "./interfaces/ITypes.js";
+
+/*
+* Base Pace class for caluclating the Pacing of the Application
+*/
+
 export default class Pace {
 
-	adding:number = 1;
+	delta:number;
 
-	targetfps:number = 60;
+	offset:number;
 
-	timer:number =	0;
+	rate:number;
 
-	rate:number =	0;
+	targetfps:number;
 
-	offset:number =	0;
+	timer:number;
 
-	delta:number = 1;
+	constructor(
+		rate:number,
+		fps:number
+		) {
 
-	Step:Function;
-
-	constructor(rate:any,fps:any){
-		//Debug.log('Pace: Init');
 		this.targetfps = fps;
+
 		this.timer = new Date().getTime();
-		this.rate = rate/1000.0;
-		this.offset = this.timer-1000.0/rate;
+
+		this.rate = rate / 1000.0;
+
+		this.offset = this.timer - 1000.0 / rate;
+
 		this.delta = 0.0;
-		return true;
+
+		//Fake Flow Interfacing
+		return (this:IPace);
 	}
 
+	/*
+	*
+	*/
+
 	Time(app:any):number {
+
 		this.timer = new Date().getTime();
+
 		return this.timer - this.offset;
 	}
 
+	/*
+	*
+	*/
+
 	Step(app:any):boolean {
+
 		this.delta = this.Time(app);
-		var step = this.rate*this.delta;
-		if (step>1.0)
-			this.offset+=Math.floor(step)/this.rate;
+
+		let step = this.rate*this.delta;
+
+		if (step>1.0) {
+			this.offset += Math.floor(step)/this.rate;
+		}
+
 		return (step - 1.0)>0.0?true:false;
 	}
 
-	GetStepsPerSecond()	{
+	/*
+	*
+	*/
+
+	GetStepsPerSecond():number	{
+
 		return 1000.0/this.delta;
 	}
 

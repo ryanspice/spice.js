@@ -10,14 +10,37 @@ export type object = Object;
 
 //export type string = string;
 
+/**
+ * @interface Pace
+ */
 
-export type Pace = {
-  timer: number;
-  rate: number;
-  offset: number;
-  delta: number;
-  targetfps: number;
+export type IPace = {
+	delta: number;
+	offset: number;
+	rate: number;
+	timer: number;
+	targetfps: number;
+	+Step:Function;
+	+Time:Function;
+	+GetStepsPerSecond:Function;
 };
+
+/**
+ * @interface Step
+ */
+
+ export type IStep = {
+
+     delta_speed:Number,
+     increment:Number,
+     addings:Number,
+     adding:Number,
+     delta:Number,
+
+     frames:Number,
+     fps:Number
+
+ }
 
 export type TClient = {
 	discription:string;

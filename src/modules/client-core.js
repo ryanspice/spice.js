@@ -15,6 +15,10 @@ import Room from './core/room.js';
 
 import Pace from './core/pace.js';
 
+import type {
+	IPace
+} from "./core/interfaces/ITypes";
+
 import Renderer from './renderer.js';
 
 import Update from './update.js';
@@ -41,7 +45,7 @@ export default class ClientCore extends _SJSClass {
 
 	renderer:Renderer = Renderer;
 
-	pace:Pace = Pace;
+	pace:IPace = Pace;
 
     /*
 	*	Verify the Input for the Application Width and Height

@@ -1,5 +1,5 @@
 
-import IFace from './core/interfaces/IFace';
+import WeakMapThingy from './core/thingy';
 
 /**
 * Canvas Interface
@@ -12,7 +12,7 @@ import IFace from './core/interfaces/IFace';
 *
 */
 
-export default class Canvas extends IFace {
+export default class Canvas extends WeakMapThingy {
 
     /**
     * Set documents private variables

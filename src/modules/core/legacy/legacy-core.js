@@ -1,6 +1,6 @@
 /* @flow */
 
-import _IFace from '../interfaces/IFace';
+import WeakMapThingy from '../thingy';
 
 interface ILegacyCore {
 
@@ -26,7 +26,7 @@ class bammarjara {
 }
 
 
-export default class legacy_core<ILegacyCore> extends _IFace {
+export default class legacy_core<ILegacyCore> extends WeakMapThingy {
 
 
     constructor(map:WeakMap):void {

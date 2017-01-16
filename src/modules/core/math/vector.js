@@ -1,13 +1,13 @@
 /* @flow */
 
-import _IFace from '../interfaces/IFace';
+import WeakMapThingy from '../thingy';
 
 /** Vector2
 * @module
 * @access public
 * @example let vector = new Math.Vector2(1,1); */
 
-export class Vector2 extends _IFace<IVector> {
+export class Vector2 extends WeakMapThingy<IVector> {
 
     static properties:object = { name:'Vector2',x:0, y:0 };
 
@@ -25,7 +25,7 @@ export class Vector2 extends _IFace<IVector> {
 * let vector = new Vector(1,1);
 */
 
-export default class Vector extends _IFace<_Inf> {
+export default class Vector extends WeakMapThingy<_Inf> {
 
     position:vector;
 

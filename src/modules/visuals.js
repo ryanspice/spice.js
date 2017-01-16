@@ -7,7 +7,7 @@ import StatsBuffer from './core/stats';
 
 import API from './core/api'
 
-//import IFace from './core/interfaces/IFace';
+//import WeakMapThingy from './core/thingy';
 
 /*
 class _Pipe {

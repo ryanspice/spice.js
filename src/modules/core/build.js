@@ -4,7 +4,7 @@
 *	@module
 *	@private */
 
-import IFace from './interfaces/IFace';
+import WeakMapThingy from './thingy';
 
 /* utils - universal helper functions */
 
@@ -23,7 +23,13 @@ const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Wind
 
 const Console:Object = console;
 
-export default class Build extends IFace {
+export default class Build extends WeakMapThingy {
+
+	/**
+	 * 	Common Functions
+	 * 	@private
+	 */
+
 	static properties = {
 
 		temp:{},
