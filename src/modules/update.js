@@ -6,9 +6,9 @@
 
 import {_SJSClass as SJSClass} from './core/sjs.js';
 
-import Step from './core/step.js';
+import Step from './core/step';
 
-import State from './core/state.js';
+import State from './state';
 
 import Vector from './core/math/vector';
 
@@ -16,7 +16,7 @@ import Vector from './core/math/vector';
 * @public
 */
 
-export default class Update extends SJSClass   {
+export default class Update extends SJSClass {
 
 	/**
     * @public

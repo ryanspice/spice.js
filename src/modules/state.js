@@ -1,6 +1,10 @@
-/* @noflow - due to destructuring */
+/* @noflow - no flow due to destructuring */
 
-import WeakMapThingy from './thingy';
+import WeakMapThingy from './core/thingy';
+
+import type {
+	IState
+} from "./core/interfaces/ITypes";
 
 /** The state class which the main game state inherits
 *	@module */
@@ -35,7 +39,7 @@ export default class State extends WeakMapThingy {
 	* @param [Object] obj - Pass an object with update, draw, init.
 	* @method */
 
-	constructor(obj:Object|WeakMap|void, app:Object|void) {
+	constructor(obj:any, app:Object|void) {
 
 		super(new WeakMap());
 
@@ -52,6 +56,8 @@ export default class State extends WeakMapThingy {
 			[this.update,this.draw,this.init,this.name,this.html] = [obj.update,obj.draw,obj.init,obj.name,obj.html];
 
 		}
+
+		return (this:IState);
 
 	}
 

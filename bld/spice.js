@@ -1144,18 +1144,20 @@ module.exports = function(bitmap, value){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IApp; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return IPace; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IState; });
 /* unused harmony export TClient */
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return weakmap; });
 /* unused harmony export method */
-/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return metatag; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return metatag; });
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -1211,6 +1213,24 @@ var object = function () {
  * @interface Pace
  */
 
+var IApp = function () {
+	function IApp(input) {
+		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object;
+	}
+
+	;
+	Object.defineProperty(IApp, Symbol.hasInstance, {
+		value: function value(input) {
+			return IApp(input);
+		}
+	});
+	return IApp;
+}();
+
+/**
+ * @interface Pace
+ */
+
 var IPace = function () {
 	function IPace(input) {
 		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.timer === 'number' && typeof input.targetfps === 'number' && typeof input.Step === 'function' && typeof input.Time === 'function' && typeof input.GetStepsPerSecond === 'function';
@@ -1241,6 +1261,24 @@ var IStep = function () {
 		}
 	});
 	return IStep;
+}();
+
+/**
+ * @interface Step
+ */
+
+var IState = function () {
+	function IState(input) {
+		return input != null && input.app instanceof Object && input.visuals instanceof Object && input.graphics instanceof Object && typeof input.initalized === 'boolean' && typeof input.update === 'function' && typeof input.draw === 'function' && typeof input.name === 'function' && typeof input.init === 'function';
+	}
+
+	;
+	Object.defineProperty(IState, Symbol.hasInstance, {
+		value: function value(input) {
+			return IState(input);
+		}
+	});
+	return IState;
 }();
 
 var TClient = function () {
@@ -2454,207 +2492,7 @@ module.exports = g;
 
 
 /***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__thingy__ = __webpack_require__(22);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/* @noflow - due to destructuring */
-
-
-
-/** The state class which the main game state inherits
-*	@module */
-
-var State = function (_WeakMapThingy) {
-	_inherits(State, _WeakMapThingy);
-
-	/** Construct and assign privates
- * @param [Object] obj - Pass an object with update, draw, init.
- * @method */
-
-	/** @private */
-
-	function State(obj, app) {
-		_classCallCheck(this, State);
-
-		if (!(obj instanceof Object || obj instanceof WeakMap || obj == null)) {
-			throw new TypeError('Value of argument "obj" violates contract.\n\nExpected:\nObject | WeakMap | void\n\nGot:\n' + _inspect(obj));
-		}
-
-		if (!(app instanceof Object || app == null)) {
-			throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject | void\n\nGot:\n' + _inspect(app));
-		}
-
-		var _this = _possibleConstructorReturn(this, (State.__proto__ || Object.getPrototypeOf(State)).call(this, new WeakMap()));
-
-		_this.initalized = false;
-
-
-		if ((typeof app === 'undefined' ? 'undefined' : _typeof(app)) == 'object') {
-
-			_this.app = app;
-			_this.visuals = _this.app.client.visuals;
-
-			if (!(_this.visuals instanceof Object)) {
-				throw new TypeError('Value of "this.visuals" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_this.visuals));
-			}
-
-			_this.graphics = _this.app.client.graphics;
-
-			if (!(_this.graphics instanceof Object)) {
-				throw new TypeError('Value of "this.graphics" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_this.graphics));
-			}
-		}
-
-		if (typeof obj != 'undefined') {
-			var _ref5 = [obj.update, obj.draw, obj.init, obj.name, obj.html];
-			_this.update = _ref5[0];
-			_this.draw = _ref5[1];
-			_this.init = _ref5[2];
-			_this.name = _ref5[3];
-			_this.html = _ref5[4];
-		}
-
-		return _this;
-	}
-
-	/** This method is overridden to draw the state.
- * @method
- * @override	*/
-
-	/** @public */
-
-	_createClass(State, [{
-		key: 'update',
-		value: function update() {}
-
-		/** This method is overridden to draw the state.
-  * @method
-  * @override	*/
-
-	}, {
-		key: 'draw',
-		value: function draw() {}
-
-		/** Method is overridden to name the state.
-  * @method
-  * @override	*/
-
-	}, {
-		key: 'name',
-		value: function name() {}
-
-		/** This method is overridden to initialize the state.
-  * @method
-  * @override	*/
-
-	}, {
-		key: 'init',
-		value: function init() {}
-	}]);
-
-	return State;
-}(__WEBPACK_IMPORTED_MODULE_0__thingy__["a" /* default */]);
-
-State.properties = {
-
-	render: function render() {},
-
-	update: function update() {},
-
-	draw: function draw() {},
-
-	init: function init() {}
-
-};
-/* harmony default export */ exports["a"] = State;
-;
-
-function _inspect(input, depth) {
-	var maxDepth = 4;
-	var maxKeys = 15;
-
-	if (depth === undefined) {
-		depth = 0;
-	}
-
-	depth += 1;
-
-	if (input === null) {
-		return 'null';
-	} else if (input === undefined) {
-		return 'void';
-	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-		return typeof input === 'undefined' ? 'undefined' : _typeof(input);
-	} else if (Array.isArray(input)) {
-		if (input.length > 0) {
-			var _ret = function () {
-				if (depth > maxDepth) return {
-						v: '[...]'
-					};
-
-				var first = _inspect(input[0], depth);
-
-				if (input.every(function (item) {
-					return _inspect(item, depth) === first;
-				})) {
-					return {
-						v: first.trim() + '[]'
-					};
-				} else {
-					return {
-						v: '[' + input.slice(0, maxKeys).map(function (item) {
-							return _inspect(item, depth);
-						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-					};
-				}
-			}();
-
-			if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-		} else {
-			return 'Array';
-		}
-	} else {
-		var keys = Object.keys(input);
-
-		if (!keys.length) {
-			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-				return input.constructor.name;
-			} else {
-				return 'Object';
-			}
-		}
-
-		if (depth > maxDepth) return '{...}';
-		var indent = '  '.repeat(depth - 1);
-		var entries = keys.slice(0, maxKeys).map(function (key) {
-			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-		}).join('\n  ' + indent);
-
-		if (keys.length >= maxKeys) {
-			entries += '\n  ' + indent + '...';
-		}
-
-		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-		} else {
-			return '{\n  ' + indent + entries + '\n' + indent + '}';
-		}
-	}
-}
-
-/***/ },
+/* 46 */,
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -3884,7 +3722,7 @@ module.exports = {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_core__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_state_js__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__state__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__canvas__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__client__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__input_input__ = __webpack_require__(124);
@@ -3923,341 +3761,341 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 * @protected */
 
 var App = function (_Core) {
-   _inherits(App, _Core);
+  _inherits(App, _Core);
 
-   function App() {
-      var _ref7;
+  function App() {
+    var _ref7;
 
-      var _temp, _this, _ret;
+    var _temp, _this, _ret;
 
-      _classCallCheck(this, App);
+    _classCallCheck(this, App);
 
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-         args[_key] = arguments[_key];
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref7 = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref7, [this].concat(args))), _this), _this.canvas = __WEBPACK_IMPORTED_MODULE_2__canvas__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(App, [{
+    key: 'loop',
+
+
+    /** The main loop for the application, use arrow functions, if arrows exist
+    * @method
+    * @private */
+
+    value: function loop(self) {
+      var _this2 = this;
+
+      if (!(self instanceof App)) {
+        throw new TypeError('Value of argument "self" violates contract.\n\nExpected:\nApp\n\nGot:\n' + _inspect(self));
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref7 = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref7, [this].concat(args))), _this), _this.canvas = __WEBPACK_IMPORTED_MODULE_2__canvas__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
-   }
+      //Use arrow function if available
 
-   _createClass(App, [{
-      key: 'loop',
+      var usearrow = true;
+      if (usearrow) {
 
+        setTimeout(function () {
 
-      /** The main loop for the application, use arrow functions, if arrows exist
-      * @method
-      * @private */
+          function AppLoop() {
+            self.client.loop();
+            self.client.loopData();
+          }
 
-      value: function loop(self) {
-         var _this2 = this;
+          function AppLoopData() {
 
-         if (!(self instanceof App)) {
-            throw new TypeError('Value of argument "self" violates contract.\n\nExpected:\nApp\n\nGot:\n' + _inspect(self));
-         }
+            ///For loops that dont need to be run at 60fps
 
-         //Use arrow function if available
+          }
 
-         var usearrow = true;
-         if (usearrow) {
+          _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
+        }, this.time);
+      } else {
 
-            setTimeout(function () {
+        setTimeout(function () {
 
-               function AppLoop() {
-                  self.client.loop();
-                  self.client.loopData();
-               }
+          function AppLoop() {
+            self.client.loop();
+            self.client.loopData();
+          }
 
-               function AppLoopData() {
+          function AppLoopData() {
 
-                  ///For loops that dont need to be run at 60fps
+            ///For loops that dont need to be run at 60fps
 
-               }
+          }
 
-               _this2.client.initalize(AppLoop, AppLoopData, _this2.scale);
-            }, this.time);
-         } else {
+          self.client.initalize(AppLoop, AppLoopData, self.scale);
+        }, this.time);
+      }
+    }
 
-            setTimeout(function () {
+    /** This function starts the application.
+    * @method
+    * @override */
 
-               function AppLoop() {
-                  self.client.loop();
-                  self.client.loopData();
-               }
+  }, {
+    key: 'start',
+    value: function start() {
+      var w = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var h = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-               function AppLoopData() {
-
-                  ///For loops that dont need to be run at 60fps
-
-               }
-
-               self.client.initalize(AppLoop, AppLoopData, self.scale);
-            }, this.time);
-         }
+      if (!(typeof w === 'number' || w == null)) {
+        throw new TypeError('Value of argument "w" violates contract.\n\nExpected:\nnumber | null\n\nGot:\n' + _inspect(w));
       }
 
-      /** This function starts the application.
-      * @method
-      * @override */
-
-   }, {
-      key: 'start',
-      value: function start() {
-         var w = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-         var h = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
-         if (!(typeof w === 'number' || w == null)) {
-            throw new TypeError('Value of argument "w" violates contract.\n\nExpected:\nnumber | null\n\nGot:\n' + _inspect(w));
-         }
-
-         if (!(typeof h === 'number' || h == null)) {
-            throw new TypeError('Value of argument "h" violates contract.\n\nExpected:\nnumber | null\n\nGot:\n' + _inspect(h));
-         }
-
-         var clientProposedWidth = w || this.app.options.width;
-
-         var clientProposedHeight = h || this.app.options.height;
-
-         this.main = Object.create(this.main);
-
-         this.canvas = new this.canvas(this);
-
-         if (!(this.canvas instanceof __WEBPACK_IMPORTED_MODULE_2__canvas__["a" /* default */])) {
-            throw new TypeError('Value of "this.canvas" violates contract.\n\nExpected:\nCanvas\n\nGot:\n' + _inspect(this.canvas));
-         }
-
-         this.client = new __WEBPACK_IMPORTED_MODULE_3__client__["a" /* default */](this, clientProposedWidth, clientProposedHeight);
-
-         this.client.update.inital(this);
-
-         this.input = new __WEBPACK_IMPORTED_MODULE_4__input_input__["a" /* default */](this);
-
-         this.loop(this);
+      if (!(typeof h === 'number' || h == null)) {
+        throw new TypeError('Value of argument "h" violates contract.\n\nExpected:\nnumber | null\n\nGot:\n' + _inspect(h));
       }
 
-      /** Triggers when the application first loops.
-      * @method
-         * @param {Object} [self] - Reference to the app.
-      * @override	*/
+      var clientProposedWidth = w || this.app.options.width;
 
-   }, {
-      key: 'OnLoad',
-      value: function OnLoad(self) {
-         if (!(self instanceof Object)) {
-            throw new TypeError('Value of argument "self" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(self));
-         }
+      var clientProposedHeight = h || this.app.options.height;
 
-         self.start();
+      this.main = Object.create(this.main);
+
+      this.canvas = new this.canvas(this);
+
+      if (!(this.canvas instanceof __WEBPACK_IMPORTED_MODULE_2__canvas__["a" /* default */])) {
+        throw new TypeError('Value of "this.canvas" violates contract.\n\nExpected:\nCanvas\n\nGot:\n' + _inspect(this.canvas));
       }
 
-      /** Triggers on dom content load.
-      * @method
-         * @param {Event} [evt] - The passing event.
-      * @override	*/
+      this.client = new __WEBPACK_IMPORTED_MODULE_3__client__["a" /* default */](this, clientProposedWidth, clientProposedHeight);
 
-   }, {
-      key: 'OnApplicationLoad',
-      value: function OnApplicationLoad(evt) {
+      this.client.update.inital(this);
 
-         evt.target.app.OnLoad(evt.target.app);
+      this.input = new __WEBPACK_IMPORTED_MODULE_4__input_input__["a" /* default */](this);
+
+      this.loop(this);
+    }
+
+    /** Triggers when the application first loops.
+    * @method
+       * @param {Object} [self] - Reference to the app.
+    * @override	*/
+
+  }, {
+    key: 'OnLoad',
+    value: function OnLoad(self) {
+      if (!(self instanceof Object)) {
+        throw new TypeError('Value of argument "self" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(self));
       }
 
-      /** Event listener polyfill.
-      * @method
-         * @param {Element} [obj] - Element to trigger event on, fallback on window.
-         * @param {Event} [evt] - The passing event.
-         * @param {String} [listener] - The listener to build.
-         * @param {Object} [param] - Paramater to pass.
-      * @example
-      * Application.Listener(window,'click',function(){////console.log('eh');},'');
-      * Application.Click(new Event,window);	*/
+      self.start();
+    }
 
-   }, {
-      key: 'Listener',
-      value: function Listener(obj, evt, listener, param) {
-         if (!(obj instanceof Object)) {
-            throw new TypeError('Value of argument "obj" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(obj));
-         }
+    /** Triggers on dom content load.
+    * @method
+       * @param {Event} [evt] - The passing event.
+    * @override	*/
 
-         if (_typeof(obj[0]) === "object") {
-            obj = obj[0] || window;
-         }
+  }, {
+    key: 'OnApplicationLoad',
+    value: function OnApplicationLoad(evt) {
 
-         if (obj.addEventListener) {
-            obj.addEventListener(evt, listener, false);
-         } else {
-            obj.attachEvent("on" + evt, listener);
-         }
+      evt.target.app.OnLoad(evt.target.app);
+    }
 
-         obj.app = window.apps[this.id] = this;
+    /** Event listener polyfill.
+    * @method
+       * @param {Element} [obj] - Element to trigger event on, fallback on window.
+       * @param {Event} [evt] - The passing event.
+       * @param {String} [listener] - The listener to build.
+       * @param {Object} [param] - Paramater to pass.
+    * @example
+    * Application.Listener(window,'click',function(){////console.log('eh');},'');
+    * Application.Click(new Event,window);	*/
+
+  }, {
+    key: 'Listener',
+    value: function Listener(obj, evt, listener, param) {
+      if (!(obj instanceof Object)) {
+        throw new TypeError('Value of argument "obj" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(obj));
       }
 
-      /** Object constructor/factory polyfill. MAY be unnecessary.
-      * @method
-         * @param {Object} [prototype] - An object prototype.
-         * @param {Object} [constructor] - An object constructor. */
-
-   }, {
-      key: 'Construct',
-      value: function Construct(prototype, constructor) {
-         if (!(prototype instanceof Object)) {
-            throw new TypeError('Value of argument "prototype" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(prototype));
-         }
-
-         if (!(typeof constructor === 'function')) {
-            throw new TypeError('Value of argument "constructor" violates contract.\n\nExpected:\nFunction\n\nGot:\n' + _inspect(constructor));
-         }
-
-         var isObj = false;
-         var obj = prototype;
-         var proto = prototype;
-         var construct = constructor;
-         var ret = {};
-         var type = void 0;
-
-         /* if prototype contains a prototype and constructor. */
-
-         if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
-            construct = obj.constructor;
-
-            if (!(typeof construct === 'function')) {
-               throw new TypeError('Value of variable "construct" violates contract.\n\nExpected:\nFunction\n\nGot:\n' + _inspect(construct));
-            }
-
-            proto = obj.prototype;
-
-            if (!(proto instanceof Object)) {
-               throw new TypeError('Value of variable "proto" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(proto));
-            }
-
-            isObj = true;
-         }
-
-         /* Grab type of constructor */
-
-         type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
-
-         /* Return & Create object based on constructor */
-         switch (type) {
-
-            /* Use only the prototype */
-            case 'undefined':
-               ret = Object.create(proto);
-
-               if (!(ret instanceof Object)) {
-                  throw new TypeError('Value of variable "ret" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(ret));
-               }
-
-               break;
-
-            /* Use constructor as object */
-            case 'object':
-               ret = Object.create(proto, construct);
-
-               if (!(ret instanceof Object)) {
-                  throw new TypeError('Value of variable "ret" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(ret));
-               }
-
-               break;
-
-            /* Use constructor as function */
-            case 'function':
-               ret = Object.create(proto, construct(this));
-
-               if (!(ret instanceof Object)) {
-                  throw new TypeError('Value of variable "ret" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(ret));
-               }
-
-               break;
-
-            /* Expected a type */
-            default:
-               console.warn("Expected 'object' or 'function': Type is " + type);
-
-         }
-
-         if (isObj) prototype = ret;
-
-         //console.warn(ret,typeof ret);
-
-         return ret;
+      if (_typeof(obj[0]) === "object") {
+        obj = obj[0] || window;
       }
-   }]);
 
-   return App;
+      if (obj.addEventListener) {
+        obj.addEventListener(evt, listener, false);
+      } else {
+        obj.attachEvent("on" + evt, listener);
+      }
+
+      obj.app = window.apps[this.id] = this;
+    }
+
+    /** Object constructor/factory polyfill. MAY be unnecessary.
+    * @method
+       * @param {Object} [prototype] - An object prototype.
+       * @param {Object} [constructor] - An object constructor. */
+
+  }, {
+    key: 'Construct',
+    value: function Construct(prototype, constructor) {
+      if (!(prototype instanceof Object)) {
+        throw new TypeError('Value of argument "prototype" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(prototype));
+      }
+
+      if (!(typeof constructor === 'function')) {
+        throw new TypeError('Value of argument "constructor" violates contract.\n\nExpected:\nFunction\n\nGot:\n' + _inspect(constructor));
+      }
+
+      var isObj = false;
+      var obj = prototype;
+      var proto = prototype;
+      var construct = constructor;
+      var ret = {};
+      var type = void 0;
+
+      /* if prototype contains a prototype and constructor. */
+
+      if (typeof obj.prototype !== 'undefined') if (typeof obj.constructor !== 'undefined') {
+        construct = obj.constructor;
+
+        if (!(typeof construct === 'function')) {
+          throw new TypeError('Value of variable "construct" violates contract.\n\nExpected:\nFunction\n\nGot:\n' + _inspect(construct));
+        }
+
+        proto = obj.prototype;
+
+        if (!(proto instanceof Object)) {
+          throw new TypeError('Value of variable "proto" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(proto));
+        }
+
+        isObj = true;
+      }
+
+      /* Grab type of constructor */
+
+      type = typeof construct === 'undefined' ? 'undefined' : _typeof(construct);
+
+      /* Return & Create object based on constructor */
+      switch (type) {
+
+        /* Use only the prototype */
+        case 'undefined':
+          ret = Object.create(proto);
+
+          if (!(ret instanceof Object)) {
+            throw new TypeError('Value of variable "ret" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(ret));
+          }
+
+          break;
+
+        /* Use constructor as object */
+        case 'object':
+          ret = Object.create(proto, construct);
+
+          if (!(ret instanceof Object)) {
+            throw new TypeError('Value of variable "ret" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(ret));
+          }
+
+          break;
+
+        /* Use constructor as function */
+        case 'function':
+          ret = Object.create(proto, construct(this));
+
+          if (!(ret instanceof Object)) {
+            throw new TypeError('Value of variable "ret" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(ret));
+          }
+
+          break;
+
+        /* Expected a type */
+        default:
+          console.warn("Expected 'object' or 'function': Type is " + type);
+
+      }
+
+      if (isObj) prototype = ret;
+
+      //console.warn(ret,typeof ret);
+
+      return ret;
+    }
+  }]);
+
+  return App;
 }(__WEBPACK_IMPORTED_MODULE_0__core_core__["a" /* default */]);
 
 /* harmony default export */ exports["a"] = App;
 
 function _inspect(input, depth) {
-   var maxDepth = 4;
-   var maxKeys = 15;
+  var maxDepth = 4;
+  var maxKeys = 15;
 
-   if (depth === undefined) {
-      depth = 0;
-   }
+  if (depth === undefined) {
+    depth = 0;
+  }
 
-   depth += 1;
+  depth += 1;
 
-   if (input === null) {
-      return 'null';
-   } else if (input === undefined) {
-      return 'void';
-   } else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-      return typeof input === 'undefined' ? 'undefined' : _typeof(input);
-   } else if (Array.isArray(input)) {
-      if (input.length > 0) {
-         var _ret2 = function () {
-            if (depth > maxDepth) return {
-                  v: '[...]'
-               };
+  if (input === null) {
+    return 'null';
+  } else if (input === undefined) {
+    return 'void';
+  } else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+    return typeof input === 'undefined' ? 'undefined' : _typeof(input);
+  } else if (Array.isArray(input)) {
+    if (input.length > 0) {
+      var _ret2 = function () {
+        if (depth > maxDepth) return {
+            v: '[...]'
+          };
 
-            var first = _inspect(input[0], depth);
+        var first = _inspect(input[0], depth);
 
-            if (input.every(function (item) {
-               return _inspect(item, depth) === first;
-            })) {
-               return {
-                  v: first.trim() + '[]'
-               };
-            } else {
-               return {
-                  v: '[' + input.slice(0, maxKeys).map(function (item) {
-                     return _inspect(item, depth);
-                  }).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-               };
-            }
-         }();
+        if (input.every(function (item) {
+          return _inspect(item, depth) === first;
+        })) {
+          return {
+            v: first.trim() + '[]'
+          };
+        } else {
+          return {
+            v: '[' + input.slice(0, maxKeys).map(function (item) {
+              return _inspect(item, depth);
+            }).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+          };
+        }
+      }();
 
-         if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-      } else {
-         return 'Array';
-      }
-   } else {
-      var keys = Object.keys(input);
+      if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+    } else {
+      return 'Array';
+    }
+  } else {
+    var keys = Object.keys(input);
 
-      if (!keys.length) {
-         if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-            return input.constructor.name;
-         } else {
-            return 'Object';
-         }
-      }
-
-      if (depth > maxDepth) return '{...}';
-      var indent = '  '.repeat(depth - 1);
-      var entries = keys.slice(0, maxKeys).map(function (key) {
-         return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-      }).join('\n  ' + indent);
-
-      if (keys.length >= maxKeys) {
-         entries += '\n  ' + indent + '...';
-      }
-
+    if (!keys.length) {
       if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-         return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+        return input.constructor.name;
       } else {
-         return '{\n  ' + indent + entries + '\n' + indent + '}';
+        return 'Object';
       }
-   }
+    }
+
+    if (depth > maxDepth) return '{...}';
+    var indent = '  '.repeat(depth - 1);
+    var entries = keys.slice(0, maxKeys).map(function (key) {
+      return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+    }).join('\n  ' + indent);
+
+    if (keys.length >= maxKeys) {
+      entries += '\n  ' + indent + '...';
+    }
+
+    if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+      return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+    } else {
+      return '{\n  ' + indent + entries + '\n' + indent + '}';
+    }
+  }
 }
 
 /***/ },
@@ -9412,7 +9250,7 @@ function _inspect(input, depth) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__graphics_js__ = __webpack_require__(121);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ext__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_room_js__ = __webpack_require__(116);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_pace_js__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_pace__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__renderer_js__ = __webpack_require__(133);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__update_js__ = __webpack_require__(135);
@@ -9471,7 +9309,7 @@ var ClientCore = function (_SJSClass2) {
 						args[_key] = arguments[_key];
 				}
 
-				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_pace_js__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
+				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
 		}
 
 		_createClass(ClientCore, [{
@@ -13860,25 +13698,28 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["b" /* IPace */],
-    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["c" /* IStep */];
+var IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IApp */],
+    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["b" /* IPace */],
+    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["e" /* IStep */];
 
 /** The state class which the main game state inherits
 *	@module */
 
-var FPS = 0;
-
 var Step = function (_WeakMapThingy) {
 	_inherits(Step, _WeakMapThingy);
 
+	/*
+    *
+    */
+
 	/** @public */
 
-	function Step(map) {
+	function Step(DataMap) {
 		var _ret;
 
 		_classCallCheck(this, Step);
 
-		var _this = _possibleConstructorReturn(this, (Step.__proto__ || Object.getPrototypeOf(Step)).call(this, map));
+		var _this = _possibleConstructorReturn(this, (Step.__proto__ || Object.getPrototypeOf(Step)).call(this, DataMap));
 
 		_this.delta = 1;
 		_this.frames = 0;
@@ -13887,18 +13728,19 @@ var Step = function (_WeakMapThingy) {
 		_this.increment = 0;
 		_this.delta_speed = 1;
 
+
 		return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	}
 
-	/**
-    * @protected
+	/*
+    *
     */
 
 	_createClass(Step, [{
 		key: 'ceil',
 
 
-		/* */
+		/* Funky Math.ceil alternative */
 
 		value: function ceil(n) {
 			function _ref3(_id3) {
@@ -13916,7 +13758,7 @@ var Step = function (_WeakMapThingy) {
 			return _ref3(n + (n < 0 ? 0 : 1) >> 0);
 		}
 
-		/* */
+		/* UNUSED */
 
 	}, {
 		key: 'focus',
@@ -13963,8 +13805,8 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of argument "b" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(b));
 			}
 
-			if (!(app instanceof Object)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
+			if (!IApp(app)) {
+				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
 			}
 
 			this.first(a, app);
@@ -13985,8 +13827,8 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of argument "step" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(step));
 			}
 
-			if (!(app instanceof Object)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
+			if (!IApp(app)) {
+				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
 			}
 
 			/*
@@ -14030,8 +13872,8 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of argument "step" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(step));
 			}
 
-			if (!(app instanceof Object)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
+			if (!IApp(app)) {
+				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
 			}
 
 			/*
@@ -14078,6 +13920,10 @@ var Step = function (_WeakMapThingy) {
 
 			this.app = app;
 
+			if (!(this.app instanceof Object)) {
+				throw new TypeError('Value of "this.app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(this.app));
+			}
+
 			if (this.fps == 0) {
 				return false;
 			}
@@ -14113,8 +13959,8 @@ var Step = function (_WeakMapThingy) {
 			this.get('data')[0] = 1 * (this.clean() / val * 1E3);
 		}
 
-		/**
-     * @protected
+		/*
+     *
      */
 
 		,
@@ -14136,7 +13982,7 @@ var Step = function (_WeakMapThingy) {
 
 Step.properties = {
 
-	data: [FPS]
+	data: [0]
 
 };
 /* harmony default export */ exports["a"] = Step;
@@ -14236,7 +14082,7 @@ console.time('SJS:B:metatags.js');
 
 
 
-var metatag = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["g" /* metatag */];
+var metatag = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["i" /* metatag */];
 
 var Metatags = function () {
 
@@ -14799,9 +14645,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["e" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* array_string */];
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["g" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["h" /* array_string */];
 
 
 
@@ -17952,7 +17798,7 @@ function _inspect(input, depth) {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_state_js__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state__ = __webpack_require__(283);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -18104,7 +17950,7 @@ var Renderer = function (_State) {
 	}]);
 
 	return Renderer;
-}(__WEBPACK_IMPORTED_MODULE_0__core_state_js__["a" /* default */]);
+}(__WEBPACK_IMPORTED_MODULE_0__state__["a" /* default */]);
 
 Renderer.properties = {
 
@@ -18350,8 +18196,8 @@ var test = function (_SJSClass) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_sjs_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_step_js__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_state_js__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_step__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(283);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_math_vector__ = __webpack_require__(29);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -18679,7 +18525,7 @@ var Update = function (_SJSClass) {
 
 Update.properties = {
 
-	data: [__WEBPACK_IMPORTED_MODULE_1__core_step_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__core_state_js__["a" /* default */]]
+	data: [__WEBPACK_IMPORTED_MODULE_1__core_step__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__state__["a" /* default */]]
 
 };
 /* harmony default export */ exports["a"] = Update;
@@ -30841,6 +30687,209 @@ module.exports = function(module) {
 __webpack_require__(105);
 module.exports = __webpack_require__(104);
 
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_thingy__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__ = __webpack_require__(24);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/* @noflow - no flow due to destructuring */
+
+
+
+
+var IState = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["c" /* IState */];
+
+/** The state class which the main game state inherits
+*	@module */
+
+var State = function (_WeakMapThingy) {
+	_inherits(State, _WeakMapThingy);
+
+	/** Construct and assign privates
+ * @param [Object] obj - Pass an object with update, draw, init.
+ * @method */
+
+	/** @private */
+
+	function State(obj, app) {
+		var _ret;
+
+		_classCallCheck(this, State);
+
+		if (!(app instanceof Object || app == null)) {
+			throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject | void\n\nGot:\n' + _inspect(app));
+		}
+
+		var _this = _possibleConstructorReturn(this, (State.__proto__ || Object.getPrototypeOf(State)).call(this, new WeakMap()));
+
+		_this.initalized = false;
+
+
+		if ((typeof app === 'undefined' ? 'undefined' : _typeof(app)) == 'object') {
+
+			_this.app = app;
+			_this.visuals = _this.app.client.visuals;
+
+			if (!(_this.visuals instanceof Object)) {
+				throw new TypeError('Value of "this.visuals" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_this.visuals));
+			}
+
+			_this.graphics = _this.app.client.graphics;
+
+			if (!(_this.graphics instanceof Object)) {
+				throw new TypeError('Value of "this.graphics" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_this.graphics));
+			}
+		}
+
+		if (typeof obj != 'undefined') {
+			var _ref5 = [obj.update, obj.draw, obj.init, obj.name, obj.html];
+			_this.update = _ref5[0];
+			_this.draw = _ref5[1];
+			_this.init = _ref5[2];
+			_this.name = _ref5[3];
+			_this.html = _ref5[4];
+		}
+
+		return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	}
+
+	/** This method is overridden to draw the state.
+ * @method
+ * @override	*/
+
+	/** @public */
+
+	_createClass(State, [{
+		key: 'update',
+		value: function update() {}
+
+		/** This method is overridden to draw the state.
+  * @method
+  * @override	*/
+
+	}, {
+		key: 'draw',
+		value: function draw() {}
+
+		/** Method is overridden to name the state.
+  * @method
+  * @override	*/
+
+	}, {
+		key: 'name',
+		value: function name() {}
+
+		/** This method is overridden to initialize the state.
+  * @method
+  * @override	*/
+
+	}, {
+		key: 'init',
+		value: function init() {}
+	}]);
+
+	return State;
+}(__WEBPACK_IMPORTED_MODULE_0__core_thingy__["a" /* default */]);
+
+State.properties = {
+
+	render: function render() {},
+
+	update: function update() {},
+
+	draw: function draw() {},
+
+	init: function init() {}
+
+};
+/* harmony default export */ exports["a"] = State;
+;
+
+function _inspect(input, depth) {
+	var maxDepth = 4;
+	var maxKeys = 15;
+
+	if (depth === undefined) {
+		depth = 0;
+	}
+
+	depth += 1;
+
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === 'undefined' ? 'undefined' : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret2 = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
+
+				var first = _inspect(input[0], depth);
+
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
+				} else {
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
+				}
+			}();
+
+			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+		} else {
+			return 'Array';
+		}
+	} else {
+		var keys = Object.keys(input);
+
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
+
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
+
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
+
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
+}
 
 /***/ }
 ],[282]);

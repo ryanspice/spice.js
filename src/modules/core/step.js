@@ -3,14 +3,13 @@
 import WeakMapThingy from './thingy';
 
 import type {
+	IApp,
 	IPace,
 	IStep
 } from "../core/interfaces/ITypes";
 
 /** The state class which the main game state inherits
 *	@module */
-
-const FPS = 0;
 
 export default class Step extends WeakMapThingy {
 
@@ -33,19 +32,26 @@ export default class Step extends WeakMapThingy {
 	static properties = {
 
 		data:[
-			FPS
+			0
 		]
 
 	};
 
-	constructor(map:any) {
+	/*
+    *
+    */
 
-		super(map);
+	constructor(
+		DataMap:any
+		) {
+
+		super(DataMap);
+
 		return (this:IStep);
 	}
 
-	/**
-    * @protected
+	/*
+    *
     */
 
 	set fps(val:number ):void {
@@ -54,8 +60,8 @@ export default class Step extends WeakMapThingy {
 
 	}
 
-	/**
-    * @protected
+	/*
+    *
     */
 
 	get fps():number {
@@ -64,8 +70,7 @@ export default class Step extends WeakMapThingy {
 
 	}
 
-
-	/* */
+	/* Funky Math.ceil alternative */
 
 	ceil(n:number):number {
 
@@ -73,7 +78,7 @@ export default class Step extends WeakMapThingy {
 
 	}
 
-	/* */
+	/* UNUSED */
 
 	focus():boolean {
         //if (this.app.ext.freezeonfocus)
@@ -98,7 +103,7 @@ export default class Step extends WeakMapThingy {
 	*	Game Loop, Increment Frames
 	*/
 
-    tick(a:IPace,b:IPace,app:Object):number {
+    tick(a:IPace,b:IPace,app:IApp):number {
 
         this.first(a,app);
 
@@ -111,7 +116,7 @@ export default class Step extends WeakMapThingy {
 	*
 	*/
 
-	second(step:IPace,app:Object):boolean {
+	second(step:IPace,app:IApp):boolean {
 
 		/*
 		Legacy Code: See if works without first check
@@ -148,7 +153,7 @@ export default class Step extends WeakMapThingy {
 	*
 	*/
 
-    first(step:IPace,app:Object):boolean {
+    first(step:IPace,app:IApp):boolean {
 
 		/*
 		Legacy Code: See if works without first check

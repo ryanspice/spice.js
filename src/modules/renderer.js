@@ -1,5 +1,5 @@
 
-import State from './core/state.js';
+import State from './state';
 
 /**
 * _private

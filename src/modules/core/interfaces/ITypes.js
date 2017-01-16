@@ -14,6 +14,16 @@ export type object = Object;
  * @interface Pace
  */
 
+ export type IApp = {
+	 OnLoad(self: object):void;
+
+	 client:Object;
+ };
+
+/**
+ * @interface Pace
+ */
+
 export type IPace = {
 
 	delta: number;
@@ -47,6 +57,22 @@ export type IPace = {
 	+tick:Function;
 	+second:Function;
 	+first:Function;
+
+ }
+
+/**
+ * @interface Step
+ */
+
+ export type IState = {
+	app:Object;
+	visuals:Object;
+	graphics:Object;
+	initalized:boolean;
+	+update:Function;
+	+draw:Function;
+	+name:Function;
+	+init:Function;
 
  }
 

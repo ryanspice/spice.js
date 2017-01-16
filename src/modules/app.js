@@ -5,7 +5,7 @@
 
 import Core from './core/core';
 
-import State from './core/state.js';
+import State from './state';
 
 import Canvas from './canvas';
 
@@ -61,18 +61,18 @@ import _input from './input/input';
 
 			setTimeout(	(function(){
 
-						function AppLoop(){
-							self.client.loop();
-							self.client.loopData();
-						}
+				function AppLoop(){
+					self.client.loop();
+					self.client.loopData();
+				}
 
-						function AppLoopData(){
+				function AppLoopData(){
 
-							///For loops that dont need to be run at 60fps
+					///For loops that dont need to be run at 60fps
 
-						}
+				}
 
-						self.client.initalize(AppLoop,AppLoopData,self.scale);
+				self.client.initalize(AppLoop,AppLoopData,self.scale);
 
 			}),this.time);
 

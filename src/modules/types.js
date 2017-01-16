@@ -11,7 +11,7 @@ export type vector<X,Y> = {x:X,y:Y};
 
 export type app<APP,VISUALS,GRAPHICS> = {app:APP,visuals:VISUALS, graphics: GRAPHICS};
 
-import type App from "./core/interfaces/IApp";
+//import type App from "./core/interfaces/IApp";
 //export type App;
 
 export type weakmap = any;

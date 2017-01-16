@@ -13,7 +13,7 @@ import Ext from './ext';
 
 import Room from './core/room.js';
 
-import Pace from './core/pace.js';
+import Pace from './core/pace';
 
 import type {
 	IPace
