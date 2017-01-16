@@ -6,10 +6,16 @@ import {
 import type {
     weakmap,
     object,
-    array_string
+    array_string,
+	IExt,
+	ICookies,
+	IUseragent,
+	IMetatags,
+	ICursor,
+	IConnect
 } from "./core/interfaces/ITypes";
 
-import Cookies from './cookies.js';
+import Cookies from './etc/cookies';
 
 import Connection from './network/connection';
 
@@ -25,52 +31,47 @@ export default class Ext extends _SJSClass {
 	/*	Assists in detecting the platform that you are running on.
 	/*	*/
 
-	useragent:Useragent;
+	useragent:IUseragent = new Useragent();
 
 	/*	Cookie Storage
 	/*	Polyfill provided by ScottHamper
 	/*	https://github.com/ScottHamper/Cookies#api-reference
 	/*	*/
 
-	cookies:Cookies;
+	cookies:ICookies = new Cookies();
 
 	/*	MetaTag Handler
 	/*	Assists in dynamically applying metatags.
 	/*	Automatically applies Microsoft, Apple and common metatags.
 	/*	*/
 
-	metatag:Metatags;
+	metatag:IMetatags = new Metatags();
 
 	/*	Cursor Handler
 	/*	Logs last cursor and allows to easily change the cursor on the fly
 	/*	*/
-	cursor:Cursor;
+	cursor:ICursor = new Cursor();
 
 	/*	Connection Controller
 	/*	Assists in making ajax calls and allows you to test your connection.
 	/*	hostReachable by jpsilvashy - https://gist.github.com/jpsilvashy/5725579
 	/*	*/
 
-	connect:Connection;
+	connect:IConnect = new Connection();
 
 	/*	Constructor
 	/*	*/
 
     constructor(app:object ){
-		super(app);
 
-		this.useragent = new Useragent();
-		this.cookies = new Cookies();
-		this.metatag = new Metatags();
-		this.cursor = new Cursor();
-		this.connect = new Connection();
+		super(app);
 
 		//Checks for If node?
 
 		//	window.m1 = this.metatags;
 		//	this.metatags = new this.metatags;
 		//this.app = app;
-
+		return (this:IExt);
     }
 
 

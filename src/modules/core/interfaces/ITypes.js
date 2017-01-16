@@ -21,6 +21,126 @@ export type object = Object;
  };
 
 /**
+* @interface
+*/
+
+export type IExt = {
+
+	useragent:Object;
+	cookies:Object;
+	metatag:IMetatags;
+	cursor:Object;
+	connect:Object;
+
+}
+
+/**
+* @interface
+*/
+
+export type ICookies = {
+
+}
+
+/**
+* @interface
+*/
+
+export type IUseragent = {
+	agent:any;
+	mouse:boolean;
+	touch:boolean;
+	keyboard:boolean;
+	windows:boolean;
+	chrome:boolean;
+	safari:boolean;
+	iemobile:boolean;
+	nokia:boolean;
+	ie:boolean;
+	ios:boolean;
+	blackberry:boolean;
+	playbook:boolean;
+	bb10:boolean;
+	mobile:boolean;
+	+IE:Function;
+	+iOS:Function;
+	+Nokia:Function;
+	+Mobile:Function;
+	+Chrome:Function;
+	+Safari:Function;
+	+Desktop:Function;
+	+Android:Function;
+	+IEMobile:Function;
+	+BlackBerry:Function;
+}
+
+/**
+* @interface
+*/
+
+export type IMetatags = {
+
+	ms_taphighlight:string;
+	apple_webapp:string;
+	apple_statusbar:string;
+	devicedpi:boolean;
+	devicewidth:boolean;
+
+	head:any;
+	link:any;
+	meta:any;
+	count:any;
+
+	width:number;
+
+	cache:boolean;
+	cacheage:number;
+
+	+metaFavicon:Function;
+	+metaLink:Function;
+	+new:Function;
+	+append:Function;
+
+}
+
+/**
+* @interface
+*/
+
+export type ICursor = {
+	current:string;
+	last:string;
+
+	changed:boolean;
+	count:number;
+	lock:number;
+	delay:number;
+	+set:Function;
+}
+
+/**
+* @interface
+*/
+
+export type IConnect = {
+
+	DisableDefaultCallback:boolean;
+	XMLHttpRequest:XMLHttpRequest;
+	Error:string;
+	ErrorAttempt:string;
+	ErrorOffline:string;
+	ConnectionAttempts:number;
+
+	offline:boolean;
+	testurl:string;
+	window:window;
+
+	+XML:Function;
+	+ready:Function;
+}
+
+
+/**
 * @interface Options
 */
 

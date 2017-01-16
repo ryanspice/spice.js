@@ -1,3 +1,6 @@
+import type {
+	ICookies
+} from "../core/interfaces/ITypes";
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -169,7 +172,7 @@ export default class Cookies {
                 global.Cookies = cookiesExport;
             }
 
-        return Cookies;
+        return (Cookies:ICookies);
     }
 
 }

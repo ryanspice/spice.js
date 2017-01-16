@@ -1,7 +1,12 @@
+/* @flow */
+
+import type {
+    ICursor
+} from "../core/interfaces/ITypes";
 
 export default class Cursor {
 
-	static Types:object = {
+	static Types:Object = {
 
 		//Cached cursor types
 		auto		: "auto",
@@ -35,32 +40,44 @@ export default class Cursor {
 	delay:number =4;
 
 	constructor(url:string|void) {
-/*
-		this.set(this.wait);
-		this.app.ext.cursor = this;*/
+		return (this:ICursor);
+		/*
+				this.set(this.wait);
+				this.app.ext.cursor = this;*/
 	}
-/*
-	set(cursor,lock) {
 
-			if	((this.last==cursor)||(this.lock))
-				return;
+	/*
+	*
+	*/
 
-			this.last = this.current;
+	set() {
 
-			this.current = cursor;
 
-			/*
-			if (this.app.options.target.buffer)
-				this.app.canvas.buffer.style.cursor=this.current;
-				this.app.canvas.canvas.style.cursor=this.current;
-
-			document.body.style.cursor=this.current;
-			*/
-			/*
-			this.changed = true;
-			this.count++;
 	}
-*/
+
+	/*
+		set(cursor,lock) {
+
+				if	((this.last==cursor)||(this.lock))
+					return;
+
+				this.last = this.current;
+
+				this.current = cursor;
+
+				/*
+				if (this.app.options.target.buffer)
+					this.app.canvas.buffer.style.cursor=this.current;
+					this.app.canvas.canvas.style.cursor=this.current;
+
+				document.body.style.cursor=this.current;
+				*/
+				/*
+				this.changed = true;
+				this.count++;
+		}
+	*/
+
 }
 
 window.Cursor = Cursor;

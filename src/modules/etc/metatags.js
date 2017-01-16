@@ -1,7 +1,4 @@
-
 /* @flow */
-
-console.time('SJS:B:metatags.js');
 
 /** Assign metatags via Metatags global object
 *	@module
@@ -10,19 +7,17 @@ console.time('SJS:B:metatags.js');
 import WeakMapThingy from '../core/thingy';
 
 import type {
-    metatag
+    IMetatags
 } from "../core/interfaces/ITypes";
 
 export default class Metatags {
 
-	//Default injected tags
 	ms_taphighlight:string = "no";
 	apple_webapp:string = "yes";
 	apple_statusbar:string = "black";
 	devicedpi:boolean = true;
 	devicewidth:boolean = true;
 
-	//
 	head:any = document.getElementsByTagName('head')[0];
 	link:any = null;
 	meta:any = null;
@@ -33,7 +28,9 @@ export default class Metatags {
 	cache:boolean = false;
 	cacheage:number = 3;
 
-	//
+	/*
+	*
+	*/
 
 	constructor(url:string|void) {
 
@@ -87,34 +84,41 @@ export default class Metatags {
 
 		this.append(this.new("expires","Tue, 01 Jan 1980 1:00:00 GMT"));
 
+		return (this:IMetatags);
 	}
 
-	//Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+	/*
+	*	Favicon. Automatically fills a standard metaAppend while needing only one argument, sets favicon
+	*/
 
-	metaFavicon(img):void {
+	metaFavicon(img:string):void {
 
 		this.append(this.metaLink(img,"shortcut icon","image/png"));
 
 	}
 
-	//Construct a standard metaLink element
-	metaLink(href,rel,type):object {
+	/*
+	* Construct a standard metaLink element
+	*/
+
+	metaLink(href:string,rel:string,type:string):Object {
 
 		//Create link element
 		this.link = document.createElement('link');
 
 		//Assign element values
 		this.link.href = href;
+
 		this.link.rel = rel;
+
 		this.link.type = type;
 
 		//Return link
 		return this.link;
 	}
 
-	/* Construct a standard metaTag element
-	*
-	*
+	/*
+	* Construct a standard metaTag element
 	*/
 
 	new(name:string = '',content:string = ''):Object {
@@ -128,9 +132,8 @@ export default class Metatags {
 		return this.meta;
 	}
 
-	/* Append a meta object to the <head>
-	*
-	*
+	/*
+	* Append a meta object to the <head>
 	*/
 
 	append(meta:any):boolean {
@@ -140,6 +143,7 @@ export default class Metatags {
 		if (this.head.appendChild(meta)) {
 
 			this.count++;
+
 			result = true;
 
 		} else {
@@ -153,8 +157,3 @@ export default class Metatags {
 	}
 
 }
-
-
-console.timeEnd('SJS:B:metatags.js');
-
-//	window.Metatags = Metatags;

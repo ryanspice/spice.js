@@ -2,11 +2,13 @@
 
 import Options from './options';
 
-import _user from '../user';
+import facebook from '../dto/facebook-user';
 
 import _math from './math/math';
 
 import legacy_core from './legacy/legacy-core';
+
+import type {dtoFacebook} from '../dto/dtoTypes';
 
 const _BUILD_OFFICIAL_ = '0.8.2';
 
@@ -33,7 +35,7 @@ import type {
 
 export default class Core extends legacy_core {
 
-    options:Options = Options;
+    options:IOptions = Options;
 
     ext:Object;
 
@@ -41,7 +43,7 @@ export default class Core extends legacy_core {
 
     input:Object;
 
-    user:_user = _user;
+    user:dtoFacebook = facebook;
 
     client:Object = {visuals:()=>{},graphics:()=>{}};
 

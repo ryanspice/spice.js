@@ -1,3 +1,7 @@
+import type {
+    IConnect
+} from "../core/interfaces/ITypes";
+
 export default class Useragent {
 
 	//Cached Navigator.userAgent
@@ -31,6 +35,10 @@ export default class Useragent {
 
 	mobile:boolean = false;
 
+	/*
+	*
+	*/
+
 	constructor(){
 
         //Query Browser
@@ -53,41 +61,54 @@ export default class Useragent {
         this.Mobile();
         this.Desktop();
 
+		return (this:IConnect);
         //this.app.ext.useragent = this;
 
 	}
 
-	//Match user agent for IE
+	/*
+	*	Match user agent for IE
+	*/
 	IE ():boolean {
 
 		return  this.agent.match(/Trident/i) ? true : false;
 	}
 
-	//Match user agent for iOS
+	/*
+	*	Match user agent for iOS
+	*/
 	iOS():boolean {
 
 		return this.agent.match(/iPhone|iPad|iPod/i) ? true : false;
 	}
 
-	//Match user agent for Nokia
+	/*
+	*	Match user agent for Nokia
+	*/
 	Nokia ():boolean {
 
 		return  this.agent.match(/Nokia/i) ? true : false;
 	}
 
-	//Determine mobile or windows based on useragent
+	/*
+	*	Determine mobile or windows based on useragent
+	*/
 	Mobile ():boolean {
 
 		return this.mobile = this.IEMobile() || this.BlackBerry() || this.iOS() || this.Android() || this.Nokia();
 	}
 
-	//Match user agent for Chrome
+	/*
+	*	Match user agent for Chrome
+	*/
 	Chrome ():boolean {
 
 		return this.chrome = this.agent.match(/Chrome/i) ? true : false;
 	}
 
-	//Match user agent for Safari
+	/*
+	*	Match user agent for Safari
+	*/
 	Safari ():boolean {
 
 		return (this.agent.match(/Safari/i) || this.agent.match(/AppleWebKit/i)) && !this.agent.match(/Chrome/i) ? true : false;
@@ -98,12 +119,16 @@ export default class Useragent {
 		return this.windows = this.IEMobile() || this.IE() || !this.Mobile();
 	}
 
-	//Match user agent for Android
+	/*
+	*	Match user agent for Android
+	*/
 	Android ():boolean {
 		return this.agent.match(/Android/i) ? true : false;
 	}
 
-	//Match user agent for IEMobile
+	/*
+	*	Match user agent for IEMobile
+	*/
 	IEMobile ():boolean {
 
 		var trident = this.agent.match(/IEMobile/i);
@@ -113,7 +138,9 @@ export default class Useragent {
 		return  trident || windowsphone || touch ? true : false;
 	}
 
-	//Match user agent for Blackberry
+	/*
+	*	Match user agent for Blackberry
+	*/
 	BlackBerry():boolean {
 		this.playbook = this.agent.match(/PlayBook/i) || false;
 		this.bb10 = this.agent.match(/BB10/i) || false;

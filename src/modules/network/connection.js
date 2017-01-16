@@ -1,3 +1,6 @@
+import type {
+    IConnect
+} from "../core/interfaces/ITypes";
 
 export default class Connection {
 
@@ -12,11 +15,17 @@ export default class Connection {
 	testurl:string = 'https://httpbin.org/get';
 	window:window = window;
 
+	/*
+	*
+	*
+	*/
+
 	constructor(url:string|void){
 
 		this.offline = true;
 		this.XML(url||this.testurl);
 
+		return (this:IConnect);
 	}
 
     /**	Request a URL via XMLHttpRequest
