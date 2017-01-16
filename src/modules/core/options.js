@@ -1,6 +1,10 @@
+/* @flow */
 
+import type {
+	IOptions
+	} from "./interfaces/ITypes.js";
 
-export default {
+export default ({
 
     overridescroll:false,
     drag:0,
@@ -22,7 +26,7 @@ export default {
     },
 
     global:{
-		
+
 		imageSmoothingEnabled:false,
 
         globalCompositeOperation:"destination-in", //or source-over //See list http://www.w3schools.com/tags/canvas_globalcompositeoperation.asp
@@ -103,7 +107,7 @@ export default {
         {
 
             //Get list of apps
-            var list = SpiceJS.controller.list();
+            var list = SJS.controller.list();
 
             //list is object
             if (typeof list == "object")
@@ -138,4 +142,4 @@ export default {
         return this;
     }
 
-};
+}:IOptions);

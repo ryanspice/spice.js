@@ -1,6 +1,6 @@
 /* @flow */
 
-import Options from '../client/options';
+import Options from './options';
 
 import _user from '../user';
 
@@ -19,8 +19,13 @@ const _BUILD_LAST_ = '08-2016';
 const _BUILD_FIRST_ = '12-2013';
 
 import type {
+	IApp,
+	IOptions
+	} from "./interfaces/ITypes.js";
+
+import type {
 	IoVersion
-} from "../../shared/version";
+	} from "../../shared/version";
 
 /** core component to the application, including version info, the main reference, and other details
 * @module
@@ -46,7 +51,7 @@ export default class Core extends legacy_core {
 
 	scale:number;
 
-	app:Object;
+	app:IApp;
 
 	id:number=0;
 
@@ -80,8 +85,9 @@ export default class Core extends legacy_core {
 
 		let scale = 1;
 
-		if (this.client.scale)
+		if (this.client.scale) {
 			scale = this.client.scale;
+		}
 
 		return scale;
 	}
@@ -105,7 +111,7 @@ export default class Core extends legacy_core {
 		return this.get('main');
 	}
 
-    /**  @type {object} */
+    /**  @type {object} TEMPORARY, use Object.Assign */
 
 	set main(newmain:Object):Object {
 

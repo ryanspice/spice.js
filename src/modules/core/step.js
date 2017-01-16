@@ -15,7 +15,7 @@ export default class Step extends WeakMapThingy {
 
 	/** @public */
 
-	app:Object;
+	app:IApp;
 
 	delta:number =1;
 

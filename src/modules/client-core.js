@@ -3,7 +3,7 @@ import {_SJSClass} from './core/sjs';
 
 import Vector from './core/math/vector';
 
-import Options from './client/options';
+import Options from './core/options';
 
 import Visuals from './visuals.js';
 

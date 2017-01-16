@@ -1,10 +1,13 @@
 /* @flow */
 
 console.time('SJS:B:sjs.js');
+import type {
+	IApp
+} from "./interfaces/ITypes";
 
 import App from '../app.js';
 
-import WeakMapThingy from './/thingy.js';
+import WeakMapThingy from './thingy.js';
 
 /** SJSClass - Used to create objects which inherit the Application.
 * @module */
@@ -13,12 +16,15 @@ export class _SJSClass extends WeakMapThingy {
 
     /** This is the constructor for the class
     * @param {Object} app[ - instance of spicejs] */
+	app:IApp;
+	visuals:any;
+	graphics:any;
 
-    constructor(app:App):void {
+    constructor(app:IApp):void {
 
         super(new WeakMap());
 
-        let appReference:App = app;
+        let appReference:IApp = app;
 
         if (typeof appReference == 'undefined') {
 
@@ -54,7 +60,7 @@ export class _SJSClass extends WeakMapThingy {
 			} else {
 
 				this.graphics = null;
-				this.trace('Unable to find app loader reference.', 'Using ', appReference, ' for ', this);
+				console.trace('Unable to find app loader reference.', 'Using ', appReference, ' for ', this);
 
 			}
 
@@ -71,7 +77,7 @@ export class _SJSClass extends WeakMapThingy {
     /**
     * @param */
 
-	warn(a0,a1,a2,a3,a4){
+	warn(a0:any,a1:any,a2:any,a3:any,a4:any){
 
 		//console.trace(a0,this);
 		//console.log(this);
@@ -82,7 +88,7 @@ export class _SJSClass extends WeakMapThingy {
     /**
     * @param */
 
-	log(a0){
+	log(a0:any){
 
 		console.trace(a0, '\n'  ,this);
 

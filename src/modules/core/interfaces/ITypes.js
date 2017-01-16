@@ -11,7 +11,7 @@ export type object = Object;
 //export type string = string;
 
 /**
- * @interface Pace
+ * @interface App
  */
 
  export type IApp = {
@@ -19,6 +19,28 @@ export type object = Object;
 
 	 client:Object;
  };
+
+/**
+* @interface Options
+*/
+
+export type IOptions = {
+
+	overridescroll:boolean;
+	drag:number;
+	targetfps:number;
+	mute:boolean;
+	paths:Object;
+	target:Object;
+	global:Object;
+	flags:Object;
+	canvas:Object;
+	msFlags:Object;
+	override:Object;
+	+get:Function;
+	+set:Function;
+
+};
 
 /**
  * @interface Pace
@@ -61,10 +83,10 @@ export type IPace = {
  }
 
 /**
- * @interface Step
+ * @interface State
  */
 
- export type IState = {
+export type IState = {
 	app:Object;
 	visuals:Object;
 	graphics:Object;
@@ -74,7 +96,52 @@ export type IPace = {
 	+name:Function;
 	+init:Function;
 
- }
+}
+
+/**
+ * @interface Room
+ */
+
+export type IRoom = {
+	started:boolean;
+	+Started:Function;
+}
+
+/**
+ * @interface Core
+ */
+
+export type ICore = {
+
+	options:Object;
+    ext:Object;
+    visuals:Object;
+    input:Object;
+    user:_user;
+    client:Object;
+    math:_math;
+    time:number;
+	scale:number;
+	app:IApp;
+
+}
+
+/**
+ * @interface StatsBuffer
+ */
+
+export type IStatsBuffer = {
+	x:number;
+	y:number;
+	w:number;
+	h:number;
+	s:number;
+	a:number;
+	c:number;
+	colour:string;
+	oldcol:string;
+	+set:Function;
+}
 
 
 export type TClient = {

@@ -1,30 +1,44 @@
+/* @flow */
 
 import {_SJSClass as SJSClass} from './sjs.js';
 
+import type {
+	IApp,
+	IRoom
+} from "./interfaces/ITypes";
+
+/**
+*
+*/
+
 export default class Room extends SJSClass {
 
+	started:boolean = false;
 
-//			init:Object = {};
+	/**
+	*
+	*/
 
-			started:Boolean = false;
+	constructor(app:IApp) {
 
-			Started(){
+		super(app);
 
-				return function() {
-					var a = this.Started;
-					//this.app.set_scale();
-					this.Started = true;
-					return a;
-				};
+		return (this:IRoom);
+	}
 
-			}
+	/**
+	*
+	*/
 
-			constructor(app){
+	Started():Function {
 
-				super(app);
+		return function() {
+			var a = this.Started;
+			//this.app.set_scale();
+			this.Started = true;
+			return a;
+		};
 
-				console.log(this.app)
+	}
 
-			}
-
-	};
+};

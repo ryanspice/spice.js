@@ -1,3 +1,12 @@
+/* @flow */
+
+import type {
+	IStatsBuffer
+} from "./interfaces/ITypes";
+
+/*
+*
+*/
 
 export default class StatsBuffer {
 
@@ -19,11 +28,20 @@ export default class StatsBuffer {
 
 	oldcol:string = "";
 
+	/*
+	*
+	*/
+
 	constructor(col:string|void, colold:string|void) {
 
 		this.init();
 
+		return (this:IStatsBuffer);
 	}
+
+	/*
+	*
+	*/
 
 	set(obj:Object):void {
 
@@ -47,6 +65,10 @@ export default class StatsBuffer {
 
 	}
 
+	/*
+	*
+	*/
+
 	init(col:string|void, colold:string|void):void {
 
 		this.x = 0;
@@ -63,9 +85,9 @@ export default class StatsBuffer {
 
 		this.c = 0;
 
-		this.colour = col || 0;
+		this.colour = col || "";
 
-		this.oldcol = colold || 0;
+		this.oldcol = colold || "";
 
 	}
 

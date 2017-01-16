@@ -1,6 +1,7 @@
 /* @flow */
 
 import type {
+	IApp,
 	IPace
 	} from "./interfaces/ITypes.js";
 
@@ -43,7 +44,7 @@ export default class Pace {
 	*
 	*/
 
-	Time(app:any):number {
+	Time(app:IApp):number {
 
 		this.timer = new Date().getTime();
 
@@ -54,7 +55,7 @@ export default class Pace {
 	*
 	*/
 
-	Step(app:any):boolean {
+	Step(app:IApp):boolean {
 
 		this.delta = this.Time(app);
 
