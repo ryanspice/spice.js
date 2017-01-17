@@ -9,6 +9,13 @@ import State from './state';
 
 import Canvas from './canvas';
 
+import type {
+
+	IApp,
+	IOptions
+
+} from './core/interfaces/ITypes'
+
 /** WIP Modules
 *	@module */
 
@@ -33,7 +40,7 @@ import _input from './input/input';
 	* @method
 	* @private */
 
-	loop(self:App):void {
+	loop(self:IApp):void {
 
 		//Use arrow function if available
 

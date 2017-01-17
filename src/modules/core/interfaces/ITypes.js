@@ -15,9 +15,14 @@ export type object = Object;
  */
 
  export type IApp = {
-	 OnLoad(self: object):void;
+	OnLoad(self: object):void;
 
-	 client:Object;
+	client:Object;
+	options:IOptions;
+
+	scale:number;
+	width:number;
+	height:number;
  };
 
 /**
@@ -175,6 +180,9 @@ export type IConnect = {
 */
 
 export type IOptions = {
+
+	width:number;
+	height:number;
 
 	overridescroll:boolean;
 	drag:number;
