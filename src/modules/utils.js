@@ -1,3 +1,32 @@
+
+Number.prototype.toFixedNumber = function(x, base){
+  var pow = Math.pow(base||10,x);
+  return +( Math.round(this*pow) / pow );
+}
+
+
+function wait(t){
+
+    return new Promise((r) => setTimeout(r, t));
+
+}
+
+var timers = {};
+
+window.timer = function timer(name) {
+    timers[name + '_start'] = window.performance.now();
+}
+
+window.timerEnd = function timerEnd(name) {
+    if (!timers[name + '_start']) return undefined;
+    var time = window.performance.now() - timers[name + '_start'];
+    var amount = timers[name + '_amount'] = timers[name + '_amount'] ? timers[name + '_amount'] + 1 : 1;
+    var sum = timers[name + '_sum'] = timers[name + '_sum'] ? timers[name + '_sum'] + time : time;
+    timers[name + '_avg'] = sum / amount;
+    delete timers[name + '_start'];
+    return time;
+}
+
 var utils = utils || {};
 
 utils.FNV_OFFSET_32 = 0x811c9dc5;
@@ -31,14 +60,6 @@ utils.toHex = function (val) {
     return ("0000000" + (val >>> 0).toString(16)).substr(-8);
 
 };
-
-function wait(t){
-
-    return new Promise((r) => setTimeout(r, t));
-
-}
-
-//Fill animation frame
 
 utils.requestAnimationFrame = function(){
 
@@ -91,6 +112,87 @@ utils.loadExternalJS = function(scripts) {
             a = e.createElement(t), "" in i ? (a.async = !1, e.head.appendChild(a)) : i[f] ? (d.push(a), a[o] = n) : e.write("<" + t + ' src="' + s + '" defer></' + t + ">"), a.src = s;
 
     }(document, "script", scripts);
+
+}
+
+utils.convertArrayOfObjectsToCSV = function(args) {
+
+    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+    data = args.data || null;
+
+    if (data == null || !data.length) {
+
+        return null;
+
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    keys = Object.keys(data[0]);
+
+    result = '';
+
+    result += keys.join(columnDelimiter);
+
+    result += lineDelimiter;
+
+    data.forEach(function(item) {
+
+        ctr = 0;
+
+        keys.forEach(function(key) {
+
+            if (ctr > 0) result += columnDelimiter;
+
+            result += item[key];
+
+            ctr++;
+
+        });
+
+        result += lineDelimiter;
+
+    });
+
+    return result;
+}
+
+utils.writeToCSV = function(name){
+
+    var logStream = fs.createWriteStream('log.txt', {'flags': 'a'});
+
+    logStream.write('Initial line...');
+
+    logStream.end('this is the end line');
+
+    let dataString = "";
+
+    var data =this.convertArrayOfObjectsToCSV(SpiceJS.logs('values')[1]);
+
+    //console.log(this.convertArrayOfObjectsToCSV({eh:'eh'}))
+
+    var csvContent = "data:text/csv;charset=utf-8,";
+
+    data.forEach(function(infoArray, index){
+
+       dataString = infoArray.join(",");
+
+       csvContent += index < data.length ? dataString+ "\n" : dataString;
+
+    });
+
+    var encodedUri = encodeURI(csvContent);
+
+    var link = document.createElement("a");
+
+    link.setAttribute("href", encodedUri);
+
+    link.setAttribute("download", name+".csv");
+
+    link.click();
 
 }
 

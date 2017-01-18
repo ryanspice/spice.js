@@ -20,7 +20,7 @@ var inputscrollcontroller =  {
 
         active:null,
         reverse:false,
-        a:false,
+    //    a:false,
 
         window:window,
         doc:document.documentElement,
@@ -124,7 +124,51 @@ var inputscrollcontroller =  {
             this.target.x = x;
             this.target.y = y;
 
-        }
+        },
+		gMaps:function() {
+
+						var t = document.getElementById('maps');
+
+						if (window.ScrollControl.elementInViewport(t)) {
+
+							if (window.ScrollControl.mapInView == false) {
+								window.ScrollControl.mapInView = true;
+								var mapsHtml = "";
+								mapsHtml += "				<iframe style=\"float:left;border-radius: 7px;margin:0px auto;width:100%;\" height=\"200\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"https:\/\/maps.google.ca\/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Toronto,+ON,+Canada&amp;aq=0&amp;oq=Toronto+Cana&amp;sll=43.656877,-79.32085&amp;sspn=0.873329,2.113495&amp;ie=UTF8&amp;hq=&amp;hnear=Toronto,+Toronto+Division,+Ontario&amp;ll=43.653226,-79.383184&amp;spn=61.734526,135.263672&amp;t=m&amp;z=4&amp;output=embed\"><\/iframe>";
+								mapsHtml += "				<br>";
+								mapsHtml += "				<a href=\"https:\/\/maps.google.ca\/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Toronto,+ON,+Canada&amp;aq=0&amp;oq=Toronto+Cana&amp;sll=43.656877,-79.32085&amp;sspn=0.873329,2.113495&amp;ie=UTF8&amp;hq=&amp;hnear=Toronto,+Toronto+Division,+Ontario&amp;ll=43.653226,-79.383184&amp;spn=61.734526,135.263672&amp;t=m&amp;z=4\"><\/a>";
+								mapsHtml += "				<br>";
+								t.innerHTML = mapsHtml;
+							}
+						}
+		},
+        scroll:function(e) {
+
+				window.ScrollControl.gMaps();
+
+				if (window.pageYOffset != undefined) {
+
+					this.x = pageXOffset;
+					this.y = pageYOffset;
+
+					return [pageXOffset, pageYOffset];
+				} else {
+
+					var sx = undefined,
+					    sy = undefined,
+					    d = document,
+					    r = d.documentElement,
+					    b = d.body;
+					sx = r.scrollLeft || b.scrollLeft || 0;
+
+					sy = r.scrollTop || b.scrollTop || 0;
+
+					this.x = sx;
+					this.y = sy;
+
+					return [sx, sy];
+	        }
+		}
 
     },
 

@@ -1,6 +1,5 @@
 
-import {_SJSClass as SJSClass} from './interfaces.js';
-
+import {_SJSClass as SJSClass} from './core/sjs';
 /**
 * Test Module for running tyhe game
 * @module

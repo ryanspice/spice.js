@@ -1,11 +1,33 @@
 <!DOCTYPE html>
+
 <html >
-<head>
-    <meta charset="UTF-8">
-    <title>App</title>
-    <script rel="prefetch" type="application/x-javascript" src="./vendor/spice.js"></script>
-    <script rel="prefetch" type="application/x-javascript" name="main" src="./main.js" ></script>
-</head>
-    <body>
-    </body>
+
+	<head>
+
+	    <meta charset="UTF-8" />
+
+	    <script rel="prefetch" type="application/x-javascript" src="./vendor.js"></script>
+
+	    <script rel="prefetch" type="application/x-javascript" name="main" src="./spice.js" ></script>
+
+		<script  type="application/x-javascript" defer>
+
+			var _App = ((SpiceJS.create()).OnLoad = function (self) {
+
+				var width = 1224;
+				var height = 720;
+
+				self.main = {update:function(){},draw:function(){},init:function(){}};
+
+				self.start(width, height);
+
+				window.Application = this;
+
+			});
+
+		</script>
+
+	</head>
+
+
 </html>

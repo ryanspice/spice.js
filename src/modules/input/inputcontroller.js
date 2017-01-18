@@ -1,7 +1,7 @@
 
-import Vector from '../math/vector';
+import Vector from '../core/math/vector';
 
-import {_SJSClass as SJSClass} from '../interfaces.js';
+import {_SJSClass as SJSClass} from '../core/sjs';
 
 import inputlistener from './inputlistener.js';
 
@@ -56,8 +56,8 @@ export default class inputcontroller extends SJSClass {
         static _pointermove(evt){
 
             let input = evt.target.app.input;
-            let x = evt.x || evt.clientX || evt.pageX;
-            let y = evt.y || evt.clientY || evt.pageY;
+            let x = Number(evt.x || evt.clientX || evt.pageX);
+            let y = Number(evt.y || evt.clientY || evt.pageY);
 
             //var mouse_last = this.mouse_last;
 
@@ -65,9 +65,9 @@ export default class inputcontroller extends SJSClass {
 
             if (input.pressed) {
 
-                let dx = (input.x-input.start.x)*evt.target.app.getScale();
-                let dy = (input.y-input.start.y)*evt.target.app.getScale();
-                input.dist = new Vector(dx.toFixed(2), dy.toFixed(2));
+                let dx = (input.x-input.start.x)*evt.target.app.scale;
+                let dy = (input.y-input.start.y)*evt.target.app.scale;
+                input.dist = new Vector(dx.toFixedNumber(2), dy.toFixedNumber(2));
 
             }
 
@@ -87,10 +87,9 @@ export default class inputcontroller extends SJSClass {
 
             let input = evt.target.app.input;
 
-            let x = evt.x || evt.clientX || evt.pageX;
+            let x = Number(evt.x || evt.clientX || evt.pageX);
 
-            let y = evt.y || evt.clientY || evt.pageY;
-
+            let y = Number(evt.y || evt.clientY || evt.pageY);
             input.start = new Vector(x,y);
 
             input.pressed = true;
