@@ -18,12 +18,17 @@ export type object = Object;
 	OnLoad(self: object):void;
 
 	client:Object;
-	options:IOptions;
-
-	scale:number;
-	width:number;
-	height:number;
  };
+/*
+
+options:IOptions;
+
+scale:number;
+width:number;
+height:number;
+
+*/
+
 
 /**
 * @interface App

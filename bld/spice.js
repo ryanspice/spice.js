@@ -217,7 +217,7 @@ var object = function () {
 
 var IApp = function () {
 	function IApp(input) {
-		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object && IOptions(input.options) && typeof input.scale === 'number' && typeof input.width === 'number' && typeof input.height === 'number';
+		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object;
 	}
 
 	;
@@ -228,6 +228,15 @@ var IApp = function () {
 	});
 	return IApp;
 }();
+/*
+
+options:IOptions;
+
+scale:number;
+width:number;
+height:number;
+
+*/
 
 /**
 * @interface App
