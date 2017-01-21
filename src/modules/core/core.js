@@ -9,13 +9,9 @@ import _math from './math/math';
 import legacy_core from './legacy/legacy-core';
 
 const _BUILD_OFFICIAL_ = '0.8.2';
-
 const _BUILD_RENDERER_ = '0.0.1';
-
 const _BUILD_CANVAS_ = '0.8.1';
-
 const _BUILD_LAST_ = '08-2016';
-
 const _BUILD_FIRST_ = '12-2013';
 
 import type {

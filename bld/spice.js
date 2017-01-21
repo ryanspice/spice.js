@@ -217,7 +217,7 @@ var object = function () {
 
 var IApp = function () {
 	function IApp(input) {
-		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object;
+		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object && IOptions(input.options) && typeof input.scale === 'number';
 	}
 
 	;
@@ -230,7 +230,7 @@ var IApp = function () {
 }();
 /*
 
-options:IOptions;
+
 
 scale:number;
 width:number;
@@ -370,7 +370,7 @@ var IConnect = function () {
 
 var IOptions = function () {
 	function IOptions(input) {
-		return input != null && typeof input.width === 'number' && typeof input.height === 'number' && typeof input.overridescroll === 'boolean' && typeof input.drag === 'number' && typeof input.targetfps === 'number' && typeof input.mute === 'boolean' && input.paths instanceof Object && input.target instanceof Object && input.global instanceof Object && input.flags instanceof Object && input.canvas instanceof Object && input.msFlags instanceof Object && input.override instanceof Object && typeof input.get === 'function' && typeof input.set === 'function';
+		return input != null && typeof input.overridescroll === 'boolean' && typeof input.drag === 'number' && typeof input.targetfps === 'number' && typeof input.mute === 'boolean' && input.paths instanceof Object && input.target instanceof Object && input.global instanceof Object && input.flags instanceof Object && input.canvas instanceof Object && input.msFlags instanceof Object && input.override instanceof Object && typeof input.get === 'function' && typeof input.set === 'function';
 	}
 
 	;
@@ -14764,13 +14764,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var _BUILD_OFFICIAL_ = '0.8.2';
-
 var _BUILD_RENDERER_ = '0.0.1';
-
 var _BUILD_CANVAS_ = '0.8.1';
-
 var _BUILD_LAST_ = '08-2016';
-
 var _BUILD_FIRST_ = '12-2013';
 
 

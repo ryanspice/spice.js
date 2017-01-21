@@ -18,10 +18,15 @@ export type object = Object;
 	OnLoad(self: object):void;
 
 	client:Object;
+	options:IOptions;
+
+	scale:number;
+
+	
  };
 /*
 
-options:IOptions;
+
 
 scale:number;
 width:number;
@@ -185,23 +190,25 @@ export type IConnect = {
 */
 
 export type IOptions = {
+	/*
 
-	width:number;
-	height:number;
+		width:number;
+		height:number;
+		*/
+		overridescroll:boolean;
+		drag:number;
+		targetfps:number;
+		mute:boolean;
+		paths:Object;
+		target:Object;
+		global:Object;
+		flags:Object;
+		canvas:Object;
+		msFlags:Object;
+		override:Object;
 
-	overridescroll:boolean;
-	drag:number;
-	targetfps:number;
-	mute:boolean;
-	paths:Object;
-	target:Object;
-	global:Object;
-	flags:Object;
-	canvas:Object;
-	msFlags:Object;
-	override:Object;
-	+get:Function;
-	+set:Function;
+		+get:Function;
+		+set:Function;
 
 };
 
