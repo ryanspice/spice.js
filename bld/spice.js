@@ -358,7 +358,7 @@ var IOptions = function () {
 
 var IPace = function () {
 	function IPace(input) {
-		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.targetfps === 'number' && typeof input.currentTime === 'number' && typeof input.Step === 'function' && typeof input.CalculateDelta === 'function' && typeof input.GetStepsPerSecond === 'function';
+		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.targetFPS === 'number' && typeof input.currentTime === 'number' && typeof input.Step === 'function' && typeof input.CalculateDelta === 'function';
 	}
 
 	;
@@ -9697,8 +9697,8 @@ function _inspect(input, depth) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__visuals_js__ = __webpack_require__(139);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__graphics_js__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ext__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_room_js__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_room_js__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__renderer_js__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__update_js__ = __webpack_require__(137);
@@ -9838,15 +9838,11 @@ var ClientCore = function (_SJSClass2) {
 
 								_this2.client_data();
 						}, 1000 / 59);
-
-						/* STOPS HERE */
-						return;
-
 						/*Assign the cursor and log the time it took to get here _WIP  */
 
-						this.app.ext.cursor.set(this.app.ext.cursor.def);
+						//this.app.ext.cursor.set(this.app.ext.cursor.def);
 
-						this.app.ext.time = (new Date().getTime() - SpiceJS.TimeToBuild) * 1;
+						return;
 				}
 
 				/*
@@ -9857,25 +9853,24 @@ var ClientCore = function (_SJSClass2) {
 		}, {
 				key: 'loop',
 				value: function loop() {
-						var _this3 = this;
 
-						var loop = function loop() {
+						//const loop:Function =
 
-								//Return true or false if resized, update size
-								_this3.resized = _this3.update.size(_this3);
 
-								//Update scale
-								_this3.scale = _this3.update.scale(_this3);
+						//Return true or false if resized, update size
+						this.resized = this.update.size(this);
 
-								//Draw frame
-								_this3.visuals.flip(_this3.scale);
+						//Update scale
+						this.scale = this.update.scale(this);
 
-								//Update frames per second
-								_this3.fps = _this3.update.step.tick(_this3.second, _this3.mainLoop, _this3.app);
+						//Draw frame
+						this.visuals.flip(this.scale);
 
-								//Update client
-								requestAnimationFrame(_this3.client_f);
-						};
+						//Update frames per second
+						this.fps = this.update.step.tick(this.second, this.mainLoop, this.app);
+
+						//Update client
+						requestAnimationFrame(this.client_f);
 
 						/*
       DISABLED, reenable for future Debugging clause
@@ -9885,7 +9880,7 @@ var ClientCore = function (_SJSClass2) {
       		    });
       */
 
-						loop();
+						//loop();
 				}
 		}]);
 
@@ -13711,8 +13706,7 @@ function _inspect(input, depth) {
 }
 
 /***/ },
-/* 114 */,
-/* 115 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13859,7 +13853,7 @@ function _inspect(input, depth) {
 }
 
 /***/ },
-/* 116 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14018,17 +14012,24 @@ var Step = function (_WeakMapThingy) {
    */
 
 			//To Remove
-			try {
-				if (!step.Step(app)) return false;
-			} catch (e) {
-				console.trace("Step: Second: step undefined");
-			};
+			/*
+   try{
+   	if (!step.Step())
+   		return false;
+   } catch(e){ console.trace("Step: Second: step undefined"); };
+   */
+
+			if (!step.Step()) return false;
 
 			this.frames++;
 
-			var s = this.padding;
+			var stepPadding = this.padding;
 
-			for (s; s >= 0; --s) {
+			if (!(typeof stepPadding === 'number')) {
+				throw new TypeError('Value of variable "stepPadding" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(stepPadding));
+			}
+
+			for (stepPadding; stepPadding >= 0; --stepPadding) {
 
 				if (app.client.update.state.initalized) {
 
@@ -14062,12 +14063,15 @@ var Step = function (_WeakMapThingy) {
              return false;
    */
 
-			//To Remove
-			try {
-				if (!step.Step(app)) return false;
-			} catch (e) {
-				console.trace("Step: First: step undefined");
-			};
+			//To Remove?
+			/*
+   try{
+   	if (!step.Step())
+   		return false;
+   } catch(e){ console.trace("Step: First: step undefined"); };
+   */
+
+			if (!step.Step()) return false;
 
 			this.fps = step.delta;
 
@@ -14075,7 +14079,7 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of "this.fps" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.fps));
 			}
 
-			var n = step.targetfps / this.fps * 100000;
+			var n = step.targetFPS / this.fps * 100000;
 
 			this.delta = this.ceil(n) / 100000;
 
@@ -14108,7 +14112,7 @@ var Step = function (_WeakMapThingy) {
 				return false;
 			}
 
-			this.increment = -step.targetfps + step.targetfps * (step.targetfps / this.fps);
+			this.increment = -step.targetFPS + step.targetFPS * (step.targetFPS / this.fps);
 
 			if (!(typeof this.increment === 'number')) {
 				throw new TypeError('Value of "this.increment" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.increment));
@@ -14116,9 +14120,9 @@ var Step = function (_WeakMapThingy) {
 
 			this.pending += this.increment;
 
-			if (this.pending > step.targetfps) {
+			if (this.pending > step.targetFPS) {
 
-				this.pending -= this.padding / step.targetfps * step.targetfps;
+				this.pending -= this.padding / step.targetFPS * step.targetFPS;
 
 				if (!(typeof this.pending === 'number')) {
 					throw new TypeError('Value of "this.pending" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.pending));
@@ -14208,6 +14212,196 @@ function _inspect(input, depth) {
 			}();
 
 			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+		} else {
+			return 'Array';
+		}
+	} else {
+		var keys = Object.keys(input);
+
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
+
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
+
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
+
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
+}
+
+/***/ },
+/* 116 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__ = __webpack_require__(6);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
+
+/*
+* Base Pace class for caluclating the Pacing of the Application
+*/
+
+var Pace = function () {
+	function Pace(rate, fps) {
+		_classCallCheck(this, Pace);
+
+		if (!(typeof rate === 'number')) {
+			throw new TypeError("Value of argument \"rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(rate));
+		}
+
+		if (!(typeof fps === 'number')) {
+			throw new TypeError("Value of argument \"fps\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(fps));
+		}
+
+		this.targetFPS = fps;
+
+		this.currentTime = Date.now();
+
+		if (!(typeof this.currentTime === 'number')) {
+			throw new TypeError("Value of \"this.currentTime\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.currentTime));
+		}
+
+		this.rate = rate / 1000.0;
+
+		if (!(typeof this.rate === 'number')) {
+			throw new TypeError("Value of \"this.rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.rate));
+		}
+
+		this.offset = this.currentTime - 1000.0 / rate;
+
+		if (!(typeof this.offset === 'number')) {
+			throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
+		}
+
+		this.delta = 0.0;
+
+		//Fake Flow Interfacing
+		return this;
+	}
+
+	/*
+ *	Delta between the last frame and this frame
+ */
+
+	_createClass(Pace, [{
+		key: "CalculateDelta",
+		value: function CalculateDelta() {
+			function _ref(_id) {
+				if (!(typeof _id === 'number')) {
+					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id));
+				}
+
+				return _id;
+			}
+
+			this.currentTime = Date.now();
+
+			if (!(typeof this.currentTime === 'number')) {
+				throw new TypeError("Value of \"this.currentTime\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.currentTime));
+			}
+
+			return _ref(this.currentTime - this.offset);
+		}
+
+		/*
+  *
+  */
+
+	}, {
+		key: "Step",
+		value: function Step() {
+
+			this.delta = this.CalculateDelta();
+
+			if (!(typeof this.delta === 'number')) {
+				throw new TypeError("Value of \"this.delta\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.delta));
+			}
+
+			var step = this.rate * this.delta;
+
+			if (step > 1.0) {
+
+				//this.offset += Math.floor(step)/this.rate;
+				this.offset += (step << 0) / this.rate;
+
+				if (!(typeof this.offset === 'number')) {
+					throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
+				}
+			}
+
+			return step - 1.0 > 0.0 ? true : false;
+		}
+	}]);
+
+	return Pace;
+}();
+
+/* harmony default export */ exports["a"] = Pace;
+
+function _inspect(input, depth) {
+	var maxDepth = 4;
+	var maxKeys = 15;
+
+	if (depth === undefined) {
+		depth = 0;
+	}
+
+	depth += 1;
+
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === "undefined" ? "undefined" : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
+
+				var first = _inspect(input[0], depth);
+
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
+				} else {
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
+				}
+			}();
+
+			if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 		} else {
 			return 'Array';
 		}
@@ -18749,7 +18943,7 @@ var test = function (_SJSClass) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_sjs_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_step__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_step__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_math_vector__ = __webpack_require__(29);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -31172,214 +31366,6 @@ module.exports = function(module) {
 __webpack_require__(105);
 module.exports = __webpack_require__(104);
 
-
-/***/ },
-/* 284 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__ = __webpack_require__(6);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
-
-/*
-* Base Pace class for caluclating the Pacing of the Application
-*/
-
-var Pace = function () {
-	function Pace(rate, fps) {
-		_classCallCheck(this, Pace);
-
-		if (!(typeof rate === 'number')) {
-			throw new TypeError("Value of argument \"rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(rate));
-		}
-
-		if (!(typeof fps === 'number')) {
-			throw new TypeError("Value of argument \"fps\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(fps));
-		}
-
-		this.targetfps = fps;
-
-		this.currentTime = Date.now();
-
-		if (!(typeof this.currentTime === 'number')) {
-			throw new TypeError("Value of \"this.currentTime\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.currentTime));
-		}
-
-		this.rate = rate / 1000.0;
-
-		if (!(typeof this.rate === 'number')) {
-			throw new TypeError("Value of \"this.rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.rate));
-		}
-
-		this.offset = this.currentTime - 1000.0 / rate;
-
-		if (!(typeof this.offset === 'number')) {
-			throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
-		}
-
-		this.delta = 0.0;
-
-		//Fake Flow Interfacing
-		return this;
-	}
-
-	/*
- *	Delta between the last frame and this frame
- */
-
-	_createClass(Pace, [{
-		key: "CalculateDelta",
-		value: function CalculateDelta() {
-			function _ref(_id) {
-				if (!(typeof _id === 'number')) {
-					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id));
-				}
-
-				return _id;
-			}
-
-			this.currentTime = Date.now();
-
-			if (!(typeof this.currentTime === 'number')) {
-				throw new TypeError("Value of \"this.currentTime\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.currentTime));
-			}
-
-			return _ref(this.currentTime - this.offset);
-		}
-
-		/*
-  *
-  */
-
-	}, {
-		key: "Step",
-		value: function Step() {
-
-			this.delta = this.CalculateDelta();
-
-			if (!(typeof this.delta === 'number')) {
-				throw new TypeError("Value of \"this.delta\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.delta));
-			}
-
-			var step = this.rate * this.delta;
-
-			if (step > 1.0) {
-
-				//this.offset += Math.floor(step)/this.rate;
-				this.offset += (step << 0) / this.rate;
-
-				if (!(typeof this.offset === 'number')) {
-					throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
-				}
-			}
-
-			return step - 1.0 > 0.0 ? true : false;
-		}
-
-		/*
-  *
-  */
-
-	}, {
-		key: "GetStepsPerSecond",
-		value: function GetStepsPerSecond() {
-			function _ref3(_id3) {
-				if (!(typeof _id3 === 'number')) {
-					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id3));
-				}
-
-				return _id3;
-			}
-
-			return _ref3(1000.0 / this.delta);
-		}
-	}]);
-
-	return Pace;
-}();
-
-/* harmony default export */ exports["a"] = Pace;
-
-function _inspect(input, depth) {
-	var maxDepth = 4;
-	var maxKeys = 15;
-
-	if (depth === undefined) {
-		depth = 0;
-	}
-
-	depth += 1;
-
-	if (input === null) {
-		return 'null';
-	} else if (input === undefined) {
-		return 'void';
-	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-		return typeof input === "undefined" ? "undefined" : _typeof(input);
-	} else if (Array.isArray(input)) {
-		if (input.length > 0) {
-			var _ret = function () {
-				if (depth > maxDepth) return {
-						v: '[...]'
-					};
-
-				var first = _inspect(input[0], depth);
-
-				if (input.every(function (item) {
-					return _inspect(item, depth) === first;
-				})) {
-					return {
-						v: first.trim() + '[]'
-					};
-				} else {
-					return {
-						v: '[' + input.slice(0, maxKeys).map(function (item) {
-							return _inspect(item, depth);
-						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-					};
-				}
-			}();
-
-			if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-		} else {
-			return 'Array';
-		}
-	} else {
-		var keys = Object.keys(input);
-
-		if (!keys.length) {
-			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-				return input.constructor.name;
-			} else {
-				return 'Object';
-			}
-		}
-
-		if (depth > maxDepth) return '{...}';
-		var indent = '  '.repeat(depth - 1);
-		var entries = keys.slice(0, maxKeys).map(function (key) {
-			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-		}).join('\n  ' + indent);
-
-		if (keys.length >= maxKeys) {
-			entries += '\n  ' + indent + '...';
-		}
-
-		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-		} else {
-			return '{\n  ' + indent + entries + '\n' + indent + '}';
-		}
-	}
-}
 
 /***/ }
 ],[283]);

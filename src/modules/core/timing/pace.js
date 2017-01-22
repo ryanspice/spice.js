@@ -17,7 +17,7 @@ export default class Pace {
 
 	rate:number;
 
-	targetfps:number;
+	targetFPS:number;
 
 	currentTime:number;
 
@@ -26,7 +26,7 @@ export default class Pace {
 		fps:number
 		) {
 
-		this.targetfps = fps;
+		this.targetFPS = fps;
 
 		this.currentTime = Date.now();
 
@@ -69,15 +69,6 @@ export default class Pace {
 		}
 
 		return (step - 1.0)>0.0?true:false;
-	}
-
-	/*
-	*
-	*/
-
-	GetStepsPerSecond():number	{
-
-		return 1000.0/this.delta;
 	}
 
 }

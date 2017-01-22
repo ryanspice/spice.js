@@ -125,16 +125,21 @@ export default class Step extends WeakMapThingy {
 		*/
 
 		//To Remove
+		/*
 		try{
-			if (!step.Step(app))
+			if (!step.Step())
 				return false;
 		} catch(e){ console.trace("Step: Second: step undefined"); };
+		*/
+
+		if (!step.Step())
+			return false;
 
 		this.frames++;
 
-		let s = this.padding;
+		let stepPadding:number = this.padding;
 
-		for(s;s>=0;--s) {
+		for(stepPadding;stepPadding>=0;--stepPadding) {
 
 			if (app.client.update.state.initalized) {
 
@@ -161,15 +166,20 @@ export default class Step extends WeakMapThingy {
             return false;
 		*/
 
-		//To Remove
+		//To Remove?
+		/*
 		try{
-			if (!step.Step(app))
+			if (!step.Step())
 				return false;
 		} catch(e){ console.trace("Step: First: step undefined"); };
+		*/
+
+		if (!step.Step())
+			return false;
 
         this.fps = step.delta;
 
-		let n = (step.targetfps / this.fps)*100000;
+		let n:number = (step.targetFPS / this.fps)*100000;
 
         this.delta = this.ceil(n)/100000;
 
@@ -196,13 +206,13 @@ export default class Step extends WeakMapThingy {
             return false;
 		}
 
-        this.increment = -step.targetfps + (step.targetfps * (step.targetfps / this.fps));
+        this.increment = -step.targetFPS + (step.targetFPS * (step.targetFPS / this.fps));
 
         this.pending+=this.increment;
 
-        if (this.pending > step.targetfps) {
+        if (this.pending > step.targetFPS) {
 
-			this.pending -= (this.padding / step.targetfps) * step.targetfps;
+			this.pending -= (this.padding / step.targetFPS) * step.targetFPS;
 
 			this.padding++;
 

@@ -76,7 +76,7 @@ export default class ClientCore extends _SJSClass {
 	*	Initalize the client's loop and loopdata
 	*/
 
-	initalize(loop:Object,loopdata:Object,scale:number):void {
+	initalize (loop:Object, loopdata:Object, scale:number):void {
 
 		this.scale = scale;
 
@@ -91,16 +91,11 @@ export default class ClientCore extends _SJSClass {
 			this.client_data();
 
 		},1000/59);
-
-		/* STOPS HERE */
-		return;
-
 		/*Assign the cursor and log the time it took to get here _WIP  */
 
-		this.app.ext.cursor.set(this.app.ext.cursor.def);
+		//this.app.ext.cursor.set(this.app.ext.cursor.def);
 
-		this.app.ext.time = (( new Date().getTime())-SpiceJS.TimeToBuild)*1;
-
+		return;
 	}
 
 	/*
@@ -110,24 +105,24 @@ export default class ClientCore extends _SJSClass {
 
     loop():void {
 
-        let loop = () => {
+		//const loop:Function =
 
-            //Return true or false if resized, update size
-            this.resized = this.update.size(this);
 
-            //Update scale
-            this.scale = this.update.scale(this);
+		//Return true or false if resized, update size
+		this.resized = this.update.size(this);
 
-            //Draw frame
-            this.visuals.flip(this.scale);
+		//Update scale
+		this.scale = this.update.scale(this);
 
-            //Update frames per second
-            this.fps = this.update.step.tick(this.second,this.mainLoop,this.app);
+		//Draw frame
+		this.visuals.flip(this.scale);
 
-            //Update client
-            requestAnimationFrame(this.client_f);
+		//Update frames per second
+		this.fps = this.update.step.tick(this.second,this.mainLoop,this.app);
 
-        }
+		//Update client
+		requestAnimationFrame(this.client_f);
+
 
 		/*
 		DISABLED, reenable for future Debugging clause
@@ -140,7 +135,7 @@ export default class ClientCore extends _SJSClass {
 		    });
 		*/
 
-		loop();
+		//loop();
 
     }
 
