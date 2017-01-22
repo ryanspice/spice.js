@@ -17,7 +17,11 @@
 				var width = 1224;
 				var height = 720;
 
-				self.main = {update:function(){},draw:function(){},init:function(){}};
+				self.main = {update:function(){},draw:function(){
+
+					this.visuals.rect(0,0,10,10,'#FFFFFF');
+
+				},init:function(){}};
 
 				self.start(width, height);
 

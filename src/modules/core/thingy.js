@@ -18,7 +18,7 @@ type V = any;
 
  class WeakMapThingy  {
 
-    static properties:object = { name:'sjsclass', map:null, version:0 };
+    static properties:Object = { name:'sjsclass', map:null, version:0 };
     static map:WeakMap = _IMap;
 
     map:WeakMap = _IMap;

@@ -22,7 +22,7 @@ export type object = Object;
 
 	scale:number;
 
-	
+
  };
 /*
 
@@ -258,18 +258,31 @@ export type IPace = {
 
 export type IState = {
 
-	+name:string;
+	name?:string;
 
-	app:Object;
-	visuals:Object;
-	graphics:Object;
-	initalized:boolean;
-	+update:Function;
-	+draw:Function;
-	+name:Function;
-	+init:Function;
+	app?:Object;
+	visuals?:Object;
+	graphics?:Object;
+	initalized?:boolean;
+
+	update:Function;
+	draw:Function;
+	init:Function;
 
 }
+/*
+export type IState = {
+
+	name: void;
+    init: Function;
+    update: Function;
+    draw: Function;
+	app:any;
+	visuals:any;
+	graphics:any;
+
+}
+*/
 
 /**
  * @interface Room

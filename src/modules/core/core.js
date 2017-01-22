@@ -58,7 +58,7 @@ export default class Core extends legacy_core {
 	id:number=0;
 
 	static properties:IoVersion = {
-		main:{},
+		main:{init:()=>{},update:()=>{},draw:()=>{}},
 		version:_BUILD_OFFICIAL_ + _BUILD_LAST_,
 		version_details:{
 			_official_:_BUILD_OFFICIAL_,
@@ -109,12 +109,11 @@ export default class Core extends legacy_core {
 
     /**  @type {object} */
 
-	get main():Object {
+	get main():IState {
 		return this.get('main');
 	}
 
-    /**  @type {object} TEMPORARY, use Object.Assign */
-
+    /**  @type {object} Legacy, pre Object.Assign
 	set main(newmain:Object):Object {
 
 		let state:Object = this.get('main');
@@ -130,6 +129,17 @@ export default class Core extends legacy_core {
 		state.graphics = this.client.graphics;
 
 		return state;
+	}
+	*/
+
+    /**  @type {object} New Object Assign Method
+	*/
+
+	set main(newState:IState):IState {
+
+		let currentState:IState = this.main;
+
+		return currentState = Object.assign(currentState,newState);
 	}
 
 }
