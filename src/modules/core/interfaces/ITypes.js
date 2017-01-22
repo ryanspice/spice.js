@@ -224,7 +224,7 @@ export type IPace = {
 	timer: number;
 	targetfps: number;
 	+Step:Function;
-	+Time:Function;
+	+CalculateDelta:Function;
 	+GetStepsPerSecond:Function;
 
 };
@@ -270,25 +270,12 @@ export type IState = {
 	init:Function;
 
 }
-/*
-export type IState = {
-
-	name: void;
-    init: Function;
-    update: Function;
-    draw: Function;
-	app:any;
-	visuals:any;
-	graphics:any;
-
-}
-*/
 
 /**
  * @interface Room
  */
 
-export type IRoom = {
+export type IRoom<IState> = {
 	started:boolean;
 	+Started:Function;
 }

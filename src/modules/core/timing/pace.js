@@ -3,7 +3,7 @@
 import type {
 	IApp,
 	IPace
-	} from "./interfaces/ITypes.js";
+} from "../interfaces/ITypes.js";
 
 /*
 * Base Pace class for caluclating the Pacing of the Application
@@ -28,8 +28,6 @@ export default class Pace {
 
 		this.targetfps = fps;
 
-		//this.timer = new Date().getTime();
-
 		this.timer = Date.now();
 
 		this.rate = rate / 1000.0;
@@ -43,12 +41,10 @@ export default class Pace {
 	}
 
 	/*
-	*	Returns the browsers time.
+	*	Get the time in ms;
 	*/
 
-	Time(app:IApp):number {
-
-		//this.timer = new Date().getTime();
+	CalculateDelta():number {
 
 		this.timer = Date.now();
 
@@ -59,14 +55,17 @@ export default class Pace {
 	*
 	*/
 
-	Step(app:IApp):boolean {
+	Step():boolean {
 
-		this.delta = this.Time(app);
+		this.delta = this.CalculateDelta();
 
 		let step:number = this.rate*this.delta;
 
 		if (step>1.0) {
-			this.offset += Math.floor(step)/this.rate;
+
+			//this.offset += Math.floor(step)/this.rate;
+			this.offset += (step  << 0)/this.rate;
+
 		}
 
 		return (step - 1.0)>0.0?true:false;

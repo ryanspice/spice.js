@@ -358,7 +358,7 @@ var IOptions = function () {
 
 var IPace = function () {
 	function IPace(input) {
-		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.timer === 'number' && typeof input.targetfps === 'number' && typeof input.Step === 'function' && typeof input.Time === 'function' && typeof input.GetStepsPerSecond === 'function';
+		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.timer === 'number' && typeof input.targetfps === 'number' && typeof input.Step === 'function' && typeof input.CalculateDelta === 'function' && typeof input.GetStepsPerSecond === 'function';
 	}
 
 	;
@@ -405,19 +405,6 @@ var IState = function () {
 	});
 	return IState;
 }();
-/*
-export type IState = {
-
-	name: void;
-    init: Function;
-    update: Function;
-    draw: Function;
-	app:any;
-	visuals:any;
-	graphics:any;
-
-}
-*/
 
 /**
  * @interface Room
@@ -9711,7 +9698,7 @@ function _inspect(input, depth) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__graphics_js__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ext__ = __webpack_require__(122);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_room_js__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_pace__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__ = __webpack_require__(284);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__renderer_js__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__update_js__ = __webpack_require__(137);
@@ -9770,7 +9757,7 @@ var ClientCore = function (_SJSClass2) {
 						args[_key] = arguments[_key];
 				}
 
-				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
+				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
 		}
 
 		_createClass(ClientCore, [{
@@ -13724,223 +13711,7 @@ function _inspect(input, depth) {
 }
 
 /***/ },
-/* 114 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__ = __webpack_require__(6);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
-
-/*
-* Base Pace class for caluclating the Pacing of the Application
-*/
-
-var Pace = function () {
-	function Pace(rate, fps) {
-		_classCallCheck(this, Pace);
-
-		if (!(typeof rate === 'number')) {
-			throw new TypeError("Value of argument \"rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(rate));
-		}
-
-		if (!(typeof fps === 'number')) {
-			throw new TypeError("Value of argument \"fps\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(fps));
-		}
-
-		this.targetfps = fps;
-
-		//this.timer = new Date().getTime();
-
-		this.timer = Date.now();
-
-		if (!(typeof this.timer === 'number')) {
-			throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
-		}
-
-		this.rate = rate / 1000.0;
-
-		if (!(typeof this.rate === 'number')) {
-			throw new TypeError("Value of \"this.rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.rate));
-		}
-
-		this.offset = this.timer - 1000.0 / rate;
-
-		if (!(typeof this.offset === 'number')) {
-			throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
-		}
-
-		this.delta = 0.0;
-
-		//Fake Flow Interfacing
-		return this;
-	}
-
-	/*
- *	Returns the browsers time.
- */
-
-	_createClass(Pace, [{
-		key: "Time",
-		value: function Time(app) {
-			function _ref(_id) {
-				if (!(typeof _id === 'number')) {
-					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id));
-				}
-
-				return _id;
-			}
-
-			if (!IApp(app)) {
-				throw new TypeError("Value of argument \"app\" violates contract.\n\nExpected:\nIApp\n\nGot:\n" + _inspect(app));
-			}
-
-			//this.timer = new Date().getTime();
-
-			this.timer = Date.now();
-
-			if (!(typeof this.timer === 'number')) {
-				throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
-			}
-
-			return _ref(this.timer - this.offset);
-		}
-
-		/*
-  *
-  */
-
-	}, {
-		key: "Step",
-		value: function Step(app) {
-			if (!IApp(app)) {
-				throw new TypeError("Value of argument \"app\" violates contract.\n\nExpected:\nIApp\n\nGot:\n" + _inspect(app));
-			}
-
-			this.delta = this.Time(app);
-
-			if (!(typeof this.delta === 'number')) {
-				throw new TypeError("Value of \"this.delta\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.delta));
-			}
-
-			var step = this.rate * this.delta;
-
-			if (step > 1.0) {
-				this.offset += Math.floor(step) / this.rate;
-
-				if (!(typeof this.offset === 'number')) {
-					throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
-				}
-			}
-
-			return step - 1.0 > 0.0 ? true : false;
-		}
-
-		/*
-  *
-  */
-
-	}, {
-		key: "GetStepsPerSecond",
-		value: function GetStepsPerSecond() {
-			function _ref3(_id3) {
-				if (!(typeof _id3 === 'number')) {
-					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id3));
-				}
-
-				return _id3;
-			}
-
-			return _ref3(1000.0 / this.delta);
-		}
-	}]);
-
-	return Pace;
-}();
-
-/* harmony default export */ exports["a"] = Pace;
-
-function _inspect(input, depth) {
-	var maxDepth = 4;
-	var maxKeys = 15;
-
-	if (depth === undefined) {
-		depth = 0;
-	}
-
-	depth += 1;
-
-	if (input === null) {
-		return 'null';
-	} else if (input === undefined) {
-		return 'void';
-	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-		return typeof input === "undefined" ? "undefined" : _typeof(input);
-	} else if (Array.isArray(input)) {
-		if (input.length > 0) {
-			var _ret = function () {
-				if (depth > maxDepth) return {
-						v: '[...]'
-					};
-
-				var first = _inspect(input[0], depth);
-
-				if (input.every(function (item) {
-					return _inspect(item, depth) === first;
-				})) {
-					return {
-						v: first.trim() + '[]'
-					};
-				} else {
-					return {
-						v: '[' + input.slice(0, maxKeys).map(function (item) {
-							return _inspect(item, depth);
-						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-					};
-				}
-			}();
-
-			if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-		} else {
-			return 'Array';
-		}
-	} else {
-		var keys = Object.keys(input);
-
-		if (!keys.length) {
-			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-				return input.constructor.name;
-			} else {
-				return 'Object';
-			}
-		}
-
-		if (depth > maxDepth) return '{...}';
-		var indent = '  '.repeat(depth - 1);
-		var entries = keys.slice(0, maxKeys).map(function (key) {
-			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-		}).join('\n  ' + indent);
-
-		if (keys.length >= maxKeys) {
-			entries += '\n  ' + indent + '...';
-		}
-
-		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-		} else {
-			return '{\n  ' + indent + entries + '\n' + indent + '}';
-		}
-	}
-}
-
-/***/ },
+/* 114 */,
 /* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31401,6 +31172,214 @@ module.exports = function(module) {
 __webpack_require__(105);
 module.exports = __webpack_require__(104);
 
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__ = __webpack_require__(6);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
+
+/*
+* Base Pace class for caluclating the Pacing of the Application
+*/
+
+var Pace = function () {
+	function Pace(rate, fps) {
+		_classCallCheck(this, Pace);
+
+		if (!(typeof rate === 'number')) {
+			throw new TypeError("Value of argument \"rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(rate));
+		}
+
+		if (!(typeof fps === 'number')) {
+			throw new TypeError("Value of argument \"fps\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(fps));
+		}
+
+		this.targetfps = fps;
+
+		this.timer = Date.now();
+
+		if (!(typeof this.timer === 'number')) {
+			throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
+		}
+
+		this.rate = rate / 1000.0;
+
+		if (!(typeof this.rate === 'number')) {
+			throw new TypeError("Value of \"this.rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.rate));
+		}
+
+		this.offset = this.timer - 1000.0 / rate;
+
+		if (!(typeof this.offset === 'number')) {
+			throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
+		}
+
+		this.delta = 0.0;
+
+		//Fake Flow Interfacing
+		return this;
+	}
+
+	/*
+ *	Get the time in ms;
+ */
+
+	_createClass(Pace, [{
+		key: "CalculateDelta",
+		value: function CalculateDelta() {
+			function _ref(_id) {
+				if (!(typeof _id === 'number')) {
+					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id));
+				}
+
+				return _id;
+			}
+
+			this.timer = Date.now();
+
+			if (!(typeof this.timer === 'number')) {
+				throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
+			}
+
+			return _ref(this.timer - this.offset);
+		}
+
+		/*
+  *
+  */
+
+	}, {
+		key: "Step",
+		value: function Step() {
+
+			this.delta = this.CalculateDelta();
+
+			if (!(typeof this.delta === 'number')) {
+				throw new TypeError("Value of \"this.delta\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.delta));
+			}
+
+			var step = this.rate * this.delta;
+
+			if (step > 1.0) {
+
+				//this.offset += Math.floor(step)/this.rate;
+				this.offset += (step << 0) / this.rate;
+
+				if (!(typeof this.offset === 'number')) {
+					throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
+				}
+			}
+
+			return step - 1.0 > 0.0 ? true : false;
+		}
+
+		/*
+  *
+  */
+
+	}, {
+		key: "GetStepsPerSecond",
+		value: function GetStepsPerSecond() {
+			function _ref3(_id3) {
+				if (!(typeof _id3 === 'number')) {
+					throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id3));
+				}
+
+				return _id3;
+			}
+
+			return _ref3(1000.0 / this.delta);
+		}
+	}]);
+
+	return Pace;
+}();
+
+/* harmony default export */ exports["a"] = Pace;
+
+function _inspect(input, depth) {
+	var maxDepth = 4;
+	var maxKeys = 15;
+
+	if (depth === undefined) {
+		depth = 0;
+	}
+
+	depth += 1;
+
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === "undefined" ? "undefined" : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
+
+				var first = _inspect(input[0], depth);
+
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
+				} else {
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
+				}
+			}();
+
+			if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+		} else {
+			return 'Array';
+		}
+	} else {
+		var keys = Object.keys(input);
+
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
+
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
+
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
+
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
+}
 
 /***/ }
 ],[283]);
