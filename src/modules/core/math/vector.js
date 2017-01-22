@@ -1,9 +1,11 @@
 /* @flow */
+/*
 import type {
 
 	IVector
 
 } from "../interfaces/ITypes";
+*/
 import WeakMapThingy from '../thingy';
 
 /** Vector2
@@ -31,7 +33,7 @@ export class Vector2 extends WeakMapThingy<IVector> {
 
 export default class Vector extends WeakMapThingy {
 
-    position:IVector;
+    position:Object;
 	_x:number;
 	_y:number;
 
@@ -65,7 +67,7 @@ export default class Vector extends WeakMapThingy {
     * PointA.position = {x:0,y:0};
     */
 
-    set position(value:IVector):void {
+    set position(value):void {
 
         this.x = value.x;
 
@@ -134,7 +136,7 @@ export default class Vector extends WeakMapThingy {
 			this.position.x = x;
 			this.position.y = y;
 
-		return (this:IVector);
+		//return (this:IVector);
     };
 
 	/**

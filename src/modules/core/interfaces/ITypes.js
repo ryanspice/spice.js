@@ -320,13 +320,20 @@ export type TClient = {
 	update:object;
 	renderer:object;
 	data:object;
+
+	width:number;
+	height:number;
+	setWidth:number;
+	setHeight:number;
 };
+
+export type IClient = TClient;
 
 export type IVector = {
 
 	x:number;
 	y:number;
-	position:IVector;
+	position:any;
 	+Difference:Function;
 	+equals:Function;
 	+sum:Function;

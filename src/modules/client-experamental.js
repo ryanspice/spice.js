@@ -178,7 +178,7 @@ export default class ClientExperamental extends ClientCore {
 	}
 
 	/*
-	*	Main Loop Data _WIP unused
+	*	Main Loop Data for Resizing and Input
 	*/
 
 	loopData(){

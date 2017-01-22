@@ -99,7 +99,7 @@ export default class ClientCore extends _SJSClass {
 	}
 
 	/*
-	*	Main game loop. Removed arrow function, kept comment for safe. 
+	*	Main game loop. Removed arrow function, kept comment for safe.
 	*/
 
     loop():void {
@@ -116,7 +116,7 @@ export default class ClientCore extends _SJSClass {
 		this.visuals.flip(this.scale);
 
 		//Update frames per second
-		this.fps = this.update.step.tick(this.second,this.mainLoop,this.app);
+		this.fps = this.update.step.tick(this.second,this.mainLoop);
 
 		//Update client
 		requestAnimationFrame(this.client_f);
