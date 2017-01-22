@@ -22,6 +22,8 @@ export type object = Object;
 
 	scale:number;
 
+	main?:IState;
+
 
  };
 /*
@@ -234,7 +236,8 @@ export type IPace = {
 
  export type IStep = {
 
-	app:Object;
+	app:IApp;
+
 	delta:number;
 	frames:number;
 	pending:number;
@@ -242,7 +245,6 @@ export type IPace = {
 	increment:number;
 	delta_speed:number;
 	fps:number;
-	+ceil:Function;
 	+focus:Function;
 	+clean:Function;
 	+tick:Function;
@@ -250,6 +252,10 @@ export type IPace = {
 	+first:Function;
 
  }
+
+
+
+
 
 /**
  * @interface State
@@ -299,7 +305,7 @@ export type IStatsBuffer = {
 
 export type TClient = {
 	discription:string;
-	projectSize:vector;
+	projectSize:IVector;
 	app:object;
 	Math:object;
 	particles:object;
@@ -315,6 +321,19 @@ export type TClient = {
 	renderer:object;
 	data:object;
 };
+
+export type IVector = {
+
+	x:number;
+	y:number;
+	position:IVector;
+	+Difference:Function;
+	+equals:Function;
+	+sum:Function;
+	+multiply:Function;
+	+offset:Function;
+
+}
 
 export type vector<X=0,Y=0> = {x:0,y:0};
 

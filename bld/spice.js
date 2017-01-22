@@ -106,30 +106,31 @@ if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IApp; });
 /* unused harmony export ICore */
 /* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IExt; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return ICookies; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return IUseragent; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return IMetatags; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return ICursor; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return IConnect; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return ICookies; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return IUseragent; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return IMetatags; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return ICursor; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return IConnect; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IOptions; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IPace; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IPace; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IRoom; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IStatsBuffer; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IRoom; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IStatsBuffer; });
 /* unused harmony export TClient */
+/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IVector; });
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -187,7 +188,7 @@ var object = function () {
 
 var IApp = function () {
 	function IApp(input) {
-		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object && IOptions(input.options) && typeof input.scale === 'number';
+		return input != null && typeof input.OnLoad === 'function' && input.client instanceof Object && IOptions(input.options) && typeof input.scale === 'number' && (input.main === undefined || IState(input.main));
 	}
 
 	;
@@ -376,7 +377,7 @@ var IPace = function () {
 
 var IStep = function () {
 	function IStep(input) {
-		return input != null && input.app instanceof Object && typeof input.delta === 'number' && typeof input.frames === 'number' && typeof input.pending === 'number' && typeof input.padding === 'number' && typeof input.increment === 'number' && typeof input.delta_speed === 'number' && typeof input.fps === 'number' && typeof input.ceil === 'function' && typeof input.focus === 'function' && typeof input.clean === 'function' && typeof input.tick === 'function' && typeof input.second === 'function' && typeof input.first === 'function';
+		return input != null && IApp(input.app) && typeof input.delta === 'number' && typeof input.frames === 'number' && typeof input.pending === 'number' && typeof input.padding === 'number' && typeof input.increment === 'number' && typeof input.delta_speed === 'number' && typeof input.fps === 'number' && typeof input.focus === 'function' && typeof input.clean === 'function' && typeof input.tick === 'function' && typeof input.second === 'function' && typeof input.first === 'function';
 	}
 
 	;
@@ -444,7 +445,7 @@ var IStatsBuffer = function () {
 
 var TClient = function () {
 	function TClient(input) {
-		return input != null && typeof input.discription === 'string' && vector(input.projectSize) && object(input.app) && object(input.Math) && object(input.particles) && object(input.visuals) && object(input.graphics) && object(input.ext) && object(input.room) && object(input.audio) && object(input.mainLoop) && object(input.second) && object(input.loader) && object(input.update) && object(input.renderer) && object(input.data);
+		return input != null && typeof input.discription === 'string' && IVector(input.projectSize) && object(input.app) && object(input.Math) && object(input.particles) && object(input.visuals) && object(input.graphics) && object(input.ext) && object(input.room) && object(input.audio) && object(input.mainLoop) && object(input.second) && object(input.loader) && object(input.update) && object(input.renderer) && object(input.data);
 	}
 
 	;
@@ -454,6 +455,20 @@ var TClient = function () {
 		}
 	});
 	return TClient;
+}();
+
+var IVector = function () {
+	function IVector(input) {
+		return input != null && typeof input.x === 'number' && typeof input.y === 'number' && IVector(input.position) && typeof input.Difference === 'function' && typeof input.equals === 'function' && typeof input.sum === 'function' && typeof input.multiply === 'function' && typeof input.offset === 'function';
+	}
+
+	;
+	Object.defineProperty(IVector, Symbol.hasInstance, {
+		value: function value(input) {
+			return IVector(input);
+		}
+	});
+	return IVector;
 }();
 
 var vector = function () {
@@ -1910,8 +1925,8 @@ else {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__thingy__ = __webpack_require__(19);
-/* unused harmony export Vector2 */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__thingy__ = __webpack_require__(19);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1923,38 +1938,26 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
+var IVector = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["f" /* IVector */];
+
+
 
 /** Vector2
 * @module
 * @access public
 * @example let vector = new Math.Vector2(1,1); */
+/*
+export class Vector2 extends WeakMapThingy<IVector> {
 
-var Vector2 = function (_WeakMapThingy) {
-    _inherits(Vector2, _WeakMapThingy);
+    static properties:object = { name:'Vector2',x:0, y:0 };
 
-    function Vector2() {
-        var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    constructor(x:number = 0, y:number = 0){
+        super(new weakmap());
+        this.position = {x ,y};
+    };
 
-        _classCallCheck(this, Vector2);
-
-        if (!(typeof x === 'number')) {
-            throw new TypeError('Value of argument "x" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(x));
-        }
-
-        if (!(typeof y === 'number')) {
-            throw new TypeError('Value of argument "y" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(y));
-        }
-
-        var _this = _possibleConstructorReturn(this, (Vector2.__proto__ || Object.getPrototypeOf(Vector2)).call(this, new weakmap()));
-
-        _this.position = { x: x, y: y };
-        return _this;
-    }
-
-    return Vector2;
-}(__WEBPACK_IMPORTED_MODULE_0__thingy__["a" /* default */]);
-
+}
+*/
 /** Vector
 * @module
 * @access public
@@ -1962,13 +1965,11 @@ var Vector2 = function (_WeakMapThingy) {
 * let vector = new Vector(1,1);
 */
 
-Vector2.properties = { name: 'Vector2', x: 0, y: 0 };
-
-var Vector = function (_WeakMapThingy2) {
-    _inherits(Vector, _WeakMapThingy2);
+var Vector = function (_WeakMapThingy) {
+    _inherits(Vector, _WeakMapThingy);
 
     _createClass(Vector, [{
-        key: 'position',
+        key: "position",
 
 
         /**
@@ -1979,7 +1980,7 @@ var Vector = function (_WeakMapThingy2) {
         get: function get() {
             function _ref(_id) {
                 if (!(_id instanceof Object)) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_id));
+                    throw new TypeError("Function return value violates contract.\n\nExpected:\nObject\n\nGot:\n" + _inspect(_id));
                 }
 
                 return _id;
@@ -2003,13 +2004,21 @@ var Vector = function (_WeakMapThingy2) {
 
         ,
         set: function set(value) {
-            if (!(value instanceof Vector)) {
-                throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(value));
+            if (!IVector(value)) {
+                throw new TypeError("Value of argument \"value\" violates contract.\n\nExpected:\nIVector\n\nGot:\n" + _inspect(value));
             }
 
             this.x = value.x;
 
+            if (!(typeof this.x === 'number')) {
+                throw new TypeError("Value of \"this.x\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.x));
+            }
+
             this.y = value.y;
+
+            if (!(typeof this.y === 'number')) {
+                throw new TypeError("Value of \"this.y\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.y));
+            }
         }
 
         /**
@@ -2018,17 +2027,10 @@ var Vector = function (_WeakMapThingy2) {
         */
 
     }, {
-        key: 'x',
+        key: "x",
         get: function get() {
-            function _ref3(_id3) {
-                if (!(typeof _id3 === 'number')) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id3));
-                }
 
-                return _id3;
-            }
-
-            return _ref3(this._x);
+            return this._x;
         }
 
         /**
@@ -2043,7 +2045,7 @@ var Vector = function (_WeakMapThingy2) {
         ,
         set: function set(value) {
             if (!(typeof value === 'number')) {
-                throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(value));
+                throw new TypeError("Value of argument \"value\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(value));
             }
 
             this._x = value;
@@ -2055,17 +2057,10 @@ var Vector = function (_WeakMapThingy2) {
         */
 
     }, {
-        key: 'y',
+        key: "y",
         get: function get() {
-            function _ref5(_id5) {
-                if (!(typeof _id5 === 'number')) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id5));
-                }
 
-                return _id5;
-            }
-
-            return _ref5(this._y);
+            return this._y;
         }
 
         /**
@@ -2079,7 +2074,7 @@ var Vector = function (_WeakMapThingy2) {
         ,
         set: function set(value) {
             if (!(typeof value === 'number')) {
-                throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(value));
+                throw new TypeError("Value of argument \"value\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(value));
             }
 
             this._y = value;
@@ -2093,28 +2088,31 @@ var Vector = function (_WeakMapThingy2) {
 
     function Vector() {
         var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+        var _ret;
+
         var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
         _classCallCheck(this, Vector);
 
         if (!(typeof x === 'number')) {
-            throw new TypeError('Value of argument "x" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(x));
+            throw new TypeError("Value of argument \"x\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(x));
         }
 
         if (!(typeof y === 'number')) {
-            throw new TypeError('Value of argument "y" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(y));
+            throw new TypeError("Value of argument \"y\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(y));
         }
 
-        var _this2 = _possibleConstructorReturn(this, (Vector.__proto__ || Object.getPrototypeOf(Vector)).call(this, new WeakMap()));
+        var _this = _possibleConstructorReturn(this, (Vector.__proto__ || Object.getPrototypeOf(Vector)).call(this, new WeakMap()));
 
-        _this2.position.x = x;
-        _this2.position.y = y;
+        _this.position.x = x;
+        _this.position.y = y;
 
-        return _this2;
+        return _ret = _this, _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(Vector, [{
-        key: 'Difference',
+        key: "Difference",
 
 
         /**
@@ -2129,11 +2127,11 @@ var Vector = function (_WeakMapThingy2) {
 
         value: function Difference(a, b) {
             if (!(a instanceof Vector)) {
-                throw new TypeError('Value of argument "a" violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(a));
+                throw new TypeError("Value of argument \"a\" violates contract.\n\nExpected:\nVector\n\nGot:\n" + _inspect(a));
             }
 
             if (!(b instanceof Vector)) {
-                throw new TypeError('Value of argument "b" violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(b));
+                throw new TypeError("Value of argument \"b\" violates contract.\n\nExpected:\nVector\n\nGot:\n" + _inspect(b));
             }
 
             var x = a.x - b.x;
@@ -2147,10 +2145,10 @@ var Vector = function (_WeakMapThingy2) {
         */
 
     }, {
-        key: 'equals',
+        key: "equals",
         value: function equals(p) {
             if (!(p instanceof Vector)) {
-                throw new TypeError('Value of argument "p" violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(p));
+                throw new TypeError("Value of argument \"p\" violates contract.\n\nExpected:\nVector\n\nGot:\n" + _inspect(p));
             }
 
             return this.x === p.x && this.y === p.y;
@@ -2161,17 +2159,17 @@ var Vector = function (_WeakMapThingy2) {
         */
 
     }, {
-        key: 'sum',
+        key: "sum",
         value: function sum() {
-            function _ref10(_id10) {
-                if (!(typeof _id10 === 'number')) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id10));
+            function _ref9(_id9) {
+                if (!(typeof _id9 === 'number')) {
+                    throw new TypeError("Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(_id9));
                 }
 
-                return _id10;
+                return _id9;
             }
 
-            return _ref10(this.x + this.y);
+            return _ref9(this.x + this.y);
         }
 
         /**
@@ -2183,28 +2181,28 @@ var Vector = function (_WeakMapThingy2) {
         */
 
     }, {
-        key: 'multiply',
+        key: "multiply",
         value: function multiply(a, b) {
-            function _ref11(_id11) {
-                if (!(_id11 instanceof Vector)) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(_id11));
+            function _ref10(_id10) {
+                if (!(_id10 instanceof Vector)) {
+                    throw new TypeError("Function return value violates contract.\n\nExpected:\nVector\n\nGot:\n" + _inspect(_id10));
                 }
 
-                return _id11;
+                return _id10;
             }
 
             if (!(typeof a === 'number')) {
-                throw new TypeError('Value of argument "a" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(a));
+                throw new TypeError("Value of argument \"a\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(a));
             }
 
             if (!(typeof b === 'number')) {
-                throw new TypeError('Value of argument "b" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(b));
+                throw new TypeError("Value of argument \"b\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(b));
             }
 
             this._x *= a;
             this._y *= b;
 
-            return _ref11(this);
+            return _ref10(this);
         }
 
         /**
@@ -2216,38 +2214,38 @@ var Vector = function (_WeakMapThingy2) {
         */
 
     }, {
-        key: 'offset',
+        key: "offset",
         value: function offset(a, b) {
-            function _ref12(_id12) {
-                if (!(_id12 instanceof Vector)) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(_id12));
+            function _ref11(_id11) {
+                if (!(_id11 instanceof Vector)) {
+                    throw new TypeError("Function return value violates contract.\n\nExpected:\nVector\n\nGot:\n" + _inspect(_id11));
                 }
 
-                return _id12;
+                return _id11;
             }
 
             if (!(typeof a === 'number')) {
-                throw new TypeError('Value of argument "a" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(a));
+                throw new TypeError("Value of argument \"a\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(a));
             }
 
             if (!(typeof b === 'number')) {
-                throw new TypeError('Value of argument "b" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(b));
+                throw new TypeError("Value of argument \"b\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(b));
             }
 
             this._x += a;
             this._y += b;
 
-            return _ref12(this);
+            return _ref11(this);
         }
     }]);
 
     return Vector;
-}(__WEBPACK_IMPORTED_MODULE_0__thingy__["a" /* default */]);
+}(__WEBPACK_IMPORTED_MODULE_1__thingy__["a" /* default */]);
 
 Vector.properties = {
     name: "Vector",
-    x: _number,
-    y: _number
+    x: null,
+    y: null
 };
 /* harmony default export */ exports["a"] = Vector;
 
@@ -2266,10 +2264,10 @@ function _inspect(input, depth) {
     } else if (input === undefined) {
         return 'void';
     } else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-        return typeof input === 'undefined' ? 'undefined' : _typeof(input);
+        return typeof input === "undefined" ? "undefined" : _typeof(input);
     } else if (Array.isArray(input)) {
         if (input.length > 0) {
-            var _ret = function () {
+            var _ret2 = function () {
                 if (depth > maxDepth) return {
                         v: '[...]'
                     };
@@ -2291,7 +2289,7 @@ function _inspect(input, depth) {
                 }
             }();
 
-            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+            if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
         } else {
             return 'Array';
         }
@@ -5421,7 +5419,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["h" /* IStatsBuffer */];
+var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["i" /* IStatsBuffer */];
 
 /*
 *
@@ -9730,7 +9728,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["f" /* IPace */];
+var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["g" /* IPace */];
 
 
 
@@ -9846,16 +9844,14 @@ var ClientCore = function (_SJSClass2) {
 				}
 
 				/*
-    *	Main game loop.
-    *	    //loop(a):void {  Not sure why A was here?
+    *	Main game loop. Removed arrow function, kept comment for safe. 
     */
 
 		}, {
 				key: 'loop',
 				value: function loop() {
 
-						//const loop:Function =
-
+						//const loop:Function = ()=>{
 
 						//Return true or false if resized, update size
 						this.resized = this.update.size(this);
@@ -9873,7 +9869,8 @@ var ClientCore = function (_SJSClass2) {
 						requestAnimationFrame(this.client_f);
 
 						/*
-      DISABLED, reenable for future Debugging clause
+      }
+      		DISABLED, reenable for future Debugging clause
       		 	SpiceJS.statistics.monitor(loop).then(function(){
       		        SpiceJS.statistics.log("fps",SpiceJS.controller.list().fps,'state');
               SpiceJS.statistics.log("scale",SpiceJS.controller.list().client.scale,'state');
@@ -13726,7 +13723,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
-    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["i" /* IRoom */];
+    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["j" /* IRoom */];
 
 /**
 *
@@ -13873,27 +13870,26 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* IPace */],
-    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["g" /* IStep */];
+    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["g" /* IPace */],
+    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["h" /* IStep */];
 
-/** The state class which the main game state inherits
-*	@module */
+/*
+*	The state class which the main game state inherits
+*/
 
 var Step = function (_WeakMapThingy) {
 	_inherits(Step, _WeakMapThingy);
 
-	/*
-    *
-    */
-
-	/** @public */
-
-	function Step(DataMap) {
+	function Step(app) {
 		var _ret;
 
 		_classCallCheck(this, Step);
 
-		var _this = _possibleConstructorReturn(this, (Step.__proto__ || Object.getPrototypeOf(Step)).call(this, DataMap));
+		if (!IApp(app)) {
+			throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
+		}
+
+		var _this = _possibleConstructorReturn(this, (Step.__proto__ || Object.getPrototypeOf(Step)).call(this, new WeakMap()));
 
 		_this.delta = 1;
 		_this.frames = 0;
@@ -13903,6 +13899,12 @@ var Step = function (_WeakMapThingy) {
 		_this.delta_speed = 1;
 
 
+		_this.app = app;
+
+		if (!IApp(_this.app)) {
+			throw new TypeError('Value of "this.app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(_this.app));
+		}
+
 		return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	}
 
@@ -13911,31 +13913,11 @@ var Step = function (_WeakMapThingy) {
     */
 
 	_createClass(Step, [{
-		key: 'ceil',
-
-
-		/* Funky Math.ceil alternative */
-
-		value: function ceil(n) {
-			function _ref3(_id3) {
-				if (!(typeof _id3 === 'number')) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id3));
-				}
-
-				return _id3;
-			}
-
-			if (!(typeof n === 'number')) {
-				throw new TypeError('Value of argument "n" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(n));
-			}
-
-			return _ref3(n + (n < 0 ? 0 : 1) >> 0);
-		}
-
-		/* UNUSED */
-
-	}, {
 		key: 'focus',
+
+
+		/* UNUSED? */
+
 		value: function focus() {
 			//if (this.app.ext.freezeonfocus)
 			//    return document.hasFocus();
@@ -13949,19 +13931,19 @@ var Step = function (_WeakMapThingy) {
 	}, {
 		key: 'clean',
 		value: function clean() {
-			function _ref5(_id5) {
-				if (!(typeof _id5 === 'number')) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id5));
+			function _ref4(_id4) {
+				if (!(typeof _id4 === 'number')) {
+					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id4));
 				}
 
-				return _id5;
+				return _id4;
 			}
 
 			var f = this.frames || 1;
 
 			this.frames = 0;
 
-			return _ref5(f);
+			return _ref4(f);
 		}
 
 		/*
@@ -13970,7 +13952,7 @@ var Step = function (_WeakMapThingy) {
 
 	}, {
 		key: 'tick',
-		value: function tick(a, b, app) {
+		value: function tick(a, b) {
 			if (!IPace(a)) {
 				throw new TypeError('Value of argument "a" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(a));
 			}
@@ -13979,13 +13961,9 @@ var Step = function (_WeakMapThingy) {
 				throw new TypeError('Value of argument "b" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(b));
 			}
 
-			if (!IApp(app)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
-			}
+			this.first(a);
 
-			this.first(a, app);
-
-			this.second(b, app);
+			this.second(b);
 
 			return this.fps;
 		}
@@ -13996,28 +13974,10 @@ var Step = function (_WeakMapThingy) {
 
 	}, {
 		key: 'second',
-		value: function second(step, app) {
+		value: function second(step) {
 			if (!IPace(step)) {
 				throw new TypeError('Value of argument "step" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(step));
 			}
-
-			if (!IApp(app)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
-			}
-
-			/*
-   Legacy Code: See if works without first check
-   if ((typeof step == 'undefined')||(!step.Step(app)))
-   	return false;
-   */
-
-			//To Remove
-			/*
-   try{
-   	if (!step.Step())
-   		return false;
-   } catch(e){ console.trace("Step: Second: step undefined"); };
-   */
 
 			if (!step.Step()) return false;
 
@@ -14031,9 +13991,9 @@ var Step = function (_WeakMapThingy) {
 
 			for (stepPadding; stepPadding >= 0; --stepPadding) {
 
-				if (app.client.update.state.initalized) {
+				if (this.app.client.update.state.initalized) {
 
-					this.focus() ? app.client.update.state.update() : null;
+					this.focus() ? this.app.client.update.state.update() : null;
 				}
 			}
 
@@ -14048,28 +14008,10 @@ var Step = function (_WeakMapThingy) {
 
 	}, {
 		key: 'first',
-		value: function first(step, app) {
+		value: function first(step) {
 			if (!IPace(step)) {
 				throw new TypeError('Value of argument "step" violates contract.\n\nExpected:\nIPace\n\nGot:\n' + _inspect(step));
 			}
-
-			if (!IApp(app)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
-			}
-
-			/*
-   Legacy Code: See if works without first check
-   if ((typeof step == 'undefined')||(!step.Step(app)))
-             return false;
-   */
-
-			//To Remove?
-			/*
-   try{
-   	if (!step.Step())
-   		return false;
-   } catch(e){ console.trace("Step: First: step undefined"); };
-   */
 
 			if (!step.Step()) return false;
 
@@ -14081,7 +14023,7 @@ var Step = function (_WeakMapThingy) {
 
 			var n = step.targetFPS / this.fps * 100000;
 
-			this.delta = this.ceil(n) / 100000;
+			this.delta = n + (n < 0 ? 0 : 1) >> 0;
 
 			// Limit FPS Catchup
 
@@ -14096,16 +14038,10 @@ var Step = function (_WeakMapThingy) {
 
 			if (this.delta !== this.delta + 1) {
 
-				app.client.delta = this.delta_speed = this.delta;
+				this.app.client.delta = this.delta_speed = this.delta;
 			} else {
 
-				app.client.delta = this.delta_speed = 1;
-			}
-
-			this.app = app;
-
-			if (!IApp(this.app)) {
-				throw new TypeError('Value of "this.app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(this.app));
+				this.app.client.delta = this.delta_speed = 1;
 			}
 
 			if (this.fps == 0) {
@@ -14258,7 +14194,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["g" /* IPace */];
 
 /*
 * Base Pace class for caluclating the Pacing of the Application
@@ -14548,7 +14484,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["m" /* ICookies */];
+var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["n" /* ICookies */];
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -14747,7 +14683,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* IMetatags */];
+var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* IMetatags */];
 
 var Metatags = function () {
 
@@ -15033,7 +14969,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["q" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["r" /* IConnect */];
 
 var Useragent = function () {
 
@@ -15353,16 +15289,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["l" /* array_string */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["l" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["m" /* array_string */],
     IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
     IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IExt */],
-    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["m" /* ICookies */],
-    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* IUseragent */],
-    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* IMetatags */],
-    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* ICursor */],
-    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* IConnect */];
+    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* ICookies */],
+    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* IUseragent */],
+    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* IMetatags */],
+    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* ICursor */],
+    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* IConnect */];
 
 
 
@@ -16075,7 +16011,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["p" /* ICursor */];
+var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["q" /* ICursor */];
 
 var Cursor = function () {
 
@@ -18015,7 +17951,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["q" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["r" /* IConnect */];
 
 var Connection = function () {
 
@@ -18942,10 +18878,11 @@ var test = function (_SJSClass) {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_sjs_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_step__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_math_vector__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_sjs_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_step__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_math_vector__ = __webpack_require__(29);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -18963,6 +18900,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 */
 
 
+var IApp = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["a" /* IApp */],
+    IStep = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["h" /* IStep */],
+    IState = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["e" /* IState */];
+
+
+
 
 
 
@@ -18977,45 +18920,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Update = function (_SJSClass) {
 	_inherits(Update, _SJSClass);
 
-	/**
-    *
-    */
+	function Update() {
+		var _ref7;
 
-	/**
-    * @public
-    */
+		var _temp, _this, _ret;
 
-	function Update(app) {
 		_classCallCheck(this, Update);
 
-		if (!(app instanceof Object)) {
-			throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
 		}
 
-		var _this = _possibleConstructorReturn(this, (Update.__proto__ || Object.getPrototypeOf(Update)).call(this, app));
-
-		_this.last = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */]();
-		_this.difference = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */]();
-		_this.scaler = { s: 1, x: 1, y: 1 };
-		_this.scaling = true;
-		_this.scalediff = 0;
-		_this.lastscale = 1;
-		_this.fullscale = false;
-		_this.resized = false;
-		_this.frames = 0;
-
-
-		if (_this.app.main.init == undefined) _this.warn(_this, _this.app.main, "Undefined main loop. ");
-
-		return _this;
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref7 = Update.__proto__ || Object.getPrototypeOf(Update)).call.apply(_ref7, [this].concat(args))), _this), _this.last = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](), _this.difference = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](), _this.scaler = { s: 1, x: 1, y: 1 }, _this.scaling = true, _this.scalediff = 0, _this.lastscale = 1, _this.fullscale = false, _this.resized = false, _this.frames = 0, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	/**
-    * @protected
-    */
-
-	/**
-    *
+    * @public
     */
 
 	_createClass(Update, [{
@@ -19030,11 +18950,16 @@ var Update = function (_SJSClass) {
   */
 
 		value: function inital(app) {
-			if (!(app instanceof Object)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
+			if (!IApp(app)) {
+				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
 			}
 
-			this.step = new this.step(new WeakMap());
+			this.step = new __WEBPACK_IMPORTED_MODULE_2__core_step__["a" /* default */](app);
+
+			if (!IStep(this.step)) {
+				throw new TypeError('Value of "this.step" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(this.step));
+			}
+
 			this.state = new this.state(app.main, app);
 		}
 
@@ -19048,21 +18973,21 @@ var Update = function (_SJSClass) {
 	}, {
 		key: 'scale',
 		value: function scale(client) {
-			function _ref2(_id2) {
-				if (!(typeof _id2 === 'number')) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id2));
+			function _ref4(_id4) {
+				if (!(typeof _id4 === 'number')) {
+					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id4));
 				}
 
-				return _id2;
+				return _id4;
 			}
 
 			if (!(client instanceof Object)) {
 				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(client));
 			}
 
-			var windowSize = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */](window.innerWidth, window.innerHeight);
+			var windowSize = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](window.innerWidth, window.innerHeight);
 
-			if (this == window) return _ref2(log('Warning: Scale: [this === window]'));else if (this.pause > 0.5) return _ref2(log('Warning: Paused', 30));else if (this.set == 1) return _ref2(log('Warning: Scale: Duplicate Run', 30));
+			if (this == window) return _ref4(log('Warning: Scale: [this === window]'));else if (this.pause > 0.5) return _ref4(log('Warning: Paused', 30));else if (this.set == 1) return _ref4(log('Warning: Scale: Duplicate Run', 30));
 
 			//Check if overriding
 
@@ -19158,7 +19083,7 @@ var Update = function (_SJSClass) {
 				throw new TypeError('Value of "this.lastscale" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.lastscale));
 			}
 
-			return _ref2(this.scaler.s);
+			return _ref4(this.scaler.s);
 		}
 
 		/**
@@ -19207,19 +19132,19 @@ var Update = function (_SJSClass) {
 				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(client));
 			}
 
-			var vector_size0 = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */](this.last.x, this.last.y);
-			var vector_size1 = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */](client.width, client.height);
+			var vector_size0 = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](this.last.x, this.last.y);
+			var vector_size1 = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](client.width, client.height);
 
 			if (vector_size0.equals(vector_size1)) {
 
-				this.difference = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */]();
+				this.difference = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */]();
 
 				return false;
 			} else {
 
-				this.difference = new __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */]().Difference(vector_size0, vector_size1);
+				this.difference = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */]().Difference(vector_size0, vector_size1);
 
-				if (!(this.difference instanceof __WEBPACK_IMPORTED_MODULE_3__core_math_vector__["a" /* default */])) {
+				if (!(this.difference instanceof __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */])) {
 					throw new TypeError('Value of "this.difference" violates contract.\n\nExpected:\nVector\n\nGot:\n' + _inspect(this.difference));
 				}
 			}
@@ -19228,23 +19153,39 @@ var Update = function (_SJSClass) {
 		}
 	}, {
 		key: 'step',
-		set: function set(s) {
 
-			this.get('data')[0] = s;
+
+		/**
+     *
+     */
+
+		set: function set(value) {
+			if (!IStep(value)) {
+				throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(value));
+			}
+
+			this.get('data')[0] = value;
 		}
 
 		/**
-     * @protected
+     *
      */
 
 		,
 		get: function get() {
+			function _ref2(_id2) {
+				if (!(IStep(_id2) || typeof _id2 === 'function')) {
+					throw new TypeError('Function return value violates contract.\n\nExpected:\nIStep | Function\n\nGot:\n' + _inspect(_id2));
+				}
 
-			return this.get('data')[0];
+				return _id2;
+			}
+
+			return _ref2(this.get('data')[0]);
 		}
 
 		/**
-     * @protected
+     *
      */
 
 	}, {
@@ -19257,7 +19198,7 @@ var Update = function (_SJSClass) {
 		}
 
 		/**
-     * @protected
+     *
      */
 
 		,
@@ -19268,11 +19209,11 @@ var Update = function (_SJSClass) {
 	}]);
 
 	return Update;
-}(__WEBPACK_IMPORTED_MODULE_0__core_sjs_js__["a" /* _SJSClass */]);
+}(__WEBPACK_IMPORTED_MODULE_1__core_sjs_js__["a" /* _SJSClass */]);
 
 Update.properties = {
 
-	data: [__WEBPACK_IMPORTED_MODULE_1__core_step__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__state__["a" /* default */]]
+	data: [__WEBPACK_IMPORTED_MODULE_2__core_step__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__state__["a" /* default */]]
 
 };
 /* harmony default export */ exports["a"] = Update;
@@ -19295,7 +19236,7 @@ function _inspect(input, depth) {
 		return typeof input === 'undefined' ? 'undefined' : _typeof(input);
 	} else if (Array.isArray(input)) {
 		if (input.length > 0) {
-			var _ret = function () {
+			var _ret2 = function () {
 				if (depth > maxDepth) return {
 						v: '[...]'
 					};
@@ -19317,7 +19258,7 @@ function _inspect(input, depth) {
 				}
 			}();
 
-			if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 		} else {
 			return 'Array';
 		}

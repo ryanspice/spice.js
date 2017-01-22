@@ -8,12 +8,11 @@ import type {
 	IStep
 } from "../core/interfaces/ITypes";
 
-/** The state class which the main game state inherits
-*	@module */
+/*
+*	The state class which the main game state inherits
+*/
 
 export default class Step extends WeakMapThingy {
-
-	/** @public */
 
 	app:IApp;
 
@@ -37,15 +36,13 @@ export default class Step extends WeakMapThingy {
 
 	};
 
-	/*
-    *
-    */
-
 	constructor(
-		DataMap:any
+		app:IApp
 		) {
 
-		super(DataMap);
+		super(new WeakMap());
+
+		this.app = app;
 
 		return (this:IStep);
 	}
@@ -56,7 +53,7 @@ export default class Step extends WeakMapThingy {
 
 	set fps(val:number ):void {
 
-    	this.get('data')[0] = 1 * (this.clean() / val * 1E3);
+    	this.get('data')[0] = (1 * (this.clean() / val * 1E3));
 
 	}
 
@@ -70,15 +67,7 @@ export default class Step extends WeakMapThingy {
 
 	}
 
-	/* Funky Math.ceil alternative */
-
-	ceil(n:number):number {
-
-		return (n + (n < 0 ? 0 : 1) >> 0);
-
-	}
-
-	/* UNUSED */
+	/* UNUSED? */
 
 	focus():boolean {
         //if (this.app.ext.freezeonfocus)
@@ -103,11 +92,11 @@ export default class Step extends WeakMapThingy {
 	*	Game Loop, Increment Frames
 	*/
 
-    tick(a:IPace,b:IPace,app:IApp):number {
+    tick(a:IPace,b:IPace):number {
 
-        this.first(a,app);
+        this.first(a);
 
-        this.second(b,app);
+        this.second(b);
 
         return this.fps;
     }
@@ -116,21 +105,7 @@ export default class Step extends WeakMapThingy {
 	*
 	*/
 
-	second(step:IPace,app:IApp):boolean {
-
-		/*
-		Legacy Code: See if works without first check
-		if ((typeof step == 'undefined')||(!step.Step(app)))
-			return false;
-		*/
-
-		//To Remove
-		/*
-		try{
-			if (!step.Step())
-				return false;
-		} catch(e){ console.trace("Step: Second: step undefined"); };
-		*/
+	second(step:IPace):boolean {
 
 		if (!step.Step())
 			return false;
@@ -141,9 +116,9 @@ export default class Step extends WeakMapThingy {
 
 		for(stepPadding;stepPadding>=0;--stepPadding) {
 
-			if (app.client.update.state.initalized) {
+			if (this.app.client.update.state.initalized) {
 
-					(this.focus())?app.client.update.state.update():null;
+					(this.focus())?this.app.client.update.state.update():null;
 
 			}
 
@@ -158,21 +133,7 @@ export default class Step extends WeakMapThingy {
 	*
 	*/
 
-    first(step:IPace,app:IApp):boolean {
-
-		/*
-		Legacy Code: See if works without first check
-		if ((typeof step == 'undefined')||(!step.Step(app)))
-            return false;
-		*/
-
-		//To Remove?
-		/*
-		try{
-			if (!step.Step())
-				return false;
-		} catch(e){ console.trace("Step: First: step undefined"); };
-		*/
+    first(step:IPace):boolean {
 
 		if (!step.Step())
 			return false;
@@ -181,7 +142,7 @@ export default class Step extends WeakMapThingy {
 
 		let n:number = (step.targetFPS / this.fps)*100000;
 
-        this.delta = this.ceil(n)/100000;
+        this.delta = (n + (n < 0 ? 0 : 1) >> 0);
 
 		// Limit FPS Catchup
         if (this.delta>2.5) {
@@ -192,15 +153,13 @@ export default class Step extends WeakMapThingy {
 
         if (this.delta!==this.delta+1) {
 
-			app.client.delta = this.delta_speed = this.delta;
+			this.app.client.delta = this.delta_speed = this.delta;
 
 		} else {
 
-            app.client.delta = this.delta_speed = 1;
+            this.app.client.delta = this.delta_speed = 1;
 
 		}
-
-        this.app = app;
 
         if (this.fps==0) {
             return false;
@@ -208,7 +167,7 @@ export default class Step extends WeakMapThingy {
 
         this.increment = -step.targetFPS + (step.targetFPS * (step.targetFPS / this.fps));
 
-        this.pending+=this.increment;
+        this.pending += this.increment;
 
         if (this.pending > step.targetFPS) {
 

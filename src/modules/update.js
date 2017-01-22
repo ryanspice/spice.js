@@ -1,8 +1,18 @@
+/* @flow */
+
 /**
 * Client Update Loop
 * @class
 * @protected
 */
+
+import type {
+
+	IApp,
+	IStep,
+	IState
+
+} from "./core/interfaces/ITypes";
 
 import {_SJSClass as SJSClass} from './core/sjs.js';
 
@@ -40,10 +50,6 @@ export default class Update extends SJSClass {
 
 	frames:number = 0;
 
-	/**
-    *
-    */
-
 	static properties = {
 
 		data:[
@@ -57,37 +63,24 @@ export default class Update extends SJSClass {
     *
     */
 
-	constructor(app:Object){
+	set step(value:IStep):void {
 
-		super(app);
-
-		if (this.app.main.init == undefined)
-			this.warn(this,this.app.main,"Undefined main loop. ");
+    	this.get('data')[0] = value;
 
 	}
 
 	/**
-    * @protected
+    *
     */
 
-	set step(s){
-
-    	this.get('data')[0] = s;
-
-	}
-
-	/**
-    * @protected
-    */
-
-	get step(){
+	get step():IStep|Function  {
 
 		return this.get('data')[0];
 
 	}
 
 	/**
-    * @protected
+    *
     */
 
 	set state(s){
@@ -99,10 +92,10 @@ export default class Update extends SJSClass {
 	}
 
 	/**
-    * @protected
+    *
     */
 
-	get state(){
+	get state() {
 
 		return this.get('data')[1];
 
@@ -115,9 +108,10 @@ export default class Update extends SJSClass {
 	* @private
 	*/
 
-	inital(app:Object):void {
+	inital(app:IApp):void {
 
-		this.step = new this.step(new WeakMap());
+		this.step = new Step(app);
+
 		this.state = new this.state(app.main,app);
 
 	}
