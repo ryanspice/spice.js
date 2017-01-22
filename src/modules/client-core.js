@@ -99,14 +99,12 @@ export default class ClientCore extends _SJSClass {
 	}
 
 	/*
-	*	Main game loop.
-	*	    //loop(a):void {  Not sure why A was here?
+	*	Main game loop. Removed arrow function, kept comment for safe. 
 	*/
 
     loop():void {
 
-		//const loop:Function =
-
+		//const loop:Function = ()=>{
 
 		//Return true or false if resized, update size
 		this.resized = this.update.size(this);
@@ -123,8 +121,9 @@ export default class ClientCore extends _SJSClass {
 		//Update client
 		requestAnimationFrame(this.client_f);
 
-
 		/*
+		}
+
 		DISABLED, reenable for future Debugging clause
 
 		 	SpiceJS.statistics.monitor(loop).then(function(){
