@@ -196,6 +196,18 @@ utils.writeToCSV = function(name){
 
 }
 
+/*
+*	Date.now polyfill
+*/
+
+if (!Date.now) {
+
+	console.warn('polyfill for Date.now used');
+
+	Date.now = function now() {	return new Date().getTime(); };
+
+}
+
 window.wait = wait;
 
 window.utils = utils;

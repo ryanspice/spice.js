@@ -13757,7 +13757,9 @@ var Pace = function () {
 
 		this.targetfps = fps;
 
-		this.timer = new Date().getTime();
+		//this.timer = new Date().getTime();
+
+		this.timer = Date.now();
 
 		if (!(typeof this.timer === 'number')) {
 			throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
@@ -13782,7 +13784,7 @@ var Pace = function () {
 	}
 
 	/*
- *
+ *	Returns the browsers time.
  */
 
 	_createClass(Pace, [{
@@ -13800,7 +13802,9 @@ var Pace = function () {
 				throw new TypeError("Value of argument \"app\" violates contract.\n\nExpected:\nIApp\n\nGot:\n" + _inspect(app));
 			}
 
-			this.timer = new Date().getTime();
+			//this.timer = new Date().getTime();
+
+			this.timer = Date.now();
 
 			if (!(typeof this.timer === 'number')) {
 				throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
@@ -19573,6 +19577,19 @@ utils.writeToCSV = function (name) {
 
     link.click();
 };
+
+/*
+*	Date.now polyfill
+*/
+
+if (!Date.now) {
+
+    console.warn('polyfill for Date.now used');
+
+    Date.now = function now() {
+        return new Date().getTime();
+    };
+}
 
 window.wait = wait;
 

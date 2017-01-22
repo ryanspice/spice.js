@@ -28,7 +28,9 @@ export default class Pace {
 
 		this.targetfps = fps;
 
-		this.timer = new Date().getTime();
+		//this.timer = new Date().getTime();
+
+		this.timer = Date.now();
 
 		this.rate = rate / 1000.0;
 
@@ -41,12 +43,14 @@ export default class Pace {
 	}
 
 	/*
-	*
+	*	Returns the browsers time.
 	*/
 
 	Time(app:IApp):number {
 
-		this.timer = new Date().getTime();
+		//this.timer = new Date().getTime();
+
+		this.timer = Date.now();
 
 		return this.timer - this.offset;
 	}
@@ -59,7 +63,7 @@ export default class Pace {
 
 		this.delta = this.Time(app);
 
-		let step = this.rate*this.delta;
+		let step:number = this.rate*this.delta;
 
 		if (step>1.0) {
 			this.offset += Math.floor(step)/this.rate;
