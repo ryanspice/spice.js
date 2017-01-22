@@ -221,8 +221,8 @@ export type IPace = {
 	delta: number;
 	offset: number;
 	rate: number;
-	timer: number;
 	targetfps: number;
+	currentTime: number;
 	+Step:Function;
 	+CalculateDelta:Function;
 	+GetStepsPerSecond:Function;

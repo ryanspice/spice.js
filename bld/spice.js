@@ -358,7 +358,7 @@ var IOptions = function () {
 
 var IPace = function () {
 	function IPace(input) {
-		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.timer === 'number' && typeof input.targetfps === 'number' && typeof input.Step === 'function' && typeof input.CalculateDelta === 'function' && typeof input.GetStepsPerSecond === 'function';
+		return input != null && typeof input.delta === 'number' && typeof input.offset === 'number' && typeof input.rate === 'number' && typeof input.targetfps === 'number' && typeof input.currentTime === 'number' && typeof input.Step === 'function' && typeof input.CalculateDelta === 'function' && typeof input.GetStepsPerSecond === 'function';
 	}
 
 	;
@@ -31207,10 +31207,10 @@ var Pace = function () {
 
 		this.targetfps = fps;
 
-		this.timer = Date.now();
+		this.currentTime = Date.now();
 
-		if (!(typeof this.timer === 'number')) {
-			throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
+		if (!(typeof this.currentTime === 'number')) {
+			throw new TypeError("Value of \"this.currentTime\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.currentTime));
 		}
 
 		this.rate = rate / 1000.0;
@@ -31219,7 +31219,7 @@ var Pace = function () {
 			throw new TypeError("Value of \"this.rate\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.rate));
 		}
 
-		this.offset = this.timer - 1000.0 / rate;
+		this.offset = this.currentTime - 1000.0 / rate;
 
 		if (!(typeof this.offset === 'number')) {
 			throw new TypeError("Value of \"this.offset\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.offset));
@@ -31232,7 +31232,7 @@ var Pace = function () {
 	}
 
 	/*
- *	Get the time in ms;
+ *	Delta between the last frame and this frame
  */
 
 	_createClass(Pace, [{
@@ -31246,13 +31246,13 @@ var Pace = function () {
 				return _id;
 			}
 
-			this.timer = Date.now();
+			this.currentTime = Date.now();
 
-			if (!(typeof this.timer === 'number')) {
-				throw new TypeError("Value of \"this.timer\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.timer));
+			if (!(typeof this.currentTime === 'number')) {
+				throw new TypeError("Value of \"this.currentTime\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.currentTime));
 			}
 
-			return _ref(this.timer - this.offset);
+			return _ref(this.currentTime - this.offset);
 		}
 
 		/*

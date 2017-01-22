@@ -19,7 +19,7 @@ export default class Pace {
 
 	targetfps:number;
 
-	timer:number;
+	currentTime:number;
 
 	constructor(
 		rate:number,
@@ -28,11 +28,11 @@ export default class Pace {
 
 		this.targetfps = fps;
 
-		this.timer = Date.now();
+		this.currentTime = Date.now();
 
 		this.rate = rate / 1000.0;
 
-		this.offset = this.timer - 1000.0 / rate;
+		this.offset = this.currentTime - 1000.0 / rate;
 
 		this.delta = 0.0;
 
@@ -41,14 +41,14 @@ export default class Pace {
 	}
 
 	/*
-	*	Get the time in ms;
+	*	Delta between the last frame and this frame
 	*/
 
 	CalculateDelta():number {
 
-		this.timer = Date.now();
+		this.currentTime = Date.now();
 
-		return this.timer - this.offset;
+		return this.currentTime - this.offset;
 	}
 
 	/*
