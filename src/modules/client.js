@@ -1,12 +1,11 @@
 /* @flow */
 
 import type {
-	IApp
+	IApp,
+	IVector
 } from './core/interfaces/ITypes';
 
 import {_SJSClass} from './core/base/sjs';
-
-import Vector from './core/math/vector';
 
 import ClientExperamental from './client-experamental';
 
@@ -19,7 +18,7 @@ export default class Client extends ClientExperamental {
 	*	The client, or base of an app.
 	*/
 
-    constructor(app:Object, size:Vector|number, h:number|void ) {
+    constructor(app:Object, size:IVector|number, h:number|void ) {
 
         super(app);
 
@@ -28,15 +27,6 @@ export default class Client extends ClientExperamental {
 		this.verifySize(size,h);
 
 		//Build Extensions
-
-		this.visuals = new this.visuals(this.app);
-
-		this.graphics = new this.graphics(this.app);
-
-		this.ext = new this.ext(this.app);
-
-		this.room = new this.room(this.app);
-
 		this.audio = {};
 
 		/* Timing Solution A */

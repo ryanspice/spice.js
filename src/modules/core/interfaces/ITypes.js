@@ -85,7 +85,7 @@ export type IExt = {
 * @interface
 */
 
-export interface IVisuals {
+export type IVisuals = {
 	a?:number;
 }
 
@@ -93,8 +93,25 @@ export interface IVisuals {
 * @interface
 */
 
-export interface IGraphics {
+export type IGraphics = {
 
+}
+
+export type IClientCore = {
+
+	projectSize:IVector;
+
+	ext:IExt;
+	room:IRoom;
+	visuals:IVisuals;
+	graphics:Object;
+	loader:Object;
+	update:IUpdate;
+	renderer:Object;
+	pace:IPace;
+
+	+initalize:Function;
+	+loop:Function;
 }
 
 /**
@@ -296,7 +313,7 @@ export type IState = {
  * @interface Room
  */
 
-export interface IRoom {
+export type IRoom = {
 	started:boolean;
 	+Started:Function;
 }
@@ -305,7 +322,7 @@ export interface IRoom {
  * @interface StatsBuffer
  */
 
-export interface IStatsBuffer {
+export type IStatsBuffer = {
 	x:number;
 	y:number;
 	w:number;
@@ -318,7 +335,7 @@ export interface IStatsBuffer {
 	+set:Function;
 }
 
-export interface ISJSClass {
+export type ISJSClass = {
 
 	app:IApp;
 	visuals:Object;
@@ -356,7 +373,7 @@ export type TClient = {
 
 export type IClient = TClient;
 
-export interface IUpdate {
+export type IUpdate = {
 
 	step:IStep;
 	state:IState;
@@ -393,13 +410,13 @@ export type IVector = {
 
 }
 
-export interface IScaler {
+export type IScaler = {
 	x:number;
 	y:number;
 	s:number;
 }
 
-export interface IThingy {
+export type IThingy = {
 
 	map:WeakMap<*,*>;
 	private:boolean;

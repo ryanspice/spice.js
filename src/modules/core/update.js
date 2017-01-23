@@ -63,13 +63,13 @@ export default class Update extends SJSClass {
     *
     */
 
-	set step(value:IStep):void {
+	set step(value:any):void {
 
     	this.get('data')[0] = value;
 
 	}
 
-	get step():IStep  {
+	get step():any  {
 
 		return this.get('data')[0];
 

@@ -75,30 +75,39 @@ module.exports = function(it){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IApp; });
 /* unused harmony export ICore */
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IExt; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return ICookies; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "v", function() { return IUseragent; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "w", function() { return IMetatags; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "x", function() { return ICursor; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "y", function() { return IConnect; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IVisuals; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IGraphics; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IClientCore; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "v", function() { return ICookies; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "w", function() { return IUseragent; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "x", function() { return IMetatags; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "y", function() { return ICursor; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "z", function() { return IConnect; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IOptions; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IPace; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return IPace; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IState; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return IRoom; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return IStatsBuffer; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return ISJSClass; });
 /* unused harmony export TClient */
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IClient; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return IVector; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return IClient; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IUpdate; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IVector; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return IScaler; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IThingy; });
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -217,9 +226,51 @@ var IExt = function () {
 * @interface
 */
 
+var IVisuals = function () {
+	function IVisuals(input) {
+		return input != null && (input.a === undefined || typeof input.a === 'number');
+	}
+
+	;
+	Object.defineProperty(IVisuals, Symbol.hasInstance, {
+		value: function value(input) {
+			return IVisuals(input);
+		}
+	});
+	return IVisuals;
+}();
+
 /**
 * @interface
 */
+
+var IGraphics = function () {
+	function IGraphics(input) {
+		return input != null && (typeof input === "undefined" ? "undefined" : _typeof(input)) === 'object';
+	}
+
+	;
+	Object.defineProperty(IGraphics, Symbol.hasInstance, {
+		value: function value(input) {
+			return IGraphics(input);
+		}
+	});
+	return IGraphics;
+}();
+
+var IClientCore = function () {
+	function IClientCore(input) {
+		return input != null && IVector(input.projectSize) && IExt(input.ext) && IRoom(input.room) && IVisuals(input.visuals) && input.graphics instanceof Object && input.loader instanceof Object && IUpdate(input.update) && input.renderer instanceof Object && IPace(input.pace) && typeof input.initalize === 'function' && typeof input.loop === 'function';
+	}
+
+	;
+	Object.defineProperty(IClientCore, Symbol.hasInstance, {
+		value: function value(input) {
+			return IClientCore(input);
+		}
+	});
+	return IClientCore;
+}();
 
 /**
 * @interface
@@ -387,9 +438,51 @@ var IState = function () {
  * @interface Room
  */
 
+var IRoom = function () {
+	function IRoom(input) {
+		return input != null && typeof input.started === 'boolean' && typeof input.Started === 'function';
+	}
+
+	;
+	Object.defineProperty(IRoom, Symbol.hasInstance, {
+		value: function value(input) {
+			return IRoom(input);
+		}
+	});
+	return IRoom;
+}();
+
 /**
  * @interface StatsBuffer
  */
+
+var IStatsBuffer = function () {
+	function IStatsBuffer(input) {
+		return input != null && typeof input.x === 'number' && typeof input.y === 'number' && typeof input.w === 'number' && typeof input.h === 'number' && typeof input.s === 'number' && typeof input.a === 'number' && typeof input.c === 'number' && typeof input.colour === 'string' && typeof input.oldcol === 'string' && typeof input.set === 'function';
+	}
+
+	;
+	Object.defineProperty(IStatsBuffer, Symbol.hasInstance, {
+		value: function value(input) {
+			return IStatsBuffer(input);
+		}
+	});
+	return IStatsBuffer;
+}();
+
+var ISJSClass = function () {
+	function ISJSClass(input) {
+		return input != null && IApp(input.app) && input.visuals instanceof Object && input.graphics instanceof Object;
+	}
+
+	;
+	Object.defineProperty(ISJSClass, Symbol.hasInstance, {
+		value: function value(input) {
+			return ISJSClass(input);
+		}
+	});
+	return ISJSClass;
+}();
 
 var TClient = function () {
 	function TClient(input) {
@@ -419,6 +512,20 @@ var IClient = function () {
 	return IClient;
 }();
 
+var IUpdate = function () {
+	function IUpdate(input) {
+		return input != null && IStep(input.step) && IState(input.state) && typeof input.inital === 'function' && typeof input.scale === 'function' && typeof input.size === 'function' && typeof input.sizedelta === 'function' && IVector(input.last) && IVector(input.difference) && IScaler(input.scaler) && typeof input.scaling === 'boolean' && typeof input.scalediff === 'number' && typeof input.lastscale === 'number' && typeof input.fullscale === 'boolean' && typeof input.resized === 'boolean' && typeof input.frames === 'number' && typeof input.pause === 'number' && typeof input.set === 'number';
+	}
+
+	;
+	Object.defineProperty(IUpdate, Symbol.hasInstance, {
+		value: function value(input) {
+			return IUpdate(input);
+		}
+	});
+	return IUpdate;
+}();
+
 var IVector = function () {
 	function IVector(input) {
 		return input != null && typeof input.x === 'number' && typeof input.y === 'number' && typeof input.Difference === 'function' && typeof input.equals === 'function' && typeof input.sum === 'function' && typeof input.multiply === 'function' && typeof input.offset === 'function';
@@ -431,6 +538,34 @@ var IVector = function () {
 		}
 	});
 	return IVector;
+}();
+
+var IScaler = function () {
+	function IScaler(input) {
+		return input != null && typeof input.x === 'number' && typeof input.y === 'number' && typeof input.s === 'number';
+	}
+
+	;
+	Object.defineProperty(IScaler, Symbol.hasInstance, {
+		value: function value(input) {
+			return IScaler(input);
+		}
+	});
+	return IScaler;
+}();
+
+var IThingy = function () {
+	function IThingy(input) {
+		return input != null && input.map instanceof WeakMap && typeof input.private === 'boolean' && typeof input.map === 'function' && typeof input.get === 'function';
+	}
+
+	;
+	Object.defineProperty(IThingy, Symbol.hasInstance, {
+		value: function value(input) {
+			return IThingy(input);
+		}
+	});
+	return IThingy;
 }();
 
 var vector = function () {
@@ -4755,7 +4890,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["j" /* IPace */];
+var IExt = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["e" /* IExt */],
+    IClientCore = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["k" /* IClientCore */],
+    IVisuals = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["g" /* IVisuals */],
+    IUpdate = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["l" /* IUpdate */],
+    IRoom = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["m" /* IRoom */],
+    IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["n" /* IPace */],
+    IVector = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["j" /* IVector */];
 
 
 
@@ -4771,34 +4912,57 @@ var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["j" /* IPace *
 var ClientCore = function (_SJSClass2) {
 		_inherits(ClientCore, _SJSClass2);
 
-		function ClientCore() {
-				var _ref4;
-
-				var _temp, _this, _ret;
+		function ClientCore(app) {
+				var _ret;
 
 				_classCallCheck(this, ClientCore);
 
-				for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-						args[_key] = arguments[_key];
+				var _this = _possibleConstructorReturn(this, (ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call(this, app));
+
+				_this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */];
+				_this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */];
+				_this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */];
+				_this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */];
+				_this.update = __WEBPACK_IMPORTED_MODULE_10__core_update_js__["a" /* default */];
+				_this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */];
+				_this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */];
+
+
+				_this.room = new __WEBPACK_IMPORTED_MODULE_6__core_base_room_js__["a" /* default */](_this.app);
+
+				if (!IRoom(_this.room)) {
+						throw new TypeError('Value of "this.room" violates contract.\n\nExpected:\nIRoom\n\nGot:\n' + _inspect(_this.room));
 				}
 
-				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_base_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__core_update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
+				_this.graphics = new __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */](_this.app);
+
+				_this.visuals = new __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */](_this.app);
+
+				if (!IVisuals(_this.visuals)) {
+						throw new TypeError('Value of "this.visuals" violates contract.\n\nExpected:\nIVisuals\n\nGot:\n' + _inspect(_this.visuals));
+				}
+
+				_this.ext = new __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */](_this.app);
+
+				if (!IExt(_this.ext)) {
+						throw new TypeError('Value of "this.ext" violates contract.\n\nExpected:\nIExt\n\nGot:\n' + _inspect(_this.ext));
+				}
+
+				return _ret = _this, _possibleConstructorReturn(_this, _ret);
 		}
+
+		/*
+  *	Verify the Input for the Application Width and Height
+  */
 
 		_createClass(ClientCore, [{
 				key: 'verifySize',
-
-
-				/*
-    *	Verify the Input for the Application Width and Height
-    */
-
 				value: function verifySize() {
 						var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 						var h = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-						if (!(typeof size === 'number' || size instanceof vector)) {
-								throw new TypeError('Value of argument "size" violates contract.\n\nExpected:\nnumber | vector\n\nGot:\n' + _inspect(size));
+						if (!(typeof size === 'number' || IVector(size))) {
+								throw new TypeError('Value of argument "size" violates contract.\n\nExpected:\nnumber | IVector\n\nGot:\n' + _inspect(size));
 						}
 
 						if (!(typeof h === 'number')) {
@@ -5308,8 +5472,7 @@ function _inspect(input, depth) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_base_sjs__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_math_vector__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__client_experamental__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__client_experamental__ = __webpack_require__(107);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5319,9 +5482,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
-var IApp = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["a" /* IApp */];
-
-
+var IApp = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["a" /* IApp */],
+    IVector = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["j" /* IVector */];
 
 
 
@@ -5342,8 +5504,8 @@ var Client = function (_ClientExperamental) {
 												throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(app));
 								}
 
-								if (!(size instanceof __WEBPACK_IMPORTED_MODULE_2__core_math_vector__["a" /* default */] || typeof size === 'number')) {
-												throw new TypeError('Value of argument "size" violates contract.\n\nExpected:\nVector | number\n\nGot:\n' + _inspect(size));
+								if (!(IVector(size) || typeof size === 'number')) {
+												throw new TypeError('Value of argument "size" violates contract.\n\nExpected:\nIVector | number\n\nGot:\n' + _inspect(size));
 								}
 
 								if (!(typeof h === 'number' || h == null)) {
@@ -5360,15 +5522,6 @@ var Client = function (_ClientExperamental) {
 								_this.verifySize(size, h);
 
 								//Build Extensions
-
-								_this.visuals = new _this.visuals(_this.app);
-
-								_this.graphics = new _this.graphics(_this.app);
-
-								_this.ext = new _this.ext(_this.app);
-
-								_this.room = new _this.room(_this.app);
-
 								_this.audio = {};
 
 								/* Timing Solution A */
@@ -5393,7 +5546,7 @@ var Client = function (_ClientExperamental) {
 				}
 
 				return Client;
-}(__WEBPACK_IMPORTED_MODULE_3__client_experamental__["a" /* default */]);
+}(__WEBPACK_IMPORTED_MODULE_2__client_experamental__["a" /* default */]);
 
 /* harmony default export */ exports["a"] = Client;
 
@@ -7672,7 +7825,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["IStatsBuffer"];
+var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["r" /* IStatsBuffer */];
 
 /*
 * The API buffer object used to store the last drawn information.
@@ -8909,7 +9062,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IScaler = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["IScaler"];
+var IScaler = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["q" /* IScaler */];
 
 /**
 */
@@ -9037,7 +9190,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["j" /* IPace */];
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["n" /* IPace */];
 
 /*
 * Base Pace class for caluclating the Pacing of the Application
@@ -9234,8 +9387,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* IPace */],
-    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* IStep */];
+    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* IPace */],
+    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* IStep */];
 
 /*
 *	The state class which the main game state inherits
@@ -9571,12 +9724,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["a" /* IApp */],
-    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["k" /* IStep */],
+    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["o" /* IStep */],
     IState = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["f" /* IState */],
-    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["l" /* IClient */],
-    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["m" /* IVector */],
-    IScaler = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IScaler"],
-    IUpdate = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IUpdate"];
+    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["p" /* IClient */],
+    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["j" /* IVector */],
+    IScaler = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["q" /* IScaler */],
+    IUpdate = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["l" /* IUpdate */];
 
 /*
 *	The Update class handles scaling, resizing, and the app state.
@@ -9594,22 +9747,12 @@ var Update = function (_SJSClass) {
      */
 
 		set: function set(value) {
-			if (!IStep(value)) {
-				throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(value));
-			}
 
 			this.get('data')[0] = value;
 		},
 		get: function get() {
-			function _ref2(_id2) {
-				if (!IStep(_id2)) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(_id2));
-				}
 
-				return _id2;
-			}
-
-			return _ref2(this.get('data')[0]);
+			return this.get('data')[0];
 		}
 
 		/**
@@ -9679,10 +9822,6 @@ var Update = function (_SJSClass) {
 			}
 
 			this.step = new __WEBPACK_IMPORTED_MODULE_1__timing_step__["a" /* default */](app);
-
-			if (!IStep(this.step)) {
-				throw new TypeError('Value of "this.step" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(this.step));
-			}
 
 			this.state = new __WEBPACK_IMPORTED_MODULE_0__state__["a" /* default */](app.main, app);
 
@@ -10099,7 +10238,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["u" /* ICookies */];
+var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["v" /* ICookies */];
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -10298,7 +10437,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* IMetatags */];
+var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["x" /* IMetatags */];
 
 var Metatags = function () {
 
@@ -10584,7 +10723,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["y" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["z" /* IConnect */];
 
 var Useragent = function () {
 
@@ -10904,16 +11043,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* array_string */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* array_string */],
     IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
     IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["e" /* IExt */],
-    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* ICookies */],
-    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* IUseragent */],
-    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* IMetatags */],
-    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["x" /* ICursor */],
-    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["y" /* IConnect */];
+    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* ICookies */],
+    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* IUseragent */],
+    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["x" /* IMetatags */],
+    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["y" /* ICursor */],
+    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["z" /* IConnect */];
 
 
 
@@ -11626,7 +11765,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["x" /* ICursor */];
+var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["y" /* ICursor */];
 
 var Cursor = function () {
 
@@ -13566,7 +13705,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["y" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["z" /* IConnect */];
 
 var Connection = function () {
 
@@ -19087,7 +19226,7 @@ if (!(Types instanceof Object)) {
 var _IMap = new WeakMap();
 
 
-var IThingy = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["IThingy"];
+var IThingy = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["c" /* IThingy */];
 
 /** The Main Inherited Interface for SpiceJS, interfaces must have a private weakmap which can be accessed by *.get('key')
 * You can also access the name of an interface with *.name
@@ -19268,9 +19407,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
-    IVisuals = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IVisuals"],
-    IGraphics = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IGraphics"],
-    ISJSClass = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["ISJSClass"];
+    IVisuals = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["g" /* IVisuals */],
+    IGraphics = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["h" /* IGraphics */],
+    ISJSClass = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["i" /* ISJSClass */];
 
 /*
 * SJSClass - Used to create objects which inherit the Application.
@@ -19468,7 +19607,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
-    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IRoom"];
+    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["m" /* IRoom */];
 
 /**
 *

@@ -1,3 +1,4 @@
+/* @flow */
 
 import {_SJSClass} from './core/base/sjs';
 
@@ -16,7 +17,13 @@ import Room from './core/base/room.js';
 import Pace from './core/timing/pace';
 
 import type {
-	IPace
+	IExt,
+	IClientCore,
+	IVisuals,
+	IUpdate,
+	IRoom,
+	IPace,
+	IVector
 } from "./core/interfaces/ITypes";
 
 import Renderer from './renderer.js';
@@ -31,27 +38,42 @@ import _loader from './loader.js';
 
 export default class ClientCore extends _SJSClass {
 
-	ext:Ext= Ext;
+	ext:IExt= Ext;
 
-	room:Room= Room;
+	room:IRoom;
 
-	visuals:Visuals = Visuals;
+	visuals:IVisuals = Visuals;
 
 	graphics:Graphics = Graphics;
 
 	loader:_loader = _loader;
 
-	update:Update = Update;
+	update:IUpdate = Update;
 
 	renderer:Renderer = Renderer;
 
 	pace:IPace = Pace;
 
+	constructor(app:any){
+
+		super(app);
+
+		this.room = new Room(this.app);
+
+		this.graphics = new Graphics(this.app);
+
+		this.visuals = new Visuals(this.app);
+
+		this.ext = new Ext(this.app);
+
+		return (this:IClientCore);
+	}
+
     /*
 	*	Verify the Input for the Application Width and Height
 	*/
 
-    verifySize(size:number|vector=0,h:number=0):void {
+    verifySize(size:number|IVector=0,h:number=0):void {
 
         let x:number = 0, y:number = 0;
 
@@ -76,7 +98,7 @@ export default class ClientCore extends _SJSClass {
 	*	Initalize the client's loop and loopdata
 	*/
 
-	initalize (loop:Object, loopdata:Object, scale:number):void {
+	initalize(loop:Object, loopdata:Object, scale:number):void {
 
 		this.scale = scale;
 
