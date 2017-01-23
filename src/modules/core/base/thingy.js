@@ -6,6 +6,12 @@ const Types:Object = new ITypes();
 
 const _IMap = new WeakMap();
 
+import type {
+
+	IThingy
+
+} from '../interfaces/ITypes';
+
 /** The Main Inherited Interface for SpiceJS, interfaces must have a private weakmap which can be accessed by *.get('key')
 * You can also access the name of an interface with *.name
 * @interface
@@ -22,7 +28,7 @@ const _IMap = new WeakMap();
 
     private:bool;
 
-    constructor(x:WeakMap<*,*>):void {
+    constructor(x:WeakMap<*,*>) {
 
         if (typeof x != 'undefined'){
 
@@ -46,6 +52,7 @@ const _IMap = new WeakMap();
 
         }
 
+		return (this:IThingy);
     }
 
     /*

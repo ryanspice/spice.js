@@ -75,30 +75,30 @@ module.exports = function(it){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IApp; });
 /* unused harmony export ICore */
-/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IExt; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return ICookies; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return IUseragent; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "v", function() { return IMetatags; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "w", function() { return ICursor; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "x", function() { return IConnect; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IOptions; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IPace; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IStep; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IExt; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return ICookies; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "v", function() { return IUseragent; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "w", function() { return IMetatags; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "x", function() { return ICursor; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "y", function() { return IConnect; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IOptions; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IPace; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IState; });
 /* unused harmony export TClient */
-/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IClient; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IVector; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IClient; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return IVector; });
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -2312,7 +2312,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IState = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["e" /* IState */];
+var IState = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* IState */];
 
 /** The state class which the main game state inherits
 *	@module */
@@ -3749,7 +3749,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_3__core_interfaces_ITypes__["a" /* IApp */],
-    IOptions = __WEBPACK_IMPORTED_MODULE_3__core_interfaces_ITypes__["c" /* IOptions */];
+    IOptions = __WEBPACK_IMPORTED_MODULE_3__core_interfaces_ITypes__["d" /* IOptions */];
 
 /** WIP Modules
 *	@module */
@@ -8944,7 +8944,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["i" /* IPace */];
+var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["j" /* IPace */];
 
 
 
@@ -12491,9 +12491,9 @@ var _BUILD_FIRST_ = '12-2013';
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["a" /* IApp */],
-    IExt = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["d" /* IExt */],
-    IOptions = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["c" /* IOptions */],
-    IState = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["e" /* IState */];
+    IExt = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["e" /* IExt */],
+    IOptions = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["d" /* IOptions */],
+    IState = __WEBPACK_IMPORTED_MODULE_4__interfaces_ITypes_js__["f" /* IState */];
 
 var dtoFacebook = __WEBPACK_IMPORTED_MODULE_5__dto_dtoTypes__["a" /* dtoFacebook */];
 
@@ -13215,7 +13215,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["i" /* IPace */];
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["j" /* IPace */];
 
 /*
 * Base Pace class for caluclating the Pacing of the Application
@@ -13412,8 +13412,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["i" /* IPace */],
-    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* IStep */];
+    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* IPace */],
+    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* IStep */];
 
 /*
 *	The state class which the main game state inherits
@@ -13749,10 +13749,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["a" /* IApp */],
-    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["j" /* IStep */],
-    IState = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["e" /* IState */],
-    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["k" /* IClient */],
-    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["l" /* IVector */],
+    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["k" /* IStep */],
+    IState = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["f" /* IState */],
+    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["l" /* IClient */],
+    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["m" /* IVector */],
     IScaler = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IScaler"],
     IUpdate = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IUpdate"];
 
@@ -14277,7 +14277,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["t" /* ICookies */];
+var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["u" /* ICookies */];
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -14476,7 +14476,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* IMetatags */];
+var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* IMetatags */];
 
 var Metatags = function () {
 
@@ -14762,7 +14762,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["x" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["y" /* IConnect */];
 
 var Useragent = function () {
 
@@ -15082,16 +15082,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* array_string */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* array_string */],
     IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
-    IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IExt */],
-    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* ICookies */],
-    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* IUseragent */],
-    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* IMetatags */],
-    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* ICursor */],
-    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["x" /* IConnect */];
+    IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["e" /* IExt */],
+    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* ICookies */],
+    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* IUseragent */],
+    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* IMetatags */],
+    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["x" /* ICursor */],
+    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["y" /* IConnect */];
 
 
 
@@ -15804,7 +15804,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["w" /* ICursor */];
+var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["x" /* ICursor */];
 
 var Cursor = function () {
 
@@ -17744,7 +17744,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["x" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["y" /* IConnect */];
 
 var Connection = function () {
 
@@ -30692,7 +30692,7 @@ module.exports = __webpack_require__(103);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 
-var IOptions = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["c" /* IOptions */];
+var IOptions = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["d" /* IOptions */];
 
 
 /* harmony default export */ exports["a"] = {
@@ -30851,6 +30851,9 @@ if (!(Types instanceof Object)) {
 
 var _IMap = new WeakMap();
 
+
+var IThingy = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["IThingy"];
+
 /** The Main Inherited Interface for SpiceJS, interfaces must have a private weakmap which can be accessed by *.get('key')
 * You can also access the name of an interface with *.name
 * @interface
@@ -30886,6 +30889,8 @@ var WeakMapThingy = function () {
 
          this.constructor.map.set(this, this.constructor.properties);
       }
+
+      return this;
    }
 
    /*
@@ -30899,19 +30904,19 @@ var WeakMapThingy = function () {
       */
 
       value: function get(value) {
-         function _ref2(_id2) {
-            if (!(_id2 instanceof Object)) {
-               throw new TypeError('Function return value violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_id2));
+         function _ref(_id) {
+            if (!(_id instanceof Object)) {
+               throw new TypeError('Function return value violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_id));
             }
 
-            return _id2;
+            return _id;
          }
 
          if (!(typeof value === 'string')) {
             throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nstring\n\nGot:\n' + _inspect(value));
          }
 
-         return _ref2(this.constructor.map.get(this)[value]);
+         return _ref(this.constructor.map.get(this)[value]);
       }
    }, {
       key: 'map',
@@ -31032,8 +31037,8 @@ var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
     IGraphics = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IGraphics"],
     ISJSClass = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["ISJSClass"];
 
-/** SJSClass - Used to create objects which inherit the Application.
-*
+/*
+* SJSClass - Used to create objects which inherit the Application.
 */
 
 var _SJSClass = function (_WeakMapThingy) {

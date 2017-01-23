@@ -9,17 +9,17 @@ import type {
 	ISJSClass
 } from "../interfaces/ITypes";
 
-/** SJSClass - Used to create objects which inherit the Application.
-*
+/*
+* SJSClass - Used to create objects which inherit the Application.
 */
 
 export class _SJSClass extends WeakMapThingy {
 
 	app:IApp;
 
-	visuals:mixed;
+	visuals:any;
 
-	graphics:mixed;
+	graphics:any;
 
     constructor(app:IApp) {
 

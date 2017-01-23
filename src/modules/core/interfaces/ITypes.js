@@ -399,6 +399,14 @@ export interface IScaler {
 	s:number;
 }
 
+export interface IThingy {
+
+	map:WeakMap<*,*>;
+	private:boolean;
+	-map:Function;
+	+get:Function;
+
+}
 
 export type vector<X=0,Y=0> = {x:0,y:0};
 
