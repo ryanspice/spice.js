@@ -28,10 +28,6 @@ import type {
 
 export default class Update extends SJSClass {
 
-	/**
-    * @public
-    */
-
 	last:IVector= new Vector();
 
 	difference:IVector = new Vector();
@@ -98,10 +94,10 @@ export default class Update extends SJSClass {
 	}
 
 	constructor(
-		a:any
-	) {
+		map:Object
+		) {
 
-		super(a);
+		super(map);
 
 		return (this:IUpdate);
 
@@ -110,8 +106,6 @@ export default class Update extends SJSClass {
 	/**
 	* Initalize the state and step objects.
 	* Step is delayed untill step is initiated so to prevent value mismatch.
-	* @method
-	* @private
 	*/
 
 	inital(app:IApp):void {
@@ -125,11 +119,11 @@ export default class Update extends SJSClass {
 	/**
 	* Calculates the scale of the canvas based on inital size inputs.
 	* Disabled if overriding canvas properties.
-	* @method
-	* @private
 	*/
 
 	scale(client:IClient):number {
+
+		//CLEAN
 
 		if (this==window)			{
 			console.log('Warning: Scale: [this === window]');return (0);
@@ -139,6 +133,8 @@ export default class Update extends SJSClass {
 			else
 		if (this.set==1)
 			{console.log('Warning: Scale: Duplicate Run',30);return (0);}
+
+		//ENDCLEAN
 
 		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
 
@@ -192,8 +188,7 @@ export default class Update extends SJSClass {
 
 			}
 
-		} else
-		{
+		} else	{
 
 
 			if (windowSize.y!==client.height) {
@@ -211,36 +206,30 @@ export default class Update extends SJSClass {
 		}
 
 		if (this.difference.sum() == 0) {
+
 			this.set = 0;
+
 			this.scalediff = 0;
+
 			return this.lastscale;
 		}
 
-		//Calculate sccalers
+		//Calculate scalers
 
 		this.set = 1;
+
 		this.scaler.x = client.height/client.setHeight;
+
 		this.scaler.y = client.width/client.setWidth;
 
 		//Toggle wither or not to scale
 
 		(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
 
-		//if scaler.s is not a number
-		/*
-		if (isNaN(this.scaler.s)){
-
-
-			console.warn("Scale is NAN");
-			return this.set = 0;
-
-		}
-		*/
-
 		//Scale difference
 		this.scalediff = this.scaler.s-this.lastscale;
 
-		//If scaled different, scroll to the top
+		//LEGACY, scroll to top, If scaled different, scroll to the top
 		//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
 
 		this.set = 0;
@@ -253,14 +242,14 @@ export default class Update extends SJSClass {
 
 	/**
 	* Perform hard resize of the canvas.
-	* @method
-	* @private
 	*/
 
 	size(client:IClient):boolean {
 
-		if (this.difference.sum() == 0)
+		if (this.difference.sum() == 0) {
+
 			return false;
+		}
 
 		client.app.canvas.canvas.width  = this.last.x = client.width;
 
@@ -276,13 +265,12 @@ export default class Update extends SJSClass {
 	/**
 	* Calculate width and height delta differences between
 	* the canvas size last frame and this frame.
-	* @method
-	* @private
 	*/
 
 	sizedelta(client:IClient):boolean {
 
 		let vector_size0:IVector = new Vector(this.last.x,this.last.y);
+
 		let vector_size1:IVector = new Vector(client.width,client.height);
 
 		if (vector_size0.equals(vector_size1)) {

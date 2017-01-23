@@ -335,6 +335,14 @@ export type IClient = TClient;
 
 export interface IUpdate {
 
+	step:IStep;
+	state:IState;
+
+	+inital:Function;
+	+scale:Function;
+	+size:Function;
+	+sizedelta:Function;
+
 	last:IVector;
 	difference:IVector;
 	scaler:IScaler;

@@ -31084,13 +31084,7 @@ var Update = function (_SJSClass) {
 			}
 
 			this.get('data')[0] = value;
-		}
-
-		/**
-     * @public
-     */
-
-		,
+		},
 		get: function get() {
 			function _ref2(_id2) {
 				if (!IStep(_id2)) {
@@ -31131,12 +31125,16 @@ var Update = function (_SJSClass) {
 		}
 	}]);
 
-	function Update(a) {
+	function Update(map) {
 		var _ret;
 
 		_classCallCheck(this, Update);
 
-		var _this = _possibleConstructorReturn(this, (Update.__proto__ || Object.getPrototypeOf(Update)).call(this, a));
+		if (!(map instanceof Object)) {
+			throw new TypeError('Value of argument "map" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(map));
+		}
+
+		var _this = _possibleConstructorReturn(this, (Update.__proto__ || Object.getPrototypeOf(Update)).call(this, map));
 
 		_this.last = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */]();
 		_this.difference = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */]();
@@ -31156,8 +31154,6 @@ var Update = function (_SJSClass) {
 	/**
  * Initalize the state and step objects.
  * Step is delayed untill step is initiated so to prevent value mismatch.
- * @method
- * @private
  */
 
 	_createClass(Update, [{
@@ -31183,8 +31179,6 @@ var Update = function (_SJSClass) {
 		/**
   * Calculates the scale of the canvas based on inital size inputs.
   * Disabled if overriding canvas properties.
-  * @method
-  * @private
   */
 
 	}, {
@@ -31202,6 +31196,8 @@ var Update = function (_SJSClass) {
 				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nIClient\n\nGot:\n' + _inspect(client));
 			}
 
+			//CLEAN
+
 			if (this == window) {
 				console.log('Warning: Scale: [this === window]');return 0;
 			} else if (this.pause > 0.5) {
@@ -31209,6 +31205,8 @@ var Update = function (_SJSClass) {
 			} else if (this.set == 1) {
 				console.log('Warning: Scale: Duplicate Run', 30);return 0;
 			}
+
+			//ENDCLEAN
 
 			var windowSize = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */](window.innerWidth, window.innerHeight);
 
@@ -31274,34 +31272,30 @@ var Update = function (_SJSClass) {
 			}
 
 			if (this.difference.sum() == 0) {
+
 				this.set = 0;
+
 				this.scalediff = 0;
+
 				return this.lastscale;
 			}
 
-			//Calculate sccalers
+			//Calculate scalers
 
 			this.set = 1;
+
 			this.scaler.x = client.height / client.setHeight;
+
 			this.scaler.y = client.width / client.setWidth;
 
 			//Toggle wither or not to scale
 
 			this.fullscale ? this.scaler.s = this.scaler.x : this.scaler.s = this.scaler.x < this.scaler.y ? this.scaler.x : this.scaler.y;
 
-			//if scaler.s is not a number
-			/*
-   if (isNaN(this.scaler.s)){
-   
-   	console.warn("Scale is NAN");
-   	return this.set = 0;
-   		}
-   */
-
 			//Scale difference
 			this.scalediff = this.scaler.s - this.lastscale;
 
-			//If scaled different, scroll to the top
+			//LEGACY, scroll to top, If scaled different, scroll to the top
 			//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
 
 			if (!(typeof this.scalediff === 'number')) {
@@ -31322,8 +31316,6 @@ var Update = function (_SJSClass) {
 
 		/**
   * Perform hard resize of the canvas.
-  * @method
-  * @private
   */
 
 	}, {
@@ -31333,7 +31325,10 @@ var Update = function (_SJSClass) {
 				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nIClient\n\nGot:\n' + _inspect(client));
 			}
 
-			if (this.difference.sum() == 0) return false;
+			if (this.difference.sum() == 0) {
+
+				return false;
+			}
 
 			client.app.canvas.canvas.width = this.last.x = client.width;
 
@@ -31349,8 +31344,6 @@ var Update = function (_SJSClass) {
 		/**
   * Calculate width and height delta differences between
   * the canvas size last frame and this frame.
-  * @method
-  * @private
   */
 
 	}, {
