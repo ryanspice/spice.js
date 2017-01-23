@@ -1,12 +1,12 @@
 /* @flow */
 
-import WeakMapThingy from './thingy';
+import WeakMapThingy from '../thingy';
 
 import type {
 	IApp,
 	IPace,
 	IStep
-} from "../core/interfaces/ITypes";
+} from "../../core/interfaces/ITypes";
 
 /*
 *	The state class which the main game state inherits

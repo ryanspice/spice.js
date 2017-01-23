@@ -342,7 +342,7 @@ export type IVector = {
 
 }
 
-export type IScaler = {
+export interface IScaler {
 	x:number;
 	y:number;
 	s:number;

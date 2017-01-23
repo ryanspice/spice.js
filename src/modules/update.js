@@ -1,31 +1,26 @@
 /* @flow */
 
-/**
-* Client Update Loop
-* @class
-* @protected
-*/
-
 import type {
 
 	IApp,
 	IStep,
 	IState,
 	IClient,
+	IVector,
 	IScaler
 
 } from "./core/interfaces/ITypes";
 
 import {_SJSClass as SJSClass} from './core/sjs.js';
 
-import Step from './core/step';
+import Step from './core/timing/step';
 
 import State from './state';
 
 import Vector from './core/math/vector';
 
-/**The Update class handles scaling, resizing, and the app state.
-* @public
+/*
+*	The Update class handles scaling, resizing, and the app state.
 */
 
 export default class Update extends SJSClass {
@@ -34,9 +29,9 @@ export default class Update extends SJSClass {
     * @public
     */
 
-	last:Vector= new Vector();
+	last:IVector= new Vector();
 
-	difference:Vector = new Vector();
+	difference:IVector = new Vector();
 
 	scaler:IScaler = {s:1,x:1,y:1};
 
