@@ -1,7 +1,7 @@
 
 import {_SJSClass as SJSClass} from './sjs';
 
-import StatsBuffer from './stats';
+import StatsBuffer from './base/stats';
 
 /*
 var pipe = function(){

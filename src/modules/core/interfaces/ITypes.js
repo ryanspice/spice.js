@@ -280,7 +280,7 @@ export type IState = {
  * @interface Room
  */
 
-export type IRoom<IState> = {
+export interface IRoom {
 	started:boolean;
 	+Started:Function;
 }

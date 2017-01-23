@@ -10,7 +10,7 @@ import type {
 *	@module
 *	@private */
 
-import WeakMapThingy from './thingy';
+import WeakMapThingy from './base/thingy';
 
 /* utils - universal helper functions */
 

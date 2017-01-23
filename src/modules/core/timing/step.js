@@ -1,6 +1,6 @@
 /* @flow */
 
-import WeakMapThingy from '../thingy';
+import WeakMapThingy from '../base/thingy';
 
 import type {
 	IApp,

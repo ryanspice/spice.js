@@ -1,6 +1,6 @@
 /* @flow */
 
-import Options from './options';
+import Options from './base/options';
 
 import facebook from '../dto/facebook-user';
 
@@ -112,25 +112,6 @@ export default class Core extends legacy_core {
 	get main():IState {
 		return this.get('main');
 	}
-
-    /**  @type {object} Legacy, pre Object.Assign
-	set main(newmain:Object):Object {
-
-		let state:Object = this.get('main');
-
-		let newstate:Object = newmain;
-
-		state.name = newstate.name;
-		state.init = newstate.init;
-		state.update = newstate.update;
-		state.draw = newstate.draw;
-		state.app = this;
-		state.visuals = this.client.visuals;
-		state.graphics = this.client.graphics;
-
-		return state;
-	}
-	*/
 
     /**  @type {object} New Object Assign Method
 	*/

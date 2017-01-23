@@ -1,7 +1,7 @@
 
 /* @flow */
 
-import ITypes from "./interfaces/ITypes";
+import ITypes from "../interfaces/ITypes";
 
 const Types:ITypes = new ITypes();
 

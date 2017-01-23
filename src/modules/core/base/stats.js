@@ -2,7 +2,7 @@
 
 import type {
 	IStatsBuffer
-} from "./interfaces/ITypes";
+} from "../interfaces/ITypes";
 
 /*
 *

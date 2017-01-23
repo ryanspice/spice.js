@@ -7,7 +7,7 @@ import type {
 
 import App from '../app.js';
 
-import WeakMapThingy from './thingy.js';
+import WeakMapThingy from './base/thingy.js';
 
 /** SJSClass - Used to create objects which inherit the Application.
 * @module */

@@ -2,7 +2,7 @@
 
 import type {
 	IOptions
-	} from "./interfaces/ITypes.js";
+} from "../interfaces/ITypes.js";
 
 export default ({
 

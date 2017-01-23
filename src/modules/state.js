@@ -1,6 +1,6 @@
 /* @noflow - no flow due to destructuring */
 
-import WeakMapThingy from './core/thingy';
+import WeakMapThingy from './core/base/thingy';
 
 import type {
 	IState

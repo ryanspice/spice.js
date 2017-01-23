@@ -6,7 +6,7 @@ import type {
 
 } from "../interfaces/ITypes";
 */
-import WeakMapThingy from '../thingy';
+import WeakMapThingy from '../base/thingy';
 
 /** Vector2
 * @module

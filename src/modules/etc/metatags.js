@@ -4,7 +4,7 @@
 *	@module
 *	@public */
 
-import WeakMapThingy from '../core/thingy';
+import WeakMapThingy from '../core/base/thingy';
 
 import type {
     IMetatags

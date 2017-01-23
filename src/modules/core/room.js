@@ -15,10 +15,6 @@ export default class Room extends SJSClass {
 
 	started:boolean = false;
 
-	/**
-	*
-	*/
-
 	constructor(app:IApp) {
 
 		super(app);
@@ -41,4 +37,4 @@ export default class Room extends SJSClass {
 
 	}
 
-};
+}
