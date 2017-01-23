@@ -19,6 +19,8 @@ import State from './state';
 
 import Vector from './core/math/vector';
 
+import Scaler from './core/math/scaler';
+
 /*
 *	The Update class handles scaling, resizing, and the app state.
 */
@@ -33,7 +35,7 @@ export default class Update extends SJSClass {
 
 	difference:IVector = new Vector();
 
-	scaler:IScaler = {s:1,x:1,y:1};
+	scaler:IScaler = new Scaler(1,1,1);
 
 	scaling:boolean = true;
 
@@ -48,6 +50,7 @@ export default class Update extends SJSClass {
 	frames:number = 0;
 
 	pause:number = 0;
+
 	set:number;
 
 	static properties = {

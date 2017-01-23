@@ -57,10 +57,6 @@ export default class Step extends WeakMapThingy {
 
 	}
 
-	/*
-    *
-    */
-
 	get fps():number {
 
 		return this.get('data')[0];
