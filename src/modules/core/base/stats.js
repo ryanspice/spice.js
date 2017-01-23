@@ -5,7 +5,7 @@ import type {
 } from "../interfaces/ITypes";
 
 /*
-*
+* The API buffer object used to store the last drawn information.
 */
 
 export default class StatsBuffer {
@@ -28,66 +28,40 @@ export default class StatsBuffer {
 
 	oldcol:string = "";
 
-	/*
-	*
-	*/
+	constructor(col:string = "", colold:string = "") {
 
-	constructor(col:string|void, colold:string|void) {
-
-		this.init();
+		this.init(col,colold);
 
 		return (this:IStatsBuffer);
 	}
 
 	/*
-	*
+	* Assigns stats.
 	*/
 
 	set(obj:Object):void {
 
-		this.x = obj.x;
-
-		this.y = obj.y;
-
-		this.w = obj.w;
-
-		this.h = obj.h;
-
-		this.s = obj.s;
-
-		this.a = obj.a;
-
-		this.c = obj.c;
-
-		this.colour = obj.colour;
-
-		this.oldcol = obj.oldcol;
+		Object.assign(this,obj);
 
 	}
 
 	/*
-	*
+	* Sets all values to default
 	*/
 
-	init(col:string|void, colold:string|void):void {
+	init(col:string = "", colold:string = ""):void {
 
-		this.x = 0;
-
-		this.y = 0;
-
-		this.w = 0;
-
-		this.h = 0;
-
-		this.s = 0;
-
-		this.a = 0;
-
-		this.c = 0;
-
-		this.colour = col || "";
-
-		this.oldcol = colold || "";
+		Object.assign(this,{
+			x:0,
+			y:0,
+			w:0,
+			h:0,
+			s:0,
+			a:0,
+			c:0,
+			colour:col||"",
+			oldcol:colold||""
+		});
 
 	}
 

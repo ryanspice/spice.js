@@ -88,7 +88,6 @@ module.exports = function(it){
 /* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IPace; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IStatsBuffer; });
 /* unused harmony export TClient */
 /* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IClient; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IVector; });
@@ -383,20 +382,6 @@ var IState = function () {
 /**
  * @interface StatsBuffer
  */
-
-var IStatsBuffer = function () {
-	function IStatsBuffer(input) {
-		return input != null && typeof input.x === 'number' && typeof input.y === 'number' && typeof input.w === 'number' && typeof input.h === 'number' && typeof input.s === 'number' && typeof input.a === 'number' && typeof input.c === 'number' && typeof input.colour === 'string' && typeof input.oldcol === 'string' && typeof input.set === 'function';
-	}
-
-	;
-	Object.defineProperty(IStatsBuffer, Symbol.hasInstance, {
-		value: function value(input) {
-			return IStatsBuffer(input);
-		}
-	});
-	return IStatsBuffer;
-}();
 
 var TClient = function () {
 	function TClient(input) {
@@ -8918,7 +8903,7 @@ function _inspect(input, depth) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__visuals_js__ = __webpack_require__(140);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__graphics_js__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ext__ = __webpack_require__(124);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_room_js__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__core_base_room_js__ = __webpack_require__(288);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__renderer_js__ = __webpack_require__(137);
@@ -8978,7 +8963,7 @@ var ClientCore = function (_SJSClass2) {
 						args[_key] = arguments[_key];
 				}
 
-				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__core_update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
+				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_base_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__core_update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
 		}
 
 		_createClass(ClientCore, [{
@@ -11857,221 +11842,164 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["l" /* IStatsBuffer */];
+var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["IStatsBuffer"];
 
 /*
-*
+* The API buffer object used to store the last drawn information.
 */
 
 var StatsBuffer = function () {
+	function StatsBuffer() {
+		var col = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+		var colold = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
 
-		/*
-  *
-  */
+		_classCallCheck(this, StatsBuffer);
 
-		function StatsBuffer(col, colold) {
-				_classCallCheck(this, StatsBuffer);
+		this.x = 0;
+		this.y = 0;
+		this.w = 0;
+		this.h = 0;
+		this.s = 0;
+		this.a = 0;
+		this.c = 0;
+		this.colour = "";
+		this.oldcol = "";
 
-				this.x = 0;
-				this.y = 0;
-				this.w = 0;
-				this.h = 0;
-				this.s = 0;
-				this.a = 0;
-				this.c = 0;
-				this.colour = "";
-				this.oldcol = "";
+		if (!(typeof col === 'string')) {
+			throw new TypeError("Value of argument \"col\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(col));
+		}
 
-				if (!(typeof col === 'string' || col == null)) {
-						throw new TypeError("Value of argument \"col\" violates contract.\n\nExpected:\nstring | void\n\nGot:\n" + _inspect(col));
-				}
+		if (!(typeof colold === 'string')) {
+			throw new TypeError("Value of argument \"colold\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(colold));
+		}
 
-				if (!(typeof colold === 'string' || colold == null)) {
-						throw new TypeError("Value of argument \"colold\" violates contract.\n\nExpected:\nstring | void\n\nGot:\n" + _inspect(colold));
-				}
+		this.init(col, colold);
 
-				this.init();
+		return this;
+	}
 
-				return this;
+	/*
+ * Assigns stats.
+ */
+
+	_createClass(StatsBuffer, [{
+		key: "set",
+		value: function set(obj) {
+			if (!(obj instanceof Object)) {
+				throw new TypeError("Value of argument \"obj\" violates contract.\n\nExpected:\nObject\n\nGot:\n" + _inspect(obj));
+			}
+
+			Object.assign(this, obj);
 		}
 
 		/*
-  *
+  * Sets all values to default
   */
 
-		_createClass(StatsBuffer, [{
-				key: "set",
-				value: function set(obj) {
-						if (!(obj instanceof Object)) {
-								throw new TypeError("Value of argument \"obj\" violates contract.\n\nExpected:\nObject\n\nGot:\n" + _inspect(obj));
-						}
+	}, {
+		key: "init",
+		value: function init() {
+			var col = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+			var colold = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
 
-						this.x = obj.x;
+			if (!(typeof col === 'string')) {
+				throw new TypeError("Value of argument \"col\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(col));
+			}
 
-						if (!(typeof this.x === 'number')) {
-								throw new TypeError("Value of \"this.x\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.x));
-						}
+			if (!(typeof colold === 'string')) {
+				throw new TypeError("Value of argument \"colold\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(colold));
+			}
 
-						this.y = obj.y;
+			Object.assign(this, {
+				x: 0,
+				y: 0,
+				w: 0,
+				h: 0,
+				s: 0,
+				a: 0,
+				c: 0,
+				colour: col || "",
+				oldcol: colold || ""
+			});
+		}
+	}]);
 
-						if (!(typeof this.y === 'number')) {
-								throw new TypeError("Value of \"this.y\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.y));
-						}
-
-						this.w = obj.w;
-
-						if (!(typeof this.w === 'number')) {
-								throw new TypeError("Value of \"this.w\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.w));
-						}
-
-						this.h = obj.h;
-
-						if (!(typeof this.h === 'number')) {
-								throw new TypeError("Value of \"this.h\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.h));
-						}
-
-						this.s = obj.s;
-
-						if (!(typeof this.s === 'number')) {
-								throw new TypeError("Value of \"this.s\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.s));
-						}
-
-						this.a = obj.a;
-
-						if (!(typeof this.a === 'number')) {
-								throw new TypeError("Value of \"this.a\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.a));
-						}
-
-						this.c = obj.c;
-
-						if (!(typeof this.c === 'number')) {
-								throw new TypeError("Value of \"this.c\" violates contract.\n\nExpected:\nnumber\n\nGot:\n" + _inspect(this.c));
-						}
-
-						this.colour = obj.colour;
-
-						if (!(typeof this.colour === 'string')) {
-								throw new TypeError("Value of \"this.colour\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(this.colour));
-						}
-
-						this.oldcol = obj.oldcol;
-
-						if (!(typeof this.oldcol === 'string')) {
-								throw new TypeError("Value of \"this.oldcol\" violates contract.\n\nExpected:\nstring\n\nGot:\n" + _inspect(this.oldcol));
-						}
-				}
-
-				/*
-    *
-    */
-
-		}, {
-				key: "init",
-				value: function init(col, colold) {
-						if (!(typeof col === 'string' || col == null)) {
-								throw new TypeError("Value of argument \"col\" violates contract.\n\nExpected:\nstring | void\n\nGot:\n" + _inspect(col));
-						}
-
-						if (!(typeof colold === 'string' || colold == null)) {
-								throw new TypeError("Value of argument \"colold\" violates contract.\n\nExpected:\nstring | void\n\nGot:\n" + _inspect(colold));
-						}
-
-						this.x = 0;
-
-						this.y = 0;
-
-						this.w = 0;
-
-						this.h = 0;
-
-						this.s = 0;
-
-						this.a = 0;
-
-						this.c = 0;
-
-						this.colour = col || "";
-
-						this.oldcol = colold || "";
-				}
-		}]);
-
-		return StatsBuffer;
+	return StatsBuffer;
 }();
 
 /* harmony default export */ exports["a"] = StatsBuffer;
 
 function _inspect(input, depth) {
-		var maxDepth = 4;
-		var maxKeys = 15;
+	var maxDepth = 4;
+	var maxKeys = 15;
 
-		if (depth === undefined) {
-				depth = 0;
-		}
+	if (depth === undefined) {
+		depth = 0;
+	}
 
-		depth += 1;
+	depth += 1;
 
-		if (input === null) {
-				return 'null';
-		} else if (input === undefined) {
-				return 'void';
-		} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-				return typeof input === "undefined" ? "undefined" : _typeof(input);
-		} else if (Array.isArray(input)) {
-				if (input.length > 0) {
-						var _ret = function () {
-								if (depth > maxDepth) return {
-												v: '[...]'
-										};
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === "undefined" ? "undefined" : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
 
-								var first = _inspect(input[0], depth);
+				var first = _inspect(input[0], depth);
 
-								if (input.every(function (item) {
-										return _inspect(item, depth) === first;
-								})) {
-										return {
-												v: first.trim() + '[]'
-										};
-								} else {
-										return {
-												v: '[' + input.slice(0, maxKeys).map(function (item) {
-														return _inspect(item, depth);
-												}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-										};
-								}
-						}();
-
-						if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
 				} else {
-						return 'Array';
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
 				}
+			}();
+
+			if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 		} else {
-				var keys = Object.keys(input);
-
-				if (!keys.length) {
-						if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-								return input.constructor.name;
-						} else {
-								return 'Object';
-						}
-				}
-
-				if (depth > maxDepth) return '{...}';
-				var indent = '  '.repeat(depth - 1);
-				var entries = keys.slice(0, maxKeys).map(function (key) {
-						return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-				}).join('\n  ' + indent);
-
-				if (keys.length >= maxKeys) {
-						entries += '\n  ' + indent + '...';
-				}
-
-				if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-						return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-				} else {
-						return '{\n  ' + indent + entries + '\n' + indent + '}';
-				}
+			return 'Array';
 		}
+	} else {
+		var keys = Object.keys(input);
+
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
+
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
+
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
+
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
 }
 
 /***/ },
@@ -13265,148 +13193,7 @@ function _inspect(input, depth) {
 }
 
 /***/ },
-/* 115 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_sjs_js__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__ = __webpack_require__(3);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
-    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IRoom"];
-
-/**
-*
-*/
-
-var Room = function (_SJSClass) {
-	_inherits(Room, _SJSClass);
-
-	function Room(app) {
-		var _ret;
-
-		_classCallCheck(this, Room);
-
-		if (!IApp(app)) {
-			throw new TypeError("Value of argument \"app\" violates contract.\n\nExpected:\nIApp\n\nGot:\n" + _inspect(app));
-		}
-
-		var _this = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, app));
-
-		_this.started = false;
-
-
-		return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	}
-
-	/**
- *
- */
-
-	_createClass(Room, [{
-		key: "Started",
-		value: function Started() {
-
-			return function () {
-				var a = this.Started;
-				//this.app.set_scale();
-				this.Started = true;
-				return a;
-			};
-		}
-	}]);
-
-	return Room;
-}(__WEBPACK_IMPORTED_MODULE_0__base_sjs_js__["a" /* _SJSClass */]);
-
-/* harmony default export */ exports["a"] = Room;
-
-function _inspect(input, depth) {
-	var maxDepth = 4;
-	var maxKeys = 15;
-
-	if (depth === undefined) {
-		depth = 0;
-	}
-
-	depth += 1;
-
-	if (input === null) {
-		return 'null';
-	} else if (input === undefined) {
-		return 'void';
-	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-		return typeof input === "undefined" ? "undefined" : _typeof(input);
-	} else if (Array.isArray(input)) {
-		if (input.length > 0) {
-			var _ret2 = function () {
-				if (depth > maxDepth) return {
-						v: '[...]'
-					};
-
-				var first = _inspect(input[0], depth);
-
-				if (input.every(function (item) {
-					return _inspect(item, depth) === first;
-				})) {
-					return {
-						v: first.trim() + '[]'
-					};
-				} else {
-					return {
-						v: '[' + input.slice(0, maxKeys).map(function (item) {
-							return _inspect(item, depth);
-						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-					};
-				}
-			}();
-
-			if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
-		} else {
-			return 'Array';
-		}
-	} else {
-		var keys = Object.keys(input);
-
-		if (!keys.length) {
-			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-				return input.constructor.name;
-			} else {
-				return 'Object';
-			}
-		}
-
-		if (depth > maxDepth) return '{...}';
-		var indent = '  '.repeat(depth - 1);
-		var entries = keys.slice(0, maxKeys).map(function (key) {
-			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-		}).join('\n  ' + indent);
-
-		if (keys.length >= maxKeys) {
-			entries += '\n  ' + indent + '...';
-		}
-
-		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-		} else {
-			return '{\n  ' + indent + entries + '\n' + indent + '}';
-		}
-	}
-}
-
-/***/ },
+/* 115 */,
 /* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31404,6 +31191,156 @@ function _inspect(input, depth) {
 			}();
 
 			if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+		} else {
+			return 'Array';
+		}
+	} else {
+		var keys = Object.keys(input);
+
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
+
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
+
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
+
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
+}
+
+/***/ },
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__sjs_js__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__ = __webpack_require__(3);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
+    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IRoom"];
+
+/**
+*
+*/
+
+var Room = function (_SJSClass) {
+	_inherits(Room, _SJSClass);
+
+	function Room(app) {
+		var _ret;
+
+		_classCallCheck(this, Room);
+
+		if (!IApp(app)) {
+			throw new TypeError("Value of argument \"app\" violates contract.\n\nExpected:\nIApp\n\nGot:\n" + _inspect(app));
+		}
+
+		var _this = _possibleConstructorReturn(this, (Room.__proto__ || Object.getPrototypeOf(Room)).call(this, app));
+
+		_this.started = false;
+
+
+		return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	}
+
+	/**
+ *
+ */
+
+	_createClass(Room, [{
+		key: "Started",
+		value: function Started() {
+
+			return function () {
+
+				var a = this.Started;
+
+				//this.app.set_scale(); UNnecessary?
+
+				if (!(typeof a === 'boolean')) {
+					throw new TypeError("Value of variable \"a\" violates contract.\n\nExpected:\nboolean\n\nGot:\n" + _inspect(a));
+				}
+
+				this.Started = true;
+
+				return a;
+			};
+		}
+	}]);
+
+	return Room;
+}(__WEBPACK_IMPORTED_MODULE_0__sjs_js__["a" /* _SJSClass */]);
+
+/* harmony default export */ exports["a"] = Room;
+
+function _inspect(input, depth) {
+	var maxDepth = 4;
+	var maxKeys = 15;
+
+	if (depth === undefined) {
+		depth = 0;
+	}
+
+	depth += 1;
+
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === "undefined" ? "undefined" : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret2 = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
+
+				var first = _inspect(input[0], depth);
+
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
+				} else {
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
+				}
+			}();
+
+			if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
 		} else {
 			return 'Array';
 		}

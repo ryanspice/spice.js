@@ -11,7 +11,7 @@ import Graphics from './graphics.js';
 
 import Ext from './ext';
 
-import Room from './core/room.js';
+import Room from './core/base/room.js';
 
 import Pace from './core/timing/pace';
 

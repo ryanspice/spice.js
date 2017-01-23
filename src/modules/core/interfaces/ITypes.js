@@ -289,7 +289,7 @@ export interface IRoom {
  * @interface StatsBuffer
  */
 
-export type IStatsBuffer = {
+export interface IStatsBuffer {
 	x:number;
 	y:number;
 	w:number;
