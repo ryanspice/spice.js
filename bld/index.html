@@ -9,6 +9,7 @@
 	    <script rel="prefetch" type="application/x-javascript" src="./vendor.js"></script>
 
 	    <script rel="prefetch" type="application/x-javascript" name="main" src="./spice.js" ></script>
+	    <script rel="prefetch" type="application/x-javascript" name="secondary" src="./2.spice.js" ></script>
 
 		<script  type="application/x-javascript" defer>
 
@@ -19,7 +20,13 @@
 
 				self.main = {update:function(){},draw:function(){
 
-					this.visuals.rect(0,0,10,10,'#FFFFFF');
+					this.visuals.rect(
+						600+5*window.innerWidth*Math.sin(Date.now()/200)/250,
+						200+5*window.innerWidth*Math.cos(Date.now()/200)/250,
+						10,
+						10,
+						'#FFFFFF'
+					);
 
 				},init:function(){}};
 

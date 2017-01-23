@@ -1,5 +1,9 @@
 /* @flow */
 
+import type {
+	IApp
+} from './core/interfaces/ITypes';
+
 import {_SJSClass} from './core/base/sjs';
 
 import Vector from './core/math/vector';
@@ -9,13 +13,13 @@ import ClientExperamental from './client-experamental';
 export default class Client extends ClientExperamental {
 
     discription:string = "Instanciates an object to hold data pertaining to a single instanciated app"
-    app:Object;
+    app:IApp;
 
 	/**
 	*	The client, or base of an app.
 	*/
 
-    constructor(app:Object, size:Vector|number, h:number|void ):void {
+    constructor(app:Object, size:Vector|number, h:number|void ) {
 
         super(app);
 
@@ -52,8 +56,6 @@ export default class Client extends ClientExperamental {
 		this.loadZip();
 
 		this.renderer.renderMarkup();
-
-
 
 		return;
 
