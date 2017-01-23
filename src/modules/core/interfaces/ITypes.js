@@ -342,6 +342,13 @@ export type IVector = {
 
 }
 
+export type IScaler = {
+	x:number;
+	y:number;
+	s:number;
+}
+
+
 export type vector<X=0,Y=0> = {x:0,y:0};
 
 

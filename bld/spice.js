@@ -75,32 +75,33 @@ module.exports = function(it){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IApp; });
 /* unused harmony export ICore */
 /* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IExt; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return ICookies; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return IUseragent; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return IMetatags; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return ICursor; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return IConnect; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return ICookies; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return IUseragent; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return IMetatags; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return ICursor; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return IConnect; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IOptions; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IPace; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IRoom; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IStatsBuffer; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IRoom; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IStatsBuffer; });
 /* unused harmony export TClient */
 /* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IClient; });
 /* unused harmony export IVector */
+/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IScaler; });
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -453,6 +454,20 @@ var IVector = function () {
 		}
 	});
 	return IVector;
+}();
+
+var IScaler = function () {
+	function IScaler(input) {
+		return input != null && typeof input.x === 'number' && typeof input.y === 'number' && typeof input.s === 'number';
+	}
+
+	;
+	Object.defineProperty(IScaler, Symbol.hasInstance, {
+		value: function value(input) {
+			return IScaler(input);
+		}
+	});
+	return IScaler;
 }();
 
 var vector = function () {
@@ -5432,7 +5447,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["i" /* IStatsBuffer */];
+var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["j" /* IStatsBuffer */];
 
 /*
 *
@@ -13736,7 +13751,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
-    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["j" /* IRoom */];
+    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["k" /* IRoom */];
 
 /**
 *
@@ -14497,7 +14512,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["n" /* ICookies */];
+var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["o" /* ICookies */];
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -14696,7 +14711,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* IMetatags */];
+var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* IMetatags */];
 
 var Metatags = function () {
 
@@ -14982,7 +14997,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["r" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["s" /* IConnect */];
 
 var Useragent = function () {
 
@@ -15302,16 +15317,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["k" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["l" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["m" /* array_string */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["l" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["m" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* array_string */],
     IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
     IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IExt */],
-    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* ICookies */],
-    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* IUseragent */],
-    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* IMetatags */],
-    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* ICursor */],
-    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* IConnect */];
+    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* ICookies */],
+    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* IUseragent */],
+    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* IMetatags */],
+    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* ICursor */],
+    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* IConnect */];
 
 
 
@@ -16024,7 +16039,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["q" /* ICursor */];
+var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["r" /* ICursor */];
 
 var Cursor = function () {
 
@@ -17964,7 +17979,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["r" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["s" /* IConnect */];
 
 var Connection = function () {
 
@@ -18916,7 +18931,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var IApp = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["a" /* IApp */],
     IStep = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["g" /* IStep */],
     IState = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["e" /* IState */],
-    IClient = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["h" /* IClient */];
+    IClient = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["h" /* IClient */],
+    IScaler = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["i" /* IScaler */];
 
 
 

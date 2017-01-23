@@ -11,7 +11,8 @@ import type {
 	IApp,
 	IStep,
 	IState,
-	IClient
+	IClient,
+	IScaler
 
 } from "./core/interfaces/ITypes";
 
@@ -37,7 +38,7 @@ export default class Update extends SJSClass {
 
 	difference:Vector = new Vector();
 
-	scaler:Object = {s:1,x:1,y:1};
+	scaler:IScaler = {s:1,x:1,y:1};
 
 	scaling:boolean = true;
 
