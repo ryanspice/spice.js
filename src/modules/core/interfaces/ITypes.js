@@ -306,20 +306,24 @@ export type IStatsBuffer = {
 export type TClient = {
 	discription:string;
 	projectSize:IVector;
-	app:object;
-	Math:object;
-	particles:object;
-	visuals:object;
-	graphics:object;
-	ext:object;
-	room:object;
-	audio:object;
-	mainLoop:object;
-	second:object;
-	loader:object;
-	update:object;
-	renderer:object;
-	data:object;
+
+
+	app:Object;
+	ext:IExt;
+
+	Math?:Object;
+	particles?:Object;
+	visuals?:Object;
+	graphics?:Object;
+
+	room?:Object;
+	audio?:Object;
+	mainLoop?:Object;
+	second?:Object;
+	loader?:Object;
+	update?:Object;
+	renderer?:Object;
+	data?:Object;
 
 	width:number;
 	height:number;
@@ -328,6 +332,22 @@ export type TClient = {
 };
 
 export type IClient = TClient;
+
+export interface IUpdate {
+
+	last:IVector;
+	difference:IVector;
+	scaler:IScaler;
+	scaling:boolean;
+	scalediff:number;
+	lastscale:number;
+	fullscale:boolean;
+	resized:boolean;
+	frames:number;
+	pause:number;
+	set:number;
+
+}
 
 export type IVector = {
 

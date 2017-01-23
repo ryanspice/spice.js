@@ -21,7 +21,7 @@ import type {
 
 import Renderer from './renderer.js';
 
-import Update from './update.js';
+import Update from './core/update.js';
 
 import _loader from './loader.js';
 
