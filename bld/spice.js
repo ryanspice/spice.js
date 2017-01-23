@@ -97,32 +97,32 @@ module.exports = function(name){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IApp; });
 /* unused harmony export ICore */
 /* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IExt; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return ICookies; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return IUseragent; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return IMetatags; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return ICursor; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return IConnect; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return ICookies; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return IUseragent; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return IMetatags; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return ICursor; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return IConnect; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IOptions; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IPace; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IRoom; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IStatsBuffer; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return IRoom; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IStatsBuffer; });
 /* unused harmony export TClient */
 /* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IClient; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IVector; });
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "m", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -437,7 +437,7 @@ var IStatsBuffer = function () {
 
 var TClient = function () {
 	function TClient(input) {
-		return input != null && typeof input.discription === 'string' && IVector(input.projectSize) && object(input.app) && object(input.Math) && object(input.particles) && object(input.visuals) && object(input.graphics) && object(input.ext) && object(input.room) && object(input.audio) && object(input.mainLoop) && object(input.second) && object(input.loader) && object(input.update) && object(input.renderer) && object(input.data) && typeof input.width === 'number' && typeof input.height === 'number' && typeof input.setWidth === 'number' && typeof input.setHeight === 'number';
+		return input != null && typeof input.discription === 'string' && IVector(input.projectSize) && input.app instanceof Object && IExt(input.ext) && (input.Math === undefined || input.Math instanceof Object) && (input.particles === undefined || input.particles instanceof Object) && (input.visuals === undefined || input.visuals instanceof Object) && (input.graphics === undefined || input.graphics instanceof Object) && (input.room === undefined || input.room instanceof Object) && (input.audio === undefined || input.audio instanceof Object) && (input.mainLoop === undefined || input.mainLoop instanceof Object) && (input.second === undefined || input.second instanceof Object) && (input.loader === undefined || input.loader instanceof Object) && (input.update === undefined || input.update instanceof Object) && (input.renderer === undefined || input.renderer instanceof Object) && (input.data === undefined || input.data instanceof Object) && typeof input.width === 'number' && typeof input.height === 'number' && typeof input.setWidth === 'number' && typeof input.setHeight === 'number';
 	}
 
 	;
@@ -5432,7 +5432,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["k" /* IStatsBuffer */];
+var IStatsBuffer = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["l" /* IStatsBuffer */];
 
 /*
 *
@@ -9712,7 +9712,7 @@ function _inspect(input, depth) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__renderer_js__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__update_js__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__core_update_js__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__loader_js__ = __webpack_require__(131);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -9768,7 +9768,7 @@ var ClientCore = function (_SJSClass2) {
 						args[_key] = arguments[_key];
 				}
 
-				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
+				return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref4 = ClientCore.__proto__ || Object.getPrototypeOf(ClientCore)).call.apply(_ref4, [this].concat(args))), _this), _this.ext = __WEBPACK_IMPORTED_MODULE_5__ext__["a" /* default */], _this.room = __WEBPACK_IMPORTED_MODULE_6__core_room_js__["a" /* default */], _this.visuals = __WEBPACK_IMPORTED_MODULE_3__visuals_js__["a" /* default */], _this.graphics = __WEBPACK_IMPORTED_MODULE_4__graphics_js__["a" /* default */], _this.loader = __WEBPACK_IMPORTED_MODULE_11__loader_js__["a" /* default */], _this.update = __WEBPACK_IMPORTED_MODULE_10__core_update_js__["a" /* default */], _this.renderer = __WEBPACK_IMPORTED_MODULE_9__renderer_js__["a" /* default */], _this.pace = __WEBPACK_IMPORTED_MODULE_7__core_timing_pace__["a" /* default */], _temp), _possibleConstructorReturn(_this, _ret);
 		}
 
 		_createClass(ClientCore, [{
@@ -13736,7 +13736,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
-    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["l" /* IRoom */];
+    IRoom = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["m" /* IRoom */];
 
 /**
 *
@@ -14167,7 +14167,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["p" /* ICookies */];
+var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["q" /* ICookies */];
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -14366,7 +14366,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* IMetatags */];
+var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* IMetatags */];
 
 var Metatags = function () {
 
@@ -14652,7 +14652,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["t" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["u" /* IConnect */];
 
 var Useragent = function () {
 
@@ -14972,16 +14972,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["m" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* array_string */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* array_string */],
     IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
     IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IExt */],
-    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* ICookies */],
-    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* IUseragent */],
-    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* IMetatags */],
-    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* ICursor */],
-    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* IConnect */];
+    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* ICookies */],
+    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* IUseragent */],
+    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* IMetatags */],
+    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* ICursor */],
+    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* IConnect */];
 
 
 
@@ -15694,7 +15694,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["s" /* ICursor */];
+var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["t" /* ICursor */];
 
 var Cursor = function () {
 
@@ -17634,7 +17634,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["t" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["u" /* IConnect */];
 
 var Connection = function () {
 
@@ -18557,439 +18557,7 @@ var test = function (_SJSClass) {
 /* harmony default export */ exports["a"] = test;
 
 /***/ },
-/* 137 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_sjs_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_timing_step__ = __webpack_require__(284);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_math_vector__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__core_math_scaler__ = __webpack_require__(285);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-var IApp = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["a" /* IApp */],
-    IStep = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["g" /* IStep */],
-    IState = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["e" /* IState */],
-    IClient = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["h" /* IClient */],
-    IVector = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["i" /* IVector */],
-    IScaler = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["IScaler"];
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-*	The Update class handles scaling, resizing, and the app state.
-*/
-
-var Update = function (_SJSClass) {
-	_inherits(Update, _SJSClass);
-
-	function Update() {
-		var _ref8;
-
-		var _temp, _this, _ret;
-
-		_classCallCheck(this, Update);
-
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
-
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref8 = Update.__proto__ || Object.getPrototypeOf(Update)).call.apply(_ref8, [this].concat(args))), _this), _this.last = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](), _this.difference = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](), _this.scaler = new __WEBPACK_IMPORTED_MODULE_5__core_math_scaler__["a" /* default */](1, 1, 1), _this.scaling = true, _this.scalediff = 0, _this.lastscale = 1, _this.fullscale = false, _this.resized = false, _this.frames = 0, _this.pause = 0, _temp), _possibleConstructorReturn(_this, _ret);
-	}
-
-	/**
-    * @public
-    */
-
-	_createClass(Update, [{
-		key: 'inital',
-
-
-		/**
-  * Initalize the state and step objects.
-  * Step is delayed untill step is initiated so to prevent value mismatch.
-  * @method
-  * @private
-  */
-
-		value: function inital(app) {
-			if (!IApp(app)) {
-				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
-			}
-
-			this.step = new __WEBPACK_IMPORTED_MODULE_2__core_timing_step__["a" /* default */](app);
-
-			if (!IStep(this.step)) {
-				throw new TypeError('Value of "this.step" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(this.step));
-			}
-
-			this.state = new __WEBPACK_IMPORTED_MODULE_3__state__["a" /* default */](app.main, app);
-
-			if (!IState(this.state)) {
-				throw new TypeError('Value of "this.state" violates contract.\n\nExpected:\nIState\n\nGot:\n' + _inspect(this.state));
-			}
-		}
-
-		/**
-  * Calculates the scale of the canvas based on inital size inputs.
-  * Disabled if overriding canvas properties.
-  * @method
-  * @private
-  */
-
-	}, {
-		key: 'scale',
-		value: function scale(client) {
-			function _ref5(_id5) {
-				if (!(typeof _id5 === 'number')) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id5));
-				}
-
-				return _id5;
-			}
-
-			if (this == window) {
-				console.log('Warning: Scale: [this === window]');return 0;
-			} else if (this.pause > 0.5) {
-				console.log('Warning: Paused', 30);return 0;
-			} else if (this.set == 1) {
-				console.log('Warning: Scale: Duplicate Run', 30);return 0;
-			}
-
-			var windowSize = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](window.innerWidth, window.innerHeight);
-
-			//Check if overriding
-
-			if (client.app.options.canvas.override) {
-
-				//Set width to override
-
-				if (client.app.options.canvas.size.width !== client.width) {
-
-					client.width = client.app.options.canvas.size.width;
-
-					if (document.body.clientHeight > windowSize.y) {
-
-						//FUCK
-
-					}
-				}
-
-				//Set height to override
-
-				if (client.app.options.canvas.size.height !== client.height) {
-
-					client.height = client.app.options.canvas.size.height;
-				}
-
-				//Check if centered
-
-				if (client.app.options.canvas.position.center) {
-
-					//if not aligned
-
-					if (client.app.options.canvas.size.left !== client.app.width / 2) {
-
-						//align
-
-						client.app.canvas.getCanvas().style.left = -client.width / 2 + windowSize.x / 2 + "px";
-
-						//if buffer align
-
-						if (client.app.options.canvas.buffer) {
-
-							client.app.canvas.getBuffer().style.left = -client.width / 2 + windowSize.x / 2 + "px";
-						}
-					}
-				}
-			} else {
-
-				if (windowSize.y !== client.height) {
-
-					client.height = windowSize.y;
-				}
-
-				if (windowSize.x !== client.width) {
-
-					client.width = windowSize.x;
-				}
-			}
-
-			if (this.difference.sum() == 0) {
-				this.set = 0;
-				this.scalediff = 0;
-				return this.lastscale;
-			}
-
-			//Calculate sccalers
-
-			this.set = 1;
-			this.scaler.x = client.height / client.setHeight;
-			this.scaler.y = client.width / client.setWidth;
-
-			//Toggle wither or not to scale
-
-			this.fullscale ? this.scaler.s = this.scaler.x : this.scaler.s = this.scaler.x < this.scaler.y ? this.scaler.x : this.scaler.y;
-
-			//if scaler.s is not a number
-			/*
-   if (isNaN(this.scaler.s)){
-   
-   	console.warn("Scale is NAN");
-   	return this.set = 0;
-   		}
-   */
-
-			//Scale difference
-			this.scalediff = this.scaler.s - this.lastscale;
-
-			//If scaled different, scroll to the top
-			//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
-
-			if (!(typeof this.scalediff === 'number')) {
-				throw new TypeError('Value of "this.scalediff" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.scalediff));
-			}
-
-			this.set = 0;
-
-			//Save scale
-			this.lastscale = this.scaler.s;
-
-			if (!(typeof this.lastscale === 'number')) {
-				throw new TypeError('Value of "this.lastscale" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.lastscale));
-			}
-
-			return _ref5(this.scaler.s);
-		}
-
-		/**
-  * Perform hard resize of the canvas.
-  * @method
-  * @private
-  */
-
-	}, {
-		key: 'size',
-		value: function size(client) {
-
-			if (this.difference.sum() == 0) return false;
-
-			client.app.canvas.canvas.width = this.last.x = client.width;
-
-			client.app.canvas.canvas.height = this.last.y = client.height;
-
-			client.app.canvas.buffer.width = this.last.x = client.width;
-
-			client.app.canvas.buffer.height = this.last.y = client.height;
-
-			return true;
-		}
-
-		/**
-  * Calculate width and height delta differences between
-  * the canvas size last frame and this frame.
-  * @method
-  * @private
-  */
-
-	}, {
-		key: 'sizedelta',
-		value: function sizedelta(client) {
-
-			var vector_size0 = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](this.last.x, this.last.y);
-			var vector_size1 = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */](client.width, client.height);
-
-			if (vector_size0.equals(vector_size1)) {
-
-				this.difference = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */]();
-
-				if (!IVector(this.difference)) {
-					throw new TypeError('Value of "this.difference" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(this.difference));
-				}
-
-				return false;
-			} else {
-
-				this.difference = new __WEBPACK_IMPORTED_MODULE_4__core_math_vector__["a" /* default */]().Difference(vector_size0, vector_size1);
-
-				if (!IVector(this.difference)) {
-					throw new TypeError('Value of "this.difference" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(this.difference));
-				}
-			}
-
-			return true;
-		}
-	}, {
-		key: 'step',
-
-
-		/**
-     *
-     */
-
-		set: function set(value) {
-			if (!IStep(value)) {
-				throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(value));
-			}
-
-			this.get('data')[0] = value;
-		}
-
-		/**
-     *
-     */
-
-		,
-		get: function get() {
-			function _ref2(_id2) {
-				if (!IStep(_id2)) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(_id2));
-				}
-
-				return _id2;
-			}
-
-			return _ref2(this.get('data')[0]);
-		}
-
-		/**
-     *
-     */
-
-	}, {
-		key: 'state',
-		set: function set(value) {
-			if (!IState(value)) {
-				throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nIState\n\nGot:\n' + _inspect(value));
-			}
-
-			value.init();
-			value.initalized = true;
-			this.get('data')[1] = value;
-		}
-
-		/**
-     *
-     */
-
-		,
-		get: function get() {
-			function _ref3(_id3) {
-				if (!IState(_id3)) {
-					throw new TypeError('Function return value violates contract.\n\nExpected:\nIState\n\nGot:\n' + _inspect(_id3));
-				}
-
-				return _id3;
-			}
-
-			return _ref3(this.get('data')[1]);
-		}
-	}]);
-
-	return Update;
-}(__WEBPACK_IMPORTED_MODULE_1__core_sjs_js__["a" /* _SJSClass */]);
-
-Update.properties = {
-
-	data: [__WEBPACK_IMPORTED_MODULE_2__core_timing_step__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__state__["a" /* default */]]
-
-};
-/* harmony default export */ exports["a"] = Update;
-
-function _inspect(input, depth) {
-	var maxDepth = 4;
-	var maxKeys = 15;
-
-	if (depth === undefined) {
-		depth = 0;
-	}
-
-	depth += 1;
-
-	if (input === null) {
-		return 'null';
-	} else if (input === undefined) {
-		return 'void';
-	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-		return typeof input === 'undefined' ? 'undefined' : _typeof(input);
-	} else if (Array.isArray(input)) {
-		if (input.length > 0) {
-			var _ret2 = function () {
-				if (depth > maxDepth) return {
-						v: '[...]'
-					};
-
-				var first = _inspect(input[0], depth);
-
-				if (input.every(function (item) {
-					return _inspect(item, depth) === first;
-				})) {
-					return {
-						v: first.trim() + '[]'
-					};
-				} else {
-					return {
-						v: '[' + input.slice(0, maxKeys).map(function (item) {
-							return _inspect(item, depth);
-						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-					};
-				}
-			}();
-
-			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-		} else {
-			return 'Array';
-		}
-	} else {
-		var keys = Object.keys(input);
-
-		if (!keys.length) {
-			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-				return input.constructor.name;
-			} else {
-				return 'Object';
-			}
-		}
-
-		if (depth > maxDepth) return '{...}';
-		var indent = '  '.repeat(depth - 1);
-		var entries = keys.slice(0, maxKeys).map(function (key) {
-			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-		}).join('\n  ' + indent);
-
-		if (keys.length >= maxKeys) {
-			entries += '\n  ' + indent + '...';
-		}
-
-		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-		} else {
-			return '{\n  ' + indent + entries + '\n' + indent + '}';
-		}
-	}
-}
-
-/***/ },
+/* 137 */,
 /* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31344,11 +30912,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var IScaler = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["IScaler"];
 
-/** Vector
-* @module
-* @access public
-* @example
-* let vector = new Vector(1,1);
+/**
 */
 
 var Scaler =
@@ -31457,6 +31021,460 @@ function _inspect(input, depth) {
 												return '{\n  ' + indent + entries + '\n' + indent + '}';
 								}
 				}
+}
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__timing_step__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__math_vector__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__math_scaler__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__sjs_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__ = __webpack_require__(5);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+
+
+
+
+
+
+var IApp = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["a" /* IApp */],
+    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["g" /* IStep */],
+    IState = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["e" /* IState */],
+    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["h" /* IClient */],
+    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["i" /* IVector */],
+    IScaler = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IScaler"],
+    IUpdate = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IUpdate"];
+
+/*
+*	The Update class handles scaling, resizing, and the app state.
+*/
+
+var Update = function (_SJSClass) {
+	_inherits(Update, _SJSClass);
+
+	_createClass(Update, [{
+		key: 'step',
+
+
+		/**
+     *
+     */
+
+		set: function set(value) {
+			if (!IStep(value)) {
+				throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(value));
+			}
+
+			this.get('data')[0] = value;
+		}
+
+		/**
+     * @public
+     */
+
+		,
+		get: function get() {
+			function _ref2(_id2) {
+				if (!IStep(_id2)) {
+					throw new TypeError('Function return value violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(_id2));
+				}
+
+				return _id2;
+			}
+
+			return _ref2(this.get('data')[0]);
+		}
+
+		/**
+     *
+     */
+
+	}, {
+		key: 'state',
+		set: function set(value) {
+			if (!IState(value)) {
+				throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nIState\n\nGot:\n' + _inspect(value));
+			}
+
+			value.init();
+			value.initalized = true;
+			this.get('data')[1] = value;
+		},
+		get: function get() {
+			function _ref3(_id3) {
+				if (!IState(_id3)) {
+					throw new TypeError('Function return value violates contract.\n\nExpected:\nIState\n\nGot:\n' + _inspect(_id3));
+				}
+
+				return _id3;
+			}
+
+			return _ref3(this.get('data')[1]);
+		}
+	}]);
+
+	function Update(a) {
+		var _ret;
+
+		_classCallCheck(this, Update);
+
+		var _this = _possibleConstructorReturn(this, (Update.__proto__ || Object.getPrototypeOf(Update)).call(this, a));
+
+		_this.last = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */]();
+		_this.difference = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */]();
+		_this.scaler = new __WEBPACK_IMPORTED_MODULE_3__math_scaler__["a" /* default */](1, 1, 1);
+		_this.scaling = true;
+		_this.scalediff = 0;
+		_this.lastscale = 1;
+		_this.fullscale = false;
+		_this.resized = false;
+		_this.frames = 0;
+		_this.pause = 0;
+
+
+		return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	}
+
+	/**
+ * Initalize the state and step objects.
+ * Step is delayed untill step is initiated so to prevent value mismatch.
+ * @method
+ * @private
+ */
+
+	_createClass(Update, [{
+		key: 'inital',
+		value: function inital(app) {
+			if (!IApp(app)) {
+				throw new TypeError('Value of argument "app" violates contract.\n\nExpected:\nIApp\n\nGot:\n' + _inspect(app));
+			}
+
+			this.step = new __WEBPACK_IMPORTED_MODULE_1__timing_step__["a" /* default */](app);
+
+			if (!IStep(this.step)) {
+				throw new TypeError('Value of "this.step" violates contract.\n\nExpected:\nIStep\n\nGot:\n' + _inspect(this.step));
+			}
+
+			this.state = new __WEBPACK_IMPORTED_MODULE_0__state__["a" /* default */](app.main, app);
+
+			if (!IState(this.state)) {
+				throw new TypeError('Value of "this.state" violates contract.\n\nExpected:\nIState\n\nGot:\n' + _inspect(this.state));
+			}
+		}
+
+		/**
+  * Calculates the scale of the canvas based on inital size inputs.
+  * Disabled if overriding canvas properties.
+  * @method
+  * @private
+  */
+
+	}, {
+		key: 'scale',
+		value: function scale(client) {
+			function _ref5(_id5) {
+				if (!(typeof _id5 === 'number')) {
+					throw new TypeError('Function return value violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(_id5));
+				}
+
+				return _id5;
+			}
+
+			if (!IClient(client)) {
+				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nIClient\n\nGot:\n' + _inspect(client));
+			}
+
+			if (this == window) {
+				console.log('Warning: Scale: [this === window]');return 0;
+			} else if (this.pause > 0.5) {
+				console.log('Warning: Paused', 30);return 0;
+			} else if (this.set == 1) {
+				console.log('Warning: Scale: Duplicate Run', 30);return 0;
+			}
+
+			var windowSize = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */](window.innerWidth, window.innerHeight);
+
+			//Check if overriding
+
+			if (!IVector(windowSize)) {
+				throw new TypeError('Value of variable "windowSize" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(windowSize));
+			}
+
+			if (client.app.options.canvas.override) {
+
+				//Set width to override
+
+				if (client.app.options.canvas.size.width !== client.width) {
+
+					client.width = client.app.options.canvas.size.width;
+
+					if (document.body.clientHeight > windowSize.y) {
+
+						//FUCK
+
+					}
+				}
+
+				//Set height to override
+
+				if (client.app.options.canvas.size.height !== client.height) {
+
+					client.height = client.app.options.canvas.size.height;
+				}
+
+				//Check if centered
+
+				if (client.app.options.canvas.position.center) {
+
+					//if not aligned
+
+					if (client.app.options.canvas.size.left !== client.app.width / 2) {
+
+						//align
+
+						client.app.canvas.getCanvas().style.left = -client.width / 2 + windowSize.x / 2 + "px";
+
+						//if buffer align
+
+						if (client.app.options.canvas.buffer) {
+
+							client.app.canvas.getBuffer().style.left = -client.width / 2 + windowSize.x / 2 + "px";
+						}
+					}
+				}
+			} else {
+
+				if (windowSize.y !== client.height) {
+
+					client.height = windowSize.y;
+				}
+
+				if (windowSize.x !== client.width) {
+
+					client.width = windowSize.x;
+				}
+			}
+
+			if (this.difference.sum() == 0) {
+				this.set = 0;
+				this.scalediff = 0;
+				return this.lastscale;
+			}
+
+			//Calculate sccalers
+
+			this.set = 1;
+			this.scaler.x = client.height / client.setHeight;
+			this.scaler.y = client.width / client.setWidth;
+
+			//Toggle wither or not to scale
+
+			this.fullscale ? this.scaler.s = this.scaler.x : this.scaler.s = this.scaler.x < this.scaler.y ? this.scaler.x : this.scaler.y;
+
+			//if scaler.s is not a number
+			/*
+   if (isNaN(this.scaler.s)){
+   
+   	console.warn("Scale is NAN");
+   	return this.set = 0;
+   		}
+   */
+
+			//Scale difference
+			this.scalediff = this.scaler.s - this.lastscale;
+
+			//If scaled different, scroll to the top
+			//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
+
+			if (!(typeof this.scalediff === 'number')) {
+				throw new TypeError('Value of "this.scalediff" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.scalediff));
+			}
+
+			this.set = 0;
+
+			//Save scale
+			this.lastscale = this.scaler.s;
+
+			if (!(typeof this.lastscale === 'number')) {
+				throw new TypeError('Value of "this.lastscale" violates contract.\n\nExpected:\nnumber\n\nGot:\n' + _inspect(this.lastscale));
+			}
+
+			return _ref5(this.scaler.s);
+		}
+
+		/**
+  * Perform hard resize of the canvas.
+  * @method
+  * @private
+  */
+
+	}, {
+		key: 'size',
+		value: function size(client) {
+			if (!IClient(client)) {
+				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nIClient\n\nGot:\n' + _inspect(client));
+			}
+
+			if (this.difference.sum() == 0) return false;
+
+			client.app.canvas.canvas.width = this.last.x = client.width;
+
+			client.app.canvas.canvas.height = this.last.y = client.height;
+
+			client.app.canvas.buffer.width = this.last.x = client.width;
+
+			client.app.canvas.buffer.height = this.last.y = client.height;
+
+			return true;
+		}
+
+		/**
+  * Calculate width and height delta differences between
+  * the canvas size last frame and this frame.
+  * @method
+  * @private
+  */
+
+	}, {
+		key: 'sizedelta',
+		value: function sizedelta(client) {
+			if (!IClient(client)) {
+				throw new TypeError('Value of argument "client" violates contract.\n\nExpected:\nIClient\n\nGot:\n' + _inspect(client));
+			}
+
+			var vector_size0 = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */](this.last.x, this.last.y);
+
+			if (!IVector(vector_size0)) {
+				throw new TypeError('Value of variable "vector_size0" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(vector_size0));
+			}
+
+			var vector_size1 = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */](client.width, client.height);
+
+			if (!IVector(vector_size1)) {
+				throw new TypeError('Value of variable "vector_size1" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(vector_size1));
+			}
+
+			if (vector_size0.equals(vector_size1)) {
+
+				this.difference = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */]();
+
+				if (!IVector(this.difference)) {
+					throw new TypeError('Value of "this.difference" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(this.difference));
+				}
+
+				return false;
+			} else {
+
+				this.difference = new __WEBPACK_IMPORTED_MODULE_2__math_vector__["a" /* default */]().Difference(vector_size0, vector_size1);
+
+				if (!IVector(this.difference)) {
+					throw new TypeError('Value of "this.difference" violates contract.\n\nExpected:\nIVector\n\nGot:\n' + _inspect(this.difference));
+				}
+			}
+
+			return true;
+		}
+	}]);
+
+	return Update;
+}(__WEBPACK_IMPORTED_MODULE_4__sjs_js__["a" /* _SJSClass */]);
+
+Update.properties = {
+
+	data: [__WEBPACK_IMPORTED_MODULE_1__timing_step__["a" /* default */], __WEBPACK_IMPORTED_MODULE_0__state__["a" /* default */]]
+
+};
+/* harmony default export */ exports["a"] = Update;
+
+function _inspect(input, depth) {
+	var maxDepth = 4;
+	var maxKeys = 15;
+
+	if (depth === undefined) {
+		depth = 0;
+	}
+
+	depth += 1;
+
+	if (input === null) {
+		return 'null';
+	} else if (input === undefined) {
+		return 'void';
+	} else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+		return typeof input === 'undefined' ? 'undefined' : _typeof(input);
+	} else if (Array.isArray(input)) {
+		if (input.length > 0) {
+			var _ret2 = function () {
+				if (depth > maxDepth) return {
+						v: '[...]'
+					};
+
+				var first = _inspect(input[0], depth);
+
+				if (input.every(function (item) {
+					return _inspect(item, depth) === first;
+				})) {
+					return {
+						v: first.trim() + '[]'
+					};
+				} else {
+					return {
+						v: '[' + input.slice(0, maxKeys).map(function (item) {
+							return _inspect(item, depth);
+						}).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+					};
+				}
+			}();
+
+			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+		} else {
+			return 'Array';
+		}
+	} else {
+		var keys = Object.keys(input);
+
+		if (!keys.length) {
+			if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+				return input.constructor.name;
+			} else {
+				return 'Object';
+			}
+		}
+
+		if (depth > maxDepth) return '{...}';
+		var indent = '  '.repeat(depth - 1);
+		var entries = keys.slice(0, maxKeys).map(function (key) {
+			return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+		}).join('\n  ' + indent);
+
+		if (keys.length >= maxKeys) {
+			entries += '\n  ' + indent + '...';
+		}
+
+		if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+			return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+		} else {
+			return '{\n  ' + indent + entries + '\n' + indent + '}';
+		}
+	}
 }
 
 /***/ }

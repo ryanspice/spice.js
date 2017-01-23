@@ -16,4 +16,5 @@ src/docs.css
 
 src/src.7z
 
-bld/
+/bld/spice.js
+/bld/spice.min.js
