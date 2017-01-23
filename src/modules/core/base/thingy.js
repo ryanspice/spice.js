@@ -1,9 +1,10 @@
-
-/* @flow */
+/* @flow WIP clean redundant codes */
 
 import ITypes from "../interfaces/ITypes";
 
-const Types:ITypes = new ITypes();
+const Types:Object = new ITypes();
+
+const _IMap = new WeakMap();
 
 /** The Main Inherited Interface for SpiceJS, interfaces must have a private weakmap which can be accessed by *.get('key')
 * You can also access the name of an interface with *.name
@@ -11,64 +12,59 @@ const Types:ITypes = new ITypes();
 * @private
 */
 
-const _IMap = new WeakMap();
-
-type K = any;
-type V = any;
-
  class WeakMapThingy  {
 
     static properties:Object = { name:'sjsclass', map:null, version:0 };
-    static map:WeakMap = _IMap;
 
-    map:WeakMap = _IMap;
+    static map:WeakMap<*,*> = _IMap;
+
+	map:WeakMap<*,*> = _IMap;
+
     private:bool;
 
-    /**  @type {constructor} */
-
-    constructor(x:any):void {
-
-        //console.log(this.constructor.map.set(this,this.constructor.properties),this)
+    constructor(x:WeakMap<*,*>):void {
 
         if (typeof x != 'undefined'){
 
             this.constructor.map = x;
-            //this.private = true;
+
+            this.private = true;
+
             this.constructor.map.set(this,this.constructor.properties);
 
         } else {
-            console.warn(x)
+
+            console.warn(x);
 
             x = new WeakMap();
+
             this.constructor.map = x;
-            //this.private = false;
+
+            this.private = false;
+
             this.constructor.map.set(this,this.constructor.properties);
 
         }
 
     }
 
-    /**  @type {WeakMap} */
+    /*
+	*/
 
-	set map(value){
+	set map(value:WeakMap<*,*>){
 
 		this.constructor.map = value;
 
 	}
 
-    /**  @type {mixed} */
+    /*
+	*/
 
     get(value:string):Object {
+
 		return this.constructor.map.get(this)[value];
 	}
 
-    /**  @type {string} */
-/*
-    get name():mixed {
-        return this.constructor.map.get(this)['name'];
-    }
-*/
 };
-
 
 export default WeakMapThingy;

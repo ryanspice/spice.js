@@ -75,30 +75,30 @@ module.exports = function(it){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "o", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return object; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IApp; });
 /* unused harmony export ICore */
 /* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return IExt; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return ICookies; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "r", function() { return IUseragent; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return IMetatags; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return ICursor; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return IConnect; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "t", function() { return ICookies; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "u", function() { return IUseragent; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "v", function() { return IMetatags; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "w", function() { return ICursor; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "x", function() { return IConnect; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return IOptions; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "f", function() { return IPace; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return IStep; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IPace; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "j", function() { return IStep; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return IState; });
 /* unused harmony export TClient */
-/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return IClient; });
-/* harmony export (binding) */ __webpack_require__.d(exports, "i", function() { return IVector; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "k", function() { return IClient; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "l", function() { return IVector; });
 /* unused harmony export vector */
 /* unused harmony export app */
-/* harmony export (binding) */ __webpack_require__.d(exports, "n", function() { return weakmap; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "q", function() { return weakmap; });
 /* unused harmony export method */
 /* unused harmony export metatag */
 /* unused harmony export element */
 /* unused harmony export array */
-/* harmony export (binding) */ __webpack_require__.d(exports, "p", function() { return array_string; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "s", function() { return array_string; });
 /* unused harmony export array_number */
 /* unused harmony export _vector */
 /* unused harmony export _weakmap */
@@ -212,6 +212,14 @@ var IExt = function () {
 	});
 	return IExt;
 }();
+
+/**
+* @interface
+*/
+
+/**
+* @interface
+*/
 
 /**
 * @interface
@@ -8936,7 +8944,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["f" /* IPace */];
+var IPace = __WEBPACK_IMPORTED_MODULE_8__core_interfaces_ITypes__["i" /* IPace */];
 
 
 
@@ -13207,7 +13215,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["f" /* IPace */];
+    IPace = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes_js__["i" /* IPace */];
 
 /*
 * Base Pace class for caluclating the Pacing of the Application
@@ -13404,8 +13412,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
-    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["f" /* IPace */],
-    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["g" /* IStep */];
+    IPace = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["i" /* IPace */],
+    IStep = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["j" /* IStep */];
 
 /*
 *	The state class which the main game state inherits
@@ -13741,10 +13749,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var IApp = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["a" /* IApp */],
-    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["g" /* IStep */],
+    IStep = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["j" /* IStep */],
     IState = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["e" /* IState */],
-    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["h" /* IClient */],
-    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["i" /* IVector */],
+    IClient = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["k" /* IClient */],
+    IVector = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["l" /* IVector */],
     IScaler = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IScaler"],
     IUpdate = __WEBPACK_IMPORTED_MODULE_5__interfaces_ITypes__["IUpdate"];
 
@@ -14269,7 +14277,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["q" /* ICookies */];
+var ICookies = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["t" /* ICookies */];
 
 /**
 * <a href="https://github.com/ScottHamper/Cookies">Cookies Polyfill by ScottHamper</a>, modified to ES6
@@ -14468,7 +14476,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* IMetatags */];
+var IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* IMetatags */];
 
 var Metatags = function () {
 
@@ -14754,7 +14762,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["u" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["x" /* IConnect */];
 
 var Useragent = function () {
 
@@ -15074,16 +15082,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["n" /* weakmap */],
-    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["o" /* object */],
-    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["p" /* array_string */],
+var weakmap = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* weakmap */],
+    object = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* object */],
+    array_string = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* array_string */],
     IApp = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["a" /* IApp */],
     IExt = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["d" /* IExt */],
-    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["q" /* ICookies */],
-    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["r" /* IUseragent */],
-    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["s" /* IMetatags */],
-    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* ICursor */],
-    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* IConnect */];
+    ICookies = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["t" /* ICookies */],
+    IUseragent = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["u" /* IUseragent */],
+    IMetatags = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["v" /* IMetatags */],
+    ICursor = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["w" /* ICursor */],
+    IConnect = __WEBPACK_IMPORTED_MODULE_1__core_interfaces_ITypes__["x" /* IConnect */];
 
 
 
@@ -15796,7 +15804,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["t" /* ICursor */];
+var ICursor = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["w" /* ICursor */];
 
 var Cursor = function () {
 
@@ -17736,7 +17744,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
-var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["u" /* IConnect */];
+var IConnect = __WEBPACK_IMPORTED_MODULE_0__core_interfaces_ITypes__["x" /* IConnect */];
 
 var Connection = function () {
 
@@ -30831,9 +30839,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/*  WIP clean redundant codes */
+
 
 
 var Types = new __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["b" /* default */]();
+
+if (!(Types instanceof Object)) {
+   throw new TypeError('Value of variable "Types" violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(Types));
+}
+
+var _IMap = new WeakMap();
 
 /** The Main Inherited Interface for SpiceJS, interfaces must have a private weakmap which can be accessed by *.get('key')
 * You can also access the name of an interface with *.name
@@ -30841,103 +30857,74 @@ var Types = new __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["b" /* default 
 * @private
 */
 
-var _IMap = new WeakMap();
-
-var K = function () {
-    function K(input) {
-        return true;
-    }
-
-    ;
-    Object.defineProperty(K, Symbol.hasInstance, {
-        value: function value(input) {
-            return K(input);
-        }
-    });
-    return K;
-}();
-
-var V = function () {
-    function V(input) {
-        return true;
-    }
-
-    ;
-    Object.defineProperty(V, Symbol.hasInstance, {
-        value: function value(input) {
-            return V(input);
-        }
-    });
-    return V;
-}();
-
 var WeakMapThingy = function () {
+   function WeakMapThingy(x) {
+      _classCallCheck(this, WeakMapThingy);
 
-    /**  @type {constructor} */
+      this.map = _IMap;
 
-    function WeakMapThingy(x) {
-        _classCallCheck(this, WeakMapThingy);
+      if (!(x instanceof WeakMap)) {
+         throw new TypeError('Value of argument "x" violates contract.\n\nExpected:\nWeakMap<*, *>\n\nGot:\n' + _inspect(x));
+      }
 
-        this.map = _IMap;
+      if (typeof x != 'undefined') {
+
+         this.constructor.map = x;
+
+         this.private = true;
+
+         this.constructor.map.set(this, this.constructor.properties);
+      } else {
+
+         console.warn(x);
+
+         x = new WeakMap();
+
+         this.constructor.map = x;
+
+         this.private = false;
+
+         this.constructor.map.set(this, this.constructor.properties);
+      }
+   }
+
+   /*
+   */
+
+   _createClass(WeakMapThingy, [{
+      key: 'get',
 
 
-        //console.log(this.constructor.map.set(this,this.constructor.properties),this)
+      /*
+      */
 
-        if (typeof x != 'undefined') {
-
-            this.constructor.map = x;
-            //this.private = true;
-            this.constructor.map.set(this, this.constructor.properties);
-        } else {
-            console.warn(x);
-
-            x = new WeakMap();
-            this.constructor.map = x;
-            //this.private = false;
-            this.constructor.map.set(this, this.constructor.properties);
-        }
-    }
-
-    /**  @type {WeakMap} */
-
-    _createClass(WeakMapThingy, [{
-        key: 'get',
-
-
-        /**  @type {mixed} */
-
-        value: function get(value) {
-            function _ref2(_id2) {
-                if (!(_id2 instanceof Object)) {
-                    throw new TypeError('Function return value violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_id2));
-                }
-
-                return _id2;
+      value: function get(value) {
+         function _ref2(_id2) {
+            if (!(_id2 instanceof Object)) {
+               throw new TypeError('Function return value violates contract.\n\nExpected:\nObject\n\nGot:\n' + _inspect(_id2));
             }
 
-            if (!(typeof value === 'string')) {
-                throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nstring\n\nGot:\n' + _inspect(value));
-            }
+            return _id2;
+         }
 
-            return _ref2(this.constructor.map.get(this)[value]);
-        }
+         if (!(typeof value === 'string')) {
+            throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nstring\n\nGot:\n' + _inspect(value));
+         }
 
-        /**  @type {string} */
-        /*
-            get name():mixed {
-                return this.constructor.map.get(this)['name'];
-            }
-        */
+         return _ref2(this.constructor.map.get(this)[value]);
+      }
+   }, {
+      key: 'map',
+      set: function set(value) {
+         if (!(value instanceof WeakMap)) {
+            throw new TypeError('Value of argument "value" violates contract.\n\nExpected:\nWeakMap<*, *>\n\nGot:\n' + _inspect(value));
+         }
 
-    }, {
-        key: 'map',
-        set: function set(value) {
+         this.constructor.map = value;
+      }
+   }]);
 
-            this.constructor.map = value;
-        }
-    }]);
-
-    return WeakMapThingy;
+   return WeakMapThingy;
 }();
 
 WeakMapThingy.properties = { name: 'sjsclass', map: null, version: 0 };
@@ -30947,76 +30934,76 @@ WeakMapThingy.map = _IMap;
 /* harmony default export */ exports["a"] = WeakMapThingy;
 
 function _inspect(input, depth) {
-    var maxDepth = 4;
-    var maxKeys = 15;
+   var maxDepth = 4;
+   var maxKeys = 15;
 
-    if (depth === undefined) {
-        depth = 0;
-    }
+   if (depth === undefined) {
+      depth = 0;
+   }
 
-    depth += 1;
+   depth += 1;
 
-    if (input === null) {
-        return 'null';
-    } else if (input === undefined) {
-        return 'void';
-    } else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
-        return typeof input === 'undefined' ? 'undefined' : _typeof(input);
-    } else if (Array.isArray(input)) {
-        if (input.length > 0) {
-            var _ret = function () {
-                if (depth > maxDepth) return {
-                        v: '[...]'
-                    };
+   if (input === null) {
+      return 'null';
+   } else if (input === undefined) {
+      return 'void';
+   } else if (typeof input === 'string' || typeof input === 'number' || typeof input === 'boolean') {
+      return typeof input === 'undefined' ? 'undefined' : _typeof(input);
+   } else if (Array.isArray(input)) {
+      if (input.length > 0) {
+         var _ret = function () {
+            if (depth > maxDepth) return {
+                  v: '[...]'
+               };
 
-                var first = _inspect(input[0], depth);
+            var first = _inspect(input[0], depth);
 
-                if (input.every(function (item) {
-                    return _inspect(item, depth) === first;
-                })) {
-                    return {
-                        v: first.trim() + '[]'
-                    };
-                } else {
-                    return {
-                        v: '[' + input.slice(0, maxKeys).map(function (item) {
-                            return _inspect(item, depth);
-                        }).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
-                    };
-                }
-            }();
-
-            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-        } else {
-            return 'Array';
-        }
-    } else {
-        var keys = Object.keys(input);
-
-        if (!keys.length) {
-            if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-                return input.constructor.name;
+            if (input.every(function (item) {
+               return _inspect(item, depth) === first;
+            })) {
+               return {
+                  v: first.trim() + '[]'
+               };
             } else {
-                return 'Object';
+               return {
+                  v: '[' + input.slice(0, maxKeys).map(function (item) {
+                     return _inspect(item, depth);
+                  }).join(', ') + (input.length >= maxKeys ? ', ...' : '') + ']'
+               };
             }
-        }
+         }();
 
-        if (depth > maxDepth) return '{...}';
-        var indent = '  '.repeat(depth - 1);
-        var entries = keys.slice(0, maxKeys).map(function (key) {
-            return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
-        }).join('\n  ' + indent);
+         if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+      } else {
+         return 'Array';
+      }
+   } else {
+      var keys = Object.keys(input);
 
-        if (keys.length >= maxKeys) {
-            entries += '\n  ' + indent + '...';
-        }
+      if (!keys.length) {
+         if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+            return input.constructor.name;
+         } else {
+            return 'Object';
+         }
+      }
 
-        if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
-            return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
-        } else {
-            return '{\n  ' + indent + entries + '\n' + indent + '}';
-        }
-    }
+      if (depth > maxDepth) return '{...}';
+      var indent = '  '.repeat(depth - 1);
+      var entries = keys.slice(0, maxKeys).map(function (key) {
+         return (/^([A-Z_$][A-Z0-9_$]*)$/i.test(key) ? key : JSON.stringify(key)) + ': ' + _inspect(input[key], depth) + ';';
+      }).join('\n  ' + indent);
+
+      if (keys.length >= maxKeys) {
+         entries += '\n  ' + indent + '...';
+      }
+
+      if (input.constructor && input.constructor.name && input.constructor.name !== 'Object') {
+         return input.constructor.name + ' {\n  ' + indent + entries + '\n' + indent + '}';
+      } else {
+         return '{\n  ' + indent + entries + '\n' + indent + '}';
+      }
+   }
 }
 
 /***/ },
@@ -31024,9 +31011,8 @@ function _inspect(input, depth) {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_js__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__thingy_js__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__thingy_js__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__ = __webpack_require__(3);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return _SJSClass; });
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -31038,22 +31024,24 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-console.time('SJS:B:sjs.js');
-
-var IApp = __WEBPACK_IMPORTED_MODULE_0__interfaces_ITypes__["a" /* IApp */];
 
 
 
-
-
+var IApp = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["a" /* IApp */],
+    IVisuals = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IVisuals"],
+    IGraphics = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["IGraphics"],
+    ISJSClass = __WEBPACK_IMPORTED_MODULE_1__interfaces_ITypes__["ISJSClass"];
 
 /** SJSClass - Used to create objects which inherit the Application.
-* @module */
+*
+*/
 
 var _SJSClass = function (_WeakMapThingy) {
 	_inherits(_SJSClass, _WeakMapThingy);
 
 	function _SJSClass(app) {
+		var _ret;
+
 		_classCallCheck(this, _SJSClass);
 
 		if (!IApp(app)) {
@@ -31115,15 +31103,12 @@ var _SJSClass = function (_WeakMapThingy) {
 			_this.warn('Unable to find app reference.', 'Using ', appReference, ' for ', _this);
 		}
 
-		return _this;
+		return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	}
 
 	/**
- * @param */
-
-	/** This is the constructor for the class
- * @param {Object} app[ - instance of spicejs] */
-
+ *
+ */
 
 	_createClass(_SJSClass, [{
 		key: 'warn',
@@ -31135,7 +31120,8 @@ var _SJSClass = function (_WeakMapThingy) {
 		}
 
 		/**
-  * @param */
+  *
+  */
 
 	}, {
 		key: 'log',
@@ -31146,9 +31132,7 @@ var _SJSClass = function (_WeakMapThingy) {
 	}]);
 
 	return _SJSClass;
-}(__WEBPACK_IMPORTED_MODULE_2__thingy_js__["a" /* default */]);;
-
-console.timeEnd('SJS:B:sjs.js');
+}(__WEBPACK_IMPORTED_MODULE_0__thingy_js__["a" /* default */]);;
 
 function _inspect(input, depth) {
 	var maxDepth = 4;
@@ -31168,7 +31152,7 @@ function _inspect(input, depth) {
 		return typeof input === 'undefined' ? 'undefined' : _typeof(input);
 	} else if (Array.isArray(input)) {
 		if (input.length > 0) {
-			var _ret = function () {
+			var _ret2 = function () {
 				if (depth > maxDepth) return {
 						v: '[...]'
 					};
@@ -31190,7 +31174,7 @@ function _inspect(input, depth) {
 				}
 			}();
 
-			if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+			if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 		} else {
 			return 'Array';
 		}

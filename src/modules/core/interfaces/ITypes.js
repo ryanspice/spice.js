@@ -85,6 +85,22 @@ export type IExt = {
 * @interface
 */
 
+export interface IVisuals {
+	a?:number;
+}
+
+/**
+* @interface
+*/
+
+export interface IGraphics {
+
+}
+
+/**
+* @interface
+*/
+
 export type ICookies = {
 
 }
@@ -302,6 +318,13 @@ export interface IStatsBuffer {
 	+set:Function;
 }
 
+export interface ISJSClass {
+
+	app:IApp;
+	visuals:Object;
+	graphics:Object;
+
+}
 
 export type TClient = {
 	discription:string;
