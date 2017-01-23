@@ -1,7 +1,7 @@
 
 import Vector from '../core/math/vector';
 
-import {_SJSClass as SJSClass} from '../core/sjs';
+import {_SJSClass as SJSClass} from '../core/base/sjs';
 
 import inputlistener from './inputlistener.js';
 

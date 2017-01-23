@@ -1,6 +1,6 @@
 
 //import {Vector} from './math/vector.js';
-import {_SJSClass as SJSClass} from './core/sjs';
+import {_SJSClass as SJSClass} from './core/base/sjs';
 
 
 import StatsBuffer from './core/base/stats';

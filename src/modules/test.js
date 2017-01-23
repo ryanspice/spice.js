@@ -1,5 +1,5 @@
 
-import {_SJSClass as SJSClass} from './core/sjs';
+import {_SJSClass as SJSClass} from './core/base/sjs';
 /**
 * Test Module for running tyhe game
 * @module

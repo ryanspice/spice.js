@@ -1,5 +1,5 @@
 
-import {_SJSClass as SJSClass} from './sjs';
+import {_SJSClass as SJSClass} from './base/sjs';
 
 import StatsBuffer from './base/stats';
 

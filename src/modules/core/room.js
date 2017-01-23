@@ -1,6 +1,6 @@
 /* @flow */
 
-import {_SJSClass as SJSClass} from './sjs.js';
+import {_SJSClass as SJSClass} from './base/sjs.js';
 
 import type {
 	IApp,

@@ -1,6 +1,6 @@
 /* @flow */
 
-import {_SJSClass} from './core/sjs';
+import {_SJSClass} from './core/base/sjs';
 
 import Vector from './core/math/vector';
 

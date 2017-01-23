@@ -1,7 +1,7 @@
 
 import {
 	_SJSClass
-} from './core/sjs';
+} from './core/base/sjs';
 
 import type {
     weakmap,

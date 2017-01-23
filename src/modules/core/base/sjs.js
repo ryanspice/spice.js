@@ -3,11 +3,11 @@
 console.time('SJS:B:sjs.js');
 import type {
 	IApp
-} from "./interfaces/ITypes";
+} from "../interfaces/ITypes";
 
-import App from '../app.js';
+import App from '../../app.js';
 
-import WeakMapThingy from './base/thingy.js';
+import WeakMapThingy from './thingy.js';
 
 /** SJSClass - Used to create objects which inherit the Application.
 * @module */
