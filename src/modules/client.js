@@ -11,8 +11,10 @@ import ClientExperamental from './client-experamental';
 
 export default class Client extends ClientExperamental {
 
-    discription:string = "Instanciates an object to hold data pertaining to a single instanciated app"
+    discription:string = "Instanciates an object to hold data pertaining to a single instanciated app";
+
     app:IApp;
+
 
 	/**
 	*	The client, or base of an app.
@@ -21,8 +23,6 @@ export default class Client extends ClientExperamental {
     constructor(app:Object, size:IVector|number, h:number|void ) {
 
         super(app);
-
-        let name:string = ''; //Unused ?
 
 		this.verifySize(size,h);
 

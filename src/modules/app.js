@@ -23,6 +23,18 @@ import Client from './client';
 
 import _input from './input/input';
 
+interface EventTarget {  }
+
+interface AppEventTarget extends EventTarget {
+		result:any;
+    app:IApp;
+}
+interface AppEvent extends Event {
+    target: AppEventTarget;
+}
+
+console.log('eh');
+
 //import Particles from './particles.js'; // (unfinished) To be built into application
 
 //window.SJSParticleController = Particles; // Temporary for snowflakes
@@ -42,48 +54,22 @@ import _input from './input/input';
 
 	loop(self:IApp):void {
 
-		//Use arrow function if available
+		setTimeout(() => {
 
-		var usearrow = true;
-		if (usearrow) {
+			function AppLoop(){
+				self.client.loop();
+				self.client.loopData();
+			}
 
-			setTimeout(() => {
+			function AppLoopData(){
 
-				function AppLoop(){
-					self.client.loop();
-					self.client.loopData();
-				}
+				///For loops that dont need to be run at 60fps
 
-				function AppLoopData(){
+			}
 
-					///For loops that dont need to be run at 60fps
+			this.client.initalize(AppLoop,AppLoopData,this.scale);
 
-				}
-
-				this.client.initalize(AppLoop,AppLoopData,this.scale);
-
-			}, this.time);
-
-		} else {
-
-			setTimeout(	(function(){
-
-				function AppLoop(){
-					self.client.loop();
-					self.client.loopData();
-				}
-
-				function AppLoopData(){
-
-					///For loops that dont need to be run at 60fps
-
-				}
-
-				self.client.initalize(AppLoop,AppLoopData,self.scale);
-
-			}),this.time);
-
-		}
+		}, this.time);
 
 	}
 
@@ -93,15 +79,13 @@ import _input from './input/input';
 
     start(w:number|null=0, h:number|null=0):void {
 
-		let clientProposedWidth = w || this.app.options.width;
-
-		let clientProposedHeight = h || this.app.options.height;
-
 		this.main = Object.create(this.main);
 
 		this.canvas =  new this.canvas(this);
 
-		this.client = new Client(this,clientProposedWidth,clientProposedHeight);
+		this.client = new Client(this,
+													w || this.app.options.canvas.size.width,
+													h || this.app.options.canvas.size.height);
 
 		this.client.update.inital(this);
 
@@ -127,7 +111,7 @@ import _input from './input/input';
     * @param {Event} [evt] - The passing event.
 	* @override	*/
 
-    OnApplicationLoad(evt:any):void {
+    OnApplicationLoad(evt:AppEvent):void {
 
        evt.target.app.OnLoad(evt.target.app);
 

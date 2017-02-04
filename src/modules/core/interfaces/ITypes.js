@@ -1,10 +1,14 @@
 // @typecheck: production, some
 /* @flow */
 
+import type {
 
+	dtoFacebook
+
+} from '../../dto/dtoTypes';
 //console.time('Types2');
 
-type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
+//type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
 
 export type object = Object;
 
@@ -15,16 +19,17 @@ export type object = Object;
  */
 
  export type IApp = {
+
 	OnLoad(self: object):void;
 
 	client:Object;
 	options:IOptions;
 
-	scale:number;
 
 	main?:IState;
 
 
+	+scale:number;
  };
 /*
 
@@ -59,7 +64,7 @@ export type ICore = {
 
 	time:number;
 
-	scale:number;
+	+scale:number;
 
 	app:IApp;
 
@@ -241,6 +246,9 @@ export type IOptions = {
 		canvas:Object;
 		msFlags:Object;
 		override:Object;
+
+		canvas:Object;
+
 
 		+get:Function;
 		+set:Function;

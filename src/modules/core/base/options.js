@@ -8,7 +8,9 @@ export default ({
 
     overridescroll:false,
     drag:0,
+
     targetfps:60,
+
     mute:false,
 
     paths:{
