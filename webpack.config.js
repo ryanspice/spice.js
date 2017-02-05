@@ -23,6 +23,7 @@ const source = {
         html404:"../404.html"
     },
 	plugins:[
+        new webpack.NamedModulesPlugin(),
 		new webpack.optimize.OccurrenceOrderPlugin(true),
 		new webpack.optimize.CommonsChunkPlugin({
 	      name: 'vendor',
@@ -44,7 +45,16 @@ if (env===true)
 
     source.plugins.push(new webpack.optimize.UglifyJsPlugin({
 	      compress: {
-	        warnings: true
+            warnings: true,
+            screw_ie8: true,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            sequences: true,
+            dead_code: true,
+            evaluate: true,
+            if_return: true,
+            join_vars: true,
 	      },
 	      output: {
 	        comments: false
@@ -72,42 +82,44 @@ module.exports = {
 	js:['babel-polyfill', './src/spice.js']
   },
   output: {
-    path: "./bld/",
-    filename: source.output.js
+	path: path.resolve(__dirname,"bld"),
+	filename: source.output.js,
+	publicPath:"/bld/",
+	library:"test-0",
+	libraryTarget: "umd"
   },
   module: {
-
-    loaders: [
-
-
-      {
-        test: /\.html$/,
-        loader: 'file',
-        query: {
-          name: '[name].[ext]'
-        }
-      },
+	  loaders: [
 
 
-      {
-        test: /\.css$/,
-        loaders: [
-          'style',
-          'css'
-        ]
-      },
+        {
+          test: /\.html$/,
+          loader: 'file',
+          query: {
+            name: '[name].[ext]'
+          }
+        },
 
 
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loaders: [
-          // 'react-hot',
-          'babel-loader'
-        ]
-      },
+        {
+          test: /\.css$/,
+          loaders: [
+            'style',
+            'css'
+          ]
+        },
 
-    ],
+
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          loaders: [
+            // 'react-hot',
+            'babel-loader'
+          ]
+        },
+
+      ],
   },
   resolve: {
     extensions: ['.js'],
@@ -119,7 +131,23 @@ module.exports = {
   },
   plugins:source.plugins,
   devServer: {
-    contentBase: './bld',
-      hot: true
+	  contentBase: './bld',
+	  hot: true,
+	  inline: true,
+	  compress: true,
+	  stats: {
+		assets: true,
+		children: false,
+		chunks: false,
+		hash: false,
+		modules: false,
+		publicPath: false,
+		timings: true,
+		version: false,
+		warnings: true,
+		colors: {
+		  green: '\u001b[32m',
+		}
+		}
    }
 }
