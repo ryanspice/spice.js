@@ -1,8 +1,11 @@
 /* @flow */
 
 import type {
+	ISJS,
 	IOptions
 } from "../interfaces/ITypes.js";
+
+declare var SJS:ISJS;
 
 export default ({
 

@@ -18,6 +18,16 @@ export type object = Object;
  * @interface App
  */
 
+ export type ISJS = {
+
+	 controller:object;
+
+ }
+
+/**
+ * @interface App
+ */
+
  export type IApp = {
 
 	OnLoad(self: object):void;

@@ -63,13 +63,13 @@ export default class Update extends SJSClass {
     *
     */
 
-	set step(value:any):void {
+	set step(value:IStep):void {
 
     	this.get('data')[0] = value;
 
 	}
 
-	get step():any  {
+	get step():IStep  {
 
 		return this.get('data')[0];
 
@@ -124,7 +124,7 @@ export default class Update extends SJSClass {
 	scale(client:IClient):number {
 
 		//CLEAN
-
+		/*
 		if (this==window)			{
 			console.log('Warning: Scale: [this === window]');return (0);
 		}else
@@ -133,7 +133,7 @@ export default class Update extends SJSClass {
 			else
 		if (this.set==1)
 			{console.log('Warning: Scale: Duplicate Run',30);return (0);}
-
+		*/
 		//ENDCLEAN
 
 		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
@@ -150,7 +150,7 @@ export default class Update extends SJSClass {
 
 				if (document.body.clientHeight > windowSize.y) {
 
-					//FUCK
+					//FUCK?????????????????
 
 				}
 
