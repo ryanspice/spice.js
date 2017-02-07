@@ -20,7 +20,6 @@ import type {
 	IExt,
 	IClientCore,
 	IVisuals,
-	IUpdate,
 	IRoom,
 	IPace,
 	IVector
@@ -28,7 +27,6 @@ import type {
 
 import Renderer from './renderer.js';
 
-import Update from './core/update.js';
 
 import _loader from './loader.js';
 
@@ -38,17 +36,16 @@ import _loader from './loader.js';
 
 export default class ClientCore extends _SJSClass {
 
-	ext:IExt= Ext;
+	ext:IExt;
 
 	room:IRoom;
 
-	visuals:IVisuals = Visuals;
+	visuals:IVisuals;
 
-	graphics:Graphics = Graphics;
+	graphics:Graphics;
 
 	loader:_loader = _loader;
 
-	update:IUpdate = Update;
 
 	renderer:Renderer = Renderer;
 
@@ -132,10 +129,12 @@ export default class ClientCore extends _SJSClass {
 		this.resized = this.update.size(this);
 
 		//Update scale
-		this.scale = this.update.scale(this);
+
+		this.update.scale(this);
 
 		//Draw frame
-		this.visuals.flip(this.scale);
+		console.log
+		this.visuals.flip(this.update.scaler.s);
 
 		//Update frames per second
 		this.fps = this.update.step.tick(this.second,this.mainLoop);

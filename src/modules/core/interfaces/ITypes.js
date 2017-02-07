@@ -102,6 +102,10 @@ export type IExt = {
 
 export type IVisuals = {
 	a?:number;
+
+
+
+	flip:Function<number>;
 }
 
 /**
@@ -127,6 +131,7 @@ export type IClientCore = {
 
 	+initalize:Function;
 	+loop:Function;
+
 }
 
 /**

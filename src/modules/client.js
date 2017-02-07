@@ -2,8 +2,11 @@
 
 import type {
 	IApp,
+	IUpdate,
 	IVector
 } from './core/interfaces/ITypes';
+
+import Update from './core/update.js';
 
 import {_SJSClass} from './core/base/sjs';
 
@@ -14,6 +17,8 @@ export default class Client extends ClientExperamental {
     discription:string = "Instanciates an object to hold data pertaining to a single instanciated app";
 
     app:IApp;
+
+	update:any;
 
 
 	/**
@@ -39,7 +44,7 @@ export default class Client extends ClientExperamental {
 
 		this.loader = window.Loader = new this.loader(this.app);
 
-		this.update = new this.update(this.app);
+		this.update = new Update(this.app);
 
 		this.renderer = new this.renderer();
 
