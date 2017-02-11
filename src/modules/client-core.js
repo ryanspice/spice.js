@@ -15,6 +15,7 @@ import Ext from './ext';
 import Room from './core/base/room.js';
 
 import type {
+	IApp,
 	IExt,
 	IClientCore,
 	IVisuals,
@@ -63,7 +64,7 @@ export default class ClientCore extends _SJSClass {
 	mainLoop:any;
 
 
-	constructor(app:any){
+	constructor(app:IApp){
 
 		super(app);
 

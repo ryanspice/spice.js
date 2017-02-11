@@ -14,6 +14,23 @@ export type object = Object;
 
 //export type string = string;
 
+
+//DUPLICATE IN app.js
+interface AppEventTarget extends EventTarget {
+	result:any;
+    app:IApp|Object;
+}
+
+interface AppEvent extends Event {
+    target: AppEventTarget;
+}
+
+declare interface Event {
+	target:AppEventTarget;
+}
+//END DUPLICATE IN app.js
+
+
 /**
  * @interface App
  */
@@ -31,16 +48,27 @@ export type object = Object;
  export type IApp = {
 
 	OnLoad(self: object):void;
+	OnApplicationLoad(evt:AppEvent):void;
 
 	client:Object;
+	canvas:ICanvas;
 	options:IOptions;
 
 
 	main?:IState;
 
+	loop(self:IApp):void;
+	start(w:any,h:any):void;
 
 	+scale:number;
  };
+
+export type ICanvas = {
+
+
+
+}
+
 /*
 
 
@@ -105,7 +133,7 @@ export type IVisuals = {
 
 
 
-	flip:Function<number>;
+	//flip:Function<number>;
 }
 
 /**
@@ -133,6 +161,7 @@ export type IClientCore = {
 	+loop:Function;
 
 }
+
 
 /**
 * @interface
@@ -394,7 +423,41 @@ export type TClient = {
 	setHeight:number;
 };
 
-export type IClient = TClient;
+//export type IClient = TClient;
+
+export type IClient = {
+
+	discription:string;
+	projectSize:IVector;
+
+
+	app:Object;
+	ext:IExt;
+
+	Math?:Object;
+	particles?:Object;
+	visuals?:Object;
+	graphics?:Object;
+
+	room?:Object;
+	audio?:Object;
+	mainLoop?:Object;
+	second?:Object;
+	loader?:Object;
+	update?:Object;
+	renderer?:Object;
+	data?:Object;
+
+	width:number;
+	height:number;
+	setWidth:number;
+	setHeight:number;
+
+	initalize:Function;
+	loop:Function;
+	loopData:Function;
+
+};
 
 export type IUpdate = {
 

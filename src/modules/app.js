@@ -12,6 +12,8 @@ import Canvas from './canvas';
 import type {
 
 	IApp,
+	IClient,
+	ICanvas,
 	IOptions
 
 } from './core/interfaces/ITypes'
@@ -24,9 +26,10 @@ import Client from './client';
 
 import _input from './input/input';
 
+// Duplicate in ITYPES
 interface AppEventTarget extends EventTarget {
 	result:any;
-    app:IApp;
+    app:IApp|Object;
 }
 
 interface AppEvent extends Event {
@@ -36,6 +39,7 @@ interface AppEvent extends Event {
 declare interface Event {
 	target:AppEventTarget;
 }
+//END DUPLICATE IN ITYPES
 
 
 //import Particles from './particles.js'; // (unfinished) To be built into application
@@ -46,10 +50,18 @@ declare interface Event {
 * @module
 * @protected */
 
- export default class App extends Core {
+export default class App extends Core {
 
-     canvas:Canvas = Canvas;
-     client:Client;
+	client:IClient;
+
+	canvas:ICanvas;
+
+	constructor(map:WeakMap<*>) {
+
+		super(map);
+
+		return (this:IApp);
+	}
 
 	/** The main loop for the application, use arrow functions, if arrows exist
 	* @method
@@ -60,8 +72,11 @@ declare interface Event {
 		setTimeout(() => {
 
 			function AppLoop(){
+
 				self.client.loop();
+
 				self.client.loopData();
+
 			}
 
 			function AppLoopData(){
@@ -84,7 +99,7 @@ declare interface Event {
 
 		this.main = Object.create(this.main);
 
-		this.canvas =  new this.canvas(this);
+		this.canvas =  new Canvas(this);
 
 		this.client = new Client(this,
 													w || this.app.options.canvas.size.width,
@@ -103,7 +118,7 @@ declare interface Event {
     * @param {Object} [self] - Reference to the app.
 	* @override	*/
 
-    OnLoad(self:Object):void {
+    OnLoad(self:IApp):void {
 
         self.start();
 
@@ -159,7 +174,7 @@ declare interface Event {
     * @param {Object} [prototype] - An object prototype.
     * @param {Object} [constructor] - An object constructor. */
 
-    Construct(prototype:Object,constructor:Function ):App|Object  {
+    Construct(prototype:Object,constructor:Function ):IApp|Object  {
 
         let  isObj:bool = false;
         let  obj:Object = prototype;
