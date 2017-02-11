@@ -45,6 +45,24 @@ export default class ClientCore extends _SJSClass {
 
 	renderer:Renderer = Renderer;
 
+	projectSize:IVector;
+
+	width:number;
+	height:number;
+	scale:number;
+
+	setWidth:number;
+	setHeight:number;
+
+	client_f:any;
+	client_data:any;
+	resized:boolean;
+	update:any;
+	fps:number;
+	second:any;
+	mainLoop:any;
+
+
 	constructor(app:any){
 
 		super(app);
@@ -66,17 +84,18 @@ export default class ClientCore extends _SJSClass {
 
     verifySize(size:number|IVector=0,h:number=0):void {
 
-        let x:number = 0, y:number = 0;
+        let x:any = 0;
+		let y:number = 0;
 
-        if (typeof size == "vector") {
+        if (typeof size == "object") {
 
-            x = size.x;
-            y = size.y;
+            x = Number(size.x);
+            y = Number(size.y);
 
         }
         else {
 
-            x = this.width = this.setWidth = size;
+            x = this.width = this.setWidth = Number(size);
             y = this.height = this.setHeight = h;
 
         }

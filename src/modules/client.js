@@ -3,6 +3,7 @@
 import type {
 	IApp,
 	IUpdate,
+	IClient,
 	IPace,
 	IVector
 } from './core/interfaces/ITypes';
@@ -57,7 +58,7 @@ export default class Client extends ClientExperamental {
 
 		this.renderer.renderMarkup();
 
-		return;
+		return (this:IClient);
 
     }
 

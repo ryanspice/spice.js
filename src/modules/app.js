@@ -17,23 +17,26 @@ import type {
 } from './core/interfaces/ITypes'
 
 /** WIP Modules
-*	@module */
+*	@module
+*/
 
 import Client from './client';
 
 import _input from './input/input';
 
-interface EventTarget {  }
-
 interface AppEventTarget extends EventTarget {
-		result:any;
+	result:any;
     app:IApp;
 }
+
 interface AppEvent extends Event {
     target: AppEventTarget;
 }
 
-console.log('eh');
+declare interface Event {
+	target:AppEventTarget;
+}
+
 
 //import Particles from './particles.js'; // (unfinished) To be built into application
 
@@ -127,16 +130,24 @@ console.log('eh');
 	* Application.Listener(window,'click',function(){////console.log('eh');},'');
 	* Application.Click(new Event,window);	*/
 
-    Listener(obj:Object, evt:any, listener:any, param:any):void {
+    Listener(obj:Object, evt:string, listener:Function, param?:string):void {
 
+		/* Legacy Unused?
         if (typeof obj[0] === "object") {
 		    obj = obj[0] || window;
         }
+		*/
 
         if (obj.addEventListener) {
+
             obj.addEventListener(evt, listener, false);
+
 		}	else {
+
+			console.warn('Using attachEvent');
+
 			obj.attachEvent("on" + evt, listener);
+
 		}
 
         obj.app = window.apps[this.id] = this;

@@ -125,9 +125,9 @@ export type IClientCore = {
 	visuals:IVisuals;
 	graphics:Object;
 	loader:Object;
-	update:IUpdate;
+	//update:IUpdate;
 	renderer:Object;
-	pace:IPace;
+
 
 	+initalize:Function;
 	+loop:Function;
