@@ -1,3 +1,6 @@
+bld\vendor.js
+bld\spice.js
+bld\spice.min.js
 
 ./bld/spice.js
 ./bld/spice.min.js

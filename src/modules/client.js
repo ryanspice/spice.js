@@ -3,10 +3,13 @@
 import type {
 	IApp,
 	IUpdate,
+	IPace,
 	IVector
 } from './core/interfaces/ITypes';
 
 import Update from './core/update.js';
+
+import Pace from './core/timing/pace';
 
 import {_SJSClass} from './core/base/sjs';
 
@@ -17,6 +20,8 @@ export default class Client extends ClientExperamental {
     discription:string = "Instanciates an object to hold data pertaining to a single instanciated app";
 
     app:IApp;
+
+	pace:IPace;
 
 	update:any;
 
@@ -36,9 +41,9 @@ export default class Client extends ClientExperamental {
 
 		/* Timing Solution A */
 
-		this.mainLoop = new this.pace(app.options.targetfps,app.options.targetfps);
+		this.mainLoop = new Pace(app.options.targetfps,app.options.targetfps);
 
-		this.second = new this.pace(1.0,app.options.targetfps);
+		this.second = new Pace(1.0,app.options.targetfps);
 
 		/* Load Main */
 

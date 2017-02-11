@@ -14,14 +14,11 @@ import Ext from './ext';
 
 import Room from './core/base/room.js';
 
-import Pace from './core/timing/pace';
-
 import type {
 	IExt,
 	IClientCore,
 	IVisuals,
 	IRoom,
-	IPace,
 	IVector
 } from "./core/interfaces/ITypes";
 
@@ -46,10 +43,7 @@ export default class ClientCore extends _SJSClass {
 
 	loader:_loader = _loader;
 
-
 	renderer:Renderer = Renderer;
-
-	pace:IPace = Pace;
 
 	constructor(app:any){
 
