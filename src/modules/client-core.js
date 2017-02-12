@@ -144,7 +144,7 @@ export default class ClientCore extends _SJSClass {
 
 		//Update scale
 
-		this.scale = this.update.scale(this);
+		this.update.scale(this);
 
 		//Draw frame
 		this.visuals.flip(this.update.scaler.s);
