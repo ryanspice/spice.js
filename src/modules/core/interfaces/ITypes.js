@@ -65,7 +65,8 @@ declare interface Event {
 
 export type ICanvas = {
 
-
+	canvas:any;
+	buffer:any;
 
 }
 

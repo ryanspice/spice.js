@@ -253,7 +253,6 @@ export default class Update extends SJSClass {
 			return false;
 		}
 
-		var t0 = performance.now();
 
 		this.app.canvas.canvas.width  = this.last.x = this.app.client.width;
 
@@ -263,8 +262,6 @@ export default class Update extends SJSClass {
 
 		this.app.canvas.buffer.height = this.last.y = this.app.client.height;
 
-		var t1 = performance.now();
-		console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
 
 
 		return true;
