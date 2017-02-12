@@ -1,9 +1,10 @@
+/* @flow */
 
-import {_SJSClass} from './core/sjs';
+import {_SJSClass} from './core/base/sjs';
 
 import Vector from './core/math/vector';
 
-import Options from './core/options';
+import Options from './core/base/options';
 
 import Visuals from './visuals.js';
 
@@ -11,17 +12,18 @@ import Graphics from './graphics.js';
 
 import Ext from './ext';
 
-import Room from './core/room.js';
-
-import Pace from './core/pace';
+import Room from './core/base/room.js';
 
 import type {
-	IPace
+	IExt,
+	IClientCore,
+	IVisuals,
+	IRoom,
+	IVector
 } from "./core/interfaces/ITypes";
 
 import Renderer from './renderer.js';
 
-import Update from './update.js';
 
 import _loader from './loader.js';
 
@@ -31,39 +33,69 @@ import _loader from './loader.js';
 
 export default class ClientCore extends _SJSClass {
 
-	ext:Ext= Ext;
+	ext:IExt;
 
-	room:Room= Room;
+	room:IRoom;
 
-	visuals:Visuals = Visuals;
+	visuals:IVisuals;
 
-	graphics:Graphics = Graphics;
+	graphics:Graphics;
 
 	loader:_loader = _loader;
 
-	update:Update = Update;
-
 	renderer:Renderer = Renderer;
 
-	pace:IPace = Pace;
+	projectSize:IVector;
+
+	width:number;
+	height:number;
+	scale:number;
+
+	setWidth:number;
+	setHeight:number;
+
+	client_f:any;
+	client_data:any;
+	resized:boolean;
+	update:any;
+	fps:number;
+	second:any;
+	mainLoop:any;
+
+
+	constructor(app:any){
+
+		super(app);
+
+		this.room = new Room(this.app);
+
+		this.graphics = new Graphics(this.app);
+
+		this.visuals = new Visuals(this.app);
+
+		this.ext = new Ext(this.app);
+
+		return (this:IClientCore);
+	}
 
     /*
 	*	Verify the Input for the Application Width and Height
 	*/
 
-    verifySize(size:number|vector=0,h:number=0):void {
+    verifySize(size:number|IVector=0,h:number=0):void {
 
-        let x:number = 0, y:number = 0;
+        let x:any = 0;
+		let y:number = 0;
 
-        if (typeof size == "vector") {
+        if (typeof size == "object") {
 
-            x = size.x;
-            y = size.y;
+            x = Number(size.x);
+            y = Number(size.y);
 
         }
         else {
 
-            x = this.width = this.setWidth = size;
+            x = this.width = this.setWidth = Number(size);
             y = this.height = this.setHeight = h;
 
         }
@@ -76,7 +108,7 @@ export default class ClientCore extends _SJSClass {
 	*	Initalize the client's loop and loopdata
 	*/
 
-	initalize(loop:Object,loopdata:Object,scale:number):void {
+	initalize(loop:Object, loopdata:Object, scale:number):void {
 
 		this.scale = scale;
 
@@ -91,45 +123,41 @@ export default class ClientCore extends _SJSClass {
 			this.client_data();
 
 		},1000/59);
-
-		/* STOPS HERE */
-		return;
-
 		/*Assign the cursor and log the time it took to get here _WIP  */
 
-		this.app.ext.cursor.set(this.app.ext.cursor.def);
+		//this.app.ext.cursor.set(this.app.ext.cursor.def);
 
-		this.app.ext.time = (( new Date().getTime())-SpiceJS.TimeToBuild)*1;
-
+		return;
 	}
 
 	/*
-	*	Main game loop.
-	*	    //loop(a):void {  Not sure why A was here?
+	*	Main game loop. Removed arrow function, kept comment for safe.
 	*/
 
     loop():void {
 
-        let loop = () => {
+		//const loop:Function = ()=>{
 
-            //Return true or false if resized, update size
-            this.resized = this.update.size(this);
+		//Return true or false if resized, update size
+		this.resized = this.update.size(this);
 
-            //Update scale
-            this.scale = this.update.scale(this);
+		//Update scale
 
-            //Draw frame
-            this.visuals.flip(this.scale);
+		this.update.scale(this);
 
-            //Update frames per second
-            this.fps = this.update.step.tick(this.second,this.mainLoop,this.app);
+		//Draw frame
+		console.log
+		this.visuals.flip(this.update.scaler.s);
 
-            //Update client
-            requestAnimationFrame(this.client_f);
+		//Update frames per second
+		this.fps = this.update.step.tick(this.second,this.mainLoop);
 
-        }
+		//Update client
+		requestAnimationFrame(this.client_f);
 
 		/*
+		}
+
 		DISABLED, reenable for future Debugging clause
 
 		 	SpiceJS.statistics.monitor(loop).then(function(){
@@ -140,7 +168,7 @@ export default class ClientCore extends _SJSClass {
 		    });
 		*/
 
-		loop();
+		//loop();
 
     }
 

@@ -1,10 +1,14 @@
 // @typecheck: production, some
 /* @flow */
 
+import type {
 
+	dtoFacebook
+
+} from '../../dto/dtoTypes';
 //console.time('Types2');
 
-type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
+//type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
 
 export type object = Object;
 
@@ -14,16 +18,39 @@ export type object = Object;
  * @interface App
  */
 
+ export type ISJS = {
+
+	 controller:object;
+
+ }
+
+/**
+ * @interface App
+ */
+
  export type IApp = {
+
 	OnLoad(self: object):void;
 
 	client:Object;
 	options:IOptions;
 
-	scale:number;
-	width:number;
-	height:number;
+
+	main?:IState;
+
+
+	+scale:number;
  };
+/*
+
+
+
+scale:number;
+width:number;
+height:number;
+
+*/
+
 
 /**
 * @interface App
@@ -47,7 +74,7 @@ export type ICore = {
 
 	time:number;
 
-	scale:number;
+	+scale:number;
 
 	app:IApp;
 
@@ -66,6 +93,44 @@ export type IExt = {
 	metatag:IMetatags;
 	cursor:Object;
 	connect:Object;
+
+}
+
+/**
+* @interface
+*/
+
+export type IVisuals = {
+	a?:number;
+
+
+
+	flip:Function<number>;
+}
+
+/**
+* @interface
+*/
+
+export type IGraphics = {
+
+}
+
+export type IClientCore = {
+
+	projectSize:IVector;
+
+	ext:IExt;
+	room:IRoom;
+	visuals:IVisuals;
+	graphics:Object;
+	loader:Object;
+	//update:IUpdate;
+	renderer:Object;
+
+
+	+initalize:Function;
+	+loop:Function;
 
 }
 
@@ -180,23 +245,28 @@ export type IConnect = {
 */
 
 export type IOptions = {
+	/*
 
-	width:number;
-	height:number;
+		width:number;
+		height:number;
+		*/
+		overridescroll:boolean;
+		drag:number;
+		targetfps:number;
+		mute:boolean;
+		paths:Object;
+		target:Object;
+		global:Object;
+		flags:Object;
+		canvas:Object;
+		msFlags:Object;
+		override:Object;
 
-	overridescroll:boolean;
-	drag:number;
-	targetfps:number;
-	mute:boolean;
-	paths:Object;
-	target:Object;
-	global:Object;
-	flags:Object;
-	canvas:Object;
-	msFlags:Object;
-	override:Object;
-	+get:Function;
-	+set:Function;
+		canvas:Object;
+
+
+		+get:Function;
+		+set:Function;
 
 };
 
@@ -209,11 +279,10 @@ export type IPace = {
 	delta: number;
 	offset: number;
 	rate: number;
-	timer: number;
-	targetfps: number;
+	targetFPS: number;
+	currentTime: number;
 	+Step:Function;
-	+Time:Function;
-	+GetStepsPerSecond:Function;
+	+CalculateDelta:Function;
 
 };
 
@@ -223,7 +292,8 @@ export type IPace = {
 
  export type IStep = {
 
-	app:Object;
+	app:IApp;
+
 	delta:number;
 	frames:number;
 	pending:number;
@@ -231,7 +301,6 @@ export type IPace = {
 	increment:number;
 	delta_speed:number;
 	fps:number;
-	+ceil:Function;
 	+focus:Function;
 	+clean:Function;
 	+tick:Function;
@@ -240,22 +309,26 @@ export type IPace = {
 
  }
 
+
+
+
+
 /**
  * @interface State
  */
 
 export type IState = {
 
-	+name:string;
+	name?:string;
 
-	app:Object;
-	visuals:Object;
-	graphics:Object;
-	initalized:boolean;
-	+update:Function;
-	+draw:Function;
-	+name:Function;
-	+init:Function;
+	app?:Object;
+	visuals?:Object;
+	graphics?:Object;
+	initalized?:boolean;
+
+	update:Function;
+	draw:Function;
+	init:Function;
 
 }
 
@@ -285,25 +358,95 @@ export type IStatsBuffer = {
 	+set:Function;
 }
 
+export type ISJSClass = {
+
+	app:IApp;
+	visuals:Object;
+	graphics:Object;
+
+}
 
 export type TClient = {
 	discription:string;
-	projectSize:vector;
-	app:object;
-	Math:object;
-	particles:object;
-	visuals:object;
-	graphics:object;
-	ext:object;
-	room:object;
-	audio:object;
-	mainLoop:object;
-	second:object;
-	loader:object;
-	update:object;
-	renderer:object;
-	data:object;
+	projectSize:IVector;
+
+
+	app:Object;
+	ext:IExt;
+
+	Math?:Object;
+	particles?:Object;
+	visuals?:Object;
+	graphics?:Object;
+
+	room?:Object;
+	audio?:Object;
+	mainLoop?:Object;
+	second?:Object;
+	loader?:Object;
+	update?:Object;
+	renderer?:Object;
+	data?:Object;
+
+	width:number;
+	height:number;
+	setWidth:number;
+	setHeight:number;
 };
+
+export type IClient = TClient;
+
+export type IUpdate = {
+
+	step:IStep;
+	state:IState;
+
+	+inital:Function;
+	+scale:Function;
+	+size:Function;
+	+sizedelta:Function;
+
+	last:IVector;
+	difference:IVector;
+	scaler:IScaler;
+	scaling:boolean;
+	scalediff:number;
+	lastscale:number;
+	fullscale:boolean;
+	resized:boolean;
+	frames:number;
+	pause:number;
+	set:number;
+
+}
+
+export type IVector = {
+
+	x:number;
+	y:number;
+	position:any;
+	+Difference:Function;
+	+equals:Function;
+	+sum:Function;
+	+multiply:Function;
+	+offset:Function;
+
+}
+
+export type IScaler = {
+	x:number;
+	y:number;
+	s:number;
+}
+
+export type IThingy = {
+
+	map:WeakMap<*,*>;
+	private:boolean;
+	-map:Function;
+	+get:Function;
+
+}
 
 export type vector<X=0,Y=0> = {x:0,y:0};
 

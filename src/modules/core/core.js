@@ -1,6 +1,6 @@
 /* @flow */
 
-import Options from './options';
+import Options from './base/options';
 
 import facebook from '../dto/facebook-user';
 
@@ -9,13 +9,9 @@ import _math from './math/math';
 import legacy_core from './legacy/legacy-core';
 
 const _BUILD_OFFICIAL_ = '0.8.2';
-
 const _BUILD_RENDERER_ = '0.0.1';
-
 const _BUILD_CANVAS_ = '0.8.1';
-
 const _BUILD_LAST_ = '08-2016';
-
 const _BUILD_FIRST_ = '12-2013';
 
 import type {
@@ -62,7 +58,7 @@ export default class Core extends legacy_core {
 	id:number=0;
 
 	static properties:IoVersion = {
-		main:{},
+		main:{init:()=>{},update:()=>{},draw:()=>{}},
 		version:_BUILD_OFFICIAL_ + _BUILD_LAST_,
 		version_details:{
 			_official_:_BUILD_OFFICIAL_,
@@ -113,27 +109,18 @@ export default class Core extends legacy_core {
 
     /**  @type {object} */
 
-	get main():Object {
+	get main():IState {
 		return this.get('main');
 	}
 
-    /**  @type {object} TEMPORARY, use Object.Assign */
+    /**  @type {object} New Object Assign Method
+	*/
 
-	set main(newmain:Object):Object {
+	set main(newState:IState):IState {
 
-		let state:Object = this.get('main');
+		let currentState:IState = this.main;
 
-		let newstate:Object = newmain;
-
-		state.name = newstate.name;
-		state.init = newstate.init;
-		state.update = newstate.update;
-		state.draw = newstate.draw;
-		state.app = this;
-		state.visuals = this.client.visuals;
-		state.graphics = this.client.graphics;
-
-		return state;
+		return currentState = Object.assign(currentState,newState);
 	}
 
 }

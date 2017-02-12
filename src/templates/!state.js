@@ -1,5 +1,5 @@
 
-import {_SJSClass as SJSClass} from './sjs.js';
+import {_SJSClass as SJSClass} from './base/sjs.js';
 
 export default class State extends SJSClass {
 

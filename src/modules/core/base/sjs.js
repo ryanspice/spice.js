@@ -1,26 +1,27 @@
 /* @flow */
 
-console.time('SJS:B:sjs.js');
-import type {
-	IApp
-} from "./interfaces/ITypes";
-
-import App from '../app.js';
-
 import WeakMapThingy from './thingy.js';
 
-/** SJSClass - Used to create objects which inherit the Application.
-* @module */
+import type {
+	IApp,
+	IVisuals,
+	IGraphics,
+	ISJSClass
+} from "../interfaces/ITypes";
+
+/*
+* SJSClass - Used to create objects which inherit the Application.
+*/
 
 export class _SJSClass extends WeakMapThingy {
 
-    /** This is the constructor for the class
-    * @param {Object} app[ - instance of spicejs] */
 	app:IApp;
+
 	visuals:any;
+
 	graphics:any;
 
-    constructor(app:IApp):void {
+    constructor(app:IApp) {
 
         super(new WeakMap());
 
@@ -72,10 +73,12 @@ export class _SJSClass extends WeakMapThingy {
 
 		}
 
+		return (this:ISJSClass)
     }
 
     /**
-    * @param */
+    *
+	*/
 
 	warn(a0:any,a1:any,a2:any,a3:any,a4:any){
 
@@ -86,7 +89,8 @@ export class _SJSClass extends WeakMapThingy {
 	}
 
     /**
-    * @param */
+    *
+	*/
 
 	log(a0:any){
 
@@ -95,5 +99,3 @@ export class _SJSClass extends WeakMapThingy {
 	}
 
 };
-
-console.timeEnd('SJS:B:sjs.js');

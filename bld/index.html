@@ -17,7 +17,17 @@
 				var width = 1224;
 				var height = 720;
 
-				self.main = {update:function(){},draw:function(){},init:function(){}};
+				self.main = {update:function(){},draw:function(){
+
+					this.visuals.rect(
+						600+5*window.innerWidth*Math.sin(Date.now()/200)/250,
+						200+5*window.innerWidth*Math.cos(Date.now()/200)/250,
+						10,
+						10,
+						'#FFFFFF'
+					);
+
+				},init:function(){}};
 
 				self.start(width, height);
 

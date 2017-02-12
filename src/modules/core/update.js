@@ -1,32 +1,38 @@
-/**
-* Client Update Loop
-* @class
-* @protected
-*/
+/* @flow */
 
-import {_SJSClass as SJSClass} from './core/sjs.js';
+import State from '../state';
 
-import Step from './core/step';
+import Step from './timing/step';
 
-import State from './state';
+import Vector from './math/vector';
 
-import Vector from './core/math/vector';
+import Scaler from './math/scaler';
 
-/**The Update class handles scaling, resizing, and the app state.
-* @public
+import {_SJSClass as SJSClass} from './base/sjs.js';
+
+import type {
+
+	IApp,
+	IStep,
+	IState,
+	IClient,
+	IVector,
+	IScaler,
+	IUpdate
+
+} from "./interfaces/ITypes";
+
+/*
+*	The Update class handles scaling, resizing, and the app state.
 */
 
 export default class Update extends SJSClass {
 
-	/**
-    * @public
-    */
+	last:IVector= new Vector();
 
-	last:Vector= new Vector();
+	difference:IVector = new Vector();
 
-	difference:Vector = new Vector();
-
-	scaler:Object = {s:1,x:1,y:1};
+	scaler:IScaler = new Scaler(1,1,1);
 
 	scaling:boolean = true;
 
@@ -40,9 +46,9 @@ export default class Update extends SJSClass {
 
 	frames:number = 0;
 
-	/**
-    *
-    */
+	pause:number = 0;
+
+	set:number;
 
 	static properties = {
 
@@ -57,91 +63,80 @@ export default class Update extends SJSClass {
     *
     */
 
-	constructor(app:Object){
+	set step(value:IStep):void {
 
-		super(app);
-
-		if (this.app.main.init == undefined)
-			this.warn(this,this.app.main,"Undefined main loop. ");
+    	this.get('data')[0] = value;
 
 	}
 
-	/**
-    * @protected
-    */
-
-	set step(s){
-
-    	this.get('data')[0] = s;
-
-	}
-
-	/**
-    * @protected
-    */
-
-	get step(){
+	get step():IStep  {
 
 		return this.get('data')[0];
 
 	}
 
 	/**
-    * @protected
+    *
     */
 
-	set state(s){
+	set state(value:IState){
 
-		s.init();
-		s.initalized = true;
-    	this.get('data')[1] = s;
+		value.init();
+		value.initalized = true;
+    	this.get('data')[1] = value;
 
 	}
 
-	/**
-    * @protected
-    */
-
-	get state(){
+	get state():IState {
 
 		return this.get('data')[1];
+
+	}
+
+	constructor(
+		map:Object
+		) {
+
+		super(map);
+
+		return (this:IUpdate);
 
 	}
 
 	/**
 	* Initalize the state and step objects.
 	* Step is delayed untill step is initiated so to prevent value mismatch.
-	* @method
-	* @private
 	*/
 
-	inital(app:Object):void {
+	inital(app:IApp):void {
 
-		this.step = new this.step(new WeakMap());
-		this.state = new this.state(app.main,app);
+		this.step = new Step(app);
+
+		this.state = new State(app.main,app);
 
 	}
 
 	/**
 	* Calculates the scale of the canvas based on inital size inputs.
 	* Disabled if overriding canvas properties.
-	* @method
-	* @private
 	*/
 
-	scale(client:Object):number {
+	scale(client:IClient):number {
 
-		let windowSize = new Vector(window.innerWidth,window.innerHeight);
-
-		if (this==window)
-			return log('Warning: Scale: [this === window]');
-			else
+		//CLEAN
+		/*
+		if (this==window)			{
+			console.log('Warning: Scale: [this === window]');return (0);
+		}else
 		if ((this.pause>0.5))
-			return log('Warning: Paused',30);
+			{console.log('Warning: Paused',30);return (0);}
 			else
 		if (this.set==1)
-			return log('Warning: Scale: Duplicate Run',30);
+			{console.log('Warning: Scale: Duplicate Run',30);return (0);}
+		*/
+		//ENDCLEAN
 
+		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
 
 		//Check if overriding
 
@@ -155,7 +150,7 @@ export default class Update extends SJSClass {
 
 				if (document.body.clientHeight > windowSize.y) {
 
-					//
+					//FUCK?????????????????
 
 				}
 
@@ -175,7 +170,7 @@ export default class Update extends SJSClass {
 
 				//if not aligned
 
-				if (client.app.options.canvas.size.left!==app.width/2)	{
+				if (client.app.options.canvas.size.left!==client.app.width/2)	{
 
 					//align
 
@@ -195,15 +190,12 @@ export default class Update extends SJSClass {
 
 		} else	{
 
-			//Set height to window height
 
 			if (windowSize.y!==client.height) {
 
 				client.height = windowSize.y;
 
 			}
-
-			//Set width to window width
 
 			if (windowSize.x!==client.width) {
 
@@ -213,25 +205,31 @@ export default class Update extends SJSClass {
 
 		}
 
-		//Calculate sccalers
+		if (this.difference.sum() == 0) {
+
+			this.set = 0;
+
+			this.scalediff = 0;
+
+			return this.lastscale;
+		}
+
+		//Calculate scalers
 
 		this.set = 1;
+
 		this.scaler.x = client.height/client.setHeight;
+
 		this.scaler.y = client.width/client.setWidth;
+
 		//Toggle wither or not to scale
+
 		(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
-
-		//if scaler.s is not a number
-		if (isNaN(this.scaler.s)){
-
-			return this.set = 0;;
-
-		}
 
 		//Scale difference
 		this.scalediff = this.scaler.s-this.lastscale;
 
-		//If scaled different, scroll to the top
+		//LEGACY, scroll to top, If scaled different, scroll to the top
 		//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
 
 		this.set = 0;
@@ -244,20 +242,14 @@ export default class Update extends SJSClass {
 
 	/**
 	* Perform hard resize of the canvas.
-	* @method
-	* @private
 	*/
 
-	size(client:Object ):boolean {
+	size(client:IClient):boolean {
 
-		//If distance hasnt changed
+		if (this.difference.sum() == 0) {
 
-		if (this.difference.sum() == 0)
 			return false;
-
-		//Reassign width and height
-
-		console.log(client.width)
+		}
 
 		client.app.canvas.canvas.width  = this.last.x = client.width;
 
@@ -273,14 +265,13 @@ export default class Update extends SJSClass {
 	/**
 	* Calculate width and height delta differences between
 	* the canvas size last frame and this frame.
-	* @method
-	* @private
 	*/
 
-	sizedelta(client:Object):boolean {
+	sizedelta(client:IClient):boolean {
 
-		let vector_size0:Vector = new Vector(this.last.x,this.last.y);
-		let vector_size1:Vector = new Vector(client.width,client.height);
+		let vector_size0:IVector = new Vector(this.last.x,this.last.y);
+
+		let vector_size1:IVector = new Vector(client.width,client.height);
 
 		if (vector_size0.equals(vector_size1)) {
 

@@ -1,12 +1,18 @@
 /* @flow */
+/*
+import type {
 
-import WeakMapThingy from '../thingy';
+	IVector
+
+} from "../interfaces/ITypes";
+*/
+import WeakMapThingy from '../base/thingy';
 
 /** Vector2
 * @module
 * @access public
 * @example let vector = new Math.Vector2(1,1); */
-
+/*
 export class Vector2 extends WeakMapThingy<IVector> {
 
     static properties:object = { name:'Vector2',x:0, y:0 };
@@ -17,7 +23,7 @@ export class Vector2 extends WeakMapThingy<IVector> {
     };
 
 }
-
+*/
 /** Vector
 * @module
 * @access public
@@ -25,18 +31,20 @@ export class Vector2 extends WeakMapThingy<IVector> {
 * let vector = new Vector(1,1);
 */
 
-export default class Vector extends WeakMapThingy<_Inf> {
+export default class Vector extends WeakMapThingy {
 
-    position:vector;
+    position:Object;
+	_x:number;
+	_y:number;
 
 	 /** Set Vector private variables
      * @type {Object}
      * @protected */
 
-    static properties:object = {
+    static properties:Object = {
         name:"Vector",
-        x:_number,
-        y:_number
+        x:null,
+        y:null
     };
 
     /**
@@ -59,7 +67,7 @@ export default class Vector extends WeakMapThingy<_Inf> {
     * PointA.position = {x:0,y:0};
     */
 
-    set position(value:Vector):void {
+    set position(value):void {
 
         this.x = value.x;
 
@@ -122,12 +130,13 @@ export default class Vector extends WeakMapThingy<_Inf> {
     * @param {number} x - position.x
     * @param {number} y - position.y */
 
-    constructor(x: number = 0,y: number = 0):void {
+    constructor(x: number = 0,y: number = 0) {
 
             super(new WeakMap());
 			this.position.x = x;
 			this.position.y = y;
 
+		//return (this:IVector);
     };
 
 	/**

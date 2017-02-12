@@ -6,8 +6,15 @@ import _math from './core/math/math.js';
 * 		Library to read Zip files from the server.
 */
 
-const JSZip:Object = require("jszip");
-const JSZipUtils:Object = require("jszip-utils");
+let JSZip:Object = {};
+let JSZipUtils:Object = {};
+
+//Code Splitting 
+require.ensure([], function() {
+	JSZip = require("jszip");
+	JSZipUtils = require("jszip-utils");
+})
+
 
 
 var _Math = {
@@ -178,7 +185,7 @@ export default class ClientExperamental extends ClientCore {
 	}
 
 	/*
-	*	Main Loop Data _WIP unused
+	*	Main Loop Data for Resizing and Input
 	*/
 
 	loopData(){

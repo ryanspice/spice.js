@@ -1,6 +1,6 @@
 
 export type dtoFacebook = {
 
-
+	
 
 }

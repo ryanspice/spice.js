@@ -1,3 +1,10 @@
+bld\vendor.js
+bld\spice.js
+bld\spice.min.js
+
+./bld/spice.js
+./bld/spice.min.js
+
 examples/animation/images/Thumbs.db
 .settings/
 docs/
@@ -16,4 +23,10 @@ src/docs.css
 
 src/src.7z
 
-bld/
+/spice.js
+/spice.min.js
+./spice.js
+./spice.min.js
+
+/bld/spice.js
+/bld/spice.min.js

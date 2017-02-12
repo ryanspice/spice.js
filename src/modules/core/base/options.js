@@ -1,14 +1,19 @@
 /* @flow */
 
 import type {
+	ISJS,
 	IOptions
-	} from "./interfaces/ITypes.js";
+} from "../interfaces/ITypes.js";
+
+declare var SJS:ISJS;
 
 export default ({
 
     overridescroll:false,
     drag:0,
+
     targetfps:60,
+
     mute:false,
 
     paths:{

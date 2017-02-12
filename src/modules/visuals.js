@@ -1,13 +1,13 @@
 
 //import {Vector} from './math/vector.js';
-import {_SJSClass as SJSClass} from './core/sjs';
+import {_SJSClass as SJSClass} from './core/base/sjs';
 
 
-import StatsBuffer from './core/stats';
+import StatsBuffer from './core/base/stats';
 
 import API from './core/api'
 
-//import WeakMapThingy from './core/thingy';
+//import WeakMapThingy from './core/base/thingy';
 
 /*
 class _Pipe {

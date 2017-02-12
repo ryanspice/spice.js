@@ -11,5 +11,5 @@ export type IoVersion = {
 
 	version:string;
 	version_details:IoDetails;
-
+	
 }
