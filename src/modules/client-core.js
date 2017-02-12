@@ -147,7 +147,6 @@ export default class ClientCore extends _SJSClass {
 		this.update.scale(this);
 
 		//Draw frame
-		console.log
 		this.visuals.flip(this.update.scaler.s);
 
 		//Update frames per second

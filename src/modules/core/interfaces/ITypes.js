@@ -133,7 +133,7 @@ export type IVisuals = {
 
 
 
-	//flip:Function<number>;
+	flip(s:number):void;
 }
 
 /**
@@ -156,6 +156,24 @@ export type IClientCore = {
 	//update:IUpdate;
 	renderer:Object;
 
+	width:number;
+	height:number;
+	scale:number;
+
+	setWidth:number;
+	setHeight:number;
+
+	client_f:any;
+	client_data:any;
+	resized:boolean;
+	update:any;
+	fps:number;
+	second:any;
+	mainLoop:any;
+
+    loop():void;
+	initalize(loop:Object, loopdata:Object, scale:number):void;
+	verifySize(size:number|IVector, h:number):void;
 
 	+initalize:Function;
 	+loop:Function;
