@@ -65,8 +65,6 @@ export default class Update extends SJSClass {
 
 		super(app);
 
-		this.windowExists();
-
 		return (this:IUpdate);
 	}
 
@@ -137,7 +135,7 @@ export default class Update extends SJSClass {
 
 				if (document.body.clientHeight > windowSize.y) {
 
-					//FUCK?????????????????
+					//Wubalubadubdub?????????????????
 
 				}
 
