@@ -121,7 +121,7 @@ export default class Update extends SJSClass {
 
 	scale(client:IClient):number {
 
-		let windowSize:IVector = new Vector(this.window.innerWidth,this.window.innerHeight);
+		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
 
 		//Check if overriding
 
@@ -158,7 +158,7 @@ export default class Update extends SJSClass {
 				if (client.app.options.canvas.size.left!==client.app.width/2)	{
 
 					//align
-
+					console.log('eh')
 					client.app.canvas.getCanvas().style.left  = -client.width/2 + windowSize.x/2+"px";
 
 					//if buffer align
