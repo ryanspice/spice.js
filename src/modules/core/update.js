@@ -158,7 +158,6 @@ export default class Update extends SJSClass {
 				if (client.app.options.canvas.size.left!==client.app.width/2)	{
 
 					//align
-					console.log('eh')
 					client.app.canvas.getCanvas().style.left  = -client.width/2 + windowSize.x/2+"px";
 
 					//if buffer align
@@ -203,9 +202,14 @@ export default class Update extends SJSClass {
 
 		this.set = 1;
 
-		this.scaler.x = client.height/client.setHeight;
+		let cx:number = client.height/client.setHeight;
+		let cy:number = client.width/client.setWidth;
 
-		this.scaler.y = client.width/client.setWidth;
+		//I wrote these backwards, not sure if on purpose. Comment More...
+		//
+		
+		this.scaler.x = cx;
+		this.scaler.y = cy;
 
 		//Toggle wither or not to scale
 
@@ -232,7 +236,6 @@ export default class Update extends SJSClass {
 	size(client:IClient):boolean {
 
 		if (this.difference.sum() == 0) { return false; }
-
 		this.app.canvas.canvas.width  = this.last.x = this.app.client.width;
 
 		this.app.canvas.canvas.height = this.last.y = this.app.client.height;
