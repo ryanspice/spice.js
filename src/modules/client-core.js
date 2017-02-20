@@ -19,6 +19,7 @@ import type {
 	IExt,
 	IClientCore,
 	IVisuals,
+	IGraphics,
 	IRoom,
 	IVector
 } from "./core/interfaces/ITypes";
@@ -40,7 +41,7 @@ export default class ClientCore extends _SJSClass {
 
 	visuals:IVisuals;
 
-	graphics:Graphics;
+	graphics:IGraphics;
 
 	loader:_loader = _loader;
 

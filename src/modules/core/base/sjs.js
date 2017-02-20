@@ -17,9 +17,13 @@ export class _SJSClass extends WeakMapThingy {
 
 	app:IApp;
 
-	visuals:any;
+	visuals:IVisuals|Function;
 
-	graphics:any;
+	graphics:IGraphics|Function;
+
+	window:Object;
+
+	windowSafe:boolean;
 
     constructor(app:IApp) {
 
@@ -49,7 +53,7 @@ export class _SJSClass extends WeakMapThingy {
 
 			} else {
 
-				this.visuals = null;
+				//this.visuals = null;
 				this.warn('Unable to find app visuals reference.', 'Using ', appReference, ' for ', this);
 
 			}
@@ -60,21 +64,51 @@ export class _SJSClass extends WeakMapThingy {
 
 			} else {
 
-				this.graphics = null;
+				//this.graphics = null;
 				console.trace('Unable to find app loader reference.', 'Using ', appReference, ' for ', this);
 
 			}
 
 		} else {
 
-			this.graphics = null;
-			this.visuals = null;
+			//this.graphics = null;
+			//this.visuals = null;
 			this.warn('Unable to find app reference.', 'Using ', appReference, ' for ', this);
 
 		}
 
-		return (this:ISJSClass)
+		return (this:ISJSClass);
     }
+
+	/**
+	*
+	*/
+
+	windowDoesntExist():void {
+
+		this.window = {app:this};
+
+		this.windowSafe = false;
+
+	}
+
+	/**
+	* Check wither or not the window object exists.
+	*/
+
+	windowExists():void {
+
+		if (window) {
+
+			this.window = window;
+
+		} else {
+
+			this.windowDoesntExist();
+
+		}
+
+	}
 
     /**
     *

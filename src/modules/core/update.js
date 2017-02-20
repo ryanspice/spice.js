@@ -59,6 +59,17 @@ export default class Update extends SJSClass {
 
 	};
 
+	constructor(
+		app:IApp
+		) {
+
+		super(app);
+
+		this.windowExists();
+
+		return (this:IUpdate);
+	}
+
 	/**
     *
     */
@@ -90,17 +101,6 @@ export default class Update extends SJSClass {
 	get state():IState {
 
 		return this.get('data')[1];
-
-	}
-
-	constructor(
-		map:Object
-		) {
-
-		super(map);
-
-		return (this:IUpdate);
-
 	}
 
 	/**
@@ -123,20 +123,7 @@ export default class Update extends SJSClass {
 
 	scale(client:IClient):number {
 
-		//CLEAN
-		/*
-		if (this==window)			{
-			console.log('Warning: Scale: [this === window]');return (0);
-		}else
-		if ((this.pause>0.5))
-			{console.log('Warning: Paused',30);return (0);}
-			else
-		if (this.set==1)
-			{console.log('Warning: Scale: Duplicate Run',30);return (0);}
-		*/
-		//ENDCLEAN
-
-		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
+		let windowSize:IVector = new Vector(this.window.innerWidth,this.window.innerHeight);
 
 		//Check if overriding
 
@@ -246,13 +233,7 @@ export default class Update extends SJSClass {
 
 	size(client:IClient):boolean {
 
-//		console.log(this.app);
-
-		if (this.difference.sum() == 0) {
-
-			return false;
-		}
-
+		if (this.difference.sum() == 0) { return false; }
 
 		this.app.canvas.canvas.width  = this.last.x = this.app.client.width;
 
@@ -261,8 +242,6 @@ export default class Update extends SJSClass {
 		this.app.canvas.buffer.width  = this.last.x = this.app.client.width;
 
 		this.app.canvas.buffer.height = this.last.y = this.app.client.height;
-
-
 
 		return true;
 	}
@@ -291,7 +270,6 @@ export default class Update extends SJSClass {
 		}
 
 		return true;
-
 	}
 
 }
