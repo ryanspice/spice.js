@@ -34,15 +34,11 @@ export default class Update extends SJSClass {
 
 	scaler:IScaler = new Scaler(1,1,1);
 
-	scaling:boolean = true;
-
 	scalediff:number = 0;
 
 	lastscale:number = 1;
 
 	fullscale:boolean = false;
-
-	resized:boolean = false;
 
 	frames:number = 0;
 
@@ -91,7 +87,9 @@ export default class Update extends SJSClass {
 	set state(value:IState){
 
 		value.init();
+
 		value.initalized = true;
+
     	this.get('data')[1] = value;
 
 	}
@@ -120,6 +118,22 @@ export default class Update extends SJSClass {
 	*/
 
 	scale(client:IClient):number {
+
+		if ((this.pause>0.5))	{
+
+			console.log('Warning: Paused',30);
+
+			return (0);
+
+		} else if (this.set==1)	{
+
+			console.log('Warning: Scale: Duplicate Run',30);
+
+			return (0);
+		}
+
+
+
 
 		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
 
@@ -206,8 +220,7 @@ export default class Update extends SJSClass {
 		let cy:number = client.width/client.setWidth;
 
 		//I wrote these backwards, not sure if on purpose. Comment More...
-		//
-		
+
 		this.scaler.x = cx;
 		this.scaler.y = cy;
 
@@ -236,6 +249,7 @@ export default class Update extends SJSClass {
 	size(client:IClient):boolean {
 
 		if (this.difference.sum() == 0) { return false; }
+
 		this.app.canvas.canvas.width  = this.last.x = this.app.client.width;
 
 		this.app.canvas.canvas.height = this.last.y = this.app.client.height;
@@ -252,7 +266,7 @@ export default class Update extends SJSClass {
 	* the canvas size last frame and this frame.
 	*/
 
-	sizedelta(client:IClient):boolean {
+	sizeDelta(client:IClient):boolean {
 
 		let vector_size0:IVector = new Vector(this.last.x,this.last.y);
 

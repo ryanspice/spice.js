@@ -9,7 +9,7 @@ import _math from './core/math/math.js';
 let JSZip:Object = {};
 let JSZipUtils:Object = {};
 
-//Code Splitting 
+//Code Splitting
 require.ensure([], function() {
 	JSZip = require("jszip");
 	JSZipUtils = require("jszip-utils");
@@ -198,7 +198,7 @@ export default class ClientExperamental extends ClientCore {
 		//Return true or false, update audio
 		//this.mute = this.audio.update();
 
-				this.update.sizedelta(this);
+				this.update.sizeDelta(this);
 
 				//Update Input
 				this.app.input.update();

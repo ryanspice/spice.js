@@ -487,15 +487,14 @@ export type IUpdate = {
 	+scale:Function;
 	+size:Function;
 	+sizedelta:Function;
+	
 
 	last:IVector;
 	difference:IVector;
 	scaler:IScaler;
-	scaling:boolean;
 	scalediff:number;
 	lastscale:number;
 	fullscale:boolean;
-	resized:boolean;
 	frames:number;
 	pause:number;
 	set:number;
