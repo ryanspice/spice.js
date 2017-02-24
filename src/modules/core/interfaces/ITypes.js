@@ -483,12 +483,6 @@ export type IUpdate = {
 	step:IStep;
 	state:IState;
 
-	+inital:Function;
-	+scale:Function;
-	+size:Function;
-	+sizedelta:Function;
-	
-
 	last:IVector;
 	difference:IVector;
 	scaler:IScaler;
@@ -498,6 +492,11 @@ export type IUpdate = {
 	frames:number;
 	pause:number;
 	set:number;
+
+	inital(app:IApp):void;
+	scale(client:IClient):number;
+	size(client:IClient):boolean;
+	sizeDelta(client:IClient):boolean;
 
 }
 

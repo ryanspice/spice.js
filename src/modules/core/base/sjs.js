@@ -13,10 +13,9 @@ import {
 	log
 } from './debugger';
 
-window.logg = log;
+console.log(typeof log);
 
 /*
-
 * SJSClass - Used to create objects which inherit the Application.
 */
 

@@ -28,6 +28,8 @@ import type {
 
 export default class Update extends SJSClass {
 
+	fullscale:boolean = false;
+
 	last:IVector= new Vector();
 
 	difference:IVector = new Vector();
@@ -37,8 +39,6 @@ export default class Update extends SJSClass {
 	scalediff:number = 0;
 
 	lastscale:number = 1;
-
-	fullscale:boolean = false;
 
 	frames:number = 0;
 
@@ -216,13 +216,10 @@ export default class Update extends SJSClass {
 
 		this.set = 1;
 
-		let cx:number = client.height/client.setHeight;
-		let cy:number = client.width/client.setWidth;
-
 		//I wrote these backwards, not sure if on purpose. Comment More...
 
-		this.scaler.x = cx;
-		this.scaler.y = cy;
+		this.scaler.x = client.height/client.setHeight;
+		this.scaler.y = client.width/client.setWidth;
 
 		//Toggle wither or not to scale
 
@@ -248,7 +245,10 @@ export default class Update extends SJSClass {
 
 	size(client:IClient):boolean {
 
-		if (this.difference.sum() == 0) { return false; }
+		if (this.difference.sum() == 0) {
+
+			return false;
+		}
 
 		this.app.canvas.canvas.width  = this.last.x = this.app.client.width;
 

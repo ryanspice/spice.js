@@ -4,16 +4,19 @@ export default class DEBUGGER {
 
 	static options:Object = {
 
-		logging:false
+		logging:true
 
 	};
 
 	static console:Object = console;
 
-	static log:Object = (string:string):void =>{
+	static log:Function = (string:string):void =>{
 
-		if (DEBUGGER.options.logging)
-		DEBUGGER.console.log(string, '\n', this);
+		if (DEBUGGER.options.logging) {
+
+			DEBUGGER.console.log(string, '\n', this);
+
+		}
 
 	}
 
