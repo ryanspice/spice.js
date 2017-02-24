@@ -16,20 +16,16 @@ interface ILegacyCore {
 
 }
 
-class bammarjara {
-
-	constructor(){
-		(this:ILegacyCore)
-
-	}
-
-}
-
 
 export default class legacy_core<ILegacyCore> extends WeakMapThingy {
 
 
-    constructor(map:WeakMap):void {
+	client:Object;
+	ext:Object;
+	Construct:any;
+
+
+    constructor(map:WeakMap<*,*>):void {
         super(map);
     }
 

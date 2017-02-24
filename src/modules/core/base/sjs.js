@@ -46,7 +46,7 @@ export class _SJSClass extends WeakMapThingy {
         }
 
 		if (this.constructor.name == "Client"){
-			//return;
+			//return; handle visuals and graphics being null
 		}
 
 		if (typeof appReference != 'undefined') {
