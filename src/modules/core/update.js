@@ -119,6 +119,7 @@ export default class Update extends SJSClass {
 
 	scale(client:IClient):number {
 
+		/* Legacy
 		if ((this.pause>0.5))	{
 
 			console.log('Warning: Paused',30);
@@ -131,9 +132,7 @@ export default class Update extends SJSClass {
 
 			return (0);
 		}
-
-
-
+		*/
 
 		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
 
@@ -141,7 +140,7 @@ export default class Update extends SJSClass {
 
 		if (client.app.options.canvas.override)	{
 
-			//Set width to override
+			//width to override
 
 			if (client.app.options.canvas.size.width!==client.width) {
 
@@ -155,7 +154,7 @@ export default class Update extends SJSClass {
 
 			}
 
-			//Set height to override
+			//height to override
 
 			if (client.app.options.canvas.size.height!==client.height) {
 
@@ -163,7 +162,7 @@ export default class Update extends SJSClass {
 
 			}
 
-			//Check if centered
+			//if centered
 
 			if (client.app.options.canvas.position.center)	{
 
@@ -178,7 +177,7 @@ export default class Update extends SJSClass {
 
 					if (client.app.options.canvas.buffer) {
 
-						   client.app.canvas.getBuffer().style.left  = -client.width/2 + windowSize.x/2+"px";
+					   client.app.canvas.getBuffer().style.left  = -client.width/2 + windowSize.x/2+"px";
 
 					}
 
@@ -186,8 +185,7 @@ export default class Update extends SJSClass {
 
 			}
 
-		} else	{
-
+		} else {
 
 			if (windowSize.y!==client.height) {
 
@@ -211,6 +209,8 @@ export default class Update extends SJSClass {
 
 			return this.lastscale;
 		}
+
+		this.log('update:scale:adjustment');
 
 		//Calculate scalers
 

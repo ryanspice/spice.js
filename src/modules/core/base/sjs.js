@@ -1,6 +1,6 @@
 /* @flow */
 
-import WeakMapThingy from './thingy.js';
+import WeakMapThingy from './thingy';
 
 import type {
 	IApp,
@@ -9,7 +9,14 @@ import type {
 	ISJSClass
 } from "../interfaces/ITypes";
 
+import {
+	log
+} from './debugger';
+
+window.logg = log;
+
 /*
+
 * SJSClass - Used to create objects which inherit the Application.
 */
 
@@ -24,6 +31,8 @@ export class _SJSClass extends WeakMapThingy {
 	window:Object;
 
 	windowSafe:boolean;
+
+	log:Function = log;
 
     constructor(app:IApp) {
 
@@ -122,14 +131,6 @@ export class _SJSClass extends WeakMapThingy {
 
 	}
 
-    /**
-    *
-	*/
 
-	log(a0:any){
-
-		console.trace(a0, '\n'  ,this);
-
-	}
 
 };
