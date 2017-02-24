@@ -13,8 +13,6 @@ import {
 	log
 } from './debugger';
 
-console.log(typeof log);
-
 /*
 * SJSClass - Used to create objects which inherit the Application.
 */
@@ -23,15 +21,15 @@ export class _SJSClass extends WeakMapThingy {
 
 	app:IApp;
 
-	visuals:IVisuals|Function;
+	log:Function = log;
 
-	graphics:IGraphics|Function;
-
-	window:Object;
+	window:window;
 
 	windowSafe:boolean;
 
-	log:Function = log;
+	visuals:IVisuals|Function;
+
+	graphics:IGraphics|Function;
 
     constructor(app:IApp) {
 

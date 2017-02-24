@@ -4,7 +4,7 @@ export default class DEBUGGER {
 
 	static options:Object = {
 
-		logging:true
+		logging:false
 
 	};
 
