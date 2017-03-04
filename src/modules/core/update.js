@@ -28,6 +28,8 @@ import type {
 
 export default class Update extends SJSClass {
 
+	document = document;
+
 	fullscale:boolean = false;
 
 	last:IVector= new Vector();
@@ -60,6 +62,8 @@ export default class Update extends SJSClass {
 		) {
 
 		super(app);
+
+
 
 		return (this:IUpdate);
 	}
@@ -146,7 +150,8 @@ export default class Update extends SJSClass {
 
 				client.width = client.app.options.canvas.size.width;
 
-				if (document.body.clientHeight > windowSize.y) {
+				if(this.document.body)
+				if (this.document.body.clientHeight > windowSize.y) {
 
 					//Wubalubadubdub?????????????????
 

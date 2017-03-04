@@ -19,14 +19,15 @@ interface ILegacyCore {
 
 export default class legacy_core<ILegacyCore> extends WeakMapThingy {
 
-
 	client:Object;
+
 	ext:Object;
-	Construct:any;
 
 
     constructor(map:WeakMap<*,*>):void {
+
         super(map);
+
     }
 
     /** Legacy functions.

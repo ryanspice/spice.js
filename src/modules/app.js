@@ -56,7 +56,7 @@ export default class App extends Core {
 
 	canvas:ICanvas;
 
-	constructor(map:WeakMap<*>) {
+	constructor(map:WeakMap<*,*>) {
 
 		super(map);
 
@@ -102,10 +102,11 @@ export default class App extends Core {
 		this.canvas =  new Canvas(this);
 
 		this.client = new Client(this,
-													w || this.app.options.canvas.size.width,
-													h || this.app.options.canvas.size.height);
+														w || this.app.options.canvas.size.width,
+														h || this.app.options.canvas.size.height);
 
-		this.client.update.inital(this);
+		//See clientJS for new implementiation with setTimeout (temporary)
+		//this.client.update.inital(this);
 
 		this.input = new _input(this);
 

@@ -45,7 +45,7 @@ export default class Core extends legacy_core {
 
     user:dtoFacebook = facebook;
 
-    client:Object = {visuals:()=>{},graphics:()=>{}};
+    client:Object = {update:{inital:{}},visuals:()=>{},graphics:()=>{}};
 
     math:_math = new _math();
 
