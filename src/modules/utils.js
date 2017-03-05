@@ -212,4 +212,7 @@ window.wait = wait;
 
 window.utils = utils;
 
+const RequestAnimationFrame = utils.requestAnimationFrame;
+export {RequestAnimationFrame as RequestAnimationFrame};
+
 export default window.utils;

@@ -4,7 +4,6 @@ import ITypes from "../interfaces/ITypes";
 
 const Types:Object = new ITypes();
 
-const _IMap = new WeakMap();
 
 import type {
 
@@ -22,17 +21,18 @@ import type {
 
     static properties:Object = { name:'sjsclass', map:null, version:0 };
 
-    static map:WeakMap<*,*> = _IMap;
+    static map:WeakMap<*,*> = new WeakMap();
 
-	map:WeakMap<*,*> = _IMap;
+	map:WeakMap<*,*> = new WeakMap();
 
     private:bool;
 
-    constructor(x:WeakMap<*,*>) {
+    constructor(map:WeakMap<*,*>) {
 
-        if (typeof x != 'undefined'){
 
-            this.constructor.map = x;
+        if (typeof map != 'undefined'){
+
+            this.constructor.map = map;
 
             this.private = true;
 
@@ -40,11 +40,11 @@ import type {
 
         } else {
 
-            console.warn(x);
+            console.warn(map);
 
-            x = new WeakMap();
+            map = new WeakMap();
 
-            this.constructor.map = x;
+            this.constructor.map = map;
 
             this.private = false;
 
