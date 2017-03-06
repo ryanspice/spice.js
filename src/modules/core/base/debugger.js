@@ -13,7 +13,8 @@ export default class DEBUGGER {
 	static options:Object = {
 
 		logging:true,
-		loggingType:CTYPE.trace
+		loggingType:CTYPE.log,
+		loggingLevel:0
 
 	};
 

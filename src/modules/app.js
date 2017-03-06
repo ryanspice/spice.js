@@ -1,5 +1,9 @@
 /* @flow */
 
+//import Particles from './particles.js'; // (unfinished) To be built into application
+
+//window.SJSParticleController = Particles; // Temporary for snowflakes
+
 /** App is the main app controller, here you can access input, math, data and graphics controllers.
 *	@module */
 
@@ -7,8 +11,11 @@ import Core from './core/core';
 
 import State from './state';
 
+import Client from './client';
+
 import Canvas from './canvas';
 
+import _input from './input/input';
 
 import type {
 
@@ -17,15 +24,7 @@ import type {
 	ICanvas,
 	IOptions
 
-} from './core/interfaces/ITypes'
-
-/** WIP Modules
-*	@module
-*/
-
-import Client from './client';
-
-import _input from './input/input';
+} from './core/interfaces/ITypes';
 
 // Duplicate in ITYPES
 interface AppEventTarget extends EventTarget {
@@ -41,11 +40,6 @@ declare interface Event {
 	target:AppEventTarget;
 }
 //END DUPLICATE IN ITYPES
-
-
-//import Particles from './particles.js'; // (unfinished) To be built into application
-
-//window.SJSParticleController = Particles; // Temporary for snowflakes
 
 /** Core of the framework, initalizes client, input and listeners.
 * @module
@@ -64,11 +58,23 @@ export default class App extends Core {
 		return (this:IApp);
 	}
 
-	/** This function starts the application.
+	/** DEPRECIATED : This function starts the application.
 	* @method
 	* @override */
 
-    start(w:number|null=0, h:number|null=0):void {
+    start(w:?number = 0, h:?number = 0):void {
+
+		console.warn('The key "start" is depreciated use "Start" instead.');
+
+		this.Start(w,h);
+
+	}
+
+	/** This function Starts the application.
+	* @method
+	* @override */
+
+    Start(w:?number = 0, h:?number = 0):void {
 
 		this.main = Object.create(this.main);
 
@@ -81,7 +87,7 @@ export default class App extends Core {
 
 		this.input = new _input(this);
 
-		this.loop(this);
+		this.Loop(this);
 
     }
 
@@ -89,7 +95,7 @@ export default class App extends Core {
 	* @method
 	* @private */
 
-	loop(self:IApp):void {
+	Loop(self:IApp):void {
 
 		this.client.log('Before First Loop');
 

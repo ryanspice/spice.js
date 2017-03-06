@@ -54,7 +54,7 @@ export default class Client extends ClientExperamental {
 
 		//Temp? running update.inital here instead of in client.update
 
-		window.requestAnimationFrame(()=>{
+		requestAnimationFrame(()=>{
 
 			this.update.inital(app);
 

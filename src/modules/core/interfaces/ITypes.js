@@ -49,6 +49,9 @@ declare interface Event {
 
 	OnLoad(self: object):void;
 	OnApplicationLoad(evt:AppEvent):void;
+	Loop(self:IApp):void;
+	Start(w:any,h:any):void;
+	start(w:any,h:any):void;
 
 	client:IClient|Object;
 	canvas:ICanvas;
@@ -56,9 +59,6 @@ declare interface Event {
 
 
 	main?:IState;
-
-	loop(self:IApp):void;
-	start(w:any,h:any):void;
 
 	+scale:number;
  };
