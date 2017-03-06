@@ -5,7 +5,7 @@ import {_SJSClass as SJSClass} from './core/base/sjs';
 
 import StatsBuffer from './core/base/stats';
 
-import API from './core/api'
+import API from './core/api';
 
 //import WeakMapThingy from './core/base/thingy';
 
@@ -34,7 +34,6 @@ export default class Visuals extends API {
 
 		let canvas = this.app.canvas;
 
-		window.utils.requestAnimationFrame(name,0,0);
 
 		this.scale = this.app.scale;
 

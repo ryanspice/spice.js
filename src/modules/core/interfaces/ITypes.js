@@ -50,7 +50,7 @@ declare interface Event {
 	OnLoad(self: object):void;
 	OnApplicationLoad(evt:AppEvent):void;
 
-	client:Object;
+	client:IClient|Object;
 	canvas:ICanvas;
 	options:IOptions;
 
@@ -475,6 +475,8 @@ export type IClient = {
 	initalize:Function;
 	loop:Function;
 	loopData:Function;
+
+	log(string:string):void;
 
 };
 

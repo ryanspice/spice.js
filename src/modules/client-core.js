@@ -14,10 +14,6 @@ import Ext from './ext';
 
 import Room from './core/base/room.js';
 
-import {
-	RequestAnimationFrame
-} from "./utils";
-
 import type {
 	IApp,
 	IExt,
@@ -115,8 +111,6 @@ export default class ClientCore extends _SJSClass {
 	*/
 
 	initalize(loop:Object, loopdata:Object, scale:number):void {
-
-		RequestAnimationFrame();
 
 		this.scale = scale;
 

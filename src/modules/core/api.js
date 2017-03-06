@@ -33,6 +33,11 @@ var end = pipe(foo,bar,baz)(1,1,2);
 console.log(end);
 */
 
+import {
+	RequestAnimationFrame
+} from "../utils";
+
+
 export default class API extends SJSClass {
 
 		free:Boolean = false;
@@ -110,6 +115,7 @@ export default class API extends SJSClass {
 
 	        super(app);
 
+			RequestAnimationFrame();
 
 				// make sure aspect scale is correctly set in advance of first tick
 				/*if (this.fullscreen_mode >= 2)

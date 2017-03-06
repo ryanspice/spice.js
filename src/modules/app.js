@@ -9,6 +9,7 @@ import State from './state';
 
 import Canvas from './canvas';
 
+
 import type {
 
 	IApp,
@@ -63,34 +64,6 @@ export default class App extends Core {
 		return (this:IApp);
 	}
 
-	/** The main loop for the application, use arrow functions, if arrows exist
-	* @method
-	* @private */
-
-	loop(self:IApp):void {
-
-		setTimeout(() => {
-
-			function AppLoop(){
-
-				self.client.loop();
-
-				self.client.loopData();
-
-			}
-
-			function AppLoopData(){
-
-				///For loops that dont need to be run at 60fps
-
-			}
-
-			this.client.initalize(AppLoop,AppLoopData,this.scale);
-
-		}, this.time);
-
-	}
-
 	/** This function starts the application.
 	* @method
 	* @override */
@@ -101,9 +74,7 @@ export default class App extends Core {
 
 		this.canvas =  new Canvas(this);
 
-		this.client = new Client(this,
-														w || this.app.options.canvas.size.width,
-														h || this.app.options.canvas.size.height);
+		this.client = new Client(this, w || this.app.options.canvas.size.width, h || this.app.options.canvas.size.height);
 
 		//See clientJS for new implementiation with setTimeout (temporary)
 		//this.client.update.inital(this);
@@ -113,6 +84,37 @@ export default class App extends Core {
 		this.loop(this);
 
     }
+
+	/** Loop of the Program
+	* @method
+	* @private */
+
+	loop(self:IApp):void {
+
+		this.client.log('Before First Loop');
+
+		window.requestUserIdle(() => {
+
+			this.client.log('First Loop');
+
+			this.client.initalize((time)=>{
+
+				this.client.loop();
+
+				this.client.loopData();
+
+				//this.time = time;
+
+			},(secondary)=>{
+
+				//Execute Teritary Loop Stuffs
+
+			},this.scale);
+
+		}, { timeout: this.time });
+
+		return;
+	}
 
 	/** Triggers when the application first loops.
 	* @method

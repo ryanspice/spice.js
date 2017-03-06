@@ -1,10 +1,19 @@
 /* @flow */
 
+
+const CTYPE:Object = {
+
+	trace:'trace',
+	log:'log'
+
+}
+
 export default class DEBUGGER {
 
 	static options:Object = {
 
-		logging:false
+		logging:true,
+		loggingType:CTYPE.trace
 
 	};
 
@@ -14,7 +23,21 @@ export default class DEBUGGER {
 
 		if (DEBUGGER.options.logging) {
 
-			DEBUGGER.console.log(string, '\n', this);
+			switch(DEBUGGER.options.loggingType) {
+
+				case CTYPE.trace:
+
+					DEBUGGER.console.trace(string, '\n', this);
+
+				break;
+
+				case CTYPE.log:
+
+					DEBUGGER.console.log(string, '\n', this);
+
+				break;
+
+			}
 
 		}
 
