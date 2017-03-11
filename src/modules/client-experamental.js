@@ -198,7 +198,7 @@ export default class ClientExperamental extends ClientCore {
 		//Return true or false, update audio
 		//this.mute = this.audio.update();
 
-				this.update.sizeDelta(this);
+				this.update.sizedelta(this);
 
 				//Update Input
 				this.app.input.update();

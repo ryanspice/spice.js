@@ -18,7 +18,10 @@ import type {
 	IApp,
 	IExt,
 	IOptions,
-	IState
+	IState,
+	IClient,
+	IVisuals
+
 	} from "./interfaces/ITypes.js";
 
 import type {
@@ -35,25 +38,25 @@ import type {
 
 export default class Core extends legacy_core {
 
-    options:IOptions = Options;
+	app:IApp;
 
     ext:IExt;
 
-    visuals:Object;
+    options:IOptions = Options;
 
-    input:Object;
+	client:Object = {update:{inital:{}},visuals:()=>{},graphics:()=>{}};
 
-    user:dtoFacebook = facebook;
+    visuals:IVisuals; /* WIP */
 
-    client:Object = {update:{inital:{}},visuals:()=>{},graphics:()=>{}};
+    input:Object; /* WIP */
 
-    math:_math = new _math();
+    user:dtoFacebook = facebook; /* WIP */
+
+    math:_math = new _math(); /* WIP */
 
     time:number = 0;
 
 	scale:number;
-
-	app:IApp;
 
 	id:number=0;
 
@@ -113,8 +116,7 @@ export default class Core extends legacy_core {
 		return this.get('main');
 	}
 
-    /**  @type {object} New Object Assign Method
-	*/
+    /**  @type {object} New Object Assign Method	*/
 
 	set main(newState:IState):IState {
 

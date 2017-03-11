@@ -19,15 +19,21 @@
 
 				self.main = {update:function(){},draw:function(){
 
+					let r = Math.sin(Date.now()/360);
+					for(var i = 5; i>0; i--)
 					this.visuals.rect(
-						600+5*window.innerWidth*Math.sin(Date.now()/200)/250,
-						200+5*window.innerWidth*Math.cos(Date.now()/200)/250,
+						600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
+						200+5*window.innerWidth*Math.cos(Date.now()/360-i*r)/250,
 						10,
 						10,
 						'#FFFFFF'
 					);
 
-				},init:function(){}};
+				},init:function(){
+
+					this.visuals.bleed = 0.75;
+
+				}};
 
 				self.Start(width, height);
 

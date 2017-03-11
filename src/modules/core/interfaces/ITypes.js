@@ -386,7 +386,7 @@ export type IState = {
 
 export type IRoom = {
 	started:boolean;
-	+Started:Function;
+	Started():Function;
 }
 
 /**
@@ -482,23 +482,26 @@ export type IClient = {
 
 export type IUpdate = {
 
-	step:IStep;
-	state:IState;
-
+	fullscale:boolean;
 	last:IVector;
 	difference:IVector;
 	scaler:IScaler;
 	scalediff:number;
+
 	lastscale:number;
-	fullscale:boolean;
 	frames:number;
 	pause:number;
 	set:number;
 
+	step:IStep;
+	state:IState;
+
 	inital(app:IApp):void;
 	scale(client:IClient):number;
 	size(client:IClient):boolean;
-	sizeDelta(client:IClient):boolean;
+	sizedelta(client:IClient):boolean;
+	
+	scrollto():void;
 
 }
 

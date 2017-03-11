@@ -28,7 +28,7 @@ import type {
 
 export default class Update extends SJSClass {
 
-	document = document;
+	/* Add to options */
 
 	fullscale:boolean = false;
 
@@ -57,20 +57,18 @@ export default class Update extends SJSClass {
 
 	};
 
+	/* */
+
 	constructor(
 		app:IApp
 		) {
 
 		super(app);
 
-
-
 		return (this:IUpdate);
 	}
 
-	/**
-    *
-    */
+	/*  */
 
 	set step(value:IStep):void {
 
@@ -78,17 +76,17 @@ export default class Update extends SJSClass {
 
 	}
 
+	/*   */
+
 	get step():IStep  {
 
 		return this.get('data')[0];
 
 	}
 
-	/**
-    *
-    */
+	/*  */
 
-	set state(value:IState){
+	set state(value:IState):void {
 
 		value.init();
 
@@ -97,6 +95,8 @@ export default class Update extends SJSClass {
     	this.get('data')[1] = value;
 
 	}
+
+	/* */
 
 	get state():IState {
 
@@ -116,8 +116,8 @@ export default class Update extends SJSClass {
 
 	}
 
-	/**
-	* Calculates the scale of the canvas based on inital size inputs.
+		/**
+		* Calculates the scale of the canvas based on inital size inputs.
 	* Disabled if overriding canvas properties.
 	*/
 
@@ -140,20 +140,19 @@ export default class Update extends SJSClass {
 
 		let windowSize:IVector = new Vector(window.innerWidth,window.innerHeight);
 
-		//Check if overriding
+		/* Check if overriding */
 
 		if (client.app.options.canvas.override)	{
 
-			//width to override
+			/* width to override */
 
 			if (client.app.options.canvas.size.width!==client.width) {
 
 				client.width = client.app.options.canvas.size.width;
 
-				if(this.document.body)
-				if (this.document.body.clientHeight > windowSize.y) {
+				if ((client.app.document.body)&&(client.app.document.body.clientHeight > windowSize.y)) {
 
-					//Wubalubadubdub?????????????????
+					/* Figure out what do to here. */
 
 				}
 
@@ -206,6 +205,8 @@ export default class Update extends SJSClass {
 
 		}
 
+		/* If No Difference return the previous scale */
+
 		if (this.difference.sum() == 0) {
 
 			this.set = 0;
@@ -217,31 +218,55 @@ export default class Update extends SJSClass {
 
 		this.log('update:scale:adjustment');
 
-		//Calculate scalers
+		/* You want to take the Y over the X and in the function after the X takes presidence */
 
 		this.set = 1;
 
-		//I wrote these backwards, not sure if on purpose. Comment More...
+		this.scaler.y = client.height/client.setHeight;
 
-		this.scaler.x = client.height/client.setHeight;
-		this.scaler.y = client.width/client.setWidth;
+		this.scaler.x = client.width/client.setWidth;
 
-		//Toggle wither or not to scale
+		/* Toggle wither or not to scale based off this.fullscale */
 
-		(this.fullscale)?this.scaler.s = this.scaler.x:this.scaler.s = (this.scaler.x<this.scaler.y)?this.scaler.x:this.scaler.y;
+		if (this.fullscale) {
 
-		//Scale difference
+			this.scaler.s = this.scaler.y;
+
+		} else {
+
+			if (this.scaler.y<this.scaler.x) {
+
+				this.scaler.s = this.scaler.y;
+
+			} else {
+
+				this.scaler.s = this.scaler.x;
+
+			}
+
+		}
+
+		/* Get scale difference and store scale in lastscale */
+
 		this.scalediff = this.scaler.s-this.lastscale;
-
-		//LEGACY, scroll to top, If scaled different, scroll to the top
-		//(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
 
 		this.set = 0;
 
-		//Save scale
 		this.lastscale = this.scaler.s;
 
 		return this.scaler.s;
+	}
+
+	/* WIP - p2 */
+
+	scrollto():void {
+
+		/* LEGACY, scroll to top, If scaled different, scroll to the top. TO ReIMplement
+
+		(this.scalediff)?app.app.input.scroll.to(true):app.app.input.scroll.to(false);
+
+		*/
+
 	}
 
 	/**
@@ -250,10 +275,14 @@ export default class Update extends SJSClass {
 
 	size(client:IClient):boolean {
 
+		/* If no difference skip */
+
 		if (this.difference.sum() == 0) {
 
 			return false;
 		}
+
+		/* Resize canvas */
 
 		this.app.canvas.canvas.width  = this.last.x = this.app.client.width;
 
@@ -271,13 +300,11 @@ export default class Update extends SJSClass {
 	* the canvas size last frame and this frame.
 	*/
 
-	sizeDelta(client:IClient):boolean {
+	sizedelta(client:IClient):boolean {
 
-		let vector_size0:IVector = new Vector(this.last.x,this.last.y);
+		let vector_size:IVector = new Vector(client.width,client.height);
 
-		let vector_size1:IVector = new Vector(client.width,client.height);
-
-		if (vector_size0.equals(vector_size1)) {
+		if (this.last.equals(vector_size)) {
 
 			this.difference = new Vector();
 
@@ -285,7 +312,7 @@ export default class Update extends SJSClass {
 
 		} else {
 
-			this.difference = new Vector().Difference(vector_size0,vector_size1);
+			this.difference = new Vector().Difference(this.last,vector_size);
 
 		}
 
