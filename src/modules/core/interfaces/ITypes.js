@@ -47,6 +47,8 @@ declare interface Event {
 
  export type IApp = {
 
+	id:number;
+
 	OnLoad(self: object):void;
 	OnApplicationLoad(evt:AppEvent):void;
 	Loop(self:IApp):void;
@@ -70,6 +72,12 @@ export type ICanvas = {
 
 }
 
+export type IInput = {
+
+
+
+}
+
 /*
 
 
@@ -80,6 +88,32 @@ height:number;
 
 */
 
+export type IMath = {
+
+
+}
+
+export type IBuild = {
+
+	+utils:Object;
+	+aState:Object;
+	+controller:Object;
+	+window:Object;
+	+time:Function;
+	+timeEnd:Function;
+	+buildWindowReferences:Function;
+	+buildPrototype:Function;
+	+create:Function;
+	/*
+	app:Function;
+	id:number;
+	document:Object;
+	stats:Object;
+	time(str:string):void;
+	buildListeners(temp:IApp):IApp;
+	*/
+
+}
 
 /**
 * @interface App
@@ -87,28 +121,38 @@ height:number;
 
 export type ICore = {
 
+	app:IApp;
+	ext:IExt;
 	options:IOptions;
 
-	ext:IExt;
+	client:IClient|Object;
+	visuals:IVisuals;
 
-	visuals:Object;
-
-	input:Object;
+	input:IInput;
 
 	user:dtoFacebook;
 
-	client:Object;
-
-	math:Object;
+	math:IMath;
 
 	time:number;
-
 	+scale:number;
-
-	app:IApp;
-
 	id:number;
 
+	+width:number;
+	+height:number;
+	+scale:number;
+	+version:String;
+	+fps:number;
+	main:IState;
+
+/*
+	width():number;
+	height():number;
+	scale():number;
+	//version():string;
+	fps():number;
+	main:IState;
+*/
 };
 
 /**
@@ -472,6 +516,8 @@ export type IClient = {
 	setWidth:number;
 	setHeight:number;
 
+	scale?:number;
+
 	initalize:Function;
 	loop:Function;
 	loopData:Function;
@@ -500,7 +546,7 @@ export type IUpdate = {
 	scale(client:IClient):number;
 	size(client:IClient):boolean;
 	sizedelta(client:IClient):boolean;
-	
+
 	scrollto():void;
 
 }

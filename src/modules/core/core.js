@@ -8,11 +8,16 @@ import _math from './math/math';
 
 import legacy_core from './legacy/legacy-core';
 
-const _BUILD_OFFICIAL_ = '0.8.2';
-const _BUILD_RENDERER_ = '0.0.1';
-const _BUILD_CANVAS_ = '0.8.1';
-const _BUILD_LAST_ = '08-2016';
-const _BUILD_FIRST_ = '12-2013';
+import {
+	prototype
+	} from '../client';
+
+/* Remove? */
+const _BUILD_OFFICIAL_:string = '0.8.2';
+const _BUILD_RENDERER_:string = '0.0.1';
+const _BUILD_CANVAS_:string = '0.8.1';
+const _BUILD_LAST_:string = '11-2017';
+const _BUILD_FIRST_:string = '12-2013';
 
 import type {
 	IApp,
@@ -20,8 +25,10 @@ import type {
 	IOptions,
 	IState,
 	IClient,
-	IVisuals
-
+	ICore,
+	IVisuals,
+	IInput,
+	IMath
 	} from "./interfaces/ITypes.js";
 
 import type {
@@ -42,17 +49,17 @@ export default class Core extends legacy_core {
 
     ext:IExt;
 
-    options:IOptions = Options;
+    options:IOptions = Options; /* See if we can move */
 
-	client:Object = {update:{inital:{}},visuals:()=>{},graphics:()=>{}};
+	client:IClient|Object = prototype;
 
     visuals:IVisuals; /* WIP */
 
-    input:Object; /* WIP */
+    input:IInput; /* WIP */
 
     user:dtoFacebook = facebook; /* WIP */
 
-    math:_math = new _math(); /* WIP */
+    math:IMath = new _math(); /* WIP */
 
     time:number = 0;
 
@@ -71,6 +78,17 @@ export default class Core extends legacy_core {
 			_lastbuild_:_BUILD_FIRST_,
 		}
 	};
+
+	/* */
+
+	constructor(
+		app:any
+		) {
+
+		super(app);
+
+		return (this:ICore);
+	}
 
     /**  @type {number} */
 
@@ -97,7 +115,7 @@ export default class Core extends legacy_core {
 		return scale;
 	}
 
-    /**  @type {number} */
+    /**  @type {String} */
 
 	get version():String {
 		return this.get('version');
@@ -107,16 +125,27 @@ export default class Core extends legacy_core {
 
 	get fps():number {
 
-		return this.client.update.step.fps.toFixedNumber(2);
+		let fps:any = 1;
+
+		//If's for flowtype, issue: var is in a weakmap
+
+		if((this.client.update)&&(this.client.update.step)&&(this.client.update.step.fps)) {
+
+			fps = this.client.update.step.fps;
+
+		}
+
+		return fps.toFixedNumber(2);
 	}
 
-    /**  @type {object} */
+    /**  @type {IState} */
 
 	get main():IState {
+
 		return this.get('main');
 	}
 
-    /**  @type {object} New Object Assign Method	*/
+    /**  @type {IState} New Object Assign Method	*/
 
 	set main(newState:IState):IState {
 

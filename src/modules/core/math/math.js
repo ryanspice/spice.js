@@ -51,6 +51,11 @@ window.sprite2 = new _Sprite();
 
 export default class Math {
 
+	toFixedNumber(x, base){
+	  var pow = Math.pow(base||10,x);
+	  return +( Math.round(this*pow) / pow );
+	};
+
     /**
     * Return the min max of 4 values
     * @method

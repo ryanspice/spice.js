@@ -26,6 +26,7 @@ export default class Client extends ClientExperamental {
 
 	update:any;
 
+	static main_prototype:Object = {app:{},update:{inital:{}},visuals:()=>{},graphics:()=>{}};
 
 	/**
 	*	The client, or base of an app.
@@ -71,3 +72,4 @@ export default class Client extends ClientExperamental {
     }
 
 }
+export const prototype = Client.main_prototype;

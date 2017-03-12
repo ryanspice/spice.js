@@ -2,7 +2,8 @@
 
 import type {
 
-	IApp
+	IApp,
+	IBuild
 
 } from './interfaces/ITypes';
 
@@ -28,11 +29,23 @@ const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Wind
 
 const Console:Object = console;
 
+const stats:Object = {
+
+	windowcount:0
+
+}
 
 export default class Build extends WeakMapThingy {
 
-	/**
-	 * 	Common Functions
+	app:Function;
+
+	id:number=0;
+
+	document:Object = document;
+
+	stats:Object;
+
+	/** Common Functions
 	 * 	@private
 	 */
 
@@ -65,15 +78,11 @@ export default class Build extends WeakMapThingy {
 		}
 
 	}
-	app:Function;
-	id:number=0;
-
-	document:Object = document;
 
 	/** Attaches a reference to the Statistics module.
 	*	@constructor	*/
 
-	constructor(map:WeakMap<>):void {
+	constructor(map:WeakMap<>) {
 
 		super(map);
 
@@ -81,12 +90,18 @@ export default class Build extends WeakMapThingy {
 
 		this.buildWindowReferences();
 
+		return (this:IBuild);
 	}
 
 	/** Reference to the Window object.
 	* @type {Element}	*/
 
 	get window():Object {
+
+		Window.stats = stats;
+
+		Window.stats.windowcount++;
+
 		return Window;
 	}
 
@@ -94,6 +109,7 @@ export default class Build extends WeakMapThingy {
 	* @type {Element}	*/
 
 	get utils():Object {
+
 		return utils;
 	}
 
@@ -101,6 +117,7 @@ export default class Build extends WeakMapThingy {
 	* @type {Element}	*/
 
 	get aState():Object {
+
 		return this.app.main;
 	}
 
@@ -109,30 +126,19 @@ export default class Build extends WeakMapThingy {
 	* @protected	*/
 
 	get controller():Object {
-		return this.constructor.map.get(this)['controller'];
+
+		return Build.properties.controller;
 	}
 
 	/** Reference to the statistics object.
 	* @type {Object}
 	* @protected	*/
 
+	/* Unused ATM
 	get statistics():Object {
 		return this.constructor.map.get(this)['statistics'];
 	}
-
-	/**
-	* @type {Element}	*/
-
-	time(str:string):void {
-		Console.timeEnd(str);
-	}
-
-	/**
-	* @type {Element}	*/
-
-	timeEnd(str:string):void {
-		Console.timeEnd(str);
-	}
+	*/
 
 	/** Attaches references to the global.window object.
 	*	@type {void} */
@@ -165,7 +171,7 @@ export default class Build extends WeakMapThingy {
     buildPrototype():Object {
 
         /* temp stores the app during the create process, it is then returned */
-        var temp = {};
+        let temp = {};
 
         temp = new this.app(new WeakMap());
 
@@ -184,14 +190,24 @@ export default class Build extends WeakMapThingy {
         return this.window.apps[temp.id];
     }
 
-    /**	Initalize the listeners for the application.
+
+	/*											*/
+	/*											*/
+	/*											*/
+	/* Below needs Refator */
+	/*											*/
+	/*											*/
+	/*											*/
+	/*											*/
+
+    /**	Initalize the listeners for the application.  * WIP *
     *   @param {temp} temp - pass a reference to attach listeners
     *   @return {Method} returns self */
 
     buildListeners(temp:App):App {
 
         if (this.document.readyState == "complete" || "loaded" || "interactive") {
-             console.log('ready')
+             Console.log('ready'); //Refactor to use system log
         }
 
         temp.Listener(document, "DOMContentLoaded", temp.OnApplicationLoad);
@@ -199,10 +215,10 @@ export default class Build extends WeakMapThingy {
         return temp;
     }
 
-	/** Begins the app build promise.
+	/** Begins the app build promise. *Old code needs refactor*
 	*	@return {App} a temp reference */
 
-	create() {
+	create():Object {
 
 	    let time:number = new Date().getTime();
 
@@ -258,6 +274,20 @@ export default class Build extends WeakMapThingy {
 
 	    return tempReference;
 
+	}
+
+	/** Refactor
+	* @type {Element}	*/
+
+	time(str:string):void {
+		Console.timeEnd(str);
+	}
+
+	/** Refactor
+	* @type {Element}	*/
+
+	timeEnd(str:string):void {
+		Console.timeEnd(str);
 	}
 
 };
