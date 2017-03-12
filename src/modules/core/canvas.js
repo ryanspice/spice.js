@@ -1,5 +1,5 @@
 
-import WeakMapThingy from './core/base/thingy';
+import WeakMapThingy from './base/thingy';
 
 /**
 * Canvas Interface

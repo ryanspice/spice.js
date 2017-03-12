@@ -9,7 +9,7 @@ import State from './state';
 
 import Client from './client';
 
-import Canvas from './canvas';
+import Canvas from './core/canvas';
 
 import _input from './input/input';
 
