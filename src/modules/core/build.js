@@ -1,5 +1,11 @@
 /* @flow */
 
+import App from '../app.js';
+
+import WeakMapThingy from './base/thingy';
+
+import utils from '../utils';
+
 import type {
 
 	IApp,
@@ -8,25 +14,9 @@ import type {
 
 } from './interfaces/ITypes';
 
-/** Builds references, listeners and the app prototype.
-*	@module
-*	@private */
-
-import WeakMapThingy from './base/thingy';
-
-/* utils - universal helper functions */
-
-import utils from '../utils';
-
-import App from '../app.js';
-
-/* Window & Windows - Cache window into Window const. Query for Windows. */
-
 const Window:Object = window;
 
 const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Window);
-
-/* Console - cache console var */
 
 const Console:Object = console;
 
@@ -35,6 +25,10 @@ const stats:Object = {
 	windowcount:0
 
 }
+
+/** Builds references, listeners and the app prototype.
+*	@module
+*	@private */
 
 export default class Build extends WeakMapThingy {
 
