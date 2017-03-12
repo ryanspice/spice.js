@@ -20,7 +20,11 @@ export default class Scaler {
     * @param {number} y - position.y
     * @param {number} s - position.s */
 
-    constructor(x: number = 0,y: number = 0, s:number = 0) {
+    constructor(
+		x: number = 0,
+		y: number = 0,
+		s:number = 0
+		) {
 
 		this.x = x;
 		this.y = y;

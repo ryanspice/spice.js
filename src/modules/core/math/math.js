@@ -1,4 +1,7 @@
-import Vector from './vector.js';
+import Vector from './vector';
+
+import Rect from './rect';
+
 
 window.Math.vector = window.Math.Vector = Vector;
 

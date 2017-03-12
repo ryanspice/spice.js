@@ -1,11 +1,9 @@
 /* @flow */
-/*
+
 import type {
-
 	IVector
-
 } from "../interfaces/ITypes";
-*/
+
 import WeakMapThingy from '../base/thingy';
 
 /** Vector2
@@ -33,7 +31,7 @@ export class Vector2 extends WeakMapThingy<IVector> {
 
 export default class Vector extends WeakMapThingy {
 
-    position:Object;
+    position:IVector;
 	_x:number;
 	_y:number;
 
@@ -55,7 +53,6 @@ export default class Vector extends WeakMapThingy {
     get position():Object {
 
         return this;
-
     }
 
     /**
@@ -67,7 +64,7 @@ export default class Vector extends WeakMapThingy {
     * PointA.position = {x:0,y:0};
     */
 
-    set position(value):void {
+    set position(value:IVector):void {
 
         this.x = value.x;
 
@@ -132,11 +129,13 @@ export default class Vector extends WeakMapThingy {
 
     constructor(x: number = 0,y: number = 0) {
 
-            super(new WeakMap());
-			this.position.x = x;
-			this.position.y = y;
+        super(new WeakMap());
 
-		//return (this:IVector);
+		this.position.x = x;
+
+		this.position.y = y;
+
+		return (this:IVector);
     };
 
 	/**
@@ -149,7 +148,7 @@ export default class Vector extends WeakMapThingy {
 	* @method
 	*/
 
-	Difference(a:Vector,b:Vector):Vector {
+	Difference(a:IVector,b:IVector):IVector {
 
 		let x = a.x - b.x;
 		let y = a.y - b.y;
@@ -161,10 +160,9 @@ export default class Vector extends WeakMapThingy {
 	* @method
 	*/
 
-    equals(p:Vector):boolean {
+    equals(p:IVector):boolean {
 
 		return this.x === p.x && this.y === p.y;
-
 	}
 
 	/**
@@ -174,7 +172,6 @@ export default class Vector extends WeakMapThingy {
     sum():number {
 
 		return this.x + this.y;
-
 	}
 
     /**
@@ -182,16 +179,15 @@ export default class Vector extends WeakMapThingy {
     * @method
     * @param {Number} a - multiply X
     * @param {Number} b - multiply Y
-    * @return {Vector}
+    * @return {IVector}
     */
 
-    multiply(a:number, b:number):Vector {
+    multiply(a:number, b:number):IVector {
 
         this._x *= a;
         this._y *= b;
 
         return this;
-
     }
 
     /**
@@ -199,16 +195,15 @@ export default class Vector extends WeakMapThingy {
     * @method
     * @param {Number} a - multiply X
     * @param {Number} b - multiply Y
-    * @return {Vector}
+    * @return {IVector}
     */
 
-    offset(a:number, b:number):Vector {
+    offset(a:number, b:number):IVector {
 
         this._x += a;
         this._y += b;
 
         return this;
-
     }
 
 }
