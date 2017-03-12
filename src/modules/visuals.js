@@ -1,24 +1,11 @@
-
-//import {Vector} from './math/vector.js';
-import {_SJSClass as SJSClass} from './core/base/sjs';
-
-
-import StatsBuffer from './core/base/stats';
+/* @noflow because toFixedNumber bug */
 
 import API from './core/api';
 
-//import WeakMapThingy from './core/base/thingy';
-
-/*
-class _Pipe {
-
-    executeNext(){
-
-
-
-    }
-}
-*/
+import type {
+	IApp,
+	IVector
+} from './core/interfaces/ITypes';
 
 export default class Visuals extends API {
 
@@ -26,14 +13,13 @@ export default class Visuals extends API {
     *
     */
 
-    constructor(app){
+    constructor(app:IApp){
 
         super(app);
 
 		this.stat = new this.stat();
 
 		let canvas = this.app.canvas;
-
 
 		this.scale = this.app.scale;
 
@@ -76,14 +62,17 @@ export default class Visuals extends API {
     * @property
     */
 
-	get position():Vector {
+	/*
+	get position():IVector {
 
 		let x = (this.app.input.x-(-this.app.getWidth()/2+this.window.innerWidth/2)+this.app.options.canvas.position.left/3).toFixedNumber(2);
 		let y = (this.app.input.y-this.app.options.canvas.position.top).toFixedNumber(2);
 
 		return new Vector(x,y);
 
+	return {x:0,y:0};
 	}
+	*/
 
 	/**
     * @method
@@ -179,9 +168,14 @@ export default class Visuals extends API {
 
 	}
 
+	/*
+
 	setBleed(threshold:number):void {
 
 		this.bleed = threshold;
 
 	}
+
+	*/
+
 }

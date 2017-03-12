@@ -54,7 +54,7 @@ import Build from './modules/core/build';
 
 export class SpiceJS extends Build  {
 
-    constructor(map:Object):void {
+    constructor(map:Object) {
 
 		super(map);
 

@@ -1,9 +1,5 @@
 /* @flow */
 
-//import Particles from './particles.js'; // (unfinished) To be built into application
-
-//window.SJSParticleController = Particles; // Temporary for snowflakes
-
 /** App is the main app controller, here you can access input, math, data and graphics controllers.
 *	@module */
 
@@ -40,6 +36,9 @@ declare interface Event {
 	target:AppEventTarget;
 }
 //END DUPLICATE IN ITYPES
+
+/* LEGACY import Particles from './particles.js'; // (unfinished) To be built into application */
+/* LEGACY window.SJSParticleController = Particles; // Temporary for snowflakes */
 
 /** Core of the framework, initalizes client, input and listeners.
 * @module

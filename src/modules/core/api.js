@@ -3,36 +3,6 @@ import {_SJSClass as SJSClass} from './base/sjs';
 
 import StatsBuffer from './base/stats';
 
-/*
-var pipe = function(){
-
-	var parentArguments = arguments;
-
-	return function() {
-
-		var result = null;
-
-		for (var i = 0; i < parentArguments.length; i++){
-
-			//if (!result)
-				result = parentArguments[i](result||arguments);
-				//else
-				//result = parentArguments[i](result);
-
-		}
-
-		return result;
-	}
-
-}
-
-var foo = function(data){ return data; };
-var bar = function(data){ return data; };
-var baz = function(data){ return data; };
-var end = pipe(foo,bar,baz)(1,1,2);
-console.log(end);
-*/
-
 import {
 	RequestAnimationFrame
 } from "../utils";

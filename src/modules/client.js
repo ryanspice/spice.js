@@ -1,5 +1,11 @@
 /* @flow */
 
+import Pace from './core/timing/pace';
+
+import Update from './core/update.js';
+
+import ClientExperamental from './client-experamental';
+
 import type {
 	IApp,
 	IUpdate,
@@ -7,14 +13,6 @@ import type {
 	IPace,
 	IVector
 } from './core/interfaces/ITypes';
-
-import Update from './core/update.js';
-
-import Pace from './core/timing/pace';
-
-import {_SJSClass} from './core/base/sjs';
-
-import ClientExperamental from './client-experamental';
 
 export default class Client extends ClientExperamental {
 
@@ -72,4 +70,5 @@ export default class Client extends ClientExperamental {
     }
 
 }
+
 export const prototype = Client.main_prototype;
