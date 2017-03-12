@@ -78,6 +78,16 @@ export type IInput = {
 
 }
 
+
+export type IUtils = {
+
+	loadExternalJS(scripts:Array<string>):void;
+
+
+}
+
+
+
 /*
 
 
@@ -95,6 +105,10 @@ export type IMath = {
 
 export type IBuild = {
 
+	app:Function;
+	id:number;
+	document:Object;
+	stats:Object;
 	+utils:Object;
 	+aState:Object;
 	+controller:Object;
@@ -104,14 +118,6 @@ export type IBuild = {
 	+buildWindowReferences:Function;
 	+buildPrototype:Function;
 	+create:Function;
-	/*
-	app:Function;
-	id:number;
-	document:Object;
-	stats:Object;
-	time(str:string):void;
-	buildListeners(temp:IApp):IApp;
-	*/
 
 }
 

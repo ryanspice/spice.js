@@ -3,7 +3,8 @@
 import type {
 
 	IApp,
-	IBuild
+	IBuild,
+	IUtils
 
 } from './interfaces/ITypes';
 
@@ -108,7 +109,7 @@ export default class Build extends WeakMapThingy {
 	/** Reference UTILS
 	* @type {Element}	*/
 
-	get utils():Object {
+	get utils():IUtils {
 
 		return utils;
 	}
@@ -189,7 +190,6 @@ export default class Build extends WeakMapThingy {
 
         return this.window.apps[temp.id];
     }
-
 
 	/*											*/
 	/*											*/
