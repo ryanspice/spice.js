@@ -3,7 +3,7 @@ import {_SJSClass as SJSClass} from './core/base/sjs';
 
 import Vector from './core/math/vector';
 
-import Loader from './loader.js';
+import Loader from './api/loader.js';
 
         let xOff = 0;
 

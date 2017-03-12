@@ -1,12 +1,13 @@
 
-import {_SJSClass as SJSClass} from './base/sjs';
+import {_SJSClass as SJSClass} from '../base/sjs';
 
-import StatsBuffer from './base/stats';
+import StatsBuffer from '../base/stats';
 
 import {
 	RequestAnimationFrame
-} from "../utils";
+} from "../../utils";
 
+/* */
 
 export default class API extends SJSClass {
 

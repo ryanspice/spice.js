@@ -10,7 +10,7 @@ import legacy_core from './legacy/legacy-core';
 
 import {
 	prototype
-	} from '../client';
+} from './client';
 
 /* Remove? */
 const _BUILD_OFFICIAL_:string = '0.8.2';

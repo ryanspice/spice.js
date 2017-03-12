@@ -1,9 +1,9 @@
 
-import {_SJSClass as SJSClass} from './core/base/sjs';
+import {_SJSClass as SJSClass} from '../base/sjs';
 
- import _test from './test.js'
+// import _test from './test.js'
 
-window.test = _test;
+//window.test = _test;
 
 
 

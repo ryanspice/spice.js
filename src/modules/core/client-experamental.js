@@ -1,6 +1,6 @@
 
 
-import _math from './core/math/math.js';
+import _math from './math/math.js';
 
 /* JSZip & JSZipUtils
 * 		Library to read Zip files from the server.

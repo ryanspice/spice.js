@@ -1,8 +1,8 @@
 /* @flow */
 
-import Pace from './core/timing/pace';
+import Pace from './timing/pace';
 
-import Update from './core/update.js';
+import Update from './update.js';
 
 import ClientExperamental from './client-experamental';
 
@@ -12,7 +12,7 @@ import type {
 	IClient,
 	IPace,
 	IVector
-} from './core/interfaces/ITypes';
+} from './interfaces/ITypes';
 
 export default class Client extends ClientExperamental {
 

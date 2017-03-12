@@ -1,18 +1,18 @@
 /* @flow */
 
-import {_SJSClass} from './core/base/sjs';
+import {_SJSClass} from './base/sjs';
 
-import Vector from './core/math/vector';
+import Vector from './math/vector';
 
-import Options from './core/base/options';
+import Options from './base/options';
 
-import Visuals from './visuals.js';
+import Visuals from './api/visuals.js';
 
-import Graphics from './graphics.js';
+import Graphics from './api/graphics';
 
-import Ext from './ext';
+import Ext from '../ext';
 
-import Room from './core/base/room.js';
+import Room from './base/room.js';
 
 import type {
 	IApp,
@@ -22,12 +22,12 @@ import type {
 	IGraphics,
 	IRoom,
 	IVector
-} from "./core/interfaces/ITypes";
+} from "./interfaces/ITypes";
 
-import Renderer from './renderer.js';
+import Renderer from '../renderer.js';
 
 
-import _loader from './loader.js';
+import _loader from './api/loader.js';
 
 /** Client object controls all the details of the application.
 * @module

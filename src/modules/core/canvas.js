@@ -1,6 +1,13 @@
 
 import WeakMapThingy from './base/thingy';
 
+import type {
+
+	IApp,
+	IOptions
+
+} from './interfaces/ITypes';
+
 /**
 * Canvas Interface
 * @module
@@ -13,6 +20,8 @@ import WeakMapThingy from './base/thingy';
 */
 
 export default class Canvas extends WeakMapThingy {
+
+	options:IOptions;
 
     /**
     * Set documents private variables
@@ -28,7 +37,59 @@ export default class Canvas extends WeakMapThingy {
         _rendering_style:document.createElement('style')
     };
 
-	options:Object;
+	/**
+    * This is the constructor for the canvas module.
+    * @param {number} x - position.x
+    * @param {number} y - position.y
+    */
+
+    constructor(app:Object) { // Type Accordingly
+
+        super(new WeakMap());
+
+		this.options = app.options;
+
+		this.id = app.id;
+
+		//SGL.start();
+
+        //Cache canvases
+        let temp_canvas:Object|null = this.doc.getElementById(this.options.target.canvas);
+
+        let temp_buffer:Object|null = this.doc.getElementById(this.options.target.buffer);
+
+        let temp_blitter:Object = this.doc.getElementById(this.options.target.blitter) || this.construct_canvas('blitter');
+
+		temp_blitter.style.position = "fixed";
+
+        //Check canvas variables
+        if (temp_canvas)    {
+
+            //    if (temp_buffer)
+            //        temp_buffer;
+
+        } else  {
+
+            temp_canvas = this.construct_canvas(this.options.canvas.name);
+
+            if (this.options.canvas.buffer) {
+
+			    temp_buffer = this.construct_canvas(this.options.canvas.buffername);
+
+			}
+
+        }
+
+        temp_canvas.mozOpaque = this.options.flags.opaque;
+
+        //Assign canvas elements
+        [this.canvas,this.buffer,this.blitter,this.rendering_style] = this.style(temp_canvas,temp_buffer,temp_blitter,this.options.canvas.style);
+
+        this.head.appendChild(this.rendering_style);
+
+        return true;
+
+    }
 
 	/**
     * Get document element
@@ -157,60 +218,6 @@ export default class Canvas extends WeakMapThingy {
 
         this.get('canvas')[2] = canvas;
     	//this._blitter = canvas;
-
-    }
-
-    /**
-    * This is the constructor for the canvas module.
-    * @param {number} x - position.x
-    * @param {number} y - position.y
-    */
-
-    constructor(app) {
-
-        super(new WeakMap());
-
-		this.options = app.options;
-
-		this.id = app.id;
-
-		//SGL.start();
-
-        //Cache canvases
-        let temp_canvas:Object|null = this.doc.getElementById(this.options.target.canvas);
-
-        let temp_buffer:Object|null = this.doc.getElementById(this.options.target.buffer);
-
-        let temp_blitter:Object = this.doc.getElementById(this.options.target.blitter) || this.construct_canvas('blitter');
-
-		temp_blitter.style.position = "fixed";
-
-        //Check canvas variables
-        if (temp_canvas)    {
-
-            //    if (temp_buffer)
-            //        temp_buffer;
-
-        } else  {
-
-            temp_canvas = this.construct_canvas(this.options.canvas.name);
-
-            if (this.options.canvas.buffer) {
-
-			    temp_buffer = this.construct_canvas(this.options.canvas.buffername);
-
-			}
-
-        }
-
-        temp_canvas.mozOpaque = this.options.flags.opaque;
-
-        //Assign canvas elements
-        [this.canvas,this.buffer,this.blitter,this.rendering_style] = this.style(temp_canvas,temp_buffer,temp_blitter,this.options.canvas.style);
-
-        this.head.appendChild(this.rendering_style);
-
-        return true;
 
     }
 

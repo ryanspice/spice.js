@@ -1,11 +1,11 @@
 /* @noflow because toFixedNumber bug */
 
-import API from './core/api';
+import API from './api';
 
 import type {
 	IApp,
 	IVector
-} from './core/interfaces/ITypes';
+} from '../interfaces/ITypes';
 
 export default class Visuals extends API {
 

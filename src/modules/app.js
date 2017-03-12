@@ -7,7 +7,7 @@ import Core from './core/core';
 
 import State from './state';
 
-import Client from './client';
+import Client from './core/client';
 
 import Canvas from './core/canvas';
 

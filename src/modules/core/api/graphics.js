@@ -1,5 +1,5 @@
 
-import {_SJSClass as SJSClass} from './core/base/sjs.js';
+import {_SJSClass as SJSClass} from '../base/sjs.js';
 
 /**
 BASE iamge class  _WIP
