@@ -2,7 +2,7 @@
 
 import Options from './base/options';
 
-import facebook from '../dto/facebook-user';
+import facebook from './interfaces/dto/facebook-user';
 
 import _math from './math/math';
 
@@ -33,7 +33,7 @@ import type {
 
 import type {
 	dtoFacebook
-	} from '../dto/dtoTypes';
+	} from './interfaces/dto/dtoTypes';
 
 import type {
 	IoVersion

@@ -5,7 +5,7 @@ import type {
 
 	dtoFacebook
 
-} from '../../dto/dtoTypes';
+} from './dto/dtoTypes';
 //console.time('Types2');
 
 //type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
