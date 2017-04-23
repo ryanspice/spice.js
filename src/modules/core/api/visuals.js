@@ -17,7 +17,7 @@ export default class Visuals extends API {
 
         super(app);
 
-		this.stat = new this.stat();
+//		this.stat = new this.stat();
 
 		let canvas = this.app.canvas;
 

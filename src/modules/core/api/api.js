@@ -1,7 +1,15 @@
+/* @flow */
+
 
 import {_SJSClass as SJSClass} from '../base/sjs';
 
 import StatsBuffer from '../base/stats';
+
+import type {
+
+	IApp
+
+} from '../interfaces/ITypes';
 
 import {
 	RequestAnimationFrame
@@ -11,60 +19,52 @@ import {
 
 export default class API extends SJSClass {
 
-		free:Boolean = false;
+		pollyFilledAnimationFrame:RequestAnimationFrame = RequestAnimationFrame;
 
-		seamless:Boolean = false;
+		free:boolean = false;
+		seamless:boolean = false;
 
-		tight:Boolean = true;
-
-		disable:Boolean = false;
+		tight:boolean = true;
+		disable:boolean = false;
 
 		alpha:number = 0;
-
 		bleed:number = 1;
 
 		point:number = 14;
-
 		zindex:number = 1;
 
 		buffer_target:number = 0;
 
 		scale:number = 0;
 
-		fillStyle:string = null;
+		fillStyle:string = "";
 
 		fontT:string = "";
-
 		fontL:string = "";
 
 		stat2:Object = (Object.create(null));
-
 		grd:Object = (Object.create(null));
 
 		canvas:Object = (Object.create(null));
-
 		buffer:Object = (Object.create(null));
-
 		blitter:Object = (Object.create(null));
 
 		canvas_context:Object = (Object.create(null));
-
 		buffer_context:Object = (Object.create(null));
-
 		blitter_context:Object = (Object.create(null));
 
 		blitter_image:Object = new Image();
 
-		within:Boolean = false;
+		within:boolean = false;
 
-		laststyle:String = "false";
+		laststyle:string = "false";
 
 		debug:boolean = true;
 
 		/* Check variables */
 		checkValuesColour:string;
 
-        setting:Boolean = true;
+        setting:boolean = true;
 
 		/**
 	    *
@@ -73,7 +73,7 @@ export default class API extends SJSClass {
 		static properties = {
 
 			data:[
-				StatsBuffer
+				new StatsBuffer()
 			]
 
 		};
@@ -82,26 +82,26 @@ export default class API extends SJSClass {
 	    *
 	    */
 
-	    constructor(app:Object){
+	    constructor(app:IApp){
 
 	        super(app);
 
-			RequestAnimationFrame();
+			this.pollyFilledAnimationFrame();
 
-				// make sure aspect scale is correctly set in advance of first tick
-				/*if (this.fullscreen_mode >= 2)
-				{
-					var orig_aspect = this.original_width / this.original_height;
-					var cur_aspect = this.width / this.height;
+			// make sure aspect scale is correctly set in advance of first tick
+			/*if (this.fullscreen_mode >= 2)
+			{
+				var orig_aspect = this.original_width / this.original_height;
+				var cur_aspect = this.width / this.height;
 
-					// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
-					if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
-						this.aspect_scale = this.height / this.original_height;
-					else
- 						this.aspect_scale = this.width / this.original_width;
-				}
+				// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+				if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
+					this.aspect_scale = this.height / this.original_height;
+				else
+						this.aspect_scale = this.width / this.original_width;
+			}
 
-				*/
+			*/
 			// Non-fullscreen games on retina displays never call setSize to enable hi-dpi display.
 			// Do this now if the device has hi-dpi support.
 			//if (this.fullscreen_mode === 0 && this.isRetina && this.devicePixelRatio > 1)
@@ -118,21 +118,59 @@ export default class API extends SJSClass {
 	    * @property
 	    */
 
-		set stat(s){
+		set stat(s:StatsBuffer){
 
+				console.log(s);
 	    	this.get('data')[0] = s;
-
 		}
 
 		/**
 	    * @property
 	    */
 
-		get stat() {
+		get stat():StatsBuffer {
+
 
 			return this.get('data')[0];
 
 		}
+
+		/**
+	    * @method
+	    */
+
+		fixX(x:number):number {
+
+			return (((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale):any).toFixedNumber(2);
+		}
+
+		/**
+	    * @method
+	    */
+
+		fixY(y:number):number {
+
+			return (((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale):any).toFixedNumber(2);
+		}
+
+		/**
+	    * @method
+	    */
+
+		fixW(w:number):number {
+
+			return ((w*this.scale):any).toFixedNumber(2);
+		}
+
+		/**
+	    * @method
+	    */
+
+		fixH(h:number):number {
+
+			return ((h*this.scale):any).toFixedNumber(2);
+		}
+
 
 		/** Resets the stats buffer.
 		* @method
@@ -166,11 +204,12 @@ export default class API extends SJSClass {
 			return this.colour(colour1,colour2);
 	    }
 
-		/** Controls changing the draw opacity
-		* @method
-		*  */
+		/*
+		*	Set opacity of the API draw calls
+		*	@method
+		*/
 
-	    opacity(opacity:number):number {
+	    opacity(opacity:number):number|boolean {
 
 	        return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
 	    }
@@ -217,7 +256,7 @@ export default class API extends SJSClass {
 		* @method
 		*  */
 
-	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number,colour:string|void,font:string|void):void {
+	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:string|void,font:string|void):void {
 
 	        this.checkValuesColour = this.colour();
 
@@ -227,6 +266,14 @@ export default class API extends SJSClass {
 
 	        this.colour(colour);
 
+			let clamp = () => { return 0; };
+
+			if (!this.app)
+			if (!this.app.client)
+			if (!this.app.client.Math)
+			if (!this.app.client.Math.Clamp)
+				clamp = this.app.client.Math.Clamp;
+
 	        if (!this.free) {
 
 				this.stat.set({
@@ -235,7 +282,7 @@ export default class API extends SJSClass {
 		            w:this.fixW(w)*s,
 		            h:this.fixH(h)*s,
 		            s:s,
-		            a:this.app.client.Math.Clamp(a,0,1) || 0,
+		            a:clamp(a,0,1) || 0,
 		            c:c || 0,
 		            colour:colour || this.colour(),
 		            oldcol:this.checkValuesColour,
@@ -250,7 +297,7 @@ export default class API extends SJSClass {
 		            w:w*s || 0,
 		            h:h*s || 0,
 		            s:s,
-		            a:this.app.client.Math.Clamp(a,0,1) || 1,
+		            a:clamp(a,0,1) || 1,
 		            c:c || 0,
 		            colour:colour || this.colour(),
 		            oldcol:this.checkValuesColour,

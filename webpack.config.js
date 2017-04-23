@@ -89,7 +89,7 @@ module.exports = {
 	libraryTarget: "umd"
   },
   module: {
-	  loaders: [
+	  rules: [
 
 
         {

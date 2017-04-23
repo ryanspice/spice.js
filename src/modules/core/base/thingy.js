@@ -40,7 +40,7 @@ import type {
 
         } else {
 
-            console.warn(map);
+            console.warn(map,this);
 
             map = new WeakMap();
 
@@ -69,7 +69,15 @@ import type {
 
     get(value:string):Object {
 
+		if (this.constructor)
+		if (this.constructor.map)
+		if (this.constructor.map.get)
+		if (this.constructor.map.get(this)==null)
+		if (this.constructor.map.get(this)[value]==null)
+		return {};
+		//if (this.constructor.map.get(this)[value])
 		return this.constructor.map.get(this)[value];
+		//else return {};
 	}
 
 };

@@ -453,7 +453,9 @@ export type IStatsBuffer = {
 	c:number;
 	colour:string;
 	oldcol:string;
-	+set:Function;
+	font:Function;
+	init(string,string):void;
+
 }
 
 export type ISJSClass = {

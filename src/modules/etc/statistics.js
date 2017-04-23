@@ -1,4 +1,4 @@
-/* @flow */
+/* @noflow */
 
 import utils from '../utils.js';
 
@@ -138,6 +138,8 @@ export default class Statistics {
 	constructor(){
 
 		this.count = 0;
+
+		console.log(this,'eh');
 
         this.logs = this.constructor.logs;
         this.logs.type = 'Array';
@@ -310,6 +312,8 @@ export default class Statistics {
     };
 
     static _details(type){
+
+		Statistics.log('eh');
 
         type = type;
 

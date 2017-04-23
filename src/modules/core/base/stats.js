@@ -28,6 +28,8 @@ export default class StatsBuffer {
 
 	oldcol:string = "";
 
+	font:any;
+
 	constructor(col:string = "", colold:string = "") {
 
 		this.init(col,colold);
