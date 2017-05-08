@@ -59,7 +59,7 @@ declare interface Event {
 	canvas:ICanvas;
 	options:IOptions;
 
-	input?:IInput;
+	input:IInput|Object|null;
 	main?:IState;
 
 	+scale:number;
@@ -103,6 +103,17 @@ export type IMath = {
 
 
 }
+
+export type ICircle = {
+
+	x:number;
+	y:number;
+	r:number;
+	col?:number|string|CanvasPattern|CanvasGradient;
+	a?:number;
+
+}
+
 
 export type IBuild = {
 
@@ -452,7 +463,7 @@ export type IStatsBuffer = {
 	s:number;
 	a:number;
 	c:number;
-	colour:string;
+	colour:string|CanvasPattern|CanvasGradient;
 	oldcol:string;
 	font:Function;
 	init(string,string):void;

@@ -4,10 +4,13 @@ import {_SJSClass as SJSClass} from '../base/sjs';
 
 import StatsBuffer from '../base/stats';
 
+import Circle from "../math/circle";
+
 import type {
 
-	IApp
-
+	IApp,
+	IVector,
+	ICircle
 } from '../interfaces/ITypes';
 
 import {
@@ -51,6 +54,7 @@ export default class API extends SJSClass {
 		canvas_context:CanvasRenderingContext2D;
 		buffer_context:CanvasRenderingContext2D;
 		blitter_context:CanvasRenderingContext2D;
+		overlay_canvas:CanvasRenderingContext2D;
 
 		blitter_image:HTMLImageElement = new Image();
 
@@ -263,7 +267,7 @@ export default class API extends SJSClass {
 		* @method
 		*  */
 
-	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:string|CanvasPattern|CanvasGradient|void,font:string|void):void {
+	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:number|string|CanvasPattern|CanvasGradient|void,font:string|void):void {
 
 	        this.checkValuesColour = this.colour();
 
@@ -328,9 +332,8 @@ export default class API extends SJSClass {
 	        x = x - this.left;
 
 			let App:IApp = this.app;
-		//	console.log(App);
-
-	        return c?((App.input.x>x-w/2&&App.input.x<x+w/2&&App.input.y>y-h/2&&App.input.y<y+h/2)?true:false):((App.input.x>x&&App.input.x<x+w&&App.input.y>y&&App.input.y<y+h)?true:false);
+			//console.log(this.input);
+	        return c?((this.app.input.x>x-w/2&&App.input.x<x+w/2&&App.input.y>y-h/2&&App.input.y<y+h/2)?true:false):((App.input.x>x&&App.input.x<x+w&&App.input.y>y&&App.input.y<y+h)?true:false);
 
 	    }
 
@@ -442,7 +445,7 @@ export default class API extends SJSClass {
 
         text_ext(string:string|number, x:number, y:number, colour:string, s:number, a:number, c:number, style:string):void {
 
-            this.checkValues(x,y,this.text_width(string),s,s,a,c,colour,'');
+            this.checkValues(x,y,this.text_width(String(string)),s,s,a,c,colour,'');
 
 
             var f = this.font('');
@@ -473,7 +476,7 @@ export default class API extends SJSClass {
 
 			this.font(Math.round(this.point*this.scale)+"px "+"sans-serif");
 
-			this.buffer_context.fillText(string,x-this.text_width(string)/2-this.point,y-this.point/2);
+			this.buffer_context.fillText(string,x-this.text_width(String(string))/2-this.point,y-this.point/2);
 
 			this.clean();
 
@@ -485,7 +488,7 @@ export default class API extends SJSClass {
 
         text_button(string:string|number, x:number, y:number, colour:string, s:number, a:number, c:number, style:string):void {
 
-            this.checkValues(x,y,this.text_width(string),s,s,a,c,colour,'');
+            this.checkValues(x,y,this.text_width(String(string)),s,s,a,c,colour,'');
             var f = this.font('');
             this.stat.h = this.stat.s*this.scale;
             this.font(this.stat.h+"em "+style);
@@ -514,7 +517,7 @@ export default class API extends SJSClass {
 
         text_button_bg(string:string|number, x:number, y:number, colour:string, s:number, a:number, c:number, loc:any, style:string):void {
 
-            this.checkValues(x,y,this.text_width(string),s,s,a,c,colour,'');
+            this.checkValues(x,y,this.text_width(String(string)),s,s,a,c,colour,'');
 
 
             this.shadow("#AAAAAA",1,1,1);
@@ -1256,9 +1259,9 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-		        lines(x,y,x2,y2,col,a,s){
+		        lines(x:number,y:number,x2:number,y2:number,col:any,a:number,s:number){
 		            this.checkValues(x,y,x2,y2,1,a,true);
-		            this.stat2 = this.checkValues(x2,y2,x2,y2,1,a,true);
+		            this.stat2 = this.stat;
 		            this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
 		            this.opacity(a);
 		            this.buffer_context.strokeStyle = col;
@@ -1273,7 +1276,8 @@ export default class API extends SJSClass {
 		            this.buffer_context.beginPath();
 		        }
 
-		        triangle(x0,y0,x1,y1,x2,y2,col,col2,width){
+		        triangle(x0:number,y0:number,x1:number,y1:number,x2:number,y2:number,col:any,col2:any,width:number){
+
 		        //this.buffer_context.fillStyle = col;
 		        //this.buffer_context.strokeStyle = col2;
 		            this.colour(col,col2);
@@ -1288,18 +1292,22 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-		        quadraticCurve(x,y,x2,y2,a,col){
-		            var t = this.buffer_context.strokeStyle;
-		            var tF = this.buffer_context.fillStyle;
+		        quadraticCurve(x:number, y:number, x2:number, y2:number, a:number, col:any):void {
+
+		            let t = this.buffer_context.strokeStyle;
+		            let tF = this.buffer_context.fillStyle;
+
 		            this.checkValues(x,y,1,1,1,a,true,col);
-		            this.stat2 = this.checkValues(x2,y2,1,1,1,a,true,col);
+		            this.stat2 = this.stat;
+
 		            this.buffer_context.beginPath();
 		            this.buffer_context.quadraticCurveTo(this.stat.x, this.stat.y, this.stat2.x, this.stat2.y);
 		            this.buffer_context.strokeStyle = col;
 		            this.buffer_context.stroke();
 		            this.buffer_context.fill();
+
 		            this.checkValues(x,y,1,1,1,a,true,t);
-		            this.stat2 = this.checkValues(x2,y2,1,1,1,a,true,t);
+		            this.stat2 = this.stat;
 
 		            this.buffer_context.strokeStyle = t;
 		            this.buffer_context.fillStyle = tF;
@@ -1369,6 +1377,14 @@ export default class API extends SJSClass {
 		        }
 	*/
 
+
+				PriorityRegistry:any = [];
+
+				appendNew = (toRegister:any)=> {
+
+					this.PriorityRegistry.push(toRegister);
+					return this.PriorityRegistry[this.PriorityRegistry.length-1];
+				}
 		        /**
 				/* CIRCLE TEST
 		            circle now allows passing vectors
@@ -1381,9 +1397,15 @@ export default class API extends SJSClass {
 
 		        */
 
-		        circle(XVec,YR,RC,CA,A){
+				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:number = 1):ICircle {
 
-		            let x, y, r, col , a;
+					return this.appendNew(new Circle());
+
+				}
+
+		        circle(XVec:number|IVector,YR:number,RC:number,CA:any,A:any){
+
+		            let x, y, r, col:any, a;
 
 		            x = XVec;
 		            y = YR;
@@ -1394,8 +1416,8 @@ export default class API extends SJSClass {
 		            if (typeof x === 'object')
 		            {
 
-		                x = XVec.x;
-		                y = XVec.y;
+		                x = (XVec:any).x;
+		                y = (XVec:any).y;
 		                r = YR;
 		                col = RC;
 		                a = CA;
@@ -1406,8 +1428,9 @@ export default class API extends SJSClass {
 
 		        }
 
-		        _circle(x,y,r,col,a){
-		            this.checkValues(x,y,1,1,r,a,0,col,"");
+		        _circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:number = 1):void {
+
+					this.checkValues(x,y,1,1,r,a,0,col,"");
 		            this.buffer_context.beginPath();
 		            this.buffer_context.arc(this.stat.x, this.stat.y, this.stat.s*this.scale, 0, 2 * Math.PI, false);
 		            this.buffer_context.fillStyle = this.stat.colour;
@@ -1415,16 +1438,17 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-				circle_free(x,y,r,col,a){
+				circle_free(x:number,y:number,r:number,col:string|CanvasPattern|CanvasGradient,a:number):void {
+
 		            this.checkValues(x,y,r,r,r,a,1,col);
 		            this.buffer_context.beginPath();
 		            this.buffer_context.arc(x, y, r*this.scale, 0, 2 * Math.PI, false);
-		            this.buffer_context.fillStyle = this.stat.col;
+		            this.buffer_context.fillStyle = this.stat.colour;
 		            this.buffer_context.fill();
 		            this.clean();
 		        }
 
-				text_width(string) {
+				text_width(string:string):number {
 		            return this.buffer_context.measureText(string).width; // Not WOrking
 		        }
 
@@ -1468,141 +1492,131 @@ export default class API extends SJSClass {
 
 		            return works;
 		        }
-
+/*
 	    newscale(w, h, force){
-				var offx = 0, offy = 0;
-				var neww = 0, newh = 0, intscale = 0;
+					var offx = 0, offy = 0;
+					var neww = 0, newh = 0, intscale = 0;
 
-				// Hide address bar on iPhone iOS 6 only
-				var tryHideAddressBar = (this.isiPhoneiOS6 && this.isSafari && !navigator["standalone"] && !this.isDomFree && !this.isCordova);
+					// Hide address bar on iPhone iOS 6 only
+					var tryHideAddressBar = (this.isiPhoneiOS6 && this.isSafari && !navigator["standalone"] && !this.isDomFree && !this.isCordova);
 
-				if (tryHideAddressBar)
-					h += 60;		// height of Safari iPhone iOS 6 address bar
+					if (tryHideAddressBar)
+						h += 60;		// height of Safari iPhone iOS 6 address bar
 
-				// Ignore redundant events
-				if (this.lastWindowWidth === w && this.lastWindowHeight === h && !force)
-					return;
+					// Ignore redundant events
+					if (this.lastWindowWidth === w && this.lastWindowHeight === h && !force)
+						return;
 
-				this.lastWindowWidth = w;
-				this.lastWindowHeight = h;
+					this.lastWindowWidth = w;
+					this.lastWindowHeight = h;
 
-				var mode = this.fullscreen_mode;
-				var orig_aspect, cur_aspect;
+					var mode = this.fullscreen_mode;
+					var orig_aspect, cur_aspect;
 
-				var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen) && !this.isCordova;
+					var isfullscreen = (document["mozFullScreen"] || document["webkitIsFullScreen"] || !!document["msFullscreenElement"] || document["fullScreen"] || this.isNodeFullscreen) && !this.isCordova;
 
-				if (!isfullscreen && this.fullscreen_mode === 0 && !force)
-					return;			// ignore size events when not fullscreen and not using a fullscreen-in-browser mode
+					if (!isfullscreen && this.fullscreen_mode === 0 && !force)
+						return;			// ignore size events when not fullscreen and not using a fullscreen-in-browser mode
 
-				if (isfullscreen && this.fullscreen_scaling > 0)
-					mode = this.fullscreen_scaling;
+					if (isfullscreen && this.fullscreen_scaling > 0)
+						mode = this.fullscreen_scaling;
 
-				var dpr = this.devicePixelRatio;
+					var dpr = this.devicePixelRatio;
 
-				// Letterbox or letterbox integer scale modes: adjust width and height and offset canvas accordingly
-				if (mode >= 4)
-				{
-					orig_aspect = this.original_width / this.original_height;
-					cur_aspect = w / h;
-
-					// too wide: scale to fit height
-					if (cur_aspect > orig_aspect)
+					// Letterbox or letterbox integer scale modes: adjust width and height and offset canvas accordingly
+					if (mode >= 4)
 					{
-						neww = h * orig_aspect;
+						orig_aspect = this.original_width / this.original_height;
+						cur_aspect = w / h;
 
-						if (mode === 5)	// integer scaling
+						// too wide: scale to fit height
+						if (cur_aspect > orig_aspect)
 						{
-							// integer scale by device pixels, not CSS pixels, since DPR may be non-integral
-							intscale = (neww * dpr) / this.original_width;
-							if (intscale > 1)
-								intscale = Math.floor(intscale);
-							else if (intscale < 1)
-								intscale = 1 / Math.ceil(1 / intscale);
-							neww = this.original_width * intscale / dpr;
-							newh = this.original_height * intscale / dpr;
-							offx = (w - neww) / 2;
-							offy = (h - newh) / 2;
-							w = neww;
-							h = newh;
+							neww = h * orig_aspect;
+
+							if (mode === 5)	// integer scaling
+							{
+								// integer scale by device pixels, not CSS pixels, since DPR may be non-integral
+								intscale = (neww * dpr) / this.original_width;
+								if (intscale > 1)
+									intscale = Math.floor(intscale);
+								else if (intscale < 1)
+									intscale = 1 / Math.ceil(1 / intscale);
+								neww = this.original_width * intscale / dpr;
+								newh = this.original_height * intscale / dpr;
+								offx = (w - neww) / 2;
+								offy = (h - newh) / 2;
+								w = neww;
+								h = newh;
+							}
+							else
+							{
+								offx = (w - neww) / 2;
+								w = neww;
+							}
 						}
+						// otherwise scale to fit width
 						else
 						{
-							offx = (w - neww) / 2;
-							w = neww;
-						}
-					}
-					// otherwise scale to fit width
-					else
-					{
-						newh = w / orig_aspect;
+							newh = w / orig_aspect;
 
-						if (mode === 5)	// integer scaling
+							if (mode === 5)	// integer scaling
+							{
+								intscale = (newh * dpr) / this.original_height;
+								if (intscale > 1)
+									intscale = Math.floor(intscale);
+								else if (intscale < 1)
+									intscale = 1 / Math.ceil(1 / intscale);
+								neww = this.original_width * intscale / dpr;
+								newh = this.original_height * intscale / dpr;
+								offx = (w - neww) / 2;
+								offy = (h - newh) / 2;
+								w = neww;
+								h = newh;
+							}
+							else
+							{
+								offy = (h - newh) / 2;
+								h = newh;
+							}
+						}
+
+						if (isfullscreen && !this.isNWjs)
 						{
-							intscale = (newh * dpr) / this.original_height;
-							if (intscale > 1)
-								intscale = Math.floor(intscale);
-							else if (intscale < 1)
-								intscale = 1 / Math.ceil(1 / intscale);
-							neww = this.original_width * intscale / dpr;
-							newh = this.original_height * intscale / dpr;
-							offx = (w - neww) / 2;
-							offy = (h - newh) / 2;
-							w = neww;
-							h = newh;
-						}
-						else
-						{
-							offy = (h - newh) / 2;
-							h = newh;
+							offx = 0;
+							offy = 0;
 						}
 					}
-
-					if (isfullscreen && !this.isNWjs)
+					// Centered mode in NW.js: keep canvas size the same and just center it
+					else if (this.isNWjs && this.isNodeFullscreen && this.fullscreen_mode_set === 0)
 					{
-						offx = 0;
-						offy = 0;
+						offx = Math.floor((w - this.original_width) / 2);
+						offy = Math.floor((h - this.original_height) / 2);
+						w = this.original_width;
+						h = this.original_height;
 					}
-				}
-				// Centered mode in NW.js: keep canvas size the same and just center it
-				else if (this.isNWjs && this.isNodeFullscreen && this.fullscreen_mode_set === 0)
-				{
-					offx = Math.floor((w - this.original_width) / 2);
-					offy = Math.floor((h - this.original_height) / 2);
-					w = this.original_width;
-					h = this.original_height;
-				}
 
-				if (mode < 2)
-					this.aspect_scale = dpr;
+					if (mode < 2)
+						this.aspect_scale = dpr;
 
-				// iPad 3 Retina bug workaround: if in retina display and the width is 2048, for some reason
-				// performance is massively reduced.  Workaround (found by Arima) is to set a width of 2046 instead.
-				if (this.isRetina && this.isiPad && dpr > 1)	// don't apply to iPad 1-2
-				{
-					if (w >= 1024)
-						w = 1023;		// 2046 retina pixels
-					if (h >= 1024)
-						h = 1023;
-				}
+					// iPad 3 Retina bug workaround: if in retina display and the width is 2048, for some reason
+					// performance is massively reduced.  Workaround (found by Arima) is to set a width of 2046 instead.
+					if (this.isRetina && this.isiPad && dpr > 1)	// don't apply to iPad 1-2
+					{
+						if (w >= 1024)
+							w = 1023;		// 2046 retina pixels
+						if (h >= 1024)
+							h = 1023;
+					}
 
-				// hacks for iOS retina
-				this.cssWidth = Math.round(w);
-				this.cssHeight = Math.round(h);
-				this.width = Math.round(w * dpr);
-				this.height = Math.round(h * dpr);
-				this.redraw = true;
+					// hacks for iOS retina
+					this.cssWidth = Math.round(w);
+					this.cssHeight = Math.round(h);
+					this.width = Math.round(w * dpr);
+					this.height = Math.round(h * dpr);
+					this.redraw = true;
 
-				if (this.wantFullscreenScalingQuality)
-				{
-					this.draw_width = this.width;
-					this.draw_height = this.height;
-					this.fullscreenScalingQuality = true;
-				}
-				else
-				{
-					// Render directly even in low-res scale mode if the display area is smaller than the window size area,
-					// or in crop mode (since no engine scaling happens)
-					if ((this.width < this.original_width && this.height < this.original_height) || mode === 1)
+					if (this.wantFullscreenScalingQuality)
 					{
 						this.draw_width = this.width;
 						this.draw_height = this.height;
@@ -1610,122 +1624,132 @@ export default class API extends SJSClass {
 					}
 					else
 					{
-						this.draw_width = this.original_width;
-						this.draw_height = this.original_height;
-						this.fullscreenScalingQuality = false;
-
-						/*var orig_aspect = this.original_width / this.original_height;
-						var cur_aspect = this.width / this.height;
-
-						// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
-						if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
-							this.aspect_scale = this.height / this.original_height;
+						// Render directly even in low-res scale mode if the display area is smaller than the window size area,
+						// or in crop mode (since no engine scaling happens)
+						if ((this.width < this.original_width && this.height < this.original_height) || mode === 1)
+						{
+							this.draw_width = this.width;
+							this.draw_height = this.height;
+							this.fullscreenScalingQuality = true;
+						}
 						else
-							this.aspect_scale = this.width / this.original_width;*/
-
-						// Scale inner or scale outer mode: adjust the draw size to be proportional
-						// to the window size, since the draw size is simply stretched-to-fit in the window
-						if (mode === 2)		// scale inner
 						{
-							orig_aspect = this.original_width / this.original_height;
-							cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+							this.draw_width = this.original_width;
+							this.draw_height = this.original_height;
+							this.fullscreenScalingQuality = false;
+*/
+							/*var orig_aspect = this.original_width / this.original_height;
+							var cur_aspect = this.width / this.height;
 
-							if (cur_aspect < orig_aspect)
-								this.draw_width = this.draw_height * cur_aspect;
-							else if (cur_aspect > orig_aspect)
-								this.draw_height = this.draw_width / cur_aspect;
+							// note mode 2 (scale inner) inverts this logic and will use window width when width wider.
+							if ((this.fullscreen_mode !== 2 && cur_aspect > orig_aspect) || (this.fullscreen_mode === 2 && cur_aspect < orig_aspect))
+								this.aspect_scale = this.height / this.original_height;
+							else
+								this.aspect_scale = this.width / this.original_width;*/
+/*
+							// Scale inner or scale outer mode: adjust the draw size to be proportional
+							// to the window size, since the draw size is simply stretched-to-fit in the window
+							if (mode === 2)		// scale inner
+							{
+								orig_aspect = this.original_width / this.original_height;
+								cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+
+								if (cur_aspect < orig_aspect)
+									this.draw_width = this.draw_height * cur_aspect;
+								else if (cur_aspect > orig_aspect)
+									this.draw_height = this.draw_width / cur_aspect;
+							}
+							else if (mode === 3)
+							{
+								orig_aspect = this.original_width / this.original_height;
+								cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
+
+								if (cur_aspect > orig_aspect)
+									this.draw_width = this.draw_height * cur_aspect;
+								else if (cur_aspect < orig_aspect)
+									this.draw_height = this.draw_width / cur_aspect;
+							}
 						}
-						else if (mode === 3)
+					}
+
+					if (this.canvasdiv && !this.isDomFree)
+					{
+						jQuery(this.canvasdiv).css({"width": Math.round(w) + "px",
+													"height": Math.round(h) + "px",
+													"margin-left": Math.floor(offx) + "px",
+													"margin-top": Math.floor(offy) + "px"});
+
+						if (typeof cr_is_preview !== "undefined")
 						{
-							orig_aspect = this.original_width / this.original_height;
-							cur_aspect = this.lastWindowWidth / this.lastWindowHeight;
-
-							if (cur_aspect > orig_aspect)
-								this.draw_width = this.draw_height * cur_aspect;
-							else if (cur_aspect < orig_aspect)
-								this.draw_height = this.draw_width / cur_aspect;
+							jQuery("#borderwrap").css({"width": Math.round(w) + "px",
+														"height": Math.round(h) + "px"});
 						}
 					}
-				}
 
-				if (this.canvasdiv && !this.isDomFree)
-				{
-					jQuery(this.canvasdiv).css({"width": Math.round(w) + "px",
-												"height": Math.round(h) + "px",
-												"margin-left": Math.floor(offx) + "px",
-												"margin-top": Math.floor(offy) + "px"});
-
-					if (typeof cr_is_preview !== "undefined")
+					if (this.canvas)
 					{
-						jQuery("#borderwrap").css({"width": Math.round(w) + "px",
-													"height": Math.round(h) + "px"});
+						this.canvas.width = Math.round(w * dpr);
+						this.canvas.height = Math.round(h * dpr);
+
+						if (this.isEjecta)
+						{
+							this.canvas.style.left = Math.floor(offx) + "px";
+							this.canvas.style.top = Math.floor(offy) + "px";
+							this.canvas.style.width = Math.round(w) + "px";
+							this.canvas.style.height = Math.round(h) + "px";
+						}
+						else if (this.isRetina && !this.isDomFree)
+						{
+							this.canvas.style.width = Math.round(w) + "px";
+							this.canvas.style.height = Math.round(h) + "px";
+						}
 					}
-				}
 
-				if (this.canvas)
-				{
-					this.canvas.width = Math.round(w * dpr);
-					this.canvas.height = Math.round(h * dpr);
-
-					if (this.isEjecta)
+					if (this.overlay_canvas)
 					{
-						this.canvas.style.left = Math.floor(offx) + "px";
-						this.canvas.style.top = Math.floor(offy) + "px";
-						this.canvas.style.width = Math.round(w) + "px";
-						this.canvas.style.height = Math.round(h) + "px";
+						this.overlay_canvas.width = Math.round(w * dpr);
+						this.overlay_canvas.height = Math.round(h * dpr);
+
+						this.overlay_canvas.style.width = this.cssWidth + "px";
+						this.overlay_canvas.style.height = this.cssHeight + "px";
 					}
-					else if (this.isRetina && !this.isDomFree)
+
+					if (this.glwrap)
 					{
-						this.canvas.style.width = Math.round(w) + "px";
-						this.canvas.style.height = Math.round(h) + "px";
+						this.glwrap.setSize(Math.round(w * dpr), Math.round(h * dpr));
 					}
-				}
 
-				if (this.overlay_canvas)
-				{
-					this.overlay_canvas.width = Math.round(w * dpr);
-					this.overlay_canvas.height = Math.round(h * dpr);
+					if (this.isDirectCanvas && this.ctx)
+					{
+						this.ctx.width = Math.round(w);
+						this.ctx.height = Math.round(h);
+					}
 
-					this.overlay_canvas.style.width = this.cssWidth + "px";
-					this.overlay_canvas.style.height = this.cssHeight + "px";
-				}
+					if (this.ctx)
+					{
+						// Re-apply the image smoothing property, since resizing the canvas resets its state
+						this.ctx["webkitImageSmoothingEnabled"] = this.linearSampling;
+						this.ctx["mozImageSmoothingEnabled"] = this.linearSampling;
+						this.ctx["msImageSmoothingEnabled"] = this.linearSampling;
+						this.ctx["imageSmoothingEnabled"] = this.linearSampling;
+					}
 
-				if (this.glwrap)
-				{
-					this.glwrap.setSize(Math.round(w * dpr), Math.round(h * dpr));
-				}
+					// Try to lock orientation to the project setting
+					this.tryLockOrientation();
 
-				if (this.isDirectCanvas && this.ctx)
-				{
-					this.ctx.width = Math.round(w);
-					this.ctx.height = Math.round(h);
-				}
-
-				if (this.ctx)
-				{
-					// Re-apply the image smoothing property, since resizing the canvas resets its state
-					this.ctx["webkitImageSmoothingEnabled"] = this.linearSampling;
-					this.ctx["mozImageSmoothingEnabled"] = this.linearSampling;
-					this.ctx["msImageSmoothingEnabled"] = this.linearSampling;
-					this.ctx["imageSmoothingEnabled"] = this.linearSampling;
-				}
-
-				// Try to lock orientation to the project setting
-				this.tryLockOrientation();
-
-				// Attempt to hide address bar on iPhone
-				// iOS 7.1 bug: weird glitch where a big space appears at the bottom of the
-				// screen when going in to landscape mode. This call to scrollTo seems to
-				// fix it, so always run this on iPhone.
-				if (!this.isDomFree && (tryHideAddressBar || this.isiPhone))
-				{
-					window.setTimeout(function () {
-						window.scrollTo(0, 1);
-					}, 100);
-				}
+					// Attempt to hide address bar on iPhone
+					// iOS 7.1 bug: weird glitch where a big space appears at the bottom of the
+					// screen when going in to landscape mode. This call to scrollTo seems to
+					// fix it, so always run this on iPhone.
+					if (!this.isDomFree && (tryHideAddressBar || this.isiPhone))
+					{
+						window.setTimeout(function () {
+							window.scrollTo(0, 1);
+						}, 100);
+					}
 			}
 
-
+*/
 				/** Get ImageData
 			    * @
 			    */

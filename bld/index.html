@@ -17,7 +17,14 @@
 				var width = 1224;
 				var height = 720;
 
-				self.main = {update:function(){},draw:function(){
+
+				self.main = {update:function(){},init:function(){
+
+					this.visuals.bleed = 0.75;
+					this.circles = [];
+					this.circles.push(this.visuals.Circle(0,0,5,"red",1));
+
+					},draw:function(){
 
 					let r = Math.sin(Date.now()/360);
 					for(var i = 5; i>0; i--)
@@ -34,10 +41,6 @@
 
 					}
 
-
-				},init:function(){
-
-					this.visuals.bleed = 0.75;
 
 				}};
 

@@ -24,7 +24,7 @@ export default class StatsBuffer {
 
 	c:number = 0;
 
-	colour:string = "";
+	colour:string|CanvasPattern|CanvasGradient = "";
 
 	oldcol:string = "";
 
@@ -51,7 +51,7 @@ export default class StatsBuffer {
 	* Sets all values to default
 	*/
 
-	init(col:string = "", colold:string = ""):void {
+	init(col:string|CanvasPattern|CanvasGradient = "", colold:string = ""):void {
 
 		Object.assign(this,{
 			x:0,
