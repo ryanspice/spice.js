@@ -1,6 +1,5 @@
 /* @flow */
 
-
 import {_SJSClass as SJSClass} from '../base/sjs';
 
 import StatsBuffer from '../base/stats';
@@ -42,18 +41,18 @@ export default class API extends SJSClass {
 		fontT:string = "";
 		fontL:string = "";
 
-		stat2:Object = (Object.create(null));
+		stat2:StatsBuffer;
 		grd:Object = (Object.create(null));
 
-		canvas:Object = (Object.create(null));
-		buffer:Object = (Object.create(null));
-		blitter:Object = (Object.create(null));
+		canvas:HTMLCanvasElement;
+		buffer:HTMLCanvasElement;
+		blitter:HTMLCanvasElement;
 
-		canvas_context:Object = (Object.create(null));
-		buffer_context:Object = (Object.create(null));
-		blitter_context:Object = (Object.create(null));
+		canvas_context:CanvasRenderingContext2D;
+		buffer_context:CanvasRenderingContext2D;
+		blitter_context:CanvasRenderingContext2D;
 
-		blitter_image:Object = new Image();
+		blitter_image:HTMLImageElement = new Image();
 
 		within:boolean = false;
 
@@ -62,9 +61,13 @@ export default class API extends SJSClass {
 		debug:boolean = true;
 
 		/* Check variables */
-		checkValuesColour:string;
+		checkValuesColour:string|CanvasPattern|CanvasGradient;
 
         setting:boolean = true;
+
+		/* Document. left and top */
+		left:number = 0;
+		top:number = 0;
 
 		/**
 	    *
@@ -120,7 +123,7 @@ export default class API extends SJSClass {
 
 		set stat(s:StatsBuffer){
 
-				console.log(s);
+				console.log('api',s);
 	    	this.get('data')[0] = s;
 		}
 
@@ -135,43 +138,6 @@ export default class API extends SJSClass {
 
 		}
 
-		/**
-	    * @method
-	    */
-
-		fixX(x:number):number {
-
-			return (((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale):any).toFixedNumber(2);
-		}
-
-		/**
-	    * @method
-	    */
-
-		fixY(y:number):number {
-
-			return (((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale):any).toFixedNumber(2);
-		}
-
-		/**
-	    * @method
-	    */
-
-		fixW(w:number):number {
-
-			return ((w*this.scale):any).toFixedNumber(2);
-		}
-
-		/**
-	    * @method
-	    */
-
-		fixH(h:number):number {
-
-			return ((h*this.scale):any).toFixedNumber(2);
-		}
-
-
 		/** Resets the stats buffer.
 		* @method
 	    */
@@ -185,11 +151,51 @@ export default class API extends SJSClass {
 
 		}
 
+		/**
+	    * @method
+			TODO:Extend Number to include .toFixedNumber
+	    */
+
+		fixX(x:number):number {
+
+			return ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale:any).toFixedNumber(2);
+		}
+
+		/**
+	    * @method
+			TODO:Extend Number to include .toFixedNumber
+	    */
+
+		fixY(y:number):number {
+
+			return ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale:any).toFixedNumber(2);
+		}
+
+		/**
+	    * @method
+			TODO:Extend Number to include .toFixedNumber
+	    */
+
+		fixW(w:number):number {
+
+			return (w*this.scale:any).toFixedNumber(2);
+		}
+
+		/**
+	    * @method
+			TODO:Extend Number to include .toFixedNumber
+	    */
+
+		fixH(h:number):number {
+
+			return (h*this.scale:any).toFixedNumber(2);
+		}
+
 		/** Controls changing the draw colour
 		* @method
 		*  */
 
-	    colour(colour1:string|void,colour2:string|void):string {
+	    colour(colour1:string|void,colour2:string|void):string|CanvasPattern|CanvasGradient {
 
 	        if (colour1)
 	            return colour1&&(this.buffer_context.fillStyle=colour1);//colour2&&(this.buffer_context.strokeStyle=colour2);
@@ -199,7 +205,7 @@ export default class API extends SJSClass {
 
 		/** Calls Colour */
 
-	    color(colour1:string|void,colour2:string|void):string {
+	    color(colour1:string|void,colour2:string|void):string|CanvasPattern|CanvasGradient {
 
 			return this.colour(colour1,colour2);
 	    }
@@ -219,7 +225,8 @@ export default class API extends SJSClass {
 		*  */
 
 	    font(font:string):string	{
-	        return this.canvas_context.font = this.buffer_context.font=this.fontT=font;
+
+	        return this.canvas_context.font = this.buffer_context.font = this.fontT = font;
 	        //return font!=this.fontT&&(this.canvas_context.font=this.buffer_context.font=this.fontT=font?font:this.fontL);
 	        //if (font)
 	        //	this.buffer_context.font = font;
@@ -256,7 +263,7 @@ export default class API extends SJSClass {
 		* @method
 		*  */
 
-	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:string|void,font:string|void):void {
+	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:string|CanvasPattern|CanvasGradient|void,font:string|void):void {
 
 	        this.checkValuesColour = this.colour();
 
@@ -312,14 +319,17 @@ export default class API extends SJSClass {
 		/**
 		* @method
 		*  */
+	    touch_within(x:number, y:number, w:number, h:number,c:boolean) {
 
-	    touch_within(x, y, w, h,c) {
-
-	        var doc = document.documentElement;
+	        var doc:any = document.documentElement;
 	        this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 	        this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
 	        y = y - this.top;
 	        x = x - this.left;
+
+			let App:IApp = this.app;
+		//	console.log(App);
+
 	        return c?((App.input.x>x-w/2&&App.input.x<x+w/2&&App.input.y>y-h/2&&App.input.y<y+h/2)?true:false):((App.input.x>x&&App.input.x<x+w&&App.input.y>y&&App.input.y<y+h)?true:false);
 
 	    }

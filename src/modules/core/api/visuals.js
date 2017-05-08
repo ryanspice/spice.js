@@ -1,13 +1,30 @@
-/* @noflow because toFixedNumber bug */
+/* @flow because toFixedNumber bug */
 
 import API from './api';
 
 import type {
 	IApp,
+	ICanvas,
 	IVector
 } from '../interfaces/ITypes';
 
+interface FixedNumber extends Number {
+
+
+}
+
+interface IVisualsAttrib {
+
+	alpha:boolean
+
+}
+
 export default class Visuals extends API {
+
+	attribs:IVisualsAttrib = {alpha:true};
+	canvas:HTMLCanvasElement;
+	buffer:HTMLCanvasElement;
+	blitter:HTMLCanvasElement;
 
 	/**
     *
@@ -17,9 +34,7 @@ export default class Visuals extends API {
 
         super(app);
 
-//		this.stat = new this.stat();
-
-		let canvas = this.app.canvas;
+		let canvas:ICanvas = this.app.canvas;
 
 		this.scale = this.app.scale;
 
@@ -29,33 +44,36 @@ export default class Visuals extends API {
 
 		this.blitter = canvas.blitter;
 
-		let attribs = {alpha:true};
+		this.attribs.alpha = true;
 
-		this.blitter_context = this.blitter.getContext("2d",attribs);
+		this.blitter_context = this.blitter.getContext("2d",this.attribs);
 
-		attribs = {alpha:false};
+		this.attribs.alpha = false;
 
-		this.canvas_context = this.canvas.getContext("2d",attribs);
+		this.canvas_context = this.canvas.getContext("2d",this.attribs);
 
 		let globalCompositeOperation = this.app.options.global.globalCompositeOperation;
 
-		this.canvas_context.globalCompositeOperation = globalCompositeOperation;
+		if (this.canvas_context)
+			this.canvas_context.globalCompositeOperation = globalCompositeOperation;
 		this.blitter_context.globalCompositeOperation = globalCompositeOperation;
-		this.buffer_context.globalCompositeOperation = globalCompositeOperation;
+
+		if (this.buffer_context)
+			this.buffer_context.globalCompositeOperation = globalCompositeOperation;
 
 		if (this.app.options.canvas.buffer)
-			this.buffer_context = this.buffer.getContext("2d",attribs);
+			this.buffer_context = this.buffer.getContext("2d",this.attribs);
 			else
-			this.buffer_context = this.canvas.getContext("2d",attribs);
+			this.buffer_context = this.canvas.getContext("2d",this.attribs);
 
 		this.linearSampling = false;
-
-		if (this.buffer_context["imageSmoothingEnabled"] != this.linearSampling)
-		if (this.buffer_context["mozImageSmoothingEnabled"] != this.linearSampling)
-		if (this.buffer_context["msImageSmoothingEnabled"] != this.linearSampling)
-		if (this.buffer_context["webkitImageSmoothingEnabled"] != this.linearSampling)
+		/*
+		if ((this.buffer_context["imageSmoothingEnabled"] != this.linearSampling)&&
+			(this.buffer_context["mozImageSmoothingEnabled"] != this.linearSampling)&&
+			(this.buffer_context["msImageSmoothingEnabled"] != this.linearSampling)&&
+			(this.buffer_context["webkitImageSmoothingEnabled"] != this.linearSampling))
 			this.buffer_context["webkitImageSmoothingEnabled"] = this.linearSampling;
-
+		*/
     }
 
 	/**
@@ -74,41 +92,6 @@ export default class Visuals extends API {
 	}
 	*/
 
-	/**
-    * @method
-    */
-
-	fixX(x:number):number {
-
-		return ((x*this.scale)+(this.app.client.width/2)-(this.app.client.setWidth/2)*this.scale).toFixedNumber(2);
-	}
-
-	/**
-    * @method
-    */
-
-	fixY(y:number):number {
-
-		return ((y*this.scale)+(this.app.client.height/2)-(this.app.client.setHeight/2)*this.scale).toFixedNumber(2);
-	}
-
-	/**
-    * @method
-    */
-
-	fixW(w:number):number {
-
-		return (w*this.scale).toFixedNumber(2);
-	}
-
-	/**
-    * @method
-    */
-
-	fixH(h:number):number {
-
-		return (h*this.scale).toFixedNumber(2);
-	}
 
 	/**
 	* @method

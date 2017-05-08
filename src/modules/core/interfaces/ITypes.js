@@ -59,7 +59,7 @@ declare interface Event {
 	canvas:ICanvas;
 	options:IOptions;
 
-
+	input?:IInput;
 	main?:IState;
 
 	+scale:number;
@@ -67,8 +67,9 @@ declare interface Event {
 
 export type ICanvas = {
 
-	canvas:any;
-	buffer:any;
+	canvas:HTMLCanvasElement;
+	buffer:HTMLCanvasElement;
+	blitter:HTMLCanvasElement;
 
 }
 
