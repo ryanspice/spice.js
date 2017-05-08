@@ -109,7 +109,7 @@ export type ICircle = {
 	x:number;
 	y:number;
 	r:number;
-	col?:number|string|CanvasPattern|CanvasGradient;
+	col?:any;
 	a?:number;
 
 }
@@ -197,6 +197,14 @@ export type IVisuals = {
 
 
 	flip(s:number):void;
+}
+
+/**
+* @interface
+*/
+
+export type IApi = {
+
 }
 
 /**

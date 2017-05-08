@@ -9,8 +9,11 @@ import Circle from "../math/circle";
 import type {
 
 	IApp,
+	IApi,
+	IVisuals,
 	IVector,
 	ICircle
+
 } from '../interfaces/ITypes';
 
 import {
@@ -1259,9 +1262,9 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-		        lines(x:number,y:number,x2:number,y2:number,col:any,a:number,s:number){
+		        lines(x,y,x2,y2,col,a,s){
 		            this.checkValues(x,y,x2,y2,1,a,true);
-		            this.stat2 = this.stat;
+		            this.stat2 = this.checkValues(x2,y2,x2,y2,1,a,true);
 		            this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
 		            this.opacity(a);
 		            this.buffer_context.strokeStyle = col;
@@ -1277,7 +1280,6 @@ export default class API extends SJSClass {
 		        }
 
 		        triangle(x0:number,y0:number,x1:number,y1:number,x2:number,y2:number,col:any,col2:any,width:number){
-
 		        //this.buffer_context.fillStyle = col;
 		        //this.buffer_context.strokeStyle = col2;
 		            this.colour(col,col2);
@@ -1292,22 +1294,18 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-		        quadraticCurve(x:number, y:number, x2:number, y2:number, a:number, col:any):void {
-
-		            let t = this.buffer_context.strokeStyle;
-		            let tF = this.buffer_context.fillStyle;
-
+		        quadraticCurve(x:number,y:number,x2:number,y2:number,a:number,col:number){
+		            var t = this.buffer_context.strokeStyle;
+		            var tF = this.buffer_context.fillStyle;
 		            this.checkValues(x,y,1,1,1,a,true,col);
-		            this.stat2 = this.stat;
-
+		            this.stat2 = this.checkValues(x2,y2,1,1,1,a,true,col);
 		            this.buffer_context.beginPath();
 		            this.buffer_context.quadraticCurveTo(this.stat.x, this.stat.y, this.stat2.x, this.stat2.y);
 		            this.buffer_context.strokeStyle = col;
 		            this.buffer_context.stroke();
 		            this.buffer_context.fill();
-
 		            this.checkValues(x,y,1,1,1,a,true,t);
-		            this.stat2 = this.stat;
+		            this.stat2 = this.checkValues(x2,y2,1,1,1,a,true,t);
 
 		            this.buffer_context.strokeStyle = t;
 		            this.buffer_context.fillStyle = tF;
@@ -1382,9 +1380,29 @@ export default class API extends SJSClass {
 
 				appendNew = (toRegister:any)=> {
 
-					this.PriorityRegistry.push(toRegister);
-					return this.PriorityRegistry[this.PriorityRegistry.length-1];
+					return this.PriorityRegistry.push(toRegister);
+					//return this.PriorityRegistry[this.PriorityRegistry.length-1];
 				}
+
+				drawArray = (array:any, func:Function)=> {
+
+					for(var i = array.length-1; i>=0; i--)
+						func(array[i]);
+
+				}
+
+				drawBufferedSprites = () => {
+
+					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.c));
+
+				}
+
+				drawBufferedSpritesNewPosition = (f:any) => {
+
+					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(f(sprite).x,f(sprite).y,sprite.r,sprite.col,sprite.c));
+
+				}
+
 		        /**
 				/* CIRCLE TEST
 		            circle now allows passing vectors
@@ -1397,9 +1415,9 @@ export default class API extends SJSClass {
 
 		        */
 
-				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:number = 1):ICircle {
+				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:void|number = 1):number {
 
-					return this.appendNew(new Circle());
+					return this.appendNew(new Circle(x,y,r,col,a));
 
 				}
 

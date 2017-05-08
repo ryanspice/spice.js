@@ -18,15 +18,17 @@
 				var height = 720;
 
 
-				self.main = {update:function(){},init:function(){
+				self.main = {init:function(){
 
 					this.visuals.bleed = 0.75;
-					this.circles = [];
-					this.circles.push(this.visuals.Circle(0,0,5,"red",1));
+					//this.circles = [];
+					for(var i = 5; i>0; i--)
+						this.visuals.Circle(window.innerWidth/3,100,3,"#A9CCE3",1);
 
 					},draw:function(){
 
 					let r = Math.sin(Date.now()/360);
+					/*
 					for(var i = 5; i>0; i--)
 					this.visuals.circle(
 						600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
@@ -34,12 +36,26 @@
 						3,
 						'#A9CCE3'
 					);
+*/
+					//this.visuals.drawArray(this.circles, circle => this.visuals.circle(circle.x,circle.y,circle.r,"red"));
+					this.visuals.drawBufferedSpritesNewPosition((sprite)=>{
+						let i = sprite._id;
+						let obj = {
+							x:600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
+							y:200+5*window.innerWidth*Math.cos(Date.now()/360-i*r)/250
+						}
+						return obj;
+					});
 
 					if (this.visuals.touch_within(0,0,10,10,false)) {
 
 						console.log('eh');
 
 					}
+
+
+				},update:function(){
+
 
 
 				}};
