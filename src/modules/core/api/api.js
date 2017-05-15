@@ -6,12 +6,15 @@ import StatsBuffer from '../base/stats';
 
 import Circle from "../math/circle";
 
+import APICore from "./api-core";
+
 import type {
 
 	IApp,
 	IApi,
 	IVisuals,
 	IVector,
+	IStatsBuffer,
 	ICircle
 
 } from '../interfaces/ITypes';
@@ -22,7 +25,7 @@ import {
 
 /* */
 
-export default class API extends SJSClass {
+export default class API extends APICore {
 
 		pollyFilledAnimationFrame:RequestAnimationFrame = RequestAnimationFrame;
 
@@ -47,17 +50,9 @@ export default class API extends SJSClass {
 		fontT:string = "";
 		fontL:string = "";
 
-		stat2:StatsBuffer;
+		stat2:IStatsBuffer;
 		grd:Object = (Object.create(null));
 
-		canvas:HTMLCanvasElement;
-		buffer:HTMLCanvasElement;
-		blitter:HTMLCanvasElement;
-
-		canvas_context:CanvasRenderingContext2D;
-		buffer_context:CanvasRenderingContext2D;
-		blitter_context:CanvasRenderingContext2D;
-		overlay_canvas:CanvasRenderingContext2D;
 
 		blitter_image:HTMLImageElement = new Image();
 
@@ -270,7 +265,7 @@ export default class API extends SJSClass {
 		* @method
 		*  */
 
-	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:number|string|CanvasPattern|CanvasGradient|void,font:string|void):void {
+	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:any,font:string|void):IStatsBuffer {
 
 	        this.checkValuesColour = this.colour();
 
@@ -321,37 +316,54 @@ export default class API extends SJSClass {
 
 			}
 
+			return this.stat;
 	    }
 
+
+		get document():any {
+
+			return document;
+		}
+
 		/**
+		* Returns true if the cursor/touch is within the bounds. X Y W H, centered
 		* @method
 		*  */
+
 	    touch_within(x:number, y:number, w:number, h:number,c:boolean) {
 
-	        var doc:any = document.documentElement;
+	        let doc:any = this.document.documentElement;
+
 	        this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 	        this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+
 	        y = y - this.top;
 	        x = x - this.left;
 
-			let App:IApp = this.app;
-			//console.log(this.input);
-	        return c?((this.app.input.x>x-w/2&&App.input.x<x+w/2&&App.input.y>y-h/2&&App.input.y<y+h/2)?true:false):((App.input.x>x&&App.input.x<x+w&&App.input.y>y&&App.input.y<y+h)?true:false);
+			let input = (this.app.input:any);
+	        return c?((input.x>x-w/2&&input.x<x+w/2&&input.y>y-h/2&&input.y<y+h/2)?true:false):((input.x>x&&input.x<x+w&&input.y>y&&input.y<y+h)?true:false);
 
 	    }
 
 		/**
+		* Returns true if the cursor/touch is within the bounds. X Y W H, centered.
+		* Applies same scaling method as images in room.
 		* @method
 		*  */
 
-	    touch_within2(x, y, w, h,c) {
-	        var stat = this.checkValues(x,y,w,h,1,1,c);
-	        var doc = document.documentElement;
+		touch_within2(x:number, y:number, w:number, h:number,c:boolean) {
+
+	        let stat = this.checkValues(x,y,w,h,1,1,c);
+	        let doc:any = this.document.documentElement;
+
 	        this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 	        this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+
 	        stat.y = stat.y - this.top;
 	        stat.x = stat.x - this.left;
-	        return stat.c?((this.app.input.x>stat.x-stat.w/2&&this.app.input.x<stat.x+stat.w/2&&this.app.input.y>stat.y-stat.h/2&&this.app.input.y<stat.y+stat.h/2)?true:false):((this.app.input.x>stat.x&&this.app.input.x<stat.x+stat.w&&this.app.input.y>stat.y&&this.app.input.y<stat.y+stat.h)?true:false);
+
+			let input = (this.app.input:any);
+	        return stat.c?((input.x>stat.x-stat.w/2&&input.x<stat.x+stat.w/2&&input.y>stat.y-stat.h/2&&input.y<stat.y+stat.h/2)?true:false):((input.x>stat.x&&input.x<stat.x+stat.w&&input.y>stat.y&&input.y<stat.y+stat.h)?true:false);
 	    }
 
 		/**
@@ -1202,9 +1214,10 @@ export default class API extends SJSClass {
             }
             return w;
         }
+
 		/** IMAGE_BUTTON LEGACY TAKE OUT
 		* @method
-		*  */
+		*
         image_buttonH(image,x,y,s,loc,highlight,xscale,yscale,a,centered){
             this.checkValues(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
             var s = this.stat2 = this.checkValues(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
@@ -1227,6 +1240,7 @@ export default class API extends SJSClass {
             }
             return w;
         }
+		*/
 
 
 
@@ -1235,7 +1249,7 @@ export default class API extends SJSClass {
 
 
 
-		        line2(vec,vec2,col,a,free){
+		        line2(vec:IVector,vec2:IVector,col:any,a:number,free:boolean){
 
 		            let x = vec.x;
 		            let y = vec.y;
@@ -1251,7 +1265,7 @@ export default class API extends SJSClass {
 
 		        }
 
-		        line(x,y,x2,y2,col,a){
+		        line(x:number,y:number,x2:number,y2:number,col:any,a:number){
 		            this.checkValues(x,y,x2,y2,1,a,true);
 		            this.stat2 = this.checkValues(x2,y2,x2,y2,1,a,true);
 		            this.buffer_context.beginPath();
@@ -1262,7 +1276,7 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-		        lines(x,y,x2,y2,col,a,s){
+		        lines(x:number,y:number,x2:number,y2:number,col:any,a:number,s:number){
 		            this.checkValues(x,y,x2,y2,1,a,true);
 		            this.stat2 = this.checkValues(x2,y2,x2,y2,1,a,true);
 		            this.buffer_context.moveTo(this.stat.x*s,this.stat.y*s);
@@ -1294,7 +1308,7 @@ export default class API extends SJSClass {
 		            this.clean();
 		        }
 
-		        quadraticCurve(x:number,y:number,x2:number,y2:number,a:number,col:number){
+		        quadraticCurve(x:number,y:number,x2:number,y2:number,a:number,col:any){
 		            var t = this.buffer_context.strokeStyle;
 		            var tF = this.buffer_context.fillStyle;
 		            this.checkValues(x,y,1,1,1,a,true,col);
@@ -1475,43 +1489,47 @@ export default class API extends SJSClass {
 
 				*/
 
+
+				//region unused
+
 		        trytolockOrientation(){
-		            /*
-		            if (!this.autoLockOrientation || this.orientations === 0)
-		    			return;
-		    		*/
-		    		var orientation = "portrait";
-		                            var works = false
+					/*
+					if (!this.autoLockOrientation || this.orientations === 0)
+					return;
+					*/
+					var orientation = "portrait";
+					            var works = false
 
 
-		    		//if (this.orientations === 2)
-		    			orientation = "landscape";
+					//if (this.orientations === 2)
+					orientation = "landscape";
 
-		    		// Note IE/Edge can throw exceptions here if in an iframe (WrongDocumentError), which also affects the debugger.
-		    	/*	try {
+					// Note IE/Edge can throw exceptions here if in an iframe (WrongDocumentError), which also affects the debugger.
+					/*	try {
 
-		    			if (screen["orientation"] && screen["orientation"]["lock"])
-		    				works = screen["orientation"]["lock"](orientation);
-		    			else if (screen["lockOrientation"])
-		    				works = screen["lockOrientation"](orientation);
-		    			else if (screen["webkitLockOrientation"])
-		    				works = screen["webkitLockOrientation"](orientation);
-		    			else if (screen["mozLockOrientation"])
-		    				works = screen["mozLockOrientation"](orientation);
-		    			else if (screen["msLockOrientation"])
-		    				works = screen["msLockOrientation"](orientation);
-		    		}
-		    		catch (e)
-		    		{
-		    			if (console && console.warn)
-		    				console.warn("Failed to lock orientation: ", e);
-		    		}
-*/
+					if (screen["orientation"] && screen["orientation"]["lock"])
+						works = screen["orientation"]["lock"](orientation);
+					else if (screen["lockOrientation"])
+						works = screen["lockOrientation"](orientation);
+					else if (screen["webkitLockOrientation"])
+						works = screen["webkitLockOrientation"](orientation);
+					else if (screen["mozLockOrientation"])
+						works = screen["mozLockOrientation"](orientation);
+					else if (screen["msLockOrientation"])
+						works = screen["msLockOrientation"](orientation);
+					}
+					catch (e)
+					{
+					if (console && console.warn)
+						console.warn("Failed to lock orientation: ", e);
+					}
+					*/
 
-		            return works;
+					return works;
 		        }
-/*
-	    newscale(w, h, force){
+
+				/*
+	    		newscale(w, h, force){
 					var offx = 0, offy = 0;
 					var neww = 0, newh = 0, intscale = 0;
 
@@ -1655,7 +1673,7 @@ export default class API extends SJSClass {
 							this.draw_width = this.original_width;
 							this.draw_height = this.original_height;
 							this.fullscreenScalingQuality = false;
-*/
+							*/
 							/*var orig_aspect = this.original_width / this.original_height;
 							var cur_aspect = this.width / this.height;
 
@@ -1664,7 +1682,7 @@ export default class API extends SJSClass {
 								this.aspect_scale = this.height / this.original_height;
 							else
 								this.aspect_scale = this.width / this.original_width;*/
-/*
+								/*
 							// Scale inner or scale outer mode: adjust the draw size to be proportional
 							// to the window size, since the draw size is simply stretched-to-fit in the window
 							if (mode === 2)		// scale inner
@@ -1940,5 +1958,5 @@ export default class API extends SJSClass {
 				/*					    }
 						*/
 
-
+	//endregion
 }

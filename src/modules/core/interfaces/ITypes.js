@@ -75,6 +75,8 @@ export type ICanvas = {
 
 export type IInput = {
 
+	x:number;
+	y:number;
 
 
 }
