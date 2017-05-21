@@ -313,4 +313,10 @@ export default class Graphics extends Library {
 
 		}
 
+		get image() {
+
+			return this.Sources.getByName(name);
+
+		}
+
 }

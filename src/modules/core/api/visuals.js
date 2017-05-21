@@ -127,6 +127,7 @@ export default class Visuals extends API {
 			if (this.app.client.update.state.initalized)
 				this.app.client.update.state.draw();
 
+			this.drawBufferedSprites();
 
 			//Draw buffer to canvs
 			this.canvas_context.drawImage(this.buffer,0,0);

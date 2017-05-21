@@ -12,31 +12,63 @@
 
 		<script  type="application/x-javascript" defer>
 
+		let TIleCount = 0;
+		class Tile  {
+			constructor(img,visuals,x,y,offx,offy){
+				this.img = img;
+				this.visuals = visuals;
+				this.position = {x:x,y:y};
+				this.off = {x:offx,y:offy};
+			}
+			draw(){
+
+				this.visuals.image_part(this.img,this.position.x,this.position.y,1,1,0,0+this.off.x*16,0+this.off.y*16,16,16);
+
+
+			}
+		}
+
 			var _App = ((SpiceJS.create()).OnLoad = function (self) {
 
-				var width = 1224;
-				var height = 720;
-
+				var width = 400;
+				var height =300;
 
 				self.main = {init:function(){
 
-					this.visuals.bleed = 0.75;
-					//this.circles = [];
-					for(var i = 5; i>0; i--)
-						this.visuals.Circle(window.innerWidth/3,100,3,"#A9CCE3",1);
 
+					/*
+					this.visuals.bleed = 0.1175;
+					for(var i = 2; i>0; i--)
+						this.visuals.Circle(window.innerWidth/3,100,3,"#A9CCE3",1);
+						*/
+						this.snow = this.graphics.load("../snow-expansion");
+
+						this.tiles = [];
+						let s = 16;
+
+						this.tiles.push(new Tile(this.snow,this.visuals,0*s,0*s,1,4));
+						this.tiles.push(new Tile(this.snow,this.visuals,1*s,0*s,1,4));
+						this.tiles.push(new Tile(this.snow,this.visuals,2*s,0*s,1,4));
+						this.tiles.push(new Tile(this.snow,this.visuals,3*s,0*s,1,4));
+						this.tiles.push(new Tile(this.snow,this.visuals,4*s,0*s,1,4));
+
+
+
+						this.tiles.push(new Tile(this.snow,this.visuals,1*s,1*s,1,4));
+						this.tiles.push(new Tile(this.snow,this.visuals,2*s,2*s,1,4));
 					},draw:function(){
 
+						for(let i = 0; i<=this.tiles.length-1;i++){
+
+							this.tiles[i].draw();
+
+						}
+
+						//this.visuals.blid()
+						/*
+
 					let r = Math.sin(Date.now()/360);
-					/*
-					for(var i = 5; i>0; i--)
-					this.visuals.circle(
-						600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
-						200+5*window.innerWidth*Math.cos(Date.now()/360-i*r)/250,
-						3,
-						'#A9CCE3'
-					);
-*/
+
 					//this.visuals.drawArray(this.circles, circle => this.visuals.circle(circle.x,circle.y,circle.r,"red"));
 					this.visuals.drawBufferedSpritesNewPosition((sprite)=>{
 						let i = sprite._id;
@@ -58,8 +90,7 @@
 						console.log('eh2');
 
 					}
-
-
+				*/
 				},update:function(){
 
 

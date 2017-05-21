@@ -5,6 +5,7 @@ import {_SJSClass as SJSClass} from '../base/sjs';
 import StatsBuffer from '../base/stats';
 
 import Circle from "../math/circle";
+import Sprite from "../api/sprite";
 
 import APICore from "./api-core";
 
@@ -23,7 +24,7 @@ import {
 	RequestAnimationFrame
 } from "../../utils";
 
-/* */
+/* This API class extends the canvas drawing api calls, including buffering */
 
 export default class API extends APICore {
 
@@ -50,9 +51,9 @@ export default class API extends APICore {
 		fontT:string = "";
 		fontL:string = "";
 
+		warn:console.warn;
 		stat2:IStatsBuffer;
 		grd:Object = (Object.create(null));
-
 
 		blitter_image:HTMLImageElement = new Image();
 
@@ -82,10 +83,6 @@ export default class API extends APICore {
 			]
 
 		};
-
-		/**
-	    *
-	    */
 
 	    constructor(app:IApp){
 
@@ -125,7 +122,7 @@ export default class API extends APICore {
 
 		set stat(s:StatsBuffer){
 
-				console.log('api',s);
+			console.log('api',s);
 	    	this.get('data')[0] = s;
 		}
 
@@ -135,9 +132,7 @@ export default class API extends APICore {
 
 		get stat():StatsBuffer {
 
-
 			return this.get('data')[0];
-
 		}
 
 		/** Resets the stats buffer.
@@ -325,6 +320,8 @@ export default class API extends APICore {
 			return document;
 		}
 
+		/* pointer collision */
+
 		/**
 		* Returns true if the cursor/touch is within the bounds. X Y W H, centered
 		* @method
@@ -332,7 +329,7 @@ export default class API extends APICore {
 
 	    touch_within(x:number, y:number, w:number, h:number,c:boolean) {
 
-	        let doc:any = this.document.documentElement;
+	        let doc:Element = this.document.documentElement;
 
 	        this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 	        this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
@@ -345,6 +342,7 @@ export default class API extends APICore {
 
 	    }
 
+
 		/**
 		* Returns true if the cursor/touch is within the bounds. X Y W H, centered.
 		* Applies same scaling method as images in room.
@@ -353,8 +351,10 @@ export default class API extends APICore {
 
 		touch_within2(x:number, y:number, w:number, h:number,c:boolean) {
 
-	        let stat = this.checkValues(x,y,w,h,1,1,c);
-	        let doc:any = this.document.documentElement;
+	        let stat:IStatsBuffer = this.checkValues(x,y,w,h,1,1,c);
+	        let doc:Element = this.document.documentElement;
+
+			//this.warn("touch_within2 is depreciated, use touch_within_stat");
 
 	        this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 	        this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
@@ -364,16 +364,20 @@ export default class API extends APICore {
 
 			let input = (this.app.input:any);
 	        return stat.c?((input.x>stat.x-stat.w/2&&input.x<stat.x+stat.w/2&&input.y>stat.y-stat.h/2&&input.y<stat.y+stat.h/2)?true:false):((input.x>stat.x&&input.x<stat.x+stat.w&&input.y>stat.y&&input.y<stat.y+stat.h)?true:false);
+
 	    }
 
 		/**
+		* Returns true if the cursor/touch is within the bounds. X Y W H, centered.
+		* Applies same scaling method as images in room.
 		* @method
 		*  */
 
-	    touch_within_stat(stat,r) {
+	    touch_within_stat(stat:IStatsBuffer,r:any) {
 
-	        var doc = document.documentElement;
-	        var w = window;
+	        let doc:Element = this.document.documentElement;
+	        var w = this.window;
+			console.log(this.window);
 
 	        this.left = (w.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
 	        this.top = (w.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
@@ -381,17 +385,17 @@ export default class API extends APICore {
 	        stat.y = stat.y - this.top;
 	        stat.x = stat.x - this.left;
 
-	        let position = this.app.input.position;
+	        let position = (this.app.input:any).position;
 
 	        let x = position.x;
 	        let y = position.y;
 
-	            /*
-
-	                        if (!r){
-	                        x = this.app.input.touched.last.x;
-	                        y = this.app.input.touched.last.y;}
-	            */
+            /*
+				touch release to be integrated
+                if (!r){
+                x = this.app.input.touched.last.x;
+                y = this.app.input.touched.last.y;}
+            */
 
 	        return stat.c?((x>stat.x-stat.w/2&&x<stat.x+stat.w/2&&y>stat.y-stat.h/2&&y<stat.y+stat.h/2)?true:false):((y>stat.x&&x<stat.x+stat.w&&y>stat.y&&y<stat.y+stat.h)?true:false);
 	    }
@@ -400,14 +404,15 @@ export default class API extends APICore {
 		* @method
 		*  */
 
-        blit(img:object, offx:number, offy:number):object {
+        blit(img:HTMLImageElement, offx:number, offy:number):Object {
 
             let _img = this.blitter_image = new Image();
             let canvas =this.blitter;
             let ctx = this.blitter_context;
 
             canvas.style.background = 'transparent';
-            canvas.background = 'transparent';
+            (canvas:any).background = 'transparent';
+
             canvas.width = img.width / 16;
             canvas.height = img.height / 16;
 
@@ -973,14 +978,30 @@ export default class API extends APICore {
 				* @method
 				*  */
 
+
+/*
 		        image_part(image,x,y,s,a,c,xx,yy,w,h){
+
+
 		            this.checkValues(x,y,w,h,s,a,c);
 
+					this.buffer_context.oImageSmoothingEnabled = false;
+					this.buffer_context.mozImageSmoothingEnabled = false;
+				    this.buffer_context.webkitImageSmoothingEnabled = false;
+				    this.buffer_context.msImageSmoothingEnabled = false;
+				    this.buffer_context.imageSmoothingEnabled = false;
+
+
+
+
+
+
 		            //var scale = (1.1*this.stat.s)*this.app.getScale();
+
 		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					this.opacity(1);
 				}
-
+*/
 
 		        image_part_flip(image,x,y,s,a,c,xx,yy,w,h){
 		            this.checkValues(x,y,w,h,s,a,c);
@@ -1187,13 +1208,13 @@ export default class API extends APICore {
 
             this.checkValues(x,y,image.width*s*xscale,image.height*s*yscale,s,a,centered);
 
-            var s = this.stat2 = this.checkValues(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
+            var step:IStatsBuffer = this.stat2 = this.checkValues(x,y,(image.width*s*xscale)*0.9,(image.height*s*yscale)*0.9,s,a,centered);
 
             var w = false;
 
 
 
-            if (this.touch_within_stat(s))
+            if (this.touch_within_stat(step))
             {
                 w = true;
                 if (this.highlight)
@@ -1407,14 +1428,36 @@ export default class API extends APICore {
 
 				drawBufferedSprites = () => {
 
-					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.c));
-
+					//this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.c));
+					let lastPriority = 0;
+					this.PriorityRegistry = this.PriorityRegistry.sort((a,b)=>{return a.priority>b.priority;});
+					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h));
+					this.PriorityRegistry = [];
 				}
 
 				drawBufferedSpritesNewPosition = (f:any) => {
 
 					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(f(sprite).x,f(sprite).y,sprite.r,sprite.col,sprite.c));
 
+				}
+
+				image_part(image,x,y,s,a,c,xx,yy,w,h) {
+
+					this.appendNew(new Sprite(image,x,y,s,a,c,xx,yy,w,h));
+
+				}
+
+		        _image_part(image,x,y,s,a,c,xx,yy,w,h){
+
+		            this.checkValues(x,y,w,h,s,a,c);
+					this.buffer_context.oImageSmoothingEnabled = false;
+					this.buffer_context.mozImageSmoothingEnabled = false;
+				    this.buffer_context.webkitImageSmoothingEnabled = false;
+				    this.buffer_context.msImageSmoothingEnabled = false;
+				    this.buffer_context.imageSmoothingEnabled = false;
+
+		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+					this.opacity(1);
 				}
 
 		        /**
@@ -1960,3 +2003,18 @@ export default class API extends APICore {
 
 	//endregion
 }
+
+/*
+class Tile  {
+	constructor(img,visuals){
+		this.img = img;
+		this.visuals = visuals;
+	}
+	draw(){
+
+		this.visuals.image_part(this.img,0,0,1,1,false,0,0,18,18);
+
+
+	}
+}
+*/
