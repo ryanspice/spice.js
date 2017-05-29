@@ -12,22 +12,6 @@
 
 		<script  type="application/x-javascript" defer>
 
-		let TIleCount = 0;
-		class Tile  {
-			constructor(img,visuals,x,y,offx,offy){
-				this.img = img;
-				this.visuals = visuals;
-				this.position = {x:x,y:y};
-				this.off = {x:offx,y:offy};
-			}
-			draw(){
-
-				this.visuals.image_part(this.img,this.position.x,this.position.y,1,1,0,0+this.off.x*16,0+this.off.y*16,16,16);
-
-
-			}
-		}
-
 		class Ground {
 
 
@@ -55,22 +39,12 @@
 						let i = 16;
 						let t = i;
 						while(i-->=0)
-						this.tiles.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));
+						this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);
 
-/*
-
-						this.tiles.push(new Tile(this.snow,this.visuals,0*s,0*s,1,4));
-						this.tiles.push(new Tile(this.snow,this.visuals,1*s,0*s,1,4));
-						this.tiles.push(new Tile(this.snow,this.visuals,2*s,0*s,1,4));
-						this.tiles.push(new Tile(this.snow,this.visuals,3*s,0*s,1,4));
-						this.tiles.push(new Tile(this.snow,this.visuals,4*s,0*s,1,4));
-
-
-
-						this.tiles.push(new Tile(this.snow,this.visuals,1*s,1*s,1,4));
-						this.tiles.push(new Tile(this.snow,this.visuals,2*s,2*s,1,4));
-						*/
 					},draw:function(){
+
+
+						this.visuals._image_part(this.snow,0,0,1,1,1,0,0,10,10);
 						/*
 						for(let i = 0; i<=this.tiles.length-1;i++){
 

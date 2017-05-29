@@ -149,7 +149,6 @@ export default class Visuals extends API {
 		}
 
 
-
 	}
 
 	/*

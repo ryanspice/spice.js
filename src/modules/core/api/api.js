@@ -1424,7 +1424,7 @@ export default class API extends APICore {
 	*/
 
 
-				PriorityRegistry:any = [];
+				PriorityRegistry:Array<any> = [];
 
 				appendNew = (toRegister:any)=> {
 
@@ -1439,13 +1439,18 @@ export default class API extends APICore {
 
 				}
 
+				pr:any = [];
+
 				drawBufferedSprites = () => {
 
 					//this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.c));
-					let lastPriority = 0;
-					this.PriorityRegistry = this.PriorityRegistry.sort((a,b)=>{return a.priority>b.priority;});
+					//let lastPriority = 0;
+					this.pr = this.PriorityRegistry.slice();
+					this.PriorityRegistry = this.PriorityRegistry.sort((a:any,b:any):any=>{return a.priority>b.priority;});
 					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h));
-					//this.PriorityRegistry = [];
+
+				//	this.PriorityRegistry = [];
+					console.log(this.PriorityRegistry);
 				}
 
 				drawBufferedSpritesNewPosition = (f:any) => {
@@ -1454,13 +1459,26 @@ export default class API extends APICore {
 
 				}
 
-				image_part(image,x,y,s,a,c,xx,yy,w,h) {
+				/* BUFFER SUPPORTED FUNCTIONS
+					Used in INIT, SPRITES, etc */
+
+				/* Append an image_part to the buffer */
+
+				image_part(image:HTMLImageElement,x:number,y:number,s:number,a:number,c:number,xx:number,yy:number,w:number,h:number) {
 
 					this.appendNew(new Sprite(image,x,y,s,a,c,xx,yy,w,h));
-
+					//this._image_part(image,x,y,s,a,c,xx,yy,w,h);
 				}
 
-		        _image_part(image,x,y,s,a,c,xx,yy,w,h){
+				/* END BUFFER SUPPORTED FUNCTIONS */
+
+				/* RAW API FUNCTIONS */
+
+				/* Draw the image_part
+					Used in DRAW
+				*/
+
+				_image_part(image:HTMLImageElement,x:number,y:number,s:number,a:number,c:number,xx:number,yy:number,w:number,h:number) {
 
 		            this.checkValues(x,y,w,h,s,a,c);
 					this.buffer_context.oImageSmoothingEnabled = false;
@@ -1472,6 +1490,9 @@ export default class API extends APICore {
 		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					this.opacity(1);
 				}
+
+				/* END RAW API */
+
 
 				/* Private for MapMaker and loading maps
 				*	use import instead
@@ -1499,7 +1520,6 @@ export default class API extends APICore {
 					return this.appendNew(new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
 
 				};
-
 
 		        /**
 				/* CIRCLE TEST
