@@ -1447,10 +1447,24 @@ export default class API extends APICore {
 					//let lastPriority = 0;
 					this.pr = this.PriorityRegistry.slice();
 					this.PriorityRegistry = this.PriorityRegistry.sort((a:any,b:any):any=>{return a.priority>b.priority;});
-					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h));
+					this.drawArray(this.PriorityRegistry, sprite => {
+						console.log(sprite);
+						switch(sprite.type){
 
-				//	this.PriorityRegistry = [];
-					console.log(this.PriorityRegistry);
+							case 'Circle':
+							((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col);
+
+							break;
+
+							default:
+
+							((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h);
+
+						}
+					});
+
+					//this.PriorityRegistry = [];
+					//console.log(this.PriorityRegistry);
 				}
 
 				drawBufferedSpritesNewPosition = (f:any) => {
@@ -1481,11 +1495,12 @@ export default class API extends APICore {
 				_image_part(image:HTMLImageElement,x:number,y:number,s:number,a:number,c:number,xx:number,yy:number,w:number,h:number) {
 
 		            this.checkValues(x,y,w,h,s,a,c);
-					this.buffer_context.oImageSmoothingEnabled = false;
-					this.buffer_context.mozImageSmoothingEnabled = false;
-				    this.buffer_context.webkitImageSmoothingEnabled = false;
-				    this.buffer_context.msImageSmoothingEnabled = false;
-				    this.buffer_context.imageSmoothingEnabled = false;
+
+					(this.buffer_context:any).oImageSmoothingEnabled = false;
+					(this.buffer_context:any).mozImageSmoothingEnabled = false;
+				    (this.buffer_context:any).webkitImageSmoothingEnabled = false;
+				    (this.buffer_context:any).msImageSmoothingEnabled = false;
+				    (this.buffer_context:any).imageSmoothingEnabled = false;
 
 		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					this.opacity(1);
@@ -1517,8 +1532,9 @@ export default class API extends APICore {
 					w:number = 0,
 					h:number = 0) {
 
-					return this.appendNew(new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
-
+					let item;
+					this.appendNew(item = new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
+					return item;
 				};
 
 		        /**

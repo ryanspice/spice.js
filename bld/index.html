@@ -39,19 +39,23 @@
 						let i = 16;
 						let t = i;
 						while(i-->=0)
-						this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);
+						this.tiles.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));
+
+						i = 6;
+						t = i;
+						while(i-->=0)
+						this.tiles.push(this.visuals.createMapObject('Circle',null,100,100,10,"#FFFFFF",1));
 
 					},draw:function(){
 
 
 						this.visuals._image_part(this.snow,0,0,1,1,1,0,0,10,10);
-						/*
+
 						for(let i = 0; i<=this.tiles.length-1;i++){
 
-							this.tiles[i].draw();
+							this.tiles[i].y = this.tiles[i].y+ Math.sin(new Date().getTime()/300+this.tiles[i].x/100)*1;
 
-						}*/
-
+						}
 						//this.visuals.blid()
 						/*
 
