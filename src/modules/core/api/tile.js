@@ -2,33 +2,29 @@
 
 import Vector from "../math/vector";
 
+import Sprite from "./sprite";
+
 import type {
 
-	IVector
+	IVisuals,
+	IVector,
+	ISprite,
+	ITile
 
 } from "../interfaces/ITypes";
 
 /** Basic Circle class
 */
-export default class Sprite extends Vector  {
+export default class Tile extends Sprite  {
 
-	static onConstructor:Function = ()=>{};
-	static count:number = 0;
-
-	_id = Sprite.count++;
+	_id = Tile.count++;
 	type:string = "_image_part";
 
-	img:HTMLImageElement;
-	priority:number = 1;
+	visuals:any;
 
-	xx:number;
-	yy:number;
-	w:number;
-	h:number;
+	off:IVector = new Vector(0,0);
+	size:IVector = new Vector(0,0);
 
-	s:number;
-	a:number;
-	c:number;
 
     /** This is the constructor for the vector
     * @param {number} x - position.x
@@ -45,7 +41,8 @@ export default class Sprite extends Vector  {
 		xx:number = 0,
 		yy:number = 0,
 		w:number = 0,
-		h:number = 0
+		h:number = 0,
+		visuals:any = {}
 		) {
 
 		super();
@@ -60,10 +57,26 @@ export default class Sprite extends Vector  {
 		this.yy = yy;
 		this.w = w;
 		this.h = h;
+		this.visuals = visuals;
 
 		return (this:any);
     };
 
-};
+	draw(){
 
-window.Sprite = Sprite;
+		this.visuals.image_part(
+			this.img,
+			this.position.x,
+			this.position.y,
+			this.s,
+			this.a,
+			this.c,
+			this.xx,//+this.off.x*16,
+			this.yy,//+this.off.y*16,
+			this.w,
+			this.h
+		);
+
+	}
+
+};

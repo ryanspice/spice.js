@@ -6,6 +6,7 @@ import StatsBuffer from '../base/stats';
 
 import Circle from "../math/circle";
 import Sprite from "../api/sprite";
+import Tile from "../api/tile";
 
 import APICore from "./api-core";
 
@@ -15,6 +16,7 @@ import type {
 	IApi,
 	IVisuals,
 	IVector,
+	ITile,
 	IStatsBuffer,
 	ICircle
 
@@ -442,11 +444,13 @@ export default class API extends APICore {
 		* @method
 		*  */
 
-        text_shadow(blur,x,y,colour):void {
+        text_shadow(blur:any,x:any,y:any,colour:any):void {
+
             this.buffer_context.shadowColor = colour;
             this.buffer_context.shadowBlur = blur;
             this.buffer_context.shadowOffsetX = x;
             this.buffer_context.shadowOffsetY = y;
+
         }
 
 		/** Draws text to the canvas
@@ -770,6 +774,7 @@ export default class API extends APICore {
 				*  */
 
 		        screen_fill(a,colour){
+
 		            this.checkValues(0,0,1,1,1,a,1,colour,'');
 
 		            this.buffer_context.beginPath();
@@ -783,11 +788,13 @@ export default class API extends APICore {
 		        }
 
 		        image_count:number = 0;
-				/** Draws text without restrictions set by scaling
+
+				/** IMAGE ELEMENT HTML
 				* @method
 				*  */
 
 		        image_element(image){
+
 		            this.elm = document.createElement("image");
 		            this.elm.draw = function(image,x,y,s,loc,xscale,yscale,a,c) {
 		                var s = this.style;
@@ -805,7 +812,9 @@ export default class API extends APICore {
 		            this.elm.src = image.src;
 		            return this.elm;
 		            //(this.stat.c)?this.buffer_context.drawImage(image,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+
 		        }
+
 				/** Draws text without restrictions set by scaling
 				* @method
 				*  */
@@ -888,11 +897,6 @@ export default class API extends APICore {
 				HTMLCanvasElement.prototype.getContext = getSmoothContext ;
 
 
-
-
-
-
-
 				*  */
 
 		        image_ext(image,x,y,s,a,c){
@@ -951,6 +955,7 @@ export default class API extends APICore {
 
 		        image_flip(x,y){
 
+					this.drawBufferedSprites();
 		            this.checkValues(x,y,1,1,1,1,1);
 		            this.buffer_context.save();
 		            this.buffer_context.scale(-1, 1);
@@ -978,30 +983,29 @@ export default class API extends APICore {
 				* @method
 				*  */
 
+				/*
+				image_part(image,x,y,s,a,c,xx,yy,w,h){
 
-/*
-		        image_part(image,x,y,s,a,c,xx,yy,w,h){
 
+				this.checkValues(x,y,w,h,s,a,c);
 
-		            this.checkValues(x,y,w,h,s,a,c);
-
-					this.buffer_context.oImageSmoothingEnabled = false;
-					this.buffer_context.mozImageSmoothingEnabled = false;
-				    this.buffer_context.webkitImageSmoothingEnabled = false;
-				    this.buffer_context.msImageSmoothingEnabled = false;
-				    this.buffer_context.imageSmoothingEnabled = false;
-
+				this.buffer_context.oImageSmoothingEnabled = false;
+				this.buffer_context.mozImageSmoothingEnabled = false;
+				this.buffer_context.webkitImageSmoothingEnabled = false;
+				this.buffer_context.msImageSmoothingEnabled = false;
+				this.buffer_context.imageSmoothingEnabled = false;
 
 
 
 
 
-		            //var scale = (1.1*this.stat.s)*this.app.getScale();
 
-		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
-					this.opacity(1);
+				//var scale = (1.1*this.stat.s)*this.app.getScale();
+
+				(this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+				this.opacity(1);
 				}
-*/
+				*/
 
 		        image_part_flip(image,x,y,s,a,c,xx,yy,w,h){
 		            this.checkValues(x,y,w,h,s,a,c);
@@ -1017,6 +1021,7 @@ export default class API extends APICore {
 				*  */
 
 		        image_part_rotate(image,x,y,s,a,c,xx,yy,w,h,angle){
+
 		            this.checkValues(x,y,w,h,s,a,c);
 
 		            //var scale = (1.1*this.stat.s)*this.app.getScale();
@@ -1034,6 +1039,7 @@ export default class API extends APICore {
 				*  */
 
 		        image_rotate(image,x,y,s,angle,a,xoff,yoff){
+
 		                if (typeof image == 'undefined')
 		                    image = new Image(),////console.log('Image fialed to render');
 		            this.checkValues(x,y,image.width,image.height,s,a,true);
@@ -1042,7 +1048,9 @@ export default class API extends APICore {
 		            (this.stat.c)?this.buffer_context.drawImage(image,0-Math.floor(this.stat.w/2),0-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,0,0,this.stat.w,this.stat.h);
 		            this.buffer_context.rotate(-angle*0.0174532925);
 		            this.buffer_context.translate(-this.stat.x,-this.stat.y);
+
 		        }
+
 				/**
 				* @method
 				*  */
@@ -1267,8 +1275,7 @@ export default class API extends APICore {
 
 		        /*  ^ IMAGE BUTTON LEGACY TAKE OUT ^ */
 
-
-
+				/* LINE API */
 
 		        line2(vec:IVector,vec2:IVector,col:any,a:number,free:boolean){
 
@@ -1315,8 +1322,9 @@ export default class API extends APICore {
 		        }
 
 		        triangle(x0:number,y0:number,x1:number,y1:number,x2:number,y2:number,col:any,col2:any,width:number){
-		        //this.buffer_context.fillStyle = col;
-		        //this.buffer_context.strokeStyle = col2;
+
+			        //this.buffer_context.fillStyle = col;
+			        //this.buffer_context.strokeStyle = col2;
 		            this.colour(col,col2);
 		            this.buffer_context.lineWidth = width;
 		            this.buffer_context.moveTo(x0,y0); // give the (x,y) coordinates
@@ -1330,6 +1338,7 @@ export default class API extends APICore {
 		        }
 
 		        quadraticCurve(x:number,y:number,x2:number,y2:number,a:number,col:any){
+
 		            var t = this.buffer_context.strokeStyle;
 		            var tF = this.buffer_context.fillStyle;
 		            this.checkValues(x,y,1,1,1,a,true,col);
@@ -1345,6 +1354,10 @@ export default class API extends APICore {
 		            this.buffer_context.strokeStyle = t;
 		            this.buffer_context.fillStyle = tF;
 		        }
+
+
+
+
 
 		        /* visuals.paths */
 	/*
@@ -1432,7 +1445,7 @@ export default class API extends APICore {
 					let lastPriority = 0;
 					this.PriorityRegistry = this.PriorityRegistry.sort((a,b)=>{return a.priority>b.priority;});
 					this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h));
-					this.PriorityRegistry = [];
+					//this.PriorityRegistry = [];
 				}
 
 				drawBufferedSpritesNewPosition = (f:any) => {
@@ -1459,6 +1472,34 @@ export default class API extends APICore {
 		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					this.opacity(1);
 				}
+
+				/* Private for MapMaker and loading maps
+				*	use import instead
+				*/
+
+				createClassList:any = {
+
+					'Tile':Tile
+
+				};
+
+				createMapObject(
+					type:string,
+					img:HTMLImageElement = new Image(),
+					x: number = 0,
+					y: number = 0,
+					s:number = 1,
+					a:number = 1,
+					c:number = 0,
+					xx:number = 0,
+					yy:number = 0,
+					w:number = 0,
+					h:number = 0) {
+
+					return this.appendNew(new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
+
+				};
+
 
 		        /**
 				/* CIRCLE TEST
@@ -1531,7 +1572,6 @@ export default class API extends APICore {
 				/* END CIRCLE TEST
 
 				*/
-
 
 				//region unused
 
@@ -2003,18 +2043,3 @@ export default class API extends APICore {
 
 	//endregion
 }
-
-/*
-class Tile  {
-	constructor(img,visuals){
-		this.img = img;
-		this.visuals = visuals;
-	}
-	draw(){
-
-		this.visuals.image_part(this.img,0,0,1,1,false,0,0,18,18);
-
-
-	}
-}
-*/

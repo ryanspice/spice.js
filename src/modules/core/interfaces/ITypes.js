@@ -594,6 +594,24 @@ export type IVector = {
 
 }
 
+export type ISprite<IVector> = {
+
+	x:number;
+	y:number;
+	position:any;
+	+Difference:Function;
+	+equals:Function;
+	+sum:Function;
+	+multiply:Function;
+	+offset:Function;
+
+}
+
+export type ITile<ISprite> = {
+
+
+}
+
 export type IScaler = {
 	x:number;
 	y:number;

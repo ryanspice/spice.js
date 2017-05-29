@@ -28,6 +28,12 @@
 			}
 		}
 
+		class Ground {
+
+
+
+		}
+
 			var _App = ((SpiceJS.create()).OnLoad = function (self) {
 
 				var width = 400;
@@ -41,10 +47,17 @@
 					for(var i = 2; i>0; i--)
 						this.visuals.Circle(window.innerWidth/3,100,3,"#A9CCE3",1);
 						*/
-						this.snow = this.graphics.load("../snow-expansion");
+						this.snow = this.graphics.load("../tiles_packed");
 
 						this.tiles = [];
 						let s = 16;
+
+						let i = 16;
+						let t = i;
+						while(i-->=0)
+						this.tiles.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));
+
+/*
 
 						this.tiles.push(new Tile(this.snow,this.visuals,0*s,0*s,1,4));
 						this.tiles.push(new Tile(this.snow,this.visuals,1*s,0*s,1,4));
@@ -56,13 +69,14 @@
 
 						this.tiles.push(new Tile(this.snow,this.visuals,1*s,1*s,1,4));
 						this.tiles.push(new Tile(this.snow,this.visuals,2*s,2*s,1,4));
+						*/
 					},draw:function(){
-
+						/*
 						for(let i = 0; i<=this.tiles.length-1;i++){
 
 							this.tiles[i].draw();
 
-						}
+						}*/
 
 						//this.visuals.blid()
 						/*
