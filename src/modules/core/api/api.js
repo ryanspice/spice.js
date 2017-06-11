@@ -1426,11 +1426,15 @@ export default class API extends APICore {
 
 				PriorityRegistry:Array<any> = [];
 
+				/* Appends a newly created sprite to the registroy */
+
 				appendNew = (toRegister:any)=> {
 
 					return this.PriorityRegistry.push(toRegister);
 					//return this.PriorityRegistry[this.PriorityRegistry.length-1];
 				}
+
+				/* Calls the draw function of the array, passing itself in */
 
 				drawArray = (array:any, func:Function)=> {
 
@@ -1448,10 +1452,10 @@ export default class API extends APICore {
 					this.pr = this.PriorityRegistry.slice();
 					this.PriorityRegistry = this.PriorityRegistry.sort((a:any,b:any):any=>{return a.priority>b.priority;});
 					this.drawArray(this.PriorityRegistry, sprite => {
-						console.log(sprite);
+						//console.log(sprite);
 						switch(sprite.type){
 
-							case 'Circle':
+							case 'circle':
 							((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col);
 
 							break;
@@ -1515,16 +1519,21 @@ export default class API extends APICore {
 
 				createClassList:any = {
 
-					'Tile':Tile
+					'Tile':Tile,
+					'Circle':Circle
 
 				};
 
+				/* Used to instanciate a map object based on type.
+				*	MapEditor
+				*/
+
 				createMapObject(
 					type:string,
-					img:HTMLImageElement = new Image(),
+					img:HTMLImageElement|number = new Image(),
 					x: number = 0,
 					y: number = 0,
-					s:number = 1,
+					s:number|string = 1,
 					a:number = 1,
 					c:number = 0,
 					xx:number = 0,
@@ -1533,9 +1542,41 @@ export default class API extends APICore {
 					h:number = 0) {
 
 					let item;
-					this.appendNew(item = new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
+					switch(type){
+
+						case this.createClassList.Circle:
+
+						this.appendNew(item = new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
+
+						break;
+
+						default:
+
+						this.appendNew(item = new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
+
+						break;
+
+					}
 					return item;
 				};
+
+				/*Use to push unpublished objects to buffer
+					ex. new Circle(10,10,10,"#FFFFFF",1,null)
+						where null for optional .visuals
+				*/
+
+				push(a:any){//totype
+
+					this.appendNew(a);
+
+					return a;
+				}
+
+				Tile(img:HTMLImageElement = new Image(),	x: number = 0,	y: number = 0,	s:number = 1,	a:number = 1,	c:number = 0,	xx:number = 0,	yy:number = 0,	w:number = 0,	h:number = 0,	visuals?:IVisuals):any {
+					let item;
+					this.appendNew(item = new Tile(img,x,y,s,a,c,xx,yy,w,h,visuals));
+					return item;
+				}
 
 		        /**
 				/* CIRCLE TEST
@@ -1549,10 +1590,10 @@ export default class API extends APICore {
 
 		        */
 
-				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:void|number = 1):number {
-
-					return this.appendNew(new Circle(x,y,r,col,a));
-
+				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:void|number = 1):any {
+					let item;
+					this.appendNew(item = new Circle(x,y,r,col,a));
+					return item;
 				}
 
 		        circle(XVec:number|IVector,YR:number,RC:number,CA:any,A:any){

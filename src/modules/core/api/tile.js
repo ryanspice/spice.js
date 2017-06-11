@@ -1,5 +1,10 @@
 /* @flow */
 
+import {
+	_EXPOSURE_,
+	_IS_PROD_
+} from "../../../config";
+
 import Vector from "../math/vector";
 
 import Sprite from "./sprite";
@@ -42,7 +47,7 @@ export default class Tile extends Sprite  {
 		yy:number = 0,
 		w:number = 0,
 		h:number = 0,
-		visuals:any = {}
+		visuals?:IVisuals
 		) {
 
 		super();
@@ -59,6 +64,12 @@ export default class Tile extends Sprite  {
 		this.h = h;
 		this.visuals = visuals;
 
+
+
+				this.visuals = visuals;
+				if (this.visuals)
+				if (this.visuals.appendNew)
+					this.visuals.appendNew(this);
 		return (this:any);
     };
 
@@ -80,3 +91,9 @@ export default class Tile extends Sprite  {
 	}
 
 };
+
+if ((_EXPOSURE_)&& (_IS_PROD_ == false)){
+
+	window.Tile = Tile;
+
+}

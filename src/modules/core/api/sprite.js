@@ -30,6 +30,7 @@ export default class Sprite extends Vector  {
 	a:number;
 	c:number;
 
+
     /** This is the constructor for the vector
     * @param {number} x - position.x
     * @param {number} y - position.y
@@ -60,6 +61,7 @@ export default class Sprite extends Vector  {
 		this.yy = yy;
 		this.w = w;
 		this.h = h;
+
 
 		return (this:any);
     };
