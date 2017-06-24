@@ -34,6 +34,8 @@ export default class Vector extends WeakMapThingy {
     position:IVector;
 	_x:number;
 	_y:number;
+	_position:Array<any> = [0,0];
+
 
 	 /** Set Vector private variables
      * @type {Object}
@@ -79,7 +81,8 @@ export default class Vector extends WeakMapThingy {
 
     get x():number {
 
-        return this._x;
+        //return this._x;
+        return this._position[0];
 
     }
 
@@ -94,7 +97,8 @@ export default class Vector extends WeakMapThingy {
 
     set x(value:number):void {
 
-        this._x = value;
+        //this._x = value;
+        this._position[0] = value;
 
     }
 
@@ -105,7 +109,8 @@ export default class Vector extends WeakMapThingy {
 
     get y():number {
 
-        return this._y;
+        //return this._y;
+        return this._position[1];
 
     }
 
@@ -119,7 +124,8 @@ export default class Vector extends WeakMapThingy {
 
     set y(value:number):void {
 
-        this._y = value;
+        //this._y = value;
+        this._position[1] = value;
 
     }
 

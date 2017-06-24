@@ -113,7 +113,6 @@ export type ICircle = {
 	r:number;
 	col?:any;
 	a?:number;
-
 }
 
 
@@ -197,7 +196,7 @@ export type IVisuals = {
 	a?:number;
 
 
-
+	appendNew:any;
 	flip(s:number):void;
 }
 

@@ -23,7 +23,8 @@ import type {
 } from '../interfaces/ITypes';
 
 import {
-	RequestAnimationFrame
+	RequestAnimationFrame,
+	sortBy
 } from "../../utils";
 
 /* This API class extends the canvas drawing api calls, including buffering */
@@ -1425,11 +1426,16 @@ export default class API extends APICore {
 
 
 				PriorityRegistry:Array<any> = [];
+				PriorityRegistryFlags:Object = {
+
+					sort:false
+
+				}
 
 				/* Appends a newly created sprite to the registroy */
 
 				appendNew = (toRegister:any)=> {
-
+					this.PriorityRegistryFlags.sort = true;
 					return this.PriorityRegistry.push(toRegister);
 					//return this.PriorityRegistry[this.PriorityRegistry.length-1];
 				}
@@ -1445,12 +1451,23 @@ export default class API extends APICore {
 
 				pr:any = [];
 
+				sortPriorityRegistry = ():void => {
+
+					if (this.PriorityRegistryFlags.sort == true){
+						this.PriorityRegistry = sortBy(this.PriorityRegistry,(o)=>{return -o.priority;});
+						this.PriorityRegistryFlags.sort = false;
+					}
+
+				}
+
 				drawBufferedSprites = () => {
 
 					//this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.c));
 					//let lastPriority = 0;
 					this.pr = this.PriorityRegistry.slice();
-					this.PriorityRegistry = this.PriorityRegistry.sort((a:any,b:any):any=>{return a.priority>b.priority;});
+
+					this.sortPriorityRegistry();
+
 					this.drawArray(this.PriorityRegistry, sprite => {
 						//console.log(sprite);
 						switch(sprite.type){
@@ -1544,9 +1561,10 @@ export default class API extends APICore {
 					let item;
 					switch(type){
 
-						case this.createClassList.Circle:
+						case 'Circle':
 
-						this.appendNew(item = new this.createClassList[type](img,x,y,s,a,c,xx,yy,w,h,this));
+						//Actual values x,y,r,col,a,visuals
+						this.appendNew(item = new this.createClassList[type](img,x,y,s,a,this));
 
 						break;
 
@@ -1557,6 +1575,7 @@ export default class API extends APICore {
 						break;
 
 					}
+
 					return item;
 				};
 

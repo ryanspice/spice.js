@@ -4,7 +4,7 @@
   "description": "SpiceJS - Html5 Canvas API Framework",
   "main": "./src/spice.js",
   "scripts": {
-	"flow": "flow",
+    "flow": "flow",
     "start": "webpack-dev-server --hot --inline --port=3333",
     "watch": "webpack --watch",
     "production": "webpack -env",
@@ -53,8 +53,9 @@
     "jszip": "^2.5.0",
     "jszip-utils": "0.0.2",
     "style-loader": "^0.13.0",
-    "webpack": "^2.2.1",
-    "webpack-closure-compiler": "^2.1.2"
+    "webpack": "^3.0.0",
+    "webpack-closure-compiler": "^2.1.2",
+    "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
     "html-webpack-plugin": "^1.7.0",

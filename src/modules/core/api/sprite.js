@@ -1,12 +1,16 @@
 /* @flow */
+import * as config from "../../../config";
 
 import Vector from "../math/vector";
 
 import type {
 
-	IVector
+	IVector,
+	IVisuals
 
 } from "../interfaces/ITypes";
+
+
 
 /** Basic Circle class
 */
@@ -19,7 +23,7 @@ export default class Sprite extends Vector  {
 	type:string = "_image_part";
 
 	img:HTMLImageElement;
-	priority:number = 1;
+	priority:number = 0;
 
 	xx:number;
 	yy:number;
@@ -30,6 +34,7 @@ export default class Sprite extends Vector  {
 	a:number;
 	c:number;
 
+	visuals:IVisuals|null;
 
     /** This is the constructor for the vector
     * @param {number} x - position.x
@@ -46,7 +51,8 @@ export default class Sprite extends Vector  {
 		xx:number = 0,
 		yy:number = 0,
 		w:number = 0,
-		h:number = 0
+		h:number = 0,
+		visuals:any
 		) {
 
 		super();
@@ -62,10 +68,20 @@ export default class Sprite extends Vector  {
 		this.w = w;
 		this.h = h;
 
+		this.visuals = visuals;
+
+		this.visuals = visuals;
+		if (this.visuals)
+		if (this.visuals.appendNew)
+			this.visuals.appendNew(this);
 
 		return (this:any);
     };
 
 };
 
-window.Sprite = Sprite;
+if ((config._EXPOSURE_)&& (config._IS_PROD_ == false)){
+
+	window.Sprite = Sprite;
+
+}

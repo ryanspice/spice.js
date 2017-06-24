@@ -12,7 +12,7 @@
 
 		<script  type="application/x-javascript" defer>
 
-		class Ground {
+		class Ground extends Tile {
 
 
 
@@ -47,29 +47,19 @@
 						this.items.push	(new Circle(100,150,10,"#FFFFFF",1,this.visuals));
 
 
-
 						this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);
-
 						this.visuals.Tile(this.snow,100+t*i,125,1,1,1,0,0,16,16);
+						this.visuals.push(new Ground(this.snow,50+t*i,150,1,1,1,0,0,16,16));
+						new Ground(this.snow,50+t*i,200,1,1,1,0,0,16,16,this.visuals);
 
-						this.visuals.push(new Tile(this.snow,50+t*i,150,1,1,1,0,0,16,16));
-						new Tile(this.snow,50+t*i,200,1,1,1,0,0,16,16,this.visuals);
-
-						i = 0;
-						t = i;
-						//while(i-->=0)
-						//this.items.push(this.visuals.Circle(100,100,10,"#FFFFFF",1));
+						this.player = new Circle(0,0,25,"#FF0000",1,this.visuals);
+						this.player.priority = 3;
 
 					},draw:function(){
 
 
 						//this.visuals._image_part(this.snow,0,0,1,1,1,0,0,10,10);
 
-						for(let i = 0; i<=this.items.length-1;i++){
-
-							this.items[i].y = this.items[i].y+ Math.sin(new Date().getTime()/300+this.items[i].x/100)*1;
-
-						}
 						//this.visuals.blid()
 						/*
 
@@ -99,6 +89,25 @@
 				*/
 				},update:function(){
 
+
+
+					if (this.player.y<200)
+					this.player.y+=1.1;
+					if (this.app.input.duration)
+						this.player.x++;
+				//	if (this.app.input.pressed)
+					//	this.player.y/=1.1;
+
+
+					for(let i = 0; i<=this.items.length-1;i++){
+						let y = this.items[i].y = this.items[i].y+ Math.sin(new Date().getTime()/300+this.items[i].x/100)*1;
+						let x = this.items[i].x;
+
+						if (y-20<this.player.y)
+						if (x-25<this.player.x)
+						if (x+25>this.player.x)
+							this.player.y = y-20;
+					}
 
 
 				}};

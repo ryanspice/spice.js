@@ -22,11 +22,13 @@ export default class Circle extends Vector  {
 	static onConstructor:Function = ()=>{};
 	static count:number = 0;
 
+	priority:number = 0;
 	type:string = "circle";
 	r:number;
 	col:any;
 	a:number;
 	_id = Circle.count++;
+	visuals:any;
 
     /** This is the constructor for the vector
     * @param {number} x - position.x
@@ -56,23 +58,6 @@ export default class Circle extends Vector  {
 
 		return (this:ICircle);
     };
-
-		draw(){
-
-			this.visuals.image_part(
-				this.img,
-				this.position.x,
-				this.position.y,
-				this.s,
-				this.a,
-				this.c,
-				this.xx,//+this.off.x*16,
-				this.yy,//+this.off.y*16,
-				this.w,
-				this.h
-			);
-
-		}
 
 }
 
