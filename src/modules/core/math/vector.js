@@ -1,5 +1,7 @@
 /* @flow */
 
+import * as config from "../../../config";
+
 import type {
 	IVector
 } from "../interfaces/ITypes";
@@ -150,6 +152,19 @@ export default class Vector extends WeakMapThingy {
 
     //toString() { return `Point<${ this.#x },${ this.#y }>` }
 
+
+	/**
+	* @method
+	*/
+
+	static Combine(a:IVector,b:IVector):IVector {
+
+		let x = a.x + b.x;
+		let y = a.y + b.y;
+
+		return new Vector(x,y);
+	}
+
 	/**
 	* @method
 	*/
@@ -211,5 +226,11 @@ export default class Vector extends WeakMapThingy {
 
         return this;
     }
+
+}
+
+if ((config._EXPOSURE_)&& (config._IS_PROD_ == false)){
+
+	window.Vector = Vector;
 
 }

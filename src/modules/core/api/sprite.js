@@ -1,29 +1,34 @@
 /* @flow */
+
 import * as config from "../../../config";
 
 import Vector from "../math/vector";
 
 import type {
 
+	ISprite,
 	IVector,
 	IVisuals
 
 } from "../interfaces/ITypes";
 
+/**/
 
-
-/** Basic Circle class
-*/
-export default class Sprite extends Vector  {
+export default class Sprite<ISprite> extends Vector  {
 
 	static onConstructor:Function = ()=>{};
 	static count:number = 0;
+
+	rotate:number = 150;
+	degrees:number = 0;
 
 	_id = Sprite.count++;
 	type:string = "_image_part";
 
 	img:HTMLImageElement;
 	priority:number = 0;
+
+
 
 	xx:number;
 	yy:number;
@@ -55,11 +60,10 @@ export default class Sprite extends Vector  {
 		visuals:any
 		) {
 
-		super();
+		super(x,y);
 
 		this.img = img;
-		this.x = x;
-		this.y = y;
+
 		this.s = s;
 		this.a = a;
 		this.c = c;
@@ -77,6 +81,19 @@ export default class Sprite extends Vector  {
 
 		return (this:any);
     };
+
+	/**
+	* @method
+	*/
+
+	Move(x:number|IVector,y?:number):void {
+
+		if (typeof x == "object")
+		this.position = Vector.Combine(x,this.position);
+		else
+		this.position = Vector.Combine(new Vector(x,y),this.position);
+
+	};
 
 };
 

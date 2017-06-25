@@ -24,7 +24,7 @@
 				var height =300;
 
 				self.main = {init:function(){
-
+					this.velocity = new Vector(-0.1,0);
 
 					/*
 					this.visuals.bleed = 0.1175;
@@ -91,10 +91,10 @@
 
 
 
-					if (this.player.y<200)
-					this.player.y+=1.1;
+					//if (this.player.y<200)
+					//this.player.y+=1.1;
 					if (this.app.input.duration)
-						this.player.x++;
+						this.velocity.x+=0.1;
 				//	if (this.app.input.pressed)
 					//	this.player.y/=1.1;
 
@@ -105,9 +105,20 @@
 
 						if (y-20<this.player.y)
 						if (x-25<this.player.x)
-						if (x+25>this.player.x)
-							this.player.y = y-20;
+						if (x+25>this.player.x){
+								if (this.velocity.y>0)
+								this.velocity.y=0;
+								this.velocity.y-=0.025;//this.player.Move(0,-20+y-this.player.y);
+						}
 					}
+
+					if (this.velocity.y<1)
+						this.velocity.y +=0.025;
+
+						this.velocity.x*=0.9;
+
+					this.player.Move(this.velocity);
+					this.player.r = 20 - this.velocity.y;
 
 
 				}};

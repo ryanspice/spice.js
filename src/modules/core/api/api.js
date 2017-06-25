@@ -1022,7 +1022,6 @@ export default class API extends APICore {
 				*  */
 
 		        image_part_rotate(image,x,y,s,a,c,xx,yy,w,h,angle){
-
 		            this.checkValues(x,y,w,h,s,a,c);
 
 		            //var scale = (1.1*this.stat.s)*this.app.getScale();
@@ -1479,7 +1478,7 @@ export default class API extends APICore {
 
 							default:
 
-							((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h);
+							((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h,sprite.degrees);
 
 						}
 					});
@@ -1501,6 +1500,7 @@ export default class API extends APICore {
 
 				image_part(image:HTMLImageElement,x:number,y:number,s:number,a:number,c:number,xx:number,yy:number,w:number,h:number) {
 
+					////USE SPRITE FROM A SPRITE REGISTRY: TODO
 					this.appendNew(new Sprite(image,x,y,s,a,c,xx,yy,w,h));
 					//this._image_part(image,x,y,s,a,c,xx,yy,w,h);
 				}

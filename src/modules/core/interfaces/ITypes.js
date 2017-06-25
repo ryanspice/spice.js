@@ -604,6 +604,8 @@ export type ISprite<IVector> = {
 	+multiply:Function;
 	+offset:Function;
 
+	Move(x:number|IVector,y?:number):void;
+
 }
 
 export type ITile<ISprite> = {

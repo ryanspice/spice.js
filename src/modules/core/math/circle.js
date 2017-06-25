@@ -5,6 +5,7 @@ import {
 	_IS_PROD_
 } from "../../../config";
 
+import Sprite from "../api/sprite";
 import Vector from "./vector";
 
 import type {
@@ -17,7 +18,7 @@ import type {
 /** Basic Circle class
 */
 
-export default class Circle extends Vector  {
+export default class Circle extends Sprite  {
 
 	static onConstructor:Function = ()=>{};
 	static count:number = 0;
