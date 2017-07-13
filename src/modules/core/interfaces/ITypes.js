@@ -110,9 +110,10 @@ export type ICircle = {
 
 	x:number;
 	y:number;
+
 	r:number;
 	col?:any;
-	a?:number;
+	a:number;
 }
 
 

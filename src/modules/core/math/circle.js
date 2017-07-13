@@ -41,7 +41,7 @@ export default class Circle extends Sprite  {
 		y: number = 0,
 		r:number = 1,
 		col:any = 1,
-		a:any = 1,
+		a:number = 1,
 		visuals:any
 		) {
 
@@ -54,6 +54,7 @@ export default class Circle extends Sprite  {
 		this.a = a;
 
 		this.visuals = visuals;
+
 		if (this.visuals)
 			this.visuals.appendNew(this);
 
