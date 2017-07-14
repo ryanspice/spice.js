@@ -254,20 +254,23 @@ export default class Input extends inputcontroller {
 
         }
 
-                // Pause and resume on page becoming visible/invisible
-        function onVisibilityChanged() {
-            if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden)
-                setSuspended(true);
-            else
-                setSuspended(false);
-        };
 
-        doc.addEventListener("visibilitychange", onVisibilityChanged, false);
-        doc.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
-        doc.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
-        doc.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+        doc.addEventListener("visibilitychange", this.onVisibilityChanged, false);
+        //doc.addEventListener("mozvisibilitychange", this.onVisibilityChanged, false);
+        //doc.addEventListener("webkitvisibilitychange", this.onVisibilityChanged, false);
+        //doc.addEventListener("msvisibilitychange", this.onVisibilityChanged, false);
 
     }
+
+	onVisibilityChanged(){
+		console.log('eh')
+		if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden)
+			setSuspended(true);
+		else
+			setSuspended(false);
+
+	}
+
 
     setup_universalMultitouch(){
 

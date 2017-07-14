@@ -1041,7 +1041,7 @@ export default class API extends APICore {
 		        image_rotate(image,x,y,s,angle,a,xoff,yoff){
 
 		                if (typeof image == 'undefined')
-		                    image = new Image(),////console.log('Image fialed to render');
+		                    image = new Image(),console.log('Image fialed to render');
 		            this.checkValues(x,y,image.width,image.height,s,a,true);
 		            this.buffer_context.translate(this.stat.x,this.stat.y);
 		            this.buffer_context.rotate(angle*0.0174532925);
@@ -1476,10 +1476,15 @@ export default class API extends APICore {
 
 							break;
 
+
 							default:
 
-							((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h,sprite.degrees);
+							if (!sprite.visuals)
+								((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h,sprite.degrees);
+							else
+								sprite.draw();
 
+							break;
 						}
 					});
 

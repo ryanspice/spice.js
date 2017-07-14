@@ -8,22 +8,6 @@ import type {
 
 import WeakMapThingy from '../base/thingy';
 
-/** Vector2
-* @module
-* @access public
-* @example let vector = new Math.Vector2(1,1); */
-/*
-export class Vector2 extends WeakMapThingy<IVector> {
-
-    static properties:object = { name:'Vector2',x:0, y:0 };
-
-    constructor(x:number = 0, y:number = 0){
-        super(new weakmap());
-        this.position = {x ,y};
-    };
-
-}
-*/
 /** Vector
 * @module
 * @access public
@@ -33,11 +17,8 @@ export class Vector2 extends WeakMapThingy<IVector> {
 
 export default class Vector extends WeakMapThingy {
 
-    position:IVector;
-	_x:number;
-	_y:number;
-	_position:Array<any> = [0,0];
-
+	_s:number;
+	_position:Array<number> = [0,0];
 
 	 /** Set Vector private variables
      * @type {Object}
@@ -47,6 +28,21 @@ export default class Vector extends WeakMapThingy {
         name:"Vector",
         x:null,
         y:null
+    };
+
+    /** This is the constructor for the vector
+    * @param {number} x - position.x
+    * @param {number} y - position.y */
+
+    constructor(x: number = 0,y: number = 0) {
+
+        super(new WeakMap());
+
+		this.position.x = x;
+
+		this.position.y = y;
+
+		return (this:IVector);
     };
 
     /**
@@ -83,7 +79,6 @@ export default class Vector extends WeakMapThingy {
 
     get x():number {
 
-        //return this._x;
         return this._position[0];
 
     }
@@ -98,8 +93,7 @@ export default class Vector extends WeakMapThingy {
     */
 
     set x(value:number):void {
-
-        //this._x = value;
+		
         this._position[0] = value;
 
     }
@@ -131,20 +125,32 @@ export default class Vector extends WeakMapThingy {
 
     }
 
-    /** This is the constructor for the vector
-    * @param {number} x - position.x
-    * @param {number} y - position.y */
+    /**
+    * Get s position
+    * @type {Number}
+    */
 
-    constructor(x: number = 0,y: number = 0) {
+    get s():number {
 
-        super(new WeakMap());
+        //return this._y;
+        return this._s;
 
-		this.position.x = x;
+    }
 
-		this.position.y = y;
+    /**
+    * Set s position
+    * @type {Number}
+    * @example
+    * var PointA = new Vector(2,1);
+    * PointA.y = 2;
+    */
 
-		return (this:IVector);
-    };
+    set s(value:number):void {
+
+        //this._y = value;
+        this._s = value;
+
+    }
 
 	/**
 	* @method
@@ -205,8 +211,8 @@ export default class Vector extends WeakMapThingy {
 
     multiply(a:number, b:number):IVector {
 
-        this._x *= a;
-        this._y *= b;
+        this._position[0] *= a;
+        this._position[1] *= b;
 
         return this;
     }
@@ -221,8 +227,8 @@ export default class Vector extends WeakMapThingy {
 
     offset(a:number, b:number):IVector {
 
-        this._x += a;
-        this._y += b;
+        this._position[0] += a;
+        this._position[1] += b;
 
         return this;
     }

@@ -24,15 +24,25 @@ export default class Tile extends Sprite  {
 
 	_id = Tile.count++;
 	type:string = "_image_part";
+	//type:string = "tile";
 
 	off:IVector = new Vector(0,0);
 	size:IVector = new Vector(0,0);
 
 	priority = 0;
-    /** This is the constructor for the vector
+
+    /** This is the constructor for the tile
+    * @param {img} img - Image used for blitting
     * @param {number} x - position.x
     * @param {number} y - position.y
-    * @param {number} r - radius */
+    * @param {number} s -
+    * @param {number} a -
+    * @param {number} c -
+    * @param {number} xx -
+    * @param {number} yy -
+    * @param {number} w -
+    * @param {number} h -
+    * @param {IVisuals} visuals - visuals */
 
     constructor(
 		img:HTMLImageElement = new Image(),

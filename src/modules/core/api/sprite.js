@@ -6,8 +6,7 @@ import Vector from "../math/vector";
 
 import type {
 
-	ISprite,
-	IVector,
+ 	IVector,
 	IVisuals
 
 } from "../interfaces/ITypes";
@@ -28,14 +27,11 @@ export default class Sprite<ISprite> extends Vector  {
 	img:HTMLImageElement;
 	priority:number = 0;
 
-
-
 	xx:number;
 	yy:number;
 	w:number;
 	h:number;
 
-	s:number;
 	a:number;
 	c:number;
 
@@ -74,13 +70,34 @@ export default class Sprite<ISprite> extends Vector  {
 
 		this.visuals = visuals;
 
-		this.visuals = visuals;
 		if (this.visuals)
 		if (this.visuals.appendNew)
 			this.visuals.appendNew(this);
 
 		return (this:any);
     };
+
+	/**
+	* @method
+	*
+	*/
+
+	draw():void {
+
+		if (config._IS_PROD_) {
+			(this:any).visuals[this.type](this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h,this.degrees);
+		} else {
+
+			if (!this.visuals)
+			console.log(this._id);
+
+			if (this.visuals)
+				(this:any).visuals[this.type](this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h,this.degrees);
+				else
+				console.warn('Early Drawn',this,this._id);
+		}
+
+	}
 
 	/**
 	* @method
