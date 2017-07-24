@@ -1,6 +1,7 @@
 
 console.time('Types');
 
+import "./core/interfaces/common.types";
 
 type _NodeCallback_<E, V> = (err: ?E, value: ?V) => void;
 

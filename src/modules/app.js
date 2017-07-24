@@ -75,18 +75,22 @@ export default class App extends Core {
 
     Start(w:?number = 0, h:?number = 0):void {
 
-		this.main = Object.create(this.main);
+		(async () => {
 
-		this.canvas =  new Canvas(this);
+			this.main = await Object.create(this.main);
+			this.canvas =  await new Canvas(this);
+			this.client = await new Client(this, w || this.app.options.canvas.size.width, h || this.app.options.canvas.size.height);
+			this.input = await new _input(this);
 
-		this.client = new Client(this, w || this.app.options.canvas.size.width, h || this.app.options.canvas.size.height);
+		})().then(()=>{
 
-		//See clientJS for new implementiation with setTimeout (temporary)
-		//this.client.update.inital(this);
+			//See clientJS for new implementiation with setTimeout (temporary)
+			//this.client.update.inital(this);
 
-		this.input = new _input(this);
+			console.log('SJS:A:Loop');
+			this.Loop(this);
 
-		this.Loop(this);
+		})
 
     }
 

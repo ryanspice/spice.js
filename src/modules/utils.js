@@ -1,6 +1,9 @@
+//@flow
+
+
 export const sortBy = (function() {
 
-  const _DESC = (/^desc:\s*/i);
+  const _DESC:RegExp = (/^desc:\s*/i);
 
   // Sests whether the input value is a string and has set the flag for descending order.
   const isDesc = (v) => typeof v === 'string' && _DESC.test(v);
@@ -33,7 +36,7 @@ export const sortBy = (function() {
    * @param  {Function} parser: transforms each item and specifies the sort order
    * @return {Array}
    */
-  return function sortBy(array, parser) {
+  return function sortBy(array:Array<any>, parser:any) {
 	let i, item;
 	const arrLength = array.length;
 	if (typeof parser === 'undefined') {
@@ -56,6 +59,12 @@ export const sortBy = (function() {
 	return array;
   }
 }());
+
+interface number {
+
+	toFixedNumber:any
+
+};
 
 
 
@@ -121,7 +130,7 @@ utils.toHex = function (val) {
 
 };
 
-utils.requestAnimationFrame = ()=>{
+utils.requestAnimationFrame = async ()=>{
 
         if (!Date.now)
             Date.now = function() { return new Date().getTime(); };

@@ -75,9 +75,9 @@ export default class ClientCore extends _SJSClass {
 
 		this.graphics = new Graphics(this.app);
 
-		this.visuals = new Visuals(this.app);
-
 		this.ext = new Ext(this.app);
+
+		(this.visuals = new Visuals(this.app)).pollyFilledAnimationFrame();
 
 		return (this:IClientCore);
 	}

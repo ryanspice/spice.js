@@ -90,9 +90,7 @@ export default class API extends APICore {
 	    constructor(app:IApp){
 
 	        super(app);
-
-			this.pollyFilledAnimationFrame();
-
+			
 			// make sure aspect scale is correctly set in advance of first tick
 			/*if (this.fullscreen_mode >= 2)
 			{
@@ -115,7 +113,6 @@ export default class API extends APICore {
 			//}
 
 			this.log('SJS:I:Visuals');
-
 
 	    }
 
@@ -470,8 +467,9 @@ export default class API extends APICore {
 
         text_ext(string:string|number, x:number, y:number, colour:string, s:number, a:number, c:number, style:string):void {
 
-            this.checkValues(x,y,this.text_width(String(string)),s,s,a,c,colour,'');
+			let str:string = String(string);
 
+            this.checkValues(x,y,this.text_width(str),s,s,a,c,colour,'');
 
             var f = this.font('');
 
@@ -481,7 +479,7 @@ export default class API extends APICore {
 
             this.stat.h = this.point*this.stat.h;
 
-            this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2));
+            this.buffer_context.fillText(str,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2));
 
 			//(this.stat.c)?this.buffer_context.fillText(string,this.stat.x-Math.floor(this.stat.w/2)-this.stat.s,this.stat.y-Math.floor(this.stat.h/2)):this.buffer_context.fillText(string,this.stat.x,this.stat.y+Math.floor(this.stat.h/2));
 
@@ -497,11 +495,13 @@ export default class API extends APICore {
 
 		text_free(string:string|number, x:number, y:number, colour:string):void {
 
+			let str:string = String(string);
+
 			this.colour(colour);
 
 			this.font(Math.round(this.point*this.scale)+"px "+"sans-serif");
 
-			this.buffer_context.fillText(string,x-this.text_width(String(string))/2-this.point,y-this.point/2);
+			this.buffer_context.fillText(str,x-this.text_width(String(string))/2-this.point,y-this.point/2);
 
 			this.clean();
 
@@ -517,11 +517,15 @@ export default class API extends APICore {
             var f = this.font('');
             this.stat.h = this.stat.s*this.scale;
             this.font(this.stat.h+"em "+style);
-            this.stat.h = this.point*this.stat.h;
+			this.stat.h = this.point*this.stat.h;
+
             if (this.touch_within_stat(this.stat))
             {
+
+				if (this.app.input)
+				if (this.app.input.pressed)
                 this.opacity(this.stat.a-(this.app.input.pressed*0.2));
-                this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
+				//this.app.ext.cursor.set(this.app.ext.cursor.pointer,true);
                 //if (App.input.released)
                 //	if (App.input.delay<1)
                 //		loc(),App.input.delay = 1;
