@@ -69,7 +69,7 @@ export default class Sprite<ISprite> extends Vector  {
 		this.h = h;
 
 		this.visuals = visuals;
-
+		console.trace(visuals);
 		if (this.visuals)
 		if (this.visuals.appendNew)
 			this.visuals.appendNew(this);

@@ -9,15 +9,12 @@ import State from './state';
 
 import Client from './core/client';
 
-import Canvas from './core/canvas';
-
 import _input from './input/input';
 
 import type {
 
 	IApp,
 	IClient,
-	ICanvas,
 	IOptions
 
 } from './core/interfaces/ITypes';
@@ -48,8 +45,6 @@ export default class App extends Core {
 
 	client:IClient;
 
-	canvas:ICanvas;
-
 	constructor(map:WeakMap<*,*>) {
 
 		super(map);
@@ -57,42 +52,66 @@ export default class App extends Core {
 		return (this:IApp);
 	}
 
-	/** DEPRECIATED : This function starts the application.
-	* @method
-	* @override */
-
-    start(w:?number = 0, h:?number = 0):void {
-
-		console.warn('The key "start" is depreciated use "Start" instead.');
-
-		this.Start(w,h);
-
-	}
 
 	/** This function Starts the application.
+	*
 	* @method
 	* @override */
 
     Start(w:?number = 0, h:?number = 0):void {
 
-		(async () => {
-
-			this.main = await Object.create(this.main);
-			this.canvas =  await new Canvas(this);
-			this.client = await new Client(this, w || this.app.options.canvas.size.width, h || this.app.options.canvas.size.height);
-			this.input = await new _input(this);
-
-		})().then(()=>{
-
-			//See clientJS for new implementiation with setTimeout (temporary)
-			//this.client.update.inital(this);
-
-			console.log('SJS:A:Loop');
-			this.Loop(this);
-
-		})
+		this.InitalizeComponents(
+			w || this.app.options.canvas.size.width,
+			h || this.app.options.canvas.size.height
+		).then(this.InitalizeLoop);
 
     }
+
+	/** Asyncronously call Loop
+	* @method
+	* @private */
+
+	InitalizeLoop = async () => {
+
+		this.client.log('SJS:A:Loop');
+
+		this.Loop(this);
+
+	}
+
+	/** Asyncronously call client loop
+	* @method
+	* @private */
+
+	InitializeClientLoop = async (time:number) => {
+
+		this.client.loop();
+
+		this.client.loopData();
+
+		//this.time = time;
+
+	}
+
+	/** Asyncronously call secondary loop
+	* @method
+	* @private */
+
+	InitializeSecondaryLoop = async () => {
+
+	}
+
+	/** Asyncronously initialize the client passing loop functions and the scale
+	* @method
+	* @private */
+
+	FirstLoop = async () => {
+
+		this.client.log('SJS:A:FirstLoop');
+
+		this.client.initalize(this.InitializeClientLoop,this.InitializeSecondaryLoop,this.scale);
+
+	};
 
 	/** Loop of the Program
 	* @method
@@ -100,27 +119,9 @@ export default class App extends Core {
 
 	Loop(self:IApp):void {
 
-		this.client.log('Before First Loop');
+		this.client.log('SJS:A:BeforeFirstLoop');
 
-		window.requestUserIdle(() => {
-
-			this.client.log('First Loop');
-
-			this.client.initalize((time)=>{
-
-				this.client.loop();
-
-				this.client.loopData();
-
-				//this.time = time;
-
-			},(secondary)=>{
-
-				//Execute Teritary Loop Stuffs
-
-			},this.scale);
-
-		}, { timeout: this.time });
+		window.requestUserIdle(this.FirstLoop, { timeout: this.time });
 
 		return;
 	}

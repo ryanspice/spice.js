@@ -16,11 +16,14 @@ import Ext from '../ext';
 
 import Room from './base/room.js';
 
+import Canvas from './canvas';
+
 import type {
 	IApp,
 	IExt,
 	IClientCore,
 	IVisuals,
+	ICanvas,
 	IGraphics,
 	IRoom,
 	IVector
@@ -44,6 +47,8 @@ export default class ClientCore extends _SJSClass {
 	visuals:IVisuals;
 
 	graphics:IGraphics;
+
+	canvas:ICanvas;
 
 	loader:_loader = _loader;
 

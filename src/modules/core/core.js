@@ -8,6 +8,12 @@ import _math from './math/math';
 
 import legacy_core from './legacy/legacy-core';
 
+import Client from './client';
+
+import Canvas from './canvas';
+
+import _input from '../input/input';
+
 import {
 	prototype
 } from './client';
@@ -67,6 +73,8 @@ export default class Core extends legacy_core {
 
 	id:number=0;
 
+	canvas:any;
+
 	static properties:IoVersion = {
 		main:{init:()=>{},update:()=>{},draw:()=>{}},
 		version:_BUILD_OFFICIAL_ + _BUILD_LAST_,
@@ -88,6 +96,17 @@ export default class Core extends legacy_core {
 		super(app);
 
 		return (this:ICore);
+	}
+
+	/* Instanciates the core components to the app */
+
+	InitalizeComponents = async (w:number,h:number) => {
+
+		this.main = await Object.create(this.main);
+		this.canvas =  await new Canvas(this);
+		this.client = await new Client(this,w,h);
+		this.input = await new _input(this);
+
 	}
 
     /**  @type {number} */

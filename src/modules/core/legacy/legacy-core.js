@@ -30,6 +30,18 @@ export default class legacy_core<ILegacyCore> extends WeakMapThingy {
 
     }
 
+	/** DEPRECIATED : This function starts the application.
+	* @method
+	* @override */
+
+    start(w:?number = 0, h:?number = 0):void {
+
+		console.trace('The key "start" is depreciated use "Start" instead.');
+
+		(this:any).Start(w,h);
+
+	}
+
     /** Legacy functions.
     *       support for these functions is limited, and planned to be removed completely
     *        this space is primarally used for legacy funtionality
