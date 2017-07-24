@@ -1,13 +1,8 @@
 /* @flow */
 
-/** App is the main app controller, here you can access input, math, data and graphics controllers.
-*	@module */
-
-import Core from './core/core';
-
 import State from './state';
 
-import _input from './input/input';
+import Core from './core/core';
 
 import type {
 	IApp,
@@ -15,7 +10,10 @@ import type {
 	IOptions
 } from './core/interfaces/ITypes';
 
-// Duplicate in ITYPES
+declare interface Event {
+	target:AppEventTarget;
+}
+
 interface AppEventTarget extends EventTarget {
 	result:any;
     app:IApp|Object;
@@ -25,20 +23,11 @@ interface AppEvent extends Event {
     target: AppEventTarget;
 }
 
-declare interface Event {
-	target:AppEventTarget;
-}
-//END DUPLICATE IN ITYPES
-
-/* LEGACY import Particles from './particles.js'; // (unfinished) To be built into application */
-/* LEGACY window.SJSParticleController = Particles; // Temporary for snowflakes */
-
 /** Core of the framework, initalizes client, input and listeners.
 * @module
 * @protected */
 
 export default class App extends Core {
-
 
 	constructor(map:WeakMap<*,*>) {
 
@@ -178,3 +167,6 @@ export default class App extends Core {
     }
 
 }
+
+/* LEGACY import Particles from './particles.js'; // (unfinished) To be built into application */
+/* LEGACY window.SJSParticleController = Particles; // Temporary for snowflakes */

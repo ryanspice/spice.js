@@ -16,18 +16,7 @@ export type object = Object;
 
 
 //DUPLICATE IN app.js
-interface AppEventTarget extends EventTarget {
-	result:any;
-    app:IApp|Object;
-}
 
-interface AppEvent extends Event {
-    target: AppEventTarget;
-}
-
-declare interface Event {
-	target:AppEventTarget;
-}
 //END DUPLICATE IN app.js
 
 
