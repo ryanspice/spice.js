@@ -57,7 +57,7 @@ export default class Core extends legacy_core {
 
     options:IOptions = Options; /* See if we can move */
 
-	client:IClient|Object = prototype;
+	client:IClient = prototype;
 
     visuals:IVisuals; /* WIP */
 
@@ -67,6 +67,7 @@ export default class Core extends legacy_core {
 
     math:IMath = new _math(); /* WIP */
 
+	Loop:any;
     time:number = 0;
 
 	scale:number;
@@ -106,6 +107,63 @@ export default class Core extends legacy_core {
 		this.canvas =  await new Canvas(this);
 		this.client = await new Client(this,w,h);
 		this.input = await new _input(this);
+
+	}
+
+	/** Asyncronously call Loop
+	* @method
+	* @private */
+
+	InitalizeLoop = async () => {
+
+		this.client.log('SJS:A:Loop');
+
+		await this.Loop(this);
+
+	}
+
+	/** Asyncronously call client loop
+	* @method
+	* @private */
+
+	InitializeClientLoop = async (time:number) => {
+
+		this.client.loop();
+
+		this.client.loopData();
+
+		//this.time = time;
+
+	}
+
+
+	/** Asyncronously call secondary loop
+	* @method
+	* @private */
+
+	InitializeSecondaryLoop = async () => {	}
+
+	/** Asyncronously initialize the client passing loop functions and the scale
+	* @method
+	* @private */
+
+	FirstLoop = async () => {
+
+		this.client.log('SJS:A:FirstLoop');
+
+		this.client.initalize(this.InitializeClientLoop,this.InitializeSecondaryLoop,this.scale);
+
+	};
+
+	/** Asyncronously Loop of the Program
+	* @method
+	* @private */
+
+	async Loop(self:IApp) {
+
+		this.client.log('SJS:A:BeforeFirstLoop');
+
+		await window.requestUserIdle(this.FirstLoop, { timeout: this.time });
 
 	}
 

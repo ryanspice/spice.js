@@ -7,16 +7,12 @@ import Core from './core/core';
 
 import State from './state';
 
-import Client from './core/client';
-
 import _input from './input/input';
 
 import type {
-
 	IApp,
 	IClient,
 	IOptions
-
 } from './core/interfaces/ITypes';
 
 // Duplicate in ITYPES
@@ -43,7 +39,6 @@ declare interface Event {
 
 export default class App extends Core {
 
-	client:IClient;
 
 	constructor(map:WeakMap<*,*>) {
 
@@ -52,9 +47,8 @@ export default class App extends Core {
 		return (this:IApp);
 	}
 
-
-	/** This function Starts the application.
-	*
+	/**
+	*  This function Starts the application by running InitalizeComponents and then InitalizeLoop
 	* @method
 	* @override */
 
@@ -66,65 +60,6 @@ export default class App extends Core {
 		).then(this.InitalizeLoop);
 
     }
-
-	/** Asyncronously call Loop
-	* @method
-	* @private */
-
-	InitalizeLoop = async () => {
-
-		this.client.log('SJS:A:Loop');
-
-		this.Loop(this);
-
-	}
-
-	/** Asyncronously call client loop
-	* @method
-	* @private */
-
-	InitializeClientLoop = async (time:number) => {
-
-		this.client.loop();
-
-		this.client.loopData();
-
-		//this.time = time;
-
-	}
-
-	/** Asyncronously call secondary loop
-	* @method
-	* @private */
-
-	InitializeSecondaryLoop = async () => {
-
-	}
-
-	/** Asyncronously initialize the client passing loop functions and the scale
-	* @method
-	* @private */
-
-	FirstLoop = async () => {
-
-		this.client.log('SJS:A:FirstLoop');
-
-		this.client.initalize(this.InitializeClientLoop,this.InitializeSecondaryLoop,this.scale);
-
-	};
-
-	/** Loop of the Program
-	* @method
-	* @private */
-
-	Loop(self:IApp):void {
-
-		this.client.log('SJS:A:BeforeFirstLoop');
-
-		window.requestUserIdle(this.FirstLoop, { timeout: this.time });
-
-		return;
-	}
 
 	/** Triggers when the application first loops.
 	* @method

@@ -51,7 +51,7 @@ declare interface Event {
 
 	OnLoad(self: object):void;
 	OnApplicationLoad(evt:AppEvent):void;
-	Loop(self:IApp):void;
+	Loop(self:IApp):Promise<>;
 	Start(w:any,h:any):void;
 	start(w:any,h:any):void;
 
@@ -85,7 +85,6 @@ export type IInput = {
 export type IUtils = {
 
 	loadExternalJS(scripts:Array<string>):void;
-
 
 }
 

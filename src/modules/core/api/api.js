@@ -90,7 +90,9 @@ export default class API extends APICore {
 	    constructor(app:IApp){
 
 	        super(app);
-			
+
+			//this.pollyFilledAnimationFrame();
+
 			// make sure aspect scale is correctly set in advance of first tick
 			/*if (this.fullscreen_mode >= 2)
 			{
@@ -332,7 +334,7 @@ export default class API extends APICore {
 	        let doc:Element = this.document.documentElement;
 
 	        this.left = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
-	        this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+			this.top = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
 
 	        y = y - this.top;
 	        x = x - this.left;
@@ -511,7 +513,7 @@ export default class API extends APICore {
 		* @method
 		*  */
 
-        text_button(string:string|number, x:number, y:number, colour:string, s:number, a:number, c:number, style:string):void {
+        text_button(string:string|number, x:number, y:number, colour:string, s:number, a:number,c:number, style:string):void {
 
             this.checkValues(x,y,this.text_width(String(string)),s,s,a,c,colour,'');
             var f = this.font('');
