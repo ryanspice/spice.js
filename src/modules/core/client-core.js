@@ -1,7 +1,5 @@
 /* @flow */
 
-
-
 import {_SJSClass} from './base/sjs';
 
 import Vector from './math/vector';
@@ -30,7 +28,6 @@ import type {
 } from "./interfaces/ITypes";
 
 import Renderer from '../renderer.js';
-
 
 import _loader from './api/loader.js';
 

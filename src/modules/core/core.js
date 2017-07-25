@@ -1,12 +1,12 @@
 /* @flow */
 
+import legacy_core from './legacy/legacy-core';
+
 import Options from './base/options';
 
 import facebook from './interfaces/dto/facebook-user';
 
 import _math from './math/math';
-
-import legacy_core from './legacy/legacy-core';
 
 import Client from './client';
 
@@ -18,7 +18,7 @@ import {
 	prototype
 } from './client';
 
-/* Remove? */
+/* Remove? or extend to grab the version number from the module as to clearly increment in the future */
 const _BUILD_OFFICIAL_:string = '0.8.2';
 const _BUILD_RENDERER_:string = '0.0.1';
 const _BUILD_CANVAS_:string = '0.8.1';
@@ -31,6 +31,7 @@ import type {
 	IOptions,
 	IState,
 	IClient,
+	ICanvas,
 	ICore,
 	IVisuals,
 	IInput,
@@ -59,6 +60,8 @@ export default class Core extends legacy_core {
 
 	client:IClient = prototype;
 
+	canvas:ICanvas;
+
     visuals:IVisuals; /* WIP */
 
     input:IInput; /* WIP */
@@ -69,12 +72,8 @@ export default class Core extends legacy_core {
 
 	Loop:any;
     time:number = 0;
-
 	scale:number;
-
 	id:number=0;
-
-	canvas:any;
 
 	static properties:IoVersion = {
 		main:{init:()=>{},update:()=>{},draw:()=>{}},
@@ -91,10 +90,10 @@ export default class Core extends legacy_core {
 	/* */
 
 	constructor(
-		app:any
+		map:WeakMap<*,*>
 		) {
 
-		super(app);
+		super(map);
 
 		return (this:ICore);
 	}
