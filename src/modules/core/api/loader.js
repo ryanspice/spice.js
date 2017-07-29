@@ -35,10 +35,30 @@ export default class _loader extends SJSClass {
 
 		super(app);
 
-		this.ImageCache.length = 0;
+		this.ImageCache = [];
 		this.ImageMap = new Map();
 
-		(this.ImageCache:any).push = this.push;
+	/*
+			this.ImageCache.push = sprite=>{
+
+				let A = Array.prototype.push.apply(this,arguments);
+				this.ImageMap = this.ImageCache.map(function(a){return a.name;});
+
+				return A;
+			}
+	*/
+
+	let self = this;
+	this.ImageCache.push = function(){
+
+		var A = Array.prototype.push.apply(this,arguments);
+
+		self.ImageMap = self.ImageCache.map(function(a){return a.name;});
+
+		return A;
+
+	}
+
 
 		this.ImageBuffer.length = 0;
 
@@ -94,6 +114,8 @@ export default class _loader extends SJSClass {
 		let img = this.graphics.load(string);
 
 		let cacheIndex = this.ImageCache.push(img);
+
+		console.log(this.ImageCache);
 
 		img.string = name;
 

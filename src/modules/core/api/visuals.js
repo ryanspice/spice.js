@@ -34,9 +34,7 @@ export default class Visuals extends API {
 
         super(app);
 
-
 		this.buffering = this._buffering;
-
 
 		let canvas:ICanvas = this.app.canvas;
 
@@ -158,17 +156,12 @@ export default class Visuals extends API {
 
 		}
 
-
 	}
 
 	/*
-
 	setBleed(threshold:number):void {
-
 		this.bleed = threshold;
-
 	}
-
 	*/
 
 }

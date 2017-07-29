@@ -201,6 +201,23 @@ export type IApi = {
 * @interface
 */
 
+export type ILoader = {
+	ImageBuffer:Array<any>;
+	ImageCache:Array<any>;
+	ImageMap:Array<any>;
+
+	ImageBufferTime:number;
+	asyncLoadCacheIndex:number;
+
+	push():any;
+	checkLoaded(name:string):any;
+
+}
+
+/**
+* @interface
+*/
+
 export type IGraphics = {
 
 }
@@ -240,6 +257,7 @@ export type IClientCore = {
 	+loop:Function;
 
 }
+
 
 
 /**

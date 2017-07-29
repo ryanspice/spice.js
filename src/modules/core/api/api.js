@@ -1465,6 +1465,29 @@ export default class API extends APICore {
 
 				}
 
+				/* TODO: type */
+
+				drawMethod =(sprite:any) => {
+					//console.log(sprite);
+					switch(sprite.type){
+
+						case 'circle':
+						((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col);
+
+						break;
+
+
+						default:
+
+						if (!sprite.visuals)
+							((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h,sprite.degrees);
+						else
+							sprite.draw();
+
+						break;
+					}
+				}
+
 				drawBufferedSprites = () => {
 
 					//this.drawArray(this.PriorityRegistry, sprite => ((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.c));
@@ -1473,26 +1496,7 @@ export default class API extends APICore {
 
 					this.sortPriorityRegistry();
 
-					this.drawArray(this.PriorityRegistry, sprite => {
-						//console.log(sprite);
-						switch(sprite.type){
-
-							case 'circle':
-							((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col);
-
-							break;
-
-
-							default:
-
-							if (!sprite.visuals)
-								((this:IApi)[''+sprite.type]:Function)(sprite.img,sprite.x,sprite.y,sprite.s,sprite.a,sprite.c,sprite.xx,sprite.yy,sprite.w,sprite.h,sprite.degrees);
-							else
-								sprite.draw();
-
-							break;
-						}
-					});
+					this.drawArray(this.PriorityRegistry, this.drawMethod);
 
 					//this.PriorityRegistry = [];
 					//console.log(this.PriorityRegistry);
