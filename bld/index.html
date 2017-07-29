@@ -41,12 +41,13 @@
 						let i = 16;
 						let t = i;
 
+
 						this.app.client.loader.asyncLoadImage('../tiles_packed','s').then((sprite)=>{
 
 							this.snow = sprite;
 
 							while(i-->=0)
-							this.items.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));
+								this.items.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));
 
 							this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);
 							this.visuals.Tile(this.snow,100+t*i,125,1,1,1,0,0,16,16);

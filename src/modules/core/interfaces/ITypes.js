@@ -204,7 +204,7 @@ export type IApi = {
 export type ILoader = {
 	ImageBuffer:Array<any>;
 	ImageCache:Array<any>;
-	ImageMap:Array<any>;
+	ImageMap:rray<any>;
 
 	ImageBufferTime:number;
 	asyncLoadCacheIndex:number;
@@ -219,6 +219,8 @@ export type ILoader = {
 */
 
 export type IGraphics = {
+
+	load(name:string ,file:string|void ):Object;
 
 }
 

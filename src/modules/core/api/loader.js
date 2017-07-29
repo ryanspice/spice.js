@@ -1,13 +1,17 @@
-
 //@flow
 
 import * as config from "../../../config";
 
+import type {
+
+	IApp,
+ 	IVector,
+	IVisuals
+
+} from "../interfaces/ITypes";
+
 import {_SJSClass as SJSClass} from '../base/sjs';
 
-// import _test from './test.js'
-
-//window.test = _test;
 /*
 declare class Array extends Array {
 	+push:any;
@@ -31,52 +35,32 @@ export default class _loader extends SJSClass {
 	ImageBufferTime:number;
 	asyncLoadCacheIndex:number;
 
-	constructor(app:any) {
+	imgMapFilter=(a:Image)=>{return a.getAttribute('name');};
+
+	constructor(app:IApp) {
 
 		super(app);
 
-		this.ImageCache = [];
 		this.ImageMap = new Map();
-
-	/*
-			this.ImageCache.push = sprite=>{
-
-				let A = Array.prototype.push.apply(this,arguments);
-				this.ImageMap = this.ImageCache.map(function(a){return a.name;});
-
-				return A;
-			}
-	*/
-
-	let self = this;
-	this.ImageCache.push = function(){
-
-		var A = Array.prototype.push.apply(this,arguments);
-
-		self.ImageMap = self.ImageCache.map(function(a){return a.name;});
-
-		return A;
-
-	}
-
-
-		this.ImageBuffer.length = 0;
-
 		this.ImageBufferTime = 3;
+		this.ImageBuffer.length = 0;
+		this.ImageCache.length = 0;
 		this.asyncLoadCacheIndex = 0;
 
+		let self = this;
+		(this.ImageCache:any).push = function(){
+
+			var A = Array.prototype.push.apply(this,arguments);
+
+			self.ImageMap = self.ImageCache.map(self.imgMapFilter);
+
+			return A;
+
+		}
+
 	}
 
-	push(){
-
-		let A = Array.prototype.push.apply(this,arguments);
-		this.ImageMap = this.ImageCache.map(function(a){return a.name;});
-
-		return A;
-	}
-
-
-	checkLoaded(name) {
+	checkLoaded(name:string) {
 
 		if (!this.getImageReference(name).complete) {
 
@@ -101,11 +85,13 @@ export default class _loader extends SJSClass {
 		return this.ImageBuffer.length;
 	}
 
-	getImageReference(string) {
+	getImageReference(string:string) {
 
-		return this.ImageCache[this.ImageMap.indexOf(string)];
+		return this.ImageCache[(this.ImageMap:any).indexOf(string)];
 
 	}
+
+	/*
 
 	loadImage(string) {
 
@@ -188,13 +174,13 @@ export default class _loader extends SJSClass {
         return newData2;
     }
 
+	*/
 
-
-	async asyncLoadImage(string,suffex) {
+	async asyncLoadImage(string:string,suffex:string) {
 
 		let name = string;
 
-		let img = await this.app.client.graphics.load(name);
+		let img = await (this.graphics:any).load(name);
 
 		img.string = name;
 
@@ -209,10 +195,7 @@ export default class _loader extends SJSClass {
 			//_img.base64 = this.getBase64Image(_img);
 			//_img.imgdata = this.createImageData(_img);
 
-
-
 			this.ImageCache[cacheIndex - 1] = _img;
-
 
 			//console.log(this.getBase64Image(_img))
 			//			console.log(this.ImageCache[cacheIndex - 1] );
@@ -225,6 +208,8 @@ export default class _loader extends SJSClass {
 
 		return this.ImageCache[cacheIndex - 1];
 	}
+
+	/*
 
 	async asyncLoadZipImage(string,suffex) {
 
@@ -297,26 +282,29 @@ export default class _loader extends SJSClass {
 		let _image = await this.asyncLoadZipImage(string,"_blit").then((img)=>{
 
 				//let _cacheIndex =  this.ImageCache.push(img);
-//				console.log( this.ImageCache[_cacheIndex-1]=img)
-/*
-				let buffindex = this.ImageBuffer.push(string+"_blit");
+		//				console.log( this.ImageCache[_cacheIndex-1]=img)
+		/*
+						let buffindex = this.ImageBuffer.push(string+"_blit");
 
-                this[string2] = img;
-                this[string2].addEventListener('load',()=>{
+		                this[string2] = img;
+		                this[string2].addEventListener('load',()=>{
 
-                        this[string2] = this.visuals.blit(this[string2],x,y)
+		                        this[string2] = this.visuals.blit(this[string2],x,y)
 
-		                this[string2].string = string2;
+				                this[string2].string = string2;
 
-						this.ImageCache.push(this[string2]);
+								this.ImageCache.push(this[string2]);
 
-								this.ImageBuffer.splice(this.ImageBuffer.indexOf(string+"_blit2"),1);
-                })
-*/
+										this.ImageBuffer.splice(this.ImageBuffer.indexOf(string+"_blit2"),1);
+		                })
+		*/
+		/*
         });
 
 		return _image || string;
 	}
+
+	*/
 
 }
 
