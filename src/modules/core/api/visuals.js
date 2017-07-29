@@ -34,6 +34,10 @@ export default class Visuals extends API {
 
         super(app);
 
+
+		this.buffering = this._buffering;
+
+
 		let canvas:ICanvas = this.app.canvas;
 
 		this.scale = this.app.scale;
@@ -92,6 +96,11 @@ export default class Visuals extends API {
 	}
 	*/
 
+	buffering:boolean = false;
+
+	get _buffering():boolean {
+		return this.app.options.canvas.buffer;
+	}
 
 	/**
 	* @method
@@ -116,12 +125,13 @@ export default class Visuals extends API {
 			this.screen_fill(this.app.client.visuals.bleed,this.app.options.canvas.background);
 		}
 
+		/*
 		if (this.debug)
 			if (this.app.client.fps)
-				this.text(this.app.client.fps,this.app.client.setWidth-125,25,"#FFFFFF");
+				this.text(this.app.client.fps,this.app.client.setWidth-125,25,"#FFFFFF");*/
 
 		//If double buffering
-		if (this.app.options.canvas.buffer)
+		if (this.buffering)
 		{
 			//If initalized, draw state
 			if (this.app.client.update.state.initalized)

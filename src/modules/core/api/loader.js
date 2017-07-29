@@ -1,42 +1,60 @@
 
+//@flow
+
+import * as config from "../../../config";
+
 import {_SJSClass as SJSClass} from '../base/sjs';
 
 // import _test from './test.js'
 
 //window.test = _test;
-
-
-
-
+/*
+declare class Array extends Array {
+	+push:any;
+}
+declare class BufferArray extends Array {
+	push:any;
+	map:any;
+}
+interface BufferArray extends Array {
+	push:any;
+	map:any;
+}
+*/
 
 export default class _loader extends SJSClass {
 
-	constructor(app) {
+	ImageBuffer:Array<any> = [];
+	ImageCache:Array<any> = [];
+	ImageMap:Map<*,*>|Array<any>;
+
+	ImageBufferTime:number;
+	asyncLoadCacheIndex:number;
+
+	constructor(app:any) {
 
 		super(app);
 
-		this.ImageCache = [];
+		this.ImageCache.length = 0;
 		this.ImageMap = new Map();
 
-		let self = this;
-		this.ImageCache.push = function(){
+		(this.ImageCache:any).push = this.push;
 
-			var A = Array.prototype.push.apply(this,arguments);
-
-			self.ImageMap = self.ImageCache.map(function(a){return a.name;});
-
-			return A;
-
-		}
-
-		this.ImageBuffer = [];
+		this.ImageBuffer.length = 0;
 
 		this.ImageBufferTime = 3;
 		this.asyncLoadCacheIndex = 0;
 
-		window.Loader = this;
-
 	}
+
+	push(){
+
+		let A = Array.prototype.push.apply(this,arguments);
+		this.ImageMap = this.ImageCache.map(function(a){return a.name;});
+
+		return A;
+	}
+
 
 	checkLoaded(name) {
 
@@ -277,5 +295,12 @@ export default class _loader extends SJSClass {
 
 		return _image || string;
 	}
+
+}
+
+
+if ((config._EXPOSURE_)&& (config._IS_PROD_ == false)){
+
+	window.Loader = _loader;
 
 }

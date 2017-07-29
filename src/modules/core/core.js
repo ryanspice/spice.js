@@ -90,8 +90,8 @@ export default class Core extends legacy_core {
 	/* */
 
 	constructor(
-		map:WeakMap<*,*>
-		) {
+	map:WeakMap<*,*>
+	) {
 
 		super(map);
 
@@ -134,7 +134,6 @@ export default class Core extends legacy_core {
 		//this.time = time;
 
 	}
-
 
 	/** Asyncronously call secondary loop
 	* @method

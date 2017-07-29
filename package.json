@@ -54,7 +54,7 @@
     "jszip-utils": "0.0.2",
     "style-loader": "^0.13.0",
     "webpack": "^3.0.0",
-    "webpack-closure-compiler": "^2.1.2",
+    "webpack-closure-compiler": "^2.1.5",
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {

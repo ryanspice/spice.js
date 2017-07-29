@@ -43,9 +43,11 @@ export default class App extends Core {
 
     Start(w:?number = 0, h:?number = 0):void {
 
+		//console.log(this.options);
+
 		this.InitalizeComponents(
-			w || this.app.options.canvas.size.width,
-			h || this.app.options.canvas.size.height
+			w || this.options.canvas.size.width,
+			h || this.options.canvas.size.height
 		).then(this.InitalizeLoop);
 
     }
@@ -55,9 +57,9 @@ export default class App extends Core {
     * @param {Object} [self] - Reference to the app.
 	* @override	*/
 
-    OnLoad(self:IApp):void {
+    OnLoad(self:App):void {
 
-        self.start();
+        self.Start();
 
     }
 

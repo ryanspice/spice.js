@@ -22,7 +22,7 @@ export default class Sprite<ISprite> extends Vector  {
 	degrees:number = 0;
 
 	_id = Sprite.count++;
-	type:string = "_image_part";
+//	type:string = "_image_part";
 
 	img:HTMLImageElement;
 	priority:number = 0;
