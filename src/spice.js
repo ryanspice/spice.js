@@ -9,10 +9,13 @@
 * 	setInnerHTML -	A polyfill based off react's core rendering
 */
 
+
+
 /* WIP - extras */
 import setInnerHTML from './modules/render/setInnerHTML.js';
 import Twitter from './modules/render/twitter.js';
 //import Statistics from './modules/etc/statistics';
+
 
 /* Build - the core canvas framework */
 

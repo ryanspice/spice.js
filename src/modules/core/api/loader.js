@@ -12,20 +12,6 @@ import type {
 
 import {_SJSClass as SJSClass} from '../base/sjs';
 
-/*
-declare class Array extends Array {
-	+push:any;
-}
-declare class BufferArray extends Array {
-	push:any;
-	map:any;
-}
-interface BufferArray extends Array {
-	push:any;
-	map:any;
-}
-*/
-
 export default class _loader extends SJSClass {
 
 	ImageBuffer:Array<any> = [];
@@ -35,7 +21,6 @@ export default class _loader extends SJSClass {
 	ImageBufferTime:number;
 	asyncLoadCacheIndex:number;
 
-	imgMapFilter=(a:Image)=>{return a.getAttribute('name');};
 
 	constructor(app:IApp) {
 
@@ -60,9 +45,13 @@ export default class _loader extends SJSClass {
 
 	}
 
+	/* Checks if the image reference is completed, otherwise start a timeout for checking again, otherwise return the reference */
+
 	checkLoaded(name:string) {
 
-		if (!this.getImageReference(name).complete) {
+		let reference = this.getImageReference(name);
+
+		if (!reference.complete) {
 
 			setTimeout(()=> {
 
@@ -76,22 +65,25 @@ export default class _loader extends SJSClass {
 
 		}
 
-		return this.getImageReference(name);
+		return reference;
 
 	}
+
+	/* Returns the length of this.ImageBuffer */
 
 	getBufferLength() {
 
 		return this.ImageBuffer.length;
 	}
 
+	/* Returns the reference to an image in the cache */
+
 	getImageReference(string:string) {
 
 		return this.ImageCache[(this.ImageMap:any).indexOf(string)];
-
 	}
 
-	/*
+	/* basic method for loading an imag
 
 	loadImage(string) {
 
@@ -176,6 +168,8 @@ export default class _loader extends SJSClass {
 
 	*/
 
+	/* Asyncronously load an image */
+
 	async asyncLoadImage(string:string,suffex:string) {
 
 		let name = string;
@@ -209,7 +203,8 @@ export default class _loader extends SJSClass {
 		return this.ImageCache[cacheIndex - 1];
 	}
 
-	/*
+	/* Other ZIP/ImageData/Web mthods for loading an image
+
 
 	async asyncLoadZipImage(string,suffex) {
 
@@ -305,6 +300,10 @@ export default class _loader extends SJSClass {
 	}
 
 	*/
+
+	//Filtering
+
+	imgMapFilter=(a:Image)=>{return a.getAttribute('name');};
 
 }
 

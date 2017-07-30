@@ -1,4 +1,6 @@
 
+
+//var OfflinePlugin = require('offline-plugin');
 require("babel-core/register");
 
 const webpack = require('webpack');
@@ -75,6 +77,9 @@ if (env===true)
 
     //webpackPlugins.push(new webpackHtmlPlugin({ filename: source.output.html404, template:'./src/404.html' }));
 }
+
+
+//source.plugins.push(new OfflinePlugin());
 
 module.exports = {
   context: '',
