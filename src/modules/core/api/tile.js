@@ -10,16 +10,14 @@ import Vector from "../math/vector";
 import Sprite from "./sprite";
 
 import type {
-
 	IVisuals,
 	IVector,
 	ISprite,
 	ITile
-
 } from "../interfaces/ITypes";
 
-/** Basic Circle class
-*/
+/** Basic Circle class */
+
 export default class Tile extends Sprite  {
 
 	_id = Tile.count++;

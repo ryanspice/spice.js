@@ -3,11 +3,9 @@
 import * as config from "../../../config";
 
 import type {
-
 	IApp,
  	IVector,
 	IVisuals
-
 } from "../interfaces/ITypes";
 
 import {_SJSClass as SJSClass} from '../base/sjs';
@@ -20,7 +18,6 @@ export default class _loader extends SJSClass {
 
 	ImageBufferTime:number;
 	asyncLoadCacheIndex:number;
-
 
 	constructor(app:IApp) {
 

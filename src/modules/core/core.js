@@ -36,15 +36,15 @@ import type {
 	IVisuals,
 	IInput,
 	IMath
-	} from "./interfaces/ITypes.js";
+} from "./interfaces/ITypes.js";
 
 import type {
 	dtoFacebook
-	} from './interfaces/dto/dtoTypes';
+} from './interfaces/dto/dtoTypes';
 
 import type {
 	IoVersion
-	} from "../../shared/version";
+} from "../../shared/version";
 
 /** core component to the application, including version info, the main reference, and other details
 * @module
