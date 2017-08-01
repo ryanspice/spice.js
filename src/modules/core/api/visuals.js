@@ -132,12 +132,18 @@ export default class Visuals extends API {
 		if (this.buffering)
 		{
 			//If initalized, draw state
-			if (this.app.client.update.state.initalized)
-				this.app.client.update.state.draw();
+			if (this.app.client.update.state.initalized){
 
-			this.drawBufferedSprites();
+				if (this.bufferIndex == 0){
+					this.drawBufferedSprites();
+					this.app.client.update.state.draw();
+				} else {
+					this.app.client.update.state.draw();
+					this.drawBufferedSprites();
+				}
 
-			//Draw buffer to canvs
+			}
+
 			this.canvas_context.drawImage(this.buffer,0,0);
 
 			//Clear buffer
@@ -157,6 +163,8 @@ export default class Visuals extends API {
 		}
 
 	}
+
+	bufferIndex = 0;
 
 	/*
 	setBleed(threshold:number):void {

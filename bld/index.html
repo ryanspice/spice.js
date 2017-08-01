@@ -11,124 +11,86 @@
 
 		<script  type="application/x-javascript" defer>
 
-		class Ground extends Tile {
+		class Star extends Circle {
 
+			constructor(x,y,r,col,a,visuals) {
 
+				super(x,y,r,col,a,visuals);
+
+				this.type2= Math.round(Math.random()*1);
+				this.position = new Vector(x,y);
+				this.scale = 0.1+Math.random()*1;
+				this.r = 1+this.scale;
+				this.velocity = new Vector(0.5*this.scale,0.52*this.scale);
+				this.layer = -4;
+
+			}
+
+			move(x,y){
+
+				this.position.x+= this.velocity.x;
+				this.position.y-= this.velocity.y;
+
+				if (this.position.x>1400)
+					this.position.x = -50;
+
+				if (this.position.y<-50)
+					this.position.y = this.visuals.app.height+50;
+
+			}
 
 		}
 
-		if (false)
+		if (true)
 			var _App = ((SpiceJS.create()).OnLoad = function (self) {
 
-				var width = 400;
-				var height =300;
+				var width = 1400;
+				var height =320;
 
 				self.main = {init:function(){
-					this.velocity = new Vector(-0.1,0);
 
-					/*
-					this.visuals.bleed = 0.1175;
-					for(var i = 2; i>0; i--)
-						this.visuals.Circle(window.innerWidth/3,100,3,"#A9CCE3",1);
-						*/
-
-						this.app.client.loader.graphics = this.graphics;
-
-						this.items = [];
-						let s = 16;
-						let i = 16;
-						let t = i;
-
-
-						this.app.client.loader.asyncLoadImage('../tiles_packed','s').then((sprite)=>{
-
-							this.snow = sprite;
-
-							while(i-->=0)
-								this.items.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));
-
-							this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);
-							this.visuals.Tile(this.snow,100+t*i,125,1,1,1,0,0,16,16);
-							this.visuals.push(new Ground(this.snow,50+t*i,150,1,1,1,0,0,16,16));
-							new Ground(this.snow,50+t*i,200,1,1,1,0,0,16,16,this.visuals);
-
-						});
-
-						this.items.push(this.visuals.createMapObject('Circle',200,200,5,"#FF00FF",0.5));
-						this.items.push	(this.visuals.Circle(100,100,10,"#FFFFFF",1));
-						this.items.push	(this.visuals.push(new Circle(150,150,10,"#FFFFFF",1)));
-						this.items.push	(new Circle(100,150,10,"#FFFFFF",1,this.visuals));
-
-
-						this.player = new Circle(0,0,25,"#FF0000",1,this.visuals);
-						this.player.priority = 3;
-
-					},draw:function(){
-
-						/* Implement UI code or something here */
-
-						//this.visuals._image_part(this.snow,0,0,1,1,1,0,0,10,10);
-
-						//this.visuals.blid()
-						/*
-
-					let r = Math.sin(Date.now()/360);
-
-					//this.visuals.drawArray(this.circles, circle => this.visuals.circle(circle.x,circle.y,circle.r,"red"));
-					this.visuals.drawBufferedSpritesNewPosition((sprite)=>{
-						let i = sprite._id;
-						let obj = {
-							x:600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
-							y:200+5*window.innerWidth*Math.cos(Date.now()/360-i*r)/250
-						}
-						return obj;
-					});
-
-					if (this.visuals.touch_within(0,0,10,10,false)) {
-
-						console.log('eh');
-
+					this.stars = [];
+					this.drawTri = function(x,y,col,ctx){
+						ctx.lineWidth=1;
+						ctx.fillStyle=col;
+						ctx.beginPath();
+					    ctx.moveTo(x, y);
+					    ctx.lineTo(x+255,y+230);
+					    ctx.lineTo(x-200, y+230);
+					    ctx.fill();
+						ctx.fillStyle='white';
 					}
 
-					if (this.visuals.touch_within2(0,0,100,100,false)) {
-
-						console.log('eh2');
-
+					let a = 0;
+					let genX = function(){
+						return -50+Math.random()*this.app.width;
 					}
-				*/
+
+					for(let i = 0; i<125; i++)
+						this.stars.push(new Star(genX(),Math.random()*5 * 65,2,"#FFFFFF",1,this.visuals));
+
+				},draw:function(){
+
+
+					for(let t = 1900; t>0; t-=100){
+					let x = -97+t;
+					let y = -3+150+Math.sin(t/60)*15;
+					x = this.visuals.fixX(x);
+					y = this.visuals.fixY(y);
+					this.drawTri(x,y,"#FFFFFF",this.visuals.buffer_context);
+					let x2 = -100+t;
+					let y2 = +150+Math.sin(t/60)*15;
+					x2 = this.visuals.fixX(x2);
+					y2 = this.visuals.fixY(y2);
+					this.drawTri(x2,y2,"#2F51A3",this.visuals.buffer_context);
+					this.visuals.rect(0,270,1400,300,'#2f51A3')
+					}
+
 				},update:function(){
 
-
-
-					//if (this.player.y<200)
-					//this.player.y+=1.1;
-					if (this.app.input.duration)
-						this.velocity.x+=0.1;
-				//	if (this.app.input.pressed)
-					//	this.player.y/=1.1;
-
-
-					for(let i = 0; i<=this.items.length-1;i++){
-						let y = this.items[i].y = this.items[i].y+ Math.sin(new Date().getTime()/300+this.items[i].x/100)*1;
-						let x = this.items[i].x;
-
-						if (y-20<this.player.y)
-						if (x-25<this.player.x)
-						if (x+25>this.player.x){
-								if (this.velocity.y>0)
-								this.velocity.y=0;
-								this.velocity.y-=0.025;//this.player.Move(0,-20+y-this.player.y);
-						}
+					for(let i = 0; i<this.stars.length; i++){
+						this.stars[i].move(1,0);
 					}
-
-					if (this.velocity.y<1)
-						this.velocity.y +=0.025;
-
-						this.velocity.x*=0.9;
-
-					this.player.Move(this.velocity);
-					this.player.r = 20 - this.velocity.y;
-
 
 				}};
 

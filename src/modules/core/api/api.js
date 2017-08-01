@@ -962,9 +962,9 @@ export default class API extends APICore {
 
 		        image_flip(x,y){
 
-					this.drawBufferedSprites();
 		            this.checkValues(x,y,1,1,1,1,1);
 		            this.buffer_context.save();
+					this.drawBufferedSprites();
 		            this.buffer_context.scale(-1, 1);
 		            this.buffer_context.translate(-this.stat.x*2, 0);
 		        }

@@ -40,7 +40,7 @@ export default class Circle extends Sprite  {
 		x: number = 0,
 		y: number = 0,
 		r:number = 1,
-		col:any = 1,
+		col:any,
 		a:number = 1,
 		visuals:any
 		) {
