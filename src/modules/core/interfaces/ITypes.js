@@ -16,7 +16,18 @@ export type object = Object;
 
 
 //DUPLICATE IN app.js
+interface AppEventTarget extends EventTarget {
+	result:any;
+    app:IApp|Object;
+}
 
+interface AppEvent extends Event {
+    target: AppEventTarget;
+}
+
+declare interface Event {
+	target:AppEventTarget;
+}
 //END DUPLICATE IN app.js
 
 
@@ -40,7 +51,7 @@ export type object = Object;
 
 	OnLoad(self: object):void;
 	OnApplicationLoad(evt:AppEvent):void;
-	Loop(self:IApp):Promise<>;
+	Loop(self:IApp):void;
 	Start(w:any,h:any):void;
 	start(w:any,h:any):void;
 
@@ -48,7 +59,7 @@ export type object = Object;
 	canvas:ICanvas;
 	options:IOptions;
 
-	input:IInput|Object|null;
+
 	main?:IState;
 
 	+scale:number;
@@ -56,16 +67,13 @@ export type object = Object;
 
 export type ICanvas = {
 
-	canvas:HTMLCanvasElement;
-	buffer:HTMLCanvasElement;
-	blitter:HTMLCanvasElement;
+	canvas:any;
+	buffer:any;
 
 }
 
 export type IInput = {
 
-	x:number;
-	y:number;
 
 
 }
@@ -74,6 +82,7 @@ export type IInput = {
 export type IUtils = {
 
 	loadExternalJS(scripts:Array<string>):void;
+
 
 }
 
@@ -93,17 +102,6 @@ export type IMath = {
 
 
 }
-
-export type ICircle = {
-
-	x:number;
-	y:number;
-
-	r:number;
-	col?:any;
-	a:number;
-}
-
 
 export type IBuild = {
 
@@ -185,7 +183,7 @@ export type IVisuals = {
 	a?:number;
 
 
-	appendNew:any;
+
 	flip(s:number):void;
 }
 
@@ -193,34 +191,7 @@ export type IVisuals = {
 * @interface
 */
 
-export type IApi = {
-
-}
-
-/**
-* @interface
-*/
-
-export type ILoader = {
-	ImageBuffer:Array<any>;
-	ImageCache:Array<any>;
-	ImageMap:rray<any>;
-
-	ImageBufferTime:number;
-	asyncLoadCacheIndex:number;
-
-	push():any;
-	checkLoaded(name:string):any;
-
-}
-
-/**
-* @interface
-*/
-
 export type IGraphics = {
-
-	load(name:string ,file:string|void ):Object;
 
 }
 
@@ -259,7 +230,6 @@ export type IClientCore = {
 	+loop:Function;
 
 }
-
 
 
 /**
@@ -481,7 +451,7 @@ export type IStatsBuffer = {
 	s:number;
 	a:number;
 	c:number;
-	colour:string|CanvasPattern|CanvasGradient;
+	colour:string;
 	oldcol:string;
 	font:Function;
 	init(string,string):void;
@@ -599,26 +569,6 @@ export type IVector = {
 	+sum:Function;
 	+multiply:Function;
 	+offset:Function;
-
-}
-
-export type ISprite<IVector> = {
-
-	x:number;
-	y:number;
-	position:any;
-	+Difference:Function;
-	+equals:Function;
-	+sum:Function;
-	+multiply:Function;
-	+offset:Function;
-
-	Move(x:number|IVector,y?:number):void;
-
-}
-
-export type ITile<ISprite> = {
-
 
 }
 

@@ -11,37 +11,7 @@
 
 		<script  type="application/x-javascript" defer>
 
-		class Star extends Circle {
-
-			constructor(x,y,r,col,a,visuals) {
-
-				super(x,y,r,col,a,visuals);
-
-				this.type2= Math.round(Math.random()*1);
-				this.position = new Vector(x,y);
-				this.scale = 0.1+Math.random()*1;
-				this.r = 1+this.scale;
-				this.velocity = new Vector(0.5*this.scale,0.52*this.scale);
-				this.layer = -4;
-
-			}
-
-			move(x,y){
-
-				this.position.x+= this.velocity.x;
-				this.position.y-= this.velocity.y;
-
-				if (this.position.x>1400)
-					this.position.x = -50;
-
-				if (this.position.y<-50)
-					this.position.y = this.visuals.app.height+50;
-
-			}
-
-		}
-
-		if (true)
+		if (true){
 			var _App = ((SpiceJS.create()).OnLoad = function (self) {
 
 				var width = 1400;
@@ -49,69 +19,72 @@
 
 				self.main = {init:function(){
 
-					this.stars = [];
-					this.drawTri = function(x,y,col,ctx){
-						ctx.lineWidth=1;
-						ctx.fillStyle=col;
-						ctx.beginPath();
-					    ctx.moveTo(x, y);
-					    ctx.lineTo(x+255,y+230);
-					    ctx.lineTo(x-200, y+230);
-					    ctx.fill();
-						ctx.fillStyle='white';
-					}
-
-					let a = 0;
-					let genX = function(){
-						return -50+Math.random()*this.app.width;
-					}
-
-					for(let i = 0; i<125; i++)
-						this.stars.push(new Star(genX(),Math.random()*5 * 65,2,"#FFFFFF",1,this.visuals));
+					//this.visuals.Rect(200,200,200,200,"#FFFFFF");
+					this.a = new Circle(120,150,10,"#FFFFFF",1,this.visuals);
+					this.b = new Circle(120,150,10,"#FFFFFF",1,this.visuals);
 
 				},draw:function(){
-
-
-					for(let t = 1900; t>0; t-=100){
-					let x = -97+t;
-					let y = -3+150+Math.sin(t/60)*15;
-					x = this.visuals.fixX(x);
-					y = this.visuals.fixY(y);
-					this.drawTri(x,y,"#FFFFFF",this.visuals.buffer_context);
-					let x2 = -100+t;
-					let y2 = +150+Math.sin(t/60)*15;
-					x2 = this.visuals.fixX(x2);
-					y2 = this.visuals.fixY(y2);
-					this.drawTri(x2,y2,"#2F51A3",this.visuals.buffer_context);
-					this.visuals.rect(0,270,1400,300,'#2f51A3')
-					}
-
+					//this.visuals.rect(200,200,200,200,"#FFFFFF");
 				},update:function(){
 
-					for(let i = 0; i<this.stars.length; i++){
-						this.stars[i].move(1,0);
-					}
+					this.a.x += Math.sin(new Date().getTime()/1000)*5;
+					this.b.x -= Math.cos(new Date().getTime()/1000)*5;
 
 				}};
 
+				//start the application with the given resolution
+
 				self.Start(width, height);
 
+				//create a global reference
 				window.Application = this;
 
 			});
-			else {
-				SpiceJS.create();
-			}
+		} else {
+			SpiceJS.create();
+		}
+
+		var handleResolutionChange = function(e){
+			var res = e.target.value.split("x");
+			var client = SpiceJS.controller.list().client;
+			client.setWidth = Number(res[0]);
+			client.setHeight = Number(res[1]);
+			client.update.difference.x = 1;
+		}
+
+		var handleMainChange = function(e){
+
+				var i = 0;
+				var res = (Array.from(e.target.children).filter(function(x){
+					if (x.selected)
+					return true;
+				})[0]).index;
+				console.log(res);
+		}
+
 		</script>
 
 	</head>
 
 	<body>
+
 		<h3 style="color:white;position:fixed;top:10px;left:5%; width:100px; z-index:100;">SpiceJS</h3>
-		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100;">
-			<option>Loading</option>
+
+		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100;" onChange="handleMainChange(event)">
+			<option value="">Loading</option>
+			<option value="" selected>Circles A & B</option>
+			<option value="">Mountian Stars</option>
+			<option value="">Tile & Circles</option>
+			<option value="">Circle</option>
 		</select>
-		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100;">
+
+		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100;" onChange="handleResolutionChange(event)">
+			<option>200x300</option>
+			<option>400x300</option>
+			<option>480x320</option>
+			<option>1024x720</option>
+			<option selected>1400x320</option>
+			<option selected>1400x780</option>
 			<option>1920x1080</option>
 		</select>
 

@@ -11,7 +11,6 @@ import Tile from "../api/tile";
 import APICore from "./api-core";
 
 import type {
-
 	IApp,
 	IApi,
 	IVisuals,
@@ -19,19 +18,15 @@ import type {
 	ITile,
 	IStatsBuffer,
 	ICircle
-
 } from '../interfaces/ITypes';
 
 import {
-	RequestAnimationFrame,
 	sortBy
 } from "../../utils";
 
 /* This API class extends the canvas drawing api calls, including buffering */
 
 export default class API extends APICore {
-
-		pollyFilledAnimationFrame:RequestAnimationFrame = RequestAnimationFrame;
 
 		free:boolean = false;
 		seamless:boolean = false;
@@ -117,6 +112,14 @@ export default class API extends APICore {
 			this.log('SJS:I:Visuals');
 
 	    }
+
+		/**/
+
+		get document():any {
+
+			return document;
+		}
+
 
 		/**
 	    * @property
@@ -317,11 +320,6 @@ export default class API extends APICore {
 	    }
 
 
-		get document():any {
-
-			return document;
-		}
-
 		/* pointer collision */
 
 		/**
@@ -439,6 +437,8 @@ export default class API extends APICore {
             return _img;
 
         }
+
+		//region text
 
 		/** Draws text to the canvas
 		* @method
@@ -593,11 +593,10 @@ export default class API extends APICore {
             this.clean();
         }
 
-        /*
+		//endregion text
 
-        *	Visuals Rectangle Functions
-
-        */
+		//region rect
+        /* Rectangle Functions */
 
 				/** Draws basic rectangle of colour
 				* @method
@@ -775,6 +774,14 @@ export default class API extends APICore {
 		            this.clean();
 
 		        }
+
+			//endregion rect
+
+
+
+
+
+
 
 				/** Draws text without restrictions set by scaling
 				* @method
@@ -962,9 +969,9 @@ export default class API extends APICore {
 
 		        image_flip(x,y){
 
+					this.drawBufferedSprites();
 		            this.checkValues(x,y,1,1,1,1,1);
 		            this.buffer_context.save();
-					this.drawBufferedSprites();
 		            this.buffer_context.scale(-1, 1);
 		            this.buffer_context.translate(-this.stat.x*2, 0);
 		        }
@@ -1329,8 +1336,10 @@ export default class API extends APICore {
 
 		        triangle(x0:number,y0:number,x1:number,y1:number,x2:number,y2:number,col:any,col2:any,width:number){
 
-			        //this.buffer_context.fillStyle = col;
-			        //this.buffer_context.strokeStyle = col2;
+			        let c2 = this.buffer_context.fillStyle;
+			        this.buffer_context.fillStyle = col;
+			        let c = this.buffer_context.strokeStyle;
+			        this.buffer_context.strokeStyle = col2;
 		            this.colour(col,col2);
 		            this.buffer_context.lineWidth = width;
 		            this.buffer_context.moveTo(x0,y0); // give the (x,y) coordinates
@@ -1340,6 +1349,8 @@ export default class API extends APICore {
 		            this.buffer_context.fill();
 		            this.buffer_context.stroke();
 		            this.buffer_context.closePath();
+					this.buffer_context.strokeStyle = c;
+					this.buffer_context.fillStyle = c2;
 		            this.clean();
 		        }
 

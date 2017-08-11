@@ -2,9 +2,18 @@
 
 import {_SJSClass as SJSClass} from '../base/sjs';
 
+import type {
+	IApp,
+	IInput
+} from '../interfaces/ITypes';
+
+import {
+	RequestAnimationFrame
+} from "../../utils";
+
 export default class APICore extends SJSClass {
 
-	input:any;
+	input:IInput = (this.app:IApp).input;
 
 	canvas:HTMLCanvasElement;
 	buffer:HTMLCanvasElement;
@@ -15,11 +24,11 @@ export default class APICore extends SJSClass {
 	blitter_context:CanvasRenderingContext2D;
 	overlay_canvas:CanvasRenderingContext2D;
 
-	constructor(app:any) {
+	pollyFilledAnimationFrame:RequestAnimationFrame = RequestAnimationFrame;
+
+	constructor(app:IApp) {
 
 		super(app);
-
-		this.input = this.app.input;
 
 	}
 
