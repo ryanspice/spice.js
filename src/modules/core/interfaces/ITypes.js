@@ -191,6 +191,25 @@ export type IVisuals = {
 * @interface
 */
 
+export type IApi = {}
+
+
+/**
+* @interface
+*/
+
+export type ITile = {}
+export type ICircle = {}
+export type ISprite = {}
+
+
+
+
+
+/**
+* @interface
+*/
+
 export type IGraphics = {
 
 }

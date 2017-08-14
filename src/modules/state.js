@@ -43,6 +43,20 @@ export default class State extends WeakMapThingy {
 
 		super(new WeakMap());
 
+		console.trace("#",obj);
+
+		this.initalize(obj:any);
+
+		return (this:IState);
+
+	}
+
+	/** Construct and assign privates
+	* @param [Object] obj - Pass an object with update, draw, init.
+	* @method */
+
+	async initalize(obj:IState|void){
+
 		if (typeof app == 'object') {
 
 			this.app = app;
@@ -56,8 +70,6 @@ export default class State extends WeakMapThingy {
 			[this.update,this.draw,this.init,this.name,this.html] = [obj.update,obj.draw,obj.init,obj.name,obj.html];
 
 		}
-
-		return (this:IState);
 
 	}
 

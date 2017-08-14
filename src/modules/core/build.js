@@ -6,17 +6,19 @@ import WeakMapThingy from './base/thingy';
 
 import utils from '../utils';
 
+import controller from './controller';
+
 import type {
 
 	IApp,
+	IStatsBuffer,
 	IBuild,
 	IUtils
 
 } from './interfaces/ITypes';
 
-const Window:Object = window;
-
-const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Window);
+//const Window:Object = window;
+//const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Window); /* ? */
 
 const Console:Object = console;
 
@@ -33,12 +35,9 @@ const stats:Object = {
 export default class Build extends WeakMapThingy {
 
 	app:Function;
-
+	stats:IStatsBuffer;
+	document:Document = document;
 	id:number=0;
-
-	document:Object = document;
-
-	stats:Object;
 
 	/** Common Functions
 	 * 	@private
@@ -52,25 +51,7 @@ export default class Build extends WeakMapThingy {
 		statistics:Statistics,
 		*/
 
-		controller:{
-
-			/** List all of the instances of SpiceJS or
-			* @type {method}
-			* @param {number} id - Specify a specific instance to return.	*/
-
-			list:function(id:number = 0):void|Object {
-
-				if (id)
-					return Window.apps[id];
-				else
-				if (Window.apps.length>1)
-					return Window.apps;
-					else
-					return Window.apps[0];
-
-			}
-
-		}
+		controller
 
 	}
 
@@ -93,11 +74,10 @@ export default class Build extends WeakMapThingy {
 
 	get window():Object {
 
-		Window.stats = stats;
+		Build.properties.controller.window.stats = stats;
+		Build.properties.controller.window.stats.windowcount++;
 
-		Window.stats.windowcount++;
-
-		return Window;
+		return Build.properties.controller.window;
 	}
 
 	/** Reference UTILS
