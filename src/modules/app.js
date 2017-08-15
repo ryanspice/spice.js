@@ -132,6 +132,10 @@ interface AppEvent extends Event {
 
 export default class App extends Core {
 
+	window:any;
+	document:Document;
+	controller:any;
+
 	constructor(map:WeakMap<*,*>) {
 
 		super(map);

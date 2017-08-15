@@ -9,10 +9,11 @@ import utils from '../utils';
 import controller from './controller';
 
 import type {
-
+	IController,
 	IApp,
 	IStatsBuffer,
 	IBuild,
+	IState,
 	IUtils
 
 } from './interfaces/ITypes';
@@ -58,7 +59,7 @@ export default class Build extends WeakMapThingy {
 	/** Attaches a reference to the Statistics module.
 	*	@constructor	*/
 
-	constructor(map:WeakMap<>) {
+	constructor(map:WeakMap<*,*>) {
 
 		super(map);
 
@@ -72,7 +73,7 @@ export default class Build extends WeakMapThingy {
 	/** Reference to the Window object.
 	* @type {Element}	*/
 
-	get window():Object {
+	get window():any {
 
 		Build.properties.controller.window.stats = stats;
 		Build.properties.controller.window.stats.windowcount++;
@@ -91,7 +92,7 @@ export default class Build extends WeakMapThingy {
 	/** Reference the state object
 	* @type {Element}	*/
 
-	get aState():Object {
+	get aState():IState {
 
 		return this.app.main;
 	}
@@ -100,7 +101,7 @@ export default class Build extends WeakMapThingy {
 	* @type {Object}
 	* @protected	*/
 
-	get controller():Object {
+	get controller():IController {
 
 		return Build.properties.controller;
 	}
@@ -109,7 +110,7 @@ export default class Build extends WeakMapThingy {
 	* @type {Object}
 	* @protected	*/
 
-	/* Unused ATM
+	/* DEFERRED for the moment
 	get statistics():Object {
 		return this.constructor.map.get(this)['statistics'];
 	}
@@ -140,15 +141,14 @@ export default class Build extends WeakMapThingy {
 
 	}
 
-	/** Generates the app prototype.
+	/** Generates the app prototype. //APp or iAPP?
 	*	@type {Object} */
 
-    buildPrototype():Object {
+    buildPrototype():App {
 
         /* temp stores the app during the create process, it is then returned */
-        let temp = {};
-
-        temp = new this.app(new WeakMap());
+        //let temp:App;// = {};
+        let temp:App = new this.app(new WeakMap());
 
         temp.window = this.window;
 
@@ -174,7 +174,7 @@ export default class Build extends WeakMapThingy {
 	/*											*/
 	/*											*/
 
-    /**	Initalize the listeners for the application.  * WIP *
+    /**	Initalize the listeners for the application.  * WIP *                      * IApp Seems to make default load
     *   @param {temp} temp - pass a reference to attach listeners
     *   @return {Method} returns self */
 
@@ -192,34 +192,31 @@ export default class Build extends WeakMapThingy {
 	/** Begins the app build promise. *Old code needs refactor*
 	*	@return {App} a temp reference */
 
-	create():Object {
+	create():App {
 
 	    let time:number = new Date().getTime();
 
-		let listReference:any;
+		//this.statistics.monitor(()=> {
 
-	    let tempReference:any;
+        //this.name = "scriptloadtime";
 
-	    let tempReferenceId:any;
+		// Load External JS files.
 
-			//this.statistics.monitor(()=> {
+        this.utils.loadExternalJS(window.scripts);
 
-	        //this.name = "scriptloadtime";
+		let tempReference:App = this.buildPrototype();
 
-			// Load External JS files.
+		let tempReferenceId:number = tempReference.id;
 
-	        this.utils.loadExternalJS(window.scripts);
+        ///Temporary Fix for Safari and IE
+        //      document
 
-	        tempReference = this.buildPrototype();
+		let listReference:any = this.controller.list(tempReferenceId);
 
-	        tempReferenceId = tempReference.id;
+		if (listReference.length)
+			console.warn("listReference > 0", listReference);
 
-	        ///Temporary Fix for Safari and IE
-	        //      document
-
-	        listReference = this.controller.list(tempReferenceId);
-
-	        this.buildListeners(listReference);
+        this.buildListeners(listReference);
 			/*
 	        // ^ F
 
@@ -250,10 +247,13 @@ export default class Build extends WeakMapThingy {
 
 	}
 
-	/** Refactor
+	//region remove
+
+	/** Refactor time (statistics)
 	* @type {Element}	*/
 
 	time(str:string):void {
+		console.warn('dnt');
 		Console.timeEnd(str);
 	}
 
@@ -261,7 +261,10 @@ export default class Build extends WeakMapThingy {
 	* @type {Element}	*/
 
 	timeEnd(str:string):void {
+		console.warn('dnt');
 		Console.timeEnd(str);
 	}
 
+
+	//endregion
 };

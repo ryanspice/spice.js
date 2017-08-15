@@ -2,14 +2,18 @@
 
 let Window = window;
 
+import type {
+	IController,
+} from './interfaces/ITypes';
+
 class controller {
+
+	window:Window = Window;
 
 	constructor(){
 
-
+		return (this:IController);
 	}
-
-	window:Window = Window;
 
 	/** List all of the instances of SpiceJS or
 	* @type {method}

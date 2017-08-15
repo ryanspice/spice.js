@@ -66,7 +66,10 @@ interface number {
 
 };
 
+import type {
+	IUtils
 
+} from '../modules/core/interfaces/ITypes';
 
 Number.prototype.toFixedNumber = function(x, base){
   var pow = Math.pow(base||10,x);
@@ -96,7 +99,7 @@ window.timerEnd = function timerEnd(name) {
     return time;
 }
 
-var utils = utils || {};
+var utils:any = utils || {};
 
 utils.FNV_OFFSET_32 = 0x811c9dc5;
 

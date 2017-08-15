@@ -41,6 +41,12 @@ declare interface Event {
 
  }
 
+export type IController = {
+	list(id:number):void|Object;
+	window:any;
+
+}
+
 /**
  * @interface App
  */
@@ -106,18 +112,20 @@ export type IMath = {
 export type IBuild = {
 
 	app:Function;
+
 	id:number;
-	document:Object;
-	stats:Object;
-	+utils:Object;
+	+utils:IUtils;
 	+aState:Object;
-	+controller:Object;
-	+window:Object;
-	+time:Function;
-	+timeEnd:Function;
-	+buildWindowReferences:Function;
-	+buildPrototype:Function;
-	+create:Function;
+	stats:IStatsBuffer;
+	document:Document;
+
+	window():any;
+	buildWindowReferences():void;
+	buildPrototype():IApp;
+	buildListeners(temp:Object):Object; //TOtype?
+	create():Object;
+	time(str:string):void;
+	timeEnd(str:string):void;
 
 }
 
