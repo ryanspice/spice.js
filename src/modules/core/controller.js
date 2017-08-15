@@ -22,12 +22,12 @@ class controller {
 	list(id:number = 0):void|Object {
 
 		if (id)
-			return Window.apps[id];
+			return this.window.apps[id];
 		else
-		if (Window.apps.length>1)
-			return Window.apps;
+		if (this.window.apps.length>1)
+			return this.window.apps;
 			else
-			return Window.apps[0];
+			return this.window.apps[0];
 
 	}
 

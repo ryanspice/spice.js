@@ -4,9 +4,9 @@ import App from '../app.js';
 
 import WeakMapThingy from './base/thingy';
 
-import utils from '../utils';
-
 import controller from './controller';
+
+import utils from '../utils';
 
 import type {
 	IController,
@@ -18,15 +18,10 @@ import type {
 
 } from './interfaces/ITypes';
 
-//const Window:Object = window;
-//const Windows:Object = Window.Windows =  (typeof Window=='undefined'?Window:Window); /* ? */
-
 const Console:Object = console;
 
 const stats:Object = {
-
 	windowcount:0
-
 }
 
 /** Builds references, listeners and the app prototype.
@@ -36,6 +31,7 @@ const stats:Object = {
 export default class Build extends WeakMapThingy {
 
 	app:Function;
+	date:Date = new Date();
 	stats:IStatsBuffer;
 	document:Document = document;
 	id:number=0;
@@ -45,15 +41,9 @@ export default class Build extends WeakMapThingy {
 	 */
 
 	static properties = {
-
 		temp:{},
-
-		/* WIP - temp removed
-		statistics:Statistics,
-		*/
-
+		/* WIP - temp removed	statistics:Statistics,	*/
 		controller
-
 	}
 
 	/** Attaches a reference to the Statistics module.
@@ -165,15 +155,6 @@ export default class Build extends WeakMapThingy {
         return this.window.apps[temp.id];
     }
 
-	/*											*/
-	/*											*/
-	/*											*/
-	/* Below needs Refator */
-	/*											*/
-	/*											*/
-	/*											*/
-	/*											*/
-
     /**	Initalize the listeners for the application.  * WIP *                      * IApp Seems to make default load
     *   @param {temp} temp - pass a reference to attach listeners
     *   @return {Method} returns self */
@@ -194,7 +175,8 @@ export default class Build extends WeakMapThingy {
 
 	create():App {
 
-	    let time:number = new Date().getTime();
+		//** DATEBROKE **//
+	    let time:number = this.date.getTime();
 
 		//this.statistics.monitor(()=> {
 
@@ -202,14 +184,12 @@ export default class Build extends WeakMapThingy {
 
 		// Load External JS files.
 
-        this.utils.loadExternalJS(window.scripts);
+		//** WINDOWSCRIPTS **//
+        this.utils.loadExternalJS(this.window.scripts);
 
 		let tempReference:App = this.buildPrototype();
 
 		let tempReferenceId:number = tempReference.id;
-
-        ///Temporary Fix for Safari and IE
-        //      document
 
 		let listReference:any = this.controller.list(tempReferenceId);
 
@@ -247,13 +227,13 @@ export default class Build extends WeakMapThingy {
 
 	}
 
-	//region remove
+	//region refactor
 
 	/** Refactor time (statistics)
 	* @type {Element}	*/
 
 	time(str:string):void {
-		console.warn('dnt');
+		Console.warn('dnt');
 		Console.timeEnd(str);
 	}
 
@@ -261,10 +241,10 @@ export default class Build extends WeakMapThingy {
 	* @type {Element}	*/
 
 	timeEnd(str:string):void {
-		console.warn('dnt');
+		Console.warn('dnt');
 		Console.timeEnd(str);
 	}
 
-
 	//endregion
+
 };
