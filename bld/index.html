@@ -14,30 +14,20 @@
 		if (true){
 			var _App = ((SpiceJS.create()).OnLoad = function (self) {
 
-				var width = 1400;
-				var height =320;
+				Loader.loadLocalFile('./map/default.mp',(e)=>{
 
-				self.main = {init:function(){
+					let data = MDATA.prototype.parse(JSON.parse(e))
 
-					//this.visuals.Rect(200,200,200,200,"#FFFFFF");
-					this.a = new Circle(120,150,10,"#FFFFFF",1,this.visuals);
-					this.b = new Circle(120,150,10,"#FFFFFF",1,this.visuals);
+					self.main = data;
 
-				},draw:function(){
-					//this.visuals.rect(200,200,200,200,"#FFFFFF");
-				},update:function(){
+					//start the application with the given resolution
+			        self.Start(
+						self.main.options.canvas.size.width||this.options.canvas.size.width,
+						self.main.options.canvas.size.height||this.options.canvas.size.height);
 
-					this.a.x += Math.sin(new Date().getTime()/1000)*5;
-					this.b.x -= Math.cos(new Date().getTime()/1000)*5;
-
-				}};
-
-				//start the application with the given resolution
-
-				self.Start(width, height);
-
-				//create a global reference
-				window.Application = this;
+					//create a global reference
+					window.Application = this;
+				});
 
 			});
 		} else {

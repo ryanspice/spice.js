@@ -42,6 +42,35 @@ export default class _loader extends SJSClass {
 
 	}
 
+
+	static loadLocalFile = async (file:string,cb:Function) => {
+
+	 	let actual_JSON;
+
+		await _loader.loadJSON(async (response)=> {
+			actual_JSON = (response);
+			cb(actual_JSON);
+	   },file);
+
+	   return actual_JSON;
+	}
+
+	static loadJSON = async (callback,file)=> {
+
+		let xobj = await new XMLHttpRequest();
+		await xobj.overrideMimeType("application/json");
+		await xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
+		xobj.onreadystatechange = function () {
+	   		if (xobj.readyState == 4 && (xobj:any).status == "200") {
+		   	// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+	   			callback(xobj.responseText);
+			}
+		};
+	   await xobj.send(null);
+	}
+
+
+
 	/* Checks if the image reference is completed, otherwise start a timeout for checking again, otherwise return the reference */
 
 	checkLoaded(name:string) {
@@ -301,6 +330,8 @@ export default class _loader extends SJSClass {
 	//Filtering
 
 	imgMapFilter=(a:Image)=>{return a.getAttribute('name');};
+
+
 
 }
 

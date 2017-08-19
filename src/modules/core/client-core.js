@@ -84,6 +84,8 @@ export default class ClientCore extends _SJSClass {
 		return (this:IClientCore);
 	}
 
+
+
     /*
 	*	Verify the Input for the Application Width and Height
 	*/
