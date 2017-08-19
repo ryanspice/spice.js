@@ -1,5 +1,5 @@
 
-/* @flow - due to jszip and jszip-tils require not being defined
+/* @flow - (old no flow due to jszip and jszip-tils require not being defined)
 *
 *	The Main Entrypoint for SpiceJS customized for Ryanspice.com
 *	@module
@@ -9,13 +9,10 @@
 * 	setInnerHTML -	A polyfill based off react's core rendering
 */
 
-
-
 /* WIP - extras */
 import setInnerHTML from './modules/render/setInnerHTML.js';
 import Twitter from './modules/render/twitter.js';
 //import Statistics from './modules/etc/statistics';
-
 
 /* Build - the core canvas framework */
 

@@ -55,6 +55,7 @@
     "style-loader": "^0.13.0",
     "webpack": "^3.0.0",
     "webpack-closure-compiler": "^2.1.5",
+    "webpack-dashboard": "^1.0.0-2",
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {

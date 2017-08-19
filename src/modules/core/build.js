@@ -15,7 +15,6 @@ import type {
 	IBuild,
 	IState,
 	IUtils
-
 } from './interfaces/ITypes';
 
 const Console:Object = console;

@@ -6,6 +6,8 @@ require("babel-core/register");
 const webpack = require('webpack');
 const path = require('path');
 
+const DashboardPlugin = require('webpack-dashboard/plugin');
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
 
@@ -35,7 +37,10 @@ const source = {
 	    new webpack.LoaderOptionsPlugin({
 	      minimize: true,
 	      debug: false
-	    })
+	  }),
+
+    	new DashboardPlugin()
+
 	]
 
 }
