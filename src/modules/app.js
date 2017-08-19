@@ -3,7 +3,7 @@
 let _MAP_DATA_ = ``;
 
 
-let _DATA_ =  {update:function(){},draw:function(){this.visuals.circle(25,25,2.5,"#FFFFFF");},init:function(){},options:{canvas:{size:{width:400,height:300}}}};
+let _DATA_ =  {update:function(){},draw:function(){},init:function(){},options:{canvas:{size:{width:400,height:300}}}};
 
 class MDATA {
 
