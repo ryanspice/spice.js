@@ -3,22 +3,7 @@
 let _MAP_DATA_ = ``;
 
 
-let loadJSON = async (callback,file)=> {
-
-    var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-    xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
-    xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
-            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(xobj.responseText);
-          }
-    };
-    xobj.send(null);
- }
-
-
-let _DATA_ =  {update:function(){},draw:function(){this.visuals.circle(25,25,2.5,"#FFFFFF");},init:function(){}};
+let _DATA_ =  {update:function(){},draw:function(){this.visuals.circle(25,25,2.5,"#FFFFFF");},init:function(){},options:{canvas:{size:{width:400,height:300}}}};
 
 class MDATA {
 
@@ -145,6 +130,9 @@ export default class App extends Core {
 
     }
 
+
+	default:boolean = false;
+
 	/** Triggers when the application first loops.
 	* @method
     * @param {Object} [self] - Reference to the app.
@@ -152,6 +140,7 @@ export default class App extends Core {
 
     OnLoad(self:App):void {
 
+		if (this.default)
 		_loader.loadLocalFile('./map/default.mp',(e)=>{
 
 			let data = MDATA.prototype.parse(JSON.parse(e))
@@ -163,6 +152,16 @@ export default class App extends Core {
 				self.main.options.canvas.size.height||this.options.canvas.size.height);
 
 		});
+		else {
+
+			self.main = _DATA_;
+
+	        self.Start(
+				self.main.options.canvas.size.width||this.options.canvas.size.width,
+				self.main.options.canvas.size.height||this.options.canvas.size.height);
+
+		}
+
     }
 
 	/** Triggers on dom content load.
