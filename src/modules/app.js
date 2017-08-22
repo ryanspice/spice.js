@@ -119,7 +119,7 @@ export default class App extends Core {
 	* @method
 	* @override */
 
-    Start(w:?number = 0, h:?number = 0):void {
+    async Start(w:?number = 0, h:?number = 0):void {
 
 		//console.log(this.options);
 
@@ -131,14 +131,14 @@ export default class App extends Core {
     }
 
 
-	default:boolean = false;
+	default:boolean = true;
 
 	/** Triggers when the application first loops.
 	* @method
     * @param {Object} [self] - Reference to the app.
 	* @override	*/
 
-    OnLoad(self:App):void {
+    async OnLoad(self:App):void {
 
 		if (this.default)
 		_loader.loadLocalFile('./map/default.mp',(e)=>{
@@ -170,7 +170,6 @@ export default class App extends Core {
 	* @override	*/
 
     OnApplicationLoad(evt:AppEvent):void {
-
        evt.target.app.OnLoad(evt.target.app);
 
     }

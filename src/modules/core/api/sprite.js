@@ -83,16 +83,32 @@ export default class Sprite<ISprite> extends Vector  {
 	*/
 
 	draw():void {
+//console.log(this.type)
+//if (!this.type)
+	//return console.warn(this);
+	//console.log(this);
+
+	if (this.s<0){
+
+
+	}
+
 
 		if (config._IS_PROD_) {
-			(this:any).visuals[this.type](this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h,this.degrees);
+				{
+
+					(this:any).visuals[this.type](this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h,this.degrees);
+			}
 		} else {
 
 			if (!this.visuals)
 			console.log(this._id);
 
 			if (this.visuals)
-				(this:any).visuals[this.type](this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h,this.degrees);
+				{
+
+					(this:any).visuals[this.type](this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h,this.degrees);
+				}
 				else
 				console.warn('Early Drawn',this,this._id);
 		}

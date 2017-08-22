@@ -11,101 +11,389 @@
 
 		<script  type="application/x-javascript" defer>
 
-		if (false){
+
+		class RagPhysics extends Sprite {
+
+			bounds(){
+
+
+				if (this.position.y<140)
+					this.position.y=140, this.diry = 0;
+
+				if (this.position.y>165)
+					this.position.y=165;
+
+				if (this.position.x<20)
+					this.position.x=20, this.pState = 'idle';
+
+				if (this.position.x>300)
+					this.position.x=300, this.pState = 'idle';
+
+
+			}
+
+		}
+
+		class Player extends RagPhysics {
+
+			constructor(img,x,y,s,a,c,xx,yy,w,h,visuals){
+
+				super(img,x,y,s,a,c,xx,yy,w,h,visuals);
+				this.type = "e"
+			}
+
+		}
+		Player.offset = new Vector(0,0);
+		Player.position = new Vector(0,0);
+
+		class Skeleton extends RagPhysics {
+
+			constructor(img,x,y,s,a,c,xx,yy,w,h,visuals){
+
+				super(img,x,y,s,a,c,xx,yy,w,h,visuals);
+				this.pState = 'walk';
+			}
+
+			update(){
+
+				let t = new Date().getTime();
+				let z = 0;
+				switch(this.pState){
+
+					case 'idle':
+
+						this.img = Skeleton.sprIdle;
+						z = (264/11);
+						this.w = (264/11);
+						this.xx =z*Math.round(this.index);
+						this.index = 5+Math.sin(t/1080)*5;
+
+
+
+						if (this.position.x-Player.offset.x>Player.position.x-25)
+						if (this.position.x-Player.offset.x<Player.position.x+25){
+
+
+								this.pState = 'idle';
+								return;
+						}
+						this.pState = 'walk';
+						/*
+						if (this.index<3.4)
+							this.index+=0.05;
+							else
+							this.index = -0.5;
+						*/
+					break;
+
+					case 'walk':
+
+						this.img = Skeleton.sprWalk;
+						z = (286/13);
+						this.w = (286/13);
+						this.xx =z*Math.round(this.index);
+						if (this.index<12)
+							this.index+=0.15;
+							else
+							this.index = 0;
+
+
+							let xdir = this.position.y/Player.position.y;
+
+						//if (this.position.y<Player.position.y+5)
+						//if (this.position.y>Player.position.y-5)
+						if (this.position.x-Player.offset.x>Player.position.x-25)
+						if (this.position.x-Player.offset.x<Player.position.x+25){
+
+
+								this.pState = 'idle';
+								return;
+						}
+
+						if (this.position.x<Player.position.x+25)
+						this.s = 1,this.position.x += Math.sin(this.index/360) * 5;
+						else
+						if (this.position.x>Player.position.x-25)
+						this.s = -1,this.position.x -= Math.sin(this.index/360) * 5;
+
+						if (this.position.y<Player.position.y+25)
+							this.position.y += Math.sin(this.index/360) * 1;
+							else
+							this.position.y -= Math.sin(this.index/360) * 1;
+
+						/*
+						if (this.index<3.4)
+							this.index+=0.05;
+							else
+							this.index = -0.5;
+						*/
+					break;
+
+				}
+				this.bounds();
+			}
+
+			draw(){
+				this.update();
+				if (this.s<0)
+				this.visuals.image_flip(-1 + this.x,1),this.visuals._image_part(this.img,this.x+Player.offset.x,this.y+Player.offset.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h)
+				else
+				this.visuals._image_part(this.img,this.x-Player.offset.x,this.y+Player.offset.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h)
+				if (this.s<0)
+				this.visuals.image_flip(-1 + this.x,1)
+
+			}
+
+		}
+
 			var _App = ((SpiceJS.create()).OnLoad = function (self) {
 
-				Loader.loadLocalFile('./map/default.mp',(e)=>{
+				var width = 320;
+				var height =180;
 
-					let data = MDATA.prototype.parse(JSON.parse(e))
+				self.main = {init:function(){
 
-					self.main = data;
+					this.app.client.loader.graphics = this.graphics;
 
-					//start the application with the given resolution
-			        self.Start(
-						self.main.options.canvas.size.width||this.options.canvas.size.width,
-						self.main.options.canvas.size.height||this.options.canvas.size.height);
+					this.bg = [];
+					this.bgItems = [];
+					this.bgItems2 = [];
+					this.bgItems3 = [];
 
-					//create a global reference
-					window.Application = this;
-				});
+					this.enemies = [];
 
-			});
-		} else {
-			SpiceJS.create();
-		}
+					this.app.client.loader.asyncLoadImage('./parallax-forest-back-trees','s1').then(sprite0=>
+					this.app.client.loader.asyncLoadImage('./parallax-forest-front-trees','s2').then(sprite1=>
+					this.app.client.loader.asyncLoadImage('./parallax-forest-lights','s1').then(sprite2=>
+					this.app.client.loader.asyncLoadImage('./parallax-forest-middle-trees','s1').then(sprite3=>{
 
-		var handleResolutionChange = function(e){
-			var res = e.target.value.split("x");
-			var client = SpiceJS.controller.list().client;
-			client.setWidth = Number(res[0]);
-			client.setHeight = Number(res[1]);
-			client.update.difference.x = 1;
-		}
+						this.bg = [
+							sprite0,
+							sprite3,
+							sprite2,
+							sprite1,
+						];
 
-		var handleMainChange = function(e){
-			var i = 0;
-			var res = (Array.from(e.target.children).filter(function(x){
-				if (x.selected)
-				return true;
-			})[0]).index;
-			//_App = null;
-			Application.client.update.state
-			//_App.main = {}
+						let s = 1.125 + 0.2;
+						let xx = 0;
+						let xxx = 0;
+
+						for(let i = 3; i>=0;i--)
+						(this.bgItems.push(this.visuals.createMapObject('Tile',this.bg[i],0,0,s,1,xx,0,0,xxx+272,160,-3+i))),
+						(this.bgItems2.push(this.visuals.createMapObject('Tile',this.bg[i],-272*s,0,s,1,xx,0,0,xxx+272,160,-3+i))),
+						(this.bgItems3.push(this.visuals.createMapObject('Tile',this.bg[i],272*s,0,s,1,xx,0,0,xxx+272,160,-3+i)));
+						for(let i = this.bgItems.length; i>=0;i--) {
+
+							this.bgItems.priority = -i;
+						}
+
+					}))));
 
 
-		}
 
 
-		var createSpiceJS = function(main) {
 
- 			return ((SpiceJS.create()).OnLoad = function (self) {
+					this.app.client.loader.asyncLoadImage('./knight_3_improved_slash_animation_2','s').then(knight_3_improved_slash_animation=>
+					this.app.client.loader.asyncLoadImage('../knight_walk_animation','s').then(knight_walk_animation=>
+					this.app.client.loader.asyncLoadImage('../images/knight_3_block','s').then(knight_3_block=>
+					this.app.client.loader.asyncLoadImage('../knight_3_idle','s').then(knight_3_idle=>{
+						this.player.sprWalk = knight_walk_animation;
+						this.player.sprBlock = knight_3_block;
+						this.player.sprAttack = knight_3_improved_slash_animation;
+						this.player.sprIdle = knight_3_idle;
+					}))));
 
-				var width = 1400;
-				var height =320;
+					this.app.client.loader.asyncLoadImage('./Skeleton/Sprite Sheets/Skeleton_Walk','s').then(Skeleton_Walk=>
+					this.app.client.loader.asyncLoadImage('./Skeleton/Sprite Sheets/Skeleton_Idle','s').then(Skeleton_Idle=>{
 
-				self.main = {init:new Function(main),draw:function(){
-					//this.visuals.rect(200,200,200,200,"#FFFFFF");
+						Skeleton.sprIdle = Skeleton_Idle;
+						Skeleton.sprWalk = Skeleton_Walk;
+							//(new Skeleton(Skeleton_Idle,120+Math.random()*300,160+Math.random()*20,-1,1,1,0,-3,(264/11),35,this.visuals)).priority = 5;
+							(new Skeleton(Skeleton_Idle,120+Math.random()*200,150+Math.random()*90,-1,1,1,0,-3,(264/11),35,this.visuals)).priority = 5;
+							(new Skeleton(Skeleton_Idle,120+Math.random()*100,150+Math.random()*190,-1,1,1,0,-3,(264/11),35,this.visuals)).priority = 5;
+					}));
+
+
+					//this.player = this.visuals.createMapObject('Tile',this.playerSpriteWalk,20,120,1,1,1,0,0,(167/4),46);
+					this.player = new Player(this.playerSpriteWalk,20,120,1,1,1,0,0,(167/4),46,this.visuals)
+					this.player.pState = 'idle';
+
+					this.player.type = '';
+					this.player.dir = 1;
+					this.player.diry = 1;
+					this.player.agility = 5;
+					this.player.priority = 5;
+					this.player.draw = function(){
+
+						if (this.dir<0)
+						this.visuals.image_flip(-1 + this.x,1)
+						this.visuals._image_part(this.img,this.x,this.y,this.s,this.a,this.c,this.xx,this.yy,this.w,this.h)
+						if (this.dir<0)
+						this.visuals.image_flip(-1 + this.x,1)
+
+					}
+					this.player.update = function(){
+						let t = new Date().getTime();
+						let z;
+
+						let gamepad =  this.visuals.app.input.gamepads
+						//if (SpiceJS.controller.list().input.gamepads)
+							//this.pState = 'walk';
+						this.pState = 'idle';
+						let s = this.dir;
+						let sy = this.dir;
+						if (gamepad){
+
+
+							if (gamepad.a)
+								this.dir=this.dir/1000,this.diry=this.diry/10000,this.pState = 'block',this.index+=0.1;
+
+							if ((gamepad.left)||(gamepad.right))
+							if (gamepad.x)
+								this.position.x+=this.dir, this.index+=0.1;
+
+							if (gamepad.left)
+								this.position.x+=this.dir,this.pState = 'walk', this.dir = -0.5;
+							if (gamepad.right)
+								this.position.x+=this.dir,this.pState = 'walk', this.dir = 0.5;
+
+							if (gamepad.up)
+								this.position.y+=this.diry,this.pState = 'walk', this.diry = -0.5;
+							if (gamepad.down)
+								this.position.y+=this.diry,this.pState = 'walk', this.diry = 0.5;
+
+							if (gamepad.a)
+								s=0,this.pState = 'block',this.index+=0.1;
+
+
+							if (gamepad.y){
+
+								this.dir = this.dir/10000, this.diry = this.diry/10000, this.pState = 'attack';
+								this.h = 80;
+								this.w = (800/10);
+								this.yy=20;
+
+
+							}
+
+							if (this.pState != 'attack'){
+
+									this.yy = 0;
+									this.h = 42;
+									this.xx=0;
+									this.w = (167/4);
+
+								}
+						}
+						this.bounds();
+						switch(this.pState){
+
+							case 'walk':
+
+								this.img = this.sprWalk;
+								z = (336/8);
+								this.xx =z*Math.round(this.index);
+
+								if (this.index<7.4)
+									this.index+=0.1;
+									else
+									this.index = -0.5;
+
+							break;
+
+							case 'block':
+
+								this.img = this.sprBlock;
+								z = (294/7);
+								this.xx =z*Math.round(this.index);
+
+								if (this.index<5.4)
+									this.index+=0.1;
+									else
+									this.index = 6;
+
+							break;
+
+							case 'idle':
+
+								this.img = this.sprIdle;
+								z = (168/4);
+								this.xx =z*Math.round(this.index);
+								this.index = 1+Math.sin(t/360)*1;
+								/*
+								if (this.index<3.4)
+									this.index+=0.05;
+									else
+									this.index = -0.5;
+								*/
+							break;
+
+							case 'attack':
+
+								this.img = this.sprAttack;
+								z = (800/10);
+								this.xx =-20 + z*Math.round(this.index);
+								//this.yy = 80;
+								this.index = 4+Math.sin(t/(360-this.agility))*4;
+								/*
+								if (this.index<3.4)
+									this.index+=0.05;
+									else
+									this.index = -0.5;
+								*/
+							break;
+
+						}
+					}
+
+				},draw:function(){
+
 				},update:function(){
 
-					this.a.x += Math.sin(new Date().getTime()/1000)*5;
-					this.b.x -= Math.cos(new Date().getTime()/1000)*5;
+					this.player.update();
+					Player.position = this.player.position;
+
+					let pox = -this.player.x*15;
+					for (var i = this.bgItems.length-1; i>=0;i--){
+						let item = this.bgItems[i];
+						item.y = -this.player.y/6- (15*i/1);
+						item.x = pox * ((2-i)/100);
+						if (i==0){
+						Player.offset.x = -item.x;
+						Player.offset.y = item.y;}
+					}
+
+					for (var i = 0; i < this.bgItems2.length;i++){
+						let item = this.bgItems2[i];
+						item.y = -this.player.y/6- (15*i/1);
+						item.x = -item.w + pox * ((2-i)/100);
+					}
+
+					for (var i = 0; i < this.bgItems3.length;i++){
+						let item = this.bgItems3[i];
+						item.y = -this.player.y/6- (15*i/1);
+						item.x = item.w + pox * ((2-i)/100);
+					}
+
+					//this.player.xx =  (Math.round(1.3 + (	Math.sin(new Date().getTime()/-240)*1.6	))) * (167/4);
 
 				}};
 
-				//start the application with the given resolution
-
 				self.Start(width, height);
 
-				//create a global reference
 				window.Application = this;
 
 			});
-
-		}
-
 		</script>
 
 	</head>
 
 	<body>
-
-		<h3 style="color:white;position:fixed;top:10px;left:5%; width:100px; z-index:100;">SpiceJS</h3>
-
-		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100;" onChange="handleMainChange(event)">
-			<option value="this.velocity=new Vector(-0.1,0);this.app.client.loader.graphics=this.graphics;this.items=[];let s=16;let i=16;let t=i;this.app.client.loader.asyncLoadImage('../tiles_packed','s').then((sprite)=>{this.snow=sprite;while(i-->=0)this.items.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);this.visuals.Tile(this.snow,100+t*i,125,1,1,1,0,0,16,16);this.visuals.push(new Ground(this.snow,50+t*i,150,1,1,1,0,0,16,16));new Ground(this.snow,50+t*i,200,1,1,1,0,0,16,16,this.visuals)});this.items.push(this.visuals.createMapObject('Circle',200,200,5,'#FF00FF',0.5));this.items.push(this.visuals.Circle(100,100,10,'#FFFFFF',1));this.items.push(this.visuals.push(new Circle(150,150,10,'#FFFFFF',1)));this.items.push(new Circle(100,150,10,'#FFFFFF',1,this.visuals));this.player=new Circle(0,0,25,'#FF0000',1,this.visuals);this.player.priority=3;">Loading</option>
-			<option value="" selected>Circles A & B</option>
-			<option value="">Mountian Stars</option>
-			<option value="">Tile & Circles</option>
-			<option value="">Circle</option>
+		<h3 style="color:white;position:fixed;top:10px;left:5%; width:100px; z-index:100;color:black;">SpiceJS</h3>
+		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100; opacity:0" >
+			<option>Loading</option>
 		</select>
-
-		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100;" onChange="handleResolutionChange(event)">
-			<option>200x300</option>
-			<option>400x300</option>
-			<option>480x320</option>
-			<option>1024x720</option>
-			<option selected>1400x320</option>
-			<option selected>1400x780</option>
+		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100; opacity:0" >
 			<option>1920x1080</option>
 		</select>
 

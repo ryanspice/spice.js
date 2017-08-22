@@ -6,6 +6,7 @@ import StatsBuffer from '../base/stats';
 
 import Circle from "../math/circle";
 import Sprite from "../api/sprite";
+import Background from "../api/background";
 import Tile from "../api/tile";
 
 import APICore from "./api-core";
@@ -13,9 +14,9 @@ import APICore from "./api-core";
 import type {
 	IApp,
 	IApi,
+	ITile,
 	IVisuals,
 	IVector,
-	ITile,
 	IStatsBuffer,
 	ICircle
 } from '../interfaces/ITypes';
@@ -969,7 +970,7 @@ export default class API extends APICore {
 
 		        image_flip(x,y){
 
-					this.drawBufferedSprites();
+					//this.drawBufferedSprites();
 		            this.checkValues(x,y,1,1,1,1,1);
 		            this.buffer_context.save();
 		            this.buffer_context.scale(-1, 1);
@@ -1552,6 +1553,23 @@ export default class API extends APICore {
 		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
 					this.opacity(1);
 				}
+				_image_part_flip(image:HTMLImageElement,x:number,y:number,s:number,a:number,c:number,xx:number,yy:number,w:number,h:number) {
+
+		            this.checkValues(x,y,w,h,s,a,c);
+
+					(this.buffer_context:any).oImageSmoothingEnabled = false;
+					(this.buffer_context:any).mozImageSmoothingEnabled = false;
+				    (this.buffer_context:any).webkitImageSmoothingEnabled = false;
+				    (this.buffer_context:any).msImageSmoothingEnabled = false;
+				    (this.buffer_context:any).imageSmoothingEnabled = false;
+
+			      this.buffer_context.scale(-1, 1);
+
+		            (this.stat.c)?this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x-Math.floor(this.stat.w/2),this.stat.y-Math.floor(this.stat.h/2),this.stat.w,this.stat.h):this.buffer_context.drawImage(image,xx,yy,w,h,this.stat.x,this.stat.y,this.stat.w,this.stat.h);
+
+			      this.buffer_context.scale(1, 1);
+					this.opacity(1);
+				}
 
 				/* END RAW API */
 
@@ -1563,7 +1581,9 @@ export default class API extends APICore {
 				createClassList:any = {
 
 					'Tile':Tile,
-					'Circle':Circle
+					'Circle':Circle,
+					'Background':Background,
+					'Sprite':Sprite
 
 				};
 
@@ -1582,7 +1602,7 @@ export default class API extends APICore {
 					xx:number = 0,
 					yy:number = 0,
 					w:number = 0,
-					h:number = 0) {
+					h:number = 0,p=0) {
 
 					let item;
 					switch(type){
@@ -1601,6 +1621,7 @@ export default class API extends APICore {
 						break;
 
 					}
+					item.priority = p;
 
 					return item;
 				};
