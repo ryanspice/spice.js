@@ -27,7 +27,6 @@ export default class Circle extends Sprite  {
 	type:string = "circle";
 	r:number;
 	col:any;
-	a:number;
 	_id = Circle.count++;
 	visuals:any;
 

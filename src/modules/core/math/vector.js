@@ -93,7 +93,7 @@ export default class Vector extends WeakMapThingy {
     */
 
     set x(value:number):void {
-		
+
         this._position[0] = value;
 
     }
@@ -126,7 +126,7 @@ export default class Vector extends WeakMapThingy {
     }
 
     /**
-    * Get s position
+    * Get s scale
     * @type {Number}
     */
 
@@ -138,11 +138,9 @@ export default class Vector extends WeakMapThingy {
     }
 
     /**
-    * Set s position
+    * Set s scale
     * @type {Number}
     * @example
-    * var PointA = new Vector(2,1);
-    * PointA.y = 2;
     */
 
     set s(value:number):void {
@@ -170,6 +168,7 @@ export default class Vector extends WeakMapThingy {
 
 		return new Vector(x,y);
 	}
+
 
 	/**
 	* @method

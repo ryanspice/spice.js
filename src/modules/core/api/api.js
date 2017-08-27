@@ -220,7 +220,10 @@ export default class API extends APICore {
 
 	    opacity(opacity:number):number|boolean {
 
-	        return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
+			const alpha = this.alpha = this.canvas_context.globalAlpha = this.buffer_context.globalAlpha = opacity;
+
+			return alpha;
+//	        return opacity!=this.alpha&&(this.alpha=opacity,this.canvas_context.globalAlpha=this.buffer_context.globalAlpha=opacity!=this.lastopacity?opacity:1);
 	    }
 
 		/** Controls changing the draw font WIP
@@ -266,13 +269,13 @@ export default class API extends APICore {
 		* @method
 		*  */
 
-	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number|void,c:number|boolean,colour:any,font:string|void):IStatsBuffer {
+	    checkValues(x:number,y:number,w:number,h:number,s:number,a:number,c:number|boolean,colour:any,font:string|void):IStatsBuffer {
 
 	        this.checkValuesColour = this.colour();
 
-			if (!a)	a = 1;
+			//if (!a)	a = 1;
 
-	        this.opacity(a);
+	       this.opacity(a);
 
 	        this.colour(colour);
 
@@ -1484,7 +1487,7 @@ export default class API extends APICore {
 					switch(sprite.type){
 
 						case 'circle':
-						((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col);
+						((this:IApi)[''+sprite.type]:Function)(sprite.x,sprite.y,sprite.r,sprite.col,sprite.a);
 
 						break;
 
@@ -1597,7 +1600,7 @@ export default class API extends APICore {
 					x: number = 0,
 					y: number = 0,
 					s:number|string = 1,
-					a:number = 1,
+					a:number,
 					c:number = 0,
 					xx:number = 0,
 					yy:number = 0,
@@ -1656,7 +1659,7 @@ export default class API extends APICore {
 
 		        */
 
-				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:void|number = 1):any {
+				Circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a:number):any {
 					let item;
 					this.appendNew(item = new Circle(x,y,r,col,a));
 					return item;
@@ -1682,12 +1685,12 @@ export default class API extends APICore {
 		                a = CA;
 
 		            }
-
+					//console.log(x,y,r,col,a);
 		            this._circle(x,y,r,col,a);
 
 		        }
 
-		        _circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a?:number = 1):void {
+		        _circle(x:number,y:number,r:number,col:number|string|CanvasPattern|CanvasGradient,a:number):void {
 
 					this.checkValues(x,y,1,1,r,a,0,col,"");
 		            this.buffer_context.beginPath();
@@ -1695,6 +1698,7 @@ export default class API extends APICore {
 		            this.buffer_context.fillStyle = this.stat.colour;
 		            this.buffer_context.fill();
 		            this.clean();
+
 		        }
 
 				circle_free(x:number,y:number,r:number,col:string|CanvasPattern|CanvasGradient,a:number):void {
