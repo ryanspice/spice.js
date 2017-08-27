@@ -1484,6 +1484,8 @@ export default class API extends APICore {
 
 				drawMethod =(sprite:any) => {
 					//console.log(sprite);
+					if (sprite.delete == true)
+						return;
 					switch(sprite.type){
 
 						case 'circle':
@@ -1698,7 +1700,7 @@ export default class API extends APICore {
 		            this.buffer_context.fillStyle = this.stat.colour;
 		            this.buffer_context.fill();
 		            this.clean();
-
+					this.opacity(1);
 		        }
 
 				circle_free(x:number,y:number,r:number,col:string|CanvasPattern|CanvasGradient,a:number):void {
