@@ -195,8 +195,13 @@ export default class Graphics extends Library {
 
 		load(name:string ,file:string|void ):Object {
 
+			if (this.app)
+			if (this.app.options)
 			if (typeof file==="undefined")
 				file =  this.app.options.get("paths").images+""+name;
+
+			if (!file)
+				file = "./"+name;
 
 			this.Sources.append(this.SpriteAppend(name,file));
 
@@ -232,7 +237,7 @@ export default class Graphics extends Library {
 
 			this.SpriteLoadNumber++;
 
-			this.SpriteLoadTime += (10*this.app.delta_speed)*this.SpriteLoadNumber;
+			this.SpriteLoadTime += (10/**this.app.delta_speed*/)*this.SpriteLoadNumber;
 
 			return this.sprite = Object.create(this.Sprite,{file:{value:file},src:{value:src},name:{value:name}});
 
@@ -320,3 +325,10 @@ export default class Graphics extends Library {
 		}
 
 }
+
+
+//if ((config._EXPOSURE_)&& (config._IS_PROD_ == false)){
+
+	window.Graphics = Graphics;
+
+//}

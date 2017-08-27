@@ -1,5 +1,8 @@
 /* @noflow - no flow due to destructuring */
 
+
+import * as config from "../config";
+
 import WeakMapThingy from './core/base/thingy';
 
 import type {
@@ -98,3 +101,9 @@ export default class State extends WeakMapThingy {
 	init():void {}
 
 };
+
+if ((config._EXPOSURE_)&& (config._IS_PROD_ == false)){
+
+	window.State = State;
+
+}

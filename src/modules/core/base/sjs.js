@@ -19,7 +19,7 @@ import {
 
 export class _SJSClass extends WeakMapThingy {
 
-	app:IApp;
+	app:IApp|null;
 
 	log:Function = log;
 
@@ -31,11 +31,11 @@ export class _SJSClass extends WeakMapThingy {
 
 	graphics:IGraphics|Function;
 
-    constructor(app:IApp) {
+    constructor(app:IApp|null) {
 
         super(new WeakMap());
 
-        let appReference:IApp = app;
+        let appReference:IApp|null = app;
 
         if (typeof appReference == 'undefined') {
 
@@ -53,6 +53,7 @@ export class _SJSClass extends WeakMapThingy {
 
 			this.app = appReference;
 
+			if (appReference)
 			if ((appReference.client) &&(appReference.client.visuals)) {
 
 				this.visuals = appReference.client.visuals;
@@ -64,6 +65,7 @@ export class _SJSClass extends WeakMapThingy {
 
 			}
 
+			if (appReference)
 			if ((appReference.client) &&(appReference.client.graphics)) {
 
 				this.graphics = appReference.client.graphics;
