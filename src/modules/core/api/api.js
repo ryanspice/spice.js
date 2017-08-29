@@ -637,7 +637,7 @@ export default class API extends APICore {
 					this.buffer_context.fill();
 
 		            this.clean();
-
+					this.opacity(1);
 		        }
 
 				/** Draw an extended rectangle with a stroke

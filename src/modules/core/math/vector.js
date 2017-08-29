@@ -174,12 +174,17 @@ export default class Vector extends WeakMapThingy {
 	* @method
 	*/
 
-	Difference(a:IVector,b:IVector):IVector {
+	static Difference(a:IVector,b:IVector):IVector {
 
 		let x = a.x - b.x;
 		let y = a.y - b.y;
 
 		return new Vector(x,y);
+	}
+
+	Difference(a:IVector,b:IVector):IVector {
+
+		return Vector.Difference(a,b);
 	}
 
 	/**

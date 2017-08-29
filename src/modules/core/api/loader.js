@@ -19,10 +19,12 @@ export default class _loader extends SJSClass {
 	ImageBufferTime:number;
 	asyncLoadCacheIndex:number;
 
-	constructor(app:IApp) {
+	constructor(app:IApp|null, graphics?:any) {
 
 		super(app);
 
+		if (graphics)
+		this.graphics = graphics;
 		this.ImageMap = new Map();
 		this.ImageBufferTime = 3;
 		this.ImageBuffer.length = 0;
@@ -193,6 +195,10 @@ export default class _loader extends SJSClass {
     }
 
 	*/
+
+	static async AsyncLoadImage(string:string,suffex:string) {
+		return this.asyncLoadImage(string, suffex);
+	}
 
 	/* Asyncronously load an image */
 
