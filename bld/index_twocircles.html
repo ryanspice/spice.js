@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html >
+
+	<head>
+
+	    <meta charset="UTF-8" />
+
+	    <script rel="prefetch" type="application/x-javascript" src="./vendor.js"></script>
+	    <script rel="prefetch" type="application/x-javascript" name="main" src="./spice.js" ></script>
+
+		<script  type="application/x-javascript" defer>
+
+		if (false){
+			var _App = ((SpiceJS.create()).OnLoad = function (self) {
+
+				var width = 1400;
+				var height =320;
+
+				self.main = {init:function(){
+
+					//this.visuals.Rect(200,200,200,200,"#FFFFFF");
+					this.a = new Circle(120,150,10,"#FFFFFF",1,this.visuals);
+					this.b = new Circle(120,150,10,"#FFFFFF",1,this.visuals);
+
+				},draw:function(){
+					//this.visuals.rect(200,200,200,200,"#FFFFFF");
+				},update:function(){
+
+					this.a.x += Math.sin(new Date().getTime()/1000)*5;
+					this.b.x -= Math.cos(new Date().getTime()/1000)*5;
+
+				}};
+
+				//start the application with the given resolution
+
+				self.Start(width, height);
+
+				//create a global reference
+				window.Application = this;
+
+			});
+		} else {
+			SpiceJS.create();
+		}
+
+		var handleResolutionChange = function(e){
+			var res = e.target.value.split("x");
+			var client = SpiceJS.controller.list().client;
+			client.setWidth = Number(res[0]);
+			client.setHeight = Number(res[1]);
+			client.update.difference.x = 1;
+		}
+
+		var handleMainChange = function(e){
+			var i = 0;
+			var res = (Array.from(e.target.children).filter(function(x){
+				if (x.selected)
+				return true;
+			})[0]).index;
+			//_App = null;
+			Application.client.update.state
+			//_App.main = {}
+
+
+		}
+
+
+		var createSpiceJS = function(main) {
+
+ 			return ((SpiceJS.create()).OnLoad = function (self) {
+
+				var width = 1400;
+				var height =320;
+
+				self.main = {init:new Function(main),draw:function(){
+					//this.visuals.rect(200,200,200,200,"#FFFFFF");
+				},update:function(){
+
+					this.a.x += Math.sin(new Date().getTime()/1000)*5;
+					this.b.x -= Math.cos(new Date().getTime()/1000)*5;
+
+				}};
+
+				//start the application with the given resolution
+
+				self.Start(width, height);
+
+				//create a global reference
+				window.Application = this;
+
+			});
+
+		}
+
+		</script>
+
+	</head>
+
+	<body>
+
+		<h3 style="color:white;position:fixed;top:10px;left:5%; width:100px; z-index:100;">SpiceJS</h3>
+
+		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100;" onChange="handleMainChange(event)">
+			<option value="this.velocity=new Vector(-0.1,0);this.app.client.loader.graphics=this.graphics;this.items=[];let s=16;let i=16;let t=i;this.app.client.loader.asyncLoadImage('../tiles_packed','s').then((sprite)=>{this.snow=sprite;while(i-->=0)this.items.push(this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16));this.visuals.createMapObject('Tile',this.snow,0+t*i,100,1,1,1,0,0,16,16);this.visuals.Tile(this.snow,100+t*i,125,1,1,1,0,0,16,16);this.visuals.push(new Ground(this.snow,50+t*i,150,1,1,1,0,0,16,16));new Ground(this.snow,50+t*i,200,1,1,1,0,0,16,16,this.visuals)});this.items.push(this.visuals.createMapObject('Circle',200,200,5,'#FF00FF',0.5));this.items.push(this.visuals.Circle(100,100,10,'#FFFFFF',1));this.items.push(this.visuals.push(new Circle(150,150,10,'#FFFFFF',1)));this.items.push(new Circle(100,150,10,'#FFFFFF',1,this.visuals));this.player=new Circle(0,0,25,'#FF0000',1,this.visuals);this.player.priority=3;">Loading</option>
+			<option value="" selected>Circles A & B</option>
+			<option value="">Mountian Stars</option>
+			<option value="">Tile & Circles</option>
+			<option value="">Circle</option>
+		</select>
+
+		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100;" onChange="handleResolutionChange(event)">
+			<option>200x300</option>
+			<option>400x300</option>
+			<option>480x320</option>
+			<option>1024x720</option>
+			<option selected>1400x320</option>
+			<option selected>1400x780</option>
+			<option>1920x1080</option>
+		</select>
+
+	</body>
+
+
+</html>

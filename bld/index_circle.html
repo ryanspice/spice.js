@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html >
+
+	<head>
+
+	    <meta charset="UTF-8" />
+
+	    <script rel="prefetch" type="application/x-javascript" src="./vendor.js"></script>
+
+	    <script rel="prefetch" type="application/x-javascript" name="main" src="./spice.js" ></script>
+
+		<script  type="application/x-javascript" defer>
+
+			var _App = ((SpiceJS.create()).OnLoad = function (self) {
+
+				var width = 1224;
+				var height = 720;
+
+
+				self.main = {init:function(){
+
+					this.visuals.bleed = 0.75;
+					//this.circles = [];
+					for(var i = 5; i>0; i--)
+						this.visuals.Circle(window.innerWidth/3,100,3,"#A9CCE3",1);
+
+					},draw:function(){
+
+					let r = Math.sin(Date.now()/360);
+					/*
+					for(var i = 5; i>0; i--)
+					this.visuals.circle(
+						600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
+						200+5*window.innerWidth*Math.cos(Date.now()/360-i*r)/250,
+						3,
+						'#A9CCE3'
+					);
+*/
+					//this.visuals.drawArray(this.circles, circle => this.visuals.circle(circle.x,circle.y,circle.r,"red"));
+					this.visuals.drawBufferedSpritesNewPosition((sprite)=>{
+						let i = sprite._id;
+						let obj = {
+							x:600+5*window.innerWidth*Math.sin(Date.now()/360-i*r)/250,
+							y:200+5*window.innerWidth*Math.cos(Date.now()/360-i*r)/250
+						}
+						return obj;
+					});
+
+					if (this.visuals.touch_within(0,0,10,10,false)) {
+
+						console.log('eh');
+
+					}
+
+					if (this.visuals.touch_within2(0,0,100,100,false)) {
+
+						console.log('eh2');
+
+					}
+
+
+				},update:function(){
+
+
+
+				}};
+
+				self.Start(width, height);
+
+				window.Application = this;
+
+			});
+
+		</script>
+
+	</head>
+
+	<body>
+		<h3 style="color:white;position:fixed;top:10px;left:5%; width:100px; z-index:100;">SpiceJS</h3>
+		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100;">
+			<option>Loading</option>
+		</select>
+		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100;">
+			<option>1920x1080</option>
+		</select>
+
+	</body>
+
+
+</html>

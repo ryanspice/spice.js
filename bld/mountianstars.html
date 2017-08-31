@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html >
+
+	<head>
+
+	    <meta charset="UTF-8" />
+
+	    <script rel="prefetch" type="application/x-javascript" src="./vendor.js"></script>
+	    <script rel="prefetch" type="application/x-javascript" name="main" src="./spice.js" ></script>
+
+		<script  type="application/x-javascript" defer>
+
+		class Star extends Circle {
+
+			constructor(x,y,r,col,a,visuals) {
+
+				super(x,y,r,col,a,visuals);
+
+				this.type2= Math.round(Math.random()*1);
+				this.position = new Vector(x,y);
+				this.scale = 0.1+Math.random()*1;
+				this.r = 1+this.scale;
+				this.velocity = new Vector(0.5*this.scale,0.52*this.scale);
+				//this.sequence =
+
+			}
+
+			move(){
+
+				this.position.x+= this.velocity.x;
+				this.position.y-= this.velocity.y;
+
+				if (this.position.x>1400)
+					this.position.x = -50;
+
+				if (this.position.y<-50)
+					this.position.y = this.visuals.app.height+50;
+
+			}
+
+		}
+
+		if (true)
+			var _App = ((SpiceJS.create()).OnLoad = function (self) {
+
+				var width = 1400;
+				var height =320;
+
+				self.main = {init:function(){
+
+					this.stars = [];
+					this.drawTri = function(x,y,col,ctx){
+
+						this.visuals.triangle(x,y,x+255,y+230,x-200,y+230,col,col,0);
+						/*
+						ctx.lineWidth=1;
+						ctx.fillStyle=col;
+						ctx.beginPath();
+					    ctx.moveTo(x, y);
+					    ctx.lineTo(x+255,y+230);
+					    ctx.lineTo(x-200, y+230);
+					    ctx.fill();
+						ctx.fillStyle='white';*/
+					}
+
+					let a = 0;
+					let genX = function(){
+						return -50+Math.random()*this.app.width;
+					}
+
+					for(let i = 0; i<125; i++)
+						this.stars.push(new Star(genX(),Math.random()*5 * 65,2,"#FFFFFF",1,this.visuals));
+
+				},draw:function(){
+
+
+					for(let t = 1900; t>-250; t-=100){
+
+						let x = -97+t;
+						let y = -3+250+Math.sin(t/60)*15;
+
+						x = this.visuals.fixX(x);
+						y = this.visuals.fixY(y);
+
+						this.drawTri(x+25,y,"#FFFFFF",this.visuals.buffer_context);
+						let x2 = -100+t;
+						let y2 = +250+Math.sin(t/60)*15;
+
+						x2 = this.visuals.fixX(x2);
+						y2 = this.visuals.fixY(y2);
+						this.drawTri(x2,y2,"#2F51A3",this.visuals.buffer_context);
+					}
+					this.visuals.rect(0,350,1400,this.visuals.fixY(3550),'#000000')
+
+				},update:function(){
+
+					for(let i = 0; i<this.stars.length; i++){
+						this.stars[i].move();
+					}
+
+				}};
+
+				self.Start(width, height);
+
+				window.Application = this;
+
+			});
+			else {
+				SpiceJS.create();
+			}
+		</script>
+
+	</head>
+
+	<body>
+		<h3 style="color:white;position:fixed;top:10px;left:5%; width:100px; z-index:100;">SpiceJS</h3>
+		<select style="position:fixed;top:50px;left:5%; width:100px; z-index:100;">
+			<option>Loading</option>
+		</select>
+		<select style="position:fixed;top:68px;left:5%; width:100px; z-index:100;">
+			<option>1920x1080</option>
+		</select>
+
+	</body>
+
+
+</html>
