@@ -67,3 +67,4 @@ export class SpiceJS extends Build  {
 
 export default new SpiceJS(new WeakMap());
 export Sprite from './modules/core/api/sprite';
+export State from './modules/state';
