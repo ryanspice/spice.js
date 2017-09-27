@@ -1,11 +1,14 @@
 {
 
-	"presets": [
-		"flow",
-        ["es2015", { "modules": false }],
-		"stage-0"
-	],
-	"plugins": ["typecheck",  "transform-class-properties"]
+	"presets":     [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions"]
+      }
+    }
+],"flow"
+],
+	"plugins": ["typecheck",  "transform-class-properties","transform-export-extensions"]
 
 }
 
@@ -18,3 +21,14 @@
 //"transform-flow-strip-types",
 //"typecheck",
 //"syntax-flow",
+//[
+    //["env", {
+      //"targets": {
+//        "browsers": ["last 2 versions", "safari >= 7"]
+//      }
+//    }]
+
+
+//"flow",
+//	["es2015", { "modules": false }],
+//	"stage-0"]

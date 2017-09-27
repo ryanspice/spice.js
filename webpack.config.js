@@ -1,7 +1,7 @@
 
 
 //var OfflinePlugin = require('offline-plugin');
-require("babel-core/register");
+//require("babel-core/register");
 
 const webpack = require('webpack');
 const path = require('path');
